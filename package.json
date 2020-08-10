@@ -1,5 +1,5 @@
 {
-  "name": "sandbox2",
+  "name": "jibrel-defi-dapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,7 +8,16 @@
     "@testing-library/user-event": "^7.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^1.1.1",
+    "styled-components": "^5.1.1",
+    "uuid": "^8.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
