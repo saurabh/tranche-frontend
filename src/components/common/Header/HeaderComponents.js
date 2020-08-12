@@ -10,7 +10,7 @@ const Link = ({ isActive, children, ...props }) => {
 const HeaderWrapper = styled.header`
   display: grid;
   grid-template-rows: 40% 50% 10%;
-  height: 39.5vh;
+  height: 39.5%;
   width: 100%;
   box-sizing: border-box;
   top: 0;
@@ -18,20 +18,11 @@ const HeaderWrapper = styled.header`
 `;
 
 const NavContainer = styled.nav`
-  display: grid;
-  grid-template-columns: 15% auto 15%;
-  width: 100%;
-  top: 60px;
-  left: 0;
+  display: none;
 
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: 15% 60% 10% 15%;
-    border-bottom: none;
-    background: none;
-    width: initial;
-    left: initial;
-    top: initial;
   }
 `;
 
@@ -45,6 +36,10 @@ const NavLinks = styled.div`
   display: flex;
   justify-content: center;
   align-content: flex-end;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const NavItem = styled(Link)`
@@ -52,23 +47,21 @@ const NavItem = styled(Link)`
   display: block;
   text-align: center;
   box-sizing: border-box;
-`;
-
-const Title = styled.h3`
-  ${(props) =>
-    props.isActive
-      ? css`
-          color: white;
-          border-bottom: 2px white solid;
-        `
-      : css`
-          color: #a988f1;
-          border-bottom: none;
-        `}
+  > h3 {
+    ${(props) =>
+      props.isActive
+        ? css`
+            color: white;
+            border-bottom: 2px white solid;
+          `
+        : css`
+            color: ${(props) => props.color};
+            border-bottom: none;
+          `}
+  }
 `;
 
 const Options = styled(Dropdown)`
-  grid-column: 3 / 4;
   place-self: center;
   padding: 8px 10px;
   color: black;
@@ -77,16 +70,14 @@ const Options = styled(Dropdown)`
 `;
 
 const StyledButton = styled(Button)`
-  grid-column: 4 / 5;
   place-self: center;
   background: white;
-  color: black;
+  color: white;
 `;
 
 const Banner = styled.div`
-  grid-row: 2 / 3;
   margin-top: 2vh;
-  color: #8edd8d;
+  color: ${(props) => props.color};
 `;
 
 const PageMenu = styled.div`
@@ -97,18 +88,47 @@ const PageMenu = styled.div`
 
 const PageMenuContainer = styled.div`
   display: flex;
-  border-bottom: none;
-  background: none;
-  width: initial;
-  left: initial;
-  top: initial;
 `;
 
 const PageMenuItem = styled.div`
   padding: 40px 30px 5px 30px;
   display: block;
   text-align: center;
-  box-sizing: border-box;
+  > h3 {
+    ${(props) =>
+      props.isActive
+        ? css`
+            color: white;
+            border-bottom: 2px white solid;
+          `
+        : css`
+            color: ${(props) => props.color};
+            border-bottom: none;
+          `}
+  }
+`;
+
+const MobileMenuContainer = styled.nav`
+  display: grid;
+  grid-template-columns: 15% auto 15%;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileMenuIcon = styled.div`
+  grid-column: 3 / 4;
+  margin: auto 0 auto auto;
+  width: 35px;
+  min-width: 35px;
+  padding: 5px;
+  > div {
+    height: 3px;
+    background: white;
+    margin: 5px 0;
+    width: 100%;
+  }
 `;
 
 export {
@@ -117,11 +137,12 @@ export {
   NavLinks,
   NavBrand,
   NavItem,
-  Title,
   Options,
   StyledButton,
   Banner,
   PageMenu,
   PageMenuContainer,
-  PageMenuItem
+  PageMenuItem,
+  MobileMenuContainer,
+  MobileMenuIcon
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container, Dropdown } from 'semantic-ui-react';
 import {
@@ -7,82 +7,104 @@ import {
   NavLinks,
   NavBrand,
   NavItem,
-  Title,
   Options,
   StyledButton,
   Banner,
   PageMenu,
   PageMenuContainer,
-  PageMenuItem
+  PageMenuItem,
+  MobileMenuContainer,
+  MobileMenuIcon
 } from './HeaderComponents';
 
 export function Header() {
   const { pathname } = useLocation();
-  // const [mobileMenu, setMobileMenu] = useState(false);
-  const [bannerColor, setBannerColor] = useState('#2c2cdf');
-  const [bannerMessage, setBannerMessage] = useState('');
-  const [bannerDescription, setBannerDescription] = useState('');
+  const [path, setPath] = useState('home');
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // const home = {
-  //   color: '#2c2cdf',
-  //   bannerMessage: '',
-  //   bannerDescription: ''
-  // };
-
-  const changeLinkData = (color, banner, description) => {
-    setBannerColor(color);
-    setBannerMessage(banner);
-    setBannerDescription(description);
-    console.log(bannerColor, bannerMessage, bannerDescription);
+  const bannerDetails = {
+    home: {
+      color: '#2c2cdf',
+      inactiveColor: '#aba9f9',
+      title: 'Welcome to Jibrel',
+      description: 'PLACEHOLDER SLOGAN'
+    },
+    borrow: {
+      color: '#5411e2',
+      inactiveColor: '#a988f1',
+      title: 'Borrower Markets',
+      description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
+    },
+    earn: {
+      color: '#389725',
+      inactiveColor: '#8edd8d',
+      title: 'Earning Markets',
+      description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
+    },
+    trade: {
+      color: '#1f1f1f',
+      inactiveColor: '#8f8f8f',
+      title: 'Trading Markets',
+      description: 'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
+    }
   };
+
+  useEffect(() => {
+    const parsePath = () => {
+      if (pathname === '/') {
+        setPath('home');
+      } else {
+        setPath(pathname.split('/')[1]);
+      }
+    };
+
+    parsePath();
+  }, [pathname]);
 
   return (
     <>
-      <HeaderWrapper color={bannerColor}>
+      <HeaderWrapper color={bannerDetails[path].color}>
         <Container>
-          {/* <i class="fas fa-bars fa-3x"></i> */}
+          <MobileMenuContainer>
+            <NavBrand to='/'>
+              <h1>
+                <strong>Jibrel</strong>
+              </h1>
+            </NavBrand>
+            <MobileMenuIcon onClick={() => setMenuOpen((isOpen) => !isOpen)}>
+              <div />
+              <div />
+              <div />
+            </MobileMenuIcon>
+            {menuOpen && (
+              <NavLinks>
+                <NavItem to='/borrow' isActive={pathname === '/borrow'} color={bannerDetails[path].inactiveColor}>
+                  <h3>BORROW</h3>
+                </NavItem>
+                <NavItem to='/earn' isActive={pathname === '/earn'} color={bannerDetails[path].inactiveColor}>
+                  <h3>EARN</h3>
+                </NavItem>
+                <NavItem to='/trade' isActive={pathname === '/trade'} color={bannerDetails[path].inactiveColor}>
+                  <h3>TRADE</h3>
+                </NavItem>
+              </NavLinks>
+            )}
+          </MobileMenuContainer>
           <NavContainer>
-            <NavBrand to='/' onClick={() => changeLinkData('#2c2cdf', '', '')}>
-              <h1><strong>Jibrel</strong></h1>
+            <NavBrand to='/'>
+              <h1>
+                <strong>Jibrel</strong>
+              </h1>
             </NavBrand>
             <NavLinks>
-              <NavItem
-                to='/borrow'
-                onClick={() =>
-                  changeLinkData(
-                    '#5411e2',
-                    'Borrower Markets',
-                    'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
-                  )
-                }
-              >
-                <Title isActive={pathname === '/borrow'}>BORROW</Title>
+              <NavItem to='/borrow' isActive={pathname === '/borrow'} color={bannerDetails[path].inactiveColor}>
+                <h3>BORROW</h3>
               </NavItem>
-              <NavItem
-                to='/earn'
-                isActive={pathname === '/earn'}
-                onClick={() =>
-                  changeLinkData(
-                    '#1ebb1b',
-                    'Earning Markets',
-                    'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
-                  )
-                }
-              >
-                <Title isActive={pathname === '/earn'}>EARN</Title>
+              <NavItem to='/earn' isActive={pathname === '/earn'} color={bannerDetails[path].inactiveColor}>
+                <h3>EARN</h3>
               </NavItem>
-              <NavItem
-                to='/trade'
-                isActive={pathname === '/trade'}
-                onClick={() =>
-                  changeLinkData(
-                    '#1f1f1f',
-                    'Trading Markets',
-                    'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
-                  )
-                }
-              >
-                <Title isActive={pathname === '/trade'}>TRADE</Title>
+              <NavItem to='/trade' isActive={pathname === '/trade'} color={bannerDetails[path].inactiveColor}>
+                <h3>TRADE</h3>
               </NavItem>
             </NavLinks>
             <Options text='USD'>
@@ -91,22 +113,22 @@ export function Header() {
                 <Dropdown.Item>BTC</Dropdown.Item>
               </Dropdown.Menu>
             </Options>
-            <StyledButton>Address</StyledButton>
+            <StyledButton>Connect</StyledButton>
           </NavContainer>
-          <Banner>
-            <h1>Trading Markets</h1>
-            <h4>DAHWDJ JAWDO HHAWDM HHAWDO HAWDOJAWD TRADING BTC</h4>
+          <Banner color={bannerDetails[path].inactiveColor}>
+            <h1>{bannerDetails[path].title}</h1>
+            <h4>{bannerDetails[path].description}</h4>
           </Banner>
           <PageMenu>
             <PageMenuContainer>
-              <PageMenuItem>
-                <Title isActive>Test</Title>
+              <PageMenuItem isActive color={bannerDetails[path].inactiveColor}>
+                <h3>Test</h3>
               </PageMenuItem>
-              <PageMenuItem>
-                <Title>Test2</Title>
+              <PageMenuItem color={bannerDetails[path].inactiveColor}>
+                <h3>Test2</h3>
               </PageMenuItem>
-              <PageMenuItem>
-                <Title right>How-To</Title>
+              <PageMenuItem color={bannerDetails[path].inactiveColor}>
+                <h3>How-To</h3>
               </PageMenuItem>
             </PageMenuContainer>
           </PageMenu>
