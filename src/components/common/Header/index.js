@@ -8,7 +8,6 @@ import {
   NavBrand,
   NavItem,
   Options,
-  StyledButton,
   Banner,
   PageMenu,
   PageMenuContainer,
@@ -16,6 +15,8 @@ import {
   MobileMenuContainer,
   MobileMenuIcon
 } from './HeaderComponents';
+
+import ConnectWallet from './ConnectWallet';
 
 export function Header() {
   const { pathname } = useLocation();
@@ -113,7 +114,7 @@ export function Header() {
                 <Dropdown.Item>BTC</Dropdown.Item>
               </Dropdown.Menu>
             </Options>
-            <StyledButton>Connect</StyledButton>
+            <ConnectWallet />
           </NavContainer>
           <Banner color={bannerDetails[path].inactiveColor}>
             <h1>{bannerDetails[path].title}</h1>

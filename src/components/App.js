@@ -4,11 +4,14 @@ import { GlobalStyle } from 'components/common';
 
 // Routes
 import Home from 'components/pages/Home';
-import Routes from 'components/Routes';
+import Earn from 'components/pages/Earn';
+import Borrow from 'components/pages/Borrow';
+import Trade from 'components/pages/Trade';
+import NotFound from 'components/pages/NotFound';
 
 // Redux
 import { Provider } from 'react-redux';
-import store from '../store';
+import store from '../redux/store';
 
 const App = () => {
   return (
@@ -17,7 +20,10 @@ const App = () => {
       <Router>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Routes component={Routes} />
+          <Route exact path='/earn' component={Earn} />
+          <Route exact path='/borrow' component={Borrow} />
+          <Route exact path='/trade' component={Trade} />
+          <Route component={NotFound} />
         </Switch>
       </Router>
     </Provider>

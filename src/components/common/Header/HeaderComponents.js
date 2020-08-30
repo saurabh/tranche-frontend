@@ -22,7 +22,7 @@ const NavContainer = styled.nav`
 
   @media (min-width: 768px) {
     display: grid;
-    grid-template-columns: 15% 60% 10% 15%;
+    grid-template-columns: 10% 60% 10% 20%;
   }
 `;
 
