@@ -7,7 +7,7 @@ import {
   setBalance,
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
-import getOnboard from 'utils/Onboarding';
+import { initOnboard } from 'utils/services';
 import addrShortener from 'utils/addrShortener';
 
 import { StyledButton } from './HeaderComponents';
@@ -21,7 +21,7 @@ const ConnectWallet = ({
 }) => {
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
-  const onboard = getOnboard({
+  const onboard = initOnboard({
     address: (address) => {
       setAddress(address);
     },
