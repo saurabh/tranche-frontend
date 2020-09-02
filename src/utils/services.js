@@ -1,8 +1,9 @@
 import Onboard from 'bnc-onboard';
-import Notify from 'bnc-notify'
+import Notify from 'bnc-notify';
 
 let onboard = undefined;
-const networkId = 4;
+let notify = undefined;
+const networkId = 42;
 const dappId = '12153f55-f29e-4f11-aa07-90f10da5d778';
 
 export function initOnboard(subscriptions) {
@@ -25,13 +26,15 @@ export function initOnboard(subscriptions) {
       }
     });
   }
-
   return onboard;
-};
+}
 
 export function initNotify() {
-  return Notify({
-    dappId,
-    networkId
-  })
+  if (!notify) {
+    notify = Notify({
+      dappId,
+      networkId
+    });
+  }
+  return notify;
 }
