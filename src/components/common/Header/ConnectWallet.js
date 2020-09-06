@@ -9,7 +9,6 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'utils/services';
 import addrShortener from 'utils/addrShortener';
-
 import { StyledButton } from './HeaderComponents';
 
 const ConnectWallet = ({
@@ -22,18 +21,10 @@ const ConnectWallet = ({
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
   const onboard = initOnboard({
-    address: (address) => {
-      setAddress(address);
-    },
-    network: (network) => {
-      setNetwork(network);
-    },
-    balance: (balance) => {
-      setBalance(balance);
-    },
-    wallet: (wallet) => {
-      setWalletAndWeb3(wallet);
-    }
+    address: setAddress,
+    network: setNetwork,
+    balance: setBalance,
+    wallet: setWalletAndWeb3
   });
 
   const handleConnect = async () => {

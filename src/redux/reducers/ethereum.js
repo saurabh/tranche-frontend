@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -6,9 +7,14 @@ import {
   SET_WEB3,
 } from '../actions/constants';
 
+const provider = new Web3.providers.HttpProvider(
+  `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
+);
+
 const initialState = {
   balance: -1,
-  address: undefined
+  address: undefined,
+  web3: new Web3(provider)
 };
 
 export default function (state = initialState, action) {

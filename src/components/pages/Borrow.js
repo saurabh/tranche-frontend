@@ -6,23 +6,32 @@ import { Layout } from 'components/common';
 import JLoansFactoryConstructor from 'utils/JLoansFactoryConstructor';
 
 const Borrow = ({ ethereum: { address, network, balance, wallet, web3 } }) => {
+  const JLoansFactory = JLoansFactoryConstructor(web3);
   const [notify, setNotify] = useState(null);
 
   useEffect(() => {
-    if (web3) {
-      const JloansFactory = JLoansFactoryConstructor(web3);
-      console.log(JloansFactory.methods);
-    }
-
     setNotify(initNotify());
   }, [address, network, balance, wallet, web3]);
 
-  // const createNewLoan = async () => {
-  // };
+  const createNewLoan = async (
+    name,
+    borrowedCurrency,
+    borrowedAmount,
+    rpbRate,
+    startPrice
+  ) => {
+    await JLoansFactory.methods
+      .deployNewEthLoanContract('eth', 'dai', 10, 5, 10)
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        notify(hash);
+      });
+  };
 
   return (
     <Layout>
-      <h1>Borrow</h1>;
+      <h1>Borrow</h1>
+      <button onClick={createNewLoan}>new loan</button>
     </Layout>
   );
 };
