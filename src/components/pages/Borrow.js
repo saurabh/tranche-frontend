@@ -51,10 +51,11 @@ const Borrow = ({
   ) => {
     const ready = await readyToTransact();
     if (!ready) return;
-
+    const walletState = await onboard.getState();
+    console.log(walletState);
     await JLoansFactory.methods
       .deployNewEthLoanContract('eth', 'dai', 10, 5, 10)
-      .send({ from: address })
+      .send({ from: walletState.address })
       .on('transactionHash', (hash) => {
         notify(hash);
       });
