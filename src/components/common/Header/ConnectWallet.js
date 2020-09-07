@@ -18,14 +18,22 @@ const ConnectWallet = ({
   setWalletAndWeb3,
   ethereum: { address, network, balance, wallet, web3 }
 }) => {
-  useEffect(() => {}, [address, network, balance, wallet, web3]);
-
   const onboard = initOnboard({
     address: setAddress,
     network: setNetwork,
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
+
+  useEffect(() => {
+    const previouslySelectedWallet = window.localStorage.getItem(
+      'selectedWallet'
+    )
+
+    if (previouslySelectedWallet && onboard) {
+      onboard.walletSelect(previouslySelectedWallet)
+    }
+  }, [onboard, address, network, balance, wallet, web3]);
 
   const handleConnect = async () => {
     await onboard.walletSelect();
