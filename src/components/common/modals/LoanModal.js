@@ -31,10 +31,10 @@ const LoanModal = ({
           startPrice
         ) {
           await JLoansFactory.methods
-            .deployNewEthLoanContract('eth', 'dai', 10, 5, 10)
+            .deployNewEthLoanContract('test', 'test', 33111, 21111111, 22222222)
             .send({ from: address })
             .on('transactionHash', (hash) => {
-              notify(hash);
+              notify.hash(hash);
             });
         }
 
@@ -49,7 +49,7 @@ const LoanModal = ({
   };
 
   return (
-    <Modal open={open} onClose={() => closeModal()} size='mini' dimmer='false' >
+    <Modal open={open} onClose={() => closeModal()} size='mini' dimmer='false'>
       <Modal.Header>Create New Loan</Modal.Header>
       <Modal.Actions>
         <Button onClick={handleActionClick}>Create</Button>
