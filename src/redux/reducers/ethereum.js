@@ -4,11 +4,11 @@ import {
   SET_NETWORK,
   SET_BALANCE,
   SET_WALLET,
-  SET_WEB3,
+  SET_WEB3
 } from '../actions/constants';
 
 const provider = new Web3.providers.HttpProvider(
-  `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
+  'https://kovan.infura.io/v3/b036e8717e624f5c826fdb9205e391d2'
 );
 
 const initialState = {
