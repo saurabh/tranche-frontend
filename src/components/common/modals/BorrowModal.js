@@ -28,7 +28,6 @@ const LoanModal = ({
           startPrice
         ) {
           console.log('createNewLoanPending')
-          /
         }
         createNewEthLoan();
         closeModal();
