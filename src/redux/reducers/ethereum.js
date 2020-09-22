@@ -6,6 +6,7 @@ import {
   SET_WALLET,
   SET_WEB3
 } from '../actions/constants';
+import { initNotify } from 'utils/services';
 
 const provider = new Web3.providers.HttpProvider(
   'https://kovan.infura.io/v3/b036e8717e624f5c826fdb9205e391d2'
@@ -14,7 +15,8 @@ const provider = new Web3.providers.HttpProvider(
 const initialState = {
   balance: -1,
   address: undefined,
-  web3: new Web3(provider)
+  web3: new Web3(provider),
+  notify: initNotify()
 };
 
 export default function (state = initialState, action) {

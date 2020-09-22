@@ -7,10 +7,9 @@ import {
   setBalance,
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
-import { initOnboard, initNotify } from 'utils/services';
+import { initOnboard } from 'utils/services';
 import { Layout } from 'components/common';
-import LoanModal from 'components/common/modals/LoanModal'
-import JLoansFactoryConstructor from 'utils/JLoansFactoryConstructor';
+import BorrowModal from 'components/common/modals/BorrowModal'
 
 const Borrow = ({
   setAddress,
@@ -19,8 +18,6 @@ const Borrow = ({
   setWalletAndWeb3,
   ethereum: { address, network, balance, wallet, web3 }
 }) => {
-  const JLoansFactory = JLoansFactoryConstructor(web3);
-  const [notify, setNotify] = useState(null);
   const [showModal, setShowModal] = useState(false)
   const [modalType, setModalType] = useState('')
 
@@ -32,7 +29,6 @@ const Borrow = ({
   });
 
   useEffect(() => {
-    setNotify(initNotify());
   }, [onboard, address, network, balance, wallet, web3]);
 
   const readyToTransact = async () => {
@@ -45,24 +41,6 @@ const Borrow = ({
     return ready;
   };
 
-  const createNewLoan = async (
-    name,
-    borrowedCurrency,
-    borrowedAmount,
-    rpbRate,
-    startPrice
-  ) => {
-    const ready = await readyToTransact();
-    if (!ready) return;
-    const walletState = await onboard.getState();
-    
-    await JLoansFactory.methods
-      .deployNewEthLoanContract('eth', 'dai', 10, 5, 10)
-      .send({ from: walletState.address })
-      .on('transactionHash', (hash) => {
-        notify(hash);
-      });
-  };
 
   const handleNewLoanClick = async () => {
     const ready = await readyToTransact();
@@ -78,12 +56,12 @@ const Borrow = ({
   //   if (!ready) return;
   // }
   
-
   return (
     <Layout>
       <h1>Borrow</h1>
       <button onClick={handleNewLoanClick}>New Loan</button>
-      <LoanModal open={showModal} type={modalType} closeModal={() => setShowModal(false)} />
+      <BorrowModal open={showModal} type={modalType} closeModal={() => setShowModal(false)} />
+      
     </Layout>
   );
 };

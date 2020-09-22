@@ -4,7 +4,7 @@ import Notify from 'bnc-notify';
 let onboard = undefined;
 let notify = undefined;
 const networkId = 42;
-const dappId = '12153f55-f29e-4f11-aa07-90f10da5d778';
+const dappId = '71c3eafc-6ae2-4fe9-863c-6c87ec604798';
 
 export function initOnboard(subscriptions) {
   if (!onboard) {
