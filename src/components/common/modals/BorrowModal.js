@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from 'semantic-ui-react';
@@ -9,7 +9,8 @@ const LoanModal = ({
   open,
   type,
   closeModal,
-  ethereum: { address, network, balance, wallet, web3, notify }
+  ethereum: { address, network, balance, wallet, web3, notify },
+  form: { pairId, borrowedAskAmount, rpbRate, collateralAmount }
 }) => {
   const JFactory = JFactoryConstructor(web3);
 
@@ -73,7 +74,8 @@ LoanModal.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  form: state.form
 });
 
 export default connect(mapStateToProps, {})(LoanModal);
