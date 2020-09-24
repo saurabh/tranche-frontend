@@ -1,15 +1,11 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Modal, Input, Button, Dropdown } from 'semantic-ui-react';
+import { Modal, Input, Button } from 'semantic-ui-react';
 import { ModalDropdown } from 'components/common';
 import { required, number } from 'utils/validations';
+// import assets from 'constants';
 
-const renderInput = ({
-  input,
-  label,
-  type,
-  meta: { touched, error, warning }
-}) => (
+const renderInput = ({ label, type, meta: { touched, error, warning } }) => (
   <>
     <Input placeholder={label} style={{ height: '40px' }} />
     {touched &&
@@ -17,11 +13,21 @@ const renderInput = ({
   </>
 );
 
-const renderDropdown = ({ input, label, ...custom }) => (
-  <Dropdown.Item text={label} compact selection {...input} {...custom} />
+const renderDropdown = ({
+  label,
+  assets,
+  meta: { touched, error, warning }
+}) => (
+  <>
+    <ModalDropdown placeholder={label} compact selection options={assets} />
+    {touched &&
+      ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+  </>
 );
 
-let NewLoan = ({ handleSubmit }) => {
+let NewLoan = ({ handleSubmit, calcMinCollateralAmount }) => {
+  const assets = [{ key: 'DAI', text: 'DAI', value: 'DAI'}, { key: 'USDC', text: 'USDC', value: 'USDC'}];
+
   return (
     <>
       <Modal.Content style={{ background: '#f7f7f7' }}>
@@ -31,13 +37,15 @@ let NewLoan = ({ handleSubmit }) => {
             component={renderInput}
             label='Borrowing'
             validate={[required, number]}
+            onChange={calcMinCollateralAmount}
           />
-          <ModalDropdown text='Currency' compact selection>
-            <Dropdown.Menu>
-              <Dropdown.Item>DAI</Dropdown.Item>
-              <Dropdown.Item>JEUR</Dropdown.Item>
-            </Dropdown.Menu>
-          </ModalDropdown>
+          <Field
+            name='borrowAsset'
+            component={renderDropdown}
+            label='Currency'
+            assets={assets}
+            validate={[required]}
+          />
         </div>
         <Input
           style={{ height: '40px', marginTop: '10px' }}

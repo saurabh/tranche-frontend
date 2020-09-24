@@ -18,7 +18,7 @@ const Borrow = ({
   setWalletAndWeb3,
   ethereum: { address, network, balance, wallet, web3 }
 }) => {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(true)
   const [modalType, setModalType] = useState('')
 
   const onboard = initOnboard({

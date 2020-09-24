@@ -15,21 +15,40 @@ const LoanModal = ({
 
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
-  const handleActionClick = (e) => {
+  const calcMinCollateralAmount = async (pairId, askAmount) => {
+    try {
+      await JFactory.methods.calcMinCollateralAmount(pairId, askAmount).call();      
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     switch (type) {
       case 'new':
-        async function createNewEthLoan(
-          name,
-          borrowedCurrency,
-          borrowedAmount,
+        async function createNewLoan(
+          pairId,
+          borrowedAskAmount,
           rpbRate,
-          startPrice
+          lendToken
         ) {
-          console.log('createNewLoanPending')
+          pairId = 0
+            ? await JFactory.methods
+                .createNewEthLoan(pairId, borrowedAskAmount, rpbRate, lendToken)
+                .send({ from: address })
+                .on('transactionHash', (hash) => {
+                  notify.hash(hash);
+                })
+            : await JFactory.methods
+                .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, lendToken)
+                .send({ from: address })
+                .on('transactionHash', (hash) => {
+                  notify.hash(hash);
+                });
         }
-        createNewEthLoan();
+        createNewLoan();
         closeModal();
         break;
       case 'adjust':
@@ -44,7 +63,7 @@ const LoanModal = ({
       <Modal.Header>
         {type === 'new' ? 'Create New' : 'Adjust'} Loan
       </Modal.Header>
-      <NewLoan handleSubmit={handleActionClick}/>
+      <NewLoan handleSubmit={handleSubmit} calcMinCollateralAmount={calcMinCollateralAmount}  />
     </Modal>
   );
 };
