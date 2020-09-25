@@ -11,7 +11,8 @@ import { initOnboard } from "utils/services";
 import { Layout } from "components/common";
 import BorrowModal from "components/common/modals/BorrowModal";
 import LoanService from "services/loan.service";
-
+import SummaryCards from '../common/Summary/SummaryCards';
+import Table from '../common/Table/Table';
 const Borrow = ({
   setAddress,
   setNetwork,
@@ -68,11 +69,10 @@ const Borrow = ({
   //   const ready = await readyToTransact();
   //   if (!ready) return;
   // }
-
   return (
     <Layout>
-      <h1>Borrow</h1>
-      <button onClick={handleNewLoanClick}>New Loan</button>
+      <SummaryCards />
+      <Table HandleNewLoan={handleNewLoanClick}/>
       <BorrowModal
         open={showModal}
         type={modalType}
