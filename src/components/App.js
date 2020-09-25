@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { GlobalStyle } from 'components/common';
 
 // Routes
@@ -21,7 +21,7 @@ const App = () => {
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route exact path='/' component={Home} />
+          <Redirect exact from="/" to="/borrow" />
           <Route exact path='/earn' component={Earn} />
           <Route exact path='/borrow' component={Borrow} />
           <Route exact path='/trade' component={Trade} />
