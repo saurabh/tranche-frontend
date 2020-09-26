@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils/validations';
@@ -15,8 +15,6 @@ const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
 let NewLoan = ({ handleSubmit, calcMinCollateralAmount }) => {
   const [pair, setPair] = useState(0);
 
-  useEffect(() => {}, []);
-
   return (
     <>
       <Modal.Content style={{ background: '#f7f7f7' }}>
@@ -25,7 +23,7 @@ let NewLoan = ({ handleSubmit, calcMinCollateralAmount }) => {
             name='borrowedAskAmount'
             style={{ height: '40px' }}
             validate={[required, number]}
-            onChange={calcMinCollateralAmount}
+            // onChange={() => calcMinCollateralAmount(pair, amount)} // todo: need to pass in amount from the field value.
             // semantic props
             component={renderInput}
             placeholder='Borrowing'

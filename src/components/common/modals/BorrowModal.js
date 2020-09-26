@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { Modal } from 'semantic-ui-react';
 import { NewLoan } from 'components/common';
 import JFactoryConstructor from 'utils/JFactoryConstructor';
@@ -10,7 +11,9 @@ const LoanModal = ({
   type,
   closeModal,
   ethereum: { address, network, balance, wallet, web3, notify },
-  form: { pairId, borrowedAskAmount, rpbRate, collateralAmount }
+  form: { pairId, borrowedAskAmount, rpbRate, collateralAmount },
+  setBorrowedAskAmount,
+  setCollateralAmount
 }) => {
   const JFactory = JFactoryConstructor(web3);
 
@@ -18,11 +21,15 @@ const LoanModal = ({
 
   const calcMinCollateralAmount = async (pairId, askAmount) => {
     try {
-      await JFactory.methods.calcMinCollateralAmount(pairId, askAmount).call();      
+      const result = await JFactory.methods
+        .calcMinCollateralAmount(pairId, askAmount)
+        .call();
+
+      setCollateralAmount(result);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +50,12 @@ const LoanModal = ({
                   notify.hash(hash);
                 })
             : await JFactory.methods
-                .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, lendToken)
+                .createNewTokenLoan(
+                  pairId,
+                  borrowedAskAmount,
+                  rpbRate,
+                  lendToken
+                )
                 .send({ from: address })
                 .on('transactionHash', (hash) => {
                   notify.hash(hash);
@@ -64,7 +76,10 @@ const LoanModal = ({
       <Modal.Header>
         {type === 'new' ? 'Create New' : 'Adjust'} Loan
       </Modal.Header>
-      <NewLoan handleSubmit={handleSubmit} calcMinCollateralAmount={calcMinCollateralAmount}  />
+      <NewLoan
+        handleSubmit={handleSubmit}
+        calcMinCollateralAmount={calcMinCollateralAmount}
+      />
     </Modal>
   );
 };
@@ -74,8 +89,13 @@ LoanModal.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  setBorrowedAskAmount: PropTypes.func.isRequired,
+  setCollateralAmount: PropTypes.func.isRequired,
   ethereum: state.ethereum,
   form: state.form
 });
 
-export default connect(mapStateToProps, {})(LoanModal);
+export default connect(mapStateToProps, {
+  setBorrowedAskAmount,
+  setCollateralAmount
+})(LoanModal);
