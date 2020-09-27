@@ -6,6 +6,7 @@ import Star from "../../../assets/images/svg/Star.svg";
 import ETHGOLD from "../../../assets/images/svg/ethGold.svg";
 import ETH from "../../../assets/images/svg/eth.svg";
 import styled from "styled-components";
+import { etherScanUrl, NA } from "../../../config/constants";
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -54,6 +55,9 @@ class TableCard extends Component {
                             </div> */}
                 <div className="first-col-subtitle">
                   <h2>{loan.contractAddress}</h2>
+                  <a href={etherScanUrl + loan.contractAddress + "/#internaltx"}>
+                    link
+                  </a>
                 </div>
               </div>
             </div>
@@ -61,7 +65,7 @@ class TableCard extends Component {
           <div className="table-second-col table-col">
             <div className="second-col-content second-3-col-content">
               <h2>
-                {loan.remainingLoan} <span>DAI</span>
+                {loan.remainingLoan} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span>
               </h2>
             </div>
           </div>
@@ -76,7 +80,7 @@ class TableCard extends Component {
           <div className="table-fourth-col table-col">
             <div className="fourth-col-content second-3-col-content">
               <h2>
-                {loan.interestPaid ? loan.interestPaid : "N/A"} <span>ETH</span>
+                {loan.interestPaid} <span>{loan.interestPaid!=NA ?loan.collateralType:''}</span>
               </h2>
             </div>
           </div>
@@ -96,7 +100,7 @@ class TableCard extends Component {
             </div>
           </div>
         </TableContentCard>
-        <div
+        {/* <div
           className={
             "table-card-more " +
             (moreCardToggle ? "table-more-card-toggle" : "")
@@ -113,7 +117,7 @@ class TableCard extends Component {
               </h2>
             </div>
           </div>
-        </div>
+        </div> */}
       </TableContentCardWrapper>
     );
   }

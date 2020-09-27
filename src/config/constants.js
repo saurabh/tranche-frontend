@@ -15,7 +15,16 @@ export const assets = [
   { key: "USDC", text: "USDC", value: 1, collateral: "JPT" },
 ];
 
-export const serverUrl = "http://13.127.123.245/api/v1/";
+export const serverUrl = "http://localhost:4000/api/v1/";
+
+export const etherScanUrl = "https://kovan.etherscan.io/address/";
+export const NA = "N/A";
+
+export const pageType = {
+  BORROW: "borrow",
+  EARN: "earn",
+  TRADE: "trade",
+};
 
 export const apiUri = {
   loanList: "loans",
