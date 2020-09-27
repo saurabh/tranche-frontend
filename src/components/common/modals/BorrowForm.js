@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils/validations';
 import { assets } from 'config/constants';
@@ -17,7 +16,8 @@ const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
 let NewLoan = ({
   handleSubmit,
   calcMinCollateralAmount,
-  form: { borrowedAskAmount, pairId, rpbRate, collateralAmount }
+  borrowedAskAmount,
+  collateralAmount
 }) => {
   const [pair, setPair] = useState(0);
 
@@ -89,12 +89,15 @@ NewLoan = reduxForm({
   form: 'newLoan'
 })(NewLoan);
 
-NewLoan.propTypes = {
-  form: PropTypes.object.isRequired
-};
+const selector = formValueSelector('newLoan');
 
-const mapStateToProps = (state) => ({
-  form: state.form
-});
+NewLoan = connect((state) => {
+  const borrowedAskAmount = selector(state, 'borrowedAskAmount');
+  const collateralAmount = selector(state, 'collateralAmount');
+  return {
+    borrowedAskAmount,
+    collateralAmount
+  };
+})(NewLoan);
 
-export default connect(mapStateToProps, {})(NewLoan);
+export { NewLoan };

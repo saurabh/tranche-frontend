@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { Modal } from 'semantic-ui-react';
-import NewLoan from 'components/common/modals/BorrowForm';
+import { NewLoan } from 'components/common';
+// import NewLoan from 'components/common/modals/BorrowForm';
 import JFactoryConstructor from 'utils/JFactoryConstructor';
 
 const LoanModal = ({
@@ -24,8 +25,7 @@ const LoanModal = ({
       const result = await JFactory.methods
         .calcMinCollateralAmount(pairId, askAmount)
         .call();
-
-      setCollateralAmount(result);
+      setCollateralAmount(web3.utils.fromWei(result, 'Ether'));
     } catch (error) {
       console.error(error);
     }
@@ -88,10 +88,10 @@ const LoanModal = ({
       <Modal.Header>
         {type === 'new' ? 'Create New' : 'Adjust'} Loan
       </Modal.Header>
+      {/* <Button onClick={() => calcMinCollateralAmount()}></Button> */}
       <NewLoan
         handleSubmit={handleSubmit}
         calcMinCollateralAmount={calcMinCollateralAmount}
-        form
       />
     </Modal>
   );
