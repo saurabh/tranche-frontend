@@ -10,7 +10,6 @@ import {
 import { initOnboard } from "utils/services";
 import { Layout } from "components/common";
 import BorrowModal from "components/common/modals/BorrowModal";
-import LoanService from "services/loan.service";
 import SummaryCards from '../common/Summary/SummaryCards';
 import Table from '../common/Table/Table';
 const Borrow = ({
@@ -31,7 +30,6 @@ const Borrow = ({
   });
 
   useEffect(() => {
-    loanListing();
   }, [onboard, address, network, balance, wallet, web3]);
 
   const readyToTransact = async () => {
@@ -51,17 +49,7 @@ const Borrow = ({
     setModalType("new");
   };
 
-  const loanListing = async () => {
-    console.log(
-      await LoanService.loanList({
-        skip: 0,
-        limit: 10,
-        filter: {
-          type: null,
-        },
-      })
-    );
-  };
+ 
 
   // const handleAdjustLoanClick = () => {
   //   setShowModal(true)
