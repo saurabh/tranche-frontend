@@ -11,6 +11,8 @@ import { initOnboard } from "utils/services";
 import { Layout } from "components/common";
 import BorrowModal from "components/common/modals/BorrowModal";
 import SummaryCards from '../common/Summary/SummaryCards';
+import { pageType } from 'config/constants';
+
 import Table from '../common/Table/Table';
 const Borrow = ({
   setAddress,
@@ -59,8 +61,8 @@ const Borrow = ({
   // }
   return (
     <Layout>
-      <SummaryCards />
-      <Table HandleNewLoan={handleNewLoanClick}/>
+      {/* <SummaryCards /> */}
+      <Table pageType={pageType.BORROW}/>
       <BorrowModal
         open={showModal}
         type={modalType}

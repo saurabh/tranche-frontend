@@ -17,8 +17,14 @@ export const assets = [
 
 export const serverUrl = "http://localhost:4000/api/v1/";
 
-export const etherScanUrl = "https://kovan.etherscan.io/address/"
-export const NA = 'N/A';
+export const etherScanUrl = "https://kovan.etherscan.io/address/";
+export const NA = "N/A";
+
+export const pageType = {
+  BORROW: "borrow",
+  EARN: "earn",
+  TRADE: "trade",
+};
 
 export const apiUri = {
   loanList: "loans",

@@ -100,7 +100,7 @@ class TableCard extends Component {
             </div>
           </div>
         </TableContentCard>
-        <div
+        {/* <div
           className={
             "table-card-more " +
             (moreCardToggle ? "table-more-card-toggle" : "")
@@ -117,7 +117,7 @@ class TableCard extends Component {
               </h2>
             </div>
           </div>
-        </div>
+        </div> */}
       </TableContentCardWrapper>
     );
   }
