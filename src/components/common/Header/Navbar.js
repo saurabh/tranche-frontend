@@ -24,10 +24,6 @@ export function Navbar() {
                             <NavLink to="/earn" activeClassName="active-navbar-link">Earn</NavLink>
                             <NavLink to="/trade" activeClassName="active-navbar-link">Trade</NavLink>
                         </NavbarLinks>
-                        <select text='USD'>
-                            <option value="usd">USD</option>
-                            <option value="btc">BTC</option>
-                        </select>
                         <ConnectWallet />
                     </div>
                 </NavbarContainer>

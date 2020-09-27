@@ -7,6 +7,7 @@ import ETHGOLD from "../../../assets/images/svg/ethGold.svg";
 import ETH from "../../../assets/images/svg/eth.svg";
 import styled from "styled-components";
 import { etherScanUrl, NA } from "../../../config/constants";
+import addrShortener from 'utils/addrShortener';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -54,7 +55,7 @@ class TableCard extends Component {
                                 <h2>Pragmatic owl</h2>
                             </div> */}
                 <div className="first-col-subtitle">
-                  <h2>{loan.contractAddress}</h2>
+                  <h2>{addrShortener(loan.contractAddress)}</h2>
                   <a href={etherScanUrl + loan.contractAddress + "/#internaltx"}>
                     link
                   </a>
