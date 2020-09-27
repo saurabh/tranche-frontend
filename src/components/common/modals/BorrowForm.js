@@ -16,6 +16,7 @@ const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
 let NewLoan = ({
   handleSubmit,
   calcMinCollateralAmount,
+  calcMaxBorrowedAmount,
   borrowedAskAmount,
   collateralAmount
 }) => {
@@ -64,6 +65,7 @@ let NewLoan = ({
                 component={renderInput}
                 key={asset.key}
                 style={{ height: '40px', marginTop: '10px' }}
+                onChange={() => calcMaxBorrowedAmount(pair, collateralAmount)}
                 validate={[required, number]}
                 // semantic props
                 fluid

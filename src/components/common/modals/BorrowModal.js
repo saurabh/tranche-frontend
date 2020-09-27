@@ -31,17 +31,17 @@ const LoanModal = ({
     }
   };
 
-  //  const calcMinBorrowedlAmount = async (pairId, askAmount) => {
-  //   try {
-  //     const result = await JFactory.methods
-  //       .calcMinCollateralAmount(pairId, askAmount)
-  //       .call();
+   const calcMaxBorrowedAmount = async (pairId, collAmount) => {
+    try {
+      const result = await JFactory.methods
+        .calcMaxStableCoinAmount(pairId, collAmount)
+        .call();
 
-  //     setCollateralAmount(result);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+      setCollateralAmount(web3.utils.fromWei(result, 'Ether'));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,6 +92,7 @@ const LoanModal = ({
       <NewLoan
         handleSubmit={handleSubmit}
         calcMinCollateralAmount={calcMinCollateralAmount}
+        calcMaxBorrowedAmount={calcMaxBorrowedAmount}
       />
     </Modal>
   );
