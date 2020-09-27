@@ -1,9 +1,9 @@
 // Contract Addresses
 
-// const JLoansEthDeployerAddress = '0xE6d3E2A19c1a1B61E26982fdFa081a9Fbf68a010';
-// const JLoansTokenDeployerAddress = '0x281Fc9c46b06440e3D4aF8Ef50Dfb4576fD64E4f';
-// const JFeesCollectorAddress = '0x4d116D767222cc1424a17D5C41C769eAD95E1BF4';
-export const JFactoryAddress = "0x78cf587217A3C4f0cFA30598AC34DDD4C20Bf69A";
+// const JLoansEthDeployerAddress = '0x3235ecc38526131d08d534549fe95eda19f92903';
+// const JLoansTokenDeployerAddress = '0x21B13aF2F0892a1285DB54b3A2669D79990C9c40';
+// const JFeesCollectorAddress = '0xa9ddC40652C4d069d812862B97444F2BA6bd9736';
+export const JFactoryAddress = "0x661e18a7c860AF1E4C06CF69C0913B2b97557B8A";
 
 //
 
