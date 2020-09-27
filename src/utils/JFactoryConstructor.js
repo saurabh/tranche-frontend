@@ -1,4 +1,4 @@
-import abi from '../ABIs/JFactoryABI';
+import abi from 'ABIs/JFactoryABI';
 import {JFactoryAddress} from 'config/constants';
 
 export default function JFactorySetup(web3) {

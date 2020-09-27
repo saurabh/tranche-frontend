@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils/validations';
@@ -12,7 +14,11 @@ const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
   </>
 );
 
-let NewLoan = ({ handleSubmit, calcMinCollateralAmount }) => {
+let NewLoan = ({
+  handleSubmit,
+  calcMinCollateralAmount,
+  form: { borrowedAskAmount, pairId, rpbRate, collateralAmount }
+}) => {
   const [pair, setPair] = useState(0);
 
   return (
@@ -23,7 +29,7 @@ let NewLoan = ({ handleSubmit, calcMinCollateralAmount }) => {
             name='borrowedAskAmount'
             style={{ height: '40px' }}
             validate={[required, number]}
-            // onChange={() => calcMinCollateralAmount(pair, amount)} // todo: need to pass in amount from the field value.
+            onChange={() => calcMinCollateralAmount(pair, borrowedAskAmount)}
             // semantic props
             component={renderInput}
             placeholder='Borrowing'
@@ -51,7 +57,7 @@ let NewLoan = ({ handleSubmit, calcMinCollateralAmount }) => {
           placeholder='Loan APY'
         />
         {assets.map(
-          (asset) => 
+          (asset) =>
             asset.value === pair && (
               <Field
                 name='collateralAmount'
@@ -83,4 +89,12 @@ NewLoan = reduxForm({
   form: 'newLoan'
 })(NewLoan);
 
-export { NewLoan };
+NewLoan.propTypes = {
+  form: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+  form: state.form
+});
+
+export default connect(mapStateToProps, {})(NewLoan);

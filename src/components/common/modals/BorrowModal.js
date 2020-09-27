@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { Modal } from 'semantic-ui-react';
-import { NewLoan } from 'components/common';
+import NewLoan from 'components/common/modals/BorrowForm';
 import JFactoryConstructor from 'utils/JFactoryConstructor';
 
 const LoanModal = ({
@@ -11,7 +11,7 @@ const LoanModal = ({
   type,
   closeModal,
   ethereum: { address, network, balance, wallet, web3, notify },
-  form: { pairId, borrowedAskAmount, rpbRate, collateralAmount },
+  form,
   setBorrowedAskAmount,
   setCollateralAmount
 }) => {
@@ -30,6 +30,18 @@ const LoanModal = ({
       console.error(error);
     }
   };
+
+  //  const calcMinBorrowedlAmount = async (pairId, askAmount) => {
+  //   try {
+  //     const result = await JFactory.methods
+  //       .calcMinCollateralAmount(pairId, askAmount)
+  //       .call();
+
+  //     setCollateralAmount(result);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,13 +91,15 @@ const LoanModal = ({
       <NewLoan
         handleSubmit={handleSubmit}
         calcMinCollateralAmount={calcMinCollateralAmount}
+        form
       />
     </Modal>
   );
 };
 
 LoanModal.propTypes = {
-  ethereum: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
