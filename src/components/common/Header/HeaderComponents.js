@@ -118,12 +118,49 @@ const HeaderTabBtn = styled.button`
         margin: 12px 0;
     }
 `;
-const StyledButton = styled.button`
-  place-self: center;
-  background: white;
-  color: white;
+
+const WalletBtn = styled.button`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 119px;
+    height: 30px;
+    background: #DFD2FB;
+    border-radius: 9px;
+    padding: 0 13px;
+    border: none;
+    cursor: pointer;
+    ${({ icon }) => !icon && `
+        justify-content: center;
+    `}
+    &:focus{
+        outline: none;
+    }
+    @media (max-width: 992px){
+        margin: 5px 0;
+    }
 `;
 
+const WalletBtnIcon = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const WalletBtnText = styled.div`
+    & > h2{
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: rgba(58, 10, 159, 0.85);
+        margin: 0;
+    }
+`;
  
 export {
   HeaderWrapper,
@@ -136,5 +173,7 @@ export {
   HeaderTabsWrapper,
   MarketsTabsContainer,
   HeaderTabBtn,
-  StyledButton
+  WalletBtn,
+  WalletBtnIcon,
+  WalletBtnText
 };

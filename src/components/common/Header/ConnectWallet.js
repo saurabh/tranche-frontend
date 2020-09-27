@@ -9,7 +9,7 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'utils/services';
 import addrShortener from 'utils/addrShortener';
-import { StyledButton } from './HeaderComponents';
+import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
 
 const ConnectWallet = ({
   setAddress,
@@ -34,22 +34,34 @@ const ConnectWallet = ({
       onboard.walletSelect(previouslySelectedWallet)
     }
   }, [onboard, address, network, balance, wallet, web3]);
+  
+  
+
 
   const handleConnect = async () => {
-    await onboard.walletSelect();
-    await onboard.walletCheck();
+    await onboard.walletSelect()
+    await onboard.walletCheck()
   };
 
   return (
     <>
       {balance < 0 ? (
-        <StyledButton onClick={handleConnect} onKeyUp={handleConnect}>
-          Connect
-        </StyledButton>
+        <WalletBtn onClick={handleConnect} onKeyUp={handleConnect}>
+          <WalletBtnText icon={false}>
+            <h2>Connect</h2>
+          </WalletBtnText>
+        </WalletBtn>
       ) : (
-        <StyledButton onClick={handleConnect} onKeyUp={handleConnect}>
-          {addrShortener(address)}
-        </StyledButton>
+        <WalletBtn onClick={handleConnect} onKeyUp={handleConnect}>
+          <WalletBtnIcon>
+            <img src="" alt=""/>
+          </WalletBtnIcon>
+          <WalletBtnText>          
+            <h2>
+              {addrShortener(address)}
+            </h2>
+          </WalletBtnText>
+        </WalletBtn>
       )}
     </>
   );
