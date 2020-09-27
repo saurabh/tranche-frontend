@@ -26,7 +26,7 @@ function Table({ HandleNewLoan }) {
       skip: 0,
       limit: 10000,
       filter: {
-        type: null,
+        type: null, //ETH/JNT keep these in constant file
       },
     });
     if (loanListResult && loanListResult.result) {
