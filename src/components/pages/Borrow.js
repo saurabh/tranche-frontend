@@ -21,7 +21,7 @@ const Borrow = ({
   setWalletAndWeb3,
   ethereum: { address, network, balance, wallet, web3 },
 }) => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
 
   const onboard = initOnboard({
@@ -51,14 +51,13 @@ const Borrow = ({
     setModalType("new");
   };
 
- 
-
   // const handleAdjustLoanClick = () => {
   //   setShowModal(true)
   //   setModalType('adjust')
   //   const ready = await readyToTransact();
   //   if (!ready) return;
   // }
+  
   return (
     <Layout>
       {/* <SummaryCards /> */}

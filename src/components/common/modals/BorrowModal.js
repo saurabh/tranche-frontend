@@ -17,26 +17,32 @@ const LoanModal = ({
   setCollateralAmount
 }) => {
   const JFactory = JFactoryConstructor(web3);
+  const toBN = web3.utils.toBN;
+  const toWei = web3.utils.toWei;
+  const fromWei = web3.utils.fromWei;
 
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
   const calcMinCollateralAmount = async (pairId, askAmount) => {
+    const amount = toBN(askAmount);
+    const finalamount = toWei(amount, 'Ether');
     try {
       const result = await JFactory.methods
-        .calcMinCollateralAmount(pairId, askAmount)
+        .calcMinCollateralAmount(pairId, finalamount)
         .call();
-      setCollateralAmount(web3.utils.fromWei(result, 'Ether'));
+      setCollateralAmount(fromWei(result, 'Ether'));
     } catch (error) {
       console.error(error);
     }
   };
 
-   const calcMaxBorrowedAmount = async (pairId, collAmount) => {
+  const calcMaxBorrowedAmount = async (pairId, collAmount) => {
+    const amount = toBN(collAmount);
+    const finalamount = toWei(amount, 'Ether');
     try {
       const result = await JFactory.methods
-        .calcMaxStableCoinAmount(pairId, collAmount)
+        .calcMaxStableCoinAmount(pairId, finalamount)
         .call();
-
       setBorrowedAskAmount(web3.utils.fromWei(result, 'Ether'));
     } catch (error) {
       console.error(error);
@@ -45,33 +51,30 @@ const LoanModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(form.newLoan.values)
 
     switch (type) {
       case 'new':
-        async function createNewLoan(
-          pairId,
-          borrowedAskAmount,
-          rpbRate,
-          lendToken
-        ) {
-          pairId = 0
-            ? await JFactory.methods
-                .createNewEthLoan(pairId, borrowedAskAmount, rpbRate, lendToken)
-                .send({ from: address })
-                .on('transactionHash', (hash) => {
-                  notify.hash(hash);
-                })
-            : await JFactory.methods
-                .createNewTokenLoan(
-                  pairId,
-                  borrowedAskAmount,
-                  rpbRate,
-                  lendToken
-                )
-                .send({ from: address })
-                .on('transactionHash', (hash) => {
-                  notify.hash(hash);
-                });
+        async function createNewLoan() {
+          const tempRpbRate = 1000;
+          
+          // pairId = 0
+          //   ? await JFactory.methods
+          //       .createNewEthLoan(pairId, borrowedAskAmount, tempRpbRate)
+          //       .send({ value: collateralAmount, from: address })
+          //       .on('transactionHash', (hash) => {
+          //         notify.hash(hash);
+          //       })
+          //   : await JFactory.methods
+          //       .createNewTokenLoan(
+          //         pairId,
+          //         borrowedAskAmount,
+          //         rpbRate
+          //       )
+          //       .send({ from: address })
+          //       .on('transactionHash', (hash) => {
+          //         notify.hash(hash);
+          //       });
         }
         createNewLoan();
         closeModal();

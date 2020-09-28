@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
+import { useDebouncedCallback } from 'utils/lodash';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils/validations';
 import { assets } from 'config/constants';
@@ -16,11 +16,21 @@ const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
 let NewLoan = ({
   handleSubmit,
   calcMinCollateralAmount,
-  calcMaxBorrowedAmount,
-  borrowedAskAmount,
-  collateralAmount
+  calcMaxBorrowedAmount
 }) => {
   const [pair, setPair] = useState(0);
+
+  const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
+    (pair, borrowedAskAmount) =>
+      calcMinCollateralAmount(pair, borrowedAskAmount),
+    1000
+  );
+
+  const [debounceCalcMaxBorrowedAmount] = useDebouncedCallback(
+    (pair, borrowedAskAmount) =>
+    calcMaxBorrowedAmount(pair, borrowedAskAmount),
+    1000
+  );
 
   return (
     <>
@@ -30,13 +40,16 @@ let NewLoan = ({
             name='borrowedAskAmount'
             style={{ height: '40px' }}
             validate={[required, number]}
-            onChange={() => calcMinCollateralAmount(pair, borrowedAskAmount)}
+            onChange={(event, newValue) =>
+              debounceCalcMinCollateralAmount(pair, newValue)
+            }
             // semantic props
             component={renderInput}
             placeholder='Borrowing'
           />
           <Field
             name='pairId'
+            value='0'
             component='select'
             validate={[required]}
             onChange={(event, newValue) => setPair(+newValue)}
@@ -52,7 +65,7 @@ let NewLoan = ({
           name='rpbRate'
           style={{ height: '40px', marginTop: '10px' }}
           component={renderInput}
-          validate={[required, number, minValue0, maxValue100]}
+          validate={[number, minValue0, maxValue100]} // Add required
           // semantic props
           fluid
           placeholder='Loan APY'
@@ -65,7 +78,9 @@ let NewLoan = ({
                 component={renderInput}
                 key={asset.key}
                 style={{ height: '40px', marginTop: '10px' }}
-                onChange={() => calcMaxBorrowedAmount(pair, collateralAmount)}
+                onChange={(event, newValue) =>
+                  debounceCalcMaxBorrowedAmount(pair, newValue)
+                }
                 validate={[required, number]}
                 // semantic props
                 fluid
@@ -89,17 +104,6 @@ let NewLoan = ({
 
 NewLoan = reduxForm({
   form: 'newLoan'
-})(NewLoan);
-
-const selector = formValueSelector('newLoan');
-
-NewLoan = connect((state) => {
-  const borrowedAskAmount = selector(state, 'borrowedAskAmount');
-  const collateralAmount = selector(state, 'collateralAmount');
-  return {
-    borrowedAskAmount,
-    collateralAmount
-  };
 })(NewLoan);
 
 export { NewLoan };
