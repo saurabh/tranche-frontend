@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Field, reduxForm, initialize } from 'redux-form';
+import { connect } from 'react-redux';
+import { Form, Field, reduxForm } from 'redux-form';
 import { useDebouncedCallback } from 'utils/lodash';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils/validations';
@@ -59,42 +60,55 @@ let NewLoan = ({
             ))}
           </Field>
         </div>
-        <Field
-          name='rpbRate'
-          style={{ height: '40px', marginTop: '10px' }}
-          component={renderInput}
-          validate={[number, minValue0, maxValue100]} // Add required
-          // semantic props
-          fluid
-          placeholder='Loan APY'
-        />
-        {assets.map(
-          (asset) =>
-            asset.value === pair && (
-              <Field
-                name='collateralAmount'
-                component={renderInput}
-                key={asset.key}
-                style={{ height: '40px', marginTop: '10px' }}
-                onChange={(event, newValue) =>
-                  debounceCalcMaxBorrowedAmount(pair, newValue)
-                }
-                validate={[required, number]}
-                // semantic props
-                fluid
-                label={{ basic: true, content: asset.collateral }}
-                labelPosition='right'
-                icon='ethereum'
-                iconPosition='left'
-                placeholder='Collateralizing'
-              />
-            )
-        )}
+        <div
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column'
+          }}
+        >
+          <Field
+            name='rpbRate'
+            style={{ height: '40px', marginTop: '10px' }}
+            component={renderInput}
+            validate={[number, minValue0, maxValue100]} // Add required
+            // semantic props
+            // fluid
+            placeholder='Loan APY'
+          />
+          {assets.map(
+            (asset) =>
+              asset.value === pair && (
+                <Field
+                  name='collateralAmount'
+                  component={renderInput}
+                  key={asset.key}
+                  style={{
+                    alignItems: 'center',
+                    height: '40px',
+                    marginTop: '10px'
+                  }}
+                  onChange={(event, newValue) =>
+                    debounceCalcMaxBorrowedAmount(pair, newValue)
+                  }
+                  validate={[required, number]}
+                  // semantic props
+                  // fluid
+                  label={{ basic: true, content: asset.collateral }}
+                  labelPosition='right'
+                  icon='ethereum'
+                  iconPosition='left'
+                  placeholder='Collateralizing'
+                />
+              )
+          )}
+        </div>
       </Modal.Content>
-      <Modal.Actions style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button type='submit' fluid>
-          Create
-        </Button>
+      <Modal.Actions
+        style={{ margin: '15px', display: 'flex', justifyContent: 'center' }}
+      >
+        <Button onClick={handleSubmit}>Create</Button>
       </Modal.Actions>
     </Form>
   );
@@ -103,5 +117,9 @@ let NewLoan = ({
 NewLoan = reduxForm({
   form: 'newLoan'
 })(NewLoan);
+
+NewLoan = connect((state) => ({
+  initialValues: { pairId: 0 }
+}))(NewLoan);
 
 export { NewLoan };
