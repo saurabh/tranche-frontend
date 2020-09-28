@@ -7,7 +7,7 @@ import {
   setBalance,
   setWalletAndWeb3,
 } from "redux/actions/ethereum";
-import { initOnboard } from "utils/services";
+import { initOnboard } from "services/blocknative";
 import { Layout } from "components/common";
 import BorrowModal from "components/common/modals/BorrowModal";
 import SummaryCards from '../common/Summary/SummaryCards';
@@ -57,7 +57,7 @@ const Borrow = ({
   //   const ready = await readyToTransact();
   //   if (!ready) return;
   // }
-  
+
   return (
     <Layout>
       {/* <SummaryCards /> */}

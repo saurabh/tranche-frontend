@@ -6,7 +6,7 @@ import {
   SET_WALLET,
   SET_WEB3
 } from '../actions/constants';
-import { initNotify } from 'utils/services';
+import { initNotify } from 'services/blocknative';
 
 const provider = new Web3.providers.HttpProvider(
   'https://kovan.infura.io/v3/b036e8717e624f5c826fdb9205e391d2'
