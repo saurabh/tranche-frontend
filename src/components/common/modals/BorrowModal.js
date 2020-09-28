@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { Modal } from 'semantic-ui-react';
 import { NewLoan } from 'components/common';
-// import NewLoan from 'components/common/modals/BorrowForm';
 import JFactoryConstructor from 'utils/JFactoryConstructor';
 
 const LoanModal = ({
@@ -51,13 +50,19 @@ const LoanModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form.newLoan.values)
 
     switch (type) {
       case 'new':
         async function createNewLoan() {
           const tempRpbRate = 1000;
-          
+          const {
+            pairId,
+            borrowedAskAmount,
+            collateralAmount,
+            rpbRate
+          } = form.newLoan.values;
+
+          console.log(+pairId, +borrowedAskAmount, +collateralAmount, +rpbRate);
           // pairId = 0
           //   ? await JFactory.methods
           //       .createNewEthLoan(pairId, borrowedAskAmount, tempRpbRate)
@@ -91,7 +96,6 @@ const LoanModal = ({
       <Modal.Header>
         {type === 'new' ? 'Create New' : 'Adjust'} Loan
       </Modal.Header>
-      {/* <Button onClick={() => calcMinCollateralAmount()}></Button> */}
       <NewLoan
         handleSubmit={handleSubmit}
         calcMinCollateralAmount={calcMinCollateralAmount}

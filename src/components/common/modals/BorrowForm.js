@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Form, Field, reduxForm, initialize } from 'redux-form';
 import { useDebouncedCallback } from 'utils/lodash';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils/validations';
@@ -23,17 +23,16 @@ let NewLoan = ({
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     (pair, borrowedAskAmount) =>
       calcMinCollateralAmount(pair, borrowedAskAmount),
-    1000
+    500
   );
 
   const [debounceCalcMaxBorrowedAmount] = useDebouncedCallback(
-    (pair, borrowedAskAmount) =>
-    calcMaxBorrowedAmount(pair, borrowedAskAmount),
-    1000
+    (pair, borrowedAskAmount) => calcMaxBorrowedAmount(pair, borrowedAskAmount),
+    500
   );
 
   return (
-    <>
+    <Form onSubmit={handleSubmit}>
       <Modal.Content style={{ background: '#f7f7f7' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Field
@@ -49,7 +48,6 @@ let NewLoan = ({
           />
           <Field
             name='pairId'
-            value='0'
             component='select'
             validate={[required]}
             onChange={(event, newValue) => setPair(+newValue)}
@@ -94,11 +92,11 @@ let NewLoan = ({
         )}
       </Modal.Content>
       <Modal.Actions style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button fluid onClick={handleSubmit}>
+        <Button type='submit' fluid>
           Create
         </Button>
       </Modal.Actions>
-    </>
+    </Form>
   );
 };
 
