@@ -37,7 +37,7 @@ const LoanModal = ({
         .calcMaxStableCoinAmount(pairId, collAmount)
         .call();
 
-      setCollateralAmount(web3.utils.fromWei(result, 'Ether'));
+      setBorrowedAskAmount(web3.utils.fromWei(result, 'Ether'));
     } catch (error) {
       console.error(error);
     }
