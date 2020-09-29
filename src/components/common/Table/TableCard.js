@@ -8,6 +8,7 @@ import ETH from "../../../assets/images/svg/eth.svg";
 import styled from "styled-components";
 import { etherScanUrl, NA } from "../../../config/constants";
 import addrShortener from 'utils/addrShortener';
+import LinkArrow from "../../../assets/images/svg/linkArrow.svg";
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -16,7 +17,7 @@ const TableContentCard = styled.div`
   display: flex;
   align-items: center;
   min-height: 66px;
-  padding: 0 12px 0 47px;
+  padding: 0 39px 0 47px;
   border-bottom: 1px solid #efefef;
   cursor: pointer;
   @media (max-width: 992px) {
@@ -30,14 +31,19 @@ const TableContentCard = styled.div`
 class TableCard extends Component {
   state = {
     moreCardToggle: false,
+    tooltipToggleRemaining: false
   };
 
   cardToggle = () => {
     this.setState({ moreCardToggle: !this.state.moreCardToggle });
   };
 
+  remainingToggle=(hover)=>{
+    this.setState({tooltipToggleRemaining: hover})
+  }
+
   render() {
-    const { moreCardToggle } = this.state;
+    const { moreCardToggle, tooltipToggleRemaining } = this.state;
     const { loan } = this.props;
     return (
       <TableContentCardWrapper>
@@ -51,43 +57,52 @@ class TableCard extends Component {
                 <img src={UserImg} alt="User" />
               </div>
               <div className="first-col-content">
-                {/* <div className="first-col-title">
+                {/*<div className="first-col-title">
                                 <h2>Pragmatic owl</h2>
-                            </div> */}
+                            </div>*/}
                 <div className="first-col-subtitle">
                   <h2>{addrShortener(loan.contractAddress)}</h2>
-                  <a href={etherScanUrl + loan.contractAddress + "/#internaltx"}>
-                    link
+                  <a href={etherScanUrl + loan.contractAddress + "/#internaltx"} target="_blank">
+                    <img src={LinkArrow} alt=""/>
                   </a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="table-second-col table-col">
-            <div className="second-col-content second-3-col-content">
-              <h2>
-                {loan.remainingLoan} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span>
+          
+          <div className="table-third-col table-col">
+            <div className="third-col-content second-4-col-content">
+              <h2 onMouseEnter={() => this.remainingToggle(true)} onMouseLeave={() => this.remainingToggle(false)}>
+                {addrShortener(loan.remainingLoan)} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span>
               </h2>
+              <h2 className={"table-tool-tip " + (tooltipToggleRemaining ? "table-tool-tip-toggle" : "")}>{loan.remainingLoan} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span></h2>
             </div>
           </div>
-          <div className="table-third-col table-col">
-            <div className="third-col-content second-3-col-content">
+          <div className="table-fourth-col table-col">
+            <div className="fourth-col-content second-4-col-content">
               <h2>
                 {loan.collateralRatio}
                 <span>%</span>
               </h2>
             </div>
           </div>
-          <div className="table-fourth-col table-col">
-            <div className="fourth-col-content second-3-col-content">
+          <div className="table-fifth-col table-col">
+            <div className="fifth-col-content second-4-col-content">
               <h2>
-                {loan.interestPaid} <span>{loan.interestPaid!=NA ?loan.collateralType:''}</span>
+                {loan.interestPaid && addrShortener(loan.interestPaid)} <span>{loan.interestPaid!=NA ?loan.collateralType:''}</span>
+              </h2>
+            </div>
+          </div>
+          <div className="table-second-col table-col">
+            <div className="second-col-content second-4-col-content">
+              <h2>
+                active
               </h2>
             </div>
           </div>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="table-fifth-col table-col"
+            className="table-sixth-col table-col"
           >
             <div className="adjust-btn-wrapper">
               <button>

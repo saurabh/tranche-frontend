@@ -35,7 +35,7 @@
 .table-first-col{
   display: flex;
   align-items: center;
-  width: 269px;
+  width: 160px;
 }
 .table-first-col-wrapper{
   display: flex;
@@ -59,6 +59,10 @@
   text-transform: uppercase;
   color: #39295A;
 }
+.first-col-subtitle{
+  display: flex;
+  align-items: center;
+}
 .first-col-subtitle h2{
   font-family: 'Roboto', sans-serif;
   font-style: normal;
@@ -68,19 +72,59 @@
   text-transform: uppercase;
   color: #838186;  
 }
+.first-col-subtitle a img{
+  height: 12px;
+  margin-left: 2px;
+}
 .table-second-col{
-  width: 139px;
+  width: 109px;
 }
 .table-third-col{
-  width: 100px;
+  width: 139px;
+  position: relative;
+}
+.table-tool-tip{
+  position: absolute;
+  width: 150%;
+  top: -75px;
+  color: #39295A;
+  background: #EEE5FF;
+  box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);
+  transition: 300ms;
+  padding: 15px;
+  border-radius: 7px;
+  visibility: hidden;
+}
+.table-tool-tip-toggle{
+  top: -55px;
+  visibility: visible;
+}
+
+.table-tool-tip:before{
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  border-top: 4px solid #EEE5FF;
+  position: absolute;
+  bottom: -4px;
+  left: 12px;
 }
 
 .table-fourth-col{
-  width: 141px;
+  width: 100px;
 }
 
+.table-fifth-col{
+  width: 136px;
+}
 
-.second-3-col-content h2{
+.table-sixth-col{
+  width: 90px;
+}
+
+.second-4-col-content h2{
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: bold;
@@ -89,16 +133,16 @@
   text-transform: uppercase;
   color: #39295A;
 }
-.second-3-col-content h2 span{
+.second-4-col-content h2 span{
   font-weight: 400;
 }
-.table-fifth-col{
+.table-sixth-col{
   display: flex;
 }
-.table-fifth-col button{
+.table-sixth-col button{
   cursor: pointer;
 }
-.table-fifth-col button:focus{
+.table-sixth-col button:focus{
   outline: none;
 }
 
@@ -178,7 +222,7 @@
   text-transform: uppercase;
   color: #838186;
 }
-.table-more-second-3 h2{
+.table-more-second-4 h2{
   font-family: "Open Sans", sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -201,7 +245,7 @@
 .table-more-row-fifth{
   width: 118px;
 }
-.table-more-second-3 h2 span{
+.table-more-second-4 h2 span{
   font-weight: 400;
 }
 .table-more-row-third h2{
@@ -271,6 +315,9 @@
   .table-more-card-toggle {
     padding: 30px 12px 30px 12px;
   }
+  .table-tool-tip{
+    width: auto;
+  }
   .table-card-more{
     padding: 30px 12px 30px 12px;
   }
@@ -280,13 +327,16 @@
   .table-first-col:before { 
     content: "Address"; 
   }
-	.table-second-col:before { 
-    content: "Remaining"; 
+  .table-second-col:before { 
+    content: "Status"; 
   }
 	.table-third-col:before { 
-    content: "Ratio"; 
+    content: "Remaining"; 
   }
 	.table-fourth-col:before { 
+    content: "Ratio"; 
+  }
+	.table-fifth-col:before { 
     content: "Interest Paid"; 
   }
 }

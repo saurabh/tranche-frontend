@@ -55,8 +55,12 @@ const GlobalStyle = createGlobalStyle`
     transition-timing-function: ease;
   }
   
+  
   .address-wrapper{
-    width: 269px;
+    width: 160px;
+  }
+  .status-wrapper{
+    width: 109px;
   }
   .remaining-wrapper{
     width: 139px;
@@ -66,9 +70,11 @@ const GlobalStyle = createGlobalStyle`
   }
   
   .interest-paid-wrapper{
-    width: 226px;
+    width: 136px;
   }
-
+  .head-btns-wrapper{
+    width: 83px;
+  }
   @media (min-width: 992px){
     .navbar-container{
       width: 990px;

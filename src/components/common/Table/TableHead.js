@@ -41,6 +41,12 @@ const TableHead = () => {
             <TableHeadTitle className="interest-paid-wrapper">
                 <h2>Interest Paid</h2>
             </TableHeadTitle>
+            <TableHeadTitle className="status-wrapper">
+                <h2>Status</h2>
+            </TableHeadTitle>
+            <TableHeadTitle className="head-btns-wrapper">
+
+            </TableHeadTitle>
         </TableHeadWrapper>  
     );
 }
