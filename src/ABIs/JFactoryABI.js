@@ -1,62 +1,4 @@
-const abi = [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_pairId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_borrowedAskAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_rpbRate",
-				"type": "uint256"
-			}
-		],
-		"name": "createNewEthLoan",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_pairId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_borrowedAskAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_rpbRate",
-				"type": "uint256"
-			}
-		],
-		"name": "createNewTokenLoan",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+export const JFactoryABI = [
 	{
 		"inputs": [
 			{
@@ -237,264 +179,15 @@ const abi = [
 	},
 	{
 		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_pairId",
-				"type": "uint256"
-			},
+		"name": "ZERO_ADDRESS",
+		"outputs": [
 			{
 				"internalType": "address",
-				"name": "_baseAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_quoteAddress",
+				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "setBaseQuoteAddresses",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_pairId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_baseDecimals",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_quoteDecimals",
-				"type": "uint8"
-			}
-		],
-		"name": "setBaseQuoteDecimals",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setEarlySettlementFee",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setEarlySettlementWindow",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_ethDepl",
-				"type": "address"
-			}
-		],
-		"name": "setEthDeployerAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setFactoryFees",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setForeclosureRatio",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setForeclosureWindow",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setInstantForeclosureRatio",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setMinRpbRate",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_pairName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_pairDecimals",
-				"type": "uint8"
-			},
-			{
-				"internalType": "address",
-				"name": "_baseAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_baseDecimals",
-				"type": "uint8"
-			},
-			{
-				"internalType": "address",
-				"name": "_quoteAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_quoteDecimals",
-				"type": "uint8"
-			}
-		],
-		"name": "setNewPair",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_pairId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_pairDecimals",
-				"type": "uint8"
-			}
-		],
-		"name": "setPairValue",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setRequiredCollateralRatio",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_tokenDepl",
-				"type": "address"
-			}
-		],
-		"name": "setTokenDeployerAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -626,6 +319,64 @@ const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_pairId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_borrowedAskAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_rpbRate",
+				"type": "uint256"
+			}
+		],
+		"name": "createNewEthLoan",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_pairId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_borrowedAskAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_rpbRate",
+				"type": "uint256"
+			}
+		],
+		"name": "createNewTokenLoan",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "ethDeplContract",
 		"outputs": [
@@ -645,6 +396,44 @@ const abi = [
 			{
 				"internalType": "uint256",
 				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "generalFees",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "factoryFees",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "userRewardShare",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "vaultShare",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "undercollateralizedForeclosingMultiple",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "atRiskForeclosedMultiple",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "cancellationFees",
 				"type": "uint256"
 			}
 		],
@@ -691,16 +480,6 @@ const abi = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
-				"name": "undercollateralizedForeclosingMultiple",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "atRiskForeclosedMultiple",
-				"type": "uint256"
-			},
-			{
 				"internalType": "address",
 				"name": "factoryAddress",
 				"type": "address"
@@ -714,11 +493,6 @@ const abi = [
 				"internalType": "address",
 				"name": "tokenDeployerAddress",
 				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "factoryFees",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -756,6 +530,51 @@ const abi = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getGeneralFees",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "factoryFees",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "userRewardShare",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "vaultShare",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "undercollateralizedForeclosingMultiple",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "atRiskForeclosedMultiple",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "cancellationFees",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct IJLoanCommons.feesParams",
+				"name": "",
+				"type": "tuple"
 			}
 		],
 		"stateMutability": "view",
@@ -803,16 +622,6 @@ const abi = [
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
-						"name": "undercollateralizedForeclosingMultiple",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "atRiskForeclosedMultiple",
-						"type": "uint256"
-					},
-					{
 						"internalType": "address",
 						"name": "factoryAddress",
 						"type": "address"
@@ -826,11 +635,6 @@ const abi = [
 						"internalType": "address",
 						"name": "tokenDeployerAddress",
 						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "factoryFees",
-						"type": "uint256"
 					}
 				],
 				"internalType": "struct IJLoanCommons.params",
@@ -1038,6 +842,13 @@ const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1096,6 +907,313 @@ const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setAtRiskForeclosedMultiple",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_pairId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_baseAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_quoteAddress",
+				"type": "address"
+			}
+		],
+		"name": "setBaseQuoteAddresses",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_pairId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_baseDecimals",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_quoteDecimals",
+				"type": "uint8"
+			}
+		],
+		"name": "setBaseQuoteDecimals",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setCancellationFees",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setEarlySettlementFee",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setEarlySettlementWindow",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_ethDepl",
+				"type": "address"
+			}
+		],
+		"name": "setEthDeployerAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setFactoryFees",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setForeclosureRatio",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setForeclosureWindow",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setInstantForeclosureRatio",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setMinRpbRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_pairName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_pairDecimals",
+				"type": "uint8"
+			},
+			{
+				"internalType": "address",
+				"name": "_baseAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_baseDecimals",
+				"type": "uint8"
+			},
+			{
+				"internalType": "address",
+				"name": "_quoteAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_quoteDecimals",
+				"type": "uint8"
+			}
+		],
+		"name": "setNewPair",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_pairId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_pairDecimals",
+				"type": "uint8"
+			}
+		],
+		"name": "setPairValue",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setRequiredCollateralRatio",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_tokenDepl",
+				"type": "address"
+			}
+		],
+		"name": "setTokenDeployerAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setUndercollateralizedForeclosingMultiple",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setUserRewardShare",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "setVaultShares",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "tokenDeplContract",
 		"outputs": [
@@ -1109,18 +1227,16 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "ZERO_ADDRESS",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "newOwner",
 				"type": "address"
 			}
 		],
-		"stateMutability": "view",
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
-
-export default abi;

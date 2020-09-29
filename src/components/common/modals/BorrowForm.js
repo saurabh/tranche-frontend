@@ -119,7 +119,7 @@ NewLoan = reduxForm({
 })(NewLoan);
 
 NewLoan = connect(() => ({
-  initialValues: { pairId: 0 }
+  initialValues: { pairId: 1, borrowedAskAmount: 1, collateralAmount: 1000 }
 }))(NewLoan);
 
 export { NewLoan };
