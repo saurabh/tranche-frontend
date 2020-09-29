@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import TableMoreRow from './TableMoreRow';
-import UserImg from '../../../assets/images/svg/userImg.svg';
-import Adjust from '../../../assets/images/svg/adjust.svg';
-import Star from '../../../assets/images/svg/Star.svg';
-import ETHGOLD from '../../../assets/images/svg/ethGold.svg';
-import ETH from '../../../assets/images/svg/eth.svg';
-import styled from 'styled-components';
-import { etherScanUrl, NA } from '../../../config/constants';
+
+import React, { Component } from "react";
+import TableMoreRow from "./TableMoreRow";
+import UserImg from "../../../assets/images/svg/userImg.svg";
+import Adjust from "../../../assets/images/svg/adjust.svg";
+import Star from "../../../assets/images/svg/Star.svg";
+import ETHGOLD from "../../../assets/images/svg/ethGold.svg";
+import ETH from "../../../assets/images/svg/eth.svg";
+import styled from "styled-components";
+import { etherScanUrl, NA } from "../../../config/constants";
 import { addrShortener } from 'utils';
+import LinkArrow from "../../../assets/images/svg/linkArrow.svg";
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -16,7 +18,7 @@ const TableContentCard = styled.div`
   display: flex;
   align-items: center;
   min-height: 66px;
-  padding: 0 12px 0 47px;
+  padding: 0 39px 0 47px;
   border-bottom: 1px solid #efefef;
   cursor: pointer;
   @media (max-width: 992px) {
@@ -29,15 +31,24 @@ const TableContentCard = styled.div`
 
 class TableCard extends Component {
   state = {
+<<<<<<< HEAD
     moreCardToggle: false
+=======
+    moreCardToggle: false,
+    tooltipToggleRemaining: false
+>>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
   };
 
   cardToggle = () => {
     this.setState({ moreCardToggle: !this.state.moreCardToggle });
   };
 
+  remainingToggle=(hover)=>{
+    this.setState({tooltipToggleRemaining: hover})
+  }
+
   render() {
-    const { moreCardToggle } = this.state;
+    const { moreCardToggle, tooltipToggleRemaining } = this.state;
     const { loan } = this.props;
     return (
       <TableContentCardWrapper>
@@ -50,6 +61,7 @@ class TableCard extends Component {
               <div className='first-col-img'>
                 <img src={UserImg} alt='User' />
               </div>
+<<<<<<< HEAD
               <div className='first-col-content'>
                 {/* <div className="first-col-title">
                                 <h2>Pragmatic owl</h2>
@@ -60,11 +72,22 @@ class TableCard extends Component {
                     href={etherScanUrl + loan.contractAddress + '/#internaltx'}
                   >
                     link
+=======
+              <div className="first-col-content">
+                {/*<div className="first-col-title">
+                                <h2>Pragmatic owl</h2>
+                            </div>*/}
+                <div className="first-col-subtitle">
+                  <h2>{addrShortener(loan.contractAddress)}</h2>
+                  <a href={etherScanUrl + loan.contractAddress + "/#internaltx"} target="_blank">
+                    <img src={LinkArrow} alt=""/>
+>>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
                   </a>
                 </div>
               </div>
             </div>
           </div>
+<<<<<<< HEAD
           <div className='table-second-col table-col'>
             <div className='second-col-content second-3-col-content'>
               <h2>
@@ -72,17 +95,31 @@ class TableCard extends Component {
                 <span>
                   {loan.remainingLoan != NA ? loan.cryptoFromLender : ''}
                 </span>
+=======
+          
+          <div className="table-third-col table-col">
+            <div className="third-col-content second-4-col-content">
+              <h2 onMouseEnter={() => this.remainingToggle(true)} onMouseLeave={() => this.remainingToggle(false)}>
+                {addrShortener(loan.remainingLoan)} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span>
+>>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
               </h2>
+              <h2 className={"table-tool-tip " + (tooltipToggleRemaining ? "table-tool-tip-toggle" : "")}>{loan.remainingLoan} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span></h2>
             </div>
           </div>
+<<<<<<< HEAD
           <div className='table-third-col table-col'>
             <div className='third-col-content second-3-col-content'>
+=======
+          <div className="table-fourth-col table-col">
+            <div className="fourth-col-content second-4-col-content">
+>>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
               <h2>
                 {loan.collateralRatio}
                 <span>%</span>
               </h2>
             </div>
           </div>
+<<<<<<< HEAD
           <div className='table-fourth-col table-col'>
             <div className='fourth-col-content second-3-col-content'>
               <h2>
@@ -90,12 +127,29 @@ class TableCard extends Component {
                 <span>
                   {loan.interestPaid != NA ? loan.collateralType : ''}
                 </span>
+=======
+          <div className="table-fifth-col table-col">
+            <div className="fifth-col-content second-4-col-content">
+              <h2>
+                {loan.interestPaid && addrShortener(loan.interestPaid)} <span>{loan.interestPaid!=NA ?loan.collateralType:''}</span>
+              </h2>
+            </div>
+          </div>
+          <div className="table-second-col table-col">
+            <div className="second-col-content second-4-col-content">
+              <h2>
+                active
+>>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
               </h2>
             </div>
           </div>
           <div
             onClick={(e) => e.stopPropagation()}
+<<<<<<< HEAD
             className='table-fifth-col table-col'
+=======
+            className="table-sixth-col table-col"
+>>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
           >
             <div className='adjust-btn-wrapper'>
               <button>

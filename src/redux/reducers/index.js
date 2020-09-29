@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import alert from './alert';
 import ethereum from './ethereum';
+import { loans, loansIsLoading } from './loans';
+
 import { reducer as form } from 'redux-form';
 import {
   SET_COLLATERAL_AMOUNT,
@@ -10,6 +12,8 @@ import {
 export default combineReducers({
   alert,
   ethereum,
+  loans,
+  loansIsLoading,
   form: form.plugin({
     newLoan: (state, action) => {
       const { type, payload } = action;

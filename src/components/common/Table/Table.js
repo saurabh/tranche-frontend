@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { connect } from 'react-redux';
+import { loansFetchData } from '../../../redux/actions/loans';
+
 import TableHeader from "./TableHeader";
 import TableHead from "./TableHead";
 import TableCard from "./TableCard";
@@ -14,25 +17,19 @@ const TableWrapper = styled.div`
   border-radius: 12px;
 `;
 
-function Table({ HandleNewLoan }) {
-  const [loanList, setLoanList] = useState([]);
-
+function Table({ HandleNewLoan, fetchData, loans }) {
   useEffect(() => {
     loanListing();
   }, []);
 
-  const loanListing = async () => {
-    const loanListResult = await LoanService.loanList({
+  const loanListing = async (filter=null) => {
+    await fetchData({
       skip: 0,
       limit: 10000,
       filter: {
-        type: null, //ETH/JNT keep these in constant file
+        type: filter, //ETH/JNT keep these in constant file
       },
     });
-    if (loanListResult && loanListResult.result) {
-      const { list } = loanListResult.result;
-      setLoanList(list);
-    }
   };
 
   return (
@@ -42,7 +39,7 @@ function Table({ HandleNewLoan }) {
         <div className="table-container">
           <TableHead />
           <div className="table-content">
-            {loanList.map((loan, i) => (
+            {loans.map((loan, i) => (
               <TableCard key={i} loan={loan} />
             ))}
           </div>
@@ -51,4 +48,18 @@ function Table({ HandleNewLoan }) {
     </div>
   );
 }
-export default Table;
+
+const mapStateToProps = (state) => {
+  return {
+      loans: state.loans,
+      isLoading: state.itemsIsLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchData: (data) => dispatch(loansFetchData(data))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
