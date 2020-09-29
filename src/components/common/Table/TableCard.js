@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import TableMoreRow from "./TableMoreRow";
 import UserImg from "../../../assets/images/svg/userImg.svg";
@@ -50,12 +49,12 @@ class TableCard extends Component {
       <TableContentCardWrapper>
         <TableContentCard
           onClick={this.cardToggle}
-          className={moreCardToggle ? 'table-card-toggle' : ''}
+          className={moreCardToggle ? "table-card-toggle" : ""}
         >
-          <div className='table-first-col table-col'>
-            <div className='table-first-col-wrapper'>
-              <div className='first-col-img'>
-                <img src={UserImg} alt='User' />
+          <div className="table-first-col table-col">
+            <div className="table-first-col-wrapper">
+              <div className="first-col-img">
+                <img src={UserImg} alt="User" />
               </div>
               <div className="first-col-content">
                 {/*<div className="first-col-title">
@@ -105,14 +104,14 @@ class TableCard extends Component {
             onClick={(e) => e.stopPropagation()}
             className="table-sixth-col table-col"
           >
-            <div className='adjust-btn-wrapper'>
+            <div className="adjust-btn-wrapper">
               <button>
-                <img src={Adjust} alt='' />
+                <img src={Adjust} alt="" />
               </button>
             </div>
-            <div className='star-btn-wrapper'>
+            <div className="star-btn-wrapper">
               <button>
-                <img src={Star} alt='' />
+                <img src={Star} alt="" />
               </button>
             </div>
           </div>
