@@ -8,7 +8,7 @@ import {
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import addrShortener from 'utils/addrShortener';
+import { addrShortener } from 'utils';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
 
 const ConnectWallet = ({
@@ -28,19 +28,16 @@ const ConnectWallet = ({
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
       'selectedWallet'
-    )
+    );
 
     if (previouslySelectedWallet && onboard) {
-      onboard.walletSelect(previouslySelectedWallet)
+      onboard.walletSelect(previouslySelectedWallet);
     }
   }, [onboard, address, network, balance, wallet, web3]);
-  
-  
-
 
   const handleConnect = async () => {
-    await onboard.walletSelect()
-    await onboard.walletCheck()
+    await onboard.walletSelect();
+    await onboard.walletCheck();
   };
 
   return (
@@ -54,12 +51,10 @@ const ConnectWallet = ({
       ) : (
         <WalletBtn onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>
-            <img src="" alt=""/>
+            <img src='' alt='' />
           </WalletBtnIcon>
-          <WalletBtnText>          
-            <h2>
-              {addrShortener(address)}
-            </h2>
+          <WalletBtnText>
+            <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>
       )}

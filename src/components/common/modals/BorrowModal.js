@@ -23,8 +23,7 @@ const LoanModal = ({
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
   const calcMinCollateralAmount = async (pairId, askAmount) => {
-    const amount = toBN(askAmount);
-    const finalamount = toWei(amount, 'Ether');
+    const finalamount = toWei(askAmount, 'Ether');
     try {
       const result = await JFactory.methods
         .calcMinCollateralAmount(pairId, finalamount)
@@ -36,8 +35,7 @@ const LoanModal = ({
   };
 
   const calcMaxBorrowedAmount = async (pairId, collAmount) => {
-    const amount = toBN(collAmount);
-    const finalamount = toWei(amount, 'Ether');
+    const finalamount = toWei(collAmount, 'Ether');
     try {
       const result = await JFactory.methods
         .calcMaxStableCoinAmount(pairId, finalamount)

@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import TableMoreRow from "./TableMoreRow";
-import UserImg from "../../../assets/images/svg/userImg.svg";
-import Adjust from "../../../assets/images/svg/adjust.svg";
-import Star from "../../../assets/images/svg/Star.svg";
-import ETHGOLD from "../../../assets/images/svg/ethGold.svg";
-import ETH from "../../../assets/images/svg/eth.svg";
-import styled from "styled-components";
-import { etherScanUrl, NA } from "../../../config/constants";
-import addrShortener from 'utils/addrShortener';
+import React, { Component } from 'react';
+import TableMoreRow from './TableMoreRow';
+import UserImg from '../../../assets/images/svg/userImg.svg';
+import Adjust from '../../../assets/images/svg/adjust.svg';
+import Star from '../../../assets/images/svg/Star.svg';
+import ETHGOLD from '../../../assets/images/svg/ethGold.svg';
+import ETH from '../../../assets/images/svg/eth.svg';
+import styled from 'styled-components';
+import { etherScanUrl, NA } from '../../../config/constants';
+import { addrShortener } from 'utils';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -29,7 +29,7 @@ const TableContentCard = styled.div`
 
 class TableCard extends Component {
   state = {
-    moreCardToggle: false,
+    moreCardToggle: false
   };
 
   cardToggle = () => {
@@ -43,60 +43,68 @@ class TableCard extends Component {
       <TableContentCardWrapper>
         <TableContentCard
           onClick={this.cardToggle}
-          className={moreCardToggle ? "table-card-toggle" : ""}
+          className={moreCardToggle ? 'table-card-toggle' : ''}
         >
-          <div className="table-first-col table-col">
-            <div className="table-first-col-wrapper">
-              <div className="first-col-img">
-                <img src={UserImg} alt="User" />
+          <div className='table-first-col table-col'>
+            <div className='table-first-col-wrapper'>
+              <div className='first-col-img'>
+                <img src={UserImg} alt='User' />
               </div>
-              <div className="first-col-content">
+              <div className='first-col-content'>
                 {/* <div className="first-col-title">
                                 <h2>Pragmatic owl</h2>
                             </div> */}
-                <div className="first-col-subtitle">
+                <div className='first-col-subtitle'>
                   <h2>{addrShortener(loan.contractAddress)}</h2>
-                  <a href={etherScanUrl + loan.contractAddress + "/#internaltx"}>
+                  <a
+                    href={etherScanUrl + loan.contractAddress + '/#internaltx'}
+                  >
                     link
                   </a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="table-second-col table-col">
-            <div className="second-col-content second-3-col-content">
+          <div className='table-second-col table-col'>
+            <div className='second-col-content second-3-col-content'>
               <h2>
-                {loan.remainingLoan} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span>
+                {loan.remainingLoan}{' '}
+                <span>
+                  {loan.remainingLoan != NA ? loan.cryptoFromLender : ''}
+                </span>
               </h2>
             </div>
           </div>
-          <div className="table-third-col table-col">
-            <div className="third-col-content second-3-col-content">
+          <div className='table-third-col table-col'>
+            <div className='third-col-content second-3-col-content'>
               <h2>
                 {loan.collateralRatio}
                 <span>%</span>
               </h2>
             </div>
           </div>
-          <div className="table-fourth-col table-col">
-            <div className="fourth-col-content second-3-col-content">
+          <div className='table-fourth-col table-col'>
+            <div className='fourth-col-content second-3-col-content'>
               <h2>
-                {loan.interestPaid} <span>{loan.interestPaid!=NA ?loan.collateralType:''}</span>
+                {loan.interestPaid}{' '}
+                <span>
+                  {loan.interestPaid != NA ? loan.collateralType : ''}
+                </span>
               </h2>
             </div>
           </div>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="table-fifth-col table-col"
+            className='table-fifth-col table-col'
           >
-            <div className="adjust-btn-wrapper">
+            <div className='adjust-btn-wrapper'>
               <button>
-                <img src={Adjust} alt="" />
+                <img src={Adjust} alt='' />
               </button>
             </div>
-            <div className="star-btn-wrapper">
+            <div className='star-btn-wrapper'>
               <button>
-                <img src={Star} alt="" />
+                <img src={Star} alt='' />
               </button>
             </div>
           </div>

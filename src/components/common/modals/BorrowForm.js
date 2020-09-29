@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
-import { useDebouncedCallback } from 'utils/lodash';
+import { useDebouncedCallback } from 'utils';
 import { Modal, Input, Button } from 'semantic-ui-react';
-import { required, number, minValue0, maxValue100 } from 'utils/validations';
+import { required, number, minValue0, maxValue100 } from 'utils';
 import { assets } from 'config/constants';
 
 const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
@@ -118,7 +118,7 @@ NewLoan = reduxForm({
   form: 'newLoan'
 })(NewLoan);
 
-NewLoan = connect((state) => ({
+NewLoan = connect(() => ({
   initialValues: { pairId: 0 }
 }))(NewLoan);
 
