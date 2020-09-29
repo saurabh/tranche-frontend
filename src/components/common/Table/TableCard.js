@@ -31,12 +31,8 @@ const TableContentCard = styled.div`
 
 class TableCard extends Component {
   state = {
-<<<<<<< HEAD
-    moreCardToggle: false
-=======
     moreCardToggle: false,
     tooltipToggleRemaining: false
->>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
   };
 
   cardToggle = () => {
@@ -61,18 +57,6 @@ class TableCard extends Component {
               <div className='first-col-img'>
                 <img src={UserImg} alt='User' />
               </div>
-<<<<<<< HEAD
-              <div className='first-col-content'>
-                {/* <div className="first-col-title">
-                                <h2>Pragmatic owl</h2>
-                            </div> */}
-                <div className='first-col-subtitle'>
-                  <h2>{addrShortener(loan.contractAddress)}</h2>
-                  <a
-                    href={etherScanUrl + loan.contractAddress + '/#internaltx'}
-                  >
-                    link
-=======
               <div className="first-col-content">
                 {/*<div className="first-col-title">
                                 <h2>Pragmatic owl</h2>
@@ -81,53 +65,28 @@ class TableCard extends Component {
                   <h2>{addrShortener(loan.contractAddress)}</h2>
                   <a href={etherScanUrl + loan.contractAddress + "/#internaltx"} target="_blank">
                     <img src={LinkArrow} alt=""/>
->>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
                   </a>
                 </div>
               </div>
             </div>
           </div>
-<<<<<<< HEAD
-          <div className='table-second-col table-col'>
-            <div className='second-col-content second-3-col-content'>
-              <h2>
-                {loan.remainingLoan}{' '}
-                <span>
-                  {loan.remainingLoan != NA ? loan.cryptoFromLender : ''}
-                </span>
-=======
           
           <div className="table-third-col table-col">
             <div className="third-col-content second-4-col-content">
               <h2 onMouseEnter={() => this.remainingToggle(true)} onMouseLeave={() => this.remainingToggle(false)}>
                 {addrShortener(loan.remainingLoan)} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span>
->>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
               </h2>
               <h2 className={"table-tool-tip " + (tooltipToggleRemaining ? "table-tool-tip-toggle" : "")}>{loan.remainingLoan} <span>{loan.remainingLoan!=NA ?loan.cryptoFromLender:''}</span></h2>
             </div>
           </div>
-<<<<<<< HEAD
-          <div className='table-third-col table-col'>
-            <div className='third-col-content second-3-col-content'>
-=======
           <div className="table-fourth-col table-col">
             <div className="fourth-col-content second-4-col-content">
->>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
               <h2>
                 {loan.collateralRatio}
                 <span>%</span>
               </h2>
             </div>
           </div>
-<<<<<<< HEAD
-          <div className='table-fourth-col table-col'>
-            <div className='fourth-col-content second-3-col-content'>
-              <h2>
-                {loan.interestPaid}{' '}
-                <span>
-                  {loan.interestPaid != NA ? loan.collateralType : ''}
-                </span>
-=======
           <div className="table-fifth-col table-col">
             <div className="fifth-col-content second-4-col-content">
               <h2>
@@ -139,17 +98,12 @@ class TableCard extends Component {
             <div className="second-col-content second-4-col-content">
               <h2>
                 active
->>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
               </h2>
             </div>
           </div>
           <div
             onClick={(e) => e.stopPropagation()}
-<<<<<<< HEAD
-            className='table-fifth-col table-col'
-=======
             className="table-sixth-col table-col"
->>>>>>> 5dd12c85ed3186204a094994ba4fedc63c05715e
           >
             <div className='adjust-btn-wrapper'>
               <button>
