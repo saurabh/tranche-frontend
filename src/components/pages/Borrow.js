@@ -8,11 +8,11 @@ import {
   setWalletAndWeb3,
 } from "redux/actions/ethereum";
 import { initOnboard } from "services/blocknative";
-import { readyToTransact } from 'utils';
+import { readyToTransact } from 'utils/helperFunctions';
 import { Layout } from "components/common";
 import BorrowModal from "components/common/modals/BorrowModal";
 import SummaryCards from '../common/Summary/SummaryCards';
-import { pageType } from 'config';
+import { pageType } from 'config/constants';
 
 import Table from '../common/Table/Table';
 const Borrow = ({

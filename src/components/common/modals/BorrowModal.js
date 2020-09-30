@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { Modal } from 'semantic-ui-react';
 import { NewLoan } from 'components/common';
-import { JFactorySetup, JPTSetup } from 'utils';
-import { JLoanTokenDeployerAddress } from 'config';
+import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
+import { JLoanTokenDeployerAddress } from 'config/ethereum';
 
 const LoanModal = ({
   open,

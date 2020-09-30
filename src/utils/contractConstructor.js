@@ -1,5 +1,5 @@
 import { JFactoryABI, ERC20ABI } from 'ABIs';
-import { JFactoryAddress, JPTAddress, USDCAddress } from 'config';
+import { JFactoryAddress, JPTAddress, USDCAddress } from 'config/ethereum';
 
 export function JFactorySetup(web3) {
   return new web3.eth.Contract(JFactoryABI, JFactoryAddress);

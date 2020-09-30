@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
-import { useDebouncedCallback } from 'utils';
+import { required, number, minValue0, maxValue100 } from 'utils/validations';
+import { useDebouncedCallback } from 'utils/lodash';
 import { Modal, Input, Button } from 'semantic-ui-react';
-import { required, number, minValue0, maxValue100 } from 'utils';
-import { assets } from 'config';
+import { assets } from 'config/constants';
 
 const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
   <>

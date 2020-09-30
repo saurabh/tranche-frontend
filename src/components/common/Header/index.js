@@ -8,7 +8,7 @@ import {
 } from './HeaderComponents';
 import HeaderTabs from './HeaderTabs';
 import { Navbar } from './Navbar';
-import { HeaderData } from 'config';
+import { HeaderData } from 'config/constants';
 
 export function Header() {
   const { pathname } = useLocation();

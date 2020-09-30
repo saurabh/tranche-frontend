@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
 import { loansFetchData } from 'redux/actions/loans';
-import { ETH, JNT } from 'config';
+import { ETH, JNT } from 'config/constants';
 
 import {
     HeaderTabsWrapper,

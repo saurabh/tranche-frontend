@@ -1,5 +1,5 @@
 import BaseService from './base.service';
-import { apiUri } from 'config';
+import { apiUri } from 'config/constants';
 import { postRequest } from './axios';
 const { loanList: loanListUrl } = apiUri;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from 'components/common';
 import SummaryCards from '../common/Summary/SummaryCards';
 import Table from '../common/Table/Table';
-import { pageType } from 'config';
+import { pageType } from 'config/constants';
 
 export default function Trade() {
   return (
