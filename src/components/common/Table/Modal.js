@@ -158,7 +158,7 @@ export default function ModalLoan({modalIsOpen, closeModal}){
           
         >
           <ModalHeader>
-            <h2>Settings</h2>
+            <h2>Adjust</h2>
             <button onClick={() => closeModal()}><img src={CloseModal} alt=""/></button>
           </ModalHeader>
           <ModalContent>
