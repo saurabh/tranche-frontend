@@ -54,6 +54,10 @@ const GlobalStyle = createGlobalStyle`
     transition-duration: 300ms;
     transition-timing-function: ease;
   }
+
+  .ModalLoan{
+    
+  }
   
   
   .address-wrapper{
