@@ -26,21 +26,21 @@ const Table = ({
   ethereum: { address, network, balance, wallet, web3, notify }
 }) => {
   useEffect(() => {
+    const loanListing = async (filter = null) => {
+      await fetchData({
+        skip: 0,
+        limit: 10000,
+        filter: {
+          type: filter //ETH/JNT keep these in constant file
+        }
+      });
+    };
+    
     loanListing();
-  }, []);
+  }, [fetchData]);
 
-  const loanListing = async (filter = null) => {
-    await fetchData({
-      skip: 0,
-      limit: 10000,
-      filter: {
-        type: filter //ETH/JNT keep these in constant file
-      }
-    });
-  };
-
-  // const approveLoan = (loanAddress, stableCoinAddress) => {
-  // }
+  const approveLoan = (loanAddress, stableCoinAddress) => {
+  }
 
   return (
     <div className='container content-container'>
@@ -50,7 +50,7 @@ const Table = ({
           <TableHead />
           <div className='table-content'>
             {loans.map((loan, i) => (
-              <TableCard key={i} loan={loan} />
+              <TableCard key={i} loan={loan} approveLoan={approveLoan}/>
             ))}
           </div>
         </div>

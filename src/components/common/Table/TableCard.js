@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import TableMoreRow from './TableMoreRow';
 import ModalLoan from './Modal';
 import UserImg from 'assets/images/svg/userImg.svg';
@@ -29,7 +29,7 @@ const TableContentCard = styled.div`
   }
 `;
 
-function TableCard({ loan }) {
+const TableCard = ({ loan, approveLoan }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
@@ -68,7 +68,7 @@ function TableCard({ loan }) {
                 <h2>{addrShortener(loan.contractAddress)}</h2>
                 <a
                   href={etherScanUrl + loan.contractAddress + '/#internaltx'}
-                  target='_blank'
+                  target='_blank' rel='noopener noreferrer'
                 >
                   <img src={LinkArrow} alt='' />
                 </a>
