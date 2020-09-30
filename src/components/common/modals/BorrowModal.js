@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
@@ -49,6 +49,61 @@ const LoanModal = ({
     }
   };
 
+  const createNewEthLoan = async (
+    pairId,
+    borrowedAskAmount,
+    rpbRate,
+    collateralAmount
+  ) => {
+    try {
+      await JFactory.methods
+        .createNewEthLoan(pairId, borrowedAskAmount, rpbRate)
+        .send({ value: collateralAmount, from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const createNewTokenLoan = async (
+    pairId,
+    borrowedAskAmount,
+    rpbRate,
+    collateralAmount
+  ) => {
+    try {
+      let userallowance = await DAI.methods
+        .allowance(address, JFactoryAddress)
+        .call({ from: address });
+      userallowance = toWei(userallowance, 'ether');
+      if (collateralAmount > userallowance) {
+        await DAI.methods
+          .approve(JFactoryAddress, collateralAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+        await JFactory.methods
+          .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      } else {
+        await JFactory.methods
+          .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -66,38 +121,19 @@ const LoanModal = ({
             borrowedAskAmount = toWei(borrowedAskAmount);
             collateralAmount = toWei(collateralAmount);
             if (pairId === 0) {
-              await JFactory.methods
-                .createNewEthLoan(pairId, borrowedAskAmount, tempRpbRate)
-                .send({ value: collateralAmount, from: address })
-                .on('transactionHash', (hash) => {
-                  notify.hash(hash);
-                });
+              createNewEthLoan(
+                pairId,
+                borrowedAskAmount,
+                tempRpbRate,
+                collateralAmount
+              );
             } else {
-              let userallowance = await DAI.methods
-                .allowance(address, JFactoryAddress)
-                .call({ from: address });
-              userallowance = toWei(userallowance, 'ether');
-              if (collateralAmount > userallowance) {
-                await DAI.methods
-                  .approve(JFactoryAddress, collateralAmount)
-                  .send({ from: address })
-                  .on('transactionHash', (hash) => {
-                    notify.hash(hash);
-                  });
-                await JFactory.methods
-                  .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
-                  .send({ from: address })
-                  .on('transactionHash', (hash) => {
-                    notify.hash(hash);
-                  });
-              } else {
-                await JFactory.methods
-                  .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
-                  .send({ from: address })
-                  .on('transactionHash', (hash) => {
-                    notify.hash(hash);
-                  });
-              }
+              createNewTokenLoan(
+                pairId,
+                borrowedAskAmount,
+                tempRpbRate,
+                collateralAmount
+              );
             }
           } catch (error) {
             console.error(error);
