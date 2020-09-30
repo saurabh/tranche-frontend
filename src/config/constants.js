@@ -36,3 +36,16 @@ export const apiUri = {
 // Filters
 export const ETH = 'ETH';
 export const JNT = 'JNT';
+
+export const statuses =  {
+  0: "Pending",
+  1: "Active",
+  2: "Under Collateralized",
+  3: "At Risk",
+  4: "Foreclosing",
+  5: "Foreclosed",
+  6: "Closing",
+  7: "Closed",
+  8: "Cancelled"
+};
+

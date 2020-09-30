@@ -7,3 +7,9 @@ export const addrShortener = (addr) => {
     addr.substring(addr.length - 4, addr.length)
   );
 }
+
+export const statusShortner = (status) => {
+  return ReactHtmlParser(
+    status.substring(0, 12) + (status.length >= 12 ? "." : "")
+  );
+}
