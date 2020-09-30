@@ -4,7 +4,7 @@ import { Form, Field, reduxForm } from 'redux-form';
 import { useDebouncedCallback } from 'utils';
 import { Modal, Input, Button } from 'semantic-ui-react';
 import { required, number, minValue0, maxValue100 } from 'utils';
-import { assets } from 'config/constants';
+import { assets } from 'config';
 
 const renderInput = ({ meta: { touched, error, warning }, ...props }) => (
   <>

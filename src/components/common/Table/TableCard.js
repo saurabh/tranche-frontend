@@ -1,17 +1,17 @@
 import React, { Component, useState } from "react";
 import TableMoreRow from "./TableMoreRow";
 import ModalLoan from "./Modal";
-import UserImg from "../../../assets/images/svg/userImg.svg";
-import Adjust from "../../../assets/images/svg/adjust.svg";
-import Star from "../../../assets/images/svg/Star.svg";
-import ETHGOLD from "../../../assets/images/svg/ethGold.svg";
-import ETH from "../../../assets/images/svg/eth.svg";
+import UserImg from "assets/images/svg/userImg.svg";
+import Adjust from "assets/images/svg/adjust.svg";
+import Star from "assets/images/svg/Star.svg";
+import ETHGOLD from "assets/images/svg/ethGold.svg";
+import ETH from "assets/images/svg/eth.svg";
 import styled from "styled-components";
-import { etherScanUrl, NA } from "../../../config/constants";
+import { etherScanUrl, NA } from "config";
 import { addrShortener } from 'utils';
 import { statusShortner } from 'utils';
-import {statuses} from 'config/constants';
-import LinkArrow from "../../../assets/images/svg/linkArrow.svg";
+import {statuses} from 'config';
+import LinkArrow from "assets/images/svg/linkArrow.svg";
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;

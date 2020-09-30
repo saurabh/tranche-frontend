@@ -1,6 +1,6 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
-import { blocknativeKey, infuraKey, networkId } from 'config/constants'
+import { blocknativeKey, infuraKey, networkId } from 'config'
 
 let onboard = undefined;
 let notify = undefined;

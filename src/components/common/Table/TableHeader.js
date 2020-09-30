@@ -1,5 +1,5 @@
 import React from "react";
-import Create from "../../../assets/images/svg/create.svg";
+import Create from "assets/images/svg/create.svg";
 import styled from 'styled-components';
 
 const TableContainerHeader = styled.div`

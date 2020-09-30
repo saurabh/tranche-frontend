@@ -1,5 +1,15 @@
 import ReactHtmlParser from 'react-html-parser';
 
+export const readyToTransact = async (wallet, onboard) => {
+  if (!wallet) {
+    const walletSelected = await onboard.walletSelect();
+    if (!walletSelected) return false;
+  }
+
+  const ready = await onboard.walletCheck();
+  return ready;
+};
+
 export const addrShortener = (addr) => {
   if (addr) {
     return ReactHtmlParser(
