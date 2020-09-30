@@ -39,12 +39,13 @@ let NewLoan = ({
           <Field
             name='borrowedAskAmount'
             style={{ height: '40px' }}
+            component={renderInput}
+            type='number'
             validate={[required, number]}
             onChange={(event, newValue) =>
               debounceCalcMinCollateralAmount(pair, newValue)
             }
             // semantic props
-            component={renderInput}
             placeholder='Borrowing'
           />
           <Field
@@ -72,6 +73,7 @@ let NewLoan = ({
             name='rpbRate'
             style={{ height: '40px', marginTop: '10px' }}
             component={renderInput}
+            type='number'
             validate={[number, minValue0, maxValue100]} // Add required
             // semantic props
             // fluid
@@ -83,6 +85,7 @@ let NewLoan = ({
                 <Field
                   name='collateralAmount'
                   component={renderInput}
+                  type='number'
                   key={asset.key}
                   style={{
                     alignItems: 'center',
