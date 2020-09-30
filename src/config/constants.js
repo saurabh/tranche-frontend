@@ -1,7 +1,7 @@
 // Contract Addresses
 export const networkId = 42;
 export const JFactoryAddress = '0x50df4D94dFA062535F43872edFCaCa06C91EE785';
-export const KovanDaiAddress = '0xc707fd5a456eec2609463f7fea79756356f0a754';
+export const DaiAddress = '0xc707fd5a456eec2609463f7fea79756356f0a754';
 // const JLoansEthDeployerAddress = '0xe995B45c65FFd82b1330ee5be95417436026122c';
 // const JLoansTokenDeployerAddress = '0x170c5176204035C0A1f79475b13f811e5C39Fd8e';
 // const JFeesCollectorAddress = '0x7dda219A696DE925fF017A00905C3DBF654D1D99';

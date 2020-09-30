@@ -29,7 +29,7 @@ const LoanModal = ({
     const finalamount = toWei(askAmount);
     try {
       const result = await JFactory.methods
-        .calcMinCollateralAmount(pairId, finalamount)
+        .calcMinCollateralWithFeesAmount(pairId, finalamount)
         .call();
       setCollateralAmount(fromWei(result, 'Ether'));
     } catch (error) {
@@ -41,7 +41,7 @@ const LoanModal = ({
     const finalamount = toWei(collAmount);
     try {
       const result = await JFactory.methods
-        .calcMaxStableCoinAmount(pairId, finalamount)
+        .calcMaxStableCoinWithFeesAmount(pairId, finalamount)
         .call();
       setBorrowedAskAmount(web3.utils.fromWei(result, 'Ether'));
     } catch (error) {
@@ -120,6 +120,7 @@ const LoanModal = ({
             } = form.newLoan.values;
             borrowedAskAmount = toWei(borrowedAskAmount);
             collateralAmount = toWei(collateralAmount);
+            console.log(borrowedAskAmount, collateralAmount)
             if (pairId === 0) {
               createNewEthLoan(
                 pairId,
