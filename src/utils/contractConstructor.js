@@ -1,10 +1,14 @@
 import { JFactoryABI, ERC20ABI } from 'ABIs';
-import { JFactoryAddress, DaiAddress } from 'config/constants';
+import { JFactoryAddress, JPTAddress, USDCAddress } from 'config';
 
 export function JFactorySetup(web3) {
   return new web3.eth.Contract(JFactoryABI, JFactoryAddress);
 }
 
-export function DaiSetup(web3) {
-  return new web3.eth.Contract(ERC20ABI, DaiAddress);
+export function JPTSetup(web3) {
+  return new web3.eth.Contract(ERC20ABI, JPTAddress);
+}
+
+export function USDCSetup(web3) {
+  return new web3.eth.Contract(ERC20ABI, USDCAddress);
 }
