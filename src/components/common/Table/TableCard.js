@@ -90,7 +90,7 @@ function TableCard({loan, path}) {
             >
               {Math.round(loan.remainingLoan)}{' '}
               <span>
-                {loan.remainingLoan != NA ? loan.cryptoFromLender : ''}
+                {loan.cryptoFromLenderName}
               </span>
             </h2>
             <h2
@@ -101,7 +101,7 @@ function TableCard({loan, path}) {
             >
               {loan.remainingLoan}{' '}
               <span>
-                {loan.remainingLoan != NA ? loan.cryptoFromLender : ''}
+                {loan.cryptoFromLenderName}
               </span>
             </h2>
           </div>
@@ -118,7 +118,7 @@ function TableCard({loan, path}) {
           <div className='fifth-col-content second-4-col-content'>
             <h2>
               {loan.interestPaid && addrShortener(loan.interestPaid)}{' '}
-              <span>{loan.interestPaid != NA ? loan.collateralType : ''}</span>
+              <span>{loan.collateralTypeName}</span>
             </h2>
           </div>
         </div>
