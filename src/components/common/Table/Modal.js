@@ -76,20 +76,26 @@ Modal.setAppElement('#root')
  
 export default function ModalLoan({modalIsOpen, closeModal, path, status}){
     const [adjustPosition, adjustPositionToggle] = useState(false) 
+    let ConfirmText = status === 0 ? "Are you sure you want to activate this loan?" :
+                      status === 1 ? "Are you sure you want to withdraw interest?" : ""
+
     const confirm = () => {
         confirmAlert({
             customUI: ({ onClose }) => {
               return (
                 <ConfirmAlertWrapper>
-                  <h2>Are you sure you want to close this loan?</h2>
+                  <h2>{ConfirmText}</h2>
                   <ConfirmAlertBtnWrapper>
                     <ModalButton onClick={onClose}>No</ModalButton>
                     <ModalButton
+                      btnColor={statuses[1].color}
+                      confirmBtn={true}
                       onClick={() => {
                         controlAction()
                       }}
                     >
                       Yes
+                      
                     </ModalButton>
                   </ConfirmAlertBtnWrapper>
                 </ConfirmAlertWrapper>

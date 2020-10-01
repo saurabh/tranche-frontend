@@ -88,7 +88,7 @@ function TableCard({loan, path}) {
               onMouseEnter={() => remainingToggle(true)}
               onMouseLeave={() => remainingToggle(false)}
             >
-              {addrShortener(loan.remainingLoan)}{' '}
+              {Math.round(loan.remainingLoan)}{' '}
               <span>
                 {loan.remainingLoan != NA ? loan.cryptoFromLender : ''}
               </span>
