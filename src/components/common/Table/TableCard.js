@@ -1,19 +1,19 @@
-import React, { Component, useState } from "react";
-import TableMoreRow from "./TableMoreRow";
-import ModalLoan from "./Modal";
-import UserImg from "assets/images/svg/userImg.svg";
-import Star from "assets/images/svg/Star.svg";
-import ETHGOLD from "assets/images/svg/ethGold.svg";
-import ETH from "assets/images/svg/eth.svg";
-import Adjust from "assets/images/svg/adjust.svg";
-import AdjustEarn from "assets/images/svg/adjustEarn.svg";
-import AdjustTrade from "assets/images/svg/adjustTrade.svg";
+import React, { Component, useState } from 'react';
+import TableMoreRow from './TableMoreRow';
+import ModalLoan from './Modal';
+import UserImg from 'assets/images/svg/userImg.svg';
+import Star from 'assets/images/svg/Star.svg';
+import ETHGOLD from 'assets/images/svg/ethGold.svg';
+import ETH from 'assets/images/svg/eth.svg';
+import Adjust from 'assets/images/svg/adjust.svg';
+import AdjustEarn from 'assets/images/svg/adjustEarn.svg';
+import AdjustTrade from 'assets/images/svg/adjustTrade.svg';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 import { addrShortener } from 'utils';
 import { statusShortner } from 'utils';
 import { statuses, etherScanUrl, NA } from 'config/constants';
-import LinkArrow from "assets/images/svg/linkArrow.svg";
+import LinkArrow from 'assets/images/svg/linkArrow.svg';
 import { ColorData } from 'config/constants';
 
 const TableContentCardWrapper = styled.div`
@@ -34,11 +34,18 @@ const TableContentCard = styled.div`
   }
 `;
 
-function TableCard({loan, path}) {
+function TableCard({ loan, path, approveLoan }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  let disableBtn = loan.status === 5 || loan.status === 6 || loan.status === 7 || loan.status === 8;
+  let disableBtn =
+    loan.status === 5 ||
+    loan.status === 6 ||
+    loan.status === 7 ||
+    loan.status === 8;
+
+  console.log(loan);
+
   function openModal() {
     setIsOpen(true);
   }
@@ -73,7 +80,8 @@ function TableCard({loan, path}) {
                 <h2>{addrShortener(loan.contractAddress)}</h2>
                 <a
                   href={etherScanUrl + loan.contractAddress + '/#internaltx'}
-                  target='_blank' rel='noopener noreferrer'
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
                   <img src={LinkArrow} alt='' />
                 </a>
@@ -89,9 +97,7 @@ function TableCard({loan, path}) {
               onMouseLeave={() => remainingToggle(false)}
             >
               {Math.round(loan.remainingLoan)}{' '}
-              <span>
-                {loan.cryptoFromLenderName}
-              </span>
+              <span>{loan.cryptoFromLenderName}</span>
             </h2>
             <h2
               className={
@@ -99,10 +105,7 @@ function TableCard({loan, path}) {
                 (tooltipToggleRemaining ? 'table-tool-tip-toggle' : '')
               }
             >
-              {loan.remainingLoan}{' '}
-              <span>
-                {loan.cryptoFromLenderName}
-              </span>
+              {loan.remainingLoan} <span>{loan.cryptoFromLenderName}</span>
             </h2>
           </div>
         </div>
@@ -122,9 +125,15 @@ function TableCard({loan, path}) {
             </h2>
           </div>
         </div>
-        <div className="table-second-col table-col">
-          <div className="second-col-content">
-            <h2 className="status-text-wrapper" style={{color: statuses[loan.status].color, backgroundColor: statuses[loan.status].background}}>
+        <div className='table-second-col table-col'>
+          <div className='second-col-content'>
+            <h2
+              className='status-text-wrapper'
+              style={{
+                color: statuses[loan.status].color,
+                backgroundColor: statuses[loan.status].background
+              }}
+            >
               {statusShortner(statuses[loan.status].status)}
             </h2>
           </div>
@@ -133,18 +142,50 @@ function TableCard({loan, path}) {
           onClick={(e) => e.stopPropagation()}
           className='table-sixth-col table-col'
         >
-          <div className="adjust-btn-wrapper">
-            <button style={{background: ColorData[path].btnColor}, (path === "trade" || disableBtn) ? {backgroundColor: "#cccccc", color: "#666666", cursor: "default"} : {}} onClick={(path === "trade" || disableBtn) ? false :() => openModal()} disabled={path === "trade" || disableBtn}>
-              <img src={path === "borrow" ? Adjust : path === "earn" ? AdjustEarn : path === "trade" ? AdjustTrade : Adjust} alt="" />
+          <div className='adjust-btn-wrapper'>
+            <button
+              style={
+                ({ background: ColorData[path].btnColor },
+                path === 'trade' || disableBtn
+                  ? {
+                      backgroundColor: '#cccccc',
+                      color: '#666666',
+                      cursor: 'default'
+                    }
+                  : {})
+              }
+              onClick={
+                path === 'trade' || disableBtn ? false : () => openModal()
+              }
+              disabled={path === 'trade' || disableBtn}
+            >
+              <img
+                src={
+                  path === 'borrow'
+                    ? Adjust
+                    : path === 'earn'
+                    ? AdjustEarn
+                    : path === 'trade'
+                    ? AdjustTrade
+                    : Adjust
+                }
+                alt=''
+              />
             </button>
-            
           </div>
           <div className='star-btn-wrapper'>
             <button>
               <img src={Star} alt='' />
             </button>
           </div>
-          <ModalLoan status={loan.status} path={path} modalIsOpen={modalIsOpen} closeModal={() => closeModal()}/>
+          <ModalLoan
+            status={loan.status}
+            loan={loan}
+            path={path}
+            modalIsOpen={modalIsOpen}
+            closeModal={() => closeModal()}
+            approveLoan={approveLoan}
+          />
         </div>
       </TableContentCard>
       {/* <div

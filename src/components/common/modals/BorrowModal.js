@@ -75,8 +75,6 @@ const LoanModal = ({
       let userallowance = await JPT.methods
         .allowance(address, JLoanTokenDeployerAddress)
         .call({ from: address });
-      console.log(collateralAmount)
-      console.log(userallowance)
       if (collateralAmount > userallowance) {
         await JPT.methods
           .approve(JLoanTokenDeployerAddress, collateralAmount)

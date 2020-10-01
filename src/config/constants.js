@@ -44,7 +44,9 @@ export const apiUri = {
 };
 // Filters
 export const ETH = 'ETH';
+export const DAI = 'DAI';
 export const JNT = 'JNT';
+export const USDC = 'USDC';
 
 export const statuses =  {
   0: {

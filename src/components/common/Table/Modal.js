@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
-import CloseModal from "assets/images/svg/closeModal.svg";
+import CloseModal from 'assets/images/svg/closeModal.svg';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses } from '../../../config/constants';
 import {
-  ModalHeader, 
+  ModalHeader,
   ModalContent,
-  BtnGrpLoanModal, 
-  ModalButton, 
-  ConfirmAlertWrapper, 
-  ConfirmAlertBtnWrapper, 
-  ModalAdjustForm, 
-  ModalFormWrapper, 
-  ModalFormGrp, 
+  BtnGrpLoanModal,
+  ModalButton,
+  ConfirmAlertWrapper,
+  ConfirmAlertBtnWrapper,
+  ModalAdjustForm,
+  ModalFormWrapper,
+  ModalFormGrp,
   ModalFormLabel,
   ModalFormInput,
   ModalFormSubmit,
   ModalFormButton
-} from "./ModalComponents"
+} from './ModalComponents';
 const FirstCustomStyles = {
   overlay: {
     display: 'flex',
@@ -29,7 +29,7 @@ const FirstCustomStyles = {
     right: '0',
     bottom: '0'
   },
-  content : {
+  content: {
     position: 'relative',
     maxWidth: '292px',
     width: '100%',
@@ -55,7 +55,7 @@ const AdjustPositionStyles = {
     right: '0',
     bottom: '0'
   },
-  content : {
+  content: {
     position: 'relative',
     maxWidth: '292px',
     width: '100%',
@@ -70,148 +70,229 @@ const AdjustPositionStyles = {
     right: '0',
     bottom: '0'
   }
-}
+};
 
-Modal.setAppElement('#root')
- 
-export default function ModalLoan({modalIsOpen, closeModal, path, status}){
-    const [adjustPosition, adjustPositionToggle] = useState(false) 
-    let ConfirmText = status === 0 ? "Are you sure you want to activate this loan?" :
-                      status === 1 ? "Are you sure you want to withdraw interest?" : ""
+Modal.setAppElement('#root');
 
-    const confirm = () => {
-        confirmAlert({
-            customUI: ({ onClose }) => {
-              return (
-                <ConfirmAlertWrapper>
-                  <h2>{ConfirmText}</h2>
-                  <ConfirmAlertBtnWrapper>
-                    <ModalButton onClick={onClose}>No</ModalButton>
-                    <ModalButton
-                      btnColor={statuses[1].color}
-                      confirmBtn={true}
-                      onClick={() => {
-                        controlAction()
-                      }}
-                    >
-                      Yes
-                      
-                    </ModalButton>
-                  </ConfirmAlertBtnWrapper>
-                </ConfirmAlertWrapper>
-              );
-            }
-          });
-    };
+export default function ModalLoan({
+  modalIsOpen,
+  closeModal,
+  path,
+  status,
+  approveLoan,
+  loan: {
+    cryptoFromLenderName,
+    contractAddress,
+    remainingLoan,
+    cryptoFromLender
+  }
+}) {
+  const [adjustPosition, adjustPositionToggle] = useState(false);
+  let ConfirmText =
+    status === 0
+      ? 'Are you sure you want to activate this loan?'
+      : status === 1
+      ? 'Are you sure you want to withdraw interest?'
+      : '';
 
-    const controlAction = () => {
-      alert("Action!")
-    }
-  
-    const modalClose =()=>{
+  const confirm = () => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmAlertWrapper>
+            <h2>{ConfirmText}</h2>
+            <ConfirmAlertBtnWrapper>
+              <ModalButton onClick={onClose}>No</ModalButton>
+              <ModalButton
+                btnColor={statuses[1].color}
+                confirmBtn={true}
+                onClick={() => {
+                  controlAction();
+                }}
+              >
+                Yes
+              </ModalButton>
+            </ConfirmAlertBtnWrapper>
+          </ConfirmAlertWrapper>
+        );
+      }
+    });
+  };
+
+  const controlAction = () => {
+    if (status === 0) {
+      approveLoan(
+        cryptoFromLenderName,
+        contractAddress,
+        remainingLoan,
+        cryptoFromLender
+      );
       closeModal();
-      adjustPositionToggle(false);
-    }
-    const borrowModal = () =>{
-        return(
-          <div>
-            { !adjustPosition ? 
-                <Modal
-                  isOpen={modalIsOpen}
-                  onRequestClose={closeModal}
-                  style={FirstCustomStyles}
-                  shouldCloseOnOverlayClick={false} 
-                  contentLabel="Adjust"
-                >
-                  <ModalHeader>
-                    <h2>Adjust</h2>
-                    <button onClick={() => modalClose()}><img src={CloseModal} alt=""/></button>
-                  </ModalHeader>
-                  <ModalContent>
-                    <BtnGrpLoanModal>
-                      <ModalButton onClick={() => adjustPositionToggle(true)}>Adjust Collateral</ModalButton>
-                      <ModalButton onClick={() => confirm()}>Close Loan</ModalButton>
-                    </BtnGrpLoanModal>
-                  </ModalContent>
-                </Modal> :
-                <Modal
-                  isOpen={modalIsOpen}
-                  onRequestClose={closeModal}
-                  style={AdjustPositionStyles}
-                  shouldCloseOnOverlayClick={false} 
-                  contentLabel="AdjustPosition"
-                >
-                <ModalHeader>
-                  <h2>Adjust Position</h2>
-                  <button onClick={() => modalClose()}><img src={CloseModal} alt=""/></button>
-                </ModalHeader>
-                <ModalAdjustForm>
-                    <ModalFormWrapper>
-                      <ModalFormGrp>
-                        <ModalFormLabel htmlFor="blockedInput">LOCKED</ModalFormLabel>
-                        <ModalFormInput type="number" step="0.0001" id="blockedInput"/>
-                        <h2>INTEREST EARNED: <span>0.0000</span> ETH</h2>
-                      </ModalFormGrp>
-                      <ModalFormGrp>
-                        <ModalFormLabel htmlFor="blockedInput">EARNING PER BLOCK</ModalFormLabel>
-                        <ModalFormInput type="number" step="0.0001" id="blockedInput"/>
-                        <h2>ANNUAL RETURN: <span>0.00%</span> APY</h2>
-                      </ModalFormGrp>
-                    </ModalFormWrapper>
-                </ModalAdjustForm>
-                <ModalFormSubmit>
-                  <BtnGrpLoanModal>
-                    <ModalFormButton>CHANGE POSITION</ModalFormButton>
-                  </BtnGrpLoanModal>
-                </ModalFormSubmit>
-                </Modal>
-              
-            }
-          </div>
-        )
-    }
-    const earnModal = () =>{
-      return (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={FirstCustomStyles}
-          shouldCloseOnOverlayClick={false} 
-          contentLabel="Adjust"
-        >
-          <ModalHeader>
-            <h2>Adjust</h2>
-            <button onClick={() => modalClose()}><img src={CloseModal} alt=""/></button>
-          </ModalHeader>
-          <ModalContent>
-            <BtnGrpLoanModal>
-              {
-                status === 0 ?
-                  <ModalButton onClick={() => confirm()} btnColor={statuses[1].color}>Active Loan</ModalButton> : 
-                status === 1 ?
-                  <ModalButton onClick={() => confirm()} btnColor={statuses[4].color}>Withdraw Interest</ModalButton> : 
-                status === 2 ?
-                  <BtnGrpLoanModal>
-                  <ModalButton onClick={() => confirm()} btnColor={statuses[4].color}>Withdraw Interest</ModalButton> 
-                  <ModalButton onClick={() => confirm()} btnColor={statuses[4].color}>Foreclosing Loan</ModalButton>
-                  </BtnGrpLoanModal> :
-                status === 3 ?
-                  <BtnGrpLoanModal>
-                    <ModalButton onClick={() => confirm()} btnColor={statuses[5].color}>Withdraw Interest</ModalButton> 
-                    <ModalButton onClick={() => confirm()} btnColor={statuses[5].color}>Foreclosed Action</ModalButton>
-                  </BtnGrpLoanModal> :
+    } else if (status === 1) alert('Withdraw Interest');
+  };
 
-                status === 4 ?
-                <ModalButton onClick={() => confirm()} btnColor={statuses[5].color}>Withdraw Interest</ModalButton> 
-                : ""
-              }
-            </BtnGrpLoanModal>
-          </ModalContent>
-        </Modal>
-      )
-    }
- 
-    return(
-      path === "borrow" ? borrowModal() : path === "earn" ? earnModal() : false
-    )
+  const modalClose = () => {
+    closeModal();
+    adjustPositionToggle(false);
+  };
+  const borrowModal = () => {
+    return (
+      <div>
+        {!adjustPosition ? (
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={FirstCustomStyles}
+            shouldCloseOnOverlayClick={false}
+            contentLabel='Adjust'
+          >
+            <ModalHeader>
+              <h2>Adjust</h2>
+              <button onClick={() => modalClose()}>
+                <img src={CloseModal} alt='' />
+              </button>
+            </ModalHeader>
+            <ModalContent>
+              <BtnGrpLoanModal>
+                <ModalButton onClick={() => adjustPositionToggle(true)}>
+                  Adjust Collateral
+                </ModalButton>
+                <ModalButton onClick={() => confirm()}>Close Loan</ModalButton>
+              </BtnGrpLoanModal>
+            </ModalContent>
+          </Modal>
+        ) : (
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={AdjustPositionStyles}
+            shouldCloseOnOverlayClick={false}
+            contentLabel='AdjustPosition'
+          >
+            <ModalHeader>
+              <h2>Adjust Position</h2>
+              <button onClick={() => modalClose()}>
+                <img src={CloseModal} alt='' />
+              </button>
+            </ModalHeader>
+            <ModalAdjustForm>
+              <ModalFormWrapper>
+                <ModalFormGrp>
+                  <ModalFormLabel htmlFor='blockedInput'>LOCKED</ModalFormLabel>
+                  <ModalFormInput
+                    type='number'
+                    step='0.0001'
+                    id='blockedInput'
+                  />
+                  <h2>
+                    INTEREST EARNED: <span>0.0000</span> ETH
+                  </h2>
+                </ModalFormGrp>
+                <ModalFormGrp>
+                  <ModalFormLabel htmlFor='blockedInput'>
+                    EARNING PER BLOCK
+                  </ModalFormLabel>
+                  <ModalFormInput
+                    type='number'
+                    step='0.0001'
+                    id='blockedInput'
+                  />
+                  <h2>
+                    ANNUAL RETURN: <span>0.00%</span> APY
+                  </h2>
+                </ModalFormGrp>
+              </ModalFormWrapper>
+            </ModalAdjustForm>
+            <ModalFormSubmit>
+              <BtnGrpLoanModal>
+                <ModalFormButton>CHANGE POSITION</ModalFormButton>
+              </BtnGrpLoanModal>
+            </ModalFormSubmit>
+          </Modal>
+        )}
+      </div>
+    );
+  };
+  const earnModal = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={FirstCustomStyles}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+      >
+        <ModalHeader>
+          <h2>Adjust</h2>
+          <button onClick={() => modalClose()}>
+            <img src={CloseModal} alt='' />
+          </button>
+        </ModalHeader>
+        <ModalContent>
+          <BtnGrpLoanModal>
+            {status === 0 ? (
+              <ModalButton
+                onClick={() => confirm()}
+                btnColor={statuses[1].color}
+              >
+                Active Loan
+              </ModalButton>
+            ) : status === 1 ? (
+              <ModalButton
+                onClick={() => confirm()}
+                btnColor={statuses[4].color}
+              >
+                Withdraw Interest
+              </ModalButton>
+            ) : status === 2 ? (
+              <BtnGrpLoanModal>
+                <ModalButton
+                  onClick={() => confirm()}
+                  btnColor={statuses[4].color}
+                >
+                  Withdraw Interest
+                </ModalButton>
+                <ModalButton
+                  onClick={() => confirm()}
+                  btnColor={statuses[4].color}
+                >
+                  Foreclosing Loan
+                </ModalButton>
+              </BtnGrpLoanModal>
+            ) : status === 3 ? (
+              <BtnGrpLoanModal>
+                <ModalButton
+                  onClick={() => confirm()}
+                  btnColor={statuses[5].color}
+                >
+                  Withdraw Interest
+                </ModalButton>
+                <ModalButton
+                  onClick={() => confirm()}
+                  btnColor={statuses[5].color}
+                >
+                  Foreclosed Action
+                </ModalButton>
+              </BtnGrpLoanModal>
+            ) : status === 4 ? (
+              <ModalButton
+                onClick={() => confirm()}
+                btnColor={statuses[5].color}
+              >
+                Withdraw Interest
+              </ModalButton>
+            ) : (
+              ''
+            )}
+          </BtnGrpLoanModal>
+        </ModalContent>
+      </Modal>
+    );
+  };
+
+  return path === 'borrow'
+    ? borrowModal()
+    : path === 'earn'
+    ? earnModal()
+    : false;
 }

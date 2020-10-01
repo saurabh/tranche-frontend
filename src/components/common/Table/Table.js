@@ -9,7 +9,13 @@ import TableHead from './TableHead';
 import TableCard from './TableCard';
 import styled from 'styled-components';
 import LoanService from 'services/loan.service';
-import { JLoanEthSetup, JLoanTokenSetup } from 'utils/contractConstructor';
+import {
+  JLoanEthSetup,
+  JLoanTokenSetup,
+  DAISetup,
+  USDCSetup
+} from 'utils/contractConstructor';
+import { DAI, USDC } from 'config/constants';
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -20,11 +26,17 @@ const TableWrapper = styled.div`
   border-radius: 12px;
 `;
 
-const Table = ({ HandleNewLoan, fetchData, loans, changePath, pathChanged,
+const Table = ({
+  HandleNewLoan,
+  fetchData,
+  loans,
+  changePath,
+  pathChanged,
   ethereum: { address, network, balance, wallet, web3, notify }
 }) => {
   const { pathname } = useLocation();
   const [path, setPath] = useState('home');
+  const toWei = web3.utils.toWei;
 
   useEffect(() => {
     const loanListing = async (filter = null) => {
@@ -50,18 +62,104 @@ const Table = ({ HandleNewLoan, fetchData, loans, changePath, pathChanged,
     loanListing();
   }, [fetchData, pathname, changePath]);
 
-  const approveLoan = (loanAddress, stableCoinAddress) => {
-  }
+  const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
+    try {
+      const JLoanEth = JLoanEthSetup(web3, loanAddress);
+      const USDC = USDCSetup(web3);
+      let userallowance = await USDC.methods
+        .allowance(address, loanAddress)
+        .call({ from: address });
+      if (loanAmount > userallowance) {
+        await USDC.methods
+          .approve(loanAddress, loanAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+        await JLoanEth.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      } else {
+        await JLoanEth.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const approveTokenLoan = async (
+    loanAddress,
+    loanAmount,
+    stableCoinAddress
+  ) => {
+    try {
+      const JLoanToken = JLoanEthSetup(web3, loanAddress);
+      const USDC = USDCSetup(web3);
+      let userallowance = await USDC.methods
+        .allowance(address, loanAddress)
+        .call({ from: address });
+      if (loanAmount > userallowance) {
+        await USDC.methods
+          .approve(loanAddress, loanAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+        await JLoanToken.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      } else {
+        await JLoanToken.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const approveLoan = (
+    cryptoFromLenderName,
+    loanAddress,
+    loanAmount,
+    stableCoinAddress
+  ) => {
+    loanAmount = toWei(loanAmount.toString());
+    if (cryptoFromLenderName === DAI) {
+      approveEthLoan(loanAddress, loanAmount, stableCoinAddress);
+    } else if (cryptoFromLenderName === USDC) {
+      approveTokenLoan(loanAddress, loanAmount, stableCoinAddress);
+    }
+  };
 
   return (
     <div className='container content-container'>
       <TableWrapper>
-        <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged}/>
-        <div className="table-container">
+        <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
+        <div className='table-container'>
           <TableHead />
           <div className='table-content'>
             {loans.map((loan, i) => (
-              <TableCard key={i} loan={loan} path={pathChanged} approveLoan={approveLoan}/>
+              <TableCard
+                key={i}
+                loan={loan}
+                path={pathChanged}
+                approveLoan={approveLoan}
+              />
             ))}
           </div>
         </div>
@@ -76,17 +174,17 @@ Table.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-      ethereum: state.ethereum,
-      loans: state.loans,
-      isLoading: state.loansIsLoading,
-      pathChanged: state.changePath
+    ethereum: state.ethereum,
+    loans: state.loans,
+    isLoading: state.loansIsLoading,
+    pathChanged: state.changePath
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      fetchData: (data) => dispatch(loansFetchData(data)),
-      changePath: (path) => dispatch(changePath(path))
+    fetchData: (data) => dispatch(loansFetchData(data)),
+    changePath: (path) => dispatch(changePath(path))
   };
 };
 
