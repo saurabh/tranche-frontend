@@ -215,6 +215,12 @@ export const JLoanTokenABI = [
 				"internalType": "uint256",
 				"name": "depositAmount",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "status",
+				"type": "uint256"
 			}
 		],
 		"name": "NewDeposit",
@@ -306,10 +312,29 @@ export const JLoanTokenABI = [
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "TokenWithdraw",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "lenderAddress",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "factoryFees",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -747,6 +772,11 @@ export const JLoanTokenABI = [
 			},
 			{
 				"internalType": "uint256",
+				"name": "earlySettlementFee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
 				"name": "userRewardShare",
 				"type": "uint256"
 			},
@@ -822,11 +852,6 @@ export const JLoanTokenABI = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
-				"name": "earlySettlementFee",
-				"type": "uint256"
-			},
-			{
 				"internalType": "address",
 				"name": "factoryAddress",
 				"type": "address"
@@ -895,6 +920,20 @@ export const JLoanTokenABI = [
 				"type": "uint256"
 			}
 		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setNewCommonParams",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setNewFeesParams",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -1014,6 +1053,13 @@ export const JLoanTokenABI = [
 				"type": "uint256"
 			}
 		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawTokens",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
