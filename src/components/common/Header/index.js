@@ -7,7 +7,7 @@ import {
   HeaderSubtitle
 } from './HeaderComponents';
 import HeaderTabs from "./HeaderTabs"
-import {Navbar} from "./Navbar"
+import Navbar from "./Navbar"
 
 
 export function Header() {

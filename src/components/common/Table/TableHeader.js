@@ -50,7 +50,7 @@ const CreateLoadBtn = styled.div`
         }
     }
 `;
-const TableHeader = ({HandleNewLoan}) => {
+const TableHeader = ({HandleNewLoan, path}) => {
     return (
         <TableContainerHeader>
             <div className="table-header-titles">
@@ -63,9 +63,12 @@ const TableHeader = ({HandleNewLoan}) => {
             </div>
 
             <div className="create-loan-wrapper">
-                <CreateLoadBtn>
-                    <button onClick={HandleNewLoan}><img src={Create} alt="Create"/> <span>New loan</span></button>
-                </CreateLoadBtn>
+                {   path !== "earn" ?
+                    <CreateLoadBtn>
+                        <button onClick={HandleNewLoan}><img src={Create} alt="Create"/> <span>New loan</span></button>
+                    </CreateLoadBtn> : ""
+                }
+                
             </div>
         </TableContainerHeader>
     );

@@ -147,7 +147,6 @@
 }
 
 .adjust-btn-wrapper button{
-  background: #EEE5FF;
   border: 1px solid #EEE5FF;
   box-sizing: border-box;
   box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);
@@ -256,7 +255,16 @@
 .table-card-toggle{
   background: #FBFCFD; 
 }
-
+.status-text-wrapper{
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  box-sizing: border-box;
+  width: 76px;
+  padding: 8px 16px;
+  text-align: center;
+  border-radius: 11px;
+}
 .more-transactions h2{
   font-family: "Open Sans", sans-serif;
   font-style: normal;
@@ -296,6 +304,10 @@
   .first-col-content{
     margin-left: 5px;
   }
+  .table-sixth-col{
+    justify-content: center !important;
+  }
+  
   .table-col{
     width: 100%;
     padding: 5px 0;

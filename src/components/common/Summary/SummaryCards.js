@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import styled from 'styled-components';
 
@@ -37,13 +38,19 @@ class SummaryCards extends Component {
   }
   render() {
     const { summaryCards } = this.state;
+    const { pathChanged } = this.props;
     return (
       <SummaryCardsWrapper className="container content-container">
-        
-        {summaryCards.map((card) => <SummaryCard key = {card.id} title = {card.title} value = {card.value} details = {card.details} />)}
-        
+        {summaryCards.map((card) => <SummaryCard key = {card.id} title = {card.title} value = {card.value} details = {card.details} path = {pathChanged}/>)}
       </SummaryCardsWrapper>
     );
   }
 }
-export default SummaryCards;
+const mapStateToProps = (state) => {
+  return {
+      pathChanged: state.changePath
+  };
+};
+
+
+export default connect(mapStateToProps)(SummaryCards);

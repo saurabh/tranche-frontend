@@ -1,12 +1,12 @@
 import React from "react";
 import styled from 'styled-components';
-
+import { ColorData } from '../../../config/constants';
 const SummaryCardWrapper = styled.div`
     width: 250px;
     height: 121px;
     background: #FFFFFF;
     border: 1px solid #EFEFEF;
-    border-top: 6px solid #DFD2FB;
+    border-top: 6px solid ${props => props.color};
     box-sizing: border-box;
     padding: 17px;
     border-radius: 12px;
@@ -44,9 +44,9 @@ const SummaryCardDetails = styled.h2`
     color: rgba(0, 0, 0, 0.25);
 `;
 
-const SummaryCard = ({title, value, details}) => {
+const SummaryCard = ({title, value, details, path}) => {
     return (
-        <SummaryCardWrapper>
+        <SummaryCardWrapper color={ColorData[path].cardColor}>
            <SummaryCardContainer>
                <SummaryCardTitle>
                     {title}

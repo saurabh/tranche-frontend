@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
 import { loansFetchData } from '../../../redux/actions/loans';
-import { ETH, JNT } from '../../../config/constants';
+import { ETH, JNT, ColorData } from '../../../config/constants';
 
 import {
     HeaderTabsWrapper,
     MarketsTabsContainer,
     HeaderTabBtn
 } from './HeaderComponents';
-const HeaderTabs = ({fetchData}) => {
+const HeaderTabs = ({fetchData, pathChanged}) => {
     const [filterValue, setFilter] = useState(null);
     const loanListing = async (filter=null) => {
         setFilter(filter);
@@ -23,15 +23,14 @@ const HeaderTabs = ({fetchData}) => {
     return (
         <div className="container content-container">
             <HeaderTabsWrapper>
-                <MarketsTabsContainer>
-                    
-                    <HeaderTabBtn onClick={()=>loanListing(null)} id="all-markets-tab" className={filterValue === null ? "active-tab-btn" : ""}>
+                <MarketsTabsContainer>         
+                    <HeaderTabBtn onClick={()=>loanListing(null)} id="all-markets-tab" active={filterValue === null} color={ColorData[pathChanged].secondaryColor}>
                         All Markets
                     </HeaderTabBtn>
-                    <HeaderTabBtn onClick={()=>loanListing(ETH)} id="eth markets" className={filterValue === ETH ? "active-tab-btn" : ""}>
+                    <HeaderTabBtn onClick={()=>loanListing(ETH)} id="eth markets" active={filterValue === ETH} color={ColorData[pathChanged].secondaryColor}>
                         Eth Markets                        
                     </HeaderTabBtn>
-                    <HeaderTabBtn onClick={()=>loanListing(JNT)} id="jnt markets" className={filterValue === JNT ? "active-tab-btn" : ""}>
+                    <HeaderTabBtn onClick={()=>loanListing(JNT)} id="jnt markets" active={filterValue === JNT} color={ColorData[pathChanged].secondaryColor}>
                         Jnt Markets
                     </HeaderTabBtn>
                 </MarketsTabsContainer>
@@ -47,12 +46,16 @@ const HeaderTabs = ({fetchData}) => {
 }
 
 
-
+const mapStateToProps = (state) => {
+    return {
+        pathChanged: state.changePath
+    };
+};
   
-  const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         fetchData: (data) => dispatch(loansFetchData(data))
     };
-  };
-  
-  export default connect(null, mapDispatchToProps)(HeaderTabs);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderTabs);

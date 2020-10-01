@@ -35,14 +35,7 @@ const GlobalStyle = createGlobalStyle`
       width: 500px;
     }
   }
-  .active-navbar-link{
-    border-bottom: 2px solid #CEB7FF;
-    opacity: 1 !important;
-  }
-  .active-tab-btn{
-    opacity: 1 !important;
-    border-color: #CEB7FF;
-  }
+
   
   .navbar-right{
     width: 766px;
@@ -55,9 +48,7 @@ const GlobalStyle = createGlobalStyle`
     transition-timing-function: ease;
   }
 
-  .ModalLoan{
-    
-  }
+
   
   
   .address-wrapper{
@@ -65,6 +56,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .status-wrapper{
     width: 109px;
+  }
+  .status-wrapper h2{
+    margin-left: 15px;
   }
   .remaining-wrapper{
     width: 139px;

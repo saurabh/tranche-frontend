@@ -113,6 +113,10 @@ const HeaderTabBtn = styled.button`
     &:focus{
         outline: none;
     }
+    ${({ active, color }) => active && `
+        opacity: 1;
+        border-color: ${color};
+    `}
     @media (max-width: 992px){
         padding: 0;
         margin: 12px 0;
@@ -125,7 +129,7 @@ const WalletBtn = styled.button`
     align-items: center;
     width: 119px;
     height: 30px;
-    background: #DFD2FB;
+    background: ${props => props.background};
     border-radius: 9px;
     padding: 0 13px;
     border: none;
@@ -157,7 +161,7 @@ const WalletBtnText = styled.div`
         align-items: center;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        color: rgba(58, 10, 159, 0.85);
+        color: ${props => props.color} !important;
         margin: 0;
     }
 `;

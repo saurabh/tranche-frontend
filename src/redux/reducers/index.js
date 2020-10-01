@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import alert from './alert';
 import ethereum from './ethereum';
 import { loans, loansIsLoading } from './loans';
+import { changePath } from './TogglePath';
 
 import { reducer as form } from 'redux-form';
 import {
@@ -14,6 +15,7 @@ export default combineReducers({
   ethereum,
   loans,
   loansIsLoading,
+  changePath,
   form: form.plugin({
     newLoan: (state, action) => {
       const { type, payload } = action;

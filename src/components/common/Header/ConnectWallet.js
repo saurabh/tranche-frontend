@@ -10,13 +10,15 @@ import {
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
+import { ColorData } from '../../../config/constants';
 
 const ConnectWallet = ({
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { address, network, balance, wallet, web3 }
+  ethereum: { address, network, balance, wallet, web3 },
+  pathChanged
 }) => {
   const onboard = initOnboard({
     address: setAddress,
@@ -24,7 +26,6 @@ const ConnectWallet = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
       'selectedWallet'
@@ -43,17 +44,17 @@ const ConnectWallet = ({
   return (
     <>
       {balance < 0 ? (
-        <WalletBtn onClick={handleConnect} onKeyUp={handleConnect}>
-          <WalletBtnText icon={false}>
+        <WalletBtn background={ColorData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+          <WalletBtnText icon={false} color={ColorData[pathChanged].color}>
             <h2>Connect</h2>
           </WalletBtnText>
         </WalletBtn>
       ) : (
-        <WalletBtn onClick={handleConnect} onKeyUp={handleConnect}>
+        <WalletBtn background={ColorData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>
             <img src='' alt='' />
           </WalletBtnIcon>
-          <WalletBtnText>
+          <WalletBtnText color={ColorData[pathChanged].color}>
             <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>
@@ -71,7 +72,8 @@ ConnectWallet.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  pathChanged: state.changePath
 });
 
 export default connect(mapStateToProps, {

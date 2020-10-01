@@ -2,16 +2,20 @@ import React, { Component, useState } from "react";
 import TableMoreRow from "./TableMoreRow";
 import ModalLoan from "./Modal";
 import UserImg from "../../../assets/images/svg/userImg.svg";
-import Adjust from "../../../assets/images/svg/adjust.svg";
 import Star from "../../../assets/images/svg/Star.svg";
 import ETHGOLD from "../../../assets/images/svg/ethGold.svg";
 import ETH from "../../../assets/images/svg/eth.svg";
+import Adjust from "../../../assets/images/svg/adjust.svg";
+import AdjustEarn from "../../../assets/images/svg/adjustEarn.svg";
+import AdjustTrade from "../../../assets/images/svg/adjustTrade.svg";
+
 import styled from "styled-components";
 import { etherScanUrl, NA } from "../../../config/constants";
 import { addrShortener } from 'utils';
 import { statusShortner } from 'utils';
 import {statuses} from 'config/constants';
 import LinkArrow from "../../../assets/images/svg/linkArrow.svg";
+import { ColorData } from '../../../config/constants';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -31,11 +35,11 @@ const TableContentCard = styled.div`
   }
 `;
 
-function TableCard({loan}) {
+function TableCard({loan, path}) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  
+  let disableBtn = loan.status === 5 || loan.status === 6 || loan.status === 7 || loan.status === 8;
   function openModal() {
     setIsOpen(true);
   }
@@ -101,9 +105,9 @@ function TableCard({loan}) {
           </div>
         </div>
         <div className="table-second-col table-col">
-          <div className="second-col-content second-4-col-content">
-            <h2>
-              {statusShortner(statuses[loan.status])}
+          <div className="second-col-content">
+            <h2 className="status-text-wrapper" style={{color: statuses[loan.status].color, backgroundColor: statuses[loan.status].background}}>
+              {statusShortner(statuses[loan.status].status)}
             </h2>
           </div>
         </div>
@@ -112,16 +116,17 @@ function TableCard({loan}) {
           className="table-sixth-col table-col"
         >
           <div className="adjust-btn-wrapper">
-            <button  onClick={() => openModal()}>
-              <img src={Adjust} alt="" />
+            <button style={{background: ColorData[path].btnColor}, (path === "trade" || disableBtn) ? {backgroundColor: "#cccccc", color: "#666666", cursor: "default"} : {}} onClick={(path === "trade" || disableBtn) ? false :() => openModal()} disabled={path === "trade" || disableBtn}>
+              <img src={path === "borrow" ? Adjust : path === "earn" ? AdjustEarn : path === "trade" ? AdjustTrade : Adjust} alt="" />
             </button>
+            
           </div>
           <div className="star-btn-wrapper">
             <button>
               <img src={Star} alt="" />
             </button>
           </div>
-          <ModalLoan modalIsOpen={modalIsOpen} closeModal={() => closeModal()}/>
+          <ModalLoan status={loan.status} path={path} modalIsOpen={modalIsOpen} closeModal={() => closeModal()}/>
         </div>
       </TableContentCard>
       {/* <div
