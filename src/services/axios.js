@@ -1,14 +1,14 @@
-import queryString from "qs";
-import axios from "axios";
-import { serverUrl } from "../config/constants";
+import queryString from 'qs';
+import axios from 'axios';
+import { serverUrl } from 'config/constants';
 
 export const BASE_URL = serverUrl;
 
 const DEFAULT_OPTIONS = {
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  }
 };
 
 function _fetch(
@@ -29,8 +29,8 @@ function _fetch(
     ? {
         headers: {
           ...DEFAULT_OPTIONS.headers,
-          "Content-Type": "multipart/form-data",
-        },
+          'Content-Type': 'multipart/form-data'
+        }
       }
     : null;
 
@@ -38,8 +38,8 @@ function _fetch(
     ? {
         headers: {
           ...DEFAULT_OPTIONS.headers,
-          "x-access-token": `${token}`,
-        },
+          'x-access-token': `${token}`
+        }
       }
     : null;
 
@@ -49,10 +49,10 @@ function _fetch(
     ...DEFAULT_OPTIONS,
     ...fileHeader,
     ...authHeader,
-    ...data,
+    ...data
   };
 
-  if (method !== "GET" && data) {
+  if (method !== 'GET' && data) {
     req.data = isFormData ? data : JSON.stringify(data);
   }
 
@@ -60,7 +60,7 @@ function _fetch(
 }
 
 export function getRequest(path, { qs = null, data = {} } = {}, token) {
-  return _fetch("GET", path, { qs, data }, token);
+  return _fetch('GET', path, { qs, data }, token);
 }
 
 export function postRequest(
@@ -70,17 +70,17 @@ export function postRequest(
   isFormData,
   isFile = false
 ) {
-  return _fetch("POST", path, { qs, data }, token, isFormData, isFile);
+  return _fetch('POST', path, { qs, data }, token, isFormData, isFile);
 }
 
 export function patchRequest(path, { qs = null, data = {} } = {}, token) {
-  return _fetch("PATCH", path, { qs, data }, token);
+  return _fetch('PATCH', path, { qs, data }, token);
 }
 
 export function putRequest(path, { qs = null, data = {} } = {}, token) {
-  return _fetch("PUT", path, { qs, data }, token);
+  return _fetch('PUT', path, { qs, data }, token);
 }
 
 export function deleteRequest(path, { qs = null, data = {} } = {}, token) {
-  return _fetch("DELETE", path, { qs, data }, token);
+  return _fetch('DELETE', path, { qs, data }, token);
 }

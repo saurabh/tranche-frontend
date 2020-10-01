@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { Modal } from 'semantic-ui-react';
 import { NewLoan } from 'components/common';
-import { JFactorySetup, DaiSetup } from 'utils';
-import { JFactoryAddress, assets } from 'config';
+import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
+import { JLoanTokenDeployerAddress } from 'config/ethereum';
 
 const LoanModal = ({
   open,
@@ -17,33 +17,31 @@ const LoanModal = ({
   setCollateralAmount
 }) => {
   const JFactory = JFactorySetup(web3);
-  const DAI = DaiSetup(web3);
-  const BN = web3.utils.BN;
-  const toBN = web3.utils.toBN;
+  const JPT = JPTSetup(web3);
   const toWei = web3.utils.toWei;
   const fromWei = web3.utils.fromWei;
 
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
   const calcMinCollateralAmount = async (pairId, askAmount) => {
-    const finalamount = toWei(askAmount);
     try {
+      const finalamount = toWei(askAmount);
       const result = await JFactory.methods
         .calcMinCollateralWithFeesAmount(pairId, finalamount)
         .call();
-      setCollateralAmount(fromWei(result, 'Ether'));
+      setCollateralAmount(fromWei(result));
     } catch (error) {
       console.error(error);
     }
   };
 
   const calcMaxBorrowedAmount = async (pairId, collAmount) => {
-    const finalamount = toWei(collAmount);
     try {
+      const finalamount = toWei(collAmount);
       const result = await JFactory.methods
         .calcMaxStableCoinWithFeesAmount(pairId, finalamount)
         .call();
-      setBorrowedAskAmount(web3.utils.fromWei(result, 'Ether'));
+      setBorrowedAskAmount(web3.utils.fromWei(result));
     } catch (error) {
       console.error(error);
     }
@@ -74,13 +72,14 @@ const LoanModal = ({
     collateralAmount
   ) => {
     try {
-      let userallowance = await DAI.methods
-        .allowance(address, JFactoryAddress)
+      let userallowance = await JPT.methods
+        .allowance(address, JLoanTokenDeployerAddress)
         .call({ from: address });
-      userallowance = toWei(userallowance, 'ether');
+      console.log(collateralAmount)
+      console.log(userallowance)
       if (collateralAmount > userallowance) {
-        await DAI.methods
-          .approve(JFactoryAddress, collateralAmount)
+        await JPT.methods
+          .approve(JLoanTokenDeployerAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -120,7 +119,6 @@ const LoanModal = ({
             } = form.newLoan.values;
             borrowedAskAmount = toWei(borrowedAskAmount);
             collateralAmount = toWei(collateralAmount);
-            console.log(borrowedAskAmount, collateralAmount)
             if (pairId === 0) {
               createNewEthLoan(
                 pairId,

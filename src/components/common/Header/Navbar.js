@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import Logo from "../../../assets/images/svg/Logo.svg";
+import Logo from "assets/images/svg/Logo.svg";
 import {
     NavbarWrapper,
     NavbarContainer,
     NavbarLinks
 } from './HeaderComponents';
-import { ColorData } from '../../../config/constants';
+import { ColorData } from 'config/constants';
 
 import { NavLink } from 'react-router-dom';
 

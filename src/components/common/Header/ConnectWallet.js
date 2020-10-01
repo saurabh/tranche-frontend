@@ -8,7 +8,7 @@ import {
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener } from 'utils';
+import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
 import { ColorData } from '../../../config/constants';
 

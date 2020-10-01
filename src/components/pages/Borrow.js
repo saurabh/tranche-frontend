@@ -8,6 +8,7 @@ import {
   setWalletAndWeb3,
 } from "redux/actions/ethereum";
 import { initOnboard } from "services/blocknative";
+import { readyToTransact } from 'utils/helperFunctions';
 import { Layout } from "components/common";
 import BorrowModal from "components/common/modals/BorrowModal";
 import SummaryCards from '../common/Summary/SummaryCards';
@@ -34,18 +35,8 @@ const Borrow = ({
   useEffect(() => {
   }, [onboard, address, network, balance, wallet, web3]);
 
-  const readyToTransact = async () => {
-    if (!wallet) {
-      const walletSelected = await onboard.walletSelect();
-      if (!walletSelected) return false;
-    }
-
-    const ready = await onboard.walletCheck();
-    return ready;
-  };
-
   const handleNewLoanClick = async () => {
-    const ready = await readyToTransact();
+    const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     setShowModal(true);
     setModalType("new");
