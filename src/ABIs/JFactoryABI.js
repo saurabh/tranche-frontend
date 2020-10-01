@@ -294,7 +294,7 @@ export const JFactoryABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "calculateCollFeesOnDeploy",
+		"name": "calculateCollFeesOnActivation",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -413,6 +413,11 @@ export const JFactoryABI = [
 			},
 			{
 				"internalType": "uint256",
+				"name": "earlySettlementFee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
 				"name": "userRewardShare",
 				"type": "uint256"
 			},
@@ -472,11 +477,6 @@ export const JFactoryABI = [
 			{
 				"internalType": "uint256",
 				"name": "instantForeclosureRatio",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "earlySettlementFee",
 				"type": "uint256"
 			},
 			{
@@ -548,6 +548,11 @@ export const JFactoryABI = [
 					},
 					{
 						"internalType": "uint256",
+						"name": "earlySettlementFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "userRewardShare",
 						"type": "uint256"
 					},
@@ -614,11 +619,6 @@ export const JFactoryABI = [
 					{
 						"internalType": "uint256",
 						"name": "instantForeclosureRatio",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "earlySettlementFee",
 						"type": "uint256"
 					},
 					{

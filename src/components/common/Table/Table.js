@@ -27,19 +27,6 @@ const Table = ({ HandleNewLoan, fetchData, loans, changePath, pathChanged,
   const [path, setPath] = useState('home');
 
   useEffect(() => {
-    const parsePath = () => {
-      if (pathname === '/') {
-        setPath('home');
-      } else {
-        setPath(pathname.split('/')[1]);
-      }
-    };
-    let currentPath = pathname.split('/')[1];
-    changePath(currentPath);
-    parsePath();
-  }, [pathname]);
-
-  useEffect(() => {
     const loanListing = async (filter = null) => {
       await fetchData({
         skip: 0,
@@ -49,19 +36,20 @@ const Table = ({ HandleNewLoan, fetchData, loans, changePath, pathChanged,
         }
       });
     };
-    
-    loanListing();
-  }, [fetchData]);
+    const parsePath = () => {
+      if (pathname === '/') {
+        setPath('home');
+      } else {
+        setPath(pathname.split('/')[1]);
+      }
+    };
 
-  const loanListing = async (filter=null) => {
-    await fetchData({
-      skip: 0,
-      limit: 10000,
-      filter: {
-        type: filter
-      },
-    });
-  };
+    let currentPath = pathname.split('/')[1];
+    changePath(currentPath);
+    parsePath();
+    loanListing();
+  }, [fetchData, pathname, changePath]);
+
   const approveLoan = (loanAddress, stableCoinAddress) => {
   }
 

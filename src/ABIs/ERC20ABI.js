@@ -2,14 +2,9 @@ export const ERC20ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "symbol",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "_initialSupply",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "nonpayable",

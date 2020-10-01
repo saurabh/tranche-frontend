@@ -3,30 +3,6 @@ export const JLoanEthABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_newShareholder",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			}
-		],
-		"name": "addLoanShareHolders",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
 				"name": "_sender",
 				"type": "address"
 			},
@@ -127,7 +103,14 @@ export const JLoanEthABI = [
 	},
 	{
 		"anonymous": false,
-		"inputs": [],
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
+			}
+		],
 		"name": "EthWithdraw",
 		"type": "event"
 	},
@@ -151,13 +134,6 @@ export const JLoanEthABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "initiateLoanForeClose",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -169,25 +145,18 @@ export const JLoanEthABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
+				"name": "factoryFees",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
 				"name": "loanActiveBlock",
 				"type": "uint256"
 			}
 		],
 		"name": "LenderAccepted",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_stableAddr",
-				"type": "address"
-			}
-		],
-		"name": "lenderSendStableCoins",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -232,20 +201,6 @@ export const JLoanEthABI = [
 		],
 		"name": "LoanCancelled",
 		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "loanClosed",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "loanClosing",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -387,55 +342,19 @@ export const JLoanEthABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "setLoanCancelled",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "setLoanStatusOnCollRatio",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "newOwner",
+				"name": "_newShareholder",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
 			}
 		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdrawEth",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdrawInterests",
+		"name": "addLoanShareHolders",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -445,10 +364,6 @@ export const JLoanEthABI = [
 		],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"stateMutability": "payable",
-		"type": "receive"
 	},
 	{
 		"inputs": [],
@@ -706,6 +621,13 @@ export const JLoanEthABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "initiateLoanForeClose",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -751,6 +673,19 @@ export const JLoanEthABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_stableAddr",
+				"type": "address"
+			}
+		],
+		"name": "lenderSendStableCoins",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "loanActiveBlock",
 		"outputs": [
@@ -765,6 +700,13 @@ export const JLoanEthABI = [
 	},
 	{
 		"inputs": [],
+		"name": "loanClosed",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "loanClosedBlock",
 		"outputs": [
 			{
@@ -774,6 +716,13 @@ export const JLoanEthABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "loanClosing",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -796,6 +745,11 @@ export const JLoanEthABI = [
 			{
 				"internalType": "uint256",
 				"name": "factoryFees",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "earlySettlementFee",
 				"type": "uint256"
 			},
 			{
@@ -875,11 +829,6 @@ export const JLoanEthABI = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
-				"name": "earlySettlementFee",
-				"type": "uint256"
-			},
-			{
 				"internalType": "address",
 				"name": "factoryAddress",
 				"type": "address"
@@ -922,6 +871,47 @@ export const JLoanEthABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setLoanCancelled",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setLoanStatusOnCollRatio",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setNewCommonParams",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setNewFeesParams",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1003,5 +993,42 @@ export const JLoanEthABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawEth",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawInterests",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
 	}
 ]
