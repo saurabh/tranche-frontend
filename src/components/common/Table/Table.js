@@ -101,7 +101,7 @@ const Table = ({
     stableCoinAddress
   ) => {
     try {
-      const JLoanToken = JLoanEthSetup(web3, loanAddress);
+      const JLoanToken = JLoanTokenSetup(web3, loanAddress);
       const USDC = USDCSetup(web3);
       let userallowance = await USDC.methods
         .allowance(address, loanAddress)
