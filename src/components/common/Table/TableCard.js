@@ -24,6 +24,7 @@ import {
   DAISetup,
   USDCSetup
 } from 'utils/contractConstructor';
+import { safeSubtract, isGreaterThan } from 'utils/helperFunctions';
 import { DAI, USDC } from 'config/constants';
 
 const TableContentCardWrapper = styled.div`
@@ -72,9 +73,9 @@ const TableCard = ({
       let userAllowance = await DAI.methods
         .allowance(address, loanAddress)
         .call({ from: address });
-      if (loanAmount > userAllowance) {
+      if (isGreaterThan(loanAmount, userAllowance)) {
         await DAI.methods
-          .approve(loanAddress, loanAmount)
+          .approve(loanAddress, safeSubtract(loanAmount, userAllowance))
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -130,9 +131,9 @@ const TableCard = ({
       console.log(userAllowance, loanAmount);
       console.log(loanAddress);
       console.log(stableCoinAddress);
-      if (loanAmount > userAllowance) {
+      if (isGreaterThan(loanAmount, userAllowance)) {
         await USDC.methods
-          .approve(loanAddress, loanAmount)
+          .approve(loanAddress, safeSubtract(loanAmount, userAllowance))
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
