@@ -27,7 +27,9 @@ const App = () => {
           <Redirect exact from="/" to="/borrow" />
           <Route exact path="/earn" component={Earn} />
           <Route exact path="/borrow" component={Borrow} />
-          <Route exact path="/trade" component={Trade} />
+          <Route exact path="/trade" component={Trade}>
+            <Redirect to="/borrow" />
+          </Route>
           <Route component={NotFound} />
         </Switch>
       </Router>
