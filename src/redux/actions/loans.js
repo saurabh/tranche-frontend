@@ -28,7 +28,6 @@ export const loansFetchData = (data) => async (dispatch) => {
     );
     dispatch(loansIsLoading(false));
     dispatch(loansFetchSuccess(result.result.list));
-    console.log(result)
     return result;
   } catch (error) {
     //TODO : error handling
