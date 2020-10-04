@@ -20,7 +20,7 @@ const TableWrapper = styled.div`
 
 const Table = ({
   HandleNewLoan,
-  fetchData,
+  loansFetchData,
   loans,
   changePath,
   pathChanged,
@@ -30,7 +30,7 @@ const Table = ({
 
   useEffect(() => {
     const loanListing = async (filter = null) => {
-      await fetchData({
+      await loansFetchData({
         skip: 0,
         limit: 10000,
         filter: {
@@ -50,7 +50,7 @@ const Table = ({
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [fetchData, pathname, changePath]);
+  }, [loansFetchData, pathname, changePath]);
 
   return (
     <div className='container content-container'>
@@ -81,11 +81,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchData: (data) => dispatch(loansFetchData(data)),
-    changePath: (path) => dispatch(changePath(path))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Table);
+export default connect(mapStateToProps, {loansFetchData, changePath})(Table);

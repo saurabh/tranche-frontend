@@ -61,6 +61,15 @@ const LoanModal = ({
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 10000,
+            filter: {
+              type: null //ETH/JNT keep these in constant file
+            }
+          });
         });
     } catch (error) {
       console.error(error);
@@ -90,6 +99,15 @@ const LoanModal = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
           });
       } else {
         await JFactory.methods
@@ -97,6 +115,15 @@ const LoanModal = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
           });
       }
     } catch (error) {
@@ -135,13 +162,6 @@ const LoanModal = ({
                 collateralAmount
               );
             }
-            await loansFetchData({
-              skip: 0,
-              limit: 10000,
-              filter: {
-                type: null //ETH/JNT keep these in constant file
-              }
-            });
           } catch (error) {
             console.error(error);
           }

@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { loansFetchData } from 'redux/actions/loans';
 import TableMoreRow from './TableMoreRow';
 import ModalLoan from './Modal';
 import UserImg from 'assets/images/svg/userImg.svg';
@@ -55,6 +56,7 @@ const TableCard = ({
     collateralTypeName
   },
   path,
+  loansFetchData,
   ethereum: { address, network, balance, wallet, web3, notify }
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -82,6 +84,15 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
           });
       } else {
         await JLoanEth.methods
@@ -89,6 +100,15 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
           });
       }
     } catch (error) {
@@ -108,8 +128,8 @@ const TableCard = ({
         .allowance(address, loanAddress)
         .call({ from: address });
       console.log(userAllowance, loanAmount);
-      console.log(loanAddress)
-      console.log(stableCoinAddress)
+      console.log(loanAddress);
+      console.log(stableCoinAddress);
       if (loanAmount > userAllowance) {
         await USDC.methods
           .approve(loanAddress, loanAmount)
@@ -317,4 +337,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {})(TableCard);
+export default connect(mapStateToProps, { loansFetchData })(TableCard);
