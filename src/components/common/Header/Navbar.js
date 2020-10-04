@@ -25,7 +25,7 @@ function Navbar({path}) {
                         <NavbarLinks>
                             <NavLink to="/borrow" activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Borrow</NavLink>
                             <NavLink to="/earn" activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Earn</NavLink>
-                            <NavLink to="/trade" activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Trade</NavLink>
+                            <NavLink to="/trade" onClick={(e) => e.preventDefault()} style={{pointerEvents: "none"}} activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Trade</NavLink>
                         </NavbarLinks>
                         <ConnectWallet />
                     </div>

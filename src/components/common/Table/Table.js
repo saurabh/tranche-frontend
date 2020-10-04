@@ -145,8 +145,8 @@ const Table = ({
       approveTokenLoan(loanAddress, loanAmount, stableCoinAddress);
     }
   };
-
   return (
+    
     <div className='container content-container'>
       <TableWrapper>
         <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
