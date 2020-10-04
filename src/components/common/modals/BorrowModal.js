@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
+import { loansFetchData } from 'redux/actions/loans';
 import { Modal } from 'semantic-ui-react';
 import { NewLoan } from 'components/common';
 import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
@@ -14,7 +15,8 @@ const LoanModal = ({
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
   setBorrowedAskAmount,
-  setCollateralAmount
+  setCollateralAmount,
+  loansFetchData
 }) => {
   const JFactory = JFactorySetup(web3);
   const JPT = JPTSetup(web3);
@@ -72,10 +74,11 @@ const LoanModal = ({
     collateralAmount
   ) => {
     try {
-      let userallowance = await JPT.methods
+      let userAllowance = await JPT.methods
         .allowance(address, JLoanTokenDeployerAddress)
         .call({ from: address });
-      if (collateralAmount > userallowance) {
+      console.log(userAllowance, collateralAmount);
+      if (collateralAmount > userAllowance) {
         await JPT.methods
           .approve(JLoanTokenDeployerAddress, collateralAmount)
           .send({ from: address })
@@ -132,6 +135,13 @@ const LoanModal = ({
                 collateralAmount
               );
             }
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
           } catch (error) {
             console.error(error);
           }
@@ -174,5 +184,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   setBorrowedAskAmount,
-  setCollateralAmount
+  setCollateralAmount,
+  loansFetchData
 })(LoanModal);

@@ -1,4 +1,6 @@
 import React, { Component, useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import TableMoreRow from './TableMoreRow';
 import ModalLoan from './Modal';
 import UserImg from 'assets/images/svg/userImg.svg';
@@ -15,6 +17,13 @@ import { statusShortner } from 'utils';
 import { statuses, etherScanUrl, NA } from 'config/constants';
 import LinkArrow from 'assets/images/svg/linkArrow.svg';
 import { ColorData } from 'config/constants';
+import {
+  JLoanEthSetup,
+  JLoanTokenSetup,
+  DAISetup,
+  USDCSetup
+} from 'utils/contractConstructor';
+import { DAI, USDC } from 'config/constants';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -34,17 +43,107 @@ const TableContentCard = styled.div`
   }
 `;
 
-function TableCard({ loan, path, approveLoan }) {
+const TableCard = ({
+  loan: {
+    status,
+    contractAddress,
+    remainingLoan,
+    cryptoFromLender,
+    cryptoFromLenderName,
+    collateralRatio,
+    interestPaid,
+    collateralTypeName
+  },
+  path,
+  ethereum: { address, network, balance, wallet, web3, notify }
+}) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  let disableBtn =
-    loan.status === 5 ||
-    loan.status === 6 ||
-    loan.status === 7 ||
-    loan.status === 8;
+  let disableBtn = status === 5 || status === 6 || status === 7 || status === 8;
+  const toWei = web3.utils.toWei;
 
-  console.log(loan);
+  const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
+    try {
+      const JLoanEth = JLoanEthSetup(web3, loanAddress);
+      const DAI = DAISetup(web3);
+      let userAllowance = await DAI.methods
+        .allowance(address, loanAddress)
+        .call({ from: address });
+      if (loanAmount > userAllowance) {
+        await DAI.methods
+          .approve(loanAddress, loanAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+        await JLoanEth.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      } else {
+        await JLoanEth.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const approveTokenLoan = async (
+    loanAddress,
+    loanAmount,
+    stableCoinAddress
+  ) => {
+    try {
+      const JLoanToken = JLoanTokenSetup(web3, loanAddress);
+      const USDC = USDCSetup(web3);
+      let userAllowance = await USDC.methods
+        .allowance(address, loanAddress)
+        .call({ from: address });
+      console.log(userAllowance, loanAmount);
+      console.log(loanAddress)
+      console.log(stableCoinAddress)
+      if (loanAmount > userAllowance) {
+        await USDC.methods
+          .approve(loanAddress, loanAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+        await JLoanToken.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      } else {
+        await JLoanToken.methods
+          .lenderSendStableCoins(stableCoinAddress)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const approveLoan = () => {
+    remainingLoan = toWei(remainingLoan.toString());
+    if (cryptoFromLenderName === DAI) {
+      approveEthLoan(contractAddress, remainingLoan, cryptoFromLender);
+    } else if (cryptoFromLenderName === USDC) {
+      approveTokenLoan(contractAddress, remainingLoan, cryptoFromLender);
+    }
+  };
 
   function openModal() {
     setIsOpen(true);
@@ -77,9 +176,9 @@ function TableCard({ loan, path, approveLoan }) {
                               <h2>Pragmatic owl</h2>
                           </div>*/}
               <div className='first-col-subtitle'>
-                <h2>{addrShortener(loan.contractAddress)}</h2>
+                <h2>{addrShortener(contractAddress)}</h2>
                 <a
-                  href={etherScanUrl + loan.contractAddress + '/#internaltx'}
+                  href={etherScanUrl + contractAddress + '/#internaltx'}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
@@ -96,8 +195,7 @@ function TableCard({ loan, path, approveLoan }) {
               onMouseEnter={() => remainingToggle(true)}
               onMouseLeave={() => remainingToggle(false)}
             >
-              {Math.round(loan.remainingLoan)}{' '}
-              <span>{loan.cryptoFromLenderName}</span>
+              {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
               className={
@@ -105,14 +203,14 @@ function TableCard({ loan, path, approveLoan }) {
                 (tooltipToggleRemaining ? 'table-tool-tip-toggle' : '')
               }
             >
-              {loan.remainingLoan} <span>{loan.cryptoFromLenderName}</span>
+              {remainingLoan} <span>{cryptoFromLenderName}</span>
             </h2>
           </div>
         </div>
         <div className='table-fourth-col table-col'>
           <div className='fourth-col-content second-4-col-content'>
             <h2>
-              {loan.collateralRatio}
+              {collateralRatio}
               <span>%</span>
             </h2>
           </div>
@@ -120,8 +218,8 @@ function TableCard({ loan, path, approveLoan }) {
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content second-4-col-content'>
             <h2>
-              {loan.interestPaid && addrShortener(loan.interestPaid)}{' '}
-              <span>{loan.collateralTypeName}</span>
+              {interestPaid && addrShortener(interestPaid)}{' '}
+              <span>{collateralTypeName}</span>
             </h2>
           </div>
         </div>
@@ -130,11 +228,11 @@ function TableCard({ loan, path, approveLoan }) {
             <h2
               className='status-text-wrapper'
               style={{
-                color: statuses[loan.status].color,
-                backgroundColor: statuses[loan.status].background
+                color: statuses[status].color,
+                backgroundColor: statuses[status].background
               }}
             >
-              {statusShortner(statuses[loan.status].status)}
+              {statusShortner(statuses[status].status)}
             </h2>
           </div>
         </div>
@@ -179,8 +277,7 @@ function TableCard({ loan, path, approveLoan }) {
             </button>
           </div>
           <ModalLoan
-            status={loan.status}
-            loan={loan}
+            status={status}
             path={path}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
@@ -208,5 +305,16 @@ function TableCard({ loan, path, approveLoan }) {
       </div> */}
     </TableContentCardWrapper>
   );
-}
-export default TableCard;
+};
+
+TableCard.propTypes = {
+  ethereum: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    ethereum: state.ethereum
+  };
+};
+
+export default connect(mapStateToProps, {})(TableCard);

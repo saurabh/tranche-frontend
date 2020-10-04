@@ -106,6 +106,31 @@ export const JLoanTokenABI = [
 			{
 				"indexed": true,
 				"internalType": "address",
+				"name": "lenderAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "factoryFees",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "loanActiveBlock",
+				"type": "uint256"
+			}
+		],
+		"name": "LenderAccepted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
 				"name": "sender",
 				"type": "address"
 			},
@@ -319,31 +344,6 @@ export const JLoanTokenABI = [
 			}
 		],
 		"name": "TokenWithdraw",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "lenderAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "factoryFees",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "loanActiveBlock",
-				"type": "uint256"
-			}
-		],
-		"name": "lenderAccepted",
 		"type": "event"
 	},
 	{

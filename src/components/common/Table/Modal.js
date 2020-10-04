@@ -80,12 +80,6 @@ export default function ModalLoan({
   path,
   status,
   approveLoan,
-  loan: {
-    cryptoFromLenderName,
-    contractAddress,
-    remainingLoan,
-    cryptoFromLender
-  }
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
@@ -121,12 +115,7 @@ export default function ModalLoan({
 
   const controlAction = () => {
     if (status === 0) {
-      approveLoan(
-        cryptoFromLenderName,
-        contractAddress,
-        remainingLoan,
-        cryptoFromLender
-      );
+      approveLoan();
       closeModal();
     } else if (status === 1) alert('Withdraw Interest');
   };
