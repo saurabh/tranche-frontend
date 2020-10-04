@@ -72,7 +72,7 @@ const TableCard = ({
       const DAI = DAISetup(web3);
       let userAllowance = await DAI.methods
         .allowance(address, loanAddress)
-        .call({ from: address });
+        .call();
       if (isGreaterThan(loanAmount, userAllowance)) {
         await DAI.methods
           .approve(loanAddress, safeSubtract(loanAmount, userAllowance))
@@ -127,7 +127,7 @@ const TableCard = ({
       const USDC = USDCSetup(web3);
       let userAllowance = await USDC.methods
         .allowance(address, loanAddress)
-        .call({ from: address });
+        .call();
       console.log(userAllowance, loanAmount);
       console.log(loanAddress);
       console.log(stableCoinAddress);

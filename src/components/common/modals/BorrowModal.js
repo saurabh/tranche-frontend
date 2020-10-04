@@ -86,18 +86,18 @@ const LoanModal = ({
     try {
       let userAllowance = await JPT.methods
         .allowance(address, JLoanTokenDeployerAddress)
-        .call({ from: address });
+        .call();
       console.log(userAllowance, collateralAmount);
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await JPT.methods
-        .approve(JLoanTokenDeployerAddress, safeSubtract(collateralAmount, userAllowance))
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          notify.hash(hash);
-        });
+          .approve(JLoanTokenDeployerAddress, safeSubtract(collateralAmount, userAllowance))
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
         userAllowance = await JPT.methods
           .allowance(address, JLoanTokenDeployerAddress)
-          .call({ from: address });
+          .call();
         console.log(userAllowance, collateralAmount);
         await JFactory.methods
           .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
