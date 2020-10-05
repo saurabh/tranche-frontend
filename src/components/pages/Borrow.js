@@ -52,9 +52,9 @@ const Borrow = ({
   return (
     <Layout>
       {/* <SummaryCards /> */}
-      <Table HandleNewLoan={handleNewLoanClick} pageType={pageType.BORROW}/>
+      <Table HandleNewLoan={handleNewLoanClick} openModal={showModal} pageType={pageType.BORROW}/>
       <BorrowModal
-        open={showModal}
+        openModal={showModal}
         type={modalType}
         closeModal={() => setShowModal(false)}
       />

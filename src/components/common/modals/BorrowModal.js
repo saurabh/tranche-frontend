@@ -1,23 +1,58 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import CloseModal from 'assets/images/svg/closeModal.svg';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
-import { Modal } from 'semantic-ui-react';
+import Modal from 'react-modal';
 import { NewLoan } from 'components/common';
 import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
+import {
+  ModalHeader
+ } from '../Table/ModalComponents';
+
+ 
+
+const AdjustPositionStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '292px',
+    width: '100%',
+    minHeight: '326px',
+    height: 'auto',
+    borderRadius: '16px',
+    border: 'none',
+    boxShadow: '0px 2px 4px rgba(99, 99, 99, 0.7)',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
+
 
 const LoanModal = ({
-  open,
   type,
-  closeModal,
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
   setBorrowedAskAmount,
   setCollateralAmount,
-  loansFetchData
+  loansFetchData,
+  openModal,
+  closeModal
 }) => {
   const JFactory = JFactorySetup(web3);
   const JPT = JPTSetup(web3);
@@ -25,7 +60,12 @@ const LoanModal = ({
   const fromWei = web3.utils.fromWei;
 
   useEffect(() => {}, [address, network, balance, wallet, web3]);
+  
 
+  function HandleCloseModal() {
+    closeModal();
+  }
+  
   const calcMinCollateralAmount = async (pairId, askAmount) => {
     try {
       const finalamount = toWei(askAmount);
@@ -168,7 +208,7 @@ const LoanModal = ({
           }
         }
         createNewLoan();
-        closeModal();
+        HandleCloseModal();
         break;
       case 'adjust':
         break;
@@ -178,10 +218,19 @@ const LoanModal = ({
   };
 
   return (
-    <Modal open={open} onClose={() => closeModal()} size='mini'>
-      <Modal.Header>
-        {type === 'new' ? 'Create New' : 'Adjust'} Loan
-      </Modal.Header>
+    <Modal
+      isOpen={openModal}
+      onRequestClose={HandleCloseModal}
+      style={AdjustPositionStyles}
+      shouldCloseOnOverlayClick={false}
+      contentLabel='NewLoan'
+    >
+      <ModalHeader>
+        <h2>New Loan</h2>
+        <button onClick={() => closeModal()}>
+          <img src={CloseModal} alt='' />
+        </button>
+      </ModalHeader>
       <NewLoan
         handleSubmit={handleSubmit}
         calcMinCollateralAmount={calcMinCollateralAmount}
