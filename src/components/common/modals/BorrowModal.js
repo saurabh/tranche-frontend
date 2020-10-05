@@ -6,7 +6,7 @@ import { loansFetchData } from 'redux/actions/loans';
 import { Modal } from 'semantic-ui-react';
 import { NewLoan } from 'components/common';
 import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
-import { safeSubtract, isGreaterThan } from 'utils/helperFunctions';
+import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
 
 const LoanModal = ({
@@ -90,15 +90,11 @@ const LoanModal = ({
       console.log(userAllowance, collateralAmount);
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await JPT.methods
-          .approve(JLoanTokenDeployerAddress, safeSubtract(collateralAmount, userAllowance))
+          .approve(JLoanTokenDeployerAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
           });
-        userAllowance = await JPT.methods
-          .allowance(address, JLoanTokenDeployerAddress)
-          .call();
-        console.log(userAllowance, collateralAmount);
         await JFactory.methods
           .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
           .send({ from: address })
