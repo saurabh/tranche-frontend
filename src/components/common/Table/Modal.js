@@ -101,7 +101,7 @@ export default function ModalLoan({
                 btnColor={statuses[1].color}
                 confirmBtn={true}
                 onClick={() => {
-                  controlAction();
+                  controlAction(onClose);
                 }}
               >
                 Yes
@@ -113,10 +113,11 @@ export default function ModalLoan({
     });
   };
 
-  const controlAction = () => {
+  const controlAction = (closeAlert) => {
     if (status === 0) {
       approveLoan();
       closeModal();
+      closeAlert();
     } else if (status === 1) alert('Withdraw Interest');
   };
 
