@@ -381,9 +381,9 @@ export const JLoanEthABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "bool",
-				"name": "_earlySet",
-				"type": "bool"
+				"internalType": "uint256",
+				"name": "_calcBlk",
+				"type": "uint256"
 			}
 		],
 		"name": "calculatingAccruedInterests",
@@ -516,7 +516,7 @@ export const JLoanEthABI = [
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "accruedInterests",
 				"type": "uint256"
 			}
 		],
@@ -529,7 +529,7 @@ export const JLoanEthABI = [
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "newCollRatio",
 				"type": "uint256"
 			}
 		],
@@ -539,19 +539,6 @@ export const JLoanEthABI = [
 	{
 		"inputs": [],
 		"name": "getContractBalance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getInitialCollateralRatio",
 		"outputs": [
 			{
 				"internalType": "uint256",

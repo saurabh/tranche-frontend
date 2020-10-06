@@ -184,27 +184,26 @@ const LoanModal = ({
               collateralAmount,
               rpbRate
             } = form.newLoan.values;
-            submitValidations(form.newLoan.values, form.newLoan.submitCheck)
-              .then(() => {
-                borrowedAskAmount = toWei(borrowedAskAmount);
-                collateralAmount = toWei(collateralAmount);
-                if (pairId === 0) {
-                  createNewEthLoan(
-                    pairId,
-                    borrowedAskAmount,
-                    tempRpbRate,
-                    collateralAmount
-                  );
-                } else {
-                  createNewTokenLoan(
-                    pairId,
-                    borrowedAskAmount,
-                    tempRpbRate,
-                    collateralAmount
-                  );
-                }
-              })
-              .catch((error) => console.error(error));
+            // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
+            //   .then(() => {})
+            //   .catch((error) => console.error(error));
+            borrowedAskAmount = toWei(borrowedAskAmount);
+            collateralAmount = toWei(collateralAmount);
+            if (pairId === 0) {
+              createNewEthLoan(
+                pairId,
+                borrowedAskAmount,
+                tempRpbRate,
+                collateralAmount
+              );
+            } else {
+              createNewTokenLoan(
+                pairId,
+                borrowedAskAmount,
+                tempRpbRate,
+                collateralAmount
+              );
+            }
           } catch (error) {
             console.error(error);
           }
