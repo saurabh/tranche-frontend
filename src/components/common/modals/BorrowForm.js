@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { required, number, minValue0, maxValue100 } from 'utils/validations';
+import { required, number, minValue0, maxValue100, validate } from 'utils/validations';
 import { useDebouncedCallback } from 'utils/lodash';
 import { assets } from 'config/constants';
 import { connect } from 'react-redux';
@@ -223,8 +223,20 @@ let NewLoan = ({
   );
 };
 
+// const mapStateToProps = (state) => ({
+//   form: state.form,
+//   initialValues: { pairId: 0 }
+// });
+
+// NewLoan = connect(mapStateToProps, {})(NewLoan);
+
+// NewLoan = reduxForm({
+//   form: 'newLoan'
+// })(NewLoan);
+
 NewLoan = reduxForm({
-  form: 'newLoan'
+  form: 'newLoan',
+  validate
 })(NewLoan);
 
 NewLoan = connect(() => ({
