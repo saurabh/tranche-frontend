@@ -18,7 +18,7 @@ import {
   ModalFormInput,
   ModalFormSubmit,
   ModalFormButton
-} from './ModalComponents';
+} from '../modals/ModalComponents';
 const FirstCustomStyles = {
   overlay: {
     display: 'flex',

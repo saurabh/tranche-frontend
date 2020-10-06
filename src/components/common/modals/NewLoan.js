@@ -35,7 +35,7 @@ import {
   NewLoanFormInput,
   SelectChevron,
   ModalFormInputAPY
-} from '../Table/ModalComponents';
+} from './ModalComponents';
 const FirstCustomStyles = {
   overlay: {
     display: 'flex',
@@ -131,19 +131,17 @@ let ModalLoan = ({
             </ModalHeader>
             <ModalAdjustForm>
               <Form component={ModalFormWrapper}>
-                  
                 <ModalFormGrpNewLoan>
                     <NewLoanFormInput>
                         <NewLoanInputWrapper>
                                 <ModalFormLabel htmlFor='BORROWINGInput'>BORROWING</ModalFormLabel>
-                                <Field component={ModalFormInputNewLoan}
+                                <ModalFormInputNewLoan
                                     type='number'
                                     step='0.0001'
                                     id='BORROWINGInput'
                                     style={{maxWidth: "120px"}}
                                 />
                         </NewLoanInputWrapper>
-            
                         <LoanCustomSelect>
                             <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
                                 {

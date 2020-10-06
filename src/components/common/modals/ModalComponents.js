@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Input } from 'semantic-ui-react';
+import {Input} from 'semantic-ui-react';
 
 const ModalHeader = styled.div` 
   width: 100%;

@@ -11,7 +11,7 @@ import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
 import {
   ModalHeader
- } from '../Table/ModalComponents';
+ } from './ModalComponents';
 
  
 
@@ -58,6 +58,8 @@ const LoanModal = ({
   const JPT = JPTSetup(web3);
   const toWei = web3.utils.toWei;
   const fromWei = web3.utils.fromWei;
+  const [collateralAmountForInput, setCollateralAmountForInput] = useState(0);
+
 
   useEffect(() => {}, [address, network, balance, wallet, web3]);
   
@@ -73,6 +75,7 @@ const LoanModal = ({
         .calcMinCollateralWithFeesAmount(pairId, finalamount)
         .call();
       setCollateralAmount(fromWei(result));
+      setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3))
     } catch (error) {
       console.error(error);
     }
@@ -232,6 +235,7 @@ const LoanModal = ({
         </button>
       </ModalHeader>
       <NewLoan
+        collateralAmountForInput={collateralAmountForInput}
         handleSubmit={handleSubmit}
         calcMinCollateralAmount={calcMinCollateralAmount}
         calcMaxBorrowedAmount={calcMaxBorrowedAmount}
