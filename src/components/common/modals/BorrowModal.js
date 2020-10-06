@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CloseModal from 'assets/images/svg/closeModal.svg';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
+import { submitValidations } from 'utils/validations'
 import Modal from 'react-modal';
 import { NewLoan } from 'components/common';
 import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
@@ -12,8 +13,6 @@ import { JLoanTokenDeployerAddress } from 'config/ethereum';
 import {
   ModalHeader
  } from './ModalComponents';
-
- 
 
 const AdjustPositionStyles = {
   overlay: {
@@ -42,8 +41,6 @@ const AdjustPositionStyles = {
   }
 };
 
-
-
 const LoanModal = ({
   type,
   ethereum: { address, network, balance, wallet, web3, notify },
@@ -60,9 +57,7 @@ const LoanModal = ({
   const fromWei = web3.utils.fromWei;
   const [collateralAmountForInput, setCollateralAmountForInput] = useState(0);
 
-
   useEffect(() => {}, [address, network, balance, wallet, web3]);
-  
 
   function HandleCloseModal() {
     closeModal();
@@ -87,7 +82,7 @@ const LoanModal = ({
       const result = await JFactory.methods
         .calcMaxStableCoinWithFeesAmount(pairId, finalamount)
         .call();
-      setBorrowedAskAmount(web3.utils.fromWei(result));
+      setBorrowedAskAmount(parseFloat(fromWei(result)).toFixed(3));
     } catch (error) {
       console.error(error);
     }
@@ -189,6 +184,7 @@ const LoanModal = ({
               collateralAmount,
               rpbRate
             } = form.newLoan.values;
+            // submitValidations(form.newLoan.values, form.newLoan.submitCheck);
             borrowedAskAmount = toWei(borrowedAskAmount);
             collateralAmount = toWei(collateralAmount);
             if (pairId === 0) {
@@ -255,6 +251,8 @@ const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   form: state.form
 });
+
+
 
 export default connect(mapStateToProps, {
   setBorrowedAskAmount,

@@ -9,10 +9,9 @@ import { Form, Field, reduxForm } from 'redux-form';
 import USDC from 'assets/images/svg/usdc.svg';
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
-import ETHFORM from  "assets/images/svg/EthForm.svg";
-import JNT from  "assets/images/svg/jnt.svg";
+import ETHFORM from 'assets/images/svg/EthForm.svg';
+import JNT from 'assets/images/svg/jnt.svg';
 import { statuses } from '../../../config/constants';
-
 import {
   ModalHeader,
   ModalContent,
@@ -39,12 +38,24 @@ import {
   ModalFormInputAPY
 } from './ModalComponents';
 
-const InputField = ({ input, type, placeholder, className, meta: { touched, error } }) => (
+const InputField = ({
+  input,
+  type,
+  placeholder,
+  className,
+  meta: { touched, error }
+}) => (
   <div>
-      <input {...input} placeholder={placeholder} type={type} className={className}/>
-      {touched && error && <span style={{display: "none"}}>{error}</span>}
+    <input
+      {...input}
+      placeholder={placeholder}
+      type={type}
+      className={className}
+    />
+    {touched && error && <span style={{ display: 'none' }}>{error}</span>}
   </div>
-)
+);
+
 let NewLoan = ({
   handleSubmit,
   calcMinCollateralAmount,
@@ -52,25 +63,24 @@ let NewLoan = ({
   collateralAmountForInput
 }) => {
   const [pair, setPair] = useState(0);
-  const [selectedCurrency, selectCurrency] = useState("dai");
+  const [selectedCurrency, selectCurrency] = useState('dai');
   const [currencySelect, toggleCurrency] = useState(false);
 
+  const toggleCurrencySelect = () => {
+    toggleCurrency(!currencySelect);
+  };
 
-  const toggleCurrencySelect =()=>{
-    toggleCurrency(!currencySelect)
-  }
-  const handleCurrenySelect =(e)=>{
+  const handleCurrenySelect = (e) => {
     e.preventDefault();
     selectCurrency(e.target.value);
     toggleCurrency(false);
-  }
+  };
+
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     (pair, borrowedAskAmount) =>
       calcMinCollateralAmount(pair, borrowedAskAmount),
     500
   );
-
-
 
   const [debounceCalcMaxBorrowedAmount] = useDebouncedCallback(
     (pair, borrowedAskAmount) => calcMaxBorrowedAmount(pair, borrowedAskAmount),
@@ -81,86 +91,113 @@ let NewLoan = ({
     <div>
       <ModalAdjustForm>
         <Form component={ModalFormWrapper} onSubmit={handleSubmit}>
-            
           <ModalFormGrpNewLoan>
-              <NewLoanFormInput>
-                  <NewLoanInputWrapper>
-                          <ModalFormLabel htmlFor='BORROWINGInput'>BORROWING</ModalFormLabel>
-                          <Field
-                              component={InputField}
-                              className="ModalFormInputNewLoan"
-                              name='borrowedAskAmount'
-                              validate={[required, number]}
-                              onChange={(event, newValue) =>
-                                debounceCalcMinCollateralAmount(pair, newValue)                                
-                              }
+            <NewLoanFormInput>
+              <NewLoanInputWrapper>
+                <ModalFormLabel htmlFor='BORROWINGInput'>
+                  BORROWING
+                </ModalFormLabel>
+                <Field
+                  component={InputField}
+                  className='ModalFormInputNewLoan'
+                  name='borrowedAskAmount'
+                  validate={[required, number]}
+                  onChange={(event, newValue) =>
+                    debounceCalcMinCollateralAmount(pair, newValue)
+                  }
+                  type='number'
+                  step='0.0001'
+                  id='BORROWINGInput'
+                  style={{ maxWidth: '120px' }}
+                />
+              </NewLoanInputWrapper>
 
-                              type='number'
-                              step='0.0001'
-                              id='BORROWINGInput'
-                              style={{maxWidth: "120px"}}
-                          />
-                  </NewLoanInputWrapper>
-      
-                  <LoanCustomSelect>
-                      <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
-                          {
-                            selectedCurrency === "dai" ?
-                            <div>
-                                <img src={DAI} alt=""/>
-                                <h2>DAI</h2>
-                            </div> :
-                            selectedCurrency === "usdc" ?
-                            <div>
-                                <img src={USDC} alt=""/>
-                                <h2>USDC</h2>
-                            </div> : ""
-                          }
+              <LoanCustomSelect>
+                <Field
+                  name='pairId'
+                  component='select'
+                  validate={[required]}
+                  onChange={(event, newValue) => setPair(+newValue)}
+                >
+                  {assets.map((asset) => (
+                    <option value={asset.value} key={asset.key}>
+                      {asset.text}
+                    </option>
+                  ))}
+                </Field>
+                {/* <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
+                  {selectedCurrency === 'dai' ? (
+                    <div>
+                      <img src={DAI} alt='' />
+                      <h2>DAI</h2>
+                    </div>
+                  ) : selectedCurrency === 'usdc' ? (
+                    <div>
+                      <img src={USDC} alt='' />
+                      <h2>USDC</h2>
+                    </div>
+                  ) : (
+                    ''
+                  )}
 
-                          <SelectChevron>
-                            <img src={selectUp} alt=""/>
-                            <img src={selectDown} alt=""/>
-                          </SelectChevron>
-                          
-                      </SelectCurrencyView>
-                      {
-                          currencySelect ? 
-                          <SelectCurrencyOptions>
-                              <SelectCurrencyOption>
-                                  <button onClick={(e) => handleCurrenySelect(e)} value="dai"><img src={DAI} alt=""/> DAI</button>
-                              </SelectCurrencyOption>  
-                              <SelectCurrencyOption>
-                                  <button onClick={(e) => handleCurrenySelect(e)} value="usdc"><img src={USDC} alt=""/> USDC</button>
-                              </SelectCurrencyOption>
-                          </SelectCurrencyOptions> : ""
-                      }
-                      
-                  </LoanCustomSelect>
-              
-              </NewLoanFormInput>
-              <h2>
-                  MINIMUM COLLATERAL: <span>{collateralAmountForInput}</span> ETH
-              </h2>
-
+                  <SelectChevron>
+                    <img src={selectUp} alt='' />
+                    <img src={selectDown} alt='' />
+                  </SelectChevron>
+                </SelectCurrencyView>
+                {currencySelect ? (
+                  <SelectCurrencyOptions>
+                    <SelectCurrencyOption>
+                      <button
+                        onClick={(e) => handleCurrenySelect(e)}
+                        value='dai'
+                      >
+                        <img src={DAI} alt='' /> DAI
+                      </button>
+                    </SelectCurrencyOption>
+                    <SelectCurrencyOption>
+                      <button
+                        onClick={(e) => handleCurrenySelect(e)}
+                        value='usdc'
+                      >
+                        <img src={USDC} alt='' /> USDC
+                      </button>
+                    </SelectCurrencyOption>
+                  </SelectCurrencyOptions>
+                ) : (
+                  ''
+                )} */}
+              </LoanCustomSelect>
+            </NewLoanFormInput>
+            <h2>
+              MINIMUM COLLATERAL: <span>{collateralAmountForInput}</span> ETH
+            </h2>
           </ModalFormGrpNewLoan>
-        
-          <ModalFormGrp currency={selectedCurrency === "dai" ? "ETH" : "JNT"}>
-            <ModalFormLabel htmlFor='COLLATERALIZINGInput'>COLLATERALIZING</ModalFormLabel>
+
+          <ModalFormGrp currency={selectedCurrency === 'dai' ? 'ETH' : 'JNT'}>
+            <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
+              COLLATERALIZING
+            </ModalFormLabel>
             <Field
               component={InputField}
-              className={"ModalFormInput " + (selectedCurrency === "dai" ? "ModalFormInputETH" : "ModalFormInputJNT")}
+              className={
+                'ModalFormInput ' +
+                (selectedCurrency === 'dai'
+                  ? 'ModalFormInputETH'
+                  : 'ModalFormInputJNT')
+              }
               name='collateralAmount'
               type='number'
               step='0.0001'
               id='COLLATERALIZINGInput'
-              background={selectedCurrency === "dai" ? ETHFORM : JNT}
+              background={selectedCurrency === 'dai' ? ETHFORM : JNT}
               onChange={(event, newValue) =>
                 debounceCalcMaxBorrowedAmount(pair, newValue)
               }
               validate={[required, number]}
             />
             <h2>
-                  COLLATERALIZATION RATIO: <span>250</span>%
+              COLLATERALIZATION RATIO: <span>250</span>%
             </h2>
           </ModalFormGrp>
 
@@ -168,7 +205,7 @@ let NewLoan = ({
             <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
             <Field
               component={InputField}
-              className="ModalFormInputAPY"
+              className='ModalFormInputAPY'
               type='number'
               step='0.0001'
               id='LOAN APYInput'
@@ -177,7 +214,6 @@ let NewLoan = ({
         </Form>
       </ModalAdjustForm>
 
-      
       <ModalFormSubmit>
         <BtnGrpLoanModal>
           <ModalFormButton onClick={handleSubmit}>Open Loan</ModalFormButton>

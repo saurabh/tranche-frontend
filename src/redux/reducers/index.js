@@ -7,7 +7,7 @@ import { changePath } from './TogglePath';
 import { reducer as form } from 'redux-form';
 import {
   SET_COLLATERAL_AMOUNT,
-  SET_BORROWED_ASK_AMOUNT
+  SET_BORROWED_ASK_AMOUNT,
 } from '../actions/constants';
 
 export default combineReducers({
@@ -23,12 +23,12 @@ export default combineReducers({
         case SET_BORROWED_ASK_AMOUNT:
           return {
             ...state,
-            values: { ...state.values, borrowedAskAmount: payload }
+            submitCheck: { ...state.submitCheck, maxBorrowedAskAmount: payload }
           };
         case SET_COLLATERAL_AMOUNT:
           return {
             ...state,
-            values: { ...state.values, collateralAmount: payload }
+            submitCheck: { ...state.submitCheck, minCollateralAmount: payload }
           };
         default:
           return state;
