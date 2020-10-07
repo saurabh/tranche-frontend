@@ -1,4 +1,4 @@
 export * from './GlobalStyle';
 export * from './Layout';
-export * from './modals/ModalComponents'
-export * from './modals/BorrowForm'
+export * from './Modals/ModalComponents'
+export * from './Modals/NewLoan'
