@@ -28,7 +28,7 @@ export const assets = [
   { key: 'USDC', text: 'USDC', value: 1, collateral: 'JPT' },
 ];
 
-export const serverUrl = 'http://13.127.123.245/api/v1/';
+export const serverUrl = 'https://13.127.123.245/api/v1/';
 
 export const etherScanUrl = 'https://kovan.etherscan.io/address/';
 export const NA = 'N/A';
