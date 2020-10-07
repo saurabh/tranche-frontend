@@ -52,7 +52,9 @@ const InputField = ({
       type={type}
       className={className}
     />
-    {touched && error && <span style={{ display: 'none' }}>{error}</span>}
+    {touched && error && <span style={{position: "absolute", top: "0", right: "0", color: "red", fontStyle: "normal",
+    fontWeight: "300",
+    fontSize: "9px"}}>{error}</span>}
   </div>
 );
 

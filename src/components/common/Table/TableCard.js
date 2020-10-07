@@ -37,7 +37,7 @@ const TableContentCard = styled.div`
   padding: 0 39px 0 47px;
   border-bottom: 1px solid #efefef;
   cursor: pointer;
-  @media (max-width: 992px) {
+  @media (max-width: 1200px) {
     flex-direction: column;
     align-items: flex-end;
     border-bottom: 3px solid #efefef;

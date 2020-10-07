@@ -10,7 +10,7 @@ const TableHeadWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    @media (max-width: 992px){
+    @media (max-width: 1200px){
         display: none !important;
     }
 `;

@@ -12,7 +12,7 @@ import Earn from "components/pages/Earn";
 import Borrow from "components/pages/Borrow";
 import Trade from "components/pages/Trade";
 import NotFound from "components/pages/NotFound";
-
+import NetworkDetector from "./common/NetworkDetector";
 // Redux
 import { Provider } from "react-redux";
 import store from "../redux/store";
@@ -37,4 +37,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default NetworkDetector(App);
