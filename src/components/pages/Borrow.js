@@ -64,14 +64,14 @@ const Borrow = ({
 
 Borrow.propTypes = {
   ethereum: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => ({
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
-  ethereum: state.ethereum,
+};
+
+const mapStateToProps = (state) => ({
+  ethereum: state.ethereum
 });
 
 export default connect(mapStateToProps, {

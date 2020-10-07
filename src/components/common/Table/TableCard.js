@@ -1,6 +1,13 @@
-import React, { Component, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3
+} from 'redux/actions/ethereum';
+import { initOnboard } from 'services/blocknative';
 import { loansFetchData } from 'redux/actions/loans';
 import TableMoreRow from './TableMoreRow';
 import LoanModal from '../Modals/LoanModal';
@@ -13,8 +20,7 @@ import AdjustEarn from 'assets/images/svg/adjustEarn.svg';
 import AdjustTrade from 'assets/images/svg/adjustTrade.svg';
 
 import styled from 'styled-components';
-import { addrShortener } from 'utils';
-import { statusShortner } from 'utils';
+import { addrShortener, statusShortner, readyToTransact } from 'utils';
 import { statuses, etherScanUrl, NA } from 'config/constants';
 import LinkArrow from 'assets/images/svg/linkArrow.svg';
 import { ColorData } from 'config/constants';
@@ -58,6 +64,10 @@ const TableCard = ({
   },
   path,
   loansFetchData,
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
   ethereum: { address, network, balance, wallet, web3, notify }
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -65,6 +75,15 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   let disableBtn = status === 5 || status === 6 || status === 7 || status === 8;
   const toWei = web3.utils.toWei;
+
+  const onboard = initOnboard({
+    address: setAddress,
+    network: setNetwork,
+    balance: setBalance,
+    wallet: setWalletAndWeb3
+  });
+
+  useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
   const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
     try {
@@ -175,7 +194,7 @@ const TableCard = ({
     }
   };
 
-  const approveLoan = () => {
+  const approveLoan = async () => {
     remainingLoan = toWei(remainingLoan.toString());
     if (cryptoFromLenderName === DAI) {
       approveEthLoan(contractAddress, remainingLoan, cryptoFromLender);
@@ -184,7 +203,9 @@ const TableCard = ({
     }
   };
 
-  function openModal() {
+  async function openModal() {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
     setIsOpen(true);
   }
   function closeModal() {
@@ -347,13 +368,21 @@ const TableCard = ({
 };
 
 TableCard.propTypes = {
-  ethereum: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired,
+  setAddress: PropTypes.func.isRequired,
+  setNetwork: PropTypes.func.isRequired,
+  setBalance: PropTypes.func.isRequired,
+  setWalletAndWeb3: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    ethereum: state.ethereum
-  };
-};
+const mapStateToProps = (state) => ({
+  ethereum: state.ethereum
+});
 
-export default connect(mapStateToProps, { loansFetchData })(TableCard);
+export default connect(mapStateToProps, {
+  loansFetchData,
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3
+})(TableCard);
