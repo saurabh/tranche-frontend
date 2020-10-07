@@ -6,7 +6,7 @@ import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
 import { submitValidations } from 'utils/validations';
 import Modal from 'react-modal';
-import { NewLoan } from 'components/common';
+import { NewLoan } from 'components/common/Form/NewLoan';
 import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
@@ -57,7 +57,7 @@ const LoanModal = ({
 
   useEffect(() => {}, [address, network, balance, wallet, web3]);
 
-  function HandleCloseModal() {
+  function handleCloseModal() {
     closeModal();
   }
 
@@ -209,7 +209,7 @@ const LoanModal = ({
           }
         }
         createNewLoan();
-        HandleCloseModal();
+        handleCloseModal();
         break;
       case 'adjust':
         break;
@@ -221,7 +221,7 @@ const LoanModal = ({
   return (
     <Modal
       isOpen={openModal}
-      onRequestClose={HandleCloseModal}
+      onRequestClose={handleCloseModal}
       style={AdjustPositionStyles}
       shouldCloseOnOverlayClick={false}
       contentLabel='NewLoan'

@@ -36,7 +36,7 @@ import {
   NewLoanFormInput,
   SelectChevron,
   ModalFormInputAPY
-} from './ModalComponents';
+} from '../Modals/ModalComponents';
 
 const InputField = ({
   input,

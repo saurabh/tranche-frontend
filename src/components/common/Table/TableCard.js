@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { loansFetchData } from 'redux/actions/loans';
 import TableMoreRow from './TableMoreRow';
-import ModalLoan from '../Modals/Modal';
+import LoanModal from '../Modals/LoanModal';
 import UserImg from 'assets/images/svg/userImg.svg';
 import Star from 'assets/images/svg/Star.svg';
 import ETHGOLD from 'assets/images/svg/ethGold.svg';
@@ -315,7 +315,7 @@ const TableCard = ({
               <img src={Star} alt='' />
             </button>
           </div>
-          <ModalLoan
+          <LoanModal
             status={status}
             path={path}
             modalIsOpen={modalIsOpen}

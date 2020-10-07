@@ -19,6 +19,7 @@ import {
   ModalFormSubmit,
   ModalFormButton
 } from './ModalComponents';
+
 const FirstCustomStyles = {
   overlay: {
     display: 'flex',
@@ -74,19 +75,21 @@ const AdjustPositionStyles = {
 
 Modal.setAppElement('#root');
 
-export default function ModalLoan({
+export default function LoanModal({
   modalIsOpen,
   closeModal,
   path,
   status,
-  approveLoan,
+  approveLoan
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
     status === 0
-      ? 'Are you sure you want to activate this loan?'
-      : status === 1
+      ? 'Are you sure you want to approve this loan?'
+      : status === 1 && path === 'earn'
       ? 'Are you sure you want to withdraw interest?'
+      : status === 1 && path === 'borrow'
+      ? 'Are you sure you want to close the loan?'
       : '';
 
   const confirm = () => {
@@ -113,18 +116,23 @@ export default function ModalLoan({
     });
   };
 
-  const controlAction = (closeAlert) => {
+  const controlAction = (onClose) => {
     if (status === 0) {
       approveLoan();
       closeModal();
-      closeAlert();
-    } else if (status === 1) alert('Withdraw Interest');
+      onClose();
+    } else if (status === 1 && path === 'borrow') {
+      alert('Close Loan');
+    } else if (status === 1 && path === 'earn') {
+      alert('Withdraw Interest');
+    }
   };
 
   const modalClose = () => {
     closeModal();
     adjustPositionToggle(false);
   };
+
   const borrowModal = () => {
     return (
       <div>
@@ -203,6 +211,7 @@ export default function ModalLoan({
       </div>
     );
   };
+
   const earnModal = () => {
     return (
       <Modal

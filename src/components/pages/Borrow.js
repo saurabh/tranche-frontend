@@ -10,7 +10,7 @@ import {
 import { initOnboard } from "services/blocknative";
 import { readyToTransact } from 'utils/helperFunctions';
 import { Layout } from "components/common";
-import { NewLoan } from "components/common/Modals/NewLoan";
+import LoanModal from "components/common/Modals/CreateLoan";
 import SummaryCards from '../common/Summary/SummaryCards';
 import { pageType } from 'config/constants';
 
@@ -53,7 +53,7 @@ const Borrow = ({
     <Layout>
       {/* <SummaryCards /> */}
       <Table HandleNewLoan={handleNewLoanClick} openModal={showModal} pageType={pageType.BORROW}/>
-      <NewLoan
+      <LoanModal
         openModal={showModal}
         type={modalType}
         closeModal={() => setShowModal(false)}
