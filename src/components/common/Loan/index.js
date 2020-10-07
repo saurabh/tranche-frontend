@@ -10,7 +10,7 @@ import { NewLoan } from 'components/common/Form/NewLoan';
 import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
-import { ModalHeader } from './ModalComponents';
+import { ModalHeader } from '../Modals/ModalComponents';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -39,7 +39,7 @@ const AdjustPositionStyles = {
   }
 };
 
-const LoanModal = ({
+const Loan = ({
   type,
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
@@ -242,7 +242,7 @@ const LoanModal = ({
   );
 };
 
-LoanModal.propTypes = {
+Loan.propTypes = {
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired
 };
@@ -258,4 +258,4 @@ export default connect(mapStateToProps, {
   setBorrowedAskAmount,
   setCollateralAmount,
   loansFetchData
-})(LoanModal);
+})(Loan);

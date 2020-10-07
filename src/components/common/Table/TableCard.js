@@ -85,6 +85,8 @@ const TableCard = ({
 
   useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
+  console.log(contractAddress);
+
   const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
     try {
       const JLoanEth = JLoanEthSetup(web3, loanAddress);
@@ -194,7 +196,7 @@ const TableCard = ({
     }
   };
 
-  const approveLoan = async () => {
+  const approveLoan = () => {
     remainingLoan = toWei(remainingLoan.toString());
     if (cryptoFromLenderName === DAI) {
       approveEthLoan(contractAddress, remainingLoan, cryptoFromLender);
@@ -202,6 +204,205 @@ const TableCard = ({
       approveTokenLoan(contractAddress, remainingLoan, cryptoFromLender);
     }
   };
+
+  const addCollateralToEthLoan = async (loanAddress, collateralAmount) => {
+    try {
+      await web3.eth
+        .sendTransaction({
+          from: address,
+          to: loanAddress,
+          value: collateralAmount
+        })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 10000,
+            filter: {
+              type: null //ETH/JNT keep these in constant file
+            }
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addCollateralToTokenLoan = async (
+    loanAddress,
+    collateralAmount,
+    stableCoinAddress
+  ) => {
+    try {
+      const JLoanToken = JLoanTokenSetup(web3, loanAddress);
+      await JLoanToken.methods
+        .depositCollateral(stableCoinAddress, collateralAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 10000,
+            filter: {
+              type: null //ETH/JNT keep these in constant file
+            }
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const closeEthLoan = async (loanAddress, loanAmount) => {
+    try {
+      const JLoanEth = JLoanEthSetup(web3, loanAddress);
+      const DAI = DAISetup(web3);
+      if (status === 0) {
+        JLoanEth.methods
+          .setLoanCancelled()
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
+          });
+      } else {
+        let userAllowance = await DAI.methods
+          .allowance(address, loanAddress)
+          .call();
+        if (isGreaterThan(loanAmount, userAllowance)) {
+          await DAI.methods
+            .approve(loanAddress, loanAmount)
+            .send({ from: address })
+            .on('transactionHash', (hash) => {
+              notify.hash(hash);
+            });
+          await JLoanEth.methods
+            .loanClosing()
+            .send({ from: address })
+            .on('transactionHash', (hash) => {
+              notify.hash(hash);
+            })
+            .on('receipt', async () => {
+              await loansFetchData({
+                skip: 0,
+                limit: 10000,
+                filter: {
+                  type: null //ETH/JNT keep these in constant file
+                }
+              });
+            });
+        } else {
+          await JLoanEth.methods
+            .loanClosing()
+            .send({ from: address })
+            .on('transactionHash', (hash) => {
+              notify.hash(hash);
+            })
+            .on('receipt', async () => {
+              await loansFetchData({
+                skip: 0,
+                limit: 10000,
+                filter: {
+                  type: null //ETH/JNT keep these in constant file
+                }
+              });
+            });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const closeTokenLoan = async (loanAddress, loanAmount) => {
+    try {
+      const JLoanToken = JLoanTokenSetup(web3, loanAddress);
+      const USDC = USDCSetup(web3);
+      if (status === 0) {
+        JLoanToken.methods
+          .setLoanCancelled()
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null //ETH/JNT keep these in constant file
+              }
+            });
+          });
+      } else {
+        let userAllowance = await USDC.methods
+          .allowance(address, loanAddress)
+          .call();
+        if (isGreaterThan(loanAmount, userAllowance)) {
+          await USDC.methods
+            .approve(loanAddress, loanAmount)
+            .send({ from: address })
+            .on('transactionHash', (hash) => {
+              notify.hash(hash);
+            });
+          await JLoanToken.methods
+            .loanClosing()
+            .send({ from: address })
+            .on('transactionHash', (hash) => {
+              notify.hash(hash);
+            })
+            .on('receipt', async () => {
+              await loansFetchData({
+                skip: 0,
+                limit: 10000,
+                filter: {
+                  type: null //ETH/JNT keep these in constant file
+                }
+              });
+            });
+        } else {
+          await JLoanToken.methods
+            .loanClosing()
+            .send({ from: address })
+            .on('transactionHash', (hash) => {
+              notify.hash(hash);
+            })
+            .on('receipt', async () => {
+              await loansFetchData({
+                skip: 0,
+                limit: 10000,
+                filter: {
+                  type: null //ETH/JNT keep these in constant file
+                }
+              });
+            });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const closeLoan = () => {
+    remainingLoan = toWei(remainingLoan.toString());
+    if (cryptoFromLenderName === DAI) {
+      closeEthLoan(contractAddress, remainingLoan);
+    } else if (cryptoFromLenderName === USDC) {
+      closeTokenLoan(contractAddress, remainingLoan);
+    }
+  }
 
   async function openModal() {
     const ready = await readyToTransact(wallet, onboard);
@@ -342,6 +543,7 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             approveLoan={approveLoan}
+            closeLoan={closeLoan}
           />
         </div>
       </TableContentCard>

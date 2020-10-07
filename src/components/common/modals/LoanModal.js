@@ -80,16 +80,19 @@ export default function LoanModal({
   closeModal,
   path,
   status,
-  approveLoan
+  approveLoan,
+  closeLoan
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
-    status === 0
+    status === 0 && path === 'borrow'
+      ? 'Are you sure you want to cancel the loan request?'
+      : status === 0 && path === 'earn'
       ? 'Are you sure you want to approve this loan?'
-      : status === 1 && path === 'earn'
-      ? 'Are you sure you want to withdraw interest?'
       : status === 1 && path === 'borrow'
       ? 'Are you sure you want to close the loan?'
+      : status === 1 && path === 'earn'
+      ? 'Are you sure you want to withdraw interest?'
       : '';
 
   const confirm = () => {
@@ -117,12 +120,18 @@ export default function LoanModal({
   };
 
   const controlAction = (onClose) => {
-    if (status === 0) {
+    if (status === 0 && path === 'borrow') {
+      closeLoan();
+      closeModal();
+      onClose();
+    } else if (status === 0 && path === 'earn') {
       approveLoan();
       closeModal();
       onClose();
     } else if (status === 1 && path === 'borrow') {
-      alert('Close Loan');
+      closeLoan();
+      closeModal();
+      onClose();
     } else if (status === 1 && path === 'earn') {
       alert('Withdraw Interest');
     }
