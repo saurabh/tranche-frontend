@@ -1,8 +1,11 @@
-import { JFactoryABI, JLoanEthABI, JLoanTokenABI, ERC20ABI } from 'ABIs';
-import { JFactoryAddress, DAIAddress, JPTAddress, USDCAddress } from 'config/ethereum';
+import { abi as JFactoryABI, networks as JFactoryNetworks } from 'build/contracts/JFactory.json';
+import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
+import { abi as JLoanEthABI } from 'build/contracts/JLoanEth.json';
+import { abi as JLoanTokenABI } from 'build/contracts/JLoanToken.json';
+import { DAIAddress, JPTAddress, USDCAddress } from 'config/ethereum';
 
 export function JFactorySetup(web3) {
-  return new web3.eth.Contract(JFactoryABI, JFactoryAddress);
+  return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[42].address);
 }
 
 export function JLoanEthSetup(web3, address) {
