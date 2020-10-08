@@ -12,6 +12,7 @@ export const SET_WEB3 = 'SET_WEB3';
 // Redux-Forms
 export const SET_BORROWED_ASK_AMOUNT = 'SET_BORROWED_ASK_AMOUNT';
 export const SET_COLLATERAL_AMOUNT = 'SET_COLLATERAL_AMOUNT';
+export const SET_PAIR_ID = 'SET_PAIR_ID';
 
 //Loans
 export const LOANS_IS_LOADING = 'LOANS_IS_LOADING';

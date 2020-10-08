@@ -62,7 +62,8 @@ let NewLoan = ({
   createNewLoan,
   calcMinCollateralAmount,
   calcMaxBorrowedAmount,
-  collateralAmountForInput
+  collateralAmountForInput,
+  // setPair
 }) => {
   const [pair, setPair] = useState(0);
   const [selectedCurrency, selectCurrency] = useState('dai');

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CloseModal from 'assets/images/svg/closeModal.svg';
-import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
+import { setBorrowedAskAmount, setCollateralAmount, setPairId } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
 import { submitValidations } from 'utils/validations';
 import Modal from 'react-modal';
@@ -44,6 +44,7 @@ const Loan = ({
   form,
   setBorrowedAskAmount,
   setCollateralAmount,
+  setPairId,
   loansFetchData,
   openModal,
   closeModal
@@ -205,6 +206,10 @@ const Loan = ({
     }
   }
 
+  const setPair = (pairId) => {
+    setPairId(pairId);
+  }
+
   return (
     <Modal
       isOpen={openModal}
@@ -224,6 +229,7 @@ const Loan = ({
         createNewLoan={createNewLoan}
         calcMinCollateralAmount={calcMinCollateralAmount}
         calcMaxBorrowedAmount={calcMaxBorrowedAmount}
+        setPair={setPair}
       />
     </Modal>
   );
@@ -237,6 +243,7 @@ Loan.propTypes = {
 const mapStateToProps = (state) => ({
   setBorrowedAskAmount: PropTypes.func.isRequired,
   setCollateralAmount: PropTypes.func.isRequired,
+  setPairId: PropTypes.func.isRequired,
   ethereum: state.ethereum,
   form: state.form
 });
@@ -244,5 +251,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   setBorrowedAskAmount,
   setCollateralAmount,
+  setPairId,
   loansFetchData
 })(Loan);

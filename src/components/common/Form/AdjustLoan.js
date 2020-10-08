@@ -68,7 +68,7 @@ let AdjustLoan = ({
             <NewLoanFormInput>
               <NewLoanInputWrapper>
                 <ModalFormLabel htmlFor='BORROWINGInput'>
-                  BORROWING
+                  ADD COLLATERAL
                 </ModalFormLabel>
                 <Field
                   component={InputField}
