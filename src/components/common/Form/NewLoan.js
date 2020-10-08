@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { required, number, minValue0, maxValue100, validate } from 'utils/validations';
+import {
+  required,
+  number,
+  minValue0,
+  maxValue100,
+  validate
+} from 'utils/validations';
 import { useDebouncedCallback } from 'utils/lodash';
 import { assets } from 'config/constants';
 import { connect } from 'react-redux';
@@ -52,9 +58,21 @@ const InputField = ({
       type={type}
       className={className}
     />
-    {touched && error && <span style={{position: "absolute", top: "0", right: "0", color: "red", fontStyle: "normal",
-    fontWeight: "300",
-    fontSize: "9px"}}>{error}</span>}
+    {touched && error && (
+      <span
+        style={{
+          position: 'absolute',
+          top: '0',
+          right: '0',
+          color: 'red',
+          fontStyle: 'normal',
+          fontWeight: '300',
+          fontSize: '9px'
+        }}
+      >
+        {error}
+      </span>
+    )}
   </div>
 );
 
@@ -63,14 +81,15 @@ let NewLoan = ({
   calcMinCollateralAmount,
   calcMaxBorrowedAmount,
   collateralAmountForInput,
-  // setPair
+  setPair
 }) => {
-  const [pair, setPair] = useState(0);
+  const [pair, setPairLocal] = useState(0);
   const [selectedCurrency, selectCurrency] = useState('dai');
   const [currencySelect, toggleCurrency] = useState(false);
 
-  const toggleCurrencySelect = () => {
-    toggleCurrency(!currencySelect);
+  const selectPair = (pairId) => {
+    setPairLocal(pairId)
+    setPair(pairId)
   };
 
   const handleCurrenySelect = (e) => {
@@ -116,11 +135,11 @@ let NewLoan = ({
               </NewLoanInputWrapper>
 
               <LoanCustomSelect>
-                <Field
+              <Field
                   name='pairId'
                   component='select'
                   validate={[required]}
-                  onChange={(event, newValue) => setPair(+newValue)}
+                  onChange={(event, newValue) => setPairLocal(+newValue)}
                 >
                   {assets.map((asset) => (
                     <option value={asset.value} key={asset.key}>
