@@ -8,6 +8,7 @@ import { reducer as form } from 'redux-form';
 import {
   SET_COLLATERAL_AMOUNT,
   SET_BORROWED_ASK_AMOUNT,
+  SET_PAIR_ID
 } from '../actions/constants';
 
 export default combineReducers({
@@ -29,6 +30,11 @@ export default combineReducers({
           return {
             ...state,
             submitCheck: { ...state.submitCheck, minCollateralAmount: payload }
+          };
+        case SET_PAIR_ID:
+          return {
+            ...state,
+            values: { ...state.values, pairId: payload }
           };
         default:
           return state;

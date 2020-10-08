@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
+import { AdjustLoan } from 'components/common/Form/AdjustLoan'
 import CloseModal from 'assets/images/svg/closeModal.svg';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { statuses } from '../../../config/constants';
+import { statuses } from 'config/constants';
 import {
   ModalHeader,
   ModalContent,
@@ -81,7 +82,8 @@ export default function LoanModal({
   path,
   status,
   approveLoan,
-  closeLoan
+  closeLoan,
+  addCollateral
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
@@ -182,39 +184,7 @@ export default function LoanModal({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
-            <ModalAdjustForm>
-              <ModalFormWrapper>
-                <ModalFormGrp>
-                  <ModalFormLabel htmlFor='blockedInput'>LOCKED</ModalFormLabel>
-                  <ModalFormInput
-                    type='number'
-                    step='0.0001'
-                    id='blockedInput'
-                  />
-                  <h2>
-                    INTEREST EARNED: <span>0.0000</span> ETH
-                  </h2>
-                </ModalFormGrp>
-                <ModalFormGrp>
-                  <ModalFormLabel htmlFor='blockedInput'>
-                    EARNING PER BLOCK
-                  </ModalFormLabel>
-                  <ModalFormInput
-                    type='number'
-                    step='0.0001'
-                    id='blockedInput'
-                  />
-                  <h2>
-                    ANNUAL RETURN: <span>0.00%</span> APY
-                  </h2>
-                </ModalFormGrp>
-              </ModalFormWrapper>
-            </ModalAdjustForm>
-            <ModalFormSubmit>
-              <BtnGrpLoanModal>
-                <ModalFormButton>CHANGE POSITION</ModalFormButton>
-              </BtnGrpLoanModal>
-            </ModalFormSubmit>
+            <AdjustLoan addCollateral={addCollateral}/>
           </Modal>
         )}
       </div>

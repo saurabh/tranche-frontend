@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CloseModal from 'assets/images/svg/closeModal.svg';
-import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
+import { setBorrowedAskAmount, setCollateralAmount, setPairId } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
 import { submitValidations } from 'utils/validations';
 import Modal from 'react-modal';
@@ -40,11 +40,11 @@ const AdjustPositionStyles = {
 };
 
 const Loan = ({
-  type,
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
   setBorrowedAskAmount,
   setCollateralAmount,
+  setPairId,
   loansFetchData,
   openModal,
   closeModal
@@ -69,7 +69,8 @@ const Loan = ({
         .call();
       setCollateralAmount(fromWei(result));
       setBorrowedAskAmount(finalAmount);
-      setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
+      setCollateralAmountForInput(fromWei(result));
+      // setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
     } catch (error) {
       console.error(error);
     }
@@ -170,53 +171,44 @@ const Loan = ({
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    switch (type) {
-      case 'new':
-        async function createNewLoan() {
-          try {
-            const tempRpbRate = 10 ** 10;
-            let {
-              pairId,
-              borrowedAskAmount,
-              collateralAmount,
-              rpbRate
-            } = form.newLoan.values;
-            // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
-            //   .then(() => {})
-            //   .catch((error) => console.error(error));
-            borrowedAskAmount = toWei(borrowedAskAmount);
-            collateralAmount = toWei(collateralAmount);
-            if (pairId === 0) {
-              createNewEthLoan(
-                pairId,
-                borrowedAskAmount,
-                tempRpbRate,
-                collateralAmount
-              );
-            } else {
-              createNewTokenLoan(
-                pairId,
-                borrowedAskAmount,
-                tempRpbRate,
-                collateralAmount
-              );
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        createNewLoan();
-        handleCloseModal();
-        break;
-      case 'adjust':
-        break;
-      default:
-        break;
+  const createNewLoan = async () => {
+    try {
+      const tempRpbRate = 10 ** 10;
+      let {
+        pairId,
+        borrowedAskAmount,
+        collateralAmount,
+        rpbRate
+      } = form.newLoan.values;
+      // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
+      //   .then(() => {})
+      //   .catch((error) => console.error(error));
+      borrowedAskAmount = toWei(borrowedAskAmount);
+      collateralAmount = toWei(collateralAmount);
+      if (pairId === 0) {
+        createNewEthLoan(
+          pairId,
+          borrowedAskAmount,
+          tempRpbRate,
+          collateralAmount
+        );
+      } else {
+        createNewTokenLoan(
+          pairId,
+          borrowedAskAmount,
+          tempRpbRate,
+          collateralAmount
+        );
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
+
+  const setPair = (pairId) => {
+    setPairId(pairId);
+  }
 
   return (
     <Modal
@@ -234,9 +226,10 @@ const Loan = ({
       </ModalHeader>
       <NewLoan
         collateralAmountForInput={collateralAmountForInput}
-        handleSubmit={handleSubmit}
+        createNewLoan={createNewLoan}
         calcMinCollateralAmount={calcMinCollateralAmount}
         calcMaxBorrowedAmount={calcMaxBorrowedAmount}
+        setPair={setPair}
       />
     </Modal>
   );
@@ -250,6 +243,7 @@ Loan.propTypes = {
 const mapStateToProps = (state) => ({
   setBorrowedAskAmount: PropTypes.func.isRequired,
   setCollateralAmount: PropTypes.func.isRequired,
+  setPairId: PropTypes.func.isRequired,
   ethereum: state.ethereum,
   form: state.form
 });
@@ -257,5 +251,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   setBorrowedAskAmount,
   setCollateralAmount,
+  setPairId,
   loansFetchData
 })(Loan);
