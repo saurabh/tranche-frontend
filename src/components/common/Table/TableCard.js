@@ -52,6 +52,7 @@ const TableContentCard = styled.div`
 `;
 
 const TableCard = ({
+  loan,
   loan: {
     status,
     contractAddress,
@@ -60,7 +61,8 @@ const TableCard = ({
     cryptoFromLenderName,
     collateralRatio,
     interestPaid,
-    collateralTypeName
+    collateralTypeName,
+    collateralType
   },
   path,
   loansFetchData,
@@ -68,7 +70,8 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { address, network, balance, wallet, web3, notify }
+  ethereum: { address, network, balance, wallet, web3, notify },
+  form
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -85,7 +88,7 @@ const TableCard = ({
 
   useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
-  console.log(contractAddress);
+  console.log(loan);
 
   const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
     try {
@@ -257,6 +260,24 @@ const TableCard = ({
     }
   };
 
+  const addCollateral = () => {
+    let { collateralAmount } = form.adjustLoan.values;
+    collateralAmount = toWei(collateralAmount);
+    if (cryptoFromLenderName === DAI) {
+      let contractAddress = '0x844a8375bf59725D8bDbEe4885afe7f33e7aFD12';
+      addCollateralToEthLoan(contractAddress, collateralAmount);
+      closeModal();
+    } else if (cryptoFromLenderName === USDC) {
+      let contractAddress = '0x2eb5518d5C86cd9778Ee2668940064686c537cDc';
+      addCollateralToTokenLoan(
+        contractAddress,
+        collateralAmount,
+        collateralType
+      );
+      closeModal();
+    }
+  };
+
   const closeEthLoan = async (loanAddress, loanAmount) => {
     try {
       const JLoanEth = JLoanEthSetup(web3, loanAddress);
@@ -402,13 +423,14 @@ const TableCard = ({
     } else if (cryptoFromLenderName === USDC) {
       closeTokenLoan(contractAddress, remainingLoan);
     }
-  }
+  };
 
   async function openModal() {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     setIsOpen(true);
   }
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -544,6 +566,7 @@ const TableCard = ({
             closeModal={() => closeModal()}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
+            addCollateral={addCollateral}
           />
         </div>
       </TableContentCard>
@@ -571,6 +594,7 @@ const TableCard = ({
 
 TableCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
@@ -578,7 +602,8 @@ TableCard.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  form: state.form
 });
 
 export default connect(mapStateToProps, {

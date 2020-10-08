@@ -59,7 +59,7 @@ const InputField = ({
 );
 
 let NewLoan = ({
-  handleSubmit,
+  createNewLoan,
   calcMinCollateralAmount,
   calcMaxBorrowedAmount,
   collateralAmountForInput
@@ -92,7 +92,7 @@ let NewLoan = ({
   return (
     <div>
       <ModalAdjustForm>
-        <Form component={ModalFormWrapper} onSubmit={handleSubmit}>
+        <Form component={ModalFormWrapper}>
           <ModalFormGrpNewLoan>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
@@ -218,7 +218,7 @@ let NewLoan = ({
 
       <ModalFormSubmit>
         <BtnGrpLoanModal>
-          <ModalFormButton onClick={handleSubmit}>Open Loan</ModalFormButton>
+          <ModalFormButton onClick={createNewLoan}>Open Loan</ModalFormButton>
         </BtnGrpLoanModal>
       </ModalFormSubmit>
     </div>

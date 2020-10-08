@@ -68,7 +68,8 @@ const Loan = ({
         .call();
       setCollateralAmount(fromWei(result));
       setBorrowedAskAmount(finalAmount);
-      setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
+      setCollateralAmountForInput(fromWei(result));
+      // setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
     } catch (error) {
       console.error(error);
     }
@@ -220,7 +221,7 @@ const Loan = ({
       </ModalHeader>
       <NewLoan
         collateralAmountForInput={collateralAmountForInput}
-        handleSubmit={createNewLoan}
+        createNewLoan={createNewLoan}
         calcMinCollateralAmount={calcMinCollateralAmount}
         calcMaxBorrowedAmount={calcMaxBorrowedAmount}
       />
