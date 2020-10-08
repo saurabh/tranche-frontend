@@ -40,7 +40,6 @@ const AdjustPositionStyles = {
 };
 
 const Loan = ({
-  type,
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
   setBorrowedAskAmount,
@@ -170,53 +169,40 @@ const Loan = ({
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    switch (type) {
-      case 'new':
-        async function createNewLoan() {
-          try {
-            const tempRpbRate = 10 ** 10;
-            let {
-              pairId,
-              borrowedAskAmount,
-              collateralAmount,
-              rpbRate
-            } = form.newLoan.values;
-            // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
-            //   .then(() => {})
-            //   .catch((error) => console.error(error));
-            borrowedAskAmount = toWei(borrowedAskAmount);
-            collateralAmount = toWei(collateralAmount);
-            if (pairId === 0) {
-              createNewEthLoan(
-                pairId,
-                borrowedAskAmount,
-                tempRpbRate,
-                collateralAmount
-              );
-            } else {
-              createNewTokenLoan(
-                pairId,
-                borrowedAskAmount,
-                tempRpbRate,
-                collateralAmount
-              );
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        createNewLoan();
-        handleCloseModal();
-        break;
-      case 'adjust':
-        break;
-      default:
-        break;
+  const createNewLoan = async () => {
+    try {
+      const tempRpbRate = 10 ** 10;
+      let {
+        pairId,
+        borrowedAskAmount,
+        collateralAmount,
+        rpbRate
+      } = form.newLoan.values;
+      // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
+      //   .then(() => {})
+      //   .catch((error) => console.error(error));
+      borrowedAskAmount = toWei(borrowedAskAmount);
+      collateralAmount = toWei(collateralAmount);
+      if (pairId === 0) {
+        createNewEthLoan(
+          pairId,
+          borrowedAskAmount,
+          tempRpbRate,
+          collateralAmount
+        );
+      } else {
+        createNewTokenLoan(
+          pairId,
+          borrowedAskAmount,
+          tempRpbRate,
+          collateralAmount
+        );
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
 
   return (
     <Modal
@@ -234,7 +220,7 @@ const Loan = ({
       </ModalHeader>
       <NewLoan
         collateralAmountForInput={collateralAmountForInput}
-        handleSubmit={handleSubmit}
+        handleSubmit={createNewLoan}
         calcMinCollateralAmount={calcMinCollateralAmount}
         calcMaxBorrowedAmount={calcMaxBorrowedAmount}
       />
