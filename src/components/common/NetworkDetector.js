@@ -26,7 +26,8 @@ export default function (ComposedComponent) {
       if (condition === 'online') {
         const webPing = setInterval(
           () => {
-            fetch('//google.com', {
+            //fetch('//google.com', {
+            fetch('https://www.google.com/', {
               mode: 'no-cors',
               })
             .then(() => {

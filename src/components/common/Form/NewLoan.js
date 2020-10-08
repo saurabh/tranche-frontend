@@ -67,6 +67,7 @@ let NewLoan = ({
   const [pair, setPair] = useState(0);
   const [selectedCurrency, selectCurrency] = useState('dai');
   const [currencySelect, toggleCurrency] = useState(false);
+  const [RPB, SETRPB] = useState(0);
 
   const toggleCurrencySelect = () => {
     toggleCurrency(!currencySelect);
@@ -77,6 +78,7 @@ let NewLoan = ({
     selectCurrency(e.target.value);
     toggleCurrency(false);
   };
+  
 
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     (pair, borrowedAskAmount) =>
@@ -88,6 +90,16 @@ let NewLoan = ({
     (pair, borrowedAskAmount) => calcMaxBorrowedAmount(pair, borrowedAskAmount),
     500
   );
+
+  const calculateRPB = (APY) =>{
+    if(APY > 0){
+      let rpb = -(100^(-1/365)*(100^(1/365)-(APY+100)^(1/365)))/5760;
+      SETRPB(parseFloat(rpb).toFixed(3));
+    }
+    else{
+      SETRPB(0);
+    }
+  }
 
   return (
     <div>
@@ -211,7 +223,11 @@ let NewLoan = ({
               type='number'
               step='0.0001'
               id='LOAN APYInput'
+              onChange={(e) => calculateRPB(e.target.value)}
             />
+            <h2>
+              RPB: <span>{RPB}</span>
+            </h2>
           </ModalFormGrpNewLoan>
         </Form>
       </ModalAdjustForm>
