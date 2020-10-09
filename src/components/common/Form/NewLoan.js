@@ -79,18 +79,11 @@ let NewLoan = ({
   calcMinCollateralAmount,
   calcMaxBorrowedAmount,
   collateralAmountForInput,
-  setPair
 }) => {
-  const [pair, setPairLocal] = useState(0);
+  const [pair, setPair] = useState(0);
   const [selectedCurrency, selectCurrency] = useState('DAI');
   const [currencySelect, toggleCurrency] = useState(false);
   const [RPB, SETRPB] = useState(0);
-  const selectPair = (pairId) => {
-    setPairLocal(pairId)
-    setPair(pairId)
-  };
-  
-  
 
   const inputChange = (val) => {
     const input = document.getElementById("selectPair");
@@ -104,9 +97,11 @@ let NewLoan = ({
     }
     input.dispatchEvent(event);
   }
+
   const toggleCurrencySelect = () =>{
     toggleCurrency(!currencySelect);
   }
+  
   const handleCurrenySelect = (e, pair) => {
     e.preventDefault();
     inputChange(pair);
@@ -168,10 +163,9 @@ let NewLoan = ({
                 component='input'
                 id="selectPair"
                 validate={[required]}
-                onChange={(event, newValue) => setPairLocal(+newValue)}
+                onChange={(event, newValue) => setPair(+newValue)}
                 style={{display: "none"}}
               />
-                  
                 <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
                     <div>
                       <img src={searchArr(selectedCurrency).img} alt='' />
