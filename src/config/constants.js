@@ -1,3 +1,7 @@
+import DAIicon from 'assets/images/svg/dai.svg';
+import USDCicon from 'assets/images/svg/usdc.svg';
+import ETHicon from 'assets/images/svg/EthForm.svg';
+import JNTicon from 'assets/images/svg/jnt.svg';
 // Site Banner Data (imported in Header component)
 export const HeaderData = {
   home: {
@@ -24,8 +28,8 @@ export const HeaderData = {
 
 // Borrow Assets (The types of stableCoins that can be borrowed against collateral)
 export const assets = [
-  { key: 'DAI', text: 'DAI', value: 0, collateral: 'ETH' }, // value = pairId
-  { key: 'USDC', text: 'USDC', value: 1, collateral: 'JPT' },
+  { key: 'DAI', text: 'DAI', value: 0, collateral: 'ETH', img: DAIicon, colIcon: ETHicon }, // value = pairId
+  { key: 'USDC', text: 'USDC', value: 1, collateral: 'JNT', img: USDCicon, colIcon: JNTicon },
 ];
 
 export const serverUrl = 'http://13.127.123.245/api/v1/';
@@ -80,16 +84,21 @@ export const statuses =  {
     background: "rgba(192, 57, 43, 0.24)"
   },
   6: {
+    status: "Early closing",
+    color: "#41A1FF",
+    background: "rgba(65, 161, 255, 0.24)"
+  },
+  7: {
     status: "Closing",
     color: "#0A66E1",
     background: "rgba(10, 102, 225, 0.24)"
   },
-  7: {
+  8: {
     status: "Closed",
     color: "#234566",
     background: "rgba(35, 69, 102, 0.24)"
   },
-  8: {
+  9: {
     status: "Cancelled",
     color: "#E70D52",
     background: "rgba(231, 13, 82, 0.24)"

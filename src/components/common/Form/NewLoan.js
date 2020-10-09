@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   required,
   number,
@@ -10,13 +10,11 @@ import { useDebouncedCallback } from 'utils/lodash';
 import { assets } from 'config/constants';
 import { connect } from 'react-redux';
 import CloseModal from 'assets/images/svg/closeModal.svg';
-import DAI from 'assets/images/svg/dai.svg';
+
 import { Form, Field, reduxForm } from 'redux-form';
-import USDC from 'assets/images/svg/usdc.svg';
+
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
-import ETHFORM from 'assets/images/svg/EthForm.svg';
-import JNT from 'assets/images/svg/jnt.svg';
 import { statuses } from '../../../config/constants';
 import {
   ModalHeader,
@@ -84,17 +82,34 @@ let NewLoan = ({
   setPair
 }) => {
   const [pair, setPairLocal] = useState(0);
-  const [selectedCurrency, selectCurrency] = useState('dai');
+  const [selectedCurrency, selectCurrency] = useState('DAI');
   const [currencySelect, toggleCurrency] = useState(false);
   const [RPB, SETRPB] = useState(0);
-
   const selectPair = (pairId) => {
     setPairLocal(pairId)
     setPair(pairId)
   };
+  
+  
 
-  const handleCurrenySelect = (e) => {
+  const inputChange = (val) => {
+    const input = document.getElementById("selectPair");
+
+    const lastValue = input.value;
+    input.value = val;
+    const event = new Event("input", { bubbles: true });
+    const tracker = input._valueTracker;
+    if (tracker) {
+      tracker.setValue(lastValue);
+    }
+    input.dispatchEvent(event);
+  }
+  const toggleCurrencySelect = () =>{
+    toggleCurrency(!currencySelect);
+  }
+  const handleCurrenySelect = (e, pair) => {
     e.preventDefault();
+    inputChange(pair);
     selectCurrency(e.target.value);
     toggleCurrency(false);
   };
@@ -120,6 +135,7 @@ let NewLoan = ({
       SETRPB(0);
     }
   }
+  const searchArr = key => assets.find(i => i.key === key);
 
   return (
     <div>
@@ -148,32 +164,19 @@ let NewLoan = ({
 
               <LoanCustomSelect>
               <Field
-                  name='pairId'
-                  component='select'
-                  validate={[required]}
-                  onChange={(event, newValue) => setPairLocal(+newValue)}
-                >
-                  {assets.map((asset) => (
-                    <option value={asset.value} key={asset.key}>
-                      {asset.text}
-                    </option>
-                  ))}
-                </Field>
-                {/* <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
-                  {selectedCurrency === 'dai' ? (
+                name='pairId'
+                component='input'
+                id="selectPair"
+                validate={[required]}
+                onChange={(event, newValue) => setPairLocal(+newValue)}
+                style={{display: "none"}}
+              />
+                  
+                <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
                     <div>
-                      <img src={DAI} alt='' />
-                      <h2>DAI</h2>
+                      <img src={searchArr(selectedCurrency).img} alt='' />
+                      <h2>{searchArr(selectedCurrency).text}</h2>
                     </div>
-                  ) : selectedCurrency === 'usdc' ? (
-                    <div>
-                      <img src={USDC} alt='' />
-                      <h2>USDC</h2>
-                    </div>
-                  ) : (
-                    ''
-                  )}
-
                   <SelectChevron>
                     <img src={selectUp} alt='' />
                     <img src={selectDown} alt='' />
@@ -181,26 +184,23 @@ let NewLoan = ({
                 </SelectCurrencyView>
                 {currencySelect ? (
                   <SelectCurrencyOptions>
-                    <SelectCurrencyOption>
-                      <button
-                        onClick={(e) => handleCurrenySelect(e)}
-                        value='dai'
-                      >
-                        <img src={DAI} alt='' /> DAI
-                      </button>
-                    </SelectCurrencyOption>
-                    <SelectCurrencyOption>
-                      <button
-                        onClick={(e) => handleCurrenySelect(e)}
-                        value='usdc'
-                      >
-                        <img src={USDC} alt='' /> USDC
-                      </button>
-                    </SelectCurrencyOption>
+                    {
+                    assets.map((i)=>{
+                      return <SelectCurrencyOption key={i.key}>
+                        <button
+                          onClick={(e) => handleCurrenySelect(e, i.value)}
+                          value={i.key}
+                        >
+                          <img src={i.img} alt='' /> {i.text}
+                        </button>
+                      </SelectCurrencyOption>
+                    })
+                    }
+                    
                   </SelectCurrencyOptions>
                 ) : (
                   ''
-                )} */}
+                )}
               </LoanCustomSelect>
             </NewLoanFormInput>
             <h2>
@@ -208,7 +208,7 @@ let NewLoan = ({
             </h2>
           </ModalFormGrpNewLoan>
 
-          <ModalFormGrp currency={selectedCurrency === 'dai' ? 'ETH' : 'JNT'}>
+          <ModalFormGrp currency={searchArr(selectedCurrency).collateral}>
             <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
               COLLATERALIZING
             </ModalFormLabel>
@@ -216,15 +216,14 @@ let NewLoan = ({
               component={InputField}
               className={
                 'ModalFormInput ' +
-                (selectedCurrency === 'dai'
-                  ? 'ModalFormInputETH'
-                  : 'ModalFormInputJNT')
+                (`${'ModalFormInput'+ searchArr(selectedCurrency).collateral}`)
+                
               }
               name='collateralAmount'
               type='number'
               step='0.0001'
               id='COLLATERALIZINGInput'
-              background={selectedCurrency === 'dai' ? ETHFORM : JNT}
+              background={searchArr(selectedCurrency).colIcon}
               onChange={(event, newValue) =>
                 debounceCalcMaxBorrowedAmount(pair, newValue)
               }

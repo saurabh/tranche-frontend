@@ -76,7 +76,7 @@ const TableCard = ({
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  let disableBtn = status === 5 || status === 6 || status === 7 || status === 8;
+  let disableBtn = status === 5 || status === 6 || status === 7 || status === 8 || status === 9;
   const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
@@ -88,7 +88,7 @@ const TableCard = ({
 
   useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
-  console.log(loan);
+  //console.log(loan);
 
   const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
     try {
