@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Form, Field, reduxForm } from 'redux-form';
+import { pairData, statuses } from 'config/constants';
+import { useDebouncedCallback } from 'utils/lodash';
 import {
   required,
   number,
@@ -6,16 +10,9 @@ import {
   maxValue100,
   validate
 } from 'utils/validations';
-import { useDebouncedCallback } from 'utils/lodash';
-import { assets } from 'config/constants';
-import { connect } from 'react-redux';
 import CloseModal from 'assets/images/svg/closeModal.svg';
-
-import { Form, Field, reduxForm } from 'redux-form';
-
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
-import { statuses } from '../../../config/constants';
 import {
   ModalHeader,
   ModalContent,
@@ -81,7 +78,7 @@ let NewLoan = ({
   collateralAmountForInput,
 }) => {
   const [pair, setPair] = useState(0);
-  const [selectedCurrency, selectCurrency] = useState('DAI');
+  const [selectedCurrency, selectCurrency] = useState(pairData[0].key);
   const [currencySelect, toggleCurrency] = useState(false);
   const [RPB, SETRPB] = useState(0);
 
@@ -98,10 +95,12 @@ let NewLoan = ({
     input.dispatchEvent(event);
   }
 
+  const searchArr = key => pairData.find(i => i.key === key);
+
   const toggleCurrencySelect = () =>{
     toggleCurrency(!currencySelect);
   }
-  
+
   const handleCurrenySelect = (e, pair) => {
     e.preventDefault();
     inputChange(pair);
@@ -109,7 +108,6 @@ let NewLoan = ({
     toggleCurrency(false);
   };
   
-
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     (pair, borrowedAskAmount) =>
       calcMinCollateralAmount(pair, borrowedAskAmount),
@@ -130,7 +128,6 @@ let NewLoan = ({
       SETRPB(0);
     }
   }
-  const searchArr = key => assets.find(i => i.key === key);
 
   return (
     <div>
@@ -179,7 +176,7 @@ let NewLoan = ({
                 {currencySelect ? (
                   <SelectCurrencyOptions>
                     {
-                    assets.map((i)=>{
+                    pairData.map((i)=>{
                       return <SelectCurrencyOption key={i.key}>
                         <button
                           onClick={(e) => handleCurrenySelect(e, i.value)}
@@ -190,7 +187,6 @@ let NewLoan = ({
                       </SelectCurrencyOption>
                     })
                     }
-                    
                   </SelectCurrencyOptions>
                 ) : (
                   ''
@@ -211,7 +207,6 @@ let NewLoan = ({
               className={
                 'ModalFormInput ' +
                 (`${'ModalFormInput'+ searchArr(selectedCurrency).collateral}`)
-                
               }
               name='collateralAmount'
               type='number'
@@ -254,24 +249,13 @@ let NewLoan = ({
   );
 };
 
-// const mapStateToProps = (state) => ({
-//   form: state.form,
-//   initialValues: { pairId: 0 }
-// });
-
-// NewLoan = connect(mapStateToProps, {})(NewLoan);
-
-// NewLoan = reduxForm({
-//   form: 'newLoan'
-// })(NewLoan);
-
 NewLoan = reduxForm({
   form: 'newLoan',
   validate
 })(NewLoan);
 
 NewLoan = connect(() => ({
-  initialValues: { pairId: 0 }
+  initialValues: { pairId: pairData[0].value }
 }))(NewLoan);
 
 export { NewLoan };

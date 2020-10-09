@@ -27,7 +27,8 @@ export const HeaderData = {
 };
 
 // Borrow Assets (The types of stableCoins that can be borrowed against collateral)
-export const assets = [
+// pairData[0] is the default option in the loan creation process
+export const pairData = [
   { key: 'DAI', text: 'DAI', value: 0, collateral: 'ETH', img: DAIicon, colIcon: ETHicon }, // value = pairId
   { key: 'USDC', text: 'USDC', value: 1, collateral: 'JNT', img: USDCicon, colIcon: JNTicon },
 ];
