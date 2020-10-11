@@ -6,7 +6,7 @@ import {
     NavbarContainer,
     NavbarLinks
 } from './HeaderComponents';
-import { ColorData } from 'config/constants';
+import { PagesData } from 'config/constants';
 
 import { NavLink } from 'react-router-dom';
 
@@ -23,9 +23,9 @@ function Navbar({path}) {
                     <div id="navbar-icon" onClick={()=>setMenuOpen(!menuOpen)}><span></span><span></span><span></span></div>
                     <div className={"navbar-right " + (menuOpen ? "navbar-right-toggle" : "")}>
                         <NavbarLinks>
-                            <NavLink to="/borrow" activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Borrow</NavLink>
-                            <NavLink to="/earn" activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Earn</NavLink>
-                            <NavLink to="/trade" onClick={(e) => e.preventDefault()} style={{pointerEvents: "none"}} activeStyle={{borderBottom: "2px solid", borderColor: ColorData[path].secondaryColor, opacity: '1'}}>Trade</NavLink>
+                            <NavLink to="/borrow" activeStyle={{borderBottom: "2px solid", borderColor: PagesData[path].secondaryColor, opacity: '1'}}>Borrow</NavLink>
+                            <NavLink to="/earn" activeStyle={{borderBottom: "2px solid", borderColor: PagesData[path].secondaryColor, opacity: '1'}}>Earn</NavLink>
+                            <NavLink to="/trade" onClick={(e) => e.preventDefault()} style={{pointerEvents: "none"}} activeStyle={{borderBottom: "2px solid", borderColor: PagesData[path].secondaryColor, opacity: '1'}}>Trade</NavLink>
                         </NavbarLinks>
                         <ConnectWallet />
                     </div>

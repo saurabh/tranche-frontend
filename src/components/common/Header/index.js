@@ -8,7 +8,7 @@ import {
 } from './HeaderComponents';
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
-import { HeaderData } from 'config/constants';
+import { PagesData } from 'config/constants';
 
 
 export function Header() {
@@ -28,15 +28,15 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <HeaderWrapper color={HeaderData[path].color}>
+    <HeaderWrapper color={PagesData[path].color}>
       <Navbar />
       <div className='content-container container'>
         <HeaderContent>
           <HeaderTitle className='header-text'>
-            <h2>{HeaderData[path].title}</h2>
+            <h2>{PagesData[path].title}</h2>
           </HeaderTitle>
           <HeaderSubtitle className='header-text'>
-            <h2>{HeaderData[path].description}</h2>
+            <h2>{PagesData[path].description}</h2>
           </HeaderSubtitle>
         </HeaderContent>
       </div>

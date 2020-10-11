@@ -61,7 +61,7 @@ const AdjustPositionStyles = {
     position: 'relative',
     maxWidth: '292px',
     width: '100%',
-    minHeight: '326px',
+    //minHeight: '326px',
     height: 'auto',
     borderRadius: '16px',
     border: 'none',

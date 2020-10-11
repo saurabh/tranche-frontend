@@ -72,29 +72,29 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
 
   return (
     <div>
-      <ModalAdjustForm>
+      <ModalAdjustForm style={{minHeight: "auto"}}>
         <Form component={ModalFormWrapper} onSubmit={addCollateral}>
-          <ModalFormGrpNewLoan>
+          <ModalFormGrp currency="ETH">
             <NewLoanFormInput>
               <NewLoanInputWrapper>
-                <ModalFormLabel htmlFor='BORROWINGInput'>ADD COLLATERAL</ModalFormLabel>
+                <ModalFormLabel htmlFor='COLLATERALIZINGInput'>ADD COLLATERAL</ModalFormLabel>
                 <Field
                   component={InputField}
-                  className='ModalFormInputNewLoan'
+                  className='ModalFormInput ModalFormInputETH'
                   name='collateralAmount'
                   onChange={(event, newValue) => debounceCalcNewCollateralRatio(newValue)}
                   validate={[required, number]}
                   type='number'
+                  id='COLLATERALIZINGInput'
                   step='0.0001'
-                  id='BORROWINGInput'
-                  style={{ maxWidth: '120px' }}
                 />
               </NewLoanInputWrapper>
-            </NewLoanFormInput>
-          </ModalFormGrpNewLoan>
-          <h5>
-            NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
-          </h5>
+            </NewLoanFormInput> 
+            <h2>
+              NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
+            </h2>
+          </ModalFormGrp>
+         
         </Form>
       </ModalAdjustForm>
 
