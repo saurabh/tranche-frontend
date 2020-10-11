@@ -76,7 +76,7 @@ const TableCard = ({
   const [modalIsOpen, setIsOpen] = useState(false);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  let disableBtn = status === 5 || status === 6 || status === 7 || status === 8 || status === 9;
+  let disableBtn = status === statuses["Foreclosed"].status || status === statuses["Early_closing"].status || status === statuses["Closing"].status || status === statuses["Closed"].status || status === statuses["Cancelled"].status;
   const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
@@ -89,7 +89,6 @@ const TableCard = ({
   useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
   //console.log(loan);
-
   const approveEthLoan = async (loanAddress, loanAmount, stableCoinAddress) => {
     try {
       const JLoanEth = JLoanEthSetup(web3, loanAddress);
@@ -430,6 +429,8 @@ const TableCard = ({
     if (!ready) return;
     setIsOpen(true);
   }
+  const searchObj = (val) => Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
+
 
   function closeModal() {
     setIsOpen(false);
@@ -511,11 +512,11 @@ const TableCard = ({
             <h2
               className='status-text-wrapper'
               style={{
-                color: statuses[status].color,
-                backgroundColor: statuses[status].background
+                color: Object.values(searchObj(status))[0].color,
+                backgroundColor: Object.values(searchObj(status))[0].background
               }}
             >
-              {statusShortner(statuses[status].status)}
+              {statusShortner(Object.values(searchObj(status))[0].key)}
             </h2>
           </div>
         </div>

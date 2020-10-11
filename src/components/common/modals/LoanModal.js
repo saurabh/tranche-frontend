@@ -87,13 +87,13 @@ export default function LoanModal({
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
-    status === 0 && path === 'borrow'
+    status === statuses["Pending"].status && path === 'borrow'
       ? 'Are you sure you want to cancel the loan request?'
-      : status === 0 && path === 'earn'
+      : status === statuses["Pending"].status && path === 'earn'
       ? 'Are you sure you want to approve this loan?'
-      : status === 1 && path === 'borrow'
+      : status === statuses["Active"].status && path === 'borrow'
       ? 'Are you sure you want to close the loan?'
-      : status === 1 && path === 'earn'
+      : status === statuses["Active"].status && path === 'earn'
       ? 'Are you sure you want to withdraw interest?'
       : '';
 
@@ -106,7 +106,7 @@ export default function LoanModal({
             <ConfirmAlertBtnWrapper>
               <ModalButton onClick={onClose}>No</ModalButton>
               <ModalButton
-                btnColor={statuses[1].color}
+                btnColor={statuses["Active"].color}
                 confirmBtn={true}
                 onClick={() => {
                   controlAction(onClose);
@@ -208,54 +208,54 @@ export default function LoanModal({
         </ModalHeader>
         <ModalContent>
           <BtnGrpLoanModal>
-            {status === 0 ? (
+            {status === statuses["Pending"].status ? (
               <ModalButton
                 onClick={() => confirm()}
-                btnColor={statuses[1].color}
+                btnColor={statuses["Active"].color}
               >
                 Active Loan
               </ModalButton>
-            ) : status === 1 ? (
+            ) : status === statuses["Active"].status ? (
               <ModalButton
                 onClick={() => confirm()}
-                btnColor={statuses[4].color}
+                btnColor={statuses["Foreclosing"].color}
               >
                 Withdraw Interest
               </ModalButton>
-            ) : status === 2 ? (
+            ) : status === statuses["Under_Collateralized"].status ? (
               <BtnGrpLoanModal>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[4].color}
+                  btnColor={statuses["Foreclosing"].color}
                 >
                   Withdraw Interest
                 </ModalButton>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[4].color}
+                  btnColor={statuses["Foreclosing"].color}
                 >
                   Foreclosing Loan
                 </ModalButton>
               </BtnGrpLoanModal>
-            ) : status === 3 ? (
+            ) : status === statuses["At_Risk"].status ? (
               <BtnGrpLoanModal>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[5].color}
+                  btnColor={statuses["Foreclosed"].color}
                 >
                   Withdraw Interest
                 </ModalButton>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[5].color}
+                  btnColor={statuses["Foreclosed"].color}
                 >
                   Foreclosed Action
                 </ModalButton>
               </BtnGrpLoanModal>
-            ) : status === 4 ? (
+            ) : status === statuses["Foreclosed"].status ? (
               <ModalButton
                 onClick={() => confirm()}
-                btnColor={statuses[5].color}
+                btnColor={statuses["Foreclosed"].color}
               >
                 Withdraw Interest
               </ModalButton>
