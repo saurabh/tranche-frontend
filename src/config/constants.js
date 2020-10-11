@@ -54,53 +54,63 @@ export const JNT = 'JNT';
 export const USDC = 'USDC';
 
 export const statuses =  {
-  0: {
-    status: "Pending",
+  Pending: {
+    key: "Pending",
+    status: 0,
     color: "#936CE6",
     background: "rgba(147, 108, 230, 0.24)"
   },
-  1: {
-    status: "Active",
+  Active: {
+    key: "Active",
+    status: 1,
     color: "#2ECC71",
     background: "rgba(46, 204, 113, 0.24)"
   },
-  2: {
-    status: "Under Collateralized",
+  Under_Collateralized: {
+    key: "Under Collateralized",
+    status: 2,
     color: "#F2C94C",
     background: "rgba(242, 201, 76, 0.24)"
   },
-  3: {
-    status: "At Risk",
+  At_Risk: {
+    key: "At Risk",
+    status: 3,
     color: "#E67E22",
     background: "rgba(230, 126, 34, 0.24)"
   },
-  4: {
-    status: "Foreclosing",
+  Foreclosing: {
+    key: "Foreclosing",
+    status: 4,
     color: "#FF5D47",
     background: "rgba(255, 93, 71, 0.24)"
   },
-  5: {
-    status: "Foreclosed",
+  Foreclosed: {
+    key: "Foreclosed",
+    status: 5,
     color: "#C0392B",
     background: "rgba(192, 57, 43, 0.24)"
   },
-  6: {
-    status: "Early closing",
+  Early_closing: {
+    key: "Early closing",
+    status: 6,
     color: "#41A1FF",
     background: "rgba(65, 161, 255, 0.24)"
   },
-  7: {
-    status: "Closing",
+  Closing: {
+    key: "Closing",
+    status: 7,
     color: "#0A66E1",
     background: "rgba(10, 102, 225, 0.24)"
   },
-  8: {
-    status: "Closed",
+  Closed: {
+    key: "Closed",
+    status: 8,
     color: "#234566",
     background: "rgba(35, 69, 102, 0.24)"
   },
-  9: {
-    status: "Cancelled",
+  Cancelled: {
+    key: "Cancelled",
+    status: 9,
     color: "#E70D52",
     background: "rgba(231, 13, 82, 0.24)"
   }
