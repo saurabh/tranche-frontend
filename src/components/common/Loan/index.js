@@ -7,10 +7,11 @@ import { loansFetchData } from 'redux/actions/loans';
 import { submitValidations } from 'utils/validations';
 import Modal from 'react-modal';
 import { NewLoan } from 'components/common/Form/NewLoan';
-import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
+import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
 import { ModalHeader } from '../Modals/ModalComponents';
+import { pairData } from 'config/constants';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -40,7 +41,6 @@ const AdjustPositionStyles = {
 };
 
 const Loan = ({
-  type,
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
   setBorrowedAskAmount,
@@ -50,7 +50,6 @@ const Loan = ({
   closeModal
 }) => {
   const JFactory = JFactorySetup(web3);
-  const JPT = JPTSetup(web3);
   const toWei = web3.utils.toWei;
   const fromWei = web3.utils.fromWei;
   const [collateralAmountForInput, setCollateralAmountForInput] = useState(0);
@@ -61,15 +60,17 @@ const Loan = ({
     closeModal();
   }
 
+  const searchArr = (value) => pairData.find((i) => i.value === value);
+
   const calcMinCollateralAmount = async (pairId, askAmount) => {
     try {
-      const finalAmount = toWei(askAmount);
       const result = await JFactory.methods
-        .calcMinCollateralWithFeesAmount(pairId, finalAmount)
+        .calcMinCollateralWithFeesAmount(pairId, toWei(askAmount))
         .call();
       setCollateralAmount(fromWei(result));
-      setBorrowedAskAmount(finalAmount);
-      setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
+      setBorrowedAskAmount(toWei(askAmount));
+      setCollateralAmountForInput(fromWei(result));
+      // setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
     } catch (error) {
       console.error(error);
     }
@@ -77,12 +78,11 @@ const Loan = ({
 
   const calcMaxBorrowedAmount = async (pairId, collAmount) => {
     try {
-      const finalAmount = toWei(collAmount);
       const result = await JFactory.methods
-        .calcMaxStableCoinWithFeesAmount(pairId, finalAmount)
+        .calcMaxStableCoinWithFeesAmount(pairId, toWei(collAmount))
         .call();
       setBorrowedAskAmount(fromWei(result));
-      setCollateralAmount(finalAmount);
+      setCollateralAmount(toWei(collAmount));
     } catch (error) {
       console.error(error);
     }
@@ -122,12 +122,13 @@ const Loan = ({
     collateralAmount
   ) => {
     try {
-      let userAllowance = await JPT.methods
+      const { collateralTokenSetup } = searchArr(parseFloat(pairId));
+      const collateralToken = collateralTokenSetup(web3);
+      let userAllowance = await collateralToken.methods
         .allowance(address, JLoanTokenDeployerAddress)
         .call();
-      console.log(userAllowance, collateralAmount);
       if (isGreaterThan(collateralAmount, userAllowance)) {
-        await JPT.methods
+        await collateralToken.methods
           .approve(JLoanTokenDeployerAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
@@ -170,51 +171,38 @@ const Loan = ({
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    switch (type) {
-      case 'new':
-        async function createNewLoan() {
-          try {
-            const tempRpbRate = 10 ** 10;
-            let {
-              pairId,
-              borrowedAskAmount,
-              collateralAmount,
-              rpbRate
-            } = form.newLoan.values;
-            // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
-            //   .then(() => {})
-            //   .catch((error) => console.error(error));
-            borrowedAskAmount = toWei(borrowedAskAmount);
-            collateralAmount = toWei(collateralAmount);
-            if (pairId === 0) {
-              createNewEthLoan(
-                pairId,
-                borrowedAskAmount,
-                tempRpbRate,
-                collateralAmount
-              );
-            } else {
-              createNewTokenLoan(
-                pairId,
-                borrowedAskAmount,
-                tempRpbRate,
-                collateralAmount
-              );
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        createNewLoan();
-        handleCloseModal();
-        break;
-      case 'adjust':
-        break;
-      default:
-        break;
+  const createNewLoan = async () => {
+    try {
+      const tempRpbRate = 10 ** 10;
+      let {
+        pairId,
+        borrowedAskAmount,
+        collateralAmount,
+        rpbRate
+      } = form.newLoan.values;
+      // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
+      //   .then(() => {})
+      //   .catch((error) => console.error(error));
+      borrowedAskAmount = toWei(borrowedAskAmount);
+      collateralAmount = toWei(collateralAmount);
+      if (pairId === searchArr(parseFloat(pairId)).value) {
+        createNewEthLoan(
+          pairId,
+          borrowedAskAmount,
+          tempRpbRate,
+          collateralAmount
+        );
+      } else {
+        createNewTokenLoan(
+          pairId,
+          borrowedAskAmount,
+          tempRpbRate,
+          collateralAmount
+        );
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -234,7 +222,7 @@ const Loan = ({
       </ModalHeader>
       <NewLoan
         collateralAmountForInput={collateralAmountForInput}
-        handleSubmit={handleSubmit}
+        createNewLoan={createNewLoan}
         calcMinCollateralAmount={calcMinCollateralAmount}
         calcMaxBorrowedAmount={calcMaxBorrowedAmount}
       />

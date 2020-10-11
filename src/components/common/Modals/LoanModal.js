@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
+import { AdjustLoan } from 'components/common/Form/AdjustLoan'
 import CloseModal from 'assets/images/svg/closeModal.svg';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { statuses } from '../../../config/constants';
+import { statuses } from 'config/constants';
 import {
   ModalHeader,
   ModalContent,
@@ -81,17 +82,20 @@ export default function LoanModal({
   path,
   status,
   approveLoan,
-  closeLoan
+  closeLoan,
+  addCollateral,
+  newCollateralRatio,
+  calcNewCollateralRatio
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
-    status === 0 && path === 'borrow'
+    status === statuses["Pending"].status && path === 'borrow'
       ? 'Are you sure you want to cancel the loan request?'
-      : status === 0 && path === 'earn'
+      : status === statuses["Pending"].status && path === 'earn'
       ? 'Are you sure you want to approve this loan?'
-      : status === 1 && path === 'borrow'
+      : status === statuses["Active"].status && path === 'borrow'
       ? 'Are you sure you want to close the loan?'
-      : status === 1 && path === 'earn'
+      : status === statuses["Active"].status && path === 'earn'
       ? 'Are you sure you want to withdraw interest?'
       : '';
 
@@ -104,7 +108,7 @@ export default function LoanModal({
             <ConfirmAlertBtnWrapper>
               <ModalButton onClick={onClose}>No</ModalButton>
               <ModalButton
-                btnColor={statuses[1].color}
+                btnColor={statuses["Active"].color}
                 confirmBtn={true}
                 onClick={() => {
                   controlAction(onClose);
@@ -182,39 +186,7 @@ export default function LoanModal({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
-            <ModalAdjustForm>
-              <ModalFormWrapper>
-                <ModalFormGrp>
-                  <ModalFormLabel htmlFor='blockedInput'>LOCKED</ModalFormLabel>
-                  <ModalFormInput
-                    type='number'
-                    step='0.0001'
-                    id='blockedInput'
-                  />
-                  <h2>
-                    INTEREST EARNED: <span>0.0000</span> ETH
-                  </h2>
-                </ModalFormGrp>
-                <ModalFormGrp>
-                  <ModalFormLabel htmlFor='blockedInput'>
-                    EARNING PER BLOCK
-                  </ModalFormLabel>
-                  <ModalFormInput
-                    type='number'
-                    step='0.0001'
-                    id='blockedInput'
-                  />
-                  <h2>
-                    ANNUAL RETURN: <span>0.00%</span> APY
-                  </h2>
-                </ModalFormGrp>
-              </ModalFormWrapper>
-            </ModalAdjustForm>
-            <ModalFormSubmit>
-              <BtnGrpLoanModal>
-                <ModalFormButton>CHANGE POSITION</ModalFormButton>
-              </BtnGrpLoanModal>
-            </ModalFormSubmit>
+            <AdjustLoan addCollateral={addCollateral} newCollateralRatio={newCollateralRatio} calcNewCollateralRatio={calcNewCollateralRatio}/>
           </Modal>
         )}
       </div>
@@ -238,54 +210,54 @@ export default function LoanModal({
         </ModalHeader>
         <ModalContent>
           <BtnGrpLoanModal>
-            {status === 0 ? (
+            {status === statuses["Pending"].status ? (
               <ModalButton
                 onClick={() => confirm()}
-                btnColor={statuses[1].color}
+                btnColor={statuses["Active"].color}
               >
                 Active Loan
               </ModalButton>
-            ) : status === 1 ? (
+            ) : status === statuses["Active"].status ? (
               <ModalButton
                 onClick={() => confirm()}
-                btnColor={statuses[4].color}
+                btnColor={statuses["Foreclosing"].color}
               >
                 Withdraw Interest
               </ModalButton>
-            ) : status === 2 ? (
+            ) : status === statuses["Under_Collateralized"].status ? (
               <BtnGrpLoanModal>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[4].color}
+                  btnColor={statuses["Foreclosing"].color}
                 >
                   Withdraw Interest
                 </ModalButton>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[4].color}
+                  btnColor={statuses["Foreclosing"].color}
                 >
                   Foreclosing Loan
                 </ModalButton>
               </BtnGrpLoanModal>
-            ) : status === 3 ? (
+            ) : status === statuses["At_Risk"].status ? (
               <BtnGrpLoanModal>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[5].color}
+                  btnColor={statuses["Foreclosed"].color}
                 >
                   Withdraw Interest
                 </ModalButton>
                 <ModalButton
                   onClick={() => confirm()}
-                  btnColor={statuses[5].color}
+                  btnColor={statuses["Foreclosed"].color}
                 >
                   Foreclosed Action
                 </ModalButton>
               </BtnGrpLoanModal>
-            ) : status === 4 ? (
+            ) : status === statuses["Foreclosed"].status ? (
               <ModalButton
                 onClick={() => confirm()}
-                btnColor={statuses[5].color}
+                btnColor={statuses["Foreclosed"].color}
               >
                 Withdraw Interest
               </ModalButton>
