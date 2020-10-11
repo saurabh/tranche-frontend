@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CloseModal from 'assets/images/svg/closeModal.svg';
+import Modal from 'react-modal';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
-import { submitValidations } from 'utils/validations';
-import Modal from 'react-modal';
 import { NewLoan } from 'components/common/Form/NewLoan';
+import { submitValidations } from 'utils/validations';
 import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
-import { ModalHeader } from '../Modals/ModalComponents';
 import { pairData } from 'config/constants';
+import { ModalHeader } from './ModalComponents';
+import CloseModal from 'assets/images/svg/closeModal.svg';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -40,7 +40,7 @@ const AdjustPositionStyles = {
   }
 };
 
-const Loan = ({
+const CreateLoan = ({
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
   setBorrowedAskAmount,
@@ -230,7 +230,7 @@ const Loan = ({
   );
 };
 
-Loan.propTypes = {
+CreateLoan.propTypes = {
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired
 };
@@ -246,4 +246,4 @@ export default connect(mapStateToProps, {
   setBorrowedAskAmount,
   setCollateralAmount,
   loansFetchData
-})(Loan);
+})(CreateLoan);
