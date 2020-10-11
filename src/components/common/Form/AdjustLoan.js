@@ -10,7 +10,7 @@ import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
 import ETHFORM from 'assets/images/svg/EthForm.svg';
 import JNT from 'assets/images/svg/jnt.svg';
-import { statuses } from '../../../config/constants';
+import { statuses } from 'config/constants';
 import {
   ModalHeader,
   ModalContent,

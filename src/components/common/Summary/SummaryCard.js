@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import { PagesData } from '../../../config/constants';
+import { PagesData } from 'config/constants';
 const SummaryCardWrapper = styled.div`
     width: 250px;
     height: 121px;

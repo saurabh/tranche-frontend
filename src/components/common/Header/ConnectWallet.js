@@ -10,7 +10,7 @@ import {
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
-import { PagesData } from '../../../config/constants';
+import { PagesData } from 'config/constants';
 
 const ConnectWallet = ({
   setAddress,
