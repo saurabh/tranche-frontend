@@ -53,7 +53,7 @@ export const pairData = [
   }
 ];
 
-export const serverUrl = 'http://13.127.123.245/api/v1/';
+export const serverUrl = 'http://65.0.83.243/api/v1/';
 
 export const etherScanUrl = 'https://kovan.etherscan.io/address/';
 export const NA = 'N/A';
