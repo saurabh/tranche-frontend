@@ -243,7 +243,6 @@ const TableCard = ({
       let userAllowance = await JPT.methods
         .allowance(address, loanAddress)
         .call();
-      console.log(userAllowance, collateralAmount);
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await JPT.methods
           .approve(loanAddress, collateralAmount)
