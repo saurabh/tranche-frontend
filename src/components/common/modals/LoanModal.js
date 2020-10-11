@@ -83,7 +83,9 @@ export default function LoanModal({
   status,
   approveLoan,
   closeLoan,
-  addCollateral
+  addCollateral,
+  newCollateralRatio,
+  calcNewCollateralRatio
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   let ConfirmText =
@@ -184,7 +186,7 @@ export default function LoanModal({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
-            <AdjustLoan addCollateral={addCollateral}/>
+            <AdjustLoan addCollateral={addCollateral} newCollateralRatio={newCollateralRatio} calcNewCollateralRatio={calcNewCollateralRatio}/>
           </Modal>
         )}
       </div>

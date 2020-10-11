@@ -60,6 +60,7 @@ const TableCard = ({
   form
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   let disableBtn =
@@ -69,6 +70,7 @@ const TableCard = ({
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
   const toWei = web3.utils.toWei;
+  const fromWei = web3.utils.fromWei;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -80,6 +82,17 @@ const TableCard = ({
   useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
+
+  const calcNewCollateralRatio = async (amount) => {
+    try {
+      const { loanContractSetup } = searchArr(cryptoFromLenderName);
+      const JLoan = loanContractSetup(web3, contractAddress);
+      const result = await JLoan.methods.calcRatioAddingCollateral(amount).call();
+      setNewCollateralRatio(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const approveLoan = async () => {
     try {
@@ -439,6 +452,8 @@ const TableCard = ({
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}
+            newCollateralRatio={newCollateralRatio}
+            calcNewCollateralRatio={calcNewCollateralRatio}
           />
         </div>
       </TableContentCard>

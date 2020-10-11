@@ -45,21 +45,31 @@ const InputField = ({
   meta: { touched, error }
 }) => (
   <div>
-    <input
-      {...input}
-      placeholder={placeholder}
-      type={type}
-      className={className}
-    />
-    {touched && error && <span style={{position: "absolute", top: "0", right: "0", color: "red", fontStyle: "normal",
-    fontWeight: "300",
-    fontSize: "9px"}}>{error}</span>}
+    <input {...input} placeholder={placeholder} type={type} className={className} />
+    {touched && error && (
+      <span
+        style={{
+          position: 'absolute',
+          top: '0',
+          right: '0',
+          color: 'red',
+          fontStyle: 'normal',
+          fontWeight: '300',
+          fontSize: '9px'
+        }}
+      >
+        {error}
+      </span>
+    )}
   </div>
 );
 
-let AdjustLoan = ({
-  addCollateral
-}) => {
+let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio }) => {
+  const [debounceCalcNewCollateralRatio] = useDebouncedCallback(
+    (collateralAmount) => calcNewCollateralRatio(collateralAmount),
+    500
+  );
+
   return (
     <div>
       <ModalAdjustForm>
@@ -67,13 +77,12 @@ let AdjustLoan = ({
           <ModalFormGrpNewLoan>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
-                <ModalFormLabel htmlFor='BORROWINGInput'>
-                  ADD COLLATERAL
-                </ModalFormLabel>
+                <ModalFormLabel htmlFor='BORROWINGInput'>ADD COLLATERAL</ModalFormLabel>
                 <Field
                   component={InputField}
                   className='ModalFormInputNewLoan'
                   name='collateralAmount'
+                  onChange={(event, newValue) => debounceCalcNewCollateralRatio(newValue)}
                   validate={[required, number]}
                   type='number'
                   step='0.0001'
@@ -83,6 +92,9 @@ let AdjustLoan = ({
               </NewLoanInputWrapper>
             </NewLoanFormInput>
           </ModalFormGrpNewLoan>
+          <h5>
+            NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
+          </h5>
         </Form>
       </ModalAdjustForm>
 

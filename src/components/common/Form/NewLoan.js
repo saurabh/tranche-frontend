@@ -3,13 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { pairData, statuses } from 'config/constants';
 import { useDebouncedCallback } from 'utils/lodash';
-import {
-  required,
-  number,
-  minValue0,
-  maxValue100,
-  validate
-} from 'utils/validations';
+import { required, number, minValue0, maxValue100, validate } from 'utils/validations';
 import CloseModal from 'assets/images/svg/closeModal.svg';
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
@@ -47,12 +41,7 @@ const InputField = ({
   meta: { touched, error }
 }) => (
   <div>
-    <input
-      {...input}
-      placeholder={placeholder}
-      type={type}
-      className={className}
-    />
+    <input {...input} placeholder={placeholder} type={type} className={className} />
     {touched && error && (
       <span
         style={{
@@ -75,7 +64,7 @@ let NewLoan = ({
   createNewLoan,
   calcMinCollateralAmount,
   calcMaxBorrowedAmount,
-  collateralAmountForInput,
+  collateralAmountForInput
 }) => {
   const [pair, setPair] = useState(0);
   const [selectedCurrency, selectCurrency] = useState(pairData[0].key);
@@ -83,23 +72,23 @@ let NewLoan = ({
   const [RPB, SETRPB] = useState(0);
 
   const inputChange = (val) => {
-    const input = document.getElementById("selectPair");
+    const input = document.getElementById('selectPair');
 
     const lastValue = input.value;
     input.value = val;
-    const event = new Event("input", { bubbles: true });
+    const event = new Event('input', { bubbles: true });
     const tracker = input._valueTracker;
     if (tracker) {
       tracker.setValue(lastValue);
     }
     input.dispatchEvent(event);
-  }
+  };
 
-  const searchArr = key => pairData.find(i => i.key === key);
+  const searchArr = (key) => pairData.find((i) => i.key === key);
 
-  const toggleCurrencySelect = () =>{
+  const toggleCurrencySelect = () => {
     toggleCurrency(!currencySelect);
-  }
+  };
 
   const handleCurrenySelect = (e, pair) => {
     e.preventDefault();
@@ -107,10 +96,9 @@ let NewLoan = ({
     selectCurrency(e.target.value);
     toggleCurrency(false);
   };
-  
+
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
-    (pair, borrowedAskAmount) =>
-      calcMinCollateralAmount(pair, borrowedAskAmount),
+    (pair, borrowedAskAmount) => calcMinCollateralAmount(pair, borrowedAskAmount),
     500
   );
 
@@ -119,15 +107,15 @@ let NewLoan = ({
     500
   );
 
-  const calculateRPB = (APY) =>{
-    if(APY > 0){
-      let rpb = -(100^(-1/365)*(100^(1/365)-(APY+100)^(1/365)))/5760;
+  const calculateRPB = (APY) => {
+    if (APY > 0) {
+      let rpb =
+        -(100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
       SETRPB(parseFloat(rpb).toFixed(3));
-    }
-    else{
+    } else {
       SETRPB(0);
     }
-  }
+  };
 
   return (
     <div>
@@ -136,9 +124,7 @@ let NewLoan = ({
           <ModalFormGrpNewLoan>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
-                <ModalFormLabel htmlFor='BORROWINGInput'>
-                  BORROWING
-                </ModalFormLabel>
+                <ModalFormLabel htmlFor='BORROWINGInput'>BORROWING</ModalFormLabel>
                 <Field
                   component={InputField}
                   className='ModalFormInputNewLoan'
@@ -155,19 +141,19 @@ let NewLoan = ({
               </NewLoanInputWrapper>
 
               <LoanCustomSelect>
-              <Field
-                name='pairId'
-                component='input'
-                id="selectPair"
-                validate={[required]}
-                onChange={(event, newValue) => setPair(+newValue)}
-                style={{display: "none"}}
-              />
+                <Field
+                  name='pairId'
+                  component='input'
+                  id='selectPair'
+                  validate={[required]}
+                  onChange={(event, newValue) => setPair(+newValue)}
+                  style={{ display: 'none' }}
+                />
                 <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
-                    <div>
-                      <img src={searchArr(selectedCurrency).img} alt='' />
-                      <h2>{searchArr(selectedCurrency).text}</h2>
-                    </div>
+                  <div>
+                    <img src={searchArr(selectedCurrency).img} alt='' />
+                    <h2>{searchArr(selectedCurrency).text}</h2>
+                  </div>
                   <SelectChevron>
                     <img src={selectUp} alt='' />
                     <img src={selectDown} alt='' />
@@ -175,18 +161,18 @@ let NewLoan = ({
                 </SelectCurrencyView>
                 {currencySelect ? (
                   <SelectCurrencyOptions>
-                    {
-                    pairData.map((i)=>{
-                      return <SelectCurrencyOption key={i.key}>
-                        <button
-                          onClick={(e) => handleCurrenySelect(e, i.value)}
-                          value={i.key}
-                        >
-                          <img src={i.img} alt='' /> {i.text}
-                        </button>
-                      </SelectCurrencyOption>
-                    })
-                    }
+                    {pairData.map((i) => {
+                      return (
+                        <SelectCurrencyOption key={i.key}>
+                          <button
+                            onClick={(e) => handleCurrenySelect(e, i.value)}
+                            value={i.key}
+                          >
+                            <img src={i.img} alt='' /> {i.text}
+                          </button>
+                        </SelectCurrencyOption>
+                      );
+                    })}
                   </SelectCurrencyOptions>
                 ) : (
                   ''
@@ -206,7 +192,7 @@ let NewLoan = ({
               component={InputField}
               className={
                 'ModalFormInput ' +
-                (`${'ModalFormInput'+ searchArr(selectedCurrency).collateral}`)
+                `${'ModalFormInput' + searchArr(selectedCurrency).collateral}`
               }
               name='collateralAmount'
               type='number'
