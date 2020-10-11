@@ -5,7 +5,8 @@ import JNTicon from 'assets/images/svg/jnt.svg';
 import { JLoanEthSetup, JLoanTokenSetup, DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
 
 // Site Banner Data (imported in Header component)
-export const HeaderData = {
+
+export const PagesData = {
   home: {
     color: '#2c2cdf',
     title: 'Welcome to Jibrel',
@@ -13,16 +14,25 @@ export const HeaderData = {
   },
   borrow: {
     color: '#5411e2',
+    secondaryColor: '#CEB7FF',
+    btnColor: '#EEE5FF',
+    cardColor: '#DFD2FB',
     title: 'Borrower Markets',
     description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
   },
   earn: {
     color: '#1ebb1b',
+    secondaryColor: '#D7FFB7',
+    btnColor: '#D7FCD6',
+    cardColor: '#D7FFB7',
     title: 'Earning Markets',
     description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
   },
   trade: {
     color: '#1f1f1f',
+    secondaryColor: '#ffffff',
+    btnColor: '#1f1f1f',
+    cardColor: 'rgba(0,0,0,0.4)',
     title: 'Trading Markets',
     description: 'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
   }
@@ -135,23 +145,4 @@ export const statuses = {
     background: 'rgba(231, 13, 82, 0.24)'
   }
 };
-export const ColorData = {
-  borrow: {
-    color: '#5411e2',
-    secondaryColor: '#CEB7FF',
-    btnColor: '#EEE5FF',
-    cardColor: '#DFD2FB'
-  },
-  earn: {
-    color: '#1ebb1b',
-    secondaryColor: '#D7FFB7',
-    btnColor: '#D7FCD6',
-    cardColor: '#D7FFB7'
-  },
-  trade: {
-    color: '#1f1f1f',
-    secondaryColor: '#ffffff',
-    btnColor: '#1f1f1f',
-    cardColor: 'rgba(0,0,0,0.4)'
-  }
-};
+

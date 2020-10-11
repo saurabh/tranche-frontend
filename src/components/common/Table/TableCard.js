@@ -9,7 +9,7 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
-import { statuses, etherScanUrl, ColorData, pairData } from 'config/constants';
+import { statuses, etherScanUrl, PagesData, pairData } from 'config/constants';
 import styled from 'styled-components';
 import { loansFetchData } from 'redux/actions/loans';
 import LoanModal from '../Modals/LoanModal';
@@ -460,7 +460,7 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <button
               style={
-                ({ background: ColorData[path].btnColor },
+                ({ background: PagesData[path].btnColor },
                 path === 'trade' || disableBtn
                   ? {
                       backgroundColor: '#cccccc',
@@ -469,7 +469,7 @@ const TableCard = ({
                     }
                   : {})
               }
-              onClick={path === 'trade' || disableBtn ? false : () => openModal()}
+              onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
             >
               <img

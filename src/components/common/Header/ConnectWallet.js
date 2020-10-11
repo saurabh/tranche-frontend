@@ -10,7 +10,7 @@ import {
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
-import { ColorData } from '../../../config/constants';
+import { PagesData } from '../../../config/constants';
 
 const ConnectWallet = ({
   setAddress,
@@ -44,17 +44,17 @@ const ConnectWallet = ({
   return (
     <>
       {balance < 0 ? (
-        <WalletBtn background={ColorData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
-          <WalletBtnText icon={false} color={ColorData[pathChanged].color}>
+        <WalletBtn background={PagesData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+          <WalletBtnText icon={false} color={PagesData[pathChanged].color}>
             <h2>Connect</h2>
           </WalletBtnText>
         </WalletBtn>
       ) : (
-        <WalletBtn background={ColorData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+        <WalletBtn background={PagesData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>
             <img src='' alt='' />
           </WalletBtnIcon>
-          <WalletBtnText color={ColorData[pathChanged].color}>
+          <WalletBtnText color={PagesData[pathChanged].color}>
             <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>
