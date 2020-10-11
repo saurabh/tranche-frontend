@@ -11,7 +11,7 @@ import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
 import { ModalHeader } from '../Modals/ModalComponents';
-import { pairContracts } from 'config/constants';
+import { pairData } from 'config/constants';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -59,6 +59,8 @@ const Loan = ({
   function handleCloseModal() {
     closeModal();
   }
+
+  const searchArr = (value) => pairData.find((i) => i.value === value);
 
   const calcMinCollateralAmount = async (pairId, askAmount) => {
     try {
@@ -122,13 +124,13 @@ const Loan = ({
     collateralAmount
   ) => {
     try {
-      const { underlyingTokenSetup } = pairContracts[pairId];
-      const underlyingToken = underlyingTokenSetup(web3);
-      let userAllowance = await underlyingToken.methods
+      const { collateralTokenSetup } = searchArr(parseFloat(pairId));
+      const collateralToken = collateralTokenSetup(web3);
+      let userAllowance = await collateralToken.methods
         .allowance(address, JLoanTokenDeployerAddress)
         .call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
-        await underlyingToken.methods
+        await collateralToken.methods
           .approve(JLoanTokenDeployerAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
