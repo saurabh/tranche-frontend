@@ -11,8 +11,7 @@ import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import { Layout } from 'components/common';
 import CreateLoan from 'components/common/Modals/CreateLoan';
-import { pageType } from 'config/constants';
-
+import { PagesData } from 'config/constants';
 import Table from '../common/Table/Table';
 const Borrow = ({
   setAddress,
@@ -43,7 +42,7 @@ const Borrow = ({
       <Table
         HandleNewLoan={handleNewLoanClick}
         openModal={showModal}
-        pageType={pageType.BORROW}
+        pageType={PagesData.borrow.pageType}
       />
       <CreateLoan openModal={showModal} closeModal={() => setShowModal(false)} />
     </Layout>

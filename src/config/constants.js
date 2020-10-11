@@ -13,6 +13,7 @@ export const PagesData = {
     description: 'PLACEHOLDER SLOGAN'
   },
   borrow: {
+    pageType: 'borrow',
     color: '#5411e2',
     secondaryColor: '#CEB7FF',
     btnColor: '#EEE5FF',
@@ -21,6 +22,7 @@ export const PagesData = {
     description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
   },
   earn: {
+    pageType: 'earn',
     color: '#1ebb1b',
     secondaryColor: '#D7FFB7',
     btnColor: '#D7FCD6',
@@ -29,6 +31,7 @@ export const PagesData = {
     description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
   },
   trade: {
+    pageType: 'trade',
     color: '#1f1f1f',
     secondaryColor: '#ffffff',
     btnColor: '#1f1f1f',
@@ -66,13 +69,6 @@ export const pairData = [
 export const serverUrl = 'http://13.127.123.245/api/v1/';
 
 export const etherScanUrl = 'https://kovan.etherscan.io/address/';
-export const NA = 'N/A';
-
-export const pageType = {
-  BORROW: 'borrow',
-  EARN: 'earn',
-  TRADE: 'trade'
-};
 
 export const apiUri = {
   loanList: 'loans'
