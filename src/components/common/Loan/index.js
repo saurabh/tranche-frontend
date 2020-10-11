@@ -7,10 +7,11 @@ import { loansFetchData } from 'redux/actions/loans';
 import { submitValidations } from 'utils/validations';
 import Modal from 'react-modal';
 import { NewLoan } from 'components/common/Form/NewLoan';
-import { JFactorySetup, JPTSetup } from 'utils/contractConstructor';
+import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/ethereum';
 import { ModalHeader } from '../Modals/ModalComponents';
+import { pairContracts } from 'config/constants';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -49,7 +50,6 @@ const Loan = ({
   closeModal
 }) => {
   const JFactory = JFactorySetup(web3);
-  const JPT = JPTSetup(web3);
   const toWei = web3.utils.toWei;
   const fromWei = web3.utils.fromWei;
   const [collateralAmountForInput, setCollateralAmountForInput] = useState(0);
@@ -122,12 +122,13 @@ const Loan = ({
     collateralAmount
   ) => {
     try {
-      let userAllowance = await JPT.methods
+      const { underlyingTokenSetup } = pairContracts[pairId];
+      const underlyingToken = underlyingTokenSetup(web3);
+      let userAllowance = await underlyingToken.methods
         .allowance(address, JLoanTokenDeployerAddress)
         .call();
-      console.log(userAllowance, collateralAmount);
       if (isGreaterThan(collateralAmount, userAllowance)) {
-        await JPT.methods
+        await underlyingToken.methods
           .approve(JLoanTokenDeployerAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
@@ -203,7 +204,7 @@ const Loan = ({
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <Modal

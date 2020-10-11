@@ -21,9 +21,8 @@ import AdjustTrade from 'assets/images/svg/adjustTrade.svg';
 
 import styled from 'styled-components';
 import { addrShortener, statusShortner, readyToTransact } from 'utils';
-import { statuses, etherScanUrl, NA } from 'config/constants';
+import { statuses, etherScanUrl, ColorData, pairContracts, DAI, USDC } from 'config/constants';
 import LinkArrow from 'assets/images/svg/linkArrow.svg';
-import { ColorData } from 'config/constants';
 import {
   JLoanEthSetup,
   JLoanTokenSetup,
@@ -31,7 +30,6 @@ import {
   USDCSetup, JPTSetup
 } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { DAI, USDC } from 'config/constants';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
