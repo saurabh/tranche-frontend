@@ -28,7 +28,7 @@ import {
   JLoanEthSetup,
   JLoanTokenSetup,
   DAISetup,
-  USDCSetup
+  USDCSetup, JPTSetup
 } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { DAI, USDC } from 'config/constants';
@@ -52,7 +52,6 @@ const TableContentCard = styled.div`
 `;
 
 const TableCard = ({
-  loan,
   loan: {
     status,
     contractAddress,
@@ -114,7 +113,7 @@ const TableCard = ({
               skip: 0,
               limit: 10000,
               filter: {
-                type: null //ETH/JNT keep these in constant file
+                type: null
               }
             });
           });
@@ -130,7 +129,7 @@ const TableCard = ({
               skip: 0,
               limit: 10000,
               filter: {
-                type: null //ETH/JNT keep these in constant file
+                type: null
               }
             });
           });
@@ -151,9 +150,6 @@ const TableCard = ({
       let userAllowance = await USDC.methods
         .allowance(address, loanAddress)
         .call();
-      console.log(userAllowance, loanAmount);
-      console.log(loanAddress);
-      console.log(stableCoinAddress);
       if (isGreaterThan(loanAmount, userAllowance)) {
         await USDC.methods
           .approve(loanAddress, loanAmount)
@@ -172,7 +168,7 @@ const TableCard = ({
               skip: 0,
               limit: 10000,
               filter: {
-                type: null //ETH/JNT keep these in constant file
+                type: null
               }
             });
           });
@@ -188,7 +184,7 @@ const TableCard = ({
               skip: 0,
               limit: 10000,
               filter: {
-                type: null //ETH/JNT keep these in constant file
+                type: null
               }
             });
           });
@@ -223,7 +219,7 @@ const TableCard = ({
             skip: 0,
             limit: 10000,
             filter: {
-              type: null //ETH/JNT keep these in constant file
+              type: null
             }
           });
         });
@@ -239,21 +235,49 @@ const TableCard = ({
   ) => {
     try {
       const JLoanToken = JLoanTokenSetup(web3, loanAddress);
-      await JLoanToken.methods
-        .depositCollateral(stableCoinAddress, collateralAmount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          notify.hash(hash);
-        })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 10000,
-            filter: {
-              type: null //ETH/JNT keep these in constant file
-            }
+      const JPT = JPTSetup(web3);
+      let userAllowance = await JPT.methods
+        .allowance(address, loanAddress)
+        .call();
+      if (isGreaterThan(collateralAmount, userAllowance)) {
+        await JPT.methods
+          .approve(loanAddress, collateralAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
           });
-        });
+        await JLoanToken.methods
+          .depositCollateral(stableCoinAddress, collateralAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null
+              }
+            });
+          });
+      } else {
+        await JLoanToken.methods
+          .depositCollateral(stableCoinAddress, collateralAmount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 10000,
+              filter: {
+                type: null
+              }
+            });
+          });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -263,11 +287,9 @@ const TableCard = ({
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === DAI) {
-      let contractAddress = '0x844a8375bf59725D8bDbEe4885afe7f33e7aFD12';
       addCollateralToEthLoan(contractAddress, collateralAmount);
       closeModal();
     } else if (cryptoFromLenderName === USDC) {
-      let contractAddress = '0x2eb5518d5C86cd9778Ee2668940064686c537cDc';
       addCollateralToTokenLoan(
         contractAddress,
         collateralAmount,
@@ -293,7 +315,7 @@ const TableCard = ({
               skip: 0,
               limit: 10000,
               filter: {
-                type: null //ETH/JNT keep these in constant file
+                type: null
               }
             });
           });
@@ -319,7 +341,7 @@ const TableCard = ({
                 skip: 0,
                 limit: 10000,
                 filter: {
-                  type: null //ETH/JNT keep these in constant file
+                  type: null
                 }
               });
             });
@@ -335,7 +357,7 @@ const TableCard = ({
                 skip: 0,
                 limit: 10000,
                 filter: {
-                  type: null //ETH/JNT keep these in constant file
+                  type: null
                 }
               });
             });
@@ -362,7 +384,7 @@ const TableCard = ({
               skip: 0,
               limit: 10000,
               filter: {
-                type: null //ETH/JNT keep these in constant file
+                type: null
               }
             });
           });
@@ -388,7 +410,7 @@ const TableCard = ({
                 skip: 0,
                 limit: 10000,
                 filter: {
-                  type: null //ETH/JNT keep these in constant file
+                  type: null
                 }
               });
             });
@@ -404,7 +426,7 @@ const TableCard = ({
                 skip: 0,
                 limit: 10000,
                 filter: {
-                  type: null //ETH/JNT keep these in constant file
+                  type: null
                 }
               });
             });
