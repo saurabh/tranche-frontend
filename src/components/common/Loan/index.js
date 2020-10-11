@@ -187,7 +187,7 @@ const Loan = ({
       //   .catch((error) => console.error(error));
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
-      if (pairId === 0) {
+      if (pairId === searchArr(parseFloat(pairId)).value) {
         createNewEthLoan(
           pairId,
           borrowedAskAmount,
