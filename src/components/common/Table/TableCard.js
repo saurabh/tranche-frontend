@@ -87,7 +87,7 @@ const TableCard = ({
     try {
       const { loanContractSetup } = searchArr(cryptoFromLenderName);
       const JLoan = loanContractSetup(web3, contractAddress);
-      const result = await JLoan.methods.calcRatioAddingCollateral(amount).call();
+      const result = await JLoan.methods.calcRatioAddingCollateral(toWei(amount)).call();
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);

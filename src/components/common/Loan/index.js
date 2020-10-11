@@ -64,12 +64,11 @@ const Loan = ({
 
   const calcMinCollateralAmount = async (pairId, askAmount) => {
     try {
-      const finalAmount = toWei(askAmount);
       const result = await JFactory.methods
-        .calcMinCollateralWithFeesAmount(pairId, finalAmount)
+        .calcMinCollateralWithFeesAmount(pairId, toWei(askAmount))
         .call();
       setCollateralAmount(fromWei(result));
-      setBorrowedAskAmount(finalAmount);
+      setBorrowedAskAmount(toWei(askAmount));
       setCollateralAmountForInput(fromWei(result));
       // setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
     } catch (error) {
@@ -79,12 +78,11 @@ const Loan = ({
 
   const calcMaxBorrowedAmount = async (pairId, collAmount) => {
     try {
-      const finalAmount = toWei(collAmount);
       const result = await JFactory.methods
-        .calcMaxStableCoinWithFeesAmount(pairId, finalAmount)
+        .calcMaxStableCoinWithFeesAmount(pairId, toWei(collAmount))
         .call();
       setBorrowedAskAmount(fromWei(result));
-      setCollateralAmount(finalAmount);
+      setCollateralAmount(toWei(collAmount));
     } catch (error) {
       console.error(error);
     }
