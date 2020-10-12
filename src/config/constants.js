@@ -3,9 +3,9 @@ import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
 import { JLoanEthSetup, JLoanTokenSetup, DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
+export const JLoanTokenDeployerAddress = process.env.REACT_APP_JLoanTokenDeployerAddress;
 
 // Site Banner Data (imported in Header component)
-
 export const PagesData = {
   home: {
     color: '#2c2cdf',
@@ -66,13 +66,10 @@ export const pairData = [
   }
 ];
 
-export const serverUrl = 'http://13.127.123.245/api/v1/';
-
-export const etherScanUrl = 'https://kovan.etherscan.io/address/';
-
 export const apiUri = {
   loanList: 'loans'
 };
+
 // Filters
 export const ETH = 'ETH';
 export const DAI = 'DAI';

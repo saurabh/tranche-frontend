@@ -1,8 +1,7 @@
 import queryString from 'qs';
 import axios from 'axios';
-import { serverUrl } from 'config/constants';
 
-export const BASE_URL = serverUrl;
+const BASE_URL = process.env.REACT_APP_serverUrl;
 
 const DEFAULT_OPTIONS = {
   headers: {

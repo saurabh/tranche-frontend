@@ -1,6 +1,5 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
-import { blocknativeKey, infuraKey, networkId } from 'config'
 
 let onboard = undefined;
 let notify = undefined;
@@ -11,14 +10,14 @@ export function initOnboard(subscriptions) {
       subscriptions,
       hideBranding: true,
       darkMode: true,
-      networkId,
+      networkId: parseInt(process.env.REACT_APP_networkId),
       walletSelect: {
         wallets: [
           { walletName: 'metamask', preferred: true },
           { walletName: 'coinbase', preferred: true },
           {
             walletName: 'walletConnect',
-            infuraKey,
+            infuraKey: process.env.REACT_APP_infuraKey,
             preferred: true
           }
         ]
@@ -31,8 +30,8 @@ export function initOnboard(subscriptions) {
 export function initNotify() {
   if (!notify) {
     notify = Notify({
-      dappId: blocknativeKey,
-      networkId
+      dappId: process.env.REACT_APP_blocknativeKey,
+      networkId: parseInt(process.env.REACT_APP_networkId)
     });
   }
   return notify;

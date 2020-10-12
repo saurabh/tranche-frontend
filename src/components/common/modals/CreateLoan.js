@@ -8,7 +8,7 @@ import { NewLoan } from 'components/common/Form/NewLoan';
 import { submitValidations } from 'utils/validations';
 import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { JLoanTokenDeployerAddress } from 'config/ethereum';
+import { JLoanTokenDeployerAddress } from 'config/constants';
 import { pairData } from 'config/constants';
 import { ModalHeader } from './ModalComponents';
 import CloseModal from 'assets/images/svg/closeModal.svg';
