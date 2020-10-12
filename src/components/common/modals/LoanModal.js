@@ -5,6 +5,7 @@ import { AdjustLoan } from 'components/common/Form/AdjustLoan';
 import CloseModal from 'assets/images/svg/closeModal.svg';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses } from 'config/constants';
+import { confirmationTexts } from 'config/constants';
 import {
   ModalHeader,
   ModalContent,
@@ -95,21 +96,21 @@ export default function LoanModal({
   if (path === 'borrow') {
     ConfirmText =
       status === statuses['Pending'].status
-        ? 'Are you sure you want to cancel the loan request?'
+        ? confirmationTexts["confirmCancel"]
         : status === statuses['Active'].status
-        ? 'Are you sure you want to close the loan?'
+        ? confirmationTexts["confirmClose"]
         : '';
   } else if (path === 'earn') {
     ConfirmText =
       status === statuses['Pending'].status
-        ? 'Are you sure you want to approve this loan?'
+        ? confirmationTexts["confirmApprove"]
         : status === statuses['Active'].status
-        ? 'Are you sure you want to withdraw interest?'
+        ? confirmationTexts["confirmWithdraw"]
         : status === statuses['Under_Collateralized'].status ||
           status === statuses['At_Risk'].status
-        ? 'Are you sure you want to foreclose this loan?'
+        ? confirmationTexts["confirmForeclose"]
         : status === statuses['Closing'].status
-        ? 'Are you sure you want to withdraw interest?'
+        ? confirmationTexts["confirmWithdraw"]
         : '';
   }
 

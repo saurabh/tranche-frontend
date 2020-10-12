@@ -77,6 +77,14 @@ export const DAI = 'DAI';
 export const JNT = 'JNT';
 export const USDC = 'USDC';
 
+
+export const confirmationTexts = {
+  confirmCancel: "Are you sure you want to cancel the loan request?",
+  confirmClose: "Are you sure you want to close the loan?",
+  confirmApprove: "Are you sure you want to approve this loan?",
+  confirmWithdraw: "Are you sure you want to withdraw interest?",
+  confirmForeclose: "Are you sure you want to foreclose this loan?"
+}
 export const statuses = {
   Pending: {
     key: 'Pending',
