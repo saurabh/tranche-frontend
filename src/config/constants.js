@@ -3,7 +3,8 @@ import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
 import { JLoanEthSetup, JLoanTokenSetup, DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
-export const JLoanTokenDeployerAddress = process.env.REACT_APP_JLoanTokenDeployerAddress;
+import { networks as JLoanTokenDeployerNetworks } from 'build/contracts/JLoanTokenDeployer.json';
+export const JLoanTokenDeployerAddress = JLoanTokenDeployerNetworks[42].address;
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
