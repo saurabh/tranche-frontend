@@ -9,7 +9,7 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
-import { statuses, PagesData, pairData } from 'config/constants';
+import { statuses, PagesData, pairData, etherScanUrl } from 'config/constants';
 import styled from 'styled-components';
 import { loansFetchData } from 'redux/actions/loans';
 import LoanModal from '../Modals/LoanModal';
@@ -398,7 +398,7 @@ const TableCard = ({
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
                 <a
-                  href={process.env.REACT_APP_etherScanUrl + contractAddress + '/#internaltx'}
+                  href={etherScanUrl + contractAddress + '/#internaltx'}
                   target='_blank'
                   rel='noopener noreferrer'
                 >

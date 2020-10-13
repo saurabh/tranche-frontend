@@ -68,7 +68,7 @@ const CreateLoan = ({
         .calcMinCollateralWithFeesAmount(pairId, toWei(askAmount))
         .call();
       setCollateralAmount(fromWei(result));
-      setBorrowedAskAmount(toWei(askAmount));
+      setBorrowedAskAmount(askAmount);
       setCollateralAmountForInput(fromWei(result));
       // setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
     } catch (error) {
@@ -82,7 +82,7 @@ const CreateLoan = ({
         .calcMaxStableCoinWithFeesAmount(pairId, toWei(collAmount))
         .call();
       setBorrowedAskAmount(fromWei(result));
-      setCollateralAmount(toWei(collAmount));
+      setCollateralAmount(collAmount);
     } catch (error) {
       console.error(error);
     }
@@ -180,8 +180,9 @@ const CreateLoan = ({
         collateralAmount,
         rpbRate
       } = form.newLoan.values;
-      // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
-      //   .then(() => {})
+      // submitValidations(form.newLoan.values)
+      //   .then(() => {
+      //     })
       //   .catch((error) => console.error(error));
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);

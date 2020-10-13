@@ -23,12 +23,12 @@ export default combineReducers({
         case SET_BORROWED_ASK_AMOUNT:
           return {
             ...state,
-            submitCheck: { ...state.submitCheck, maxBorrowedAskAmount: payload }
+            values: { ...state.values, maxBorrowedAskAmount: payload }
           };
         case SET_COLLATERAL_AMOUNT:
           return {
             ...state,
-            submitCheck: { ...state.submitCheck, minCollateralAmount: payload }
+            values: { ...state.values, minCollateralAmount: payload }
           };
         default:
           return state;

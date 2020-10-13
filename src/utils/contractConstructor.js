@@ -2,6 +2,7 @@ import { abi as JFactoryABI, networks as JFactoryNetworks } from 'build/contract
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
 import { abi as JLoanEthABI } from 'build/contracts/JLoanEth.json';
 import { abi as JLoanTokenABI } from 'build/contracts/JLoanToken.json';
+import { DAIAddress, JPTAddress, USDCAddress } from 'config/constants';
 
 export function JFactorySetup(web3) {
   return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[42].address);
@@ -16,13 +17,13 @@ export function JLoanTokenSetup(web3, address) {
 }
 
 export function DAISetup(web3) {
-  return new web3.eth.Contract(ERC20ABI, process.env.REACT_APP_DAIAddress);
+  return new web3.eth.Contract(ERC20ABI, DAIAddress);
 }
 
 export function JPTSetup(web3) {
-  return new web3.eth.Contract(ERC20ABI, process.env.REACT_APP_JPTAddress);
+  return new web3.eth.Contract(ERC20ABI, JPTAddress);
 }
 
 export function USDCSetup(web3) {
-  return new web3.eth.Contract(ERC20ABI, process.env.REACT_APP_USDCAddress);
+  return new web3.eth.Contract(ERC20ABI, USDCAddress);
 }

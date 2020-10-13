@@ -1,5 +1,5 @@
 import React from 'react';
-import { required, number, validate } from 'utils/validations';
+import { required, number } from 'utils/validations';
 import { useDebouncedCallback } from 'utils/lodash';
 import { Form, Field, reduxForm } from 'redux-form';
 import {
@@ -86,7 +86,6 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
 
 AdjustLoan = reduxForm({
   form: 'adjustLoan',
-  validate
 })(AdjustLoan);
 
 export { AdjustLoan };

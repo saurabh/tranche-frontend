@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { pairData } from 'config/constants';
 import { useDebouncedCallback } from 'utils/lodash';
-import { required, number, validate } from 'utils/validations';
+import { validate, asyncValidate } from 'utils/validations';
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
 import {
@@ -52,6 +52,7 @@ const InputField = ({
 );
 
 let NewLoan = ({
+  submitting,
   createNewLoan,
   calcMinCollateralAmount,
   calcMaxBorrowedAmount,
@@ -111,7 +112,7 @@ let NewLoan = ({
   return (
     <div>
       <ModalAdjustForm>
-        <Form component={ModalFormWrapper}>
+        <Form component={ModalFormWrapper} onSubmit={createNewLoan}>
           <ModalFormGrpNewLoan>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
@@ -120,7 +121,6 @@ let NewLoan = ({
                   component={InputField}
                   className='ModalFormInputNewLoan'
                   name='borrowedAskAmount'
-                  validate={[required, number]}
                   onChange={(event, newValue) =>
                     debounceCalcMinCollateralAmount(pair, newValue)
                   }
@@ -136,7 +136,6 @@ let NewLoan = ({
                   name='pairId'
                   component='input'
                   id='selectPair'
-                  validate={[required]}
                   onChange={(event, newValue) => setPair(+newValue)}
                   style={{ display: 'none' }}
                 />
@@ -193,7 +192,6 @@ let NewLoan = ({
               onChange={(event, newValue) =>
                 debounceCalcMaxBorrowedAmount(pair, newValue)
               }
-              validate={[required, number]}
             />
             <h2>
               COLLATERALIZATION RATIO: <span>250</span>%
@@ -220,6 +218,7 @@ let NewLoan = ({
       <ModalFormSubmit>
         <BtnGrpLoanModal>
           <ModalFormButton onClick={createNewLoan}>Open Loan</ModalFormButton>
+          {/* <ModalFormButton type='submit' disabled={submitting}>Open Loan</ModalFormButton> */}
         </BtnGrpLoanModal>
       </ModalFormSubmit>
     </div>
@@ -228,7 +227,9 @@ let NewLoan = ({
 
 NewLoan = reduxForm({
   form: 'newLoan',
-  validate
+  validate,
+  asyncValidate,
+  asyncChangeFields: ['borrowedAskAmount', 'collateralAmount']
 })(NewLoan);
 
 NewLoan = connect(() => ({

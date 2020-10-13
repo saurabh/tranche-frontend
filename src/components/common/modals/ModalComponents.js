@@ -25,7 +25,7 @@ const ModalContent = styled.div`
   padding: 33px;
   display: flex;
   flex-direction: column;
-  align-item: center;
+  align-items: center;
   justify-content: center;
 `
 

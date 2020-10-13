@@ -1,13 +1,9 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
+import { networkId, infuraProviderUrl as rpcUrl, infuraKey, blocknativeKey as dappId } from 'config/constants'
 
 let onboard = undefined;
 let notify = undefined;
-
-const networkId = parseInt(process.env.REACT_APP_networkId);
-const rpcUrl = process.env.REACT_APP_infuraProviderUrl;
-const infuraKey = process.env.REACT_APP_infuraKey;
-const dappId = process.env.REACT_APP_blocknativeKey;
 
 export function initOnboard(subscriptions) {
   if (!onboard) {

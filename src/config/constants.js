@@ -6,6 +6,18 @@ import { JLoanEthSetup, JLoanTokenSetup, DAISetup, JPTSetup, USDCSetup } from 'u
 import { networks as JLoanTokenDeployerNetworks } from 'build/contracts/JLoanTokenDeployer.json';
 export const JLoanTokenDeployerAddress = JLoanTokenDeployerNetworks[42].address;
 
+// exporting .env variables
+export const serverUrl = process.env.REACT_APP_serverUrl;
+export const etherScanUrl = process.env.REACT_APP_etherScanUrl;
+export const blocknativeKey = process.env.REACT_APP_blocknativeKey;
+export const infuraKey = process.env.REACT_APP_infuraKey;
+export const infuraProviderUrl = process.env.REACT_APP_infuraProviderUrl;
+export const networkId = parseInt(process.env.REACT_APP_networkId);
+export const DAIAddress = parseInt(process.env.REACT_APP_DAIAddress);
+export const JPTAddress = parseInt(process.env.REACT_APP_JPTAddress);
+export const USDCAddress = parseInt(process.env.REACT_APP_USDCAddress);
+
+
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {
