@@ -13,13 +13,6 @@ import {
   ModalButton,
   ConfirmAlertWrapper,
   ConfirmAlertBtnWrapper,
-  ModalAdjustForm,
-  ModalFormWrapper,
-  ModalFormGrp,
-  ModalFormLabel,
-  ModalFormInput,
-  ModalFormSubmit,
-  ModalFormButton
 } from './ModalComponents';
 
 const FirstCustomStyles = {

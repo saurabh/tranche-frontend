@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
-import { pairData, statuses } from 'config/constants';
+import { pairData } from 'config/constants';
 import { useDebouncedCallback } from 'utils/lodash';
-import { required, number, minValue0, maxValue100, validate } from 'utils/validations';
-import CloseModal from 'assets/images/svg/closeModal.svg';
+import { required, number, validate } from 'utils/validations';
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
 import {
-  ModalHeader,
-  ModalContent,
   BtnGrpLoanModal,
-  ModalButton,
-  ConfirmAlertWrapper,
-  ConfirmAlertBtnWrapper,
   ModalAdjustForm,
   ModalFormWrapper,
   ModalFormGrp,
   ModalFormLabel,
-  ModalFormInput,
   ModalFormSubmit,
   ModalFormButton,
   SelectCurrencyOption,
   SelectCurrencyView,
   SelectCurrencyOptions,
   ModalFormGrpNewLoan,
-  ModalFormInputNewLoan,
   NewLoanInputWrapper,
   LoanCustomSelect,
   NewLoanFormInput,
   SelectChevron,
-  ModalFormInputAPY
 } from '../Modals/ModalComponents';
 
 const InputField = ({

@@ -7,7 +7,6 @@ import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
 import styled from 'styled-components';
-import LoanService from 'services/loan.service';
 
 const TableWrapper = styled.div`
   width: 100%;
