@@ -53,7 +53,7 @@ export const pairData = [
   }
 ];
 
-export const serverUrl = 'https://api.staging.tranche.finance//api/v1/';
+export const serverUrl = 'https://api.staging.tranche.finance//api/v1';
 
 export const etherScanUrl = 'https://kovan.etherscan.io/address/';
 export const NA = 'N/A';
