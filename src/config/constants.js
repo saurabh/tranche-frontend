@@ -13,9 +13,9 @@ export const blocknativeKey = process.env.REACT_APP_blocknativeKey;
 export const infuraKey = process.env.REACT_APP_infuraKey;
 export const infuraProviderUrl = process.env.REACT_APP_infuraProviderUrl;
 export const networkId = parseInt(process.env.REACT_APP_networkId);
-export const DAIAddress = parseInt(process.env.REACT_APP_DAIAddress);
-export const JPTAddress = parseInt(process.env.REACT_APP_JPTAddress);
-export const USDCAddress = parseInt(process.env.REACT_APP_USDCAddress);
+export const DAIAddress = process.env.REACT_APP_DAIAddress;
+export const JPTAddress = process.env.REACT_APP_JPTAddress;
+export const USDCAddress = process.env.REACT_APP_USDCAddress;
 
 
 // Site Banner Data (imported in Header component)
