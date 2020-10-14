@@ -77,7 +77,7 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
+  useEffect(() => { }, [onboard, address, network, balance, wallet, web3]);
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
@@ -117,7 +117,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -133,7 +133,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -161,7 +161,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -187,7 +187,7 @@ const TableCard = ({
             .on('receipt', async () => {
               await loansFetchData({
                 skip: 0,
-                limit: 10000,
+                limit: 100,
                 filter: {
                   type: null
                 }
@@ -203,7 +203,7 @@ const TableCard = ({
             .on('receipt', async () => {
               await loansFetchData({
                 skip: 0,
-                limit: 10000,
+                limit: 100,
                 filter: {
                   type: null
                 }
@@ -229,7 +229,7 @@ const TableCard = ({
         .on('receipt', async () => {
           await loansFetchData({
             skip: 0,
-            limit: 10000,
+            limit: 100,
             filter: {
               type: null
             }
@@ -253,7 +253,7 @@ const TableCard = ({
         .on('receipt', async () => {
           await loansFetchData({
             skip: 0,
-            limit: 10000,
+            limit: 100,
             filter: {
               type: null
             }
@@ -278,7 +278,7 @@ const TableCard = ({
         .on('receipt', async () => {
           await loansFetchData({
             skip: 0,
-            limit: 10000,
+            limit: 100,
             filter: {
               type: null
             }
@@ -317,7 +317,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -333,7 +333,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -461,13 +461,13 @@ const TableCard = ({
             <button
               style={
                 ({ background: PagesData[path].btnColor },
-                path === 'trade' || disableBtn
-                  ? {
+                  path === 'trade' || disableBtn
+                    ? {
                       backgroundColor: '#cccccc',
                       color: '#666666',
                       cursor: 'default'
                     }
-                  : {})
+                    : {})
               }
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
@@ -477,10 +477,10 @@ const TableCard = ({
                   path === 'borrow'
                     ? Adjust
                     : path === 'earn'
-                    ? AdjustEarn
-                    : path === 'trade'
-                    ? AdjustTrade
-                    : Adjust
+                      ? AdjustEarn
+                      : path === 'trade'
+                        ? AdjustTrade
+                        : Adjust
                 }
                 alt=''
               />

@@ -15,7 +15,6 @@ const validate = (values) => {
   } else if (isNaN(Number(collateralAmount))) {
     errors.collateralAmount = 'Must be a number';
   }
-  console.log(errors)
   return errors;
 };
 
@@ -28,45 +27,40 @@ const minValue0 = minValue(0);
 const maxValue = (max) => (value) =>
   value && value >= max ? `Must be ${max}% at most` : undefined;
 const maxValue100 = maxValue(100);
-
-let submitValidations = async (values) => {
-  let { borrowedAskAmount, collateralAmount, maxBorrowedAskAmount, minCollateralAmount } = values;
-
-  return new Promise((resolve, reject) => {
-    if (isLessThan(collateralAmount, minCollateralAmount)) {
-      reject(
-        new SubmissionError({
-          borrowedAskAmount: 'Ask amount is too high',
-          _error: 'Create New Loan failed!'
-        })
-      );
-    } else if (isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount)) {
-      reject(
-        new SubmissionError({
-          collateralAmount: 'Not enough collateral',
-          _error: 'Create New Loan failed!'
-        })
-      );
-    } else {
-      resolve();
-    }
-  });
-};
-
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-let asyncValidate = (values) => {
+let submitValidations = async (values) => {
   return sleep(0).then(async () => {
-    console.log(values)
     let { borrowedAskAmount, collateralAmount, pairId } = values;
     let minCollateralAmount = await calcMinCollateralAmount(pairId, borrowedAskAmount);
     let maxBorrowedAskAmount = await calcMaxBorrowedAmount(pairId, collateralAmount);
-    console.log(borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount)))
     if (borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))) {
-      throw { collateralAmount: 'Not enough collateral' }
+      throw new SubmissionError({
+        borrowedAskAmount: 'Ask amount is too high',
+        _error: 'Create New Loan failed!'
+      })
     }
     if (collateralAmount && (!borrowedAskAmount || isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount))) {
-      throw { borrowedAskAmount: 'Ask amount is too high' }
+      throw new SubmissionError({
+        collateralAmount: 'Not enough collateral',
+        _error: 'Create New Loan failed!'
+      })
+    }
+  })
+};
+
+let asyncValidate = (values) => {
+  return sleep(0).then(async () => {
+    let { borrowedAskAmount, collateralAmount, pairId } = values;
+    let minCollateralAmount = borrowedAskAmount ? await calcMinCollateralAmount(pairId, borrowedAskAmount) : undefined;
+    let maxBorrowedAskAmount = collateralAmount ? await calcMaxBorrowedAmount(pairId, collateralAmount) : undefined;
+    console.log(isLessThan(collateralAmount, minCollateralAmount))
+    console.log(collateralAmount && (!borrowedAskAmount || isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount)))
+    if (borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))) {
+      throw { collateralAmount: 'Not enough collateral', _error: 'Not enough collateral' }
+    }
+    if (collateralAmount && (!borrowedAskAmount || isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount))) {
+      throw { borrowedAskAmount: 'Ask amount is too high', _error: 'Ask amount is too high' }
     }
   })
 };

@@ -31,7 +31,7 @@ const Table = ({
     const loanListing = async (filter = null) => {
       await loansFetchData({
         skip: 0,
-        limit: 10000,
+        limit: 100,
         filter: {
           type: filter //ETH/JNT keep these in constant file
         }
@@ -76,4 +76,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {loansFetchData, changePath})(Table);
+export default connect(mapStateToProps, { loansFetchData, changePath })(Table);

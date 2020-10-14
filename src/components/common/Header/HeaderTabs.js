@@ -14,7 +14,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged }) => {
     setFilter(filter);
     await loansFetchData({
       skip: 0,
-      limit: 10000,
+      limit: 100,
       filter: {
         type: filter //ETH/JNT keep these in constant file
       }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { pairData } from 'config/constants';
+import { calcMinCollateralAmount } from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
 import { validate, asyncValidate } from 'utils/validations';
 import selectUp from 'assets/images/svg/selectUp.svg';
@@ -52,16 +53,15 @@ const InputField = ({
   );
 
 let NewLoan = ({
+  error,
   pristine,
   submitting,
   createNewLoan,
-  calcMinCollateralAmount,
-  calcMaxBorrowedAmount,
-  collateralAmountForInput
 }) => {
   const [pair, setPair] = useState(0);
   const [selectedCurrency, selectCurrency] = useState(pairData[0].key);
   const [currencySelect, toggleCurrency] = useState(false);
+  const [minCollateralAmount, setminCollateralAmount] = useState(0);
   const [RPB, SETRPB] = useState(0);
 
   const inputChange = (val) => {
@@ -91,12 +91,10 @@ let NewLoan = ({
   };
 
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
-    (pair, borrowedAskAmount) => calcMinCollateralAmount(pair, borrowedAskAmount),
-    500
-  );
-
-  const [debounceCalcMaxBorrowedAmount] = useDebouncedCallback(
-    (pair, borrowedAskAmount) => calcMaxBorrowedAmount(pair, borrowedAskAmount),
+    async (pair, borrowedAskAmount) => {
+      const result = await calcMinCollateralAmount(pair, borrowedAskAmount)
+      setminCollateralAmount(result);
+    },
     500
   );
 
@@ -172,7 +170,7 @@ let NewLoan = ({
                 </LoanCustomSelect>
               </NewLoanFormInput>
               <h2>
-                MINIMUM COLLATERAL: <span>{collateralAmountForInput}</span> ETH
+                MINIMUM COLLATERAL: <span>{minCollateralAmount}</span> ETH
             </h2>
             </ModalFormGrpNewLoan>
 
@@ -191,9 +189,6 @@ let NewLoan = ({
                 step='0.0001'
                 id='COLLATERALIZINGInput'
                 background={searchArr(selectedCurrency).colIcon}
-                onChange={(event, newValue) =>
-                  debounceCalcMaxBorrowedAmount(pair, newValue)
-                }
               />
               <h2>
                 COLLATERALIZATION RATIO: <span>250</span>%
@@ -218,8 +213,7 @@ let NewLoan = ({
           </FormInputsWrapper>
           <ModalFormSubmit>
             <BtnGrpLoanModal>
-              {/* <ModalFormButton onClick={createNewLoan}>Open Loan</ModalFormButton> */}
-              <ModalFormButton type='submit' disabled={pristine || submitting}>Open Loan</ModalFormButton>
+              <ModalFormButton type='submit' disabled={pristine || submitting || error}>Open Loan</ModalFormButton>
             </BtnGrpLoanModal>
           </ModalFormSubmit>
         </Form>
