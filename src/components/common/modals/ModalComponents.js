@@ -92,13 +92,13 @@ const ConfirmAlertBtnWrapper = styled.div`
 
 
 const ModalAdjustForm = styled.div`
- min-height: 160px;
+ /*min-height: 160px;*/
  height: auto;
  width: 100%;
  border-bottom: 1px solid rgba(63, 63, 63, 0.1);
  background: rgba(247,247,247,1);
  box-sizing: border-box;
- padding: 10px 35px;
+ /*padding: 10px 35px;*/
  display: flex;
 `
 
@@ -262,12 +262,17 @@ const ModalFormInputNewLoan = styled(Input)`
       margin: 0;
   }
 `
+const FormInputsWrapper = styled.div`
+  padding:10px 35px;
+`
 const ModalFormSubmit = styled.div`
   width: 100%;
-  min-height: 91px;
-  height: 100%;  
+  height: 91px;
+  /*height: 100%;*/
   padding: 0 33px;
   box-sizing: border-box;
+  border-top: 1px solid rgba(63,63,63,0.1);
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -392,6 +397,7 @@ export {
     SelectCurrencyOptions,
     ModalFormGrpNewLoan,
     ModalFormInputNewLoan,
+    FormInputsWrapper,
     NewLoanInputWrapper,
     LoanCustomSelect,
     NewLoanFormInput,

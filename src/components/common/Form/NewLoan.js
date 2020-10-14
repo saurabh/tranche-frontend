@@ -18,6 +18,7 @@ import {
   SelectCurrencyView,
   SelectCurrencyOptions,
   ModalFormGrpNewLoan,
+  FormInputsWrapper,
   NewLoanInputWrapper,
   LoanCustomSelect,
   NewLoanFormInput,
@@ -113,6 +114,7 @@ let NewLoan = ({
     <div>
       <ModalAdjustForm>
         <Form component={ModalFormWrapper} onSubmit={createNewLoan}>
+        <FormInputsWrapper>
           <ModalFormGrpNewLoan>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
@@ -212,15 +214,15 @@ let NewLoan = ({
               RPB: <span>{RPB}</span>
             </h2>
           </ModalFormGrpNewLoan>
+          </FormInputsWrapper>
+          <ModalFormSubmit>
+            <BtnGrpLoanModal>
+              <ModalFormButton onClick={createNewLoan}>Open Loan</ModalFormButton>
+              {/* <ModalFormButton type='submit' disabled={submitting}>Open Loan</ModalFormButton> */}
+            </BtnGrpLoanModal>
+          </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
-
-      <ModalFormSubmit>
-        <BtnGrpLoanModal>
-          <ModalFormButton onClick={createNewLoan}>Open Loan</ModalFormButton>
-          {/* <ModalFormButton type='submit' disabled={submitting}>Open Loan</ModalFormButton> */}
-        </BtnGrpLoanModal>
-      </ModalFormSubmit>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   ModalFormGrp,
   ModalFormLabel,
   ModalFormSubmit,
+  FormInputsWrapper,
   ModalFormButton,
   NewLoanInputWrapper,
   NewLoanFormInput,
@@ -51,6 +52,7 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
     <div>
       <ModalAdjustForm style={{minHeight: "auto"}}>
         <Form component={ModalFormWrapper} onSubmit={addCollateral}>
+          <FormInputsWrapper>
           <ModalFormGrp currency="ETH">
             <NewLoanFormInput>
               <NewLoanInputWrapper>
@@ -71,15 +73,16 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
               NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
             </h2>
           </ModalFormGrp>
-         
+          </FormInputsWrapper>
+          <ModalFormSubmit>
+            <BtnGrpLoanModal>
+              <ModalFormButton onClick={addCollateral}>Adjust Loan</ModalFormButton>
+            </BtnGrpLoanModal>
+          </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
 
-      <ModalFormSubmit>
-        <BtnGrpLoanModal>
-          <ModalFormButton onClick={addCollateral}>Adjust Loan</ModalFormButton>
-        </BtnGrpLoanModal>
-      </ModalFormSubmit>
+      
     </div>
   );
 };

@@ -25,7 +25,7 @@ const Table = ({
   pathChanged,
 }) => {
   const { pathname } = useLocation();
-  const [path, setPath] = useState('home');
+  const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
 
   useEffect(() => {
     const loanListing = async (filter = null) => {
@@ -38,11 +38,7 @@ const Table = ({
       });
     };
     const parsePath = () => {
-      if (pathname === '/') {
-        setPath('home');
-      } else {
-        setPath(pathname.split('/')[1]);
-      }
+      setPath(pathname.split('/')[1]);
     };
 
     let currentPath = pathname.split('/')[1];

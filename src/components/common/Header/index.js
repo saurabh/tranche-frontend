@@ -11,17 +11,12 @@ import Navbar from "./Navbar"
 import { PagesData } from 'config/constants';
 
 
-export function Header() {
+export function Header({updateDate}) {
   const { pathname } = useLocation();
-  const [path, setPath] = useState('home');
-
+  const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
   useEffect(() => {
     const parsePath = () => {
-      if (pathname === '/') {
-        setPath('home');
-      } else {
-        setPath(pathname.split('/')[1]);
-      }
+      setPath(pathname.split('/')[1]);
     };
 
     parsePath();
@@ -29,18 +24,27 @@ export function Header() {
 
   return (
     <HeaderWrapper color={PagesData[path].color}>
-      <Navbar />
-      <div className='content-container container'>
-        <HeaderContent>
-          <HeaderTitle className='header-text'>
-            <h2>{PagesData[path].title}</h2>
-          </HeaderTitle>
-          <HeaderSubtitle className='header-text'>
-            <h2>{PagesData[path].description}</h2>
-          </HeaderSubtitle>
-        </HeaderContent>
-      </div>
-      <HeaderTabs />
+      <Navbar path={pathname.split('/')[1]}/>
+        <div className='content-container container'>
+          <HeaderContent path={path}>
+            {  (path === "privacy" || path === "terms") ? 
+              <HeaderSubtitle className='header-text' fontSize="9px">
+                <h2>Last Updated: {updateDate}</h2>
+              </HeaderSubtitle> : ""
+            }
+            <HeaderTitle className='header-text'>
+              <h2>{PagesData[path].title}</h2>
+            </HeaderTitle>
+            <HeaderSubtitle className='header-text'>
+              <h2>{PagesData[path].description}</h2>
+            </HeaderSubtitle>
+          </HeaderContent>
+        </div>
+        {
+          (path === "borrow" || path === "earn" || path === "trade") ?
+          <HeaderTabs /> : ""
+        }
+        
     </HeaderWrapper>
   );
 }
