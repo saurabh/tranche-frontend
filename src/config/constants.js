@@ -17,7 +17,6 @@ export const DAIAddress = process.env.REACT_APP_DAIAddress;
 export const JPTAddress = process.env.REACT_APP_JPTAddress;
 export const USDCAddress = process.env.REACT_APP_USDCAddress;
 
-
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {

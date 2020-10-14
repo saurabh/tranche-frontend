@@ -5,10 +5,17 @@ import { calcMinCollateralAmount, calcMaxBorrowedAmount } from 'services/contrac
 const validate = (values) => {
   const { borrowedAskAmount, collateralAmount, rpbRate } = values;
   const errors = {};
-  if (!borrowedAskAmount) errors.borrowedAskAmount = 'Required';
-  if (borrowedAskAmount && NaN) errors.borrowedAskAmount = 'Must be a number';
-  if (!collateralAmount) errors.collateralAmount = 'Required';
-  if (collateralAmount && NaN) errors.collateralAmount = 'Must be a number';
+  if (!borrowedAskAmount) {
+    errors.borrowedAskAmount = 'Required';
+  } else if (isNaN(Number(borrowedAskAmount))) {
+    errors.borrowedAskAmount = 'Must be a number';
+  }
+  if (!collateralAmount) {
+    errors.collateralAmount = 'Required';
+  } else if (isNaN(Number(collateralAmount))) {
+    errors.collateralAmount = 'Must be a number';
+  }
+  console.log(errors)
   return errors;
 };
 
@@ -54,6 +61,7 @@ let asyncValidate = (values) => {
     let { borrowedAskAmount, collateralAmount, pairId } = values;
     let minCollateralAmount = await calcMinCollateralAmount(pairId, borrowedAskAmount);
     let maxBorrowedAskAmount = await calcMaxBorrowedAmount(pairId, collateralAmount);
+    console.log(borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount)))
     if (borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))) {
       throw { collateralAmount: 'Not enough collateral' }
     }

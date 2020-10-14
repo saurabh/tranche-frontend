@@ -5,7 +5,6 @@ import Modal from 'react-modal';
 import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
 import { loansFetchData } from 'redux/actions/loans';
 import { NewLoan } from 'components/common/Form/NewLoan';
-import { submitValidations } from 'utils/validations';
 import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { JLoanTokenDeployerAddress } from 'config/constants';
@@ -180,10 +179,6 @@ const CreateLoan = ({
         collateralAmount,
         rpbRate
       } = form.newLoan.values;
-      // submitValidations(form.newLoan.values)
-      //   .then(() => {
-      //     })
-      //   .catch((error) => console.error(error));
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       if (pairId === searchArr(parseFloat(pairId)).value) {
