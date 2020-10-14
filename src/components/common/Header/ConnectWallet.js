@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
+
 import {
   setAddress,
   setNetwork,
@@ -8,6 +10,7 @@ import {
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
+import { changePath } from 'redux/actions/TogglePath';
 import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
 import { PagesData } from 'config/constants';
@@ -35,6 +38,16 @@ const ConnectWallet = ({
       onboard.walletSelect(previouslySelectedWallet);
     }
   }, [onboard, address, network, balance, wallet, web3]);
+  
+  const { pathname } = useLocation();
+  const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
+  useEffect(() => {
+    const parsePath = () => {
+      setPath(pathname.split('/')[1]);
+    };
+
+    parsePath();
+  }, [pathname]);
 
   const handleConnect = async () => {
     await onboard.walletSelect();
@@ -44,17 +57,17 @@ const ConnectWallet = ({
   return (
     <>
       {balance < 0 ? (
-        <WalletBtn background={PagesData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
-          <WalletBtnText icon={false} color={PagesData[pathChanged].color}>
+        <WalletBtn background={PagesData[path].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+          <WalletBtnText icon={false} color={PagesData[path].color}>
             <h2>Connect</h2>
           </WalletBtnText>
         </WalletBtn>
       ) : (
-        <WalletBtn background={PagesData[pathChanged].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+        <WalletBtn background={PagesData[path].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>
             <img src='' alt='' />
           </WalletBtnIcon>
-          <WalletBtnText color={PagesData[pathChanged].color}>
+          <WalletBtnText color={PagesData[path].color}>
             <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>

@@ -13,6 +13,8 @@ import Borrow from "components/pages/Borrow";
 import Trade from "components/pages/Trade";
 import NotFound from "components/pages/NotFound";
 import NetworkDetector from "./common/NetworkDetector";
+import Privacy from "./pages/Privacy";
+import TermsAndConditions from "./pages/Terms&Conditions";
 // Redux
 import { Provider } from "react-redux";
 import store from "../redux/store";
@@ -30,6 +32,8 @@ const App = () => {
           <Route exact path="/trade" component={Trade}>
             <Redirect to="/borrow" />
           </Route>
+          <Route exact path="/privacy" component={Privacy} />
+          <Route exact path="/terms" component={TermsAndConditions} />
           <Route component={NotFound} />
         </Switch>
       </Router>

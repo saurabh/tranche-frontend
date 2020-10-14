@@ -51,6 +51,24 @@ export const PagesData = {
     cardColor: 'rgba(0,0,0,0.4)',
     title: 'Trading Markets',
     description: 'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
+  },
+  privacy: {
+    pageType: 'privacy',
+    color: '#006173',
+    secondaryColor: '#7EABC8',
+    btnColor: '#EEE5FF',
+    cardColor: '#DFD2FB',
+    title: 'Privacy Policy',
+    description: ""
+  },
+  terms: {
+    pageType: 'terms-and-conditions',
+    color: '#006173',
+    secondaryColor: '#7EABC8',
+    btnColor: '#EEE5FF',
+    cardColor: '#DFD2FB',
+    title: 'Terms and Conditions',
+    description: ""
   }
 };
 
