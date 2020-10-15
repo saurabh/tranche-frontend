@@ -9,7 +9,7 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
-import { statuses, etherScanUrl, ColorData, pairData } from 'config/constants';
+import { statuses, PagesData, pairData, etherScanUrl } from 'config/constants';
 import styled from 'styled-components';
 import { loansFetchData } from 'redux/actions/loans';
 import LoanModal from '../Modals/LoanModal';
@@ -66,11 +66,9 @@ const TableCard = ({
   let disableBtn =
     status === statuses['Foreclosed'].status ||
     status === statuses['Early_closing'].status ||
-    status === statuses['Closing'].status ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
   const toWei = web3.utils.toWei;
-  const fromWei = web3.utils.fromWei;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -79,7 +77,7 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
+  useEffect(() => { }, [onboard, address, network, balance, wallet, web3]);
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
@@ -92,7 +90,7 @@ const TableCard = ({
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const approveLoan = async () => {
     try {
@@ -119,7 +117,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -135,7 +133,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -163,7 +161,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -189,7 +187,7 @@ const TableCard = ({
             .on('receipt', async () => {
               await loansFetchData({
                 skip: 0,
-                limit: 10000,
+                limit: 100,
                 filter: {
                   type: null
                 }
@@ -205,7 +203,7 @@ const TableCard = ({
             .on('receipt', async () => {
               await loansFetchData({
                 skip: 0,
-                limit: 10000,
+                limit: 100,
                 filter: {
                   type: null
                 }
@@ -213,6 +211,54 @@ const TableCard = ({
             });
         }
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const withdrawInterest = async () => {
+    try {
+      const { loanContractSetup } = searchArr(cryptoFromLenderName);
+      const JLoan = loanContractSetup(web3, contractAddress);
+      await JLoan.methods
+        .withdrawInterests()
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 100,
+            filter: {
+              type: null
+            }
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const forecloseLoan = async () => {
+    try {
+      const { loanContractSetup } = searchArr(cryptoFromLenderName);
+      const JLoan = loanContractSetup(web3, contractAddress);
+      await JLoan.methods
+        .initiateLoanForeClose()
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 100,
+            filter: {
+              type: null
+            }
+          });
+        });
     } catch (error) {
       console.error(error);
     }
@@ -232,7 +278,7 @@ const TableCard = ({
         .on('receipt', async () => {
           await loansFetchData({
             skip: 0,
-            limit: 10000,
+            limit: 100,
             filter: {
               type: null
             }
@@ -271,7 +317,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -287,7 +333,7 @@ const TableCard = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null
               }
@@ -311,19 +357,20 @@ const TableCard = ({
     }
   };
 
-  async function openModal() {
+  const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     setIsOpen(true);
-  }
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   const searchObj = (val) =>
     Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
-
-  function closeModal() {
-    setIsOpen(false);
-  }
 
   const cardToggle = () => {
     setMoreCardToggle(!moreCardToggle);
@@ -413,16 +460,16 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <button
               style={
-                ({ background: ColorData[path].btnColor },
-                path === 'trade' || disableBtn
-                  ? {
+                ({ background: PagesData[path].btnColor },
+                  path === 'trade' || disableBtn
+                    ? {
                       backgroundColor: '#cccccc',
                       color: '#666666',
                       cursor: 'default'
                     }
-                  : {})
+                    : {})
               }
-              onClick={path === 'trade' || disableBtn ? false : () => openModal()}
+              onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
             >
               <img
@@ -430,10 +477,10 @@ const TableCard = ({
                   path === 'borrow'
                     ? Adjust
                     : path === 'earn'
-                    ? AdjustEarn
-                    : path === 'trade'
-                    ? AdjustTrade
-                    : Adjust
+                      ? AdjustEarn
+                      : path === 'trade'
+                        ? AdjustTrade
+                        : Adjust
                 }
                 alt=''
               />
@@ -452,6 +499,8 @@ const TableCard = ({
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}
+            withdrawInterest={withdrawInterest}
+            forecloseLoan={forecloseLoan}
             newCollateralRatio={newCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
           />

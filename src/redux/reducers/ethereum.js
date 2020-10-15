@@ -7,10 +7,9 @@ import {
   SET_WEB3
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
+import { infuraProviderUrl } from 'config/constants'
 
-const provider = new Web3.providers.HttpProvider(
-  'https://kovan.infura.io/v3/b036e8717e624f5c826fdb9205e391d2'
-);
+const provider = new Web3.providers.HttpProvider(infuraProviderUrl);
 
 const initialState = {
   balance: -1,

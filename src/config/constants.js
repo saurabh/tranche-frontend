@@ -3,28 +3,71 @@ import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
 import { JLoanEthSetup, JLoanTokenSetup, DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
+import { networks as JLoanTokenDeployerNetworks } from 'build/contracts/JLoanTokenDeployer.json';
+export const JLoanTokenDeployerAddress = JLoanTokenDeployerNetworks[42].address;
+
+// exporting .env variables
+export const serverUrl = process.env.REACT_APP_serverUrl;
+export const etherScanUrl = process.env.REACT_APP_etherScanUrl;
+export const blocknativeKey = process.env.REACT_APP_blocknativeKey;
+export const infuraKey = process.env.REACT_APP_infuraKey;
+export const infuraProviderUrl = process.env.REACT_APP_infuraProviderUrl;
+export const networkId = parseInt(process.env.REACT_APP_networkId);
+export const DAIAddress = process.env.REACT_APP_DAIAddress;
+export const JPTAddress = process.env.REACT_APP_JPTAddress;
+export const USDCAddress = process.env.REACT_APP_USDCAddress;
 
 // Site Banner Data (imported in Header component)
-export const HeaderData = {
+export const PagesData = {
   home: {
     color: '#2c2cdf',
     title: 'Welcome to Jibrel',
     description: 'PLACEHOLDER SLOGAN'
   },
   borrow: {
+    pageType: 'borrow',
     color: '#5411e2',
+    secondaryColor: '#CEB7FF',
+    btnColor: '#EEE5FF',
+    cardColor: '#DFD2FB',
     title: 'Borrower Markets',
     description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
   },
   earn: {
+    pageType: 'earn',
     color: '#1ebb1b',
+    secondaryColor: '#D7FFB7',
+    btnColor: '#D7FCD6',
+    cardColor: '#D7FFB7',
     title: 'Earning Markets',
     description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
   },
   trade: {
+    pageType: 'trade',
     color: '#1f1f1f',
+    secondaryColor: '#ffffff',
+    btnColor: '#1f1f1f',
+    cardColor: 'rgba(0,0,0,0.4)',
     title: 'Trading Markets',
     description: 'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
+  },
+  privacy: {
+    pageType: 'privacy',
+    color: '#006173',
+    secondaryColor: '#7EABC8',
+    btnColor: '#EEE5FF',
+    cardColor: '#DFD2FB',
+    title: 'Privacy Policy',
+    description: ""
+  },
+  terms: {
+    pageType: 'terms-and-conditions',
+    color: '#006173',
+    secondaryColor: '#7EABC8',
+    btnColor: '#EEE5FF',
+    cardColor: '#DFD2FB',
+    title: 'Terms and Conditions',
+    description: ""
   }
 };
 
@@ -53,25 +96,23 @@ export const pairData = [
   }
 ];
 
-export const serverUrl = 'https://api.staging.tranche.finance/api/v1/';
-
-export const etherScanUrl = 'https://kovan.etherscan.io/address/';
-export const NA = 'N/A';
-
-export const pageType = {
-  BORROW: 'borrow',
-  EARN: 'earn',
-  TRADE: 'trade'
-};
-
 export const apiUri = {
   loanList: 'loans'
 };
+
 // Filters
 export const ETH = 'ETH';
 export const DAI = 'DAI';
 export const JNT = 'JNT';
 export const USDC = 'USDC';
+
+export const confirmationTexts = {
+  confirmCancel: 'Are you sure you want to cancel the loan request?',
+  confirmClose: 'Are you sure you want to close the loan?',
+  confirmApprove: 'Are you sure you want to approve this loan?',
+  confirmWithdraw: 'Are you sure you want to withdraw interest?',
+  confirmForeclose: 'Are you sure you want to foreclose this loan?'
+};
 
 export const statuses = {
   Pending: {
@@ -133,25 +174,5 @@ export const statuses = {
     status: 9,
     color: '#E70D52',
     background: 'rgba(231, 13, 82, 0.24)'
-  }
-};
-export const ColorData = {
-  borrow: {
-    color: '#5411e2',
-    secondaryColor: '#CEB7FF',
-    btnColor: '#EEE5FF',
-    cardColor: '#DFD2FB'
-  },
-  earn: {
-    color: '#1ebb1b',
-    secondaryColor: '#D7FFB7',
-    btnColor: '#D7FCD6',
-    cardColor: '#D7FFB7'
-  },
-  trade: {
-    color: '#1f1f1f',
-    secondaryColor: '#ffffff',
-    btnColor: '#1f1f1f',
-    cardColor: 'rgba(0,0,0,0.4)'
   }
 };

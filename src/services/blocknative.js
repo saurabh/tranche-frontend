@@ -1,6 +1,6 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
-import { blocknativeKey, infuraKey, networkId } from 'config'
+import { networkId, infuraProviderUrl as rpcUrl, infuraKey, blocknativeKey as dappId } from 'config/constants'
 
 let onboard = undefined;
 let notify = undefined;
@@ -16,13 +16,22 @@ export function initOnboard(subscriptions) {
         wallets: [
           { walletName: 'metamask', preferred: true },
           { walletName: 'coinbase', preferred: true },
-          {
-            walletName: 'walletConnect',
-            infuraKey,
-            preferred: true
-          }
+          { walletName: 'coinbase', preferred: true },
+          { walletName: 'status', preferred: true },
+          { walletName: 'trust', rpcUrl, preferred: true },
+          { walletName: 'ledger', rpcUrl, preferred: true },
+          { walletName: 'torus', preferred: true },
+          { walletName: 'authereum', preferred: true },
+          { walletName: 'walletConnect', infuraKey, preferred: true }
         ]
-      }
+      },
+      walletCheck: [
+        { checkName: 'derivationPath' },
+        { checkName: 'connect' },
+        { checkName: 'accounts' },
+        { checkName: 'network' },
+        { checkName: 'balance' }
+      ]
     });
   }
   return onboard;
@@ -31,7 +40,7 @@ export function initOnboard(subscriptions) {
 export function initNotify() {
   if (!notify) {
     notify = Notify({
-      dappId: blocknativeKey,
+      dappId,
       networkId
     });
   }

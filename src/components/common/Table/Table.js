@@ -7,7 +7,6 @@ import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
 import styled from 'styled-components';
-import LoanService from 'services/loan.service';
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -26,24 +25,20 @@ const Table = ({
   pathChanged,
 }) => {
   const { pathname } = useLocation();
-  const [path, setPath] = useState('home');
+  const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
 
   useEffect(() => {
     const loanListing = async (filter = null) => {
       await loansFetchData({
         skip: 0,
-        limit: 10000,
+        limit: 100,
         filter: {
           type: filter //ETH/JNT keep these in constant file
         }
       });
     };
     const parsePath = () => {
-      if (pathname === '/') {
-        setPath('home');
-      } else {
-        setPath(pathname.split('/')[1]);
-      }
+      setPath(pathname.split('/')[1]);
     };
 
     let currentPath = pathname.split('/')[1];
@@ -81,4 +76,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {loansFetchData, changePath})(Table);
+export default connect(mapStateToProps, { loansFetchData, changePath })(Table);

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import { ColorData } from '../../../config/constants';
+import { PagesData } from 'config/constants';
 const SummaryCardWrapper = styled.div`
     width: 250px;
     height: 121px;
@@ -46,7 +46,7 @@ const SummaryCardDetails = styled.h2`
 
 const SummaryCard = ({title, value, details, path}) => {
     return (
-        <SummaryCardWrapper color={ColorData[path].cardColor}>
+        <SummaryCardWrapper color={PagesData[path].cardColor}>
            <SummaryCardContainer>
                <SummaryCardTitle>
                     {title}

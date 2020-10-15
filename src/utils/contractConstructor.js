@@ -2,7 +2,7 @@ import { abi as JFactoryABI, networks as JFactoryNetworks } from 'build/contract
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
 import { abi as JLoanEthABI } from 'build/contracts/JLoanEth.json';
 import { abi as JLoanTokenABI } from 'build/contracts/JLoanToken.json';
-import { DAIAddress, JPTAddress, USDCAddress } from 'config/ethereum';
+import { DAIAddress, JPTAddress, USDCAddress } from 'config/constants';
 
 export function JFactorySetup(web3) {
   return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[42].address);

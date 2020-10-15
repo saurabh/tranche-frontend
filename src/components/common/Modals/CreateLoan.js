@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CloseModal from 'assets/images/svg/closeModal.svg';
-import { setBorrowedAskAmount, setCollateralAmount } from 'redux/actions/form';
-import { loansFetchData } from 'redux/actions/loans';
-import { submitValidations } from 'utils/validations';
 import Modal from 'react-modal';
+import { loansFetchData } from 'redux/actions/loans';
 import { NewLoan } from 'components/common/Form/NewLoan';
 import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { JLoanTokenDeployerAddress } from 'config/ethereum';
-import { ModalHeader } from '../Modals/ModalComponents';
+import { submitValidations } from 'utils/validations';
+import { JLoanTokenDeployerAddress } from 'config/constants';
 import { pairData } from 'config/constants';
+import { ModalHeader } from './ModalComponents';
+import CloseModal from 'assets/images/svg/closeModal.svg';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -40,53 +39,23 @@ const AdjustPositionStyles = {
   }
 };
 
-const Loan = ({
+const CreateLoan = ({
   ethereum: { address, network, balance, wallet, web3, notify },
   form,
-  setBorrowedAskAmount,
-  setCollateralAmount,
   loansFetchData,
   openModal,
   closeModal
 }) => {
   const JFactory = JFactorySetup(web3);
   const toWei = web3.utils.toWei;
-  const fromWei = web3.utils.fromWei;
-  const [collateralAmountForInput, setCollateralAmountForInput] = useState(0);
 
-  useEffect(() => {}, [address, network, balance, wallet, web3]);
+  useEffect(() => { }, [address, network, balance, wallet, web3]);
 
   function handleCloseModal() {
     closeModal();
   }
 
   const searchArr = (value) => pairData.find((i) => i.value === value);
-
-  const calcMinCollateralAmount = async (pairId, askAmount) => {
-    try {
-      const result = await JFactory.methods
-        .calcMinCollateralWithFeesAmount(pairId, toWei(askAmount))
-        .call();
-      setCollateralAmount(fromWei(result));
-      setBorrowedAskAmount(toWei(askAmount));
-      setCollateralAmountForInput(fromWei(result));
-      // setCollateralAmountForInput(parseFloat(fromWei(result)).toFixed(3));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const calcMaxBorrowedAmount = async (pairId, collAmount) => {
-    try {
-      const result = await JFactory.methods
-        .calcMaxStableCoinWithFeesAmount(pairId, toWei(collAmount))
-        .call();
-      setBorrowedAskAmount(fromWei(result));
-      setCollateralAmount(toWei(collAmount));
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const createNewEthLoan = async (
     pairId,
@@ -104,7 +73,7 @@ const Loan = ({
         .on('receipt', async () => {
           await loansFetchData({
             skip: 0,
-            limit: 10000,
+            limit: 100,
             filter: {
               type: null //ETH/JNT keep these in constant file
             }
@@ -143,7 +112,7 @@ const Loan = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null //ETH/JNT keep these in constant file
               }
@@ -159,7 +128,7 @@ const Loan = ({
           .on('receipt', async () => {
             await loansFetchData({
               skip: 0,
-              limit: 10000,
+              limit: 100,
               filter: {
                 type: null //ETH/JNT keep these in constant file
               }
@@ -180,9 +149,8 @@ const Loan = ({
         collateralAmount,
         rpbRate
       } = form.newLoan.values;
-      // submitValidations(form.newLoan.values, form.newLoan.submitCheck)
-      //   .then(() => {})
-      //   .catch((error) => console.error(error));
+      // submitValidations(form.newLoan.values).then(() => {
+      // }).catch(error => console.error)
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       if (pairId === searchArr(parseFloat(pairId)).value) {
@@ -220,30 +188,21 @@ const Loan = ({
           <img src={CloseModal} alt='' />
         </button>
       </ModalHeader>
-      <NewLoan
-        collateralAmountForInput={collateralAmountForInput}
-        createNewLoan={createNewLoan}
-        calcMinCollateralAmount={calcMinCollateralAmount}
-        calcMaxBorrowedAmount={calcMaxBorrowedAmount}
-      />
+      <NewLoan createNewLoan={createNewLoan} />
     </Modal>
   );
 };
 
-Loan.propTypes = {
+CreateLoan.propTypes = {
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  setBorrowedAskAmount: PropTypes.func.isRequired,
-  setCollateralAmount: PropTypes.func.isRequired,
   ethereum: state.ethereum,
   form: state.form
 });
 
 export default connect(mapStateToProps, {
-  setBorrowedAskAmount,
-  setCollateralAmount,
   loansFetchData
-})(Loan);
+})(CreateLoan);

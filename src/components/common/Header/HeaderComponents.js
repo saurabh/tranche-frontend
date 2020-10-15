@@ -13,6 +13,14 @@ const HeaderContent = styled.div`
     @media (max-width: 992px){
         margin: 39px 0px;
     }
+    ${({ path }) => (path === "privacy" || path === "terms") && `
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        @media (max-width: 992px){
+            transform: translate(-50%, 50%);
+        }
+    `}
 `;
 const HeaderTitle = styled.div`
     & > h2{
@@ -28,6 +36,9 @@ const HeaderSubtitle = styled.div`
         letter-spacing: 0.05em;
         margin-top: 9px;
         text-transform: uppercase;
+        ${({ fontSize }) => fontSize && `
+            font-size: 9px;
+        `}
     }
 `;
   
@@ -129,7 +140,7 @@ const WalletBtn = styled.button`
     align-items: center;
     width: 119px;
     height: 30px;
-    background: ${props => props.background};
+    background: ${props => props.background} !important;
     border-radius: 9px;
     padding: 0 13px;
     border: none;

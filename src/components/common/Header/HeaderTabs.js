@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { loansFetchData } from 'redux/actions/loans';
-import { ETH, JNT, ColorData } from 'config/constants';
+import { ETH, JNT, PagesData } from 'config/constants';
 
 import {
   HeaderTabsWrapper,
@@ -14,7 +14,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged }) => {
     setFilter(filter);
     await loansFetchData({
       skip: 0,
-      limit: 10000,
+      limit: 100,
       filter: {
         type: filter //ETH/JNT keep these in constant file
       }
@@ -28,7 +28,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged }) => {
             onClick={() => loanListing(null)}
             id='all-markets-tab'
             active={filterValue === null}
-            color={ColorData[pathChanged].secondaryColor}
+            color={PagesData[pathChanged].secondaryColor}
           >
             All Markets
           </HeaderTabBtn>
@@ -36,7 +36,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged }) => {
             onClick={() => loanListing(ETH)}
             id='eth markets'
             active={filterValue === ETH}
-            color={ColorData[pathChanged].secondaryColor}
+            color={PagesData[pathChanged].secondaryColor}
           >
             Eth Markets
           </HeaderTabBtn>
@@ -44,7 +44,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged }) => {
             onClick={() => loanListing(JNT)}
             id='jnt markets'
             active={filterValue === JNT}
-            color={ColorData[pathChanged].secondaryColor}
+            color={PagesData[pathChanged].secondaryColor}
           >
             Jnt Markets
           </HeaderTabBtn>
