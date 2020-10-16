@@ -40,6 +40,7 @@ const TableContentCard = styled.div`
 
 const TableCard = ({
   loan: {
+    borrowerAddress,
     status,
     contractAddress,
     remainingLoan,
@@ -63,11 +64,7 @@ const TableCard = ({
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  let disableBtn =
-    status === statuses['Foreclosed'].status ||
-    status === statuses['Early_closing'].status ||
-    status === statuses['Closed'].status ||
-    status === statuses['Cancelled'].status;
+  const [disableBtn, setDisableBtn] = useState(false);
   const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
@@ -77,7 +74,16 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  useEffect(() => { }, [onboard, address, network, balance, wallet, web3]);
+  useEffect(() => {
+    if (
+      status === statuses['Foreclosed'].status ||
+      status === statuses['Closed'].status ||
+      status === statuses['Cancelled'].status
+    )
+      setDisableBtn(true);
+    if (path === 'borrow' && borrowerAddress !== address) setDisableBtn(true);
+
+  }, [onboard, address, network, balance, wallet, web3, status, path, borrowerAddress]);
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
@@ -461,13 +467,13 @@ const TableCard = ({
             <button
               style={
                 ({ background: PagesData[path].btnColor },
-                  path === 'trade' || disableBtn
-                    ? {
+                path === 'trade' || disableBtn
+                  ? {
                       backgroundColor: '#cccccc',
                       color: '#666666',
                       cursor: 'default'
                     }
-                    : {})
+                  : {})
               }
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
@@ -477,10 +483,10 @@ const TableCard = ({
                   path === 'borrow'
                     ? Adjust
                     : path === 'earn'
-                      ? AdjustEarn
-                      : path === 'trade'
-                        ? AdjustTrade
-                        : Adjust
+                    ? AdjustEarn
+                    : path === 'trade'
+                    ? AdjustTrade
+                    : Adjust
                 }
                 alt=''
               />
