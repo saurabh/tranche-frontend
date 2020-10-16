@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm } from 'redux-form';
+import { Form, Field, reduxForm, getFormValues } from 'redux-form';
 import { pairData } from 'config/constants';
-import { calcMinCollateralAmount } from 'services/contractMethods';
+import { calcMinCollateralAmount, getPairDetails, toWei } from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
+import { safeSubtract } from 'utils/helperFunctions';
 import { validate, asyncValidate } from 'utils/validations';
 import selectUp from 'assets/images/svg/selectUp.svg';
 import selectDown from 'assets/images/svg/selectDown.svg';
@@ -57,11 +58,13 @@ let NewLoan = ({
   pristine,
   submitting,
   createNewLoan,
+  formValues
 }) => {
   const [pair, setPair] = useState(0);
   const [selectedCurrency, selectCurrency] = useState(pairData[0].key);
   const [currencySelect, toggleCurrency] = useState(false);
   const [minCollateralAmount, setminCollateralAmount] = useState(0);
+  const [collateralRatio, setCollateralRatio] = useState(0);
   const [RPB, SETRPB] = useState(0);
 
   const inputChange = (val) => {
@@ -98,6 +101,30 @@ let NewLoan = ({
     500
   );
 
+  const [debounceCalcCollateralRatio] = useDebouncedCallback(
+    async (borrowedAskAmount, collateralAmount) => { 
+      try {
+        borrowedAskAmount = toWei(borrowedAskAmount);
+        collateralAmount = toWei(collateralAmount);
+        let newCollRatio;
+        const result = await getPairDetails(pair);
+        let { baseDecimals, quoteDecimals, pairValue, pairDecimals } = result;
+        if (baseDecimals >= quoteDecimals) {
+          let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
+          newCollRatio = ((((collateralAmount * pairValue) / (borrowedAskAmount)) * 100) / 10 ** pairDecimals) / 10 ** diffBaseQuoteDecimals
+          setCollateralRatio(newCollRatio);
+        } else {
+          let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
+          newCollRatio = ((((collateralAmount * pairValue) / (borrowedAskAmount)) * 100) / 10 ** pairDecimals) * 10 ** diffBaseQuoteDecimals
+          setCollateralRatio(newCollRatio);
+        }
+      } catch (error) {
+        console.error(error)
+      }
+     },
+    500
+  );
+
   const calculateRPB = (APY) => {
     if (APY > 0) {
       let rpb =
@@ -121,7 +148,7 @@ let NewLoan = ({
                     component={InputField}
                     className='ModalFormInputNewLoan'
                     name='borrowedAskAmount'
-                    onChange={(event, newValue) =>
+                    onChange={(e, newValue) =>
                       debounceCalcMinCollateralAmount(pair, newValue)
                     }
                     type='number'
@@ -136,7 +163,7 @@ let NewLoan = ({
                     name='pairId'
                     component='input'
                     id='selectPair'
-                    onChange={(event, newValue) => setPair(+newValue)}
+                    onChange={(e, newValue) => setPair(+newValue)}
                     style={{ display: 'none' }}
                   />
                   <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
@@ -171,7 +198,7 @@ let NewLoan = ({
               </NewLoanFormInput>
               <h2>
                 MINIMUM COLLATERAL: <span>{minCollateralAmount}</span> ETH
-            </h2>
+              </h2>
             </ModalFormGrpNewLoan>
 
             <ModalFormGrp currency={searchArr(selectedCurrency).collateral}>
@@ -185,17 +212,18 @@ let NewLoan = ({
                   `${'ModalFormInput' + searchArr(selectedCurrency).collateral}`
                 }
                 name='collateralAmount'
+                onChange={(e, newValue) => debounceCalcCollateralRatio(formValues.borrowedAskAmount, newValue)}
                 type='number'
                 step='0.0001'
                 id='COLLATERALIZINGInput'
                 background={searchArr(selectedCurrency).colIcon}
               />
               <h2>
-                COLLATERALIZATION RATIO: <span>250</span>%
+                COLLATERALIZATION RATIO: <span>{collateralRatio}</span>%
             </h2>
             </ModalFormGrp>
 
-            {/* <ModalFormGrpNewLoan>
+            <ModalFormGrpNewLoan>
               <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
               <Field
                 name='apy'
@@ -204,12 +232,12 @@ let NewLoan = ({
                 type='number'
                 step='0.0001'
                 id='LOAN APYInput'
-                onChange={(e) => calculateRPB(e.target.value)}
+                onChange={(e, newValue) => calculateRPB(newValue)}
               />
               <h2>
                 RPB: <span>{RPB}</span>
               </h2>
-            </ModalFormGrpNewLoan> */}
+            </ModalFormGrpNewLoan>
           </FormInputsWrapper>
           <ModalFormSubmit>
             <BtnGrpLoanModal>
@@ -229,8 +257,9 @@ NewLoan = reduxForm({
   asyncChangeFields: ['borrowedAskAmount', 'collateralAmount']
 })(NewLoan);
 
-NewLoan = connect(() => ({
-  initialValues: { pairId: pairData[0].value }
+NewLoan = connect(state => ({
+  initialValues: { pairId: pairData[0].value },
+  formValues: getFormValues('newLoan')(state),
 }))(NewLoan);
 
 export { NewLoan };

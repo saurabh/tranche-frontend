@@ -5,6 +5,8 @@ const provider = new Web3.providers.HttpProvider(infuraProviderUrl);
 const web3 = new Web3(provider);
 const JFactory = JFactorySetup(web3);
 
+export const toWei = web3.utils.toWei;
+
 export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
     const result = await JFactory.methods
@@ -26,3 +28,12 @@ export const calcMaxBorrowedAmount = async (pairId, collAmount) => {
     console.error(error);
   }
 };
+
+export const getPairDetails = async (pairId) => {
+  try {
+    const result = await JFactory.methods.pairs(pairId).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
