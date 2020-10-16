@@ -64,7 +64,11 @@ const TableCard = ({
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
-  const [disableBtn, setDisableBtn] = useState(false);
+  let disableBtn =
+    (path === 'borrow' && borrowerAddress !== address) ||
+    status === statuses['Foreclosed'].status ||
+    status === statuses['Closed'].status ||
+    status === statuses['Cancelled'].status;
   const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
@@ -73,17 +77,7 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
-  useEffect(() => {
-    (path === 'borrow' && borrowerAddress !== address) ||
-    status === statuses['Foreclosed'].status ||
-    status === statuses['Closed'].status ||
-    status === statuses['Cancelled'].status
-      ? setDisableBtn(true)
-      : setDisableBtn(false);
-    
-  }, [onboard, address, network, balance, wallet, web3, status, path, borrowerAddress]);
-
+  
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
   const calcNewCollateralRatio = async (amount) => {
