@@ -104,6 +104,7 @@ let NewLoan = ({
   const [debounceCalcCollateralRatio] = useDebouncedCallback(
     async (borrowedAskAmount, collateralAmount) => { 
       try {
+        if (!borrowedAskAmount) return;
         borrowedAskAmount = toWei(borrowedAskAmount);
         collateralAmount = toWei(collateralAmount);
         let newCollRatio;
