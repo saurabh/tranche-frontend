@@ -76,13 +76,12 @@ const TableCard = ({
 
   useEffect(() => {
     if (
+      (path === 'borrow' && borrowerAddress !== address) ||
       status === statuses['Foreclosed'].status ||
       status === statuses['Closed'].status ||
       status === statuses['Cancelled'].status
     )
       setDisableBtn(true);
-    if (path === 'borrow' && borrowerAddress !== address) setDisableBtn(true);
-
   }, [onboard, address, network, balance, wallet, web3, status, path, borrowerAddress]);
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
