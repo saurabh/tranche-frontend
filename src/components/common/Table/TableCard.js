@@ -41,6 +41,7 @@ const TableContentCard = styled.div`
 const TableCard = ({
   loan: {
     borrowerAddress,
+    lenderAddress,
     status,
     contractAddress,
     remainingLoan,
@@ -66,6 +67,7 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
+    (path === 'earn' && status === statuses['Active'].status && lenderAddress !== address) ||
     status === statuses['Foreclosed'].status ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
@@ -77,7 +79,7 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-  
+
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
   const calcNewCollateralRatio = async (amount) => {
