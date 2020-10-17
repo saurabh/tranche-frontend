@@ -3,9 +3,9 @@ import { postRequest } from 'services/axios';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import TableMoreRow from './TableMoreRow'
+import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
-import ReactLoading from "react-loading";
+import ReactLoading from 'react-loading';
 import {
   setAddress,
   setNetwork,
@@ -18,7 +18,7 @@ import { statuses, PagesData, pairData, etherScanUrl } from 'config/constants';
 import styled from 'styled-components';
 import { loansFetchData } from 'redux/actions/loans';
 import LoanModal from '../Modals/LoanModal';
-import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets'
+import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -68,13 +68,17 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const toWei = web3.utils.toWei;
+  let isLender = lenderAddress === address;
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
-    (path === 'earn' && status === statuses['Active'].status && lenderAddress !== address) ||
+    (path === 'earn' &&
+      (status === statuses['Active'].status ||
+        status === statuses['Early_closing'].status ||
+        status === statuses['Closing'].status) &&
+      lenderAddress !== address) ||
     status === statuses['Foreclosed'].status ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
-  let isLender = lenderAddress === address;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -378,7 +382,7 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
-    getTransaction(hash)
+    getTransaction(hash);
   };
 
   const remainingToggle = (hover) => {
@@ -391,7 +395,8 @@ const TableCard = ({
     try {
       const { data: result } = await postRequest(
         transactionUrl,
-        { data: {
+        {
+          data: {
             skip: 0,
             limit: 10,
             filter: {
@@ -403,11 +408,11 @@ const TableCard = ({
         true
       );
       setIsLoading(false);
-      setMoreList(result.result.list)
+      setMoreList(result.result.list);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <TableContentCardWrapper>
@@ -536,29 +541,40 @@ const TableCard = ({
           />
         </div>
       </TableContentCard>
-       <div
-        className={
-          "table-card-more " +
-          (moreCardToggle ? "table-more-card-toggle" : "")
-        }
+      <div
+        className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
       >
-        <div className="table-card-more-content">
-          {
-            isLoading ? <ReactLoading className="TableMoreLoading" type={"bubbles"} color="rgba(56,56,56,0.3)" /> :
-            moreList && moreList.map(i=>{
-              return <TableMoreRow ethImg={ETH} arrow="downArrow" ratio={i.collateralRatio} hash={addrShortener(i.transactionHash)} collateralTypeName={collateralTypeName} interest={i.interestPaid}/>
+        <div className='table-card-more-content'>
+          {isLoading ? (
+            <ReactLoading
+              className='TableMoreLoading'
+              type={'bubbles'}
+              color='rgba(56,56,56,0.3)'
+            />
+          ) : (
+            moreList &&
+            moreList.map((i) => {
+              return (
+                <TableMoreRow
+                  ethImg={ETH}
+                  arrow='downArrow'
+                  ratio={i.collateralRatio}
+                  hash={addrShortener(i.transactionHash)}
+                  collateralTypeName={collateralTypeName}
+                  interest={i.interestPaid}
+                />
+              );
             })
-          }
-          
+          )}
 
-         {/* <div className="more-transactions">
+          {/* <div className="more-transactions">
             <h2>
               this loan has 11 more transactions in its history.
               <a href="/">show more transactions</a>
             </h2>
           </div>*/}
         </div>
-      </div> 
+      </div>
     </TableContentCardWrapper>
   );
 };
