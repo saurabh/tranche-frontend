@@ -10,7 +10,6 @@ import {
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import { changePath } from 'redux/actions/TogglePath';
 import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
 import { PagesData } from 'config/constants';
@@ -21,33 +20,30 @@ const ConnectWallet = ({
   setBalance,
   setWalletAndWeb3,
   ethereum: { address, network, balance, wallet, web3 },
-  pathChanged
 }) => {
+  const { pathname } = useLocation();
+  const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');
+
   const onboard = initOnboard({
     address: setAddress,
     network: setNetwork,
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
+
   useEffect(() => {
-    const previouslySelectedWallet = window.localStorage.getItem(
-      'selectedWallet'
-    );
+    const previouslySelectedWallet = window.localStorage.getItem('selectedWallet');
 
     if (previouslySelectedWallet && onboard) {
       onboard.walletSelect(previouslySelectedWallet);
     }
-  }, [onboard, address, network, balance, wallet, web3]);
-  
-  const { pathname } = useLocation();
-  const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
-  useEffect(() => {
+
     const parsePath = () => {
       setPath(pathname.split('/')[1]);
     };
 
     parsePath();
-  }, [pathname]);
+  }, [onboard, address, network, balance, wallet, web3, pathname]);
 
   const handleConnect = async () => {
     await onboard.walletSelect();
@@ -57,13 +53,21 @@ const ConnectWallet = ({
   return (
     <>
       {balance < 0 ? (
-        <WalletBtn background={PagesData[path].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+        <WalletBtn
+          background={PagesData[path].secondaryColor}
+          onClick={handleConnect}
+          onKeyUp={handleConnect}
+        >
           <WalletBtnText icon={false} color={PagesData[path].color}>
             <h2>Connect</h2>
           </WalletBtnText>
         </WalletBtn>
       ) : (
-        <WalletBtn background={PagesData[path].secondaryColor} onClick={handleConnect} onKeyUp={handleConnect}>
+        <WalletBtn
+          background={PagesData[path].secondaryColor}
+          onClick={handleConnect}
+          onKeyUp={handleConnect}
+        >
           <WalletBtnIcon>
             <img src='' alt='' />
           </WalletBtnIcon>
@@ -86,7 +90,6 @@ ConnectWallet.propTypes = {
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  pathChanged: state.changePath
 });
 
 export default connect(mapStateToProps, {

@@ -7,7 +7,7 @@ export function Footer() {
         <div className="footerLinks">
           <a href="/privacy" target="_blank">Privacy</a> 
           <a href="/terms" target="_blank">Terms</a>
-          <a href="https://discord.gg/eSmYep" target="_blank">Support</a>
+          <a href="https://discord.gg/eSmYep" target="_blank" rel="noopener noreferrer">Support</a>
         </div>
       </div>
     </div>
