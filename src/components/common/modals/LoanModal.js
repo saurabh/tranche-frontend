@@ -74,6 +74,7 @@ export default function LoanModal({
   closeModal,
   path,
   status,
+  isLender,
   approveLoan,
   closeLoan,
   addCollateral,
@@ -217,6 +218,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosing'].color}
+                  disabled={!isLender}
                 >
                   Withdraw Interest
                 </ModalButton>
@@ -232,6 +234,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosed'].color}
+                  disabled={!isLender}
                 >
                   Withdraw Interest
                 </ModalButton>

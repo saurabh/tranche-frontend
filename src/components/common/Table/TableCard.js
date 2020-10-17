@@ -67,13 +67,14 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const toWei = web3.utils.toWei;
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
     (path === 'earn' && status === statuses['Active'].status && lenderAddress !== address) ||
     status === statuses['Foreclosed'].status ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
-  const toWei = web3.utils.toWei;
+  let isLender = lenderAddress === address;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -524,6 +525,7 @@ const TableCard = ({
             path={path}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
+            isLender={isLender}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}
