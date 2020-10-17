@@ -6,8 +6,7 @@ import { calcMinCollateralAmount, getPairDetails, toWei } from 'services/contrac
 import { useDebouncedCallback } from 'utils/lodash';
 import { safeSubtract } from 'utils/helperFunctions';
 import { validate, asyncValidate } from 'utils/validations';
-import selectUp from 'assets/images/svg/selectUp.svg';
-import selectDown from 'assets/images/svg/selectDown.svg';
+import { selectUp, selectDown } from 'assets';
 import {
   BtnGrpLoanModal,
   ModalAdjustForm,

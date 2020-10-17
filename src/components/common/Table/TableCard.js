@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import TableMoreRow from './TableMoreRow'
 import ETH from 'assets/images/svg/EthForm.svg';
 import ReactLoading from "react-loading";
-
 import {
   setAddress,
   setNetwork,
@@ -19,12 +18,7 @@ import { statuses, PagesData, pairData, etherScanUrl } from 'config/constants';
 import styled from 'styled-components';
 import { loansFetchData } from 'redux/actions/loans';
 import LoanModal from '../Modals/LoanModal';
-import UserImg from 'assets/images/svg/userImg.svg';
-import Star from 'assets/images/svg/Star.svg';
-import Adjust from 'assets/images/svg/adjust.svg';
-import AdjustEarn from 'assets/images/svg/adjustEarn.svg';
-import AdjustTrade from 'assets/images/svg/adjustTrade.svg';
-import LinkArrow from 'assets/images/svg/linkArrow.svg';
+import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets'
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;

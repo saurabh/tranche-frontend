@@ -10,7 +10,7 @@ import { submitValidations } from 'utils/validations';
 import { JLoanTokenDeployerAddress } from 'config/constants';
 import { pairData } from 'config/constants';
 import { ModalHeader } from './ModalComponents';
-import CloseModal from 'assets/images/svg/closeModal.svg';
+import { CloseModal } from 'assets';
 
 const AdjustPositionStyles = {
   overlay: {
