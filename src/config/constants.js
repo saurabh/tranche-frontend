@@ -97,7 +97,8 @@ export const pairData = [
 ];
 
 export const apiUri = {
-  loanList: 'loans'
+  loanList: 'loans',
+  transaction: 'loans/transaction'
 };
 
 // Filters

@@ -1,6 +1,12 @@
+import { apiUri } from 'config/constants';
+import { postRequest } from 'services/axios';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import TableMoreRow from './TableMoreRow'
+import ETH from 'assets/images/svg/EthForm.svg';
+import ReactLoading from "react-loading";
+
 import {
   setAddress,
   setNetwork,
@@ -65,6 +71,8 @@ const TableCard = ({
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
+  const [moreList, setMoreList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
     (path === 'earn' && status === statuses['Active'].status && lenderAddress !== address) ||
@@ -373,18 +381,43 @@ const TableCard = ({
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
 
-  const cardToggle = () => {
+  const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
+    getTransaction(hash)
   };
 
   const remainingToggle = (hover) => {
     setTooltipToggleRemaining(hover);
   };
 
+  const getTransaction = async (hash) => {
+    const { transaction: transactionUrl } = apiUri;
+    setIsLoading(true);
+    try {
+      const { data: result } = await postRequest(
+        transactionUrl,
+        { data: {
+            skip: 0,
+            limit: 10,
+            filter: {
+              contractAddress: hash
+            }
+          }
+        },
+        null,
+        true
+      );
+      setIsLoading(false);
+      setMoreList(result.result.list)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <TableContentCardWrapper>
       <TableContentCard
-        onClick={() => cardToggle()}
+        onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
         <div className='table-first-col table-col'>
@@ -507,24 +540,29 @@ const TableCard = ({
           />
         </div>
       </TableContentCard>
-      {/* <div
+       <div
         className={
           "table-card-more " +
           (moreCardToggle ? "table-more-card-toggle" : "")
         }
       >
         <div className="table-card-more-content">
-          <TableMoreRow ethImg={ETHGOLD} arrow="upArrow" />
-          <TableMoreRow ethImg={ETH} arrow="downArrow" />
+          {
+            isLoading ? <ReactLoading className="TableMoreLoading" type={"bubbles"} color="rgba(56,56,56,0.3)" /> :
+            moreList && moreList.map(i=>{
+              return <TableMoreRow ethImg={ETH} arrow="downArrow" ratio={i.collateralRatio} hash={addrShortener(i.transactionHash)} collateralTypeName={collateralTypeName} interest={i.interestPaid}/>
+            })
+          }
+          
 
-          <div className="more-transactions">
+         {/* <div className="more-transactions">
             <h2>
               this loan has 11 more transactions in its history.
               <a href="/">show more transactions</a>
             </h2>
-          </div>
+          </div>*/}
         </div>
-      </div> */}
+      </div> 
     </TableContentCardWrapper>
   );
 };
