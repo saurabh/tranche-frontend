@@ -91,10 +91,12 @@ const TableCard = ({
   useEffect(() => {
     const isShareholderCheck = async () => {
       try {
-        const { loanContractSetup } = searchArr(cryptoFromLenderName);
-        const JLoan = loanContractSetup(web3, contractAddress);
-        const result = await JLoan.methods.isShareHolder(address).call();
-        setIsShareholder(result);
+        if (address) {
+          const { loanContractSetup } = searchArr(cryptoFromLenderName);
+          const JLoan = loanContractSetup(web3, contractAddress);
+          const result = await JLoan.methods.isShareHolder(address).call();
+          setIsShareholder(result);
+        }
       } catch (error) {
         console.error(error);
       }
