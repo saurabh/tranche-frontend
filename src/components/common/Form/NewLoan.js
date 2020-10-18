@@ -90,7 +90,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   };
 
   const setCollateralAmount = () => {
-    change('newLoan', 'collateralAmount', +minCollateralAmount);
+    change('collateralAmount', +minCollateralAmount);
   };
 
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
