@@ -446,8 +446,6 @@ const TableCard = ({
         <div className='table-third-col table-col'>
           <div className='third-col-content second-4-col-content'>
             <h2
-              onMouseEnter={() => remainingToggle(true)}
-              onMouseLeave={() => remainingToggle(false)}
             >
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>

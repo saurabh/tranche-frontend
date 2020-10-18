@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { loansFetchData } from 'redux/actions/loans';
+import Pagination from "react-paginating";
+import { loansFetchData, changeFilter } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
@@ -17,26 +18,63 @@ const TableWrapper = styled.div`
   border-radius: 12px;
 `;
 
+const style = {
+  pageItem: {
+    fontFamily: "Roboto, sans-serif",
+    background: "transparent",
+    border: "none",
+    fontStyle: "normal",
+    fontWeight: "700",
+    fontSize: "12px",
+    letterSpacing: ".02em",
+    textRransform: "uppercase",
+    color: "#BEBEBE",
+    cursor: "pointer",
+    padding: "7px 12px",
+  },
+  pageItemActive: {
+    color: "#DADADA",
+    backgroundColor: "#FAF8FF",
+    borderColor: "#FAF8FF",
+    borderRadius: "7px",
+  },
+};
+
 const Table = ({
   HandleNewLoan,
   loansFetchData,
   loans,
   changePath,
   pathChanged,
+  filterChanged
 }) => {
   const { pathname } = useLocation();
   const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
+  const page = useRef(1);
+  const [data, setData] = useState({});
+  const [limit, setLimit] = useState(20);
+  const [pageCount, setPageCount] = useState(5);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  const loanListing = async (filter = null, p = page.current) => {
+    let currentPage = page.current;
+    if (!currentPage || currentPage === 0) {
+      currentPage = 1;
+    }
+
+    const offset = (currentPage - 1) * limit;
+    await loansFetchData({
+      skip: offset,
+      limit: limit,
+      filter: {
+        type: filterChanged //ETH/JNT keep these in constant file
+      }
+    });
+    page.current = currentPage;
+  };
 
   useEffect(() => {
-    const loanListing = async (filter = null) => {
-      await loansFetchData({
-        skip: 0,
-        limit: 100,
-        filter: {
-          type: filter //ETH/JNT keep these in constant file
-        }
-      });
-    };
     const parsePath = () => {
       setPath(pathname.split('/')[1]);
     };
@@ -45,25 +83,142 @@ const Table = ({
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [loansFetchData, pathname, changePath]);
+  }, [loansFetchData, pathname, changePath, filterChanged]);
+
+
+  const handlePageChange = (p) => {
+    page.current = p;
+    loanListing();
+  };
+
+ 
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className='container content-container'>
-      <TableWrapper>
-        <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
-        <div className='table-container'>
-          <TableHead />
-          <div className='table-content'>
-            {loans.map((loan, i) => (
-              <TableCard
-                key={i}
-                loan={loan}
-                path={pathChanged}
-              />
-            ))}
+      <div className="TableContentWrapper" style={{marginBottom: "150px"}}>
+        <TableWrapper>
+          <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
+          <div className='table-container'>
+            <TableHead />
+            <div className='table-content'>
+              
+              {loans && loans.list.map((loan, i) => (
+                <TableCard
+                  key={i}
+                  loan={loan}
+                  path={pathChanged}
+                />
+              ))}
+              
+            </div>
           </div>
-        </div>
-      </TableWrapper>
+        </TableWrapper>
+        { loans && loans.count > limit ?
+        <div className="paginationWrapper">
+          <Pagination
+                  total={loans && loans.count}
+                  limit={limit}
+                  pageCount={pageCount}
+                  currentPage={page ? parseInt(page, 10) : 1}
+                >
+
+                  {({
+                    pages,
+                    currentPage,
+                    hasNextPage,
+                    hasPreviousPage,
+                    previousPage,
+                    nextPage,
+                    totalPages,
+                    getPageItemProps,
+                  }) => (
+                    <div>
+                      <a
+                        {...getPageItemProps({
+                          pageValue: 1,
+                          onPageChange:() => handlePageChange(1),
+                          className: "first",
+                          style: style.pageItem,
+                        })}
+                      >
+                        First
+                      </a>
+
+                      {hasPreviousPage && (
+                        <a
+                          {...getPageItemProps({
+                            pageValue: previousPage,
+                            onPageChange: (previousPage) => handlePageChange(previousPage),
+                            className: "first",
+                            style: style.pageItem,
+                          })}
+                        >
+                          {"<"}
+                        </a>
+                      )}
+
+                      {pages.map((page) => {
+                        let activePage = {};
+                        if (currentPage === page) {
+                          activePage = style.pageItemActive;
+                        }
+                        return (
+                          <a
+                            {...getPageItemProps({
+                              key: page,
+                              pageValue: page,
+                              onPageChange: (page) => handlePageChange(page),
+                              className: "first",
+                              style: { ...style.pageItem, ...activePage },
+                            })}
+                          >
+                            {page}
+                          </a>
+                        );
+                      })}
+
+                      {hasNextPage && (
+                        <a
+                          {...getPageItemProps({
+                            pageValue: nextPage,
+                            onPageChange: (nextPage) => handlePageChange(nextPage),
+                            className: "first",
+                            style: style.pageItem,
+                          })}
+                        >
+                          {">"}
+                        </a>
+                      )}
+
+                      <a
+                        {...getPageItemProps({
+                          pageValue: totalPages,
+                          onPageChange: (totalPages) => handlePageChange(totalPages),
+                          className: "first",
+                          style: style.pageItem,
+                        })}
+                      >
+                        Last
+                      </a>
+                    </div>
+                  )}
+
+
+                </Pagination>
+              </div> : ""
+              }
+
+            </div>
     </div>
   );
 };
@@ -72,8 +227,9 @@ const mapStateToProps = (state) => {
   return {
     loans: state.loans,
     isLoading: state.loansIsLoading,
-    pathChanged: state.changePath
+    pathChanged: state.changePath,
+    filterChanged: state.changeFilter
   };
 };
 
-export default connect(mapStateToProps, { loansFetchData, changePath })(Table);
+export default connect(mapStateToProps, { loansFetchData, changePath, changeFilter })(Table);
