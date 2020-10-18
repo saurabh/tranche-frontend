@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -28,8 +28,6 @@ const Borrow = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
-  useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
   const handleNewLoanClick = async () => {
     const ready = await readyToTransact(wallet, onboard);
