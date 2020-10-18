@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import { loansFetchData } from 'redux/actions/loans';
-import { NewLoan } from 'components/common/Form/NewLoan';
+import NewLoan from 'components/common/Form/NewLoan';
 import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { submitValidations } from 'utils/validations';
