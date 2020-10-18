@@ -76,7 +76,6 @@ const TableCard = ({
         status === statuses['Early_closing'].status ||
         status === statuses['Closing'].status) &&
       lenderAddress !== address) ||
-    status === statuses['Foreclosed'].status ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
 
