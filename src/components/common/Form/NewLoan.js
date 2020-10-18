@@ -92,6 +92,12 @@ let NewLoan = ({
     toggleCurrency(false);
   };
 
+  const onPairChange = async (pairId, borrowedAskAmount) => {
+    setPair(pairId);
+    const result = await calcMinCollateralAmount(pairId, borrowedAskAmount)
+    setminCollateralAmount(result);
+  }
+
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     async (pair, borrowedAskAmount) => {
       const result = await calcMinCollateralAmount(pair, borrowedAskAmount)
@@ -163,7 +169,7 @@ let NewLoan = ({
                     name='pairId'
                     component='input'
                     id='selectPair'
-                    onChange={(e, newValue) => setPair(+newValue)}
+                    onChange={(e, newValue) => onPairChange(+newValue, formValues.borrowedAskAmount)}
                     style={{ display: 'none' }}
                   />
                   <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
