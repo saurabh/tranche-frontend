@@ -1,38 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { initNotify } from 'utils/services';
+import {
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3
+} from 'redux/actions/ethereum';
+import { initOnboard } from 'services/blocknative';
+import { readyToTransact } from 'utils/helperFunctions';
 import { Layout } from 'components/common';
-import JLoansFactoryConstructor from 'utils/JLoansFactoryConstructor';
+import CreateLoan from 'components/common/Modals/CreateLoan';
+import { PagesData } from 'config/constants';
+import Table from '../common/Table/Table';
+const Borrow = ({
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
+  ethereum: { address, network, balance, wallet, web3 }
+}) => {
+  const [showModal, setShowModal] = useState(false);
 
-const Borrow = ({ ethereum: { address, network, balance, wallet, web3 } }) => {
-  const [notify, setNotify] = useState(null);
+  const onboard = initOnboard({
+    address: setAddress,
+    network: setNetwork,
+    balance: setBalance,
+    wallet: setWalletAndWeb3
+  });
 
-  useEffect(() => {
-    if (web3) {
-      const JloansFactory = JLoansFactoryConstructor(web3);
-      console.log(JloansFactory.methods);
-    }
+  useEffect(() => {}, [onboard, address, network, balance, wallet, web3]);
 
-    setNotify(initNotify());
-  }, [address, network, balance, wallet, web3]);
-
-  // const createNewLoan = async () => {
-  // };
+  const handleNewLoanClick = async () => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    setShowModal(true);
+  };
 
   return (
     <Layout>
-      <h1>Borrow</h1>;
+      <Table
+        HandleNewLoan={handleNewLoanClick}
+        openModal={showModal}
+        pageType={PagesData.borrow.pageType}
+      />
+      <CreateLoan openModal={showModal} closeModal={() => setShowModal(false)} />
     </Layout>
   );
 };
 
 Borrow.propTypes = {
-  ethereum: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired,
+  setAddress: PropTypes.func.isRequired,
+  setNetwork: PropTypes.func.isRequired,
+  setBalance: PropTypes.func.isRequired,
+  setWalletAndWeb3: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum
 });
 
-export default connect(mapStateToProps, {})(Borrow);
+export default connect(mapStateToProps, {
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3
+})(Borrow);

@@ -1,148 +1,194 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { Button, Dropdown } from 'semantic-ui-react';
-import { Link as ReactRouterDomLink } from 'react-router-dom';
+import styled from 'styled-components';
 
-const Link = ({ isActive, children, ...props }) => {
-  return <ReactRouterDomLink {...props}>{children}</ReactRouterDomLink>;
-};
-
-const HeaderWrapper = styled.header`
-  display: grid;
-  grid-template-rows: 40% 50% 10%;
-  height: 39.5%;
-  width: 100%;
-  box-sizing: border-box;
-  top: 0;
-  background: ${(props) => props.color};
+const HeaderWrapper = styled.div`
+    min-height: 330px;
+    background-color: ${(props) => props.color};
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `;
-
-const NavContainer = styled.nav`
-  display: none;
-
-  @media (min-width: 768px) {
-    display: grid;
-    grid-template-columns: 10% 60% 10% 20%;
-  }
+const HeaderContent = styled.div`
+    margin: 39px 0px;
+    @media (max-width: 992px){
+        margin: 39px 0px;
+    }
+    ${({ path }) => (path === "privacy" || path === "terms") && `
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        @media (max-width: 992px){
+            transform: translate(-50%, 50%);
+        }
+    `}
 `;
-
-const NavBrand = styled(Link)`
-  grid-column: 1 / 2;
-  padding: 35px 0;
-  color: white;
+const HeaderTitle = styled.div`
+    & > h2{
+        font-weight: 500;
+        font-size: 36px;
+        line-height: 42px;
+    }
 `;
-
-const NavLinks = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: flex-end;
+const HeaderSubtitle = styled.div`
+    & > h2{
+        font-weight: 400;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        margin-top: 9px;
+        text-transform: uppercase;
+        ${({ fontSize }) => fontSize && `
+            font-size: 9px;
+        `}
+    }
+`;
   
-  @media (max-width: 768px) {
-    display: block;
-  }
+const NavbarWrapper = styled.div`
+    height: 85px;
+    position: relative;
+    @media (max-width: 992px){
+        height: auto;
+        padding: 15px 0;
+    }
+`;
+const NavbarContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    @media (max-width: 992px){
+        flex-wrap: wrap;
+    }
 `;
 
-const NavItem = styled(Link)`
-  padding: 40px 30px 5px 30px;
-  display: block;
-  text-align: center;
-  box-sizing: border-box;
-  > h3 {
-    ${(props) =>
-      props.isActive
-        ? css`
-            color: white;
-            border-bottom: 2px white solid;
-          `
-        : css`
-            color: ${(props) => props.color};
-            border-bottom: none;
-          `}
-  }
+const NavbarLinks = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 336px;
+    & > a{
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 18px;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        opacity: 0.5;
+        @media (max-width: 992px){
+            margin: 5px 0;
+        }
+    }
+    @media (max-width: 992px){
+        flex-direction: column;
+        align-items: center; 
+    }
+`;
+const HeaderTabsWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    @media (max-width: 992px){
+        flex-direction: column;
+        width: auto;
+        text-align: center;
+        margin: 26px 0;
+    }
 `;
 
-const Options = styled(Dropdown)`
-  place-self: center;
-  padding: 8px 10px;
-  color: black;
-  background: white;
-  border-radius: 5px;
+const MarketsTabsContainer = styled.div`
+    width: 384px; 
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 992px){
+        flex-direction: column;
+        width: auto;
+        text-align: center;
+    }
+`;
+const HeaderTabBtn = styled.button`
+    font-family: 'Roboto', sans-serif;
+    background-color: transparent;
+    border: none;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    padding: 0;
+    padding-bottom: 6px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    cursor: pointer;
+    opacity: 0.5;
+    border-bottom: 4px solid transparent;
+    &:focus{
+        outline: none;
+    }
+    ${({ active, color }) => active && `
+        opacity: 1;
+        border-color: ${color};
+    `}
+    @media (max-width: 992px){
+        padding: 0;
+        margin: 12px 0;
+    }
 `;
 
-const StyledButton = styled(Button)`
-  place-self: center;
-  background: white;
-  color: white;
+const WalletBtn = styled.button`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 119px;
+    height: 30px;
+    background: ${props => props.background} !important;
+    border-radius: 9px;
+    padding: 0 13px;
+    border: none;
+    cursor: pointer;
+    ${({ icon }) => !icon && `
+        justify-content: center;
+    `}
+    &:focus{
+        outline: none;
+    }
+    @media (max-width: 992px){
+        margin: 5px 0;
+    }
 `;
 
-const Banner = styled.div`
-  margin-top: 2vh;
-  color: ${(props) => props.color};
+const WalletBtnIcon = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
-const PageMenu = styled.div`
-  grid-row: 3 / 4;
-  margin-top: 2vh;
-  color: white;
+const WalletBtnText = styled.div`
+    & > h2{
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: ${props => props.color} !important;
+        margin: 0;
+    }
 `;
-
-const PageMenuContainer = styled.div`
-  display: flex;
-`;
-
-const PageMenuItem = styled.div`
-  padding: 40px 30px 5px 30px;
-  display: block;
-  text-align: center;
-  > h3 {
-    ${(props) =>
-      props.isActive
-        ? css`
-            color: white;
-            border-bottom: 2px white solid;
-          `
-        : css`
-            color: ${(props) => props.color};
-            border-bottom: none;
-          `}
-  }
-`;
-
-const MobileMenuContainer = styled.nav`
-  display: grid;
-  grid-template-columns: 15% auto 15%;
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-`;
-
-const MobileMenuIcon = styled.div`
-  grid-column: 3 / 4;
-  margin: auto 0 auto auto;
-  width: 35px;
-  min-width: 35px;
-  padding: 5px;
-  > div {
-    height: 3px;
-    background: white;
-    margin: 5px 0;
-    width: 100%;
-  }
-`;
-
+ 
 export {
   HeaderWrapper,
-  NavContainer,
-  NavLinks,
-  NavBrand,
-  NavItem,
-  Options,
-  StyledButton,
-  Banner,
-  PageMenu,
-  PageMenuContainer,
-  PageMenuItem,
-  MobileMenuContainer,
-  MobileMenuIcon
+  HeaderContent,
+  HeaderTitle,
+  HeaderSubtitle,
+  NavbarWrapper,
+  NavbarContainer,
+  NavbarLinks,
+  HeaderTabsWrapper,
+  MarketsTabsContainer,
+  HeaderTabBtn,
+  WalletBtn,
+  WalletBtnIcon,
+  WalletBtnText
 };

@@ -39,4 +39,5 @@ export const setWalletAndWeb3 = (wallet) => (dispatch) => {
     type: SET_WEB3,
     payload: web3
   });
+  window.localStorage.setItem('selectedWallet', wallet.name)
 };

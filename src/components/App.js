@@ -1,17 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { GlobalStyle } from 'components/common';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import { GlobalStyle } from "components/common";
 
 // Routes
-import Home from 'components/pages/Home';
-import Earn from 'components/pages/Earn';
-import Borrow from 'components/pages/Borrow';
-import Trade from 'components/pages/Trade';
-import NotFound from 'components/pages/NotFound';
-
+import Earn from "components/pages/Earn";
+import Borrow from "components/pages/Borrow";
+import Trade from "components/pages/Trade";
+import NotFound from "components/pages/NotFound";
+import NetworkDetector from "./common/NetworkDetector";
+import Privacy from "./pages/Privacy";
+import TermsAndConditions from "./pages/Terms&Conditions";
 // Redux
-import { Provider } from 'react-redux';
-import store from '../redux/store';
+import { Provider } from "react-redux";
+import store from "../redux/store";
+import "../App.css";
 
 const App = () => {
   return (
@@ -19,10 +26,14 @@ const App = () => {
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route exact path='/' component={Home} />
-          <Route exact path='/earn' component={Earn} />
-          <Route exact path='/borrow' component={Borrow} />
-          <Route exact path='/trade' component={Trade} />
+          <Redirect exact from="/" to="/borrow" />
+          <Route exact path="/earn" component={Earn} />
+          <Route exact path="/borrow" component={Borrow} />
+          <Route exact path="/trade" component={Trade}>
+            <Redirect to="/borrow" />
+          </Route>
+          <Route exact path="/privacy" component={Privacy} />
+          <Route exact path="/terms" component={TermsAndConditions} />
           <Route component={NotFound} />
         </Switch>
       </Router>
@@ -30,4 +41,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default NetworkDetector(App);
