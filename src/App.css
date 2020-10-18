@@ -837,6 +837,17 @@ table, th, td {
   color: #AEAEAE;
 }
 
+.paginationWrapper div{
+  display: flex;
+  align-items: center;
+  position: absolute;
+  height: 50px;
+  width: auto;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
 @media (max-width: 1200px){
   .first-col-content{
     margin-left: 5px;

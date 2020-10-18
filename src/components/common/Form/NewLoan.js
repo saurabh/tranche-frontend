@@ -128,7 +128,7 @@ let NewLoan = ({
   const calculateRPB = (APY) => {
     if (APY > 0) {
       let rpb =
-        -(100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
+        (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
       SETRPB(parseFloat(rpb).toFixed(3));
     } else {
       SETRPB(0);

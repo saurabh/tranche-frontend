@@ -1,6 +1,6 @@
 import { apiUri } from 'config/constants';
 import { postRequest } from 'services/axios';
-import { LOANS_IS_LOADING, LOANS_SUCCESS } from './constants';
+import { LOANS_IS_LOADING, LOANS_SUCCESS, CHANGE_FILTER } from './constants';
 const { loanList: loanListUrl } = apiUri;
 
 export const loansIsLoading = (bool) => (dispatch) => {
@@ -17,6 +17,13 @@ export const loansFetchSuccess = (loans) => (dispatch) => {
   });
 };
 
+export const changeFilter = (filter)  => {
+  return {
+    type: CHANGE_FILTER,
+    filter
+  };
+};
+
 export const loansFetchData = (data) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
@@ -27,7 +34,7 @@ export const loansFetchData = (data) => async (dispatch) => {
       true
     );
     dispatch(loansIsLoading(false));
-    dispatch(loansFetchSuccess(result.result.list));
+    dispatch(loansFetchSuccess(result.result));
     return result;
   } catch (error) {
     //TODO : error handling
