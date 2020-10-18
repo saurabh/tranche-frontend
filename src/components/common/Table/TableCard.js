@@ -86,12 +86,14 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
+  const searchArr = (key) => pairData.find((i) => i.key === key);
+  
   useEffect(() => {
     const isShareholderCheck = async () => {
       try {
         const { loanContractSetup } = searchArr(cryptoFromLenderName);
         const JLoan = loanContractSetup(web3, contractAddress);
-        const result = await JLoan.methods.isShareholder(address).call();
+        const result = await JLoan.methods.isShareHolder(address).call();
         setIsShareholder(result);
       } catch (error) {
         console.error(error);
@@ -100,8 +102,6 @@ const TableCard = ({
 
     isShareholderCheck();
   }, [address, web3, contractAddress, cryptoFromLenderName]);
-
-  const searchArr = (key) => pairData.find((i) => i.key === key);
 
   const calcNewCollateralRatio = async (amount) => {
     try {

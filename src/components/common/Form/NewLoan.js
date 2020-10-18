@@ -26,8 +26,6 @@ import {
   SelectChevron
 } from '../Modals/ModalComponents';
 
-console.log(change)
-
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
     <input {...input} type={type} className={className} />

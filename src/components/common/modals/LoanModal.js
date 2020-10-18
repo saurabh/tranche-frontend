@@ -221,7 +221,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosing'].color}
-                  display={!isShareholder ? 'none' : ''}
+                  style={{ display: !isShareholder ? 'none' : '' }}
                 >
                   Withdraw Interest
                 </ModalButton>
@@ -237,7 +237,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosed'].color}
-                  display={!isShareholder ? 'none' : ''}
+                  style={{ display: !isShareholder ? 'none' : '' }}
                 >
                   Withdraw Interest
                 </ModalButton>
@@ -253,7 +253,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosed'].color}
-                  display={!isShareholder ? 'none' : ''}
+                  style={{ display: !isShareholder ? 'none' : '' }}
                 >
                   Withdraw Interest
                 </ModalButton>
