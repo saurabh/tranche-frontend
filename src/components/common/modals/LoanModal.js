@@ -84,6 +84,7 @@ export default function LoanModal({
   calcNewCollateralRatio
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
+  const loanStatusPending = status === statuses['Pending'].status;
 
   const confirm = (type) => {
     confirmAlert({
@@ -153,7 +154,7 @@ export default function LoanModal({
             </ModalHeader>
             <ModalContent>
               <BtnGrpLoanModal>
-                <ModalButton onClick={() => adjustPositionToggle(true)}>
+                <ModalButton disabled={loanStatusPending} onClick={() => adjustPositionToggle(true)}>
                   Adjust Collateral
                 </ModalButton>
                 <ModalButton onClick={() => confirm('Close')}>Close Loan</ModalButton>

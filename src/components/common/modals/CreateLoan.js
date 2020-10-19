@@ -141,30 +141,15 @@ const CreateLoan = ({
   const createNewLoan = async () => {
     try {
       const tempRpbRate = 10 ** 10;
-      let {
-        pairId,
-        borrowedAskAmount,
-        collateralAmount,
-        rpbRate
-      } = form.newLoan.values;
+      let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
       // submitValidations(form.newLoan.values).then(() => {
       // }).catch(error => console.error)
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       if (pairId === searchArr(parseFloat(pairId)).value) {
-        createNewEthLoan(
-          pairId,
-          borrowedAskAmount,
-          tempRpbRate,
-          collateralAmount
-        );
+        createNewEthLoan(pairId, borrowedAskAmount, tempRpbRate, collateralAmount);
       } else {
-        createNewTokenLoan(
-          pairId,
-          borrowedAskAmount,
-          tempRpbRate,
-          collateralAmount
-        );
+        createNewTokenLoan(pairId, borrowedAskAmount, tempRpbRate, collateralAmount);
       }
       handleCloseModal();
     } catch (error) {

@@ -28,10 +28,21 @@ import {
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
-    {
-    (touched && error) ? <input {...input} type={type} style={{boxShadow: "inset 0 0 3px red"}} className={className} /> :
-    <input {...input} type={type} style={{border: "1px solid #ffffff"}} className={className} />
-    }
+    {touched && error ? (
+      <input
+        {...input}
+        type={type}
+        style={{ boxShadow: 'inset 0 0 3px red' }}
+        className={className}
+      />
+    ) : (
+      <input
+        {...input}
+        type={type}
+        style={{ border: '1px solid #ffffff' }}
+        className={className}
+      />
+    )}
     {touched && error && (
       <span
         style={{
@@ -43,9 +54,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
           fontWeight: '300',
           fontSize: '9px'
         }}
-      >
-        
-      </span>
+      ></span>
     )}
   </div>
 );
@@ -102,8 +111,6 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     500
   );
 
-  
-
   const [debounceCalcCollateralRatio] = useDebouncedCallback(
     async (borrowedAskAmount, collateralAmount) => {
       try {
@@ -137,18 +144,27 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 
   const calculateRPB = (APY) => {
     if (APY > 0) {
-      let rpb = (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
-      SETRPB(parseFloat(rpb).toFixed(3));
+      let rpb = ((((APY / 100 + 1) ^ (1 / 365)) - 1) / 5760) * 10 ** 18;
+      // let rpb = (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
+      SETRPB(parseFloat(rpb));
     } else {
       SETRPB(0);
     }
   };
 
+  // const calculateAPY = (APY) => {
+  //   if (APY > 0) {
+  //     let rpb = ((((APY / 1000000000000000000) * 5760 + 1) ^ 365) - 1) * 100;
+  //     // let rpb = (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
+  //     SETRPB(parseFloat(rpb));
+  //   } else {
+  //     SETRPB(0);
+  //   }
+  // };
+
   const handleCOLLATERALIZINGInput = () => {
-    console.log("test")
-  }
-  
-  
+    console.log('test');
+  };
 
   return (
     <div>
@@ -213,9 +229,12 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                   )}
                 </LoanCustomSelect>
               </NewLoanFormInput>
-              <h2 style={{cursor: "pointer"}}>
+              <h2 style={{ cursor: 'pointer' }}>
                 MINIMUM COLLATERAL:{' '}
-                <span style={{cursor: 'pointer'}} onClick={setCollateralAmount}>{minCollateralAmount}</span> {searchArr(selectedCurrency).collateral}
+                <span style={{ cursor: 'pointer' }} onClick={setCollateralAmount}>
+                  {minCollateralAmount}
+                </span>{' '}
+                {searchArr(selectedCurrency).collateral}
               </h2>
             </ModalFormGrpNewLoan>
 
