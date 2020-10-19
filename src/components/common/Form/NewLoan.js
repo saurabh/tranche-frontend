@@ -30,7 +30,10 @@ console.log(change)
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
-    <input {...input} type={type} className={className} />
+    {
+    (touched && error) ? <input {...input} type={type} style={{boxShadow: "inset 0 0 3px red"}} className={className} /> :
+    <input {...input} type={type} style={{border: "1px solid #ffffff"}} className={className} />
+    }
     {touched && error && (
       <span
         style={{
@@ -43,7 +46,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
           fontSize: '9px'
         }}
       >
-        {error}
+        
       </span>
     )}
   </div>
@@ -101,6 +104,8 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     500
   );
 
+  
+
   const [debounceCalcCollateralRatio] = useDebouncedCallback(
     async (borrowedAskAmount, collateralAmount) => {
       try {
@@ -140,6 +145,12 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
       SETRPB(0);
     }
   };
+
+  const handleCOLLATERALIZINGInput = () => {
+    console.log("test")
+  }
+  
+  
 
   return (
     <div>
@@ -204,7 +215,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                   )}
                 </LoanCustomSelect>
               </NewLoanFormInput>
-              <h2>
+              <h2 style={{cursor: "pointer"}}>
                 MINIMUM COLLATERAL:{' '}
                 <span style={{cursor: 'pointer'}} onClick={setCollateralAmount}>{minCollateralAmount}</span> {searchArr(selectedCurrency).collateral}
               </h2>
@@ -246,7 +257,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                 onChange={(e, newValue) => calculateRPB(newValue)}
               />
               <h2>
-                RPB: <span>{RPB}</span>
+                RPB: <span>{RPB}%</span>
               </h2>
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>

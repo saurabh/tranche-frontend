@@ -22,8 +22,11 @@ const InputField = ({
   className,
   meta: { touched, error }
 }) => (
-  <div>
-    <input {...input} placeholder={placeholder} type={type} className={className} />
+  <div>    
+    {
+    (touched && error) ? <input placeholder={placeholder} {...input} type={type} style={{boxShadow: "inset 0 0 3px red"}} className={className} /> :
+    <input {...input} type={type} style={{border: "1px solid #ffffff"}} className={className} />
+    }
     {touched && error && (
       <span
         style={{
@@ -36,7 +39,6 @@ const InputField = ({
           fontSize: '9px'
         }}
       >
-        {error}
       </span>
     )}
   </div>
@@ -47,6 +49,7 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
     (collateralAmount) => calcNewCollateralRatio(collateralAmount),
     500
   );
+  
 
   return (
     <div>
@@ -81,8 +84,6 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
           </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
-
-      
     </div>
   );
 };

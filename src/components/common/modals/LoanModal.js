@@ -26,7 +26,7 @@ const FirstCustomStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '292px',
+    maxWidth: '392px',
     width: '100%',
     //height: '326px',
     height: 'auto',
@@ -52,7 +52,7 @@ const AdjustPositionStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '292px',
+    maxWidth: '392px',
     width: '100%',
     //minHeight: '326px',
     height: 'auto',

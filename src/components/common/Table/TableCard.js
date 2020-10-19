@@ -443,7 +443,7 @@ const TableCard = ({
         </div>
 
         <div className='table-third-col table-col'>
-          <div className='third-col-content second-4-col-content'>
+          <div className='third-col-content content-3-col second-4-col-content'>
             <h2
             >
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
@@ -459,7 +459,7 @@ const TableCard = ({
           </div>
         </div>
         <div className='table-fourth-col table-col'>
-          <div className='fourth-col-content second-4-col-content'>
+          <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
               {collateralRatio}
               <span>%</span>
@@ -467,7 +467,7 @@ const TableCard = ({
           </div>
         </div>
         <div className='table-fifth-col table-col'>
-          <div className='fifth-col-content second-4-col-content'>
+          <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
               {interestPaid && addrShortener(interestPaid)}{' '}
               <span>{collateralTypeName}</span>

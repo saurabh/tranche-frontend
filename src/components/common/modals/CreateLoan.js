@@ -24,9 +24,9 @@ const AdjustPositionStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '292px',
+    maxWidth: '392px',
     width: '100%',
-    minHeight: '326px',
+    minHeight: '426px',
     height: 'auto',
     borderRadius: '16px',
     border: 'none',

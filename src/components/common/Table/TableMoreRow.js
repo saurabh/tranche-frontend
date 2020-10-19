@@ -17,10 +17,14 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}
                 {/*<h2>12.85 <span>DAI</span></h2>*/}
             </div>
             <div className="table-more-row-third table-more-second-4 table-more-row-content">
-                <h2>{ratio}%</h2>
+                <div className="table-more-row-third-content">
+                    <h2>{ratio}%</h2>
+                </div>
             </div>
             <div className="table-more-row-fourth table-more-second-4 table-more-row-content">
-                <h2>{interest} <span>{collateralTypeName}</span></h2>
+                <div className="table-more-row-fourth-content">
+                    <h2>{interest} <span>{collateralTypeName}</span></h2>
+                </div>
             </div>
             <div className="table-more-row-fifth table-more-second-4 table-more-row-content">
                 
