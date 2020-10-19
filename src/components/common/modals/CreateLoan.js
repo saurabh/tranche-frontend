@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -48,8 +48,6 @@ const CreateLoan = ({
 }) => {
   const JFactory = JFactorySetup(web3);
   const toWei = web3.utils.toWei;
-
-  useEffect(() => { }, [address, network, balance, wallet, web3]);
 
   function handleCloseModal() {
     closeModal();

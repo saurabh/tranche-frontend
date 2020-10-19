@@ -1,22 +1,21 @@
-import { apiUri } from 'config/constants';
-import { postRequest } from 'services/axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import ReactLoading from 'react-loading';
+import { postRequest } from 'services/axios';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
-import ReactLoading from 'react-loading';
 import {
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
+import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
-import { statuses, PagesData, pairData, etherScanUrl } from 'config/constants';
-import styled from 'styled-components';
-import { loansFetchData } from 'redux/actions/loans';
+import { statuses, PagesData, pairData, etherScanUrl, apiUri } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 
@@ -67,15 +66,16 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isShareholder, setIsShareholder] = useState(false);
   const toWei = web3.utils.toWei;
-  let isLender = lenderAddress === address;
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
     (path === 'earn' &&
+      isShareholder &&
       (status === statuses['Active'].status ||
         status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status) &&
-      lenderAddress !== address) ||
+        status === statuses['Foreclosed'].status ||
+        status === statuses['Closing'].status)) ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
 
@@ -87,6 +87,23 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
+  
+  useEffect(() => {
+    const isShareholderCheck = async () => {
+      try {
+        if (address) {
+          const { loanContractSetup } = searchArr(cryptoFromLenderName);
+          const JLoan = loanContractSetup(web3, contractAddress);
+          const result = await JLoan.methods.isShareHolder(address).call();
+          setIsShareholder(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    isShareholderCheck();
+  }, [address, web3, contractAddress, cryptoFromLenderName]);
 
   const calcNewCollateralRatio = async (amount) => {
     try {
@@ -527,7 +544,7 @@ const TableCard = ({
             path={path}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
-            isLender={isLender}
+            isShareholder={isShareholder}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}
