@@ -1,4 +1,7 @@
 import React from "react";
+import { LinkArrow } from 'assets';
+import {etherScanUrl } from 'config/constants';
+import { addrShortener } from 'utils';
 
 const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}) => {
     return (
@@ -10,7 +13,14 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}
                 </div>*/}
                 <div className="table-more-row-first-content">
                    {/* <h2>apr 15, 2020 - 1:53 pm</h2>*/}
-                    <h2>{hash}</h2>
+                    <h2>{addrShortener(hash)}</h2>
+                    <a
+                        href={etherScanUrl + hash + '/#internaltx'}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
+                    <img src={LinkArrow} alt='' />
+                    </a>
                 </div>
             </div>
             <div className="table-more-row-second table-more-second-4 table-more-row-content">

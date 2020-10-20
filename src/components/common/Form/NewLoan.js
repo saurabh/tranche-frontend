@@ -255,7 +255,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
               </h2>
             </ModalFormGrp>
 
-            <ModalFormGrpNewLoan>
+            <ModalFormGrpNewLoan placeholder="%">
               <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
               <Field
                 name='apy'

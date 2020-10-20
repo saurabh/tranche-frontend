@@ -28,7 +28,20 @@ const ModalContent = styled.div`
   align-items: center;
   justify-content: center;
 `
-
+const ModalContentDetails = styled.div`
+  & > div {
+    & > h2 {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #3F3F3F;
+      text-transform: uppercase;
+      & > span{
+        font-weight: 700;
+      }
+    }
+  }
+`
 const BtnGrpLoanModal = styled.div`
   display: flex;
   flex-direction: column;
@@ -166,6 +179,7 @@ const ModalFormGrp = styled.div`
 
 
 const ModalFormGrpNewLoan = styled.div`
+  position: relative;
   & > h2{
     font-style: normal;
     font-weight: normal;
@@ -174,6 +188,21 @@ const ModalFormGrpNewLoan = styled.div`
     color: #B9B9B9;
     margin: 6px 0 0 0;
   }
+  ${({ placeholder }) => placeholder === '%' && `
+    &:after{
+      content: '%';
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #39295A;
+      opacity: 0.1;
+      position: absolute;
+      right: 39px;
+      top: 27px;
+    }  
+  `}
 `
 const NewLoanFormInput = styled.div`
   position: relative;
@@ -402,6 +431,7 @@ const SelectChevron = styled.span`
 export {
     ModalHeader, 
     ModalContent,
+    ModalContentDetails,
     BtnGrpLoanModal, 
     ModalButton, 
     ConfirmAlertWrapper, 

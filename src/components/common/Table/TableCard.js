@@ -572,6 +572,8 @@ const TableCard = ({
           <LoanModal
             status={status}
             path={path}
+            interestPaid={interestPaid}
+            collateralTypeName={collateralTypeName}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             isShareholder={isShareholder}
@@ -604,7 +606,7 @@ const TableCard = ({
                   ethImg={ETH}
                   arrow='downArrow'
                   ratio={i.collateralRatio}
-                  hash={addrShortener(i.transactionHash)}
+                  hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
                 />
