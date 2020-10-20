@@ -14,7 +14,7 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
@@ -502,7 +502,7 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {interestPaid && addrShortener(interestPaid)}{' '}
+              {interestPaid && valShortner(interestPaid)}{' '}
               <span>{collateralTypeName}</span>
             </h2>
           </div>
@@ -516,7 +516,7 @@ const TableCard = ({
                 backgroundColor: Object.values(searchObj(status))[0].background
               }}
             >
-              {statusShortner(Object.values(searchObj(status))[0].key)}
+              {valShortner(Object.values(searchObj(status))[0].key)}
             </h2>
           </div>
         </div>
