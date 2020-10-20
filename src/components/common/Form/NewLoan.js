@@ -262,7 +262,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
               </h2>
             </ModalFormGrp>
 
-            <ModalFormGrpNewLoan>
+            <ModalFormGrpNewLoan placeholder="%">
               <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
               <Field
                 name='apy'
@@ -274,7 +274,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                 onChange={(e, newValue) => calculateRPB(newValue)}
               />
               <h2>
-                RPB: <span>{RPB}%</span>
+                RPB: <span>{RPB}</span>
               </h2>
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
