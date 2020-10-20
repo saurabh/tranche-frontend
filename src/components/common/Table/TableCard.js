@@ -67,6 +67,7 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
+  const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
@@ -87,7 +88,7 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  
+
   useEffect(() => {
     const isShareholderCheck = async () => {
       try {
@@ -101,9 +102,39 @@ const TableCard = ({
         console.error(error);
       }
     };
-
+   
     isShareholderCheck();
-  }, [address, web3, contractAddress, cryptoFromLenderName]);
+  }, [address, contractAddress, cryptoFromLenderName, web3]);
+
+  // useEffect(() => {
+  //   const getAccruedInterest = async () => {
+  //     try {
+  //       const { loanContractSetup } = searchArr(cryptoFromLenderName);
+  //       const JLoan = loanContractSetup(web3, contractAddress);
+  //       console.log(JLoan.methods)
+  //       const result = await JLoan.methods
+  //         .getAccruedInterests()
+  //         .call()
+  //         .on('transactionHash', (hash) => {
+  //           notify.hash(hash);
+  //         })
+  //         .on('receipt', async () => {
+  //           await loansFetchData({
+  //             skip: 0,
+  //             limit: 100,
+  //             filter: {
+  //               type: null
+  //             }
+  //           });
+  //         });
+  //       setAccruedInterest(result);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   getAccruedInterest();
+  // }, [contractAddress, cryptoFromLenderName, loansFetchData, notify, web3])
 
   const calcNewCollateralRatio = async (amount) => {
     try {
@@ -461,8 +492,7 @@ const TableCard = ({
 
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
-            <h2
-            >
+            <h2>
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
@@ -547,6 +577,7 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             isShareholder={isShareholder}
+            accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}

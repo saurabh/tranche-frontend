@@ -99,10 +99,6 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     setminCollateralAmount(result);
   };
 
-  const setCollateralAmount = () => {
-    change('collateralAmount', minCollateralAmount);
-  };
-
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     async (pair, borrowedAskAmount) => {
       const result = await calcMinCollateralAmount(pair, borrowedAskAmount);
@@ -111,65 +107,59 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     500
   );
 
-  const [debounceCalcCollateralRatio] = useDebouncedCallback(
-    async (borrowedAskAmount, collateralAmount) => {
-      try {
-        if (!borrowedAskAmount) return;
-        borrowedAskAmount = toWei(borrowedAskAmount);
-        collateralAmount = toWei(collateralAmount);
-        let newCollRatio;
-        const result = await getPairDetails(pair);
-        let { baseDecimals, quoteDecimals, pairValue, pairDecimals } = result;
-        if (baseDecimals >= quoteDecimals) {
-          let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
-          newCollRatio =
-            (((collateralAmount * pairValue) / borrowedAskAmount) * 100) /
-            10 ** pairDecimals /
-            10 ** diffBaseQuoteDecimals;
-          setCollateralRatio(newCollRatio);
-        } else {
-          let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
-          newCollRatio =
-            ((((collateralAmount * pairValue) / borrowedAskAmount) * 100) /
-              10 ** pairDecimals) *
-            10 ** diffBaseQuoteDecimals;
-          setCollateralRatio(newCollRatio);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    500
-  );
+  const setCollateralAmount = (borrowedAskAmount) => {
+    change('collateralAmount', minCollateralAmount);
+    calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
+  };
 
-  const calculateRPB = (APY) => {
-    if (APY > 0) {
-      let rpb = ((((APY / 100 + 1) ^ (1 / 365)) - 1) / 5760) * 10 ** 18;
+  const calcCollateralRatio = async (borrowedAskAmount, collateralAmount) => {
+    try {
+      if (!borrowedAskAmount) return;
+      borrowedAskAmount = toWei(borrowedAskAmount);
+      collateralAmount = toWei(collateralAmount);
+      let newCollRatio;
+      const result = await getPairDetails(pair);
+      let { baseDecimals, quoteDecimals, pairValue, pairDecimals } = result;
+      let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
+      if (baseDecimals >= quoteDecimals) {
+        newCollRatio =
+          (((collateralAmount * pairValue) / borrowedAskAmount) * 100) /
+          10 ** pairDecimals /
+          10 ** diffBaseQuoteDecimals;
+        setCollateralRatio(newCollRatio);
+      } else {
+        newCollRatio =
+          ((((collateralAmount * pairValue) / borrowedAskAmount) * 100) /
+            10 ** pairDecimals) *
+          10 ** diffBaseQuoteDecimals;
+        setCollateralRatio(newCollRatio);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const calculateRPB = async (amount, APY) => {
+    if (amount && APY > 0) {
+      let blocksPerYear = 2372500;
+      console.log(amount)
+      console.log(typeof amount)
+      const result = await getPairDetails(pair);
+      let { baseDecimals, quoteDecimals, pairValue, pairDecimals } = result;
+      let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
+      // let rpb = ((((APY / 100 + 1) ^ (1 / 365)) - 1) / 5760) * 10 ** 18;
       // let rpb = (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
+      let rpb = (toWei(amount) * APY) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
       SETRPB(parseFloat(rpb));
     } else {
       SETRPB(0);
     }
   };
 
-  // const calculateAPY = (APY) => {
-  //   if (APY > 0) {
-  //     let rpb = ((((APY / 1000000000000000000) * 5760 + 1) ^ 365) - 1) * 100;
-  //     // let rpb = (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
-  //     SETRPB(parseFloat(rpb));
-  //   } else {
-  //     SETRPB(0);
-  //   }
-  // };
-
-  const handleCOLLATERALIZINGInput = () => {
-    console.log('test');
-  };
-
   return (
     <div>
       <ModalAdjustForm>
-        <Form component={ModalFormWrapper} onSubmit={createNewLoan}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => createNewLoan(e)}>
           <FormInputsWrapper>
             <ModalFormGrpNewLoan>
               <NewLoanFormInput>
@@ -250,7 +240,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                 }
                 name='collateralAmount'
                 onChange={(e, newValue) =>
-                  debounceCalcCollateralRatio(formValues.borrowedAskAmount, newValue)
+                  calcCollateralRatio(formValues.borrowedAskAmount, newValue)
                 }
                 type='number'
                 step='0.0001'
@@ -269,9 +259,11 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                 component={InputField}
                 className='ModalFormInputAPY'
                 type='number'
-                step='0.0001'
+                // step='0.0001'
                 id='LOAN APYInput'
-                onChange={(e, newValue) => calculateRPB(newValue)}
+                onChange={(e, newValue) =>
+                  calculateRPB(formValues.borrowedAskAmount, newValue)
+                }
               />
               <h2>
                 RPB: <span>{RPB}</span>

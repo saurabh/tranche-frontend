@@ -76,6 +76,7 @@ export default function LoanModal({
   path,
   status,
   isShareholder,
+  accruedInterest,
   approveLoan,
   closeLoan,
   addCollateral,
@@ -88,6 +89,8 @@ export default function LoanModal({
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
+
+  accruedInterest !== 0 && console.log(accruedInterest);
 
   const confirm = (type) => {
     confirmAlert({
@@ -157,7 +160,10 @@ export default function LoanModal({
             </ModalHeader>
             <ModalContent>
               <BtnGrpLoanModal>
-                <ModalButton disabled={loanStatusPending} onClick={() => adjustPositionToggle(true)}>
+                <ModalButton
+                  disabled={loanStatusPending}
+                  onClick={() => adjustPositionToggle(true)}
+                >
                   Adjust Collateral
                 </ModalButton>
                 <ModalButton onClick={() => confirm('Close')}>Close Loan</ModalButton>
