@@ -35,7 +35,15 @@ html{
   opacity: 1;
   height: auto;
 }
-
+.remaining-title-content{
+  max-width: 64px;
+}
+.ratio-title-content{
+  max-width: 33px;
+}
+.interest-paid-title-content{
+  max-width: 85px;
+}
 .table-first-col{
   display: flex;
   align-items: center;
