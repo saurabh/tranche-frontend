@@ -440,7 +440,6 @@ const TableCard = ({
         true
       );
       setIsLoading(false);
-      console.log(result.result.list)
       setMoreList(result.result.list);
     } catch (error) {
       console.log(error);
