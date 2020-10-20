@@ -37,13 +37,15 @@ const ConnectWallet = ({
     if (previouslySelectedWallet && onboard) {
       onboard.walletSelect(previouslySelectedWallet);
     }
+  }, [onboard]);
 
+  useEffect(() => {
     const parsePath = () => {
       setPath(pathname.split('/')[1]);
     };
 
     parsePath();
-  }, [onboard, address, network, balance, wallet, web3, pathname]);
+  }, [pathname])
 
   const handleConnect = async () => {
     await onboard.walletSelect();

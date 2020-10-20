@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -24,9 +24,9 @@ const AdjustPositionStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '292px',
+    maxWidth: '392px',
     width: '100%',
-    minHeight: '326px',
+    minHeight: '426px',
     height: 'auto',
     borderRadius: '16px',
     border: 'none',
@@ -48,8 +48,6 @@ const CreateLoan = ({
 }) => {
   const JFactory = JFactorySetup(web3);
   const toWei = web3.utils.toWei;
-
-  useEffect(() => { }, [address, network, balance, wallet, web3]);
 
   function handleCloseModal() {
     closeModal();
@@ -143,30 +141,15 @@ const CreateLoan = ({
   const createNewLoan = async () => {
     try {
       const tempRpbRate = 10 ** 10;
-      let {
-        pairId,
-        borrowedAskAmount,
-        collateralAmount,
-        rpbRate
-      } = form.newLoan.values;
+      let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
       // submitValidations(form.newLoan.values).then(() => {
       // }).catch(error => console.error)
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       if (pairId === searchArr(parseFloat(pairId)).value) {
-        createNewEthLoan(
-          pairId,
-          borrowedAskAmount,
-          tempRpbRate,
-          collateralAmount
-        );
+        createNewEthLoan(pairId, borrowedAskAmount, tempRpbRate, collateralAmount);
       } else {
-        createNewTokenLoan(
-          pairId,
-          borrowedAskAmount,
-          tempRpbRate,
-          collateralAmount
-        );
+        createNewTokenLoan(pairId, borrowedAskAmount, tempRpbRate, collateralAmount);
       }
       handleCloseModal();
     } catch (error) {

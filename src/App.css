@@ -87,6 +87,9 @@ html{
   width: 139px;
   position: relative;
 }
+.third-col-content{
+  max-width: 64px;
+}
 .table-tool-tip{
   position: absolute;
   width: 160%;
@@ -119,11 +122,20 @@ html{
 .table-fourth-col{
   width: 100px;
 }
+.fourth-col-content{
+  max-width: 33px;
+}
 
 .table-fifth-col{
   width: 136px;
 }
+.fifth-col-content{
+  max-width: 84px;
+}
 
+.content-3-col h2{
+  text-align: right;
+}
 .table-sixth-col{
   width: 90px;
 }
@@ -242,11 +254,29 @@ html{
 .table-more-row-third{
   width: 100px;
 }
+
+.table-more-row-third-content{
+  max-width: 33px;
+}
+.table-more-row-third-content h2{
+  text-align: right;
+}
+
 .table-more-row-fourth{
   width: 136px;
 }
+
+.table-more-row-fourth-content{
+  max-width: 84px;
+}
+.table-more-row-fourth-content h2{
+  text-align: right;
+}
 .table-more-row-fifth{
   width: 109px;
+}
+.table-more-row-fifth-content{
+  max-width: 84px;
 }
 .table-more-row-sixth{
   width: 90px;
@@ -504,7 +534,7 @@ html{
   height: 32px;
   font-style: normal;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -573,10 +603,10 @@ html{
   border-radius: 4px;
   width: 100%;
   height: 32px;
-  max-width: 120px;
+  max-width: 220px;
   font-style: normal;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -630,7 +660,7 @@ html{
   position: relative;
 }
 .SelectCurrencyView div{
-  width: 88px;
+  width: 100px;
   height: 32px;
   background: #ffffff;
   display: flex;
@@ -674,7 +704,7 @@ html{
 
 
 .SelectCurrencyOption button{
-  width: 88px;
+  width: 100px;
   height: 32px;
   background: #ffffff;
   font-style: normal;
@@ -715,6 +745,7 @@ html{
   justify-content: space-between;
   cursor: pointer;
 }
+
 
 
 .internet-notification-wrapper{
