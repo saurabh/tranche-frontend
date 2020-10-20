@@ -19,6 +19,8 @@ import Star from 'assets/images/svg/Star.svg';
 import USDC from 'assets/images/svg/usdc.svg';
 import UserIcon from 'assets/images/svg/UserIcon.svg';
 import UserImg from 'assets/images/svg/userImg.svg';
+import downChevron from 'assets/images/svg/downChevron.svg';
+import upChevron from 'assets/images/svg/upChevron.svg';
 
 export {
   Adjust,
@@ -41,5 +43,7 @@ export {
   Star,
   USDC,
   UserIcon,
-  UserImg
+  UserImg,
+  downChevron,
+  upChevron
 };

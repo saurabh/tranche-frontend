@@ -229,9 +229,9 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                   )}
                 </LoanCustomSelect>
               </NewLoanFormInput>
-              <h2 style={{ cursor: 'pointer' }}>
+              <h2 style={{ cursor: 'pointer' }} onClick={setCollateralAmount}>
                 MINIMUM COLLATERAL:{' '}
-                <span style={{ cursor: 'pointer' }} onClick={setCollateralAmount}>
+                <span style={{ cursor: 'pointer' }}>
                   {minCollateralAmount}
                 </span>{' '}
                 {searchArr(selectedCurrency).collateral}
