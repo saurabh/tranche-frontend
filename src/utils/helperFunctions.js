@@ -12,7 +12,7 @@ export const readyToTransact = async (wallet, onboard) => {
 };
 
 export const addrShortener = (addr) => {
-  if (addr.length > 4) {
+  if (addr.length > 5) {
     return ReactHtmlParser(
       addr.substring(0, 5) +
         '...' +
@@ -21,10 +21,15 @@ export const addrShortener = (addr) => {
   } else return 'Connect';
 };
 
-export const statusShortner = (status) => {
-  return ReactHtmlParser(
-    status.substring(0, 12) + (status.length >= 12 ? '.' : '')
-  );
+export const valShortner = (val) => {
+  if(typeof val === "string"){
+    return ReactHtmlParser(
+      val.substring(0, 12) + (val.length >= 12 ? '.' : '')
+    );
+  } else if(typeof val === "number"){
+    return val;
+  }
+  
 };
 
 // Big Number Functions
