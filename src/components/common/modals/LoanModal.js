@@ -8,6 +8,7 @@ import { statuses, actionTypes } from 'config/constants';
 import {
   ModalHeader,
   ModalContent,
+  ModalContentDetails,
   BtnGrpLoanModal,
   ModalButton,
   ConfirmAlertWrapper,
@@ -75,13 +76,16 @@ export default function LoanModal({
   path,
   status,
   isShareholder,
+  accruedInterest,
   approveLoan,
   closeLoan,
   addCollateral,
   withdrawInterest,
   forecloseLoan,
   newCollateralRatio,
-  calcNewCollateralRatio
+  calcNewCollateralRatio,
+  interestPaid,
+  collateralTypeName
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
@@ -92,6 +96,9 @@ export default function LoanModal({
         return (
           <ConfirmAlertWrapper>
             <h2>{actionTypes[type].confirmationText}</h2>
+            {type === 'WithdrawInterest' && (
+              <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
+            )}
             <ConfirmAlertBtnWrapper>
               <ModalButton onClick={onClose}>No</ModalButton>
               <ModalButton
@@ -147,14 +154,17 @@ export default function LoanModal({
             contentLabel='Adjust'
           >
             <ModalHeader>
-              <h2>Adjust</h2>
+              <h2>Review loan request</h2>
               <button onClick={() => modalClose()}>
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
             <ModalContent>
               <BtnGrpLoanModal>
-                <ModalButton disabled={loanStatusPending} onClick={() => adjustPositionToggle(true)}>
+                <ModalButton
+                  disabled={loanStatusPending}
+                  onClick={() => adjustPositionToggle(true)}
+                >
                   Adjust Collateral
                 </ModalButton>
                 <ModalButton onClick={() => confirm('Close')}>Close Loan</ModalButton>
@@ -196,12 +206,20 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>Adjust</h2>
+          <h2>Review loan request</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
         <ModalContent>
+          <ModalContentDetails>
+            <div>
+              <h2>
+                <span>Interest paid: </span>
+                {interestPaid} {collateralTypeName}
+              </h2>
+            </div>
+          </ModalContentDetails>
           <BtnGrpLoanModal>
             {status === statuses['Pending'].status ? (
               <ModalButton

@@ -35,7 +35,15 @@ html{
   opacity: 1;
   height: auto;
 }
-
+.remaining-title-content{
+  max-width: 64px;
+}
+.ratio-title-content{
+  max-width: 33px;
+}
+.interest-paid-title-content{
+  max-width: 85px;
+}
 .table-first-col{
   display: flex;
   align-items: center;
@@ -226,7 +234,10 @@ html{
   bottom: 3px;
   right: -7px;
 }
-
+.table-more-row-first-content{
+  display: flex;
+  align-items: center;
+}
 .table-more-row-first-content h2{
   font-family: "Open Sans", sans-serif;
   font-style: normal;
@@ -236,6 +247,10 @@ html{
   margin-left: 15px;
   text-transform: uppercase;
   color: #838186;
+}
+.table-more-row-first-content a img{
+  height: 12px;
+  margin-left: 2px;
 }
 .table-more-second-4 h2{
   font-family: "Open Sans", sans-serif;
@@ -573,13 +588,14 @@ html{
   height: 32px;
   font-style: normal;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: rgba(57,41,90,0.5);
-  padding: 4px 10px;
+  padding: 4px 74px 4px 10px;
 }
+
 .ModalFormInputAPY:focus{
   outline: none;
 }
@@ -943,6 +959,7 @@ table, th, td {
 
 @media (max-width: 992px){
   .navbar-right{
+    width: 100% !important;
     flex-direction: column !important;
     align-items: center;
     height: 0;

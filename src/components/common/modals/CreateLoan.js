@@ -138,8 +138,9 @@ const CreateLoan = ({
     }
   };
 
-  const createNewLoan = async () => {
+  const createNewLoan = async (e) => {
     try {
+      e.preventDefault();
       const tempRpbRate = 10 ** 10;
       let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
       // submitValidations(form.newLoan.values).then(() => {

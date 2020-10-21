@@ -14,7 +14,7 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
@@ -67,6 +67,7 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
+  const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
@@ -87,7 +88,7 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  
+
   useEffect(() => {
     const isShareholderCheck = async () => {
       try {
@@ -103,7 +104,22 @@ const TableCard = ({
     };
 
     isShareholderCheck();
-  }, [address, web3, contractAddress, cryptoFromLenderName]);
+  }, [address, contractAddress, cryptoFromLenderName, web3]);
+
+  useEffect(() => {
+    const getAccruedInterest = async () => {
+      try {
+        const { loanContractSetup } = searchArr(cryptoFromLenderName);
+        const JLoan = loanContractSetup(web3, contractAddress);
+        const result = await JLoan.methods.getAccruedInterests().call();
+        setAccruedInterest(web3.utils.fromWei(result));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getAccruedInterest();
+  }, [contractAddress, cryptoFromLenderName, web3]);
 
   const calcNewCollateralRatio = async (amount) => {
     try {
@@ -461,8 +477,7 @@ const TableCard = ({
 
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
-            <h2
-            >
+            <h2>
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
@@ -486,7 +501,7 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {interestPaid && addrShortener(interestPaid)}{' '}
+              {interestPaid && valShortner(interestPaid)}{' '}
               <span>{collateralTypeName}</span>
             </h2>
           </div>
@@ -500,7 +515,7 @@ const TableCard = ({
                 backgroundColor: Object.values(searchObj(status))[0].background
               }}
             >
-              {statusShortner(Object.values(searchObj(status))[0].key)}
+              {valShortner(Object.values(searchObj(status))[0].key)}
             </h2>
           </div>
         </div>
@@ -542,9 +557,12 @@ const TableCard = ({
           <LoanModal
             status={status}
             path={path}
+            interestPaid={interestPaid}
+            collateralTypeName={collateralTypeName}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             isShareholder={isShareholder}
+            accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}
@@ -570,10 +588,11 @@ const TableCard = ({
             moreList.map((i) => {
               return (
                 <TableMoreRow
+                  key={i}
                   ethImg={ETH}
                   arrow='downArrow'
                   ratio={i.collateralRatio}
-                  hash={addrShortener(i.transactionHash)}
+                  hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
                 />
