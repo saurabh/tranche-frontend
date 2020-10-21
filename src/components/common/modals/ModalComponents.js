@@ -177,7 +177,7 @@ const ModalFormGrp = styled.div`
     font-style: normal;
     font-weight: normal;
     font-size: 10px;
-    text-align: left;
+    text-align: right;
     color: #B9B9B9;
     margin: 6px 0 0 0;
   }
@@ -190,7 +190,7 @@ const ModalFormGrpNewLoan = styled.div`
     font-style: normal;
     font-weight: normal;
     font-size: 10px;
-    text-align: left;
+    text-align: right;
     color: #B9B9B9;
     margin: 6px 0 0 0;
   }
