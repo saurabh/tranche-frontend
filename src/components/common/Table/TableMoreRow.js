@@ -3,7 +3,7 @@ import { LinkArrow } from 'assets';
 import {etherScanUrl } from 'config/constants';
 import { addrShortener } from 'utils';
 
-const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}) => {
+const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest, createdAt}) => {
     return (
         <div className="table-more-row">
             <div className="table-more-row-first table-more-row-content">
@@ -13,7 +13,7 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}
                 </div>*/}
                 <div className="table-more-row-first-content">
                    {/* <h2>apr 15, 2020 - 1:53 pm</h2>*/}
-                    <h2>{addrShortener(hash)}</h2>
+                    <h2>{createdAt}</h2>
                     <a
                         href={etherScanUrl + hash + '/#internaltx'}
                         target='_blank'

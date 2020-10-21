@@ -49,7 +49,8 @@ const TableCard = ({
     collateralRatio,
     interestPaid,
     collateralTypeName,
-    collateralType
+    collateralType,
+    name
   },
   path,
   loansFetchData,
@@ -473,9 +474,9 @@ const TableCard = ({
               <img src={UserImg} alt='User' />
             </div>
             <div className='first-col-content'>
-              {/*<div className="first-col-title">
-                              <h2>Pragmatic owl</h2>
-                          </div>*/}
+              <div className="first-col-title">
+                <h2>{name && name}</h2>
+              </div>
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
                 <a
@@ -609,6 +610,7 @@ const TableCard = ({
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
+                  createdAt={i.createdAt}
                 />
               );
             })

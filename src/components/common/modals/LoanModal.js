@@ -213,7 +213,8 @@ export default function LoanModal({
         <ModalContent>
           <ModalContentDetails>
             <div>
-    <h2><span>Interest paid: </span>{interestPaid} {collateralTypeName}</h2>
+              <h2><span>Interest paid</span></h2>
+              <h2>{interestPaid} {collateralTypeName}</h2>
             </div>
           </ModalContentDetails>
           <BtnGrpLoanModal>

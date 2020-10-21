@@ -42,18 +42,6 @@ const SortChevronWrapper = styled.div`
     justify-content: space-between;`
 
 const TableHead = () => {
-    const [order, setOrder] = useState({});
-    const [currentOrder, setCurrentOrder] = useState({});
-    
-    /*const orderTable = (order) =>{
-        if(order === currentOrder.order){
-            setOrder({order: order, type: !currentOrder.type});
-            setCurrentOrder({order: order, type: !currentOrder.type});
-        } else{
-            setOrder({order: order, type: "asc"});
-            setCurrentOrder({order: order, type: "asc"});
-        }
-    }*/
 
     return (
         <TableHeadWrapper>

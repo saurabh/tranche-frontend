@@ -66,7 +66,7 @@ html{
   font-family: 'Open Sans', sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #39295A;
@@ -244,10 +244,20 @@ html{
   font-weight: 400;
   font-size: 10px;
   letter-spacing: 0.05em;
-  margin-left: 15px;
   text-transform: uppercase;
   color: #838186;
 }
+.adjust-btn-wrapper button:disabled, .adjust-btn-wrapper
+button[disabled]{
+  opacity: 0.5 !important;
+  background-color: rgba(204, 204, 204, 0.5) !important;
+}
+.adjust-btn-wrapper button:disabled img, .adjust-btn-wrapper
+button[disabled] img{
+  filter: grayscale(1) !important;
+  opacity: 0.5 !important;
+}
+
 .table-more-row-first-content a img{
   height: 12px;
   margin-left: 2px;
