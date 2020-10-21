@@ -90,14 +90,15 @@ export default function LoanModal({
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
 
-  accruedInterest !== 0 && console.log(accruedInterest);
-
   const confirm = (type) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
           <ConfirmAlertWrapper>
             <h2>{actionTypes[type].confirmationText}</h2>
+            {type === 'WithdrawInterest' && (
+              <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
+            )}
             <ConfirmAlertBtnWrapper>
               <ModalButton onClick={onClose}>No</ModalButton>
               <ModalButton

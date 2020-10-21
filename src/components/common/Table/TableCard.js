@@ -103,39 +103,24 @@ const TableCard = ({
         console.error(error);
       }
     };
-   
+
     isShareholderCheck();
   }, [address, contractAddress, cryptoFromLenderName, web3]);
 
-  // useEffect(() => {
-  //   const getAccruedInterest = async () => {
-  //     try {
-  //       const { loanContractSetup } = searchArr(cryptoFromLenderName);
-  //       const JLoan = loanContractSetup(web3, contractAddress);
-  //       console.log(JLoan.methods)
-  //       const result = await JLoan.methods
-  //         .getAccruedInterests()
-  //         .call()
-  //         .on('transactionHash', (hash) => {
-  //           notify.hash(hash);
-  //         })
-  //         .on('receipt', async () => {
-  //           await loansFetchData({
-  //             skip: 0,
-  //             limit: 100,
-  //             filter: {
-  //               type: null
-  //             }
-  //           });
-  //         });
-  //       setAccruedInterest(result);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getAccruedInterest = async () => {
+      try {
+        const { loanContractSetup } = searchArr(cryptoFromLenderName);
+        const JLoan = loanContractSetup(web3, contractAddress);
+        const result = await JLoan.methods.getAccruedInterests().call();
+        setAccruedInterest(web3.utils.fromWei(result));
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //   getAccruedInterest();
-  // }, [contractAddress, cryptoFromLenderName, loansFetchData, notify, web3])
+    getAccruedInterest();
+  }, [contractAddress, cryptoFromLenderName, web3]);
 
   const calcNewCollateralRatio = async (amount) => {
     try {
@@ -604,6 +589,7 @@ const TableCard = ({
             moreList.map((i) => {
               return (
                 <TableMoreRow
+                  key={i}
                   ethImg={ETH}
                   arrow='downArrow'
                   ratio={i.collateralRatio}
