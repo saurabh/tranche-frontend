@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { loansFetchData } from 'redux/actions/loans';
+import { loansFetchData, changeFilter } from 'redux/actions/loans';
 import { ETH, JNT, PagesData } from 'config/constants';
 
 import {
@@ -8,17 +8,11 @@ import {
   MarketsTabsContainer,
   HeaderTabBtn
 } from './HeaderComponents';
-const HeaderTabs = ({ loansFetchData, pathChanged }) => {
+const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }) => {
   const [filterValue, setFilter] = useState(null);
   const loanListing = async (filter = null) => {
     setFilter(filter);
-    await loansFetchData({
-      skip: 0,
-      limit: 100,
-      filter: {
-        type: filter //ETH/JNT keep these in constant file
-      }
-    });
+    changeFilter(filter)
   };
   return (
     <div className='container content-container'>
@@ -60,8 +54,9 @@ const HeaderTabs = ({ loansFetchData, pathChanged }) => {
 
 const mapStateToProps = (state) => {
   return {
-    pathChanged: state.changePath
+    pathChanged: state.changePath,
+    filterChanged: state.changeFilter
   };
 };
 
-export default connect(mapStateToProps, { loansFetchData })(HeaderTabs);
+export default connect(mapStateToProps, { loansFetchData, changeFilter })(HeaderTabs);

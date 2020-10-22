@@ -1180,8 +1180,8 @@
       "transactionHash": "0x4a3985ae2be11acf60f1a3ad52847438e09fd3558502feb465c50196d009a93e"
     }
   },
-  "schemaVersion": "3.2.5",
-  "updatedAt": "2020-10-13T18:16:22.698Z",
+  "schemaVersion": "3.3.1",
+  "updatedAt": "2020-10-18T18:33:14.030Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'components/common/Form/AdjustLoan';
-import CloseModal from 'assets/images/svg/closeModal.svg';
+import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { statuses } from 'config/constants';
-import { confirmationTexts } from 'config/constants';
+import { statuses, actionTypes } from 'config/constants';
 import {
   ModalHeader,
   ModalContent,
+  ModalContentDetails,
   BtnGrpLoanModal,
   ModalButton,
   ConfirmAlertWrapper,
-  ConfirmAlertBtnWrapper,
+  ConfirmAlertBtnWrapper
 } from './ModalComponents';
 
 const FirstCustomStyles = {
@@ -27,7 +27,7 @@ const FirstCustomStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '292px',
+    maxWidth: '392px',
     width: '100%',
     //height: '326px',
     height: 'auto',
@@ -53,7 +53,7 @@ const AdjustPositionStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '292px',
+    maxWidth: '392px',
     width: '100%',
     //minHeight: '326px',
     height: 'auto',
@@ -75,51 +75,38 @@ export default function LoanModal({
   closeModal,
   path,
   status,
+  isShareholder,
+  accruedInterest,
+  canBeForeclosed,
   approveLoan,
   closeLoan,
   addCollateral,
   withdrawInterest,
   forecloseLoan,
   newCollateralRatio,
-  calcNewCollateralRatio
+  calcNewCollateralRatio,
+  interestPaid,
+  collateralTypeName
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
-  let ConfirmText;
+  const loanStatusPending = status === statuses['Pending'].status;
 
-  if (path === 'borrow') {
-    ConfirmText =
-      status === statuses['Pending'].status
-        ? confirmationTexts["confirmCancel"]
-        : status === statuses['Active'].status
-        ? confirmationTexts["confirmClose"]
-        : '';
-  } else if (path === 'earn') {
-    ConfirmText =
-      status === statuses['Pending'].status
-        ? confirmationTexts["confirmApprove"]
-        : status === statuses['Active'].status
-        ? confirmationTexts["confirmWithdraw"]
-        : status === statuses['Under_Collateralized'].status ||
-          status === statuses['At_Risk'].status
-        ? confirmationTexts["confirmForeclose"]
-        : status === statuses['Closing'].status
-        ? confirmationTexts["confirmWithdraw"]
-        : '';
-  }
-
-  const confirm = () => {
+  const confirm = (type) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
           <ConfirmAlertWrapper>
-            <h2>{ConfirmText}</h2>
+            <h2>{actionTypes[type].confirmationText}</h2>
+            {type === 'WithdrawInterest' && (
+              <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
+            )}
             <ConfirmAlertBtnWrapper>
               <ModalButton onClick={onClose}>No</ModalButton>
               <ModalButton
                 btnColor={statuses['Active'].color}
                 confirmBtn={true}
                 onClick={() => {
-                  controlAction(onClose);
+                  controlAction(type, onClose);
                 }}
               >
                 Yes
@@ -131,32 +118,21 @@ export default function LoanModal({
     });
   };
 
-  const controlAction = (onClose) => {
-    if (
-      path === 'borrow' &&
-      (status === statuses['Pending'].status || status === statuses['Active'].status)
-    ) {
+  const controlAction = (type, onClose) => {
+    if (type === actionTypes['Cancel'].name || type === actionTypes['Close'].name) {
       closeLoan();
       closeModal();
       onClose();
-    } else if (path === 'earn' && status === statuses['Pending'].status) {
+    } else if (type === actionTypes['Approve'].name) {
       approveLoan();
       closeModal();
       onClose();
-    } else if (path === 'earn' && status === statuses['Active'].status) {
+    } else if (type === actionTypes['WithdrawInterest'].name) {
       withdrawInterest();
       closeModal();
       onClose();
-    } else if (
-      path === 'earn' &&
-      (status === statuses['Under_Collateralized'].status ||
-        status === statuses['At_Risk'].status)
-    ) {
+    } else if (type === actionTypes['Foreclose'].name) {
       forecloseLoan();
-      closeModal();
-      onClose();
-    } else if (path === 'earn' && status === statuses['Closing'].status) {
-      withdrawInterest();
       closeModal();
       onClose();
     }
@@ -179,17 +155,20 @@ export default function LoanModal({
             contentLabel='Adjust'
           >
             <ModalHeader>
-              <h2>Adjust</h2>
+              <h2>Review loan request</h2>
               <button onClick={() => modalClose()}>
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
             <ModalContent>
               <BtnGrpLoanModal>
-                <ModalButton onClick={() => adjustPositionToggle(true)}>
+                <ModalButton
+                  disabled={loanStatusPending}
+                  onClick={() => adjustPositionToggle(true)}
+                >
                   Adjust Collateral
                 </ModalButton>
-                <ModalButton onClick={() => confirm()}>Close Loan</ModalButton>
+                <ModalButton onClick={() => confirm('Close')}>Close Loan</ModalButton>
               </BtnGrpLoanModal>
             </ModalContent>
           </Modal>
@@ -208,6 +187,7 @@ export default function LoanModal({
               </button>
             </ModalHeader>
             <AdjustLoan
+              collateralTypeName={collateralTypeName}
               addCollateral={addCollateral}
               newCollateralRatio={newCollateralRatio}
               calcNewCollateralRatio={calcNewCollateralRatio}
@@ -228,20 +208,33 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>Adjust</h2>
+          <h2>Review loan request</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
         <ModalContent>
+          <ModalContentDetails>
+            <div>
+              <h2>
+                <span>Interest paid</span>
+              </h2>
+              <h2>
+                {interestPaid} {collateralTypeName}
+              </h2>
+            </div>
+          </ModalContentDetails>
           <BtnGrpLoanModal>
             {status === statuses['Pending'].status ? (
-              <ModalButton onClick={() => confirm()} btnColor={statuses['Active'].color}>
+              <ModalButton
+                onClick={() => confirm('Approve')}
+                btnColor={statuses['Active'].color}
+              >
                 Approve Loan
               </ModalButton>
             ) : status === statuses['Active'].status ? (
               <ModalButton
-                onClick={() => confirm()}
+                onClick={() => confirm('WithdrawInterest')}
                 btnColor={statuses['Foreclosing'].color}
               >
                 Withdraw Interest
@@ -249,13 +242,14 @@ export default function LoanModal({
             ) : status === statuses['Under_Collateralized'].status ? (
               <BtnGrpLoanModal>
                 <ModalButton
-                  onClick={() => confirm()}
+                  onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosing'].color}
+                  style={{ display: !isShareholder ? 'none' : '' }}
                 >
                   Withdraw Interest
                 </ModalButton>
                 <ModalButton
-                  onClick={() => confirm()}
+                  onClick={() => confirm('Foreclose')}
                   btnColor={statuses['Foreclosing'].color}
                 >
                   Foreclose Loan
@@ -264,34 +258,55 @@ export default function LoanModal({
             ) : status === statuses['At_Risk'].status ? (
               <BtnGrpLoanModal>
                 <ModalButton
-                  onClick={() => confirm()}
+                  onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosed'].color}
+                  style={{ display: !isShareholder ? 'none' : '' }}
                 >
                   Withdraw Interest
                 </ModalButton>
                 <ModalButton
-                  onClick={() => confirm()}
+                  onClick={() => confirm('Foreclose')}
                   btnColor={statuses['Foreclosed'].color}
+                >
+                  Foreclose Loan
+                </ModalButton>
+              </BtnGrpLoanModal>
+            ) : status === statuses['Foreclosing'].status ? (
+              <BtnGrpLoanModal>
+                <ModalButton
+                  onClick={() => confirm('WithdrawInterest')}
+                  btnColor={statuses['Foreclosed'].color}
+                  style={{ display: !isShareholder ? 'none' : '' }}
+                >
+                  Withdraw Interest
+                </ModalButton>
+                <ModalButton
+                  onClick={() => confirm('Foreclose')}
+                  btnColor={statuses['Foreclosed'].color}
+                  disabled={!canBeForeclosed}
                 >
                   Foreclose Loan
                 </ModalButton>
               </BtnGrpLoanModal>
             ) : status === statuses['Foreclosed'].status ? (
               <ModalButton
-                onClick={() => confirm()}
+                onClick={() => confirm('WithdrawInterest')}
                 btnColor={statuses['Foreclosed'].color}
               >
                 Withdraw Interest
               </ModalButton>
             ) : status === statuses['Early_closing'].status ? (
               <ModalButton
-                onClick={() => confirm()}
+                onClick={() => confirm('WithdrawInterest')}
                 btnColor={statuses['Early_closing'].color}
               >
                 Withdraw Interest
               </ModalButton>
             ) : status === statuses['Closing'].status ? (
-              <ModalButton onClick={() => confirm()} btnColor={statuses['Closing'].color}>
+              <ModalButton
+                onClick={() => confirm('WithdrawInterest')}
+                btnColor={statuses['Closing'].color}
+              >
                 Withdraw Interest
               </ModalButton>
             ) : (

@@ -53,14 +53,11 @@ let asyncValidate = (values) => {
   return sleep(0).then(async () => {
     let { borrowedAskAmount, collateralAmount, pairId } = values;
     let minCollateralAmount = borrowedAskAmount ? await calcMinCollateralAmount(pairId, borrowedAskAmount) : undefined;
-    let maxBorrowedAskAmount = collateralAmount ? await calcMaxBorrowedAmount(pairId, collateralAmount) : undefined;
-    console.log(isLessThan(collateralAmount, minCollateralAmount))
-    console.log(collateralAmount && (!borrowedAskAmount || isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount)))
+    // let maxBorrowedAskAmount = collateralAmount ? await calcMaxBorrowedAmount(pairId, collateralAmount) : undefined;
+    // console.log(isLessThan(collateralAmount, minCollateralAmount))
+    // console.log(borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount)))
     if (borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))) {
       throw { collateralAmount: 'Not enough collateral', _error: 'Not enough collateral' }
-    }
-    if (collateralAmount && (!borrowedAskAmount || isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount))) {
-      throw { borrowedAskAmount: 'Ask amount is too high', _error: 'Ask amount is too high' }
     }
   })
 };

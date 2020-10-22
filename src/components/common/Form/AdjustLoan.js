@@ -14,6 +14,7 @@ import {
   NewLoanInputWrapper,
   NewLoanFormInput,
 } from '../Modals/ModalComponents';
+import { pairData } from 'config/constants'
 
 const InputField = ({
   input,
@@ -22,8 +23,11 @@ const InputField = ({
   className,
   meta: { touched, error }
 }) => (
-  <div>
-    <input {...input} placeholder={placeholder} type={type} className={className} />
+  <div>    
+    {
+    (touched && error) ? <input placeholder={placeholder} {...input} type={type} style={{boxShadow: "inset 0 0 3px red"}} className={className} /> :
+    <input {...input} type={type} style={{border: "1px solid #ffffff"}} className={className} />
+    }
     {touched && error && (
       <span
         style={{
@@ -36,13 +40,15 @@ const InputField = ({
           fontSize: '9px'
         }}
       >
-        {error}
       </span>
     )}
   </div>
 );
 
-let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio }) => {
+let AdjustLoan = ({ collateralTypeName, addCollateral, newCollateralRatio, calcNewCollateralRatio }) => {
+
+  const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
+
   const [debounceCalcNewCollateralRatio] = useDebouncedCallback(
     (collateralAmount) => calcNewCollateralRatio(collateralAmount),
     500
@@ -51,15 +57,15 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
   return (
     <div>
       <ModalAdjustForm style={{minHeight: "auto"}}>
-        <Form component={ModalFormWrapper} onSubmit={addCollateral}>
+        <Form component={ModalFormWrapper} onSubmit={e => addCollateral(e)}>
           <FormInputsWrapper>
-          <ModalFormGrp currency="ETH">
+          <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
                 <ModalFormLabel htmlFor='COLLATERALIZINGInput'>ADD COLLATERAL</ModalFormLabel>
                 <Field
                   component={InputField}
-                  className='ModalFormInput ModalFormInputETH'
+                  className={`ModalFormInput ${'ModalFormInput' + searchArr(collateralTypeName).collateral}`}
                   name='collateralAmount'
                   onChange={(event, newValue) => debounceCalcNewCollateralRatio(newValue)}
                   validate={[required, number]}
@@ -81,8 +87,6 @@ let AdjustLoan = ({ addCollateral, newCollateralRatio, calcNewCollateralRatio })
           </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
-
-      
     </div>
   );
 };

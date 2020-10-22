@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import ReactLoading from 'react-loading';
+import { postRequest } from 'services/axios';
+import TableMoreRow from './TableMoreRow';
+import ETH from 'assets/images/svg/EthForm.svg';
 import {
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
-import { initOnboard } from 'services/blocknative';
-import { addrShortener, statusShortner, readyToTransact, isGreaterThan } from 'utils';
-import { statuses, PagesData, pairData, etherScanUrl } from 'config/constants';
-import styled from 'styled-components';
 import { loansFetchData } from 'redux/actions/loans';
+import { initOnboard } from 'services/blocknative';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
+import {
+  statuses,
+  PagesData,
+  pairData,
+  etherScanUrl,
+  apiUri,
+  USDC,
+  DAI,
+  generalParams
+} from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
-import UserImg from 'assets/images/svg/userImg.svg';
-import Star from 'assets/images/svg/Star.svg';
-import Adjust from 'assets/images/svg/adjust.svg';
-import AdjustEarn from 'assets/images/svg/adjustEarn.svg';
-import AdjustTrade from 'assets/images/svg/adjustTrade.svg';
-import LinkArrow from 'assets/images/svg/linkArrow.svg';
+import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -40,7 +48,9 @@ const TableContentCard = styled.div`
 
 const TableCard = ({
   loan: {
+    borrowerAddress,
     status,
+    loanActiveBlock,
     contractAddress,
     remainingLoan,
     cryptoFromLender,
@@ -48,7 +58,8 @@ const TableCard = ({
     collateralRatio,
     interestPaid,
     collateralTypeName,
-    collateralType
+    collateralType,
+    name
   },
   path,
   loansFetchData,
@@ -63,12 +74,26 @@ const TableCard = ({
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
+  const [moreList, setMoreList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShareholder, setIsShareholder] = useState(false);
+  const [canBeForeclosed, setCanBeForeclosed] = useState(false);
+  const [accruedInterest, setAccruedInterest] = useState(0);
+  const toWei = web3.utils.toWei;
   let disableBtn =
-    status === statuses['Foreclosed'].status ||
-    status === statuses['Early_closing'].status ||
+    (path === 'borrow' && borrowerAddress !== address) ||
+    (path === 'borrow' &&
+      (status === statuses['Foreclosed'].status ||
+        status === statuses['Early_closing'].status ||
+        status === statuses['Closing'].status)) ||
+    (path === 'earn' &&
+      !isShareholder &&
+      (status === statuses['Active'].status ||
+        status === statuses['Foreclosed'].status ||
+        status === statuses['Early_closing'].status ||
+        status === statuses['Closing'].status)) ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
-  const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -77,9 +102,45 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  useEffect(() => { }, [onboard, address, network, balance, wallet, web3]);
-
   const searchArr = (key) => pairData.find((i) => i.key === key);
+
+  useEffect(() => {
+    const isShareholderCheck = async () => {
+      try {
+        if (address) {
+          const { loanContractSetup } = searchArr(cryptoFromLenderName);
+          const JLoan = loanContractSetup(web3, contractAddress);
+          const result = await JLoan.methods.isShareHolder(address).call();
+          setIsShareholder(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    isShareholderCheck();
+  }, [address, contractAddress, cryptoFromLenderName, web3]);
+
+  useEffect(() => {
+    const getAccruedInterest = async () => {
+      try {
+        const { loanContractSetup } = searchArr(cryptoFromLenderName);
+        const JLoan = loanContractSetup(web3, contractAddress);
+        const result = await JLoan.methods.getAccruedInterests().call();
+        setAccruedInterest(web3.utils.fromWei(result));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const forecloseWindowCheck = async () => {
+      const currentBlock = await web3.eth.getBlockNumber();
+      if (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow)
+        setCanBeForeclosed(true);
+    };
+
+    forecloseWindowCheck();
+    getAccruedInterest();
+  }, [contractAddress, cryptoFromLenderName, loanActiveBlock, web3]);
 
   const calcNewCollateralRatio = async (amount) => {
     try {
@@ -244,21 +305,46 @@ const TableCard = ({
     try {
       const { loanContractSetup } = searchArr(cryptoFromLenderName);
       const JLoan = loanContractSetup(web3, contractAddress);
-      await JLoan.methods
-        .initiateLoanForeClose()
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          notify.hash(hash);
-        })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null
-            }
+      const currentBlock = await web3.eth.getBlockNumber();
+      if (
+        status === statuses['Under_Collateralized'].status ||
+        status === statuses['At_Risk'].status
+      ) {
+        await JLoan.methods
+          .initiateLoanForeClose()
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 100,
+              filter: {
+                type: null
+              }
+            });
           });
-        });
+      } else if (
+        currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
+        status === statuses['Foreclosing'].status
+      ) {
+        await JLoan.methods
+          .setLoanInForeclosedByTime()
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 100,
+              filter: {
+                type: null
+              }
+            });
+          });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -345,13 +431,14 @@ const TableCard = ({
     }
   };
 
-  const addCollateral = () => {
+  const addCollateral = (e) => {
+    e.preventDefault();
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
-    if (cryptoFromLenderName === searchArr(cryptoFromLenderName).key) {
+    if (cryptoFromLenderName === searchArr(DAI).key) {
       addCollateralToEthLoan(contractAddress, collateralAmount);
       closeModal();
-    } else if (cryptoFromLenderName === searchArr(cryptoFromLenderName).key) {
+    } else if (cryptoFromLenderName === searchArr(USDC).key) {
       addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
       closeModal();
     }
@@ -372,18 +459,44 @@ const TableCard = ({
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
 
-  const cardToggle = () => {
+  const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
+    getTransaction(hash);
   };
 
   const remainingToggle = (hover) => {
     setTooltipToggleRemaining(hover);
   };
 
+  const getTransaction = async (hash) => {
+    const { transaction: transactionUrl } = apiUri;
+    setIsLoading(true);
+    try {
+      const { data: result } = await postRequest(
+        transactionUrl,
+        {
+          data: {
+            skip: 0,
+            limit: 10,
+            filter: {
+              contractAddress: hash
+            }
+          }
+        },
+        null,
+        true
+      );
+      setIsLoading(false);
+      setMoreList(result.result.list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <TableContentCardWrapper>
       <TableContentCard
-        onClick={() => cardToggle()}
+        onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
         <div className='table-first-col table-col'>
@@ -392,9 +505,9 @@ const TableCard = ({
               <img src={UserImg} alt='User' />
             </div>
             <div className='first-col-content'>
-              {/*<div className="first-col-title">
-                              <h2>Pragmatic owl</h2>
-                          </div>*/}
+              <div className='first-col-title'>
+                <h2>{name && name}</h2>
+              </div>
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
                 <a
@@ -410,11 +523,8 @@ const TableCard = ({
         </div>
 
         <div className='table-third-col table-col'>
-          <div className='third-col-content second-4-col-content'>
-            <h2
-              onMouseEnter={() => remainingToggle(true)}
-              onMouseLeave={() => remainingToggle(false)}
-            >
+          <div className='third-col-content content-3-col second-4-col-content'>
+            <h2>
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
@@ -428,7 +538,7 @@ const TableCard = ({
           </div>
         </div>
         <div className='table-fourth-col table-col'>
-          <div className='fourth-col-content second-4-col-content'>
+          <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
               {collateralRatio}
               <span>%</span>
@@ -436,9 +546,9 @@ const TableCard = ({
           </div>
         </div>
         <div className='table-fifth-col table-col'>
-          <div className='fifth-col-content second-4-col-content'>
+          <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {interestPaid && addrShortener(interestPaid)}{' '}
+              {interestPaid && valShortner(interestPaid)}{' '}
               <span>{collateralTypeName}</span>
             </h2>
           </div>
@@ -452,7 +562,7 @@ const TableCard = ({
                 backgroundColor: Object.values(searchObj(status))[0].background
               }}
             >
-              {statusShortner(Object.values(searchObj(status))[0].key)}
+              {valShortner(Object.values(searchObj(status))[0].key)}
             </h2>
           </div>
         </div>
@@ -461,13 +571,13 @@ const TableCard = ({
             <button
               style={
                 ({ background: PagesData[path].btnColor },
-                  path === 'trade' || disableBtn
-                    ? {
+                path === 'trade' || disableBtn
+                  ? {
                       backgroundColor: '#cccccc',
                       color: '#666666',
                       cursor: 'default'
                     }
-                    : {})
+                  : {})
               }
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
@@ -477,10 +587,10 @@ const TableCard = ({
                   path === 'borrow'
                     ? Adjust
                     : path === 'earn'
-                      ? AdjustEarn
-                      : path === 'trade'
-                        ? AdjustTrade
-                        : Adjust
+                    ? AdjustEarn
+                    : path === 'trade'
+                    ? AdjustTrade
+                    : Adjust
                 }
                 alt=''
               />
@@ -494,8 +604,13 @@ const TableCard = ({
           <LoanModal
             status={status}
             path={path}
+            interestPaid={interestPaid}
+            collateralTypeName={collateralTypeName}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
+            isShareholder={isShareholder}
+            canBeForeclosed={canBeForeclosed}
+            accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             addCollateral={addCollateral}
@@ -506,24 +621,42 @@ const TableCard = ({
           />
         </div>
       </TableContentCard>
-      {/* <div
-        className={
-          "table-card-more " +
-          (moreCardToggle ? "table-more-card-toggle" : "")
-        }
+      <div
+        className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
       >
-        <div className="table-card-more-content">
-          <TableMoreRow ethImg={ETHGOLD} arrow="upArrow" />
-          <TableMoreRow ethImg={ETH} arrow="downArrow" />
+        <div className='table-card-more-content'>
+          {isLoading ? (
+            <ReactLoading
+              className='TableMoreLoading'
+              type={'bubbles'}
+              color='rgba(56,56,56,0.3)'
+            />
+          ) : (
+            moreList &&
+            moreList.map((i) => {
+              return (
+                <TableMoreRow
+                  key={i}
+                  ethImg={ETH}
+                  arrow='downArrow'
+                  ratio={i.collateralRatio}
+                  hash={i.transactionHash}
+                  collateralTypeName={collateralTypeName}
+                  interest={i.interestPaid}
+                  createdAt={i.createdAt}
+                />
+              );
+            })
+          )}
 
-          <div className="more-transactions">
+          {/* <div className="more-transactions">
             <h2>
               this loan has 11 more transactions in its history.
               <a href="/">show more transactions</a>
             </h2>
-          </div>
+          </div>*/}
         </div>
-      </div> */}
+      </div>
     </TableContentCardWrapper>
   );
 };

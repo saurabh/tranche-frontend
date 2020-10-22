@@ -38,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
 
   
   .navbar-right{
-    width: 766px;
+    width: 66%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -46,6 +46,10 @@ const GlobalStyle = createGlobalStyle`
     transition-property: height;
     transition-duration: 300ms;
     transition-timing-function: ease;
+  }
+
+  #logo-wrapper{
+    width: 34%;
   }
 
 

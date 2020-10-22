@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-
+html{
+  overflow-x: hidden;
+}
 #navbar-icon{
   margin-left: auto;
   display: none;
@@ -26,12 +28,22 @@
 }
 
 .table-more-card-toggle{
-  padding: 30px 12px 30px 102px;
+  /*padding: 30px 12px 30px 102px;*/
+  padding: 30px 39px 30px 47px;;
+
   border-bottom: 1px solid #EFEFEF;
   opacity: 1;
   height: auto;
 }
-
+.remaining-title-content{
+  max-width: 64px;
+}
+.ratio-title-content{
+  max-width: 33px;
+}
+.interest-paid-title-content{
+  max-width: 85px;
+}
 .table-first-col{
   display: flex;
   align-items: center;
@@ -54,7 +66,7 @@
   font-family: 'Open Sans', sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #39295A;
@@ -82,6 +94,9 @@
 .table-third-col{
   width: 139px;
   position: relative;
+}
+.third-col-content{
+  max-width: 64px;
 }
 .table-tool-tip{
   position: absolute;
@@ -115,11 +130,20 @@
 .table-fourth-col{
   width: 100px;
 }
+.fourth-col-content{
+  max-width: 33px;
+}
 
 .table-fifth-col{
   width: 136px;
 }
+.fifth-col-content{
+  max-width: 84px;
+}
 
+.content-3-col h2{
+  text-align: right;
+}
 .table-sixth-col{
   width: 90px;
 }
@@ -182,7 +206,7 @@
 .table-more-row-first{
   display: flex;
   align-items: center;
-  width: 224px;
+  width: 160px;
 }
 .table-more-row-first-img{
   position: relative;
@@ -210,16 +234,33 @@
   bottom: 3px;
   right: -7px;
 }
-
+.table-more-row-first-content{
+  display: flex;
+  align-items: center;
+}
 .table-more-row-first-content h2{
   font-family: "Open Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
   letter-spacing: 0.05em;
-  margin-left: 15px;
   text-transform: uppercase;
   color: #838186;
+}
+.adjust-btn-wrapper button:disabled, .adjust-btn-wrapper
+button[disabled]{
+  opacity: 0.5 !important;
+  background-color: rgba(204, 204, 204, 0.5) !important;
+}
+.adjust-btn-wrapper button:disabled img, .adjust-btn-wrapper
+button[disabled] img{
+  filter: grayscale(1) !important;
+  opacity: 0.5 !important;
+}
+
+.table-more-row-first-content a img{
+  height: 12px;
+  margin-left: 2px;
 }
 .table-more-second-4 h2{
   font-family: "Open Sans", sans-serif;
@@ -232,17 +273,41 @@
   color: #39295A;
 }
 .table-more-row-second{
-  width: 140px;
+  width: 139px;
 }
 
 .table-more-row-third{
-  width: 109px;
+  width: 100px;
 }
+
+.table-more-row-third-content{
+  max-width: 33px;
+}
+.table-more-row-third-content h2{
+  text-align: right;
+}
+
 .table-more-row-fourth{
-  width: 143px;
+  width: 136px;
+}
+
+.table-more-row-fourth-content{
+  max-width: 84px;
+}
+.table-more-row-fourth-content h2{
+  text-align: right;
 }
 .table-more-row-fifth{
-  width: 118px;
+  width: 109px;
+}
+.table-more-row-fifth-content{
+  max-width: 84px;
+}
+.table-more-row-sixth{
+  width: 90px;
+}
+.TableMoreLoading{
+  margin: 0 auto;
 }
 .table-more-second-4 h2 span{
   font-weight: 400;
@@ -494,7 +559,7 @@
   height: 32px;
   font-style: normal;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -533,13 +598,14 @@
   height: 32px;
   font-style: normal;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: rgba(57,41,90,0.5);
-  padding: 4px 10px;
+  padding: 4px 74px 4px 10px;
 }
+
 .ModalFormInputAPY:focus{
   outline: none;
 }
@@ -563,10 +629,10 @@
   border-radius: 4px;
   width: 100%;
   height: 32px;
-  max-width: 120px;
+  max-width: 220px;
   font-style: normal;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -620,7 +686,7 @@
   position: relative;
 }
 .SelectCurrencyView div{
-  width: 88px;
+  width: 100px;
   height: 32px;
   background: #ffffff;
   display: flex;
@@ -664,7 +730,7 @@
 
 
 .SelectCurrencyOption button{
-  width: 88px;
+  width: 100px;
   height: 32px;
   background: #ffffff;
   font-style: normal;
@@ -705,6 +771,7 @@
   justify-content: space-between;
   cursor: pointer;
 }
+
 
 
 .internet-notification-wrapper{
@@ -827,6 +894,17 @@ table, th, td {
   color: #AEAEAE;
 }
 
+.paginationWrapper div{
+  display: flex;
+  align-items: center;
+  position: absolute;
+  height: 50px;
+  width: auto;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
 @media (max-width: 1200px){
   .first-col-content{
     margin-left: 5px;
@@ -852,13 +930,15 @@ table, th, td {
     color: rgba(56, 56, 56, 0.3);
   }
   .table-more-card-toggle {
-    padding: 30px 12px 30px 12px;
+    /*padding: 30px 12px 30px 12px;*/
+    padding: 30px 39px 30px 47px;
   }
   .table-tool-tip{
     width: auto;
   }
   .table-card-more{
-    padding: 30px 12px 30px 12px;
+    /*padding: 30px 12px 30px 12px;*/
+    padding: 0 39px 0 47px;
   }
   .table-more-row-content{
     width: auto;
@@ -889,6 +969,7 @@ table, th, td {
 
 @media (max-width: 992px){
   .navbar-right{
+    width: 100% !important;
     flex-direction: column !important;
     align-items: center;
     height: 0;
@@ -938,7 +1019,9 @@ table, th, td {
     color: rgba(56, 56, 56, 0.3);
   }
   .table-more-card-toggle {
-    padding: 30px 12px 30px 12px;
+    /*padding: 30px 12px 30px 12px;*/
+    padding: 30px 39px 30px 47px;
+
   }
   .table-tool-tip{
     width: auto;

@@ -97,7 +97,8 @@ export const pairData = [
 ];
 
 export const apiUri = {
-  loanList: 'loans'
+  loanList: 'loans',
+  transaction: 'loans/transaction'
 };
 
 // Filters
@@ -106,13 +107,33 @@ export const DAI = 'DAI';
 export const JNT = 'JNT';
 export const USDC = 'USDC';
 
-export const confirmationTexts = {
-  confirmCancel: 'Are you sure you want to cancel the loan request?',
-  confirmClose: 'Are you sure you want to close the loan?',
-  confirmApprove: 'Are you sure you want to approve this loan?',
-  confirmWithdraw: 'Are you sure you want to withdraw interest?',
-  confirmForeclose: 'Are you sure you want to foreclose this loan?'
-};
+export const generalParams = {
+  foreclosureWindow: 50,
+  earlySettlementWindow: 540000
+}
+
+export const actionTypes = {
+  Cancel: {
+    name: 'Cancel',
+    confirmationText: 'Are you sure you want to cancel the loan request?'
+  },
+  Close: {
+    name: 'Close',
+    confirmationText: 'Are you sure you want to close the loan?'
+  },
+  Approve: {
+    name: 'Approve',
+    confirmationText: 'Are you sure you want to approve this loan?'
+  },
+  WithdrawInterest: {
+    name: 'WithdrawInterest',
+    confirmationText: 'Are you sure you want to withdraw interest?'
+  },
+  Foreclose: {
+    name: 'Foreclose',
+    confirmationText: 'Are you sure you want to foreclose this loan?'
+  }
+}
 
 export const statuses = {
   Pending: {
