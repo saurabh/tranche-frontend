@@ -53,8 +53,6 @@ const CreateLoan = ({
     closeModal();
   }
 
-  const searchArr = (value) => pairData.find((i) => i.value === value);
-
   const createNewEthLoan = async (
     pairId,
     borrowedAskAmount,
@@ -89,7 +87,7 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      const { collateralTokenSetup } = searchArr(parseFloat(pairId));
+      const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
       let userAllowance = await collateralToken.methods
         .allowance(address, JLoanTokenDeployerAddress)
@@ -141,16 +139,16 @@ const CreateLoan = ({
   const createNewLoan = async (e) => {
     try {
       e.preventDefault();
-      const tempRpbRate = 10 ** 10;
       let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
+      pairId = parseFloat(pairId);
       // submitValidations(form.newLoan.values).then(() => {
       // }).catch(error => console.error)
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
-      if (pairId === searchArr(parseFloat(pairId)).value) {
-        createNewEthLoan(pairId, borrowedAskAmount, tempRpbRate, collateralAmount);
-      } else {
-        createNewTokenLoan(pairId, borrowedAskAmount, tempRpbRate, collateralAmount);
+      if (pairId === pairData[0].value) {
+        createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
+      } else if (pairId === pairData[1].value) {
+        createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       }
       handleCloseModal();
     } catch (error) {

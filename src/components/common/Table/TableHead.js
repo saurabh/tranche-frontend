@@ -39,22 +39,14 @@ const SortChevronWrapper = styled.div`
     display: flex;
     flex-direction: column;
     height: 10px;
-    justify-content: space-between;`
+    justify-content: space-between;  
+    & > img{
+        cursor: pointer;
+    }
+`;
 
-const TableHead = () => {
-    const [order, setOrder] = useState({});
-    const [currentOrder, setCurrentOrder] = useState({});
-    
-    /*const orderTable = (order) =>{
-        if(order === currentOrder.order){
-            setOrder({order: order, type: !currentOrder.type});
-            setCurrentOrder({order: order, type: !currentOrder.type});
-        } else{
-            setOrder({order: order, type: "asc"});
-            setCurrentOrder({order: order, type: "asc"});
-        }
-    }*/
 
+const TableHead = ({handleSorting}) => {
     return (
         <TableHeadWrapper>
             <TableHeadTitle className="address-wrapper">
@@ -66,8 +58,8 @@ const TableHead = () => {
                 <div className="remaining-title-content">
                     <h2>Remaining</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} onClick={() => handleSorting("remainingLoan", "asc")}/>
+                        <img src={downChevron} onClick={() => handleSorting("remainingLoan", "desc")}/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -75,8 +67,8 @@ const TableHead = () => {
                 <div className="ratio-title-content">
                     <h2>Ratio</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} onClick={() => handleSorting("collateralRatio", "asc")}/>
+                        <img src={downChevron} onClick={() => handleSorting("collateralRatio", "desc")}/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -84,14 +76,18 @@ const TableHead = () => {
                 <div className="interest-paid-title-content">
                     <h2>Interest Paid</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} onClick={() => handleSorting("interestPaid", "asc")}/>
+                        <img src={downChevron} onClick={() => handleSorting("interestPaid", "desc")}/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="status-wrapper">
                 <div className="status-title-content">
                     <h2>Status</h2>
+                    <SortChevronWrapper>
+                        <img src={upChevron} onClick={() => handleSorting("status", "asc")}/>
+                        <img src={downChevron} onClick={() => handleSorting("status", "desc")}/>
+                    </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="head-btns-wrapper">

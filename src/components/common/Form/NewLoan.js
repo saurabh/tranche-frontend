@@ -60,8 +60,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change }) => {
-  const [pair, setPair] = useState(0);
-  const [selectedCurrency, selectCurrency] = useState(pairData[0].key);
+  const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
   const [minCollateralAmount, setminCollateralAmount] = useState(0);
   const [collateralRatio, setCollateralRatio] = useState(0);
@@ -80,8 +79,6 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     input.dispatchEvent(event);
   };
 
-  const searchArr = (key) => pairData.find((i) => i.key === key);
-
   const toggleCurrencySelect = () => {
     toggleCurrency(!currencySelect);
   };
@@ -89,12 +86,11 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   const handleCurrenySelect = (e, pair) => {
     e.preventDefault();
     inputChange(pair);
-    selectCurrency(e.target.value);
     toggleCurrency(false);
   };
 
   const onPairChange = async (pairId, borrowedAskAmount) => {
-    setPair(pairId);
+    setPair(parseFloat(pairId));
     const result = await calcMinCollateralAmount(pairId, borrowedAskAmount);
     setminCollateralAmount(result);
   };
@@ -142,15 +138,13 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   const calculateRPB = async (amount, APY) => {
     if (amount && APY > 0) {
       let blocksPerYear = 2372500;
-      console.log(amount)
-      console.log(typeof amount)
       const result = await getPairDetails(pair);
-      let { baseDecimals, quoteDecimals, pairValue, pairDecimals } = result;
-      let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
-      // let rpb = ((((APY / 100 + 1) ^ (1 / 365)) - 1) / 5760) * 10 ** 18;
-      // let rpb = (100 ^ ((-1 / 365) * (100 ^ (1 / 365 - (APY + 100)) ^ (1 / 365)))) / 5760;
-      let rpb = (toWei(amount) * APY) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
+      let { pairValue, pairDecimals } = result;
+      let rpb =
+        (toWei(amount) * (APY / 100)) /
+        (blocksPerYear * (pairValue / 10 ** pairDecimals));
       SETRPB(parseFloat(rpb));
+      change('rpbRate', Math.ceil(rpb).toString());
     } else {
       SETRPB(0);
     }
@@ -191,8 +185,8 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                   />
                   <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
                     <div>
-                      <img src={searchArr(selectedCurrency).img} alt='' />
-                      <h2>{searchArr(selectedCurrency).text}</h2>
+                      <img src={pairData[pair].img} alt='' />
+                      <h2>{pairData[pair].text}</h2>
                     </div>
                     <SelectChevron>
                       <img src={selectUp} alt='' />
@@ -219,25 +213,25 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                   )}
                 </LoanCustomSelect>
               </NewLoanFormInput>
-              <h2 style={{ cursor: 'pointer' }} onClick={setCollateralAmount}>
+              <h2
+                style={{ cursor: 'pointer' }}
+                onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}
+              >
                 MINIMUM COLLATERAL:{' '}
-                <span style={{ cursor: 'pointer' }}>
-                  {minCollateralAmount}
-                </span>{' '}
-                {searchArr(selectedCurrency).collateral}
+                <span style={{ cursor: 'pointer' }}>{minCollateralAmount}</span>{' '}
+                {pairData[pair].collateral}
               </h2>
             </ModalFormGrpNewLoan>
 
-            <ModalFormGrp currency={searchArr(selectedCurrency).collateral}>
+            <ModalFormGrp currency={pairData[pair].collateral}>
               <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
                 COLLATERALIZING
               </ModalFormLabel>
               <Field
                 component={InputField}
-                className={
-                  'ModalFormInput ' +
-                  `${'ModalFormInput' + searchArr(selectedCurrency).collateral}`
-                }
+                className={`ModalFormInput ${
+                  'ModalFormInput' + pairData[pair].collateral
+                }`}
                 name='collateralAmount'
                 onChange={(e, newValue) =>
                   calcCollateralRatio(formValues.borrowedAskAmount, newValue)
@@ -245,14 +239,14 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                 type='number'
                 step='0.0001'
                 id='COLLATERALIZINGInput'
-                background={searchArr(selectedCurrency).colIcon}
+                background={pairData[pair].colIcon}
               />
               <h2>
                 COLLATERALIZATION RATIO: <span>{collateralRatio}</span>%
               </h2>
             </ModalFormGrp>
 
-            <ModalFormGrpNewLoan placeholder="%">
+            <ModalFormGrpNewLoan placeholder='%'>
               <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
               <Field
                 name='apy'

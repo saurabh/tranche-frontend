@@ -1,9 +1,16 @@
 import React from "react";
 import { LinkArrow } from 'assets';
 import {etherScanUrl } from 'config/constants';
+import { statuses } from 'config/constants';
 import { addrShortener } from 'utils';
 
-const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}) => {
+const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest, status, createdAt}) => {
+    
+    const searchObj = (val) =>{
+        return Object.fromEntries(
+          Object.entries(statuses).filter(([key, value]) => value.status === val)
+        );
+    }
     return (
         <div className="table-more-row">
             <div className="table-more-row-first table-more-row-content">
@@ -13,7 +20,7 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}
                 </div>*/}
                 <div className="table-more-row-first-content">
                    {/* <h2>apr 15, 2020 - 1:53 pm</h2>*/}
-                    <h2>{addrShortener(hash)}</h2>
+                    <h2>{createdAt}</h2>
                     <a
                         href={etherScanUrl + hash + '/#internaltx'}
                         target='_blank'
@@ -37,7 +44,14 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest}
                 </div>
             </div>
             <div className="table-more-row-fifth table-more-second-4 table-more-row-content">
-                
+                {/*<div className="table-more-row-fifth-content">
+                    <span
+                        style={{
+                            color: Object.values(searchObj(parseInt(status)))[0].color
+                        }}
+                    >•</span>
+                    <h2>Loan Status</h2>
+                </div>*/}
             </div>
             <div className="table-more-row-sixth table-more-second-4 table-more-row-content">
                 

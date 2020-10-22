@@ -56,20 +56,32 @@ const Table = ({
   const [pageCount, setPageCount] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const loanListing = async (filter = null, p = page.current) => {
+  const loanListing = async (p = page.current, sort = null) => {
     let currentPage = page.current;
     if (!currentPage || currentPage === 0) {
       currentPage = 1;
     }
 
     const offset = (currentPage - 1) * limit;
-    await loansFetchData({
-      skip: offset,
-      limit: limit,
-      filter: {
-        type: filterChanged //ETH/JNT keep these in constant file
-      }
-    });
+    if(sort){
+      await loansFetchData({
+        sort: sort,
+        skip: offset,
+        limit: limit,
+        filter: {
+          type: filterChanged //ETH/JNT keep these in constant file
+        }
+      });
+    }
+    else{
+      await loansFetchData({
+        skip: offset,
+        limit: limit,
+        filter: {
+          type: filterChanged //ETH/JNT keep these in constant file
+        }
+      });
+    }
     page.current = currentPage;
   };
 
@@ -89,13 +101,21 @@ const Table = ({
     loanListing();
   };
 
+  const handleSorting = (name, type) => {
+    let sort = {
+        name: name,
+        type: type
+    }
+    loanListing(page.current, sort);
+  }
+
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper' style={{ marginBottom: '150px' }}>
         <TableWrapper>
           <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
           <div className='table-container'>
-            <TableHead />
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)}/>
             <div className='table-content'>
               {loans &&
                 loans.list.map((loan, i) => (

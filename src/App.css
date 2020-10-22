@@ -30,7 +30,6 @@ html{
 .table-more-card-toggle{
   /*padding: 30px 12px 30px 102px;*/
   padding: 30px 39px 30px 47px;;
-
   border-bottom: 1px solid #EFEFEF;
   opacity: 1;
   height: auto;
@@ -43,6 +42,9 @@ html{
 }
 .interest-paid-title-content{
   max-width: 85px;
+}
+.status-title-content{
+  max-width: 60px;
 }
 .table-first-col{
   display: flex;
@@ -66,7 +68,7 @@ html{
   font-family: 'Open Sans', sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #39295A;
@@ -244,10 +246,20 @@ html{
   font-weight: 400;
   font-size: 10px;
   letter-spacing: 0.05em;
-  margin-left: 15px;
   text-transform: uppercase;
   color: #838186;
 }
+.adjust-btn-wrapper button:disabled, .adjust-btn-wrapper
+button[disabled]{
+  opacity: 0.5 !important;
+  background-color: rgba(204, 204, 204, 0.5) !important;
+}
+.adjust-btn-wrapper button:disabled img, .adjust-btn-wrapper
+button[disabled] img{
+  filter: grayscale(1) !important;
+  opacity: 0.5 !important;
+}
+
 .table-more-row-first-content a img{
   height: 12px;
   margin-left: 2px;
@@ -291,7 +303,14 @@ html{
   width: 109px;
 }
 .table-more-row-fifth-content{
-  max-width: 84px;
+  max-width: 105px;
+  display: flex;
+}
+.table-more-row-fifth-content span{
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  margin-top: -1px;
+  margin-right: 7px;
 }
 .table-more-row-sixth{
   width: 90px;

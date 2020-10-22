@@ -15,7 +15,16 @@ import {
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
-import { statuses, PagesData, pairData, etherScanUrl, apiUri } from 'config/constants';
+import {
+  statuses,
+  PagesData,
+  pairData,
+  etherScanUrl,
+  apiUri,
+  USDC,
+  DAI,
+  generalParams
+} from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 
@@ -40,8 +49,8 @@ const TableContentCard = styled.div`
 const TableCard = ({
   loan: {
     borrowerAddress,
-    lenderAddress,
     status,
+    loanActiveBlock,
     contractAddress,
     remainingLoan,
     cryptoFromLender,
@@ -49,7 +58,8 @@ const TableCard = ({
     collateralRatio,
     interestPaid,
     collateralTypeName,
-    collateralType
+    collateralType,
+    name
   },
   path,
   loansFetchData,
@@ -67,15 +77,20 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
+  const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
-    (path === 'earn' &&
-      isShareholder &&
-      (status === statuses['Active'].status ||
+    (path === 'borrow' &&
+      (status === statuses['Foreclosed'].status || 
         status === statuses['Early_closing'].status ||
+        status === statuses['Closing'].status)) ||
+    (path === 'earn' &&
+      !isShareholder &&
+      (status === statuses['Active'].status ||
         status === statuses['Foreclosed'].status ||
+        status === statuses['Early_closing'].status ||
         status === statuses['Closing'].status)) ||
     status === statuses['Closed'].status ||
     status === statuses['Cancelled'].status;
@@ -95,7 +110,7 @@ const TableCard = ({
         if (address) {
           const { loanContractSetup } = searchArr(cryptoFromLenderName);
           const JLoan = loanContractSetup(web3, contractAddress);
-          const result = await JLoan.methods.isShareHolder(address).call();
+          const result = await JLoan.methods.isShareholder(address).call();
           setIsShareholder(result);
         }
       } catch (error) {
@@ -117,9 +132,15 @@ const TableCard = ({
         console.error(error);
       }
     };
+    const forecloseWindowCheck = async () => {
+      const currentBlock = await web3.eth.getBlockNumber();
+      if (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow)
+        setCanBeForeclosed(true);
+    };
 
+    forecloseWindowCheck();
     getAccruedInterest();
-  }, [contractAddress, cryptoFromLenderName, web3]);
+  }, [contractAddress, cryptoFromLenderName, loanActiveBlock, web3]);
 
   const calcNewCollateralRatio = async (amount) => {
     try {
@@ -284,21 +305,46 @@ const TableCard = ({
     try {
       const { loanContractSetup } = searchArr(cryptoFromLenderName);
       const JLoan = loanContractSetup(web3, contractAddress);
-      await JLoan.methods
-        .initiateLoanForeClose()
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          notify.hash(hash);
-        })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null
-            }
+      const currentBlock = await web3.eth.getBlockNumber();
+      if (
+        status === statuses['Under_Collateralized'].status ||
+        status === statuses['At_Risk'].status
+      ) {
+        await JLoan.methods
+          .initiateLoanForeClose()
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 100,
+              filter: {
+                type: null
+              }
+            });
           });
-        });
+      } else if (
+        currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
+        status === statuses['Foreclosing'].status
+      ) {
+        await JLoan.methods
+          .setLoanInForeclosedByTime()
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          })
+          .on('receipt', async () => {
+            await loansFetchData({
+              skip: 0,
+              limit: 100,
+              filter: {
+                type: null
+              }
+            });
+          });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -385,13 +431,14 @@ const TableCard = ({
     }
   };
 
-  const addCollateral = () => {
+  const addCollateral = (e) => {
+    e.preventDefault();
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
-    if (cryptoFromLenderName === searchArr(cryptoFromLenderName).key) {
+    if (cryptoFromLenderName === searchArr(DAI).key) {
       addCollateralToEthLoan(contractAddress, collateralAmount);
       closeModal();
-    } else if (cryptoFromLenderName === searchArr(cryptoFromLenderName).key) {
+    } else if (cryptoFromLenderName === searchArr(USDC).key) {
       addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
       closeModal();
     }
@@ -407,10 +454,12 @@ const TableCard = ({
     setIsOpen(false);
   };
 
-  const searchObj = (val) =>
-    Object.fromEntries(
+  const searchObj = (val) => {
+    return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
+  }
+    
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
@@ -458,9 +507,9 @@ const TableCard = ({
               <img src={UserImg} alt='User' />
             </div>
             <div className='first-col-content'>
-              {/*<div className="first-col-title">
-                              <h2>Pragmatic owl</h2>
-                          </div>*/}
+              <div className='first-col-title'>
+                <h2>{name && name}</h2>
+              </div>
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
                 <a
@@ -562,6 +611,7 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             isShareholder={isShareholder}
+            canBeForeclosed={canBeForeclosed}
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
@@ -595,6 +645,8 @@ const TableCard = ({
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
+                  status={i.loanStatus}
+                  createdAt={i.createdAt}
                 />
               );
             })

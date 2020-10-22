@@ -29,7 +29,13 @@ const ModalContent = styled.div`
   justify-content: center;
 `
 const ModalContentDetails = styled.div`
+  width: 100%;
+  margin: 15px 0;
   & > div {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+
     & > h2 {
       font-style: normal;
       font-weight: 500;
