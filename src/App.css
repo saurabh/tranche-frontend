@@ -303,7 +303,14 @@ button[disabled] img{
   width: 109px;
 }
 .table-more-row-fifth-content{
-  max-width: 84px;
+  max-width: 105px;
+  display: flex;
+}
+.table-more-row-fifth-content span{
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  margin-top: -1px;
+  margin-right: 7px;
 }
 .table-more-row-sixth{
   width: 90px;
