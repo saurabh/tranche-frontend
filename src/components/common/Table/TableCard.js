@@ -83,7 +83,7 @@ const TableCard = ({
   let disableBtn =
     (path === 'borrow' && borrowerAddress !== address) ||
     (path === 'borrow' &&
-      (status === statuses['Foreclosed'].status ||
+      (status === statuses['Foreclosed'].status || 
         status === statuses['Early_closing'].status ||
         status === statuses['Closing'].status)) ||
     (path === 'earn' &&
