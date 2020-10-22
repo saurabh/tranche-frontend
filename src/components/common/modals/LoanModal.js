@@ -77,6 +77,7 @@ export default function LoanModal({
   status,
   isShareholder,
   accruedInterest,
+  canBeForeclosed,
   approveLoan,
   closeLoan,
   addCollateral,
@@ -186,6 +187,7 @@ export default function LoanModal({
               </button>
             </ModalHeader>
             <AdjustLoan
+              collateralTypeName={collateralTypeName}
               addCollateral={addCollateral}
               newCollateralRatio={newCollateralRatio}
               calcNewCollateralRatio={calcNewCollateralRatio}
@@ -214,8 +216,12 @@ export default function LoanModal({
         <ModalContent>
           <ModalContentDetails>
             <div>
-              <h2><span>Interest paid</span></h2>
-              <h2>{interestPaid} {collateralTypeName}</h2>
+              <h2>
+                <span>Interest paid</span>
+              </h2>
+              <h2>
+                {interestPaid} {collateralTypeName}
+              </h2>
             </div>
           </ModalContentDetails>
           <BtnGrpLoanModal>
@@ -277,6 +283,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('Foreclose')}
                   btnColor={statuses['Foreclosed'].color}
+                  disabled={!canBeForeclosed}
                 >
                   Foreclose Loan
                 </ModalButton>

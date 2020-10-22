@@ -107,6 +107,11 @@ export const DAI = 'DAI';
 export const JNT = 'JNT';
 export const USDC = 'USDC';
 
+export const generalParams = {
+  foreclosureWindow: 50,
+  earlySettlementWindow: 540000
+}
+
 export const actionTypes = {
   Cancel: {
     name: 'Cancel',
