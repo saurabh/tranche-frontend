@@ -1,16 +1,16 @@
 {
   "contractName": "IJLoanCommons",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.11+commit.5ef660b1\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol\":\"IJLoanCommons\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol\":{\"keccak256\":\"0xc3ff40adbf37094dc6b96b8fb5bba79186677e6c49f67a332273bbfbbf71c44d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dc995a49bd6f5e202200baf33152747e6b2040527dec2141c375891fa21f6cf5\",\"dweb:/ipfs/QmTZomzRfuHkia19qkyc6W9dpjdh2NyAb9Vg4zdGBcaEpR\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.11+commit.5ef660b1\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV1/contracts/IJLoanCommons.sol\":\"IJLoanCommons\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV1/contracts/IJLoanCommons.sol\":{\"keccak256\":\"0xc3ff40adbf37094dc6b96b8fb5bba79186677e6c49f67a332273bbfbbf71c44d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dc995a49bd6f5e202200baf33152747e6b2040527dec2141c375891fa21f6cf5\",\"dweb:/ipfs/QmTZomzRfuHkia19qkyc6W9dpjdh2NyAb9Vg4zdGBcaEpR\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.6.11;\npragma experimental ABIEncoderV2;\n\n\ninterface IJLoanCommons {\n    struct GeneralParams {\n        uint minRpbRate; \n        uint earlySettlementWindow;\n        uint foreclosureWindow;\n        uint8 requiredCollateralRatio;\n        uint8 foreclosingRatio;\n        uint8 instantForeclosureRatio;\n        uint8 limitCollRatioForWithdraw;\n        address factoryAddress;\n        address ethDeployerAddress;\n        address tokenDeployerAddress;\n    }\n\n    struct FeesParams {\n        uint earlySettlementFee;\n        uint8 factoryFees;\n        uint8 userRewardShare;\n        uint8 vaultShare;\n        uint8 cancellationFees;\n        uint16 undercollateralizedForeclosingMultiple;\n        uint16 atRiskForeclosedMultiple;\n    }\n\n    struct ContractParams {\n        uint loanId;  \n        uint rpbRate; \n        uint initialCollateralRatio;\n        uint creationBlock;\n        uint pairId;\n        uint borrowedAskAmount;\n        uint8 collDecimals;\n        uint8 lendDecimals;\n    }\n\n    enum Status {\n        pending,                // 0    by borrower\n        active,                 // 1    by lender(s) and >= 200% initialCollateralRatio\n        underCollateralized,    // 2    (< 150%) foreclosingRatio\n        atRisk,                 // 3    (< 120%) instantForeclosureRatio\n        foreclosing,            // 4    third party proposal (fees), starting time and vlaue conditions to go in atrisk\n        foreclosed,             // 5    if foreclosing and atrisk, set by third party (fees) (borrower could not adjust collateral, and he cannot send back stable coins)\n                                //      firts rewards (80/20), then shareholders (collateral + interests), then borrower\n        earlyClosing,           // 6    loan is settled early by the borrower, it continue to calculate interests until the earlySettlementWindow, \n                                //      then it can be closed by lender(s). Borrower could not add collateral\n        closing,                // 7    only by borrower (borrower could not adjust collateral)\n        closed,                 // 8    by lender(s): from atRisk or from foreclosed (borrower could not adjust collateral)\n        cancelled               // 9    loan cancelled by the borrower before receiving lender's stable coins (borrower could not adjust collateral)\n    } \n\n}\n",
-  "sourcePath": "C:\\Users\\saurabh\\code\\Jibrel\\defi-smartcontracts\\LoansFactoryV2\\contracts\\IJLoanCommons.sol",
+  "sourcePath": "C:\\Users\\saurabh\\code\\Jibrel\\defi-smartcontracts\\LoansFactoryV1\\contracts\\IJLoanCommons.sol",
   "ast": {
-    "absolutePath": "/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol",
+    "absolutePath": "/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV1/contracts/IJLoanCommons.sol",
     "exportedSymbols": {
       "IJLoanCommons": [
         201
@@ -866,7 +866,7 @@
     "src": "33:2347:1"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol",
+    "absolutePath": "/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV1/contracts/IJLoanCommons.sol",
     "exportedSymbols": {
       "IJLoanCommons": [
         201
@@ -1727,7 +1727,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-10-22T13:11:22.034Z",
+  "updatedAt": "2020-10-22T17:57:25.418Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
