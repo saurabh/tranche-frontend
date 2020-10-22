@@ -454,10 +454,12 @@ const TableCard = ({
     setIsOpen(false);
   };
 
-  const searchObj = (val) =>
-    Object.fromEntries(
+  const searchObj = (val) => {
+    return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
+  }
+    
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
@@ -643,6 +645,7 @@ const TableCard = ({
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
+                  status={i.loanStatus}
                   createdAt={i.createdAt}
                 />
               );

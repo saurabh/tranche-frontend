@@ -30,7 +30,6 @@ html{
 .table-more-card-toggle{
   /*padding: 30px 12px 30px 102px;*/
   padding: 30px 39px 30px 47px;;
-
   border-bottom: 1px solid #EFEFEF;
   opacity: 1;
   height: auto;
@@ -43,6 +42,9 @@ html{
 }
 .interest-paid-title-content{
   max-width: 85px;
+}
+.status-title-content{
+  max-width: 60px;
 }
 .table-first-col{
   display: flex;
@@ -301,7 +303,14 @@ button[disabled] img{
   width: 109px;
 }
 .table-more-row-fifth-content{
-  max-width: 84px;
+  max-width: 105px;
+  display: flex;
+}
+.table-more-row-fifth-content span{
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  margin-top: -1px;
+  margin-right: 7px;
 }
 .table-more-row-sixth{
   width: 90px;
