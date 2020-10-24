@@ -134,6 +134,20 @@ export const actionTypes = {
     confirmationText: 'Are you sure you want to foreclose this loan?'
   }
 }
+export const events = {
+	LOAN_CREATED_ETH: "NewEthLoanCreated",
+	LOAN_CREATED_TOKEN: "NewTokenLoanCreated",
+	APPROVE_LOAN: "LenderAccepted",
+	NEW_DEPOSIT_TOKEN: "NewDeposit",
+	NEW_DEPOSIT_ETH: "EthReceived",
+	FORECLOSING: "LoanForeclosing",
+	FORECLOSED: "LoanForeclosed",
+	LOAN_CANCEL: "LoanCancelled",
+	LOAN_CLOSING_BORROWER: "LoanClosingByBorrower",
+	LOAN_CLOSED: 'LoanClosed',
+	INTEREST_WITHDRAWN: 'InterestsWithdrawed',
+	REMOVE_COLLATERAL: 'WithdrawCollateral'
+}
 
 export const statuses = {
   Pending: {

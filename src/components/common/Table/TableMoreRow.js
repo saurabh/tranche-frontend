@@ -1,10 +1,10 @@
 import React from "react";
 import { LinkArrow } from 'assets';
 import {etherScanUrl } from 'config/constants';
-import { statuses } from 'config/constants';
+import { statuses, events } from 'config/constants';
 import { addrShortener } from 'utils';
 
-const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest, status, createdAt}) => {
+const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest, status, createdAt, eventName}) => {
     
     const searchObj = (val) =>{
         return Object.fromEntries(
@@ -44,14 +44,29 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest,
                 </div>
             </div>
             <div className="table-more-row-fifth table-more-second-4 table-more-row-content">
-                {/*<div className="table-more-row-fifth-content">
+                <div className="table-more-row-fifth-content">
                     <span
                         style={{
                             color: Object.values(searchObj(parseInt(status)))[0].color
                         }}
                     >•</span>
-                    <h2>Loan Status</h2>
-                </div>*/}
+                    <h2>
+                        {
+                            eventName === events["LOAN_CREATED_ETH"].toLowerCase() ?  "Loan Requested":
+                            eventName === events["LOAN_CREATED_TOKEN"].toLowerCase() ?  "Loan Requested":
+                            eventName === events["APPROVE_LOAN"].toLowerCase() ?  "Loan Approved":
+                            eventName === events["NEW_DEPOSIT_TOKEN"].toLowerCase() ?  "Collateral Adjustment" :
+                            eventName === events["NEW_DEPOSIT_ETH"].toLowerCase() ?  "Collateral Adjustment" :
+                            eventName === events["FORECLOSING"].toLowerCase() ?  "Loan Foreclosing" :
+                            eventName === events["FORECLOSED"].toLowerCase() ? "Loan Foreclosed" :
+                            eventName === events["LOAN_CANCEL"].toLowerCase() ? "Loan Cancelled" :
+                            eventName === events["LOAN_CLOSING_BORROWER"].toLowerCase() ? "Loan Closing" :
+                            eventName === events["LOAN_CLOSED"].toLowerCase() ? "Loan Closed" :
+                            eventName === events["INTEREST_WITHDRAWN"].toLowerCase() ?  "Interest Withdrawal" :
+                            eventName === events["REMOVE_COLLATERAL"].toLowerCase() ? "Collateral Removed" : "N/A"
+                        }
+                    </h2>
+                </div>
             </div>
             <div className="table-more-row-sixth table-more-second-4 table-more-row-content">
                 

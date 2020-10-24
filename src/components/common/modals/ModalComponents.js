@@ -172,7 +172,6 @@ const ModalFormGrp = styled.div`
       top: 27px;
     }  
   `}
-  
   & > h2{
     font-style: normal;
     font-weight: normal;

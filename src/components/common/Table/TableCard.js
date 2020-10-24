@@ -647,6 +647,7 @@ const TableCard = ({
                   interest={i.interestPaid}
                   status={i.loanStatus}
                   createdAt={i.createdAt}
+                  eventName={i.eventName}
                 />
               );
             })
