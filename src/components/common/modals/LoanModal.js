@@ -86,7 +86,11 @@ export default function LoanModal({
   newCollateralRatio,
   calcNewCollateralRatio,
   interestPaid,
-  collateralTypeName
+  collateralTypeName,
+  remainingLoan, 
+  collateralRatio, 
+  collateralAmount,
+  cryptoFromLenderName
 }) {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
@@ -97,9 +101,9 @@ export default function LoanModal({
         return (
           <ConfirmAlertWrapper>
             <h2>{actionTypes[type].confirmationText}</h2>
-            {type === 'WithdrawInterest' && (
+            {/*{type === 'WithdrawInterest' && (
               <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
-            )}
+            )}*/}
             <ConfirmAlertBtnWrapper>
               <ModalButton onClick={onClose}>No</ModalButton>
               <ModalButton
@@ -155,12 +159,58 @@ export default function LoanModal({
             contentLabel='Adjust'
           >
             <ModalHeader>
-              <h2>Review loan request</h2>
+              <h2>Manage Loan</h2>
               <button onClick={() => modalClose()}>
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
             <ModalContent>
+            <ModalContentDetails>
+            <div>
+              <h2>
+                <span>Loan amount</span>
+              </h2>
+              <h2>
+                {remainingLoan} {cryptoFromLenderName}
+              </h2>
+            </div>
+
+            <div>
+              <h2>
+                <span>Collateral amount</span>
+              </h2>
+              <h2>
+                {collateralAmount} {collateralTypeName}
+              </h2>
+            </div>
+
+            <div>
+              <h2>
+                <span>Collateral ratio</span>
+              </h2>
+              <h2>
+                {collateralRatio}%
+              </h2>
+            </div>
+
+            {/*<div>
+              <h2>
+                <span>APY</span>
+              </h2>
+              <h2>
+                {interestPaid} {collateralTypeName}
+              </h2>
+            </div>*/}
+
+            <div>
+              <h2>
+                <span>Interest accrued</span>
+              </h2>
+              <h2>
+                {accruedInterest} {collateralTypeName}
+              </h2>
+            </div>
+          </ModalContentDetails>
               <BtnGrpLoanModal>
                 <ModalButton
                   disabled={loanStatusPending}
@@ -208,7 +258,7 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>Review loan request</h2>
+          <h2>Manage Earning Asset</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
@@ -217,10 +267,46 @@ export default function LoanModal({
           <ModalContentDetails>
             <div>
               <h2>
-                <span>Interest paid</span>
+                <span>Loan amount</span>
+              </h2>
+              <h2>
+                {remainingLoan} {cryptoFromLenderName}
+              </h2>
+            </div>
+
+            <div>
+              <h2>
+                <span>Collateral amount</span>
+              </h2>
+              <h2>
+                {collateralAmount} {collateralTypeName}
+              </h2>
+            </div>
+
+            <div>
+              <h2>
+                <span>Collateral ratio</span>
+              </h2>
+              <h2>
+                {collateralRatio}%
+              </h2>
+            </div>
+
+            {/*<div>
+              <h2>
+                <span>APY</span>
               </h2>
               <h2>
                 {interestPaid} {collateralTypeName}
+              </h2>
+            </div>*/}
+
+            <div>
+              <h2>
+                <span>Interest accrued</span>
+              </h2>
+              <h2>
+                {accruedInterest} {collateralTypeName}
               </h2>
             </div>
           </ModalContentDetails>
@@ -230,7 +316,7 @@ export default function LoanModal({
                 onClick={() => confirm('Approve')}
                 btnColor={statuses['Active'].color}
               >
-                Approve Loan
+                Approve Loan request
               </ModalButton>
             ) : status === statuses['Active'].status ? (
               <ModalButton

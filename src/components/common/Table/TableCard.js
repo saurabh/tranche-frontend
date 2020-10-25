@@ -58,6 +58,8 @@ const TableCard = ({
     collateralRatio,
     interestPaid,
     collateralTypeName,
+    collateralAmount,
+    loanCommonParams,
     collateralType,
     name
   },
@@ -620,6 +622,11 @@ const TableCard = ({
             forecloseLoan={forecloseLoan}
             newCollateralRatio={newCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
+            rpbRate={loanCommonParams && loanCommonParams.rpbRate}
+            collateralAmount={collateralAmount}
+            collateralRatio={collateralRatio}
+            remainingLoan={remainingLoan}
+            cryptoFromLenderName={cryptoFromLenderName}
           />
         </div>
       </TableContentCard>

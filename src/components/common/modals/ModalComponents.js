@@ -33,17 +33,23 @@ const ModalContentDetails = styled.div`
   margin: 15px 0;
   & > div {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
     margin: 15px 0;
+    border-bottom: 1px solid rgba(63,63,63,0.1);
 
     & > h2 {
       font-style: normal;
-      font-weight: 500;
+      font-weight: 300;
       font-size: 12px;
-      color: #3F3F3F;
+      color: rgba(56,56,56,0.7) !important;
       text-transform: uppercase;
+      margin-bottom: 12px;
       & > span{
-        font-weight: 700;
+        font-weight: 700 !important;
+        font-size: 15px;
+        letter-spacing: 3px;
       }
     }
   }
@@ -71,9 +77,10 @@ const ModalButton = styled.button`
   text-transform: uppercase;
   /*color: rgba(131, 129, 134, 0.4);*/
   cursor: pointer;
+  color: ${props => props.btnColor ? "#ffffff" : "#000000"};
   &:last-child{
     margin: 12px 0 0 0;
-    color: #ffffff;
+    color: #ffffff !important;
     background: ${props => props.btnColor ? props.btnColor  : "#E42013"};
   }
 `
@@ -121,7 +128,7 @@ const ModalAdjustForm = styled.div`
  display: flex;
  & > form{
    width: 100%;
-   min-height: 351px;
+   //min-height: 351px;
    height: 100%;
    display: flex;
    flex-direction: column;
@@ -210,6 +217,7 @@ const ModalFormGrpNewLoan = styled.div`
   `}
 `
 const NewLoanFormInput = styled.div`
+  width: 100%;  
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -307,7 +315,7 @@ const ModalFormInputNewLoan = styled(Input)`
 `
 const FormInputsWrapper = styled.div`
   padding:10px 35px;
-  min-height: 260px;
+  //min-height: 260px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -373,9 +381,12 @@ const SelectCurrencyView = styled.div`
   
 `
 const NewLoanInputWrapper = styled.div`
+  width: 100%;  
   display: flex;
   flex-direction: column;
-
+  ${({ name }) => name === 'borrowedAskAmount' && `
+    width: auto;
+  `}
 `
 const LoanCustomSelect = styled.div`
   align-self: flex-end;

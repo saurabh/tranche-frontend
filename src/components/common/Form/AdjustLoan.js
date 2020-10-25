@@ -62,7 +62,7 @@ let AdjustLoan = ({ collateralTypeName, addCollateral, newCollateralRatio, calcN
           <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
             <NewLoanFormInput>
               <NewLoanInputWrapper>
-                <ModalFormLabel htmlFor='COLLATERALIZINGInput'>ADD COLLATERAL</ModalFormLabel>
+                <ModalFormLabel htmlFor='COLLATERALIZINGInput'>New Collateral Amount</ModalFormLabel>
                 <Field
                   component={InputField}
                   className={`ModalFormInput ${'ModalFormInput' + searchArr(collateralTypeName).collateral}`}
