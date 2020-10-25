@@ -78,24 +78,11 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
-  let disableBtn =
-    (path === 'borrow' && borrowerAddress !== address) ||
-    (path === 'borrow' &&
-      (status === statuses['Foreclosed'].status || 
-        status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status)) ||
-    (path === 'earn' &&
-      !isShareholder &&
-      (status === statuses['Active'].status ||
-        status === statuses['Foreclosed'].status ||
-        status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status)) ||
-    status === statuses['Closed'].status ||
-    status === statuses['Cancelled'].status;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -107,12 +94,33 @@ const TableCard = ({
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
   useEffect(() => {
+    if (
+      (path === 'borrow' && borrowerAddress !== address) ||
+      (path === 'borrow' &&
+        (status === statuses['Foreclosed'].status ||
+          status === statuses['Early_closing'].status ||
+          status === statuses['Closing'].status)) ||
+      (path === 'earn' &&
+        !isShareholder &&
+        (status === statuses['Active'].status ||
+          status === statuses['Foreclosed'].status ||
+          status === statuses['Early_closing'].status ||
+          status === statuses['Closing'].status)) ||
+      status === statuses['Closed'].status ||
+      status === statuses['Cancelled'].status
+    ) {
+      setDisableBtn(true);
+    } else setDisableBtn(false);
+  }, [status, path, address, isShareholder, borrowerAddress]);
+
+  useEffect(() => {
     const isShareholderCheck = async () => {
       try {
         if (address) {
           const { loanContractSetup } = searchArr(cryptoFromLenderName);
           const JLoan = loanContractSetup(web3, contractAddress);
           const result = await JLoan.methods.isShareholder(address).call();
+          console.log(result)
           setIsShareholder(result);
         }
       } catch (error) {
@@ -460,8 +468,7 @@ const TableCard = ({
     return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
-  }
-    
+  };
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
