@@ -12,9 +12,9 @@ import {
   FormInputsWrapper,
   ModalFormButton,
   NewLoanInputWrapper,
-  NewLoanFormInput,
+  NewLoanFormInput
 } from '../Modals/ModalComponents';
-import { pairData } from 'config/constants'
+import { pairData } from 'config/constants';
 
 const InputField = ({
   input,
@@ -23,11 +23,23 @@ const InputField = ({
   className,
   meta: { touched, error }
 }) => (
-  <div>    
-    {
-    (touched && error) ? <input placeholder={placeholder} {...input} type={type} style={{boxShadow: "inset 0 0 3px red"}} className={className} /> :
-    <input {...input} type={type} style={{border: "1px solid #ffffff"}} className={className} />
-    }
+  <div>
+    {touched && error ? (
+      <input
+        placeholder={placeholder}
+        {...input}
+        type={type}
+        style={{ boxShadow: 'inset 0 0 3px red' }}
+        className={className}
+      />
+    ) : (
+      <input
+        {...input}
+        type={type}
+        style={{ border: '1px solid #ffffff' }}
+        className={className}
+      />
+    )}
     {touched && error && (
       <span
         style={{
@@ -39,14 +51,17 @@ const InputField = ({
           fontWeight: '300',
           fontSize: '9px'
         }}
-      >
-      </span>
+      ></span>
     )}
   </div>
 );
 
-let AdjustLoan = ({ collateralTypeName, addCollateral, newCollateralRatio, calcNewCollateralRatio }) => {
-
+let AdjustLoan = ({
+  collateralTypeName,
+  addCollateral,
+  newCollateralRatio,
+  calcNewCollateralRatio
+}) => {
   const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
 
   const [debounceCalcNewCollateralRatio] = useDebouncedCallback(
@@ -56,33 +71,39 @@ let AdjustLoan = ({ collateralTypeName, addCollateral, newCollateralRatio, calcN
 
   return (
     <div>
-      <ModalAdjustForm style={{minHeight: "auto"}}>
-        <Form component={ModalFormWrapper} onSubmit={e => addCollateral(e)}>
+      <ModalAdjustForm style={{ minHeight: 'auto' }}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => addCollateral(e)}>
           <FormInputsWrapper>
-          <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
-            <NewLoanFormInput>
-              <NewLoanInputWrapper>
-                <ModalFormLabel htmlFor='COLLATERALIZINGInput'>ADD COLLATERAL</ModalFormLabel>
-                <Field
-                  component={InputField}
-                  className={`ModalFormInput ${'ModalFormInput' + searchArr(collateralTypeName).collateral}`}
-                  name='collateralAmount'
-                  onChange={(event, newValue) => debounceCalcNewCollateralRatio(newValue)}
-                  validate={[required, number]}
-                  type='number'
-                  id='COLLATERALIZINGInput'
-                  step='0.0001'
-                />
-              </NewLoanInputWrapper>
-            </NewLoanFormInput> 
-            <h2>
-              NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
-            </h2>
-          </ModalFormGrp>
+            <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
+              <NewLoanFormInput>
+                <NewLoanInputWrapper>
+                  <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
+                    ADD COLLATERAL
+                  </ModalFormLabel>
+                  <Field
+                    component={InputField}
+                    className={`ModalFormInput ${
+                      'ModalFormInput' + searchArr(collateralTypeName).collateral
+                    }`}
+                    name='collateralAmount'
+                    onChange={(event, newValue) =>
+                      debounceCalcNewCollateralRatio(newValue)
+                    }
+                    validate={[required, number]}
+                    type='number'
+                    id='COLLATERALIZINGInput'
+                    step='0.0001'
+                  />
+                </NewLoanInputWrapper>
+              </NewLoanFormInput>
+              <h2>
+                NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
+              </h2>
+            </ModalFormGrp>
           </FormInputsWrapper>
           <ModalFormSubmit>
             <BtnGrpLoanModal>
-              <ModalFormButton onClick={addCollateral}>Adjust Loan</ModalFormButton>
+              <ModalFormButton type='submit'>Adjust Loan</ModalFormButton>
             </BtnGrpLoanModal>
           </ModalFormSubmit>
         </Form>
@@ -92,7 +113,7 @@ let AdjustLoan = ({ collateralTypeName, addCollateral, newCollateralRatio, calcN
 };
 
 AdjustLoan = reduxForm({
-  form: 'adjustLoan',
+  form: 'adjustLoan'
 })(AdjustLoan);
 
 export { AdjustLoan };

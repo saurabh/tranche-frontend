@@ -2,7 +2,7 @@ import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
 import {
   networkId,
-  infuraProviderUrl as rpcUrl,
+  alchemyProviderUrl as rpcUrl,
   infuraKey,
   blocknativeKey as dappId
 } from 'config/constants';
