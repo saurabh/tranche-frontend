@@ -300,10 +300,9 @@ button[disabled] img{
   text-align: right;
 }
 .table-more-row-fifth{
-  width: 109px;
+  width: 160px;
 }
 .table-more-row-fifth-content{
-  max-width: 105px;
   display: flex;
 }
 .table-more-row-fifth-content span{
@@ -313,7 +312,7 @@ button[disabled] img{
   margin-right: 7px;
 }
 .table-more-row-sixth{
-  width: 90px;
+  width: 39px;
 }
 .TableMoreLoading{
   margin: 0 auto;

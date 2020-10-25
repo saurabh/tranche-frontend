@@ -55,7 +55,10 @@ const TableHeader = ({HandleNewLoan, path}) => {
         <TableContainerHeader>
             <div className="table-header-titles">
                 <TableTitle>
+                {   path === "earn" ?
+                    <h2>Earning Assets</h2> :
                     <h2>Open Loans</h2>
+                }
                 </TableTitle>
                 <TableSubTitle>
                     <h2>All Markets</h2>

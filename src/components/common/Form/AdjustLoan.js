@@ -74,32 +74,26 @@ let AdjustLoan = ({
       <ModalAdjustForm style={{ minHeight: 'auto' }}>
         <Form component={ModalFormWrapper} onSubmit={(e) => addCollateral(e)}>
           <FormInputsWrapper>
-            <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
-              <NewLoanFormInput>
-                <NewLoanInputWrapper>
-                  <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
-                    ADD COLLATERAL
-                  </ModalFormLabel>
-                  <Field
-                    component={InputField}
-                    className={`ModalFormInput ${
-                      'ModalFormInput' + searchArr(collateralTypeName).collateral
-                    }`}
-                    name='collateralAmount'
-                    onChange={(event, newValue) =>
-                      debounceCalcNewCollateralRatio(newValue)
-                    }
-                    validate={[required, number]}
-                    type='number'
-                    id='COLLATERALIZINGInput'
-                    step='0.0001'
-                  />
-                </NewLoanInputWrapper>
-              </NewLoanFormInput>
-              <h2>
-                NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
-              </h2>
-            </ModalFormGrp>
+          <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
+            <NewLoanFormInput>
+              <NewLoanInputWrapper>
+                <ModalFormLabel htmlFor='COLLATERALIZINGInput'>New Collateral Amount</ModalFormLabel>
+                <Field
+                  component={InputField}
+                  className={`ModalFormInput ${'ModalFormInput' + searchArr(collateralTypeName).collateral}`}
+                  name='collateralAmount'
+                  onChange={(event, newValue) => debounceCalcNewCollateralRatio(newValue)}
+                  validate={[required, number]}
+                  type='number'
+                  id='COLLATERALIZINGInput'
+                  step='0.0001'
+                />
+              </NewLoanInputWrapper>
+            </NewLoanFormInput> 
+            <h2>
+              NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
+            </h2>
+          </ModalFormGrp>
           </FormInputsWrapper>
           <ModalFormSubmit>
             <BtnGrpLoanModal>
