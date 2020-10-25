@@ -120,7 +120,6 @@ const TableCard = ({
           const { loanContractSetup } = searchArr(cryptoFromLenderName);
           const JLoan = loanContractSetup(web3, contractAddress);
           const result = await JLoan.methods.isShareholder(address).call();
-          console.log(result)
           setIsShareholder(result);
         }
       } catch (error) {
