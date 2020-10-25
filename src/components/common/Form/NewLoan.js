@@ -157,7 +157,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
           <FormInputsWrapper>
             <ModalFormGrpNewLoan>
               <NewLoanFormInput>
-                <NewLoanInputWrapper>
+                <NewLoanInputWrapper name="borrowedAskAmount">
                   <ModalFormLabel htmlFor='BORROWINGInput'>BORROWING</ModalFormLabel>
                   <Field
                     component={InputField}
@@ -267,7 +267,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
           <ModalFormSubmit>
             <BtnGrpLoanModal>
               <ModalFormButton type='submit' disabled={pristine || submitting || error}>
-                Open Loan
+                Request Loan
               </ModalFormButton>
             </BtnGrpLoanModal>
           </ModalFormSubmit>

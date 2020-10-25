@@ -11,7 +11,7 @@ export const serverUrl = process.env.REACT_APP_serverUrl;
 export const etherScanUrl = process.env.REACT_APP_etherScanUrl;
 export const blocknativeKey = process.env.REACT_APP_blocknativeKey;
 export const infuraKey = process.env.REACT_APP_infuraKey;
-export const infuraProviderUrl = process.env.REACT_APP_infuraProviderUrl;
+export const alchemyProviderUrl = process.env.REACT_APP_alchemyProviderUrl;
 export const networkId = parseInt(process.env.REACT_APP_networkId);
 export const DAIAddress = process.env.REACT_APP_DAIAddress;
 export const JPTAddress = process.env.REACT_APP_JPTAddress;
@@ -133,6 +133,20 @@ export const actionTypes = {
     name: 'Foreclose',
     confirmationText: 'Are you sure you want to foreclose this loan?'
   }
+}
+export const events = {
+	LOAN_CREATED_ETH: "NewEthLoanCreated",
+	LOAN_CREATED_TOKEN: "NewTokenLoanCreated",
+	APPROVE_LOAN: "LenderAccepted",
+	NEW_DEPOSIT_TOKEN: "NewDeposit",
+	NEW_DEPOSIT_ETH: "EthReceived",
+	FORECLOSING: "LoanForeclosing",
+	FORECLOSED: "LoanForeclosed",
+	LOAN_CANCEL: "LoanCancelled",
+	LOAN_CLOSING_BORROWER: "LoanClosingByBorrower",
+	LOAN_CLOSED: 'LoanClosed',
+	INTEREST_WITHDRAWN: 'InterestsWithdrawed',
+	REMOVE_COLLATERAL: 'WithdrawCollateral'
 }
 
 export const statuses = {

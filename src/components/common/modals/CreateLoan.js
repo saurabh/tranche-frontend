@@ -26,7 +26,7 @@ const AdjustPositionStyles = {
     position: 'relative',
     maxWidth: '392px',
     width: '100%',
-    minHeight: '426px',
+    //minHeight: '426px',
     height: 'auto',
     borderRadius: '16px',
     border: 'none',
@@ -165,7 +165,7 @@ const CreateLoan = ({
       contentLabel='NewLoan'
     >
       <ModalHeader>
-        <h2>New Loan</h2>
+        <h2>New Loan Request</h2>
         <button onClick={() => closeModal()}>
           <img src={CloseModal} alt='' />
         </button>

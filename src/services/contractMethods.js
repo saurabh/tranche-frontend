@@ -1,10 +1,6 @@
-import Web3 from 'web3';
 import { JFactorySetup } from 'utils/contractConstructor';
-import { infuraProviderUrl } from 'config/constants';
-const provider = new Web3.providers.HttpProvider(infuraProviderUrl);
-const web3 = new Web3(provider);
+import { web3 } from 'utils/getWeb3';
 const JFactory = JFactorySetup(web3);
-
 export const toWei = web3.utils.toWei;
 
 export const calcMinCollateralAmount = async (pairId, askAmount) => {

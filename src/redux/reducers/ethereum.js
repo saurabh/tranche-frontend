@@ -1,4 +1,3 @@
-import Web3 from 'web3';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -7,14 +6,12 @@ import {
   SET_WEB3
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
-import { infuraProviderUrl } from 'config/constants'
-
-const provider = new Web3.providers.HttpProvider(infuraProviderUrl);
+import { web3 } from 'utils/getWeb3';
 
 const initialState = {
   balance: -1,
   address: undefined,
-  web3: new Web3(provider),
+  web3,
   notify: initNotify()
 };
 
