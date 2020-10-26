@@ -359,6 +359,33 @@ const TableCard = ({
     }
   };
 
+  const withdrawCollateral = async (e) => {
+    e.preventDefault();
+    let { collateralAmount } = form.adjustLoan.values;
+    collateralAmount = toWei(collateralAmount);
+    try {
+      const { loanContractSetup } = searchArr(cryptoFromLenderName);
+      const JLoan = loanContractSetup(web3, contractAddress);
+      await JLoan.methods
+        .withdrawCollateral(collateralAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 100,
+            filter: {
+              type: null
+            }
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addCollateralToEthLoan = async (contractAddress, collateralAmount) => {
     try {
       await web3.eth
@@ -446,9 +473,18 @@ const TableCard = ({
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === searchArr(DAI).key) {
       addCollateralToEthLoan(contractAddress, collateralAmount);
-      closeModal();
     } else if (cryptoFromLenderName === searchArr(USDC).key) {
       addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
+    }
+  };
+
+  const adjustLoan = (e, type) => {
+    e.preventDefault();
+    if (type === 'addCollateral') {
+      addCollateral(e);
+      closeModal();
+    } else if (type === 'removeCollateral') {
+      withdrawCollateral(e);
       closeModal();
     }
   };
@@ -623,7 +659,8 @@ const TableCard = ({
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
-            addCollateral={addCollateral}
+            adjustLoan={adjustLoan}
+            withdrawCollateral={withdrawCollateral}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
             newCollateralRatio={newCollateralRatio}
