@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { required, number } from 'utils/validations';
 import { useDebouncedCallback } from 'utils/lodash';
 import { Form, Field, reduxForm } from 'redux-form';
@@ -58,10 +58,12 @@ const InputField = ({
 
 let AdjustLoan = ({
   collateralTypeName,
-  addCollateral,
+  adjustLoan,
   newCollateralRatio,
   calcNewCollateralRatio
 }) => {
+  const [isConfirmButton, setIsConfirmButton] = useState(false);
+  const [adjustAction, setAdjustAction] = useState('');
   const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
 
   const [debounceCalcNewCollateralRatio] = useDebouncedCallback(
@@ -69,36 +71,63 @@ let AdjustLoan = ({
     500
   );
 
+  const setAction = (type) => {
+    setAdjustAction(type);
+    setIsConfirmButton(true);
+  };
+  
   return (
     <div>
       <ModalAdjustForm style={{ minHeight: 'auto' }}>
-        <Form component={ModalFormWrapper} onSubmit={(e) => addCollateral(e)}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoan(e, adjustAction)}>
           <FormInputsWrapper>
-          <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
-            <NewLoanFormInput>
-              <NewLoanInputWrapper>
-                <ModalFormLabel htmlFor='COLLATERALIZINGInput'>New Collateral Amount</ModalFormLabel>
-                <Field
-                  component={InputField}
-                  className={`ModalFormInput ${'ModalFormInput' + searchArr(collateralTypeName).collateral}`}
-                  name='collateralAmount'
-                  onChange={(event, newValue) => debounceCalcNewCollateralRatio(newValue)}
-                  validate={[required, number]}
-                  type='number'
-                  id='COLLATERALIZINGInput'
-                  step='0.0001'
-                />
-              </NewLoanInputWrapper>
-            </NewLoanFormInput> 
-            <h2>
-              NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
-            </h2>
-          </ModalFormGrp>
+            <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
+              <NewLoanFormInput>
+                <NewLoanInputWrapper>
+                  <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
+                    New Collateral Amount
+                  </ModalFormLabel>
+                  <Field
+                    component={InputField}
+                    className={`ModalFormInput ${
+                      'ModalFormInput' + searchArr(collateralTypeName).collateral
+                    }`}
+                    name='collateralAmount'
+                    onChange={(event, newValue) =>
+                      debounceCalcNewCollateralRatio(newValue)
+                    }
+                    validate={[required, number]}
+                    type='number'
+                    id='COLLATERALIZINGInput'
+                    step='0.0001'
+                  />
+                </NewLoanInputWrapper>
+              </NewLoanFormInput>
+              <h2>
+                NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
+              </h2>
+            </ModalFormGrp>
           </FormInputsWrapper>
           <ModalFormSubmit>
-            <BtnGrpLoanModal>
-              <ModalFormButton type='submit'>Adjust Loan</ModalFormButton>
-            </BtnGrpLoanModal>
+            {!isConfirmButton && (
+              <>
+                <BtnGrpLoanModal>
+                  <ModalFormButton onClick={() => setAction('addCollateral')}>
+                    Add Collateral
+                  </ModalFormButton>
+                </BtnGrpLoanModal>
+                <BtnGrpLoanModal>
+                  <ModalFormButton onClick={() => setAction('removeCollateral')}>
+                    Remove Collateral
+                  </ModalFormButton>
+                </BtnGrpLoanModal>
+              </>
+            )}
+            {isConfirmButton && (
+              <BtnGrpLoanModal>
+                <ModalFormButton type='submit'>Confirm</ModalFormButton>
+              </BtnGrpLoanModal>
+            )}
           </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
