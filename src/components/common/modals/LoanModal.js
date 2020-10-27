@@ -12,7 +12,11 @@ import {
   BtnGrpLoanModal,
   ModalButton,
   ConfirmAlertWrapper,
-  ConfirmAlertBtnWrapper
+  ConfirmAlertBtnWrapper,
+  BtnGrpLoanModalWrapper,
+  ModalActionsContent,
+  ModalActionDetails,
+  ModalUserActions
 } from './ModalComponents';
 
 const FirstCustomStyles = {
@@ -27,13 +31,14 @@ const FirstCustomStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '392px',
+    maxWidth: '831px',
     width: '100%',
+    minHeight: '454px',
     //height: '326px',
     height: 'auto',
-    borderRadius: '16px',
     border: 'none',
-    boxShadow: '0px 2px 4px rgba(99, 99, 99, 0.7)',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
     padding: '0',
     top: '0',
     left: '0',
@@ -53,13 +58,14 @@ const AdjustPositionStyles = {
   },
   content: {
     position: 'relative',
-    maxWidth: '392px',
+    maxWidth: '831px',
     width: '100%',
+    minHeight: '454px',
     //minHeight: '326px',
     height: 'auto',
-    borderRadius: '16px',
     border: 'none',
-    boxShadow: '0px 2px 4px rgba(99, 99, 99, 0.7)',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
     padding: '0',
     top: '0',
     left: '0',
@@ -164,63 +170,42 @@ export default function LoanModal({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
-            <ModalContent>
-            <ModalContentDetails>
-            <div>
-              <h2>
-                <span>Loan amount</span>
-              </h2>
-              <h2>
-                {remainingLoan} {cryptoFromLenderName}
-              </h2>
-            </div>
 
-            <div>
-              <h2>
-                <span>Collateral amount</span>
-              </h2>
-              <h2>
-                {collateralAmount} {collateralTypeName}
-              </h2>
-            </div>
+            <ModalActionsContent>
 
-            <div>
-              <h2>
-                <span>Collateral ratio</span>
-              </h2>
-              <h2>
-                {collateralRatio}%
-              </h2>
-            </div>
 
-            {/*<div>
-              <h2>
-                <span>APY</span>
-              </h2>
-              <h2>
-                {interestPaid} {collateralTypeName}
-              </h2>
-            </div>*/}
+              <ModalActionDetails>
 
-            <div>
-              <h2>
-                <span>Interest accrued</span>
-              </h2>
-              <h2>
-                {accruedInterest} {collateralTypeName}
-              </h2>
-            </div>
-          </ModalContentDetails>
-              <BtnGrpLoanModal>
-                <ModalButton
-                  disabled={loanStatusPending}
-                  onClick={() => adjustPositionToggle(true)}
-                >
-                  Adjust Collateral
-                </ModalButton>
-                <ModalButton onClick={() => confirm('Close')}>Close Loan</ModalButton>
-              </BtnGrpLoanModal>
-            </ModalContent>
+              </ModalActionDetails>
+
+              <ModalUserActions>
+
+                <ModalContent>           
+                    <BtnGrpLoanModal>
+
+                      <BtnGrpLoanModalWrapper>
+                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                        <ModalButton
+                          disabled={loanStatusPending}
+                          onClick={() => adjustPositionToggle(true)}
+                          backgroundColor="#EAEAEA"
+                          btnColor="#234566"
+                        >
+                          Adjust Collateral
+                        </ModalButton>
+                      </BtnGrpLoanModalWrapper>
+
+                      <BtnGrpLoanModalWrapper>       
+                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>                 
+                        <ModalButton onClick={() => confirm('Close')} backgroundColor="#0A66E1" btnColor="#FFFFFF">Close Loan</ModalButton>
+                      </BtnGrpLoanModalWrapper>
+
+                    </BtnGrpLoanModal>
+                </ModalContent>
+              </ModalUserActions>
+
+
+            </ModalActionsContent>
           </Modal>
         ) : (
           <Modal
@@ -236,6 +221,44 @@ export default function LoanModal({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
+              <ModalContentDetails>
+              <div>
+                <h2>
+                  <span>Loan amount</span>
+                </h2>
+                <h2>
+                  {remainingLoan} {cryptoFromLenderName}
+                </h2>
+              </div>
+
+              <div>
+                <h2>
+                  <span>Collateral amount</span>
+                </h2>
+                <h2>
+                  {collateralAmount} {collateralTypeName}
+                </h2>
+              </div>
+
+              <div>
+                <h2>
+                  <span>Collateral ratio</span>
+                </h2>
+                <h2>
+                  {collateralRatio}%
+                </h2>
+              </div>
+
+              {/*<div>
+                <h2>
+                  <span>APY</span>
+                </h2>
+                <h2>
+                  {interestPaid} {collateralTypeName}
+                </h2>
+              </div>*/}
+
+            </ModalContentDetails>
             <AdjustLoan
               collateralTypeName={collateralTypeName}
               addCollateral={addCollateral}
@@ -259,7 +282,7 @@ export default function LoanModal({
       >
         <ModalHeader>
           <h2>
-          {status === statuses['Pending'].status ? "Accept Loan Request" : "Manage Earning Asset"}
+            Manage Earning Asset
           </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
@@ -303,14 +326,6 @@ export default function LoanModal({
               </h2>
             </div>*/}
 
-            <div>
-              <h2>
-                <span>Interest accrued</span>
-              </h2>
-              <h2>
-                {accruedInterest} {collateralTypeName}
-              </h2>
-            </div>
           </ModalContentDetails>
           <BtnGrpLoanModal>
             {status === statuses['Pending'].status ? (
@@ -332,7 +347,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosing'].color}
-                  style={{ display: !isShareholder ? 'none' : '' }}
+                  display={!isShareholder ? 'none' : ''}
                 >
                   Withdraw Interest
                 </ModalButton>
@@ -348,7 +363,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosed'].color}
-                  style={{ display: !isShareholder ? 'none' : '' }}
+                  display={!isShareholder ? 'none' : ''}
                 >
                   Withdraw Interest
                 </ModalButton>
@@ -364,7 +379,7 @@ export default function LoanModal({
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor={statuses['Foreclosed'].color}
-                  style={{ display: !isShareholder ? 'none' : '' }}
+                  display={!isShareholder ? 'none' : ''}
                 >
                   Withdraw Interest
                 </ModalButton>

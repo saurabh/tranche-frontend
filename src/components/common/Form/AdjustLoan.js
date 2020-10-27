@@ -25,21 +25,11 @@ const InputField = ({
 }) => (
   <div>    
     {
-    (touched && error) ? <input placeholder={placeholder} {...input} type={type} style={{boxShadow: "inset 0 0 3px red"}} className={className} /> :
-    <input {...input} type={type} style={{border: "1px solid #ffffff"}} className={className} />
+    (touched && error) ? <input placeholder={placeholder} {...input} type={type} className={className + " " + "InputStylingError"} /> :
+    <input {...input} type={type} className={className + " " + "InputStyling"} />
     }
     {touched && error && (
-      <span
-        style={{
-          position: 'absolute',
-          top: '0',
-          right: '0',
-          color: 'red',
-          fontStyle: 'normal',
-          fontWeight: '300',
-          fontSize: '9px'
-        }}
-      >
+      <span>
       </span>
     )}
   </div>
@@ -56,7 +46,7 @@ let AdjustLoan = ({ collateralTypeName, addCollateral, newCollateralRatio, calcN
 
   return (
     <div>
-      <ModalAdjustForm style={{minHeight: "auto"}}>
+      <ModalAdjustForm className="modalAdjustFormStyle">
         <Form component={ModalFormWrapper} onSubmit={e => addCollateral(e)}>
           <FormInputsWrapper>
           <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>

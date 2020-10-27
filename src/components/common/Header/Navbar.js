@@ -48,7 +48,7 @@ function Navbar({ path }) {
             <NavLink
               to='/trade'
               onClick={(e) => e.preventDefault()}
-              style={{ pointerEvents: 'none' }}
+              className="navLinkDisabled"
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,

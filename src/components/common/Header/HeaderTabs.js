@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loansFetchData, changeFilter } from 'redux/actions/loans';
 import { ETH, JNT, PagesData } from 'config/constants';

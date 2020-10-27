@@ -27,6 +27,11 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
+import {
+  StatusTextWrapper,
+  AdjustModalBtn
+
+} from '../Modals/ModalComponents';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -559,30 +564,20 @@ const TableCard = ({
         </div>
         <div className='table-second-col table-col'>
           <div className='second-col-content'>
-            <h2
+            <StatusTextWrapper
               className='status-text-wrapper'
-              style={{
-                color: Object.values(searchObj(status))[0].color,
-                backgroundColor: Object.values(searchObj(status))[0].background
-              }}
+              color={Object.values(searchObj(status))[0].color}
+              backgroundColor={Object.values(searchObj(status))[0].background}
             >
               {valShortner(Object.values(searchObj(status))[0].key)}
-            </h2>
+            </StatusTextWrapper>
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
-            <button
-              style={
-                ({ background: PagesData[path].btnColor },
-                path === 'trade' || disableBtn
-                  ? {
-                      backgroundColor: '#cccccc',
-                      color: '#666666',
-                      cursor: 'default'
-                    }
-                  : {})
-              }
+            <AdjustModalBtn
+              disabeldBtn = {path === 'trade' || disableBtn}
+              background = {PagesData[path].btnColor}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
             >
@@ -598,7 +593,7 @@ const TableCard = ({
                 }
                 alt=''
               />
-            </button>
+            </AdjustModalBtn>
           </div>
           <div className='star-btn-wrapper'>
             <button>
