@@ -134,6 +134,7 @@ export const actionTypes = {
     confirmationText: 'Are you sure you want to foreclose this loan?'
   }
 }
+
 export const events = {
 	LOAN_CREATED_ETH: "NewEthLoanCreated",
 	LOAN_CREATED_TOKEN: "NewTokenLoanCreated",
