@@ -1,7 +1,9 @@
 import { JFactorySetup } from 'utils/contractConstructor';
 import { web3 } from 'utils/getWeb3';
 const JFactory = JFactorySetup(web3);
+
 export const toWei = web3.utils.toWei;
+export const fromWei = web3.utils.fromWei;
 
 export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
