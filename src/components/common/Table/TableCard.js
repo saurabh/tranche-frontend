@@ -83,24 +83,11 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
-  let disableBtn =
-    (path === 'borrow' && borrowerAddress !== address) ||
-    (path === 'borrow' &&
-      (status === statuses['Foreclosed'].status || 
-        status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status)) ||
-    (path === 'earn' &&
-      !isShareholder &&
-      (status === statuses['Active'].status ||
-        status === statuses['Foreclosed'].status ||
-        status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status)) ||
-    status === statuses['Closed'].status ||
-    status === statuses['Cancelled'].status;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -110,6 +97,26 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
+
+  useEffect(() => {
+    if (
+      (path === 'borrow' && borrowerAddress !== address) ||
+      (path === 'borrow' &&
+        (status === statuses['Foreclosed'].status ||
+          status === statuses['Early_closing'].status ||
+          status === statuses['Closing'].status)) ||
+      (path === 'earn' &&
+        !isShareholder &&
+        (status === statuses['Active'].status ||
+          status === statuses['Foreclosed'].status ||
+          status === statuses['Early_closing'].status ||
+          status === statuses['Closing'].status)) ||
+      status === statuses['Closed'].status ||
+      status === statuses['Cancelled'].status
+    ) {
+      setDisableBtn(true);
+    } else setDisableBtn(false);
+  }, [status, path, address, isShareholder, borrowerAddress]);
 
   useEffect(() => {
     const isShareholderCheck = async () => {
@@ -357,6 +364,33 @@ const TableCard = ({
     }
   };
 
+  const withdrawCollateral = async (e) => {
+    e.preventDefault();
+    let { collateralAmount } = form.adjustLoan.values;
+    collateralAmount = toWei(collateralAmount);
+    try {
+      const { loanContractSetup } = searchArr(cryptoFromLenderName);
+      const JLoan = loanContractSetup(web3, contractAddress);
+      await JLoan.methods
+        .withdrawCollateral(collateralAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 100,
+            filter: {
+              type: null
+            }
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addCollateralToEthLoan = async (contractAddress, collateralAmount) => {
     try {
       await web3.eth
@@ -444,9 +478,18 @@ const TableCard = ({
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === searchArr(DAI).key) {
       addCollateralToEthLoan(contractAddress, collateralAmount);
-      closeModal();
     } else if (cryptoFromLenderName === searchArr(USDC).key) {
       addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
+    }
+  };
+
+  const adjustLoan = (e, type) => {
+    e.preventDefault();
+    if (type === 'addCollateral') {
+      addCollateral(e);
+      closeModal();
+    } else if (type === 'removeCollateral') {
+      withdrawCollateral(e);
       closeModal();
     }
   };
@@ -465,8 +508,7 @@ const TableCard = ({
     return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
-  }
-    
+  };
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
@@ -612,7 +654,8 @@ const TableCard = ({
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
-            addCollateral={addCollateral}
+            adjustLoan={adjustLoan}
+            withdrawCollateral={withdrawCollateral}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
             newCollateralRatio={newCollateralRatio}

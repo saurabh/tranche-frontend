@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { pairData } from 'config/constants';
-import { calcMinCollateralAmount, getPairDetails, toWei } from 'services/contractMethods';
+import { calcMinCollateralAmount, getPairDetails, toWei, fromWei } from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
 import { safeSubtract } from 'utils/helperFunctions';
 import { validate, asyncValidate } from 'utils/validations';
@@ -138,7 +138,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
       let rpb =
         (toWei(amount) * (APY / 100)) /
         (blocksPerYear * (pairValue / 10 ** pairDecimals));
-      SETRPB(parseFloat(rpb));
+      SETRPB(fromWei(Math.ceil(rpb).toString()));
       change('rpbRate', Math.ceil(rpb).toString());
     } else {
       SETRPB(0);

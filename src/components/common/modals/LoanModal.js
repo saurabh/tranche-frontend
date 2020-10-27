@@ -86,7 +86,7 @@ export default function LoanModal({
   canBeForeclosed,
   approveLoan,
   closeLoan,
-  addCollateral,
+  adjustLoan,
   withdrawInterest,
   forecloseLoan,
   newCollateralRatio,
@@ -261,7 +261,7 @@ export default function LoanModal({
             </ModalContentDetails>
             <AdjustLoan
               collateralTypeName={collateralTypeName}
-              addCollateral={addCollateral}
+              adjustLoan={adjustLoan}
               newCollateralRatio={newCollateralRatio}
               calcNewCollateralRatio={calcNewCollateralRatio}
             />

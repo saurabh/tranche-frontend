@@ -897,12 +897,12 @@
     "42": {
       "events": {},
       "links": {},
-      "address": "0xCeb8b30447694590Ae0A491973bb635c4d8dede8",
-      "transactionHash": "0x96e21ffaf89004feaf3e4823bc52963637de120c8725bc912c4130ef9fbae140"
+      "address": "0x7c293384376161548A00523e33eEbFE134a6dDEc",
+      "transactionHash": "0xe73ac76101acf87aa074c04a18721153d7efb92362a524ed278ea4559a302bc0"
     }
   },
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-10-22T17:59:23.928Z",
+  "updatedAt": "2020-10-27T10:21:42.976Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

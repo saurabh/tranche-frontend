@@ -103,7 +103,7 @@ const ModalButton = styled.button`
   border-radius: 27px;
   border: none;
   margin: 12px 0 0 0;
-  background: ${props => props.btnColor ? props.btnColor  : "#ECECEC"};
+  background: ${props => props.backgroundColor ? props.backgroundColor  : "#ECECEC"};
   /*opacity: 0.75;*/
   font-family: Roboto;
   font-style: normal;
@@ -114,7 +114,7 @@ const ModalButton = styled.button`
   text-transform: uppercase;
   /*color: rgba(131, 129, 134, 0.4);*/
   cursor: pointer;
-  color: ${props => props.btnColor ? "#ffffff" : "#000000"};
+  color: ${props => props.btnColor ? props.btnColor : "#000000"};
   &:last-child{
     /*margin: 12px 0 0 0;
     color: #ffffff !important;
