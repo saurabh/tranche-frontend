@@ -1128,3 +1128,9 @@ table, th, td {
 
 
 
+
+@media (max-width: 633px){
+  .ReactModal__Content{
+    position: absolute !important;
+  }
+}

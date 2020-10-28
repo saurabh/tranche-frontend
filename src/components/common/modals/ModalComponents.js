@@ -23,6 +23,10 @@ const ModalHeader = styled.div`
     border: none;
     cursor: pointer;
   }
+  @media (max-width: 633px){
+    position: relative;
+  }
+  
 `
 const ModalContent = styled.div`
   padding: 33px;
@@ -63,14 +67,19 @@ const ModalContentDetails = styled.div`
 const BtnGrpLoanModal = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   text-align: center;
   max-height: 200px;
   height: 100%;
   width: 100%;
+
+  ${({ submitBtn }) => submitBtn && `
+    max-width: 164px;
+  `}
 `
 const BtnGrpLoanModalWrapper = styled.div`
+  margin: 25px 0;
   width: 100%;
   & > h2{
     font-style: normal;
@@ -123,6 +132,11 @@ const ModalButton = styled.button`
   ${({ display }) => display && `
     display: ${display}
   `}
+  :disabled{
+    color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
+    opacity: 0.5;
+    cursor: default;
+  }
 `
 
 const ConfirmAlertWrapper = styled.div`
@@ -130,14 +144,14 @@ const ConfirmAlertWrapper = styled.div`
   width: auto;
   //height: 326px;
   height: auto;
-  border-radius: 16px;
+  border-radius: 12px;
   background: #ffffff;
   border: none;
-  box-shadow: 0px 2px 4px rgba(99, 99, 99, 0.7);
-  padding: 33px;
+  box-shadow: 0px 2px 4px rgba(99,99,99,0.7);
+  padding: 33px 100px;
   & > h2{
     font-style: normal;
-    font-weight: bold;
+    font-weight: normal;
     font-size: 15px;
     color: #3F3F3F;
   }
@@ -272,6 +286,7 @@ const ModalFormLabel = styled.label`
   text-align: center;
   letter-spacing: 0.15em;
   color: #4F4F4F;
+  text-transform: uppercase;
 `
 
 const ModalFormInput = styled(Input)`
@@ -366,6 +381,9 @@ const FormInputsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;    
+  @media (max-width: 633px){
+    transform: none;
+  }
 
 `
 const ModalFormSubmit = styled.div`
@@ -377,8 +395,13 @@ const ModalFormSubmit = styled.div`
   //border-top: 1px solid rgba(63,63,63,0.1);
   background: #ffffff;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 633px){
+    flex-direction: column;
+  }
+
 `
 
 
@@ -397,6 +420,12 @@ const ModalFormButton = styled.button`
   border: none;
   box-sizing: border-box;
   text-transform: uppercase;
+
+  ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
+    font-size: 10px;
+    background: #EAEAEA;
+    color: rgba(35, 69, 102, 0.7);
+  `}
 `
 const SelectCurrencyView = styled.div`
   position: relative;
@@ -516,6 +545,11 @@ const ModalNewLoanContent = styled.div`
   height: 100%;
   display: flex;
   flex-direction: row;
+  @media (max-width: 633px){
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    margin: 50px auto;
+  }
 `
 const ModalNewLoanDetails = styled.div`
   position: relative;
@@ -529,11 +563,18 @@ const ModalNewLoanDetails = styled.div`
   min-height: 454px;
   height: 100%;
   background: #FAFAFA;
+  @media (max-width: 633px){
+    max-width: initial;
+  }
+  
 `
 const ModalActionsContent = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  @media (max-width: 633px){
+    flex-direction: column-reverse;
+  }
 `
 const ModalActionDetails = styled.div`
   position: relative;
@@ -547,6 +588,9 @@ const ModalActionDetails = styled.div`
   min-height: 454px;
   height: 100%;
   background: #FAFAFA;
+  @media (max-width: 633px){
+    max-width: initial;
+  }
 `
 
 const ModalUserActions = styled.div`
@@ -558,17 +602,40 @@ const ModalNewLoanDetailsContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  ${({ adjustDetails }) => adjustDetails && `
+    min-height: 220px;
+  `}
+  @media (max-width: 633px){
+    max-height: 190px;
+  }
+`
+
+const ModalActionDetailsContent = styled.div`
+  min-height: 190px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (max-width: 633px){
+    max-height: 190px;
+  }
 `
 const LoanDetailsRow = styled.div`
   position: relative;
+  
+  ${({ newValue }) => newValue && `
+    bottom: -50px;
+  `}
 `
 const LoanDetailsRowTitle = styled.h2`
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: 0.05em;
   color: #B3B3B3;
   text-transform: uppercase;
+
+  
 `
 const LoanDetailsRowValue = styled.h2`
   font-style: normal;
@@ -577,7 +644,7 @@ const LoanDetailsRowValue = styled.h2`
   line-height: 14px;
   letter-spacing: 0.15em;
   color: #B3B3B3;
-  margin: 10px 0 0 0;
+  margin: 5px 0 0 0;
   ${({ cursor }) => cursor && `
     cursor: ${cursor}
   `}
@@ -625,7 +692,8 @@ export {
     ModalActionDetails,
     ModalActionsContent,
     ModalUserActions,
-    BtnGrpLoanModalWrapper
+    BtnGrpLoanModalWrapper,
+    ModalActionDetailsContent
 
 };
   
