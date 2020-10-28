@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loansFetchData, changeFilter } from 'redux/actions/loans';
 import { ETH, JNT, PagesData } from 'config/constants';
-
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
   HeaderTabBtn
 } from './HeaderComponents';
+
 const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }) => {
   const [filterValue, setFilter] = useState(null);
   const loanListing = async (filter = null) => {

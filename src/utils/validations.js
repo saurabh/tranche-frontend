@@ -3,7 +3,7 @@ import { isLessThan, isGreaterThan } from './helperFunctions';
 import { calcMinCollateralAmount, calcMaxBorrowedAmount } from 'services/contractMethods';
 
 const validate = (values) => {
-  const { borrowedAskAmount, collateralAmount, rpbRate } = values;
+  const { borrowedAskAmount, collateralAmount, apy } = values;
   const errors = {};
   if (!borrowedAskAmount) {
     errors.borrowedAskAmount = 'Required';
@@ -14,6 +14,11 @@ const validate = (values) => {
     errors.collateralAmount = 'Required';
   } else if (isNaN(Number(collateralAmount))) {
     errors.collateralAmount = 'Must be a number';
+  }
+  if (!apy) {
+    errors.apy = 'Required';
+  } else if (isNaN(Number(apy))) {
+    errors.apy = 'Must be a number';
   }
   return errors;
 };
@@ -53,9 +58,6 @@ let asyncValidate = (values) => {
   return sleep(0).then(async () => {
     let { borrowedAskAmount, collateralAmount, pairId } = values;
     let minCollateralAmount = borrowedAskAmount ? await calcMinCollateralAmount(pairId, borrowedAskAmount) : undefined;
-    // let maxBorrowedAskAmount = collateralAmount ? await calcMaxBorrowedAmount(pairId, collateralAmount) : undefined;
-    // console.log(isLessThan(collateralAmount, minCollateralAmount))
-    // console.log(borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount)))
     if (borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))) {
       throw { collateralAmount: 'Not enough collateral', _error: 'Not enough collateral' }
     }

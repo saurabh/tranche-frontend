@@ -27,6 +27,11 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
+import {
+  StatusTextWrapper,
+  AdjustModalBtn
+
+} from '../Modals/ModalComponents';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -58,6 +63,8 @@ const TableCard = ({
     collateralRatio,
     interestPaid,
     collateralTypeName,
+    collateralAmount,
+    loanCommonParams,
     collateralType,
     name
   },
@@ -76,24 +83,11 @@ const TableCard = ({
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
-  let disableBtn =
-    (path === 'borrow' && borrowerAddress !== address) ||
-    (path === 'borrow' &&
-      (status === statuses['Foreclosed'].status ||
-        status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status)) ||
-    (path === 'earn' &&
-      !isShareholder &&
-      (status === statuses['Active'].status ||
-        status === statuses['Foreclosed'].status ||
-        status === statuses['Early_closing'].status ||
-        status === statuses['Closing'].status)) ||
-    status === statuses['Closed'].status ||
-    status === statuses['Cancelled'].status;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -105,12 +99,32 @@ const TableCard = ({
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
   useEffect(() => {
+    if (
+      (path === 'borrow' && borrowerAddress !== address) ||
+      (path === 'borrow' &&
+        (status === statuses['Foreclosed'].status ||
+          status === statuses['Early_closing'].status ||
+          status === statuses['Closing'].status)) ||
+      (path === 'earn' &&
+        !isShareholder &&
+        (status === statuses['Active'].status ||
+          status === statuses['Foreclosed'].status ||
+          status === statuses['Early_closing'].status ||
+          status === statuses['Closing'].status)) ||
+      status === statuses['Closed'].status ||
+      status === statuses['Cancelled'].status
+    ) {
+      setDisableBtn(true);
+    } else setDisableBtn(false);
+  }, [status, path, address, isShareholder, borrowerAddress]);
+
+  useEffect(() => {
     const isShareholderCheck = async () => {
       try {
         if (address) {
           const { loanContractSetup } = searchArr(cryptoFromLenderName);
           const JLoan = loanContractSetup(web3, contractAddress);
-          const result = await JLoan.methods.isShareHolder(address).call();
+          const result = await JLoan.methods.isShareholder(address).call();
           setIsShareholder(result);
         }
       } catch (error) {
@@ -350,6 +364,33 @@ const TableCard = ({
     }
   };
 
+  const withdrawCollateral = async (e) => {
+    e.preventDefault();
+    let { collateralAmount } = form.adjustLoan.values;
+    collateralAmount = toWei(collateralAmount);
+    try {
+      const { loanContractSetup } = searchArr(cryptoFromLenderName);
+      const JLoan = loanContractSetup(web3, contractAddress);
+      await JLoan.methods
+        .withdrawCollateral(collateralAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          notify.hash(hash);
+        })
+        .on('receipt', async () => {
+          await loansFetchData({
+            skip: 0,
+            limit: 100,
+            filter: {
+              type: null
+            }
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addCollateralToEthLoan = async (contractAddress, collateralAmount) => {
     try {
       await web3.eth
@@ -437,9 +478,18 @@ const TableCard = ({
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === searchArr(DAI).key) {
       addCollateralToEthLoan(contractAddress, collateralAmount);
-      closeModal();
     } else if (cryptoFromLenderName === searchArr(USDC).key) {
       addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
+    }
+  };
+
+  const adjustLoan = (e, type) => {
+    e.preventDefault();
+    if (type === 'addCollateral') {
+      addCollateral(e);
+      closeModal();
+    } else if (type === 'removeCollateral') {
+      withdrawCollateral(e);
       closeModal();
     }
   };
@@ -454,10 +504,11 @@ const TableCard = ({
     setIsOpen(false);
   };
 
-  const searchObj = (val) =>
-    Object.fromEntries(
+  const searchObj = (val) => {
+    return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
+  };
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
@@ -511,7 +562,7 @@ const TableCard = ({
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
                 <a
-                  href={etherScanUrl + contractAddress + '/#internaltx'}
+                  href={etherScanUrl + 'address/' + contractAddress + '/#internaltx'}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
@@ -555,30 +606,20 @@ const TableCard = ({
         </div>
         <div className='table-second-col table-col'>
           <div className='second-col-content'>
-            <h2
+            <StatusTextWrapper
               className='status-text-wrapper'
-              style={{
-                color: Object.values(searchObj(status))[0].color,
-                backgroundColor: Object.values(searchObj(status))[0].background
-              }}
+              color={Object.values(searchObj(status))[0].color}
+              backgroundColor={Object.values(searchObj(status))[0].background}
             >
               {valShortner(Object.values(searchObj(status))[0].key)}
-            </h2>
+            </StatusTextWrapper>
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
-            <button
-              style={
-                ({ background: PagesData[path].btnColor },
-                path === 'trade' || disableBtn
-                  ? {
-                      backgroundColor: '#cccccc',
-                      color: '#666666',
-                      cursor: 'default'
-                    }
-                  : {})
-              }
+            <AdjustModalBtn
+              disabeldBtn = {path === 'trade' || disableBtn}
+              background = {PagesData[path].btnColor}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
             >
@@ -594,7 +635,7 @@ const TableCard = ({
                 }
                 alt=''
               />
-            </button>
+            </AdjustModalBtn>
           </div>
           <div className='star-btn-wrapper'>
             <button>
@@ -613,11 +654,17 @@ const TableCard = ({
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
-            addCollateral={addCollateral}
+            adjustLoan={adjustLoan}
+            withdrawCollateral={withdrawCollateral}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
             newCollateralRatio={newCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
+            rpbRate={loanCommonParams && loanCommonParams.rpbRate}
+            collateralAmount={collateralAmount}
+            collateralRatio={collateralRatio}
+            remainingLoan={remainingLoan}
+            cryptoFromLenderName={cryptoFromLenderName}
           />
         </div>
       </TableContentCard>
@@ -643,7 +690,9 @@ const TableCard = ({
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
+                  status={i.loanStatus}
                   createdAt={i.createdAt}
+                  eventName={i.eventName}
                 />
               );
             })
