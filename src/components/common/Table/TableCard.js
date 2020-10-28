@@ -561,7 +561,7 @@ const TableCard = ({
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
                 <a
-                  href={etherScanUrl + contractAddress + '/#internaltx'}
+                  href={etherScanUrl + 'address/' + contractAddress + '/#internaltx'}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
