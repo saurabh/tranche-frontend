@@ -12,7 +12,13 @@ import {
   FormInputsWrapper,
   ModalFormButton,
   NewLoanInputWrapper,
-  NewLoanFormInput
+  NewLoanFormInput,
+  ModalNewLoanContent,
+  ModalNewLoanDetails,
+  ModalNewLoanDetailsContent,
+  LoanDetailsRow,
+  LoanDetailsRowTitle,
+  LoanDetailsRowValue
 } from '../Modals/ModalComponents';
 import { pairData } from 'config/constants';
 
@@ -23,35 +29,14 @@ const InputField = ({
   className,
   meta: { touched, error }
 }) => (
-  <div>
-    {touched && error ? (
-      <input
-        placeholder={placeholder}
-        {...input}
-        type={type}
-        style={{ boxShadow: 'inset 0 0 3px red' }}
-        className={className}
-      />
-    ) : (
-      <input
-        {...input}
-        type={type}
-        style={{ border: '1px solid #ffffff' }}
-        className={className}
-      />
-    )}
+  <div>    
+    {
+    (touched && error) ? <input placeholder={placeholder} {...input} type={type} className={className + " " + "InputStylingError"} /> :
+    <input {...input} type={type} className={className + " " + "InputStyling"} />
+    }
     {touched && error && (
-      <span
-        style={{
-          position: 'absolute',
-          top: '0',
-          right: '0',
-          color: 'red',
-          fontStyle: 'normal',
-          fontWeight: '300',
-          fontSize: '9px'
-        }}
-      ></span>
+      <span>
+      </span>
     )}
   </div>
 );
@@ -60,7 +45,11 @@ let AdjustLoan = ({
   collateralTypeName,
   adjustLoan,
   newCollateralRatio,
-  calcNewCollateralRatio
+  calcNewCollateralRatio,
+  remainingLoan,
+  cryptoFromLenderName,
+  collateralAmount,
+  collateralRatio
 }) => {
   const [isConfirmButton, setIsConfirmButton] = useState(false);
   const [adjustAction, setAdjustAction] = useState('');
@@ -77,9 +66,65 @@ let AdjustLoan = ({
   };
   
   return (
-    <div>
-      <ModalAdjustForm style={{ minHeight: 'auto' }}>
-        <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoan(e, adjustAction)}>
+    <ModalNewLoanContent>
+
+
+
+    <ModalNewLoanDetails>
+        <ModalNewLoanDetailsContent adjustDetails={true}>
+            <LoanDetailsRow>
+              <LoanDetailsRowTitle>
+                Loan amount
+              </LoanDetailsRowTitle>
+
+              <LoanDetailsRowValue>
+                {remainingLoan} {cryptoFromLenderName}
+              </LoanDetailsRowValue>
+
+            </LoanDetailsRow>
+
+            <LoanDetailsRow>
+              <LoanDetailsRowTitle>
+                Collateral amount
+              </LoanDetailsRowTitle>
+
+              <LoanDetailsRowValue>
+                {collateralAmount} {collateralTypeName}
+              </LoanDetailsRowValue>
+
+            </LoanDetailsRow>
+
+            <LoanDetailsRow>
+              <LoanDetailsRowTitle>
+                Collateral ratio
+              </LoanDetailsRowTitle>
+
+              <LoanDetailsRowValue>
+                {collateralRatio}%
+              </LoanDetailsRowValue>
+
+            </LoanDetailsRow>
+
+
+            <LoanDetailsRow newValue={true}>
+              <LoanDetailsRowTitle>
+                NEW COLLATERAL RATIO
+              </LoanDetailsRowTitle>
+
+              <LoanDetailsRowValue>
+                {newCollateralRatio}%
+              </LoanDetailsRowValue>
+
+            </LoanDetailsRow>
+          </ModalNewLoanDetailsContent>
+
+      </ModalNewLoanDetails>
+
+
+
+
+      <ModalAdjustForm className="modalAdjustFormStyle">
+        <Form component={ModalFormWrapper}>
           <FormInputsWrapper>
             <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
               <NewLoanFormInput>
@@ -103,21 +148,19 @@ let AdjustLoan = ({
                   />
                 </NewLoanInputWrapper>
               </NewLoanFormInput>
-              <h2>
-                NEW COLLATERAL RATIO: <span>{newCollateralRatio}</span>
-              </h2>
+              
             </ModalFormGrp>
           </FormInputsWrapper>
           <ModalFormSubmit>
             {!isConfirmButton && (
               <>
-                <BtnGrpLoanModal>
-                  <ModalFormButton onClick={() => setAction('addCollateral')}>
+                <BtnGrpLoanModal submitBtn={true}>
+                  <ModalFormButton adjustCollateralBtn={true} onClick={() => setAction('addCollateral')}>
                     Add Collateral
                   </ModalFormButton>
                 </BtnGrpLoanModal>
-                <BtnGrpLoanModal>
-                  <ModalFormButton onClick={() => setAction('removeCollateral')}>
+                <BtnGrpLoanModal submitBtn={true}>
+                  <ModalFormButton adjustCollateralBtn={true} onClick={() => setAction('removeCollateral')}>
                     Remove Collateral
                   </ModalFormButton>
                 </BtnGrpLoanModal>
@@ -131,7 +174,7 @@ let AdjustLoan = ({
           </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
-    </div>
+    </ModalNewLoanContent>
   );
 };
 

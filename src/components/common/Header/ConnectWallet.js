@@ -19,7 +19,7 @@ const ConnectWallet = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { address, network, balance, wallet, web3 },
+  ethereum: { address, balance },
 }) => {
   const { pathname } = useLocation();
   const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');

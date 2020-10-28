@@ -3,6 +3,9 @@ import { LinkArrow } from 'assets';
 import {etherScanUrl } from 'config/constants';
 import { statuses, events } from 'config/constants';
 import { addrShortener } from 'utils';
+import {
+    MoreRowSpan
+  } from '../Modals/ModalComponents';
 
 const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest, status, createdAt, eventName}) => {
     
@@ -45,11 +48,9 @@ const TableMoreRow = ({ethImg, arrow, ratio, hash, collateralTypeName, interest,
             </div>
             <div className="table-more-row-fifth table-more-second-4 table-more-row-content">
                 <div className="table-more-row-fifth-content">
-                    <span
-                        style={{
-                            color: Object.values(searchObj(parseInt(status)))[0].color
-                        }}
-                    >•</span>
+                    <MoreRowSpan
+                        color={Object.values(searchObj(parseInt(status)))[0].color}
+                    >•</MoreRowSpan>
                     <h2>
                         {
                             eventName === events["LOAN_CREATED_ETH"].toLowerCase() ?  "Loan Requested":

@@ -1,33 +1,42 @@
 import styled from 'styled-components';
-import { Input } from 'semantic-ui-react';
+import {Input} from 'semantic-ui-react';
 
-const ModalHeader = styled.div`
+const ModalHeader = styled.div` 
+  position: absolute;
+  z-index: 1;
   width: 100%;
   height: 75px;
-  border-bottom: 1px solid rgba(63, 63, 63, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 33px;
-  & > h2 {
+  padding: 0 35px;
+  & > h2{
     font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-    color: #3f3f3f;
+    font-weight: normal;
+    font-size: 17px;
+    letter-spacing: 0.1em;
+    color: #3F3F3F;
+    text-transform: uppercase;
   }
-  & > button {
+  & > button{
     background: transparent;
     border: none;
     cursor: pointer;
   }
-`;
+  @media (max-width: 633px){
+    position: relative;
+  }
+  
+`
 const ModalContent = styled.div`
   padding: 33px;
+  min-height: 454px;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-`;
+  align-items: center;
+  flex-direction: row;
+`
 const ModalContentDetails = styled.div`
   width: 100%;
   margin: 15px 0;
@@ -53,77 +62,126 @@ const ModalContentDetails = styled.div`
       }
     }
   }
-`;
+`
+
 const BtnGrpLoanModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-height: 200px;
+  height: 100%;
+  width: 100%;
+
+  ${({ submitBtn }) => submitBtn && `
+    max-width: 164px;
+  `}
+`
+const BtnGrpLoanModalWrapper = styled.div`
+  margin: 25px 0;
+  width: 100%;
+  & > h2{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: 0.15em;
+    color: #4F4F4F;
+    max-width: 200px;
+    margin: auto;
+  }
+`
+const BtnLoanModal = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-`;
+  & > button:disabled{
+    opacity: 0.5;
+    cursor: default;
+  }
+`
+
 
 const ModalButton = styled.button`
+  max-width: 241px;
   width: 100%;
-  height: 32px;
-  background: ${(props) => (props.btnColor ? props.btnColor : '#ECECEC')};
+  height: 38px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 27px;
+  border: none;
+  margin: 12px 0 0 0;
+  background: ${props => props.backgroundColor ? props.backgroundColor  : "#ECECEC"};
   /*opacity: 0.75;*/
-  border: 0.3px solid #ececec;
-  box-sizing: border-box;
-  box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
-  border-radius: 4px;
+  font-family: Roboto;
   font-style: normal;
-  font-weight: 500;
-  font-size: 9px;
+  font-weight: normal;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #FFFFFF;
   text-transform: uppercase;
   /*color: rgba(131, 129, 134, 0.4);*/
   cursor: pointer;
-  color: ${props => props.btnColor ? "#ffffff" : "#000000"};
+  color: ${props => props.btnColor ? props.btnColor : "#000000"};
   &:last-child{
-    margin: 12px 0 0 0;
+    /*margin: 12px 0 0 0;
     color: #ffffff !important;
-    background: ${props => props.btnColor ? props.btnColor  : "#E42013"};
+    background: ${props => props.btnColor ? props.btnColor  : "#E42013"};*/
   }
-`;
+  ${({ display }) => display && `
+    display: ${display}
+  `}
+  :disabled{
+    color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
+    opacity: 0.5;
+    cursor: default;
+  }
+`
 
 const ConfirmAlertWrapper = styled.div`
   position: relative;
   width: auto;
   //height: 326px;
   height: auto;
-  border-radius: 16px;
+  border-radius: 12px;
   background: #ffffff;
   border: none;
-  box-shadow: 0px 2px 4px rgba(99, 99, 99, 0.7);
-  padding: 33px;
-  & > h2 {
+  box-shadow: 0px 2px 4px rgba(99,99,99,0.7);
+  padding: 33px 100px;
+  & > h2{
     font-style: normal;
-    font-weight: bold;
+    font-weight: normal;
     font-size: 15px;
-    color: #3f3f3f;
+    color: #3F3F3F;
   }
-`;
+
+`
 
 const ConfirmAlertBtnWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  & > button {
+ & > button{
     max-width: 100px;
     font-size: 14px;
     font-weight: 700;
     margin: 12px 0 0 0;
-  }
-`;
+ } 
+`
+
+
 
 const ModalAdjustForm = styled.div`
  /*min-height: 160px;*/
  height: auto;
  width: 100%;
  //border-bottom: 1px solid rgba(63, 63, 63, 0.1);
- background: rgba(247,247,247,1);
+ //background: rgba(247,247,247,1);
  box-sizing: border-box;
  /*padding: 10px 35px;*/
  display: flex;
  & > form{
-   width: 100%;
+   width: 100% !important;
    //min-height: 351px;
    height: 100%;
    display: flex;
@@ -138,15 +196,16 @@ const ModalFormWrapper = styled.form`
   flex-direction: column;
   justify-content: space-between;
   flex: auto;
+  align-items: center;
   width: 100% !important;
-`;
+`
+
 
 const ModalFormGrp = styled.div`
   position: relative;
-
-  ${({ currency }) =>
-    currency === 'ETH' &&
-    `
+  text-align: center;
+  
+  ${({ currency }) => currency === 'ETH' && `
     &:after{
       content: 'ETH';
       font-style: normal;
@@ -161,9 +220,7 @@ const ModalFormGrp = styled.div`
       top: 27px;
     }  
   `}
-  ${({ currency }) =>
-    currency === 'JNT' &&
-    `
+  ${({ currency }) => currency === 'JNT' && `
     &:after{
       content: 'JNT';
       font-style: normal;
@@ -183,24 +240,24 @@ const ModalFormGrp = styled.div`
     font-weight: normal;
     font-size: 10px;
     text-align: right;
-    color: #b9b9b9;
+    color: #B9B9B9;
     margin: 6px 0 0 0;
   }
-`;
+`
+
 
 const ModalFormGrpNewLoan = styled.div`
   position: relative;
-  & > h2 {
+  text-align: center;
+  & > h2{
     font-style: normal;
     font-weight: normal;
     font-size: 10px;
     text-align: right;
-    color: #b9b9b9;
+    color: #B9B9B9;
     margin: 6px 0 0 0;
   }
-  ${({ placeholder }) =>
-    placeholder === '%' &&
-    `
+  ${({ placeholder }) => placeholder === '%' && `
     &:after{
       content: '%';
       font-style: normal;
@@ -215,24 +272,27 @@ const ModalFormGrpNewLoan = styled.div`
       top: 27px;
     }  
   `}
-`;
+`
 const NewLoanFormInput = styled.div`
   width: 100%;  
   position: relative;
   display: flex;
   justify-content: space-between;
-`;
+`
 const ModalFormLabel = styled.label`
   font-style: normal;
-  font-weight: 300;
-  font-size: 9px;
-  color: #4f4f4f;
-`;
+  font-weight: normal;
+  font-size: 10px;
+  text-align: center;
+  letter-spacing: 0.15em;
+  color: #4F4F4F;
+  text-transform: uppercase;
+`
 
 const ModalFormInput = styled(Input)`
   position: relative;
-  background: #ffffff;
-  border: 1px solid #ffffff;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
   box-sizing: border-box;
   border: none;
   border-radius: 4px;
@@ -244,26 +304,25 @@ const ModalFormInput = styled(Input)`
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(57, 41, 90, 0.5);
+  color: rgba(57,41,90,0.5);
   padding: 4px 74px 4px 44px;
-  background-image: url(${(props) => props.background});
+  background-image: url(${props => props.background});
   background-repeat: no-repeat;
   background-position: 9px 50%;
-  &:focus {
+  &:focus{
     outline: none;
   }
-  &::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
+  &::-webkit-inner-spin-button, ::-webkit-outer-spin-button { 
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
   }
-`;
+`
 const ModalFormInputAPY = styled(Input)`
   position: relative;
-  background: #ffffff;
-  border: 1px solid #ffffff;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
   box-sizing: border-box;
   border: none;
   border-radius: 4px;
@@ -275,23 +334,22 @@ const ModalFormInputAPY = styled(Input)`
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(57, 41, 90, 0.5);
+  color: rgba(57,41,90,0.5);
   padding: 4px 10px;
-  &:focus {
+  &:focus{
     outline: none;
   }
-  &::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
+  &::-webkit-inner-spin-button, ::-webkit-outer-spin-button { 
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
   }
-`;
+`
 const ModalFormInputNewLoan = styled(Input)`
   position: relative;
-  background: #ffffff;
-  border: 1px solid #ffffff;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
   box-sizing: border-box;
   border: none;
   border-radius: 4px;
@@ -303,70 +361,85 @@ const ModalFormInputNewLoan = styled(Input)`
   font-size: 14px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #39295a;
+  color: #39295A;
   padding: 4px 10px;
-  &:focus {
+  &:focus{
     outline: none;
   }
-  &::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
+  &::-webkit-inner-spin-button, ::-webkit-outer-spin-button { 
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
   }
-`;
+`
 const FormInputsWrapper = styled.div`
+  transform: translateY(50%);
   padding:10px 35px;
-  //min-height: 260px;
+  max-height: 215px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-`;
+  justify-content: space-around;    
+  @media (max-width: 633px){
+    transform: none;
+  }
+
+`
 const ModalFormSubmit = styled.div`
   width: 100%;
   height: 91px;
   /*height: 100%;*/
-  padding: 0 33px;
+  padding: 0 35px;
   box-sizing: border-box;
-  border-top: 1px solid rgba(63, 63, 63, 0.1);
+  //border-top: 1px solid rgba(63,63,63,0.1);
   background: #ffffff;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-`;
+
+  @media (max-width: 633px){
+    flex-direction: column;
+  }
+
+`
+
 
 const ModalFormButton = styled.button`
-  width: 100%;
-  height: 32px;
-  background: #ececec;
-  /*opacity: 0.75;*/
-  border: 0.3px solid #ececec;
-  box-sizing: border-box;
-  box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
-  border-radius: 4px;
+  width: 164px;
+  height: 38px;  
+  background: #936CE6;
+  border-radius: 27px;
   font-style: normal;
-  font-weight: 500;
-  font-size: 9px;
-  text-transform: uppercase;
-  /*color: rgba(131, 129, 134, 0.4);*/
+  font-weight: normal;
+  font-size: 12px;
+  align-self: flex-end;
+  letter-spacing: 0.15em;
+  color: #FFFFFF;
   cursor: pointer;
-`;
+  border: none;
+  box-sizing: border-box;
+  text-transform: uppercase;
+
+  ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
+    font-size: 10px;
+    background: #EAEAEA;
+    color: rgba(35, 69, 102, 0.7);
+  `}
+`
 const SelectCurrencyView = styled.div`
   position: relative;
-  & > div {
+  & > div{
     width: 100px;
-    height: 32px;
-    background: #ffffff;
+    height: 19px;
+    border-left: 2px solid #F1F1F1;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     box-sizing: border-box;
     padding: 9px 20px 9px 9px;
-    cursor: pointer;
-    border-radius: 4px;
-    & > h2 {
+    cursor: pointer;  
+    & > h2{
       font-style: normal;
       font-weight: normal;
       font-size: 14px;
@@ -375,13 +448,14 @@ const SelectCurrencyView = styled.div`
       text-transform: uppercase;
       color: rgba(57, 41, 90, 0.2);
     }
-    & > img {
+    & > img{
       margin: 0 6px 2px 0;
     }
   }
-`;
+  
+`
 const NewLoanInputWrapper = styled.div`
-  width: 100%;  
+  width: 100% !important;  
   display: flex;
   flex-direction: column;
   ${({ name }) => name === 'borrowedAskAmount' && `
@@ -389,17 +463,21 @@ const NewLoanInputWrapper = styled.div`
   `}
 `
 const LoanCustomSelect = styled.div`
-  align-self: flex-end;
-`;
-const SelectCurrencyOptions = styled.div`
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
   position: absolute;
-  margin-top: 3px;
+  right: 5px;
+  bottom: 6px;
+  align-self: flex-end;
+
+`
+const SelectCurrencyOptions = styled.div`
+  border-radius: 4px;
+  position: absolute;
+  margin-top: 7px;
+  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.12);
   z-index: 1000;
-`;
+`
 const SelectCurrencyOption = styled.div`
-  & > button {
+  & > button{
     width: 100px;
     height: 32px;
     background: #ffffff;
@@ -418,20 +496,20 @@ const SelectCurrencyOption = styled.div`
     align-items: center;
     box-sizing: border-box;
     padding: 9px;
-    &:hover {
-      background: #e7e7e7;
-    }
-    & > img {
+    &:hover{
+      background: #E7E7E7;
+    } 
+    & > img{
       margin: 0 6px 2px 0;
     }
   }
-  &:last-child {
-    & > button {
+  &:last-child{
+    & > button{
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
     }
-  }
-`;
+  }  
+`
 const SelectChevron = styled.span`
   position: absolute;
   display: flex;
@@ -442,31 +520,180 @@ const SelectChevron = styled.span`
   height: 8px;
   justify-content: space-between;
   cursor: pointer;
-`;
+`
+
+const StatusTextWrapper = styled.h2`
+  color: ${props => props.color ? props.color : ""};
+  background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+`
+const MoreRowSpan = styled.span`
+  color: ${props => props.color ? props.color : ""};
+`
+const AdjustModalBtn = styled.button`
+  background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+
+  ${({ disabledBtn }) => disabledBtn && `
+    background-color: #cccccc;
+    color: #666666;
+    cursor: default;
+  `}
+`
+
+const ModalNewLoanContent = styled.div`
+  width: 100%;
+  min-height: 454px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  @media (max-width: 633px){
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    margin: 50px auto;
+  }
+`
+const ModalNewLoanDetails = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  max-width: 413px;
+  width: 100%;
+  min-height: 454px;
+  height: 100%;
+  background: #FAFAFA;
+  @media (max-width: 633px){
+    max-width: initial;
+  }
+  
+`
+const ModalActionsContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  @media (max-width: 633px){
+    flex-direction: column-reverse;
+  }
+`
+const ModalActionDetails = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  max-width: 413px;
+  width: 100%;
+  min-height: 454px;
+  height: 100%;
+  background: #FAFAFA;
+  @media (max-width: 633px){
+    max-width: initial;
+  }
+`
+
+const ModalUserActions = styled.div`
+  width: 100%;
+`
+const ModalNewLoanDetailsContent = styled.div`
+  min-height: 190px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  ${({ adjustDetails }) => adjustDetails && `
+    min-height: 220px;
+  `}
+  @media (max-width: 633px){
+    max-height: 190px;
+  }
+`
+
+const ModalActionDetailsContent = styled.div`
+  min-height: 190px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (max-width: 633px){
+    max-height: 190px;
+  }
+`
+const LoanDetailsRow = styled.div`
+  position: relative;
+  
+  ${({ newValue }) => newValue && `
+    bottom: -50px;
+  `}
+`
+const LoanDetailsRowTitle = styled.h2`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  color: #B3B3B3;
+  text-transform: uppercase;
+
+  
+`
+const LoanDetailsRowValue = styled.h2`
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 0.15em;
+  color: #B3B3B3;
+  margin: 5px 0 0 0;
+  ${({ cursor }) => cursor && `
+    cursor: ${cursor}
+  `}
+`
+
+
+
+
 export {
-  ModalHeader,
-  ModalContent,
-  ModalContentDetails,
-  BtnGrpLoanModal,
-  ModalButton,
-  ConfirmAlertWrapper,
-  ConfirmAlertBtnWrapper,
-  ModalAdjustForm,
-  ModalFormWrapper,
-  ModalFormGrp,
-  ModalFormLabel,
-  ModalFormInput,
-  ModalFormSubmit,
-  ModalFormButton,
-  SelectCurrencyOption,
-  SelectCurrencyView,
-  SelectCurrencyOptions,
-  ModalFormGrpNewLoan,
-  ModalFormInputNewLoan,
-  FormInputsWrapper,
-  NewLoanInputWrapper,
-  LoanCustomSelect,
-  NewLoanFormInput,
-  SelectChevron,
-  ModalFormInputAPY
+    ModalHeader, 
+    ModalContent,
+    ModalContentDetails,
+    BtnGrpLoanModal, 
+    ModalButton, 
+    ConfirmAlertWrapper, 
+    ConfirmAlertBtnWrapper, 
+    ModalAdjustForm, 
+    ModalFormWrapper, 
+    ModalFormGrp, 
+    ModalFormLabel,
+    ModalFormInput,
+    ModalFormSubmit,
+    ModalFormButton,
+    SelectCurrencyOption,
+    SelectCurrencyView,
+    SelectCurrencyOptions,
+    ModalFormGrpNewLoan,
+    ModalFormInputNewLoan,
+    FormInputsWrapper,
+    NewLoanInputWrapper,
+    LoanCustomSelect,
+    NewLoanFormInput,
+    SelectChevron,
+    ModalFormInputAPY,
+    StatusTextWrapper,
+    MoreRowSpan,
+    AdjustModalBtn,
+    ModalNewLoanContent,
+    ModalNewLoanDetails,
+    BtnLoanModal,
+    LoanDetailsRow,
+    LoanDetailsRowTitle,
+    LoanDetailsRowValue,
+    ModalNewLoanDetailsContent,
+    ModalActionDetails,
+    ModalActionsContent,
+    ModalUserActions,
+    BtnGrpLoanModalWrapper,
+    ModalActionDetailsContent
+
 };
+  

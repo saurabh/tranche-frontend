@@ -111,7 +111,7 @@ const Table = ({
 
   return (
     <div className='container content-container'>
-      <div className='TableContentWrapper' style={{ marginBottom: '150px' }}>
+      <div className='TableContentWrapper'>
         <TableWrapper>
           <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
           <div className='table-container'>
