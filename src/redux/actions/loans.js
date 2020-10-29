@@ -18,7 +18,6 @@ export const loansFetchSuccess = (loans) => (dispatch) => {
 };
 
 export const changeFilter = (filter)  => {
-  console.log('cccccccc',filter)
   return {
     type: CHANGE_FILTER,
     filter
