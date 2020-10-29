@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
@@ -27,11 +28,7 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
-import {
-  StatusTextWrapper,
-  AdjustModalBtn
-
-} from '../Modals/ModalComponents';
+import { StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
 
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
@@ -74,6 +71,7 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  change,
   ethereum: { address, network, balance, wallet, web3, notify },
   form
 }) => {
@@ -156,12 +154,15 @@ const TableCard = ({
     getAccruedInterest();
   }, [contractAddress, cryptoFromLenderName, loanActiveBlock, web3]);
 
-  const calcNewCollateralRatio = async (amount) => {
+  const calcNewCollateralRatio = async (amount, actionType) => {
     try {
       const { loanContractSetup } = searchArr(cryptoFromLenderName);
       const JLoan = loanContractSetup(web3, contractAddress);
-      const result = await JLoan.methods.calcRatioAddingCollateral(toWei(amount)).call();
+      const result = await JLoan.methods
+        .calcRatioAdjustingCollateral(toWei(amount), actionType)
+        .call();
       setNewCollateralRatio(result);
+      change('adjustLoan', 'newCollateralRatio', result);
     } catch (error) {
       console.error(error);
     }
@@ -364,8 +365,7 @@ const TableCard = ({
     }
   };
 
-  const withdrawCollateral = async (e) => {
-    e.preventDefault();
+  const withdrawCollateral = async () => {
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     try {
@@ -472,8 +472,7 @@ const TableCard = ({
     }
   };
 
-  const addCollateral = (e) => {
-    e.preventDefault();
+  const addCollateral = () => {
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === searchArr(DAI).key) {
@@ -486,10 +485,10 @@ const TableCard = ({
   const adjustLoan = (e, type) => {
     e.preventDefault();
     if (type === 'addCollateral') {
-      addCollateral(e);
+      addCollateral();
       closeModal();
     } else if (type === 'removeCollateral') {
-      withdrawCollateral(e);
+      withdrawCollateral();
       closeModal();
     }
   };
@@ -618,8 +617,8 @@ const TableCard = ({
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
             <AdjustModalBtn
-              disabeldBtn = {path === 'trade' || disableBtn}
-              background = {PagesData[path].btnColor}
+              disabeldBtn={path === 'trade' || disableBtn}
+              background={PagesData[path].btnColor}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
             >
@@ -659,6 +658,7 @@ const TableCard = ({
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
             newCollateralRatio={newCollateralRatio}
+            setNewCollateralRatio={setNewCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
             rpbRate={loanCommonParams && loanCommonParams.rpbRate}
             collateralAmount={collateralAmount}
@@ -729,5 +729,6 @@ export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3
+  setWalletAndWeb3,
+  change
 })(TableCard);

@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { pairData } from 'config/constants';
-import { calcMinCollateralAmount, getPairDetails, toWei, fromWei } from 'services/contractMethods';
+import {
+  calcMinCollateralAmount,
+  getPairDetails,
+  toWei,
+  fromWei
+} from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
 import { safeSubtract } from 'utils/helperFunctions';
-import { validate, asyncValidate } from 'utils/validations';
+import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
-  BtnGrpLoanModal,
   ModalAdjustForm,
   ModalFormWrapper,
   ModalFormGrp,
@@ -36,21 +40,11 @@ import {
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
     {touched && error ? (
-      <input
-        {...input}
-        type={type}
-        className={className + " " + "InputStylingError"}
-      />
+      <input {...input} type={type} className={`${className} InputStylingError`} />
     ) : (
-      <input
-        {...input}
-        type={type}
-        className={className + " " + "InputStyling"}
-      />
+      <input {...input} type={type} className={`${className} InputStyling`} />
     )}
-    {touched && error && (
-      <span></span>
-    )}
+    {touched && error && <span></span>}
   </div>
 );
 
@@ -149,155 +143,137 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     <ModalNewLoanContent>
       <ModalNewLoanDetails>
         <ModalNewLoanDetailsContent>
-            <LoanDetailsRow>
-              <LoanDetailsRowTitle>
-                MINIMUM COLLATERAL
-              </LoanDetailsRowTitle>
+          <LoanDetailsRow>
+            <LoanDetailsRowTitle>MINIMUM COLLATERAL</LoanDetailsRowTitle>
 
-              <LoanDetailsRowValue cursor="pointer" onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}>
-                {minCollateralAmount} {pairData[pair].collateral}
-              </LoanDetailsRowValue>
+            <LoanDetailsRowValue
+              cursor='pointer'
+              onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}
+            >
+              {minCollateralAmount} {pairData[pair].collateral}
+            </LoanDetailsRowValue>
+          </LoanDetailsRow>
 
-            </LoanDetailsRow>
+          <LoanDetailsRow>
+            <LoanDetailsRowTitle>COLLATERALIZATION RATIO</LoanDetailsRowTitle>
 
-            <LoanDetailsRow>
-              <LoanDetailsRowTitle>
-                COLLATERALIZATION RATIO
-              </LoanDetailsRowTitle>
+            <LoanDetailsRowValue>{collateralRatio}%</LoanDetailsRowValue>
+          </LoanDetailsRow>
 
-              <LoanDetailsRowValue>
-                {collateralRatio}%
-              </LoanDetailsRowValue>
+          <LoanDetailsRow>
+            <LoanDetailsRowTitle>RBP</LoanDetailsRowTitle>
 
-            </LoanDetailsRow>
-
-            <LoanDetailsRow>
-              <LoanDetailsRowTitle>
-                RBP
-              </LoanDetailsRowTitle>
-
-              <LoanDetailsRowValue>
-                {RPB}
-              </LoanDetailsRowValue>
-
-            </LoanDetailsRow>
-          </ModalNewLoanDetailsContent>
-
+            <LoanDetailsRowValue>{RPB}</LoanDetailsRowValue>
+          </LoanDetailsRow>
+        </ModalNewLoanDetailsContent>
       </ModalNewLoanDetails>
 
-
       <ModalAdjustForm>
-          <Form component={ModalFormWrapper} onSubmit={(e) => createNewLoan(e)}>
-              <FormInputsWrapper>
-                <ModalFormGrpNewLoan>
-                  <NewLoanFormInput>
-                    <NewLoanInputWrapper name="borrowedAskAmount">
-                      <ModalFormLabel htmlFor='BORROWINGInput'>BORROWING</ModalFormLabel>
-                      <Field
-                        component={InputField}
-                        className='ModalFormInputNewLoan'
-                        name='borrowedAskAmount'
-                        onChange={(e, newValue) =>
-                          debounceCalcMinCollateralAmount(pair, newValue)
-                        }
-                        type='number'
-                        step='0.0001'
-                        id='BORROWINGInput'
-                      />
-                    </NewLoanInputWrapper>
-
-                    <LoanCustomSelect>
-                      <Field
-                        name='pairId'
-                        component='input'
-                        id='selectPair'
-                        onChange={(e, newValue) =>
-                          onPairChange(+newValue, formValues.borrowedAskAmount)
-                        }
-                        className="fieldStylingDisplay"
-                      />
-                      <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
-                        <div>
-                          <img src={pairData[pair].img} alt='' />
-                          <h2>{pairData[pair].text}</h2>
-                        </div>
-                        <SelectChevron>
-                          <img src={selectUp} alt='' />
-                          <img src={selectDown} alt='' />
-                        </SelectChevron>
-                      </SelectCurrencyView>
-                      {currencySelect ? (
-                        <SelectCurrencyOptions>
-                          {pairData.map((i) => {
-                            return (
-                              <SelectCurrencyOption key={i.key}>
-                                <button
-                                  onClick={(e) => handleCurrenySelect(e, i.value)}
-                                  value={i.key}
-                                >
-                                  <img src={i.img} alt='' /> {i.text}
-                                </button>
-                              </SelectCurrencyOption>
-                            );
-                          })}
-                        </SelectCurrencyOptions>
-                      ) : (
-                        ''
-                      )}
-                    </LoanCustomSelect>
-                  </NewLoanFormInput>
-                </ModalFormGrpNewLoan>
-
-
-                <ModalFormGrp currency={pairData[pair].collateral}>
-                  <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
-                    COLLATERALIZING
-                  </ModalFormLabel>
+        <Form component={ModalFormWrapper} onSubmit={(e) => createNewLoan(e)}>
+          <FormInputsWrapper>
+            <ModalFormGrpNewLoan>
+              <NewLoanFormInput>
+                <NewLoanInputWrapper name='borrowedAskAmount'>
+                  <ModalFormLabel htmlFor='BORROWINGInput'>BORROWING</ModalFormLabel>
                   <Field
                     component={InputField}
-                    className={`ModalFormInput ${
-                      'ModalFormInput' + pairData[pair].collateral
-                    }`}
-                    name='collateralAmount'
+                    className='ModalFormInputNewLoan'
+                    name='borrowedAskAmount'
                     onChange={(e, newValue) =>
-                      calcCollateralRatio(formValues.borrowedAskAmount, newValue)
+                      debounceCalcMinCollateralAmount(pair, newValue)
                     }
                     type='number'
                     step='0.0001'
-                    id='COLLATERALIZINGInput'
-                    background={pairData[pair].colIcon}
+                    id='BORROWINGInput'
                   />
-                </ModalFormGrp>
+                </NewLoanInputWrapper>
 
-
-                <ModalFormGrpNewLoan placeholder='%'>
-                  <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
+                <LoanCustomSelect>
                   <Field
-                    name='apy'
-                    component={InputField}
-                    className='ModalFormInputAPY'
-                    type='number'
-                    // step='0.0001'
-                    id='LOAN APYInput'
+                    name='pairId'
+                    component='input'
+                    id='selectPair'
                     onChange={(e, newValue) =>
-                      calculateRPB(formValues.borrowedAskAmount, newValue)
+                      onPairChange(+newValue, formValues.borrowedAskAmount)
                     }
+                    className='fieldStylingDisplay'
                   />
-                </ModalFormGrpNewLoan>
-              </FormInputsWrapper>
+                  <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
+                    <div>
+                      <img src={pairData[pair].img} alt='' />
+                      <h2>{pairData[pair].text}</h2>
+                    </div>
+                    <SelectChevron>
+                      <img src={selectUp} alt='' />
+                      <img src={selectDown} alt='' />
+                    </SelectChevron>
+                  </SelectCurrencyView>
+                  {currencySelect ? (
+                    <SelectCurrencyOptions>
+                      {pairData.map((i) => {
+                        return (
+                          <SelectCurrencyOption key={i.key}>
+                            <button
+                              onClick={(e) => handleCurrenySelect(e, i.value)}
+                              value={i.key}
+                            >
+                              <img src={i.img} alt='' /> {i.text}
+                            </button>
+                          </SelectCurrencyOption>
+                        );
+                      })}
+                    </SelectCurrencyOptions>
+                  ) : (
+                    ''
+                  )}
+                </LoanCustomSelect>
+              </NewLoanFormInput>
+            </ModalFormGrpNewLoan>
 
+            <ModalFormGrp currency={pairData[pair].collateral}>
+              <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
+                COLLATERALIZING
+              </ModalFormLabel>
+              <Field
+                component={InputField}
+                className={`ModalFormInput ${
+                  'ModalFormInput' + pairData[pair].collateral
+                }`}
+                name='collateralAmount'
+                onChange={(e, newValue) =>
+                  calcCollateralRatio(formValues.borrowedAskAmount, newValue)
+                }
+                type='number'
+                step='0.0001'
+                id='COLLATERALIZINGInput'
+                background={pairData[pair].colIcon}
+              />
+            </ModalFormGrp>
 
-              <ModalFormSubmit>
-                <BtnLoanModal>
-                  <ModalFormButton type='submit' disabled={pristine || submitting || error}>
-                    Request Loan
-                  </ModalFormButton>
-                </BtnLoanModal>
-              </ModalFormSubmit>
+            <ModalFormGrpNewLoan placeholder='%'>
+              <ModalFormLabel htmlFor='LOAN APYInput'>LOAN APY</ModalFormLabel>
+              <Field
+                name='apy'
+                component={InputField}
+                className='ModalFormInputAPY'
+                type='number'
+                // step='0.0001'
+                id='LOAN APYInput'
+                onChange={(e, newValue) =>
+                  calculateRPB(formValues.borrowedAskAmount, newValue)
+                }
+              />
+            </ModalFormGrpNewLoan>
+          </FormInputsWrapper>
 
-
-            </Form>
-
+          <ModalFormSubmit>
+            <BtnLoanModal>
+              <ModalFormButton type='submit' disabled={pristine || submitting || error}>
+                Request Loan
+              </ModalFormButton>
+            </BtnLoanModal>
+          </ModalFormSubmit>
+        </Form>
       </ModalAdjustForm>
     </ModalNewLoanContent>
   );
@@ -306,7 +282,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 NewLoan = reduxForm({
   form: 'newLoan',
   validate,
-  asyncValidate,
+  asyncValidateCreate,
   asyncChangeFields: ['borrowedAskAmount', 'collateralAmount'],
   enableReinitialize: true
 })(NewLoan);
