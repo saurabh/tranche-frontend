@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
+import { Form, Field, reduxForm, getFormValues, change, reset } from 'redux-form';
 import { pairData } from 'config/constants';
-import { calcMinCollateralAmount, getPairDetails, toWei, fromWei } from 'services/contractMethods';
+import {
+  calcMinCollateralAmount,
+  getPairDetails,
+  toWei,
+  fromWei
+} from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
 import { safeSubtract } from 'utils/helperFunctions';
-import { validate, asyncValidate } from 'utils/validations';
+import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
-  BtnGrpLoanModal,
   ModalAdjustForm,
   ModalFormWrapper,
   ModalFormGrp,
@@ -36,21 +40,11 @@ import {
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
     {touched && error ? (
-      <input
-        {...input}
-        type={type}
-        className={className + " " + "InputStylingError"}
-      />
+      <input {...input} type={type} className={`${className} InputStylingError`} />
     ) : (
-      <input
-        {...input}
-        type={type}
-        className={className + " " + "InputStyling"}
-      />
+      <input {...input} type={type} className={`${className} InputStyling`} />
     )}
-    {touched && error && (
-      <span></span>
-    )}
+    {touched && error && <span></span>}
   </div>
 );
 
@@ -58,7 +52,10 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
   const [minCollateralAmount, setminCollateralAmount] = useState(0);
-  const [collateralRatio, setCollateralRatio] = useState(0);
+  const [collateralRatio, setCollateralRatio] = useState(0);  
+  const [borrowing, setBorrowing] = useState(0);  
+  const [collateralizing, setCollateralizing] = useState(0);  
+  const [apyValue, setApyValue] = useState(0);  
   const [RPB, SETRPB] = useState(0);
 
   const inputChange = (val) => {
@@ -78,8 +75,11 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     toggleCurrency(!currencySelect);
   };
 
-  const handleCurrenySelect = (e, pair) => {
+  const handleCurrencySelect = (e, pair) => {
     e.preventDefault();
+    change('collateralAmount', null);
+    setCollateralizing(0);
+    setCollateralRatio(0);
     inputChange(pair);
     toggleCurrency(false);
   };
@@ -97,6 +97,12 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     },
     500
   );
+  
+  const handleBorrowingChange = (pair, newValue) => {
+    setBorrowing(newValue);
+    debounceCalcMinCollateralAmount(pair, newValue);
+  }
+
 
   const setCollateralAmount = (borrowedAskAmount) => {
     change('collateralAmount', minCollateralAmount);
@@ -130,6 +136,20 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     }
   };
 
+  const [debounceCalcCollateralRatio] = useDebouncedCallback((newValue) =>{
+    setCollateralRatio(newValue);
+  },
+    500
+  );
+
+  const handleCollateralizingChange = (borrowingValue, newValue) =>{
+    if(!newValue){
+      setTimeout(()=> debounceCalcCollateralRatio(0), 500)
+    }
+    setCollateralizing(newValue);
+    calcCollateralRatio(borrowingValue, newValue);
+  }
+
   const calculateRPB = async (amount, APY) => {
     if (amount && APY > 0) {
       let blocksPerYear = 2372500;
@@ -145,6 +165,11 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     }
   };
 
+  const handleAPYChange = (borrowingValue, newValue) =>{
+    setApyValue(newValue);
+    calculateRPB(borrowingValue, newValue);
+  }
+
   return (
     <ModalNewLoanContent>
       <ModalNewLoanDetails>
@@ -155,7 +180,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
               </LoanDetailsRowTitle>
 
               <LoanDetailsRowValue cursor="pointer" onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}>
-                {minCollateralAmount} {pairData[pair].collateral}
+                {minCollateralAmount ? minCollateralAmount : 0} {pairData[pair].collateral}
               </LoanDetailsRowValue>
 
             </LoanDetailsRow>
@@ -166,7 +191,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
               </LoanDetailsRowTitle>
 
               <LoanDetailsRowValue>
-                {collateralRatio}%
+                {collateralRatio ? collateralRatio : 0}%
               </LoanDetailsRowValue>
 
             </LoanDetailsRow>
@@ -198,7 +223,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                         className='ModalFormInputNewLoan'
                         name='borrowedAskAmount'
                         onChange={(e, newValue) =>
-                          debounceCalcMinCollateralAmount(pair, newValue)
+                          handleBorrowingChange(pair, newValue)
                         }
                         type='number'
                         step='0.0001'
@@ -232,7 +257,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                             return (
                               <SelectCurrencyOption key={i.key}>
                                 <button
-                                  onClick={(e) => handleCurrenySelect(e, i.value)}
+                                  onClick={(e) => handleCurrencySelect(e, i.value)}
                                   value={i.key}
                                 >
                                   <img src={i.img} alt='' /> {i.text}
@@ -260,7 +285,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                     }`}
                     name='collateralAmount'
                     onChange={(e, newValue) =>
-                      calcCollateralRatio(formValues.borrowedAskAmount, newValue)
+                      handleCollateralizingChange(formValues.borrowedAskAmount, newValue)
                     }
                     type='number'
                     step='0.0001'
@@ -280,7 +305,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                     // step='0.0001'
                     id='LOAN APYInput'
                     onChange={(e, newValue) =>
-                      calculateRPB(formValues.borrowedAskAmount, newValue)
+                      handleAPYChange(formValues.borrowedAskAmount, newValue)
                     }
                   />
                 </ModalFormGrpNewLoan>
@@ -289,7 +314,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 
               <ModalFormSubmit>
                 <BtnLoanModal>
-                  <ModalFormButton type='submit' disabled={pristine || submitting || error}>
+                  <ModalFormButton type='submit' disabled={pristine || submitting || error || !borrowing || !collateralizing || !apyValue}>
                     Request Loan
                   </ModalFormButton>
                 </BtnLoanModal>
@@ -306,7 +331,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 NewLoan = reduxForm({
   form: 'newLoan',
   validate,
-  asyncValidate,
+  asyncValidateCreate,
   asyncChangeFields: ['borrowedAskAmount', 'collateralAmount'],
   enableReinitialize: true
 })(NewLoan);
