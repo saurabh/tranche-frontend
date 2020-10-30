@@ -107,6 +107,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   const setCollateralAmount = (borrowedAskAmount) => {
     change('collateralAmount', minCollateralAmount);
     calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
+    setCollateralizing(minCollateralAmount);
   };
 
   const calcCollateralRatio = async (borrowedAskAmount, collateralAmount) => {
@@ -314,7 +315,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 
               <ModalFormSubmit>
                 <BtnLoanModal>
-                  <ModalFormButton type='submit' disabled={pristine || submitting || error || !borrowing || !collateralizing || !apyValue}>
+                <ModalFormButton type='submit' disabled={pristine || submitting || error || !borrowing || !collateralizing || !apyValue}>
                     Request Loan
                   </ModalFormButton>
                 </BtnLoanModal>
@@ -331,7 +332,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 NewLoan = reduxForm({
   form: 'newLoan',
   validate,
-  asyncValidateCreate,
+  asyncValidate: asyncValidateCreate,
   asyncChangeFields: ['borrowedAskAmount', 'collateralAmount'],
   enableReinitialize: true
 })(NewLoan);
