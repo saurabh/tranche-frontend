@@ -170,7 +170,7 @@ let AdjustLoan = ({
 
 AdjustLoan = reduxForm({
   form: 'adjustLoan',
-  asyncValidateAdjust
+  asyncValidate: asyncValidateAdjust
 })(AdjustLoan);
 
 const mapStateToProps = (state) => ({

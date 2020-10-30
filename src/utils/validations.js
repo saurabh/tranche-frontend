@@ -82,6 +82,8 @@ let asyncValidateCreate = (values) => {
 let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
     let { newCollateralRatio } = values;
+    console.log(parseFloat(newCollateralRatio))
+    console.log(isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw))
     if (isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)) {
       throw {
         collateralAmount: 'New collateral ratio is below acceptable threshold',

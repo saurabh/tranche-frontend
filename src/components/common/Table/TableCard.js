@@ -484,10 +484,10 @@ const TableCard = ({
 
   const adjustLoan = (e, type) => {
     e.preventDefault();
-    if (type === 'addCollateral') {
+    if (type) {
       addCollateral();
       closeModal();
-    } else if (type === 'removeCollateral') {
+    } else {
       withdrawCollateral();
       closeModal();
     }
