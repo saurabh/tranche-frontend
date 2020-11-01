@@ -108,6 +108,7 @@ export const JNT = 'JNT';
 export const USDC = 'USDC';
 
 export const generalParams = {
+  limitCollRatioForWithdraw: 160,
   foreclosureWindow: 50,
   earlySettlementWindow: 540000
 }

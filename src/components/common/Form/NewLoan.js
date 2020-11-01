@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change, reset } from 'redux-form';
 import { pairData } from 'config/constants';
-import { calcMinCollateralAmount, getPairDetails, toWei, fromWei } from 'services/contractMethods';
+import {
+  calcMinCollateralAmount,
+  getPairDetails,
+  toWei,
+  fromWei
+} from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
 import { safeSubtract } from 'utils/helperFunctions';
-import { validate, asyncValidate } from 'utils/validations';
+import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
-  BtnGrpLoanModal,
   ModalAdjustForm,
   ModalFormWrapper,
   ModalFormGrp,
@@ -36,21 +40,11 @@ import {
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
     {touched && error ? (
-      <input
-        {...input}
-        type={type}
-        className={className + " " + "InputStylingError"}
-      />
+      <input {...input} type={type} className={`${className} InputStylingError`} />
     ) : (
-      <input
-        {...input}
-        type={type}
-        className={className + " " + "InputStyling"}
-      />
+      <input {...input} type={type} className={`${className} InputStyling`} />
     )}
-    {touched && error && (
-      <span></span>
-    )}
+    {touched && error && <span></span>}
   </div>
 );
 
@@ -340,7 +334,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 NewLoan = reduxForm({
   form: 'newLoan',
   validate,
-  asyncValidate,
+  asyncValidate: asyncValidateCreate,
   asyncChangeFields: ['borrowedAskAmount', 'collateralAmount'],
   enableReinitialize: true
 })(NewLoan);
