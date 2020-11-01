@@ -16,7 +16,9 @@ html{
   background: #ffffff;
   width: 23px;
 }
-
+#logo-wrapper a img{
+  height: 25px;
+}
 .table-card-more{
   height: 0;
   overflow: hidden;
@@ -50,7 +52,7 @@ html{
 .table-first-col{
   display: flex;
   align-items: center;
-  width: 160px;
+  width: 200px;
 }
 .table-first-col-wrapper{
   display: flex;
@@ -92,10 +94,10 @@ html{
   margin-left: 2px;
 }
 .table-second-col{
-  width: 109px;
+  width: 119px;
 }
 .table-third-col{
-  width: 139px;
+  width: 149px;
   position: relative;
 }
 .third-col-content{
@@ -133,14 +135,14 @@ html{
 }
 
 .table-fourth-col{
-  width: 100px;
+  width: 110px;
 }
 .fourth-col-content{
   max-width: 33px;
 }
 
 .table-fifth-col{
-  width: 136px;
+  width: 146px;
 }
 .fifth-col-content{
   max-width: 84px;
@@ -150,7 +152,7 @@ html{
   text-align: right;
 }
 .table-sixth-col{
-  width: 90px;
+  width: 100px;
 }
 
 .second-4-col-content h2{
@@ -211,7 +213,7 @@ html{
 .table-more-row-first{
   display: flex;
   align-items: center;
-  width: 160px;
+  width: 200px;
 }
 .table-more-row-first-img{
   position: relative;
@@ -278,11 +280,11 @@ button[disabled] img{
   color: #39295A;
 }
 .table-more-row-second{
-  width: 139px;
+  width: 149px;
 }
 
 .table-more-row-third{
-  width: 100px;
+  width: 110px;
 }
 
 .table-more-row-third-content{
@@ -293,7 +295,7 @@ button[disabled] img{
 }
 
 .table-more-row-fourth{
-  width: 136px;
+  width: 146px;
 }
 
 .table-more-row-fourth-content{
@@ -303,7 +305,7 @@ button[disabled] img{
   text-align: right;
 }
 .table-more-row-fifth{
-  width: 160px;
+  width: 150px;
 }
 .table-more-row-fifth-content{
   display: flex;
@@ -315,7 +317,7 @@ button[disabled] img{
   margin-right: 7px;
 }
 .table-more-row-sixth{
-  width: 39px;
+  width: 67px;
 }
 .TableMoreLoading{
   margin: 0 auto;
@@ -336,10 +338,10 @@ button[disabled] img{
   font-weight: normal;
   font-size: 12px;
   box-sizing: border-box;
-  width: 76px;
+  width: 85px;
   padding: 8px 0;
   text-align: center;
-  border-radius: 11px;
+  border-radius: 19px;
 }
 .more-transactions h2{
   font-family: "Open Sans", sans-serif;
@@ -1069,6 +1071,12 @@ table, th, td {
 
   #navbar-icon{
     display: block;
+  }
+
+  .table-more-row{
+    flex-wrap: wrap-reverse;
+    padding: 15px 0;
+    border-bottom: 2px solid #efefef;
   }
 
   

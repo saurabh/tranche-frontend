@@ -113,6 +113,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   const setCollateralAmount = (borrowedAskAmount) => {
     change('collateralAmount', minCollateralAmount);
     calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
+    setCollateralizing(minCollateralAmount);
   };
 
   const calcCollateralRatio = async (borrowedAskAmount, collateralAmount) => {

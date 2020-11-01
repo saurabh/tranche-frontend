@@ -110,7 +110,10 @@ export default function LoanModal({
       customUI: ({ onClose }) => {
         return (
           <ConfirmAlertWrapper>
-            <h2>{actionTypes[type].confirmationText}</h2>
+            {
+              type === 'Close' ? <h2>Are you sure you want to return {remainingLoan + ' ' + cryptoFromLenderName}?</h2> : 
+              <h2>{actionTypes[type].confirmationText}</h2>
+            }
             {/*{type === 'WithdrawInterest' && (
               <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
             )}*/}
@@ -174,7 +177,7 @@ export default function LoanModal({
             contentLabel='Adjust'
           >
             <ModalHeader>
-              <h2>Manage Loan Request</h2>
+              <h2>{status === statuses['Pending'].status ? "Manage Loan Request" : status === statuses['Under_Collateralized'].status ? "Manage Loan Position" : "Manage Loan" }</h2>
               <button onClick={() => modalClose()}>
                 <img src={CloseModal} alt='' />
               </button>
@@ -237,7 +240,11 @@ export default function LoanModal({
                     <BtnGrpLoanModal>
 
                       <BtnGrpLoanModalWrapper>
-                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                        {
+                          status === statuses['Under_Collateralized'].status ? <h2>Your loan is undercollateralized, add collateral to avoid foreclosure.</h2>
+                          : <h2>Increase or decrease your collateral amount based on market conditions.</h2>
+                        }
+                        
                         <ModalButton
                           disabled={loanStatusPending}
                           onClick={() => adjustPositionToggle(true)}
@@ -250,7 +257,7 @@ export default function LoanModal({
                       </BtnGrpLoanModalWrapper>
 
                       <BtnGrpLoanModalWrapper>       
-                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>                 
+                        <h2>Return the loan amount and pay outstanding interest.</h2>                 
                         <ModalButton onClick={() => confirm('Close')} backgroundColor="#0A66E1" btnColor="#FFFFFF">Close Loan</ModalButton>
                       </BtnGrpLoanModalWrapper>
 
@@ -302,7 +309,7 @@ export default function LoanModal({
       >
         <ModalHeader>
           <h2>
-            Manage Earning Asset
+            Review Loan Request
           </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
@@ -362,7 +369,7 @@ export default function LoanModal({
           <BtnGrpLoanModal>
             {status === statuses['Pending'].status ? (
               <BtnGrpLoanModalWrapper>
-                <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                <h2>You are lending {remainingLoan + ' ' + cryptoFromLenderName} backed by a collateral ratio of {collateralRatio}%.</h2>
 
                 <ModalButton
                   onClick={() => confirm('Approve')}
@@ -377,7 +384,7 @@ export default function LoanModal({
             ) : status === statuses['Active'].status ? (
 
               <BtnGrpLoanModalWrapper>
-                <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                <h2>You can withdraw accrued interest at any point.</h2>
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor="#234566"    
@@ -393,7 +400,7 @@ export default function LoanModal({
               <BtnGrpLoanModal>
 
               <BtnGrpLoanModalWrapper>
-                  <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                  <h2>You can withdraw accrued interest at any point.</h2>
                   <ModalButton
                     onClick={() => confirm('WithdrawInterest')}
                     btnColor="#234566"    
@@ -406,7 +413,7 @@ export default function LoanModal({
 
 
                 <BtnGrpLoanModalWrapper>
-                  <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                  <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
                   <ModalButton
                     onClick={() => confirm('Foreclose')}
                     btnColor="#234566"    
@@ -424,7 +431,7 @@ export default function LoanModal({
 
 
                 <BtnGrpLoanModalWrapper>
-                  <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                  <h2>You can withdraw accrued interest at any point.</h2>
                   <ModalButton
                     onClick={() => confirm('WithdrawInterest')}
                     btnColor="#234566"    
@@ -438,7 +445,7 @@ export default function LoanModal({
 
 
                 <BtnGrpLoanModalWrapper>
-                  <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                  <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
                   <ModalButton
                     onClick={() => confirm('Foreclose')}
                     btnColor="#234566"    
@@ -456,7 +463,7 @@ export default function LoanModal({
 
 
               <BtnGrpLoanModalWrapper>
-                  <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                  <h2>You can withdraw accrued interest at any point.</h2>
                   <ModalButton
                     onClick={() => confirm('WithdrawInterest')}
                     btnColor="#234566"    
@@ -470,7 +477,7 @@ export default function LoanModal({
 
 
                 <BtnGrpLoanModalWrapper>
-                <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
                   <ModalButton
                     onClick={() => confirm('Foreclose')}
                     btnColor="#234566"    
@@ -490,7 +497,7 @@ export default function LoanModal({
 
 
               <BtnGrpLoanModalWrapper>
-                <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                <h2>You can withdraw accrued interest at any point.</h2>
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor="#234566"    
@@ -508,7 +515,7 @@ export default function LoanModal({
 
 
               <BtnGrpLoanModalWrapper>
-                <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                <h2>You can withdraw accrued interest at any point.</h2>
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor="#234566"    
@@ -526,7 +533,7 @@ export default function LoanModal({
 
 
               <BtnGrpLoanModalWrapper>
-                <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                <h2>You can withdraw accrued interest at any point.</h2>
                 <ModalButton
                   onClick={() => confirm('WithdrawInterest')}
                   btnColor="#234566"    

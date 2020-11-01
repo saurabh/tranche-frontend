@@ -14,7 +14,7 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
 import {
   statuses,
   PagesData,
@@ -544,6 +544,8 @@ const TableCard = ({
     }
   };
 
+  
+
   return (
     <TableContentCardWrapper>
       <TableContentCard
@@ -599,7 +601,7 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {interestPaid && valShortner(interestPaid)}{' '}
+              {interestPaid && (interestPaid % 1 !== 0 ? roundNumber(interestPaid) : interestPaid)}{' '}
               <span>{collateralTypeName}</span>
             </h2>
           </div>
