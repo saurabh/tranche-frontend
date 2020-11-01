@@ -25553,12 +25553,120 @@
         }
       },
       "links": {},
-      "address": "0xb402ffd7edd18BC312eCDa5f4B996a98Db9B27B8",
-      "transactionHash": "0xd09036d1f7989e7d8cb499d66b5a6b330fed17cb888ddb9cadef3f0caa490b8b"
+      "address": "0x2a8fa48FBf236bdd02536a8bBca05F5efe0B9E2e",
+      "transactionHash": "0x3c6f20a3aa166846e176b91f42e923873df79408893b49e7563da6ac0842ba0b"
+    },
+    "5777": {
+      "events": {
+        "0x44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e339": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "AdminAdded",
+          "type": "event"
+        },
+        "0xa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "AdminRemoved",
+          "type": "event"
+        },
+        "0x23cc28b328bc4c352043591698fcca6cf25d48f1b15c267c2f11debcbfd7d282": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "pairId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newLoan",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "pairName",
+              "type": "string"
+            }
+          ],
+          "name": "NewPairLoanCreated",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        },
+        "0xa1661b6e1932625ac6173661a83389c6f4d9b37adb71d92b6252f9615780adf4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "idx",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "loanId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "oldStatus",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "newStatus",
+              "type": "uint256"
+            }
+          ],
+          "name": "SetNewStatus",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x043D41Ef8146ad49eA977241A4eAb62263c66401",
+      "transactionHash": "0xf0bf79c15605c00602974339d0a0515e0298fa959fce7d8243dd4e2007cd27b9"
     }
   },
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-11-01T07:00:13.188Z",
+  "updatedAt": "2020-11-01T10:47:33.977Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
