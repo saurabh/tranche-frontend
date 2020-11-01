@@ -124,7 +124,7 @@ export const actionTypes = {
   },
   Approve: {
     name: 'Approve',
-    confirmationText: 'Are you sure you want to approve this loan?'
+    confirmationText: 'Are you sure you want to accept this loan?'
   },
   WithdrawInterest: {
     name: 'WithdrawInterest',

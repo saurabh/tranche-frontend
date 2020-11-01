@@ -56,7 +56,7 @@ const GlobalStyle = createGlobalStyle`
   
   
   .address-wrapper{
-    width: 160px;
+    width: 200px;
   }
   .status-wrapper{
     width: 109px;
@@ -65,17 +65,17 @@ const GlobalStyle = createGlobalStyle`
     margin-left: 15px;
   }
   .remaining-wrapper{
-    width: 139px;
+    width: 149px;
   }
   .ratio-wrapper{
-    width: 100px;
+    width: 110px;
   }
   
   .interest-paid-wrapper{
-    width: 136px;
+    width: 146px;
   }
   .head-btns-wrapper{
-    width: 83px;
+    width: 103px;
   }
   @media (min-width: 992px){
     .navbar-container{
@@ -90,7 +90,7 @@ const GlobalStyle = createGlobalStyle`
       width: 1126px;
     }
     .content-container{
-      width: 826px;
+      width: 942px;
     }
   }
  
