@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ef9e70dc5adb9ff03cfc87003cba26b2",
+    "revision": "6f4665b2e6f8891dc8ca980ad1ab98ed",
     "url": "/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/css/11.4406a383.chunk.css"
   },
   {
-    "revision": "d00d23abde1c31baa115",
-    "url": "/static/css/main.d34f91f0.chunk.css"
+    "revision": "164bb5fa5966bd6605cd",
+    "url": "/static/css/main.53af1e03.chunk.css"
   },
   {
     "revision": "8a2eb97e5444a21a8877",
@@ -248,8 +248,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/8.29ba0428.chunk.js"
   },
   {
-    "revision": "d00d23abde1c31baa115",
-    "url": "/static/js/main.75b167de.chunk.js"
+    "revision": "164bb5fa5966bd6605cd",
+    "url": "/static/js/main.097da9c4.chunk.js"
   },
   {
     "revision": "2ddab93e1bc19b19c7cc",
@@ -268,8 +268,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/JibrelLogoError.5ccd0287.svg"
   },
   {
-    "revision": "ac2f1cb152e3bdd730961b8c43727c07",
-    "url": "/static/media/Logo.ac2f1cb1.svg"
+    "revision": "7b988c0aa85da4cc93ca37f60c230f76",
+    "url": "/static/media/Logo.7b988c0a.svg"
   },
   {
     "revision": "951b8f5d9289aa28fed0e8f13032dd56",
