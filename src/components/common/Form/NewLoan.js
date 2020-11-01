@@ -125,12 +125,14 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
           10 ** pairDecimals /
           10 ** diffBaseQuoteDecimals;
         setCollateralRatio(newCollRatio);
+        debounceCalcCollateralRatio(newCollRatio)
       } else {
         newCollRatio =
           ((((collateralAmount * pairValue) / borrowedAskAmount) * 100) /
             10 ** pairDecimals) *
           10 ** diffBaseQuoteDecimals;
         setCollateralRatio(newCollRatio);
+        debounceCalcCollateralRatio(newCollRatio);
       }
     } catch (error) {
       console.error(error);
@@ -315,7 +317,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 
               <ModalFormSubmit>
                 <BtnLoanModal>
-                <ModalFormButton type='submit' disabled={pristine || submitting || error || !borrowing || !collateralizing || !apyValue}>
+                  <ModalFormButton type='submit' disabled={pristine || submitting || error || !borrowing || !collateralizing || !apyValue}>
                     Request Loan
                   </ModalFormButton>
                 </BtnLoanModal>

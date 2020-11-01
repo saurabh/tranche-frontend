@@ -32,6 +32,15 @@ export const valShortner = (val) => {
   
 };
 
+export const roundNumber = (num) => {
+  const formatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 3,      
+    maximumFractionDigits: 3,
+ });
+ 
+ return formatter.format(num)
+}
+
 // Big Number Functions
 
 export const safeAdd = function (a, b) {
