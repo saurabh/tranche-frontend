@@ -54,7 +54,6 @@ const Table = ({
   const [data, setData] = useState({});
   const [limit, setLimit] = useState(20);
   const [pageCount, setPageCount] = useState(5);
-  const [isLoading, setIsLoading] = useState(true);
 
   const loanListing = async (p = page.current, sort = null) => {
     let currentPage = page.current;

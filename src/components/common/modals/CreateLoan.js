@@ -6,7 +6,6 @@ import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'components/common/Form/NewLoan';
 import { JFactorySetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { submitValidations } from 'utils/validations';
 import { JLoanTokenDeployerAddress } from 'config/constants';
 import { pairData } from 'config/constants';
 import { ModalHeader } from './ModalComponents';
@@ -141,8 +140,6 @@ const CreateLoan = ({
       e.preventDefault();
       let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
       pairId = parseFloat(pairId);
-      // submitValidations(form.newLoan.values).then(() => {
-      // }).catch(error => console.error)
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       if (pairId === pairData[0].value) {

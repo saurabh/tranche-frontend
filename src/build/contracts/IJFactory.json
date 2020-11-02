@@ -76,11 +76,6 @@
           "components": [
             {
               "internalType": "uint256",
-              "name": "minRpbRate",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
               "name": "earlySettlementWindow",
               "type": "uint256"
             },
@@ -199,7 +194,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.11+commit.5ef660b1\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pairId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_askAmount\",\"type\":\"uint256\"}],\"name\":\"calcMinCollateralAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pairId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_askAmount\",\"type\":\"uint256\"}],\"name\":\"calcMinCollateralWithFeesAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_collAmount\",\"type\":\"uint256\"}],\"name\":\"calculateCollFeesOnActivation\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGeneralFees\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"earlySettlementFee\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"factoryFees\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"userRewardShare\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"vaultRewardShare\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"cancellationFees\",\"type\":\"uint8\"},{\"internalType\":\"uint16\",\"name\":\"undercollateralizedForeclosingMultiple\",\"type\":\"uint16\"},{\"internalType\":\"uint16\",\"name\":\"atRiskForeclosedMultiple\",\"type\":\"uint16\"}],\"internalType\":\"struct IJLoanCommons.FeesParams\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGeneralParams\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"minRpbRate\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"earlySettlementWindow\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"foreclosureWindow\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"requiredCollateralRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"foreclosingRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"instantForeclosureRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"limitCollRatioForWithdraw\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"factoryAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"pairLoanDeployerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"pairPriceOracleAddress\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"collDecimals\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"lendDecimals\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"pairId\",\"type\":\"uint256\"}],\"internalType\":\"struct IJLoanCommons.GeneralParams\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJFactory.sol\":\"IJFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJFactory.sol\":{\"keccak256\":\"0x39d6bc29dc47fdc9d60d0898cf5442ad11015dd6ea1ef280c91efd8a0ee98827\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a4741751c2ea8293815919ddcf7f51e0ca754edb7f00532c0da86c3caecc5b21\",\"dweb:/ipfs/QmZ3RFzjr9kPjaoXtK2Spsk9eLDcVUKaREYomB1BpLBQPd\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol\":{\"keccak256\":\"0xdace934304aaaaf0c92bbde067a7bea673f697ba50829f6299eaa2d3451c1789\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://20506d38168d0ca675d8ea56935f05b28484a139688a61e9766853169e42a751\",\"dweb:/ipfs/QmXWaHzEvQw7taotur7AhZZ6tYfKD6BPh8DR9ukkFeurSs\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.11+commit.5ef660b1\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pairId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_askAmount\",\"type\":\"uint256\"}],\"name\":\"calcMinCollateralAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pairId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_askAmount\",\"type\":\"uint256\"}],\"name\":\"calcMinCollateralWithFeesAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_collAmount\",\"type\":\"uint256\"}],\"name\":\"calculateCollFeesOnActivation\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGeneralFees\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"earlySettlementFee\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"factoryFees\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"userRewardShare\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"vaultRewardShare\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"cancellationFees\",\"type\":\"uint8\"},{\"internalType\":\"uint16\",\"name\":\"undercollateralizedForeclosingMultiple\",\"type\":\"uint16\"},{\"internalType\":\"uint16\",\"name\":\"atRiskForeclosedMultiple\",\"type\":\"uint16\"}],\"internalType\":\"struct IJLoanCommons.FeesParams\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGeneralParams\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"earlySettlementWindow\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"foreclosureWindow\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"requiredCollateralRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"foreclosingRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"instantForeclosureRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"limitCollRatioForWithdraw\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"factoryAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"pairLoanDeployerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"pairPriceOracleAddress\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"collDecimals\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"lendDecimals\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"pairId\",\"type\":\"uint256\"}],\"internalType\":\"struct IJLoanCommons.GeneralParams\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJFactory.sol\":\"IJFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJFactory.sol\":{\"keccak256\":\"0x39d6bc29dc47fdc9d60d0898cf5442ad11015dd6ea1ef280c91efd8a0ee98827\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a4741751c2ea8293815919ddcf7f51e0ca754edb7f00532c0da86c3caecc5b21\",\"dweb:/ipfs/QmZ3RFzjr9kPjaoXtK2Spsk9eLDcVUKaREYomB1BpLBQPd\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol\":{\"keccak256\":\"0xd7de34d10c2803e577d173f963f1b05e5a0485e3e61d22022b3d28d4adad2c7a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://57cd7464a436a318b0abe2158d3ecffb0ab37452ce929d5e559a5d6007d8c8ce\",\"dweb:/ipfs/QmZDzDgRQz2ZSopu9EMdYLMKFGrnYT67oeyT6Nof9wqYMX\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -243,7 +238,7 @@
         "id": 3,
         "nodeType": "ImportDirective",
         "scope": 40,
-        "sourceUnit": 132,
+        "sourceUnit": 130,
         "src": "180:29:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -612,7 +607,7 @@
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_GeneralParams_$97_memory_ptr",
+                    "typeIdentifier": "t_struct$_GeneralParams_$95_memory_ptr",
                     "typeString": "struct IJLoanCommons.GeneralParams"
                   },
                   "typeName": {
@@ -620,10 +615,10 @@
                     "id": 30,
                     "name": "IJLoanCommons.GeneralParams",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 97,
+                    "referencedDeclaration": 95,
                     "src": "584:27:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_GeneralParams_$97_storage_ptr",
+                      "typeIdentifier": "t_struct$_GeneralParams_$95_storage_ptr",
                       "typeString": "struct IJLoanCommons.GeneralParams"
                     }
                   },
@@ -672,7 +667,7 @@
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_FeesParams_$112_memory_ptr",
+                    "typeIdentifier": "t_struct$_FeesParams_$110_memory_ptr",
                     "typeString": "struct IJLoanCommons.FeesParams"
                   },
                   "typeName": {
@@ -680,10 +675,10 @@
                     "id": 35,
                     "name": "IJLoanCommons.FeesParams",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 112,
+                    "referencedDeclaration": 110,
                     "src": "674:24:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_FeesParams_$112_storage_ptr",
+                      "typeIdentifier": "t_struct$_FeesParams_$110_storage_ptr",
                       "typeString": "struct IJLoanCommons.FeesParams"
                     }
                   },
@@ -742,7 +737,7 @@
         "id": 3,
         "nodeType": "ImportDirective",
         "scope": 40,
-        "sourceUnit": 132,
+        "sourceUnit": 130,
         "src": "180:29:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1111,7 +1106,7 @@
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_GeneralParams_$97_memory_ptr",
+                    "typeIdentifier": "t_struct$_GeneralParams_$95_memory_ptr",
                     "typeString": "struct IJLoanCommons.GeneralParams"
                   },
                   "typeName": {
@@ -1119,10 +1114,10 @@
                     "id": 30,
                     "name": "IJLoanCommons.GeneralParams",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 97,
+                    "referencedDeclaration": 95,
                     "src": "584:27:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_GeneralParams_$97_storage_ptr",
+                      "typeIdentifier": "t_struct$_GeneralParams_$95_storage_ptr",
                       "typeString": "struct IJLoanCommons.GeneralParams"
                     }
                   },
@@ -1171,7 +1166,7 @@
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_FeesParams_$112_memory_ptr",
+                    "typeIdentifier": "t_struct$_FeesParams_$110_memory_ptr",
                     "typeString": "struct IJLoanCommons.FeesParams"
                   },
                   "typeName": {
@@ -1179,10 +1174,10 @@
                     "id": 35,
                     "name": "IJLoanCommons.FeesParams",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 112,
+                    "referencedDeclaration": 110,
                     "src": "674:24:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_FeesParams_$112_storage_ptr",
+                      "typeIdentifier": "t_struct$_FeesParams_$110_storage_ptr",
                       "typeString": "struct IJLoanCommons.FeesParams"
                     }
                   },
@@ -1211,7 +1206,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-11-01T10:45:48.332Z",
+  "updatedAt": "2020-11-02T06:57:44.512Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
