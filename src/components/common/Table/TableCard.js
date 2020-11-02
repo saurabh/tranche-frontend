@@ -4,7 +4,7 @@ import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
-import { postRequest } from 'services/axios';
+import { postRequest } from 'services/axios'
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
 import {
@@ -28,25 +28,7 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
-import { StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
-
-const TableContentCardWrapper = styled.div`
-  min-height: 66px;
-`;
-const TableContentCard = styled.div`
-  display: flex;
-  align-items: center;
-  min-height: 66px;
-  padding: 0 39px 0 47px;
-  border-bottom: 1px solid #efefef;
-  cursor: pointer;
-  @media (max-width: 1200px) {
-    flex-direction: column;
-    align-items: flex-end;
-    border-bottom: 3px solid #efefef;
-    padding: 0 12px;
-  }
-`;
+import { TableContentCard, TableContentCardWrapper, StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
 
 const TableCard = ({
   loan: {
@@ -66,6 +48,7 @@ const TableCard = ({
     name
   },
   path,
+  avatar,
   loansFetchData,
   setAddress,
   setNetwork,
@@ -554,7 +537,8 @@ const TableCard = ({
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
-              <img src={UserImg} alt='User' />
+              <img src={avatar} alt='User' />
+              
             </div>
             <div className='first-col-content'>
               <div className='first-col-title'>
@@ -612,7 +596,7 @@ const TableCard = ({
               color={Object.values(searchObj(status))[0].color}
               backgroundColor={Object.values(searchObj(status))[0].background}
             >
-              {valShortner(Object.values(searchObj(status))[0].key)}
+              { Object.values(searchObj(status))[0].key === "Under Collateralized" ? "Under" : valShortner(Object.values(searchObj(status))[0].key)}
             </StatusTextWrapper>
           </div>
         </div>
@@ -637,11 +621,6 @@ const TableCard = ({
                 alt=''
               />
             </AdjustModalBtn>
-          </div>
-          <div className='star-btn-wrapper'>
-            <button>
-              <img src={Star} alt='' />
-            </button>
           </div>
           <LoanModal
             status={status}
