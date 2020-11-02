@@ -1,5 +1,4 @@
-import { SubmissionError } from 'redux-form';
-import { isLessThan, isGreaterThan } from './helperFunctions';
+import { isLessThan } from './helperFunctions';
 import {
   calcMinCollateralAmount,
   calcAdjustCollateralRatio
@@ -37,22 +36,6 @@ const maxValue = (max) => (value) =>
   value && value >= max ? `Must be ${max}% at most` : undefined;
 const maxValue100 = maxValue(100);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-let submitValidations = async (values) => {
-  return sleep(0).then(async () => {
-    let { borrowedAskAmount, collateralAmount, pairId } = values;
-    let minCollateralAmount = await calcMinCollateralAmount(pairId, borrowedAskAmount);
-    if (
-      borrowedAskAmount &&
-      (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))
-    ) {
-      throw new SubmissionError({
-        borrowedAskAmount: 'Ask amount is too high',
-        _error: 'Create New Loan failed!'
-      });
-    }
-  });
-};
 
 let asyncValidateCreate = (values) => {
   return sleep(0).then(async () => {
@@ -97,7 +80,6 @@ export {
   number,
   minValue0,
   maxValue100,
-  submitValidations,
   validate,
   asyncValidateCreate,
   asyncValidateAdjust

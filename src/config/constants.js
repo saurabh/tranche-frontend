@@ -2,20 +2,20 @@ import DAIicon from 'assets/images/svg/dai.svg';
 import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
-import { JLoanEthSetup, JLoanTokenSetup, DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
-import { networks as JLoanTokenDeployerNetworks } from 'build/contracts/JLoanTokenDeployer.json';
-export const JLoanTokenDeployerAddress = JLoanTokenDeployerNetworks[42].address;
+import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
-export const serverUrl = process.env.REACT_APP_serverUrl;
-export const etherScanUrl = process.env.REACT_APP_etherScanUrl;
-export const blocknativeKey = process.env.REACT_APP_blocknativeKey;
-export const infuraKey = process.env.REACT_APP_infuraKey;
-export const alchemyProviderUrl = process.env.REACT_APP_alchemyProviderUrl;
-export const networkId = parseInt(process.env.REACT_APP_networkId);
-export const DAIAddress = process.env.REACT_APP_DAIAddress;
-export const JPTAddress = process.env.REACT_APP_JPTAddress;
-export const USDCAddress = process.env.REACT_APP_USDCAddress;
+export const serverUrl = process.env.REACT_APP_SERVER_URL;
+export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
+export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
+export const infuraKey = process.env.REACT_APP_INFURA_KEY;
+export const alchemyProviderUrl = process.env.REACT_APP_ALCHEMY_PROVIDER_URL;
+export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
+const Pair0Address = process.env.REACT_APP_PAIR_0;
+const Pair1Address = process.env.REACT_APP_PAIR_1;
+export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
+export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
+export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
@@ -58,7 +58,7 @@ export const PagesData = {
     btnColor: '#EEE5FF',
     cardColor: '#DFD2FB',
     title: 'Privacy Policy',
-    description: ""
+    description: ''
   },
   terms: {
     pageType: 'terms-and-conditions',
@@ -67,7 +67,7 @@ export const PagesData = {
     btnColor: '#EEE5FF',
     cardColor: '#DFD2FB',
     title: 'Terms and Conditions',
-    description: ""
+    description: ''
   }
 };
 
@@ -81,7 +81,7 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup,
-    loanContractSetup: JLoanEthSetup
+    loanContractAddress: Pair0Address
   },
   {
     key: 'USDC',
@@ -92,7 +92,7 @@ export const pairData = [
     colIcon: JNTicon,
     collateralTokenSetup: JPTSetup,
     lendTokenSetup: USDCSetup,
-    loanContractSetup: JLoanTokenSetup
+    loanContractAddress: Pair1Address
   }
 ];
 
@@ -109,9 +109,9 @@ export const USDC = 'USDC';
 
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
-  foreclosureWindow: 50,
+  foreclosureWindow: 18000,
   earlySettlementWindow: 540000
-}
+};
 
 export const actionTypes = {
   Cancel: {
@@ -134,22 +134,22 @@ export const actionTypes = {
     name: 'Foreclose',
     confirmationText: 'Are you sure you want to foreclose this loan?'
   }
-}
+};
 
 export const events = {
-	LOAN_CREATED_ETH: "NewEthLoanCreated",
-	LOAN_CREATED_TOKEN: "NewTokenLoanCreated",
-	APPROVE_LOAN: "LenderAccepted",
-	NEW_DEPOSIT_TOKEN: "NewDeposit",
-	NEW_DEPOSIT_ETH: "EthReceived",
-	FORECLOSING: "LoanForeclosing",
-	FORECLOSED: "LoanForeclosed",
-	LOAN_CANCEL: "LoanCancelled",
-	LOAN_CLOSING_BORROWER: "LoanClosingByBorrower",
-	LOAN_CLOSED: 'LoanClosed',
-	INTEREST_WITHDRAWN: 'InterestsWithdrawed',
-	REMOVE_COLLATERAL: 'WithdrawCollateral'
-}
+  LOAN_CREATED_ETH: 'NewEthLoanCreated',
+  LOAN_CREATED_TOKEN: 'NewTokenLoanCreated',
+  APPROVE_LOAN: 'LenderAccepted',
+  NEW_DEPOSIT_TOKEN: 'NewDeposit',
+  NEW_DEPOSIT_ETH: 'EthReceived',
+  FORECLOSING: 'LoanForeclosing',
+  FORECLOSED: 'LoanForeclosed',
+  LOAN_CANCEL: 'LoanCancelled',
+  LOAN_CLOSING_BORROWER: 'LoanClosingByBorrower',
+  LOAN_CLOSED: 'LoanClosed',
+  INTEREST_WITHDRAWN: 'InterestsWithdrawed',
+  REMOVE_COLLATERAL: 'WithdrawCollateral'
+};
 
 export const statuses = {
   Pending: {
