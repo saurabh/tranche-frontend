@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm, getFormValues } from 'redux-form';
+import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, asyncValidateAdjust } from 'utils/validations';
 import {
   BtnGrpLoanModal,
@@ -50,6 +50,7 @@ let AdjustLoan = ({
   submitting,
   isAdjustSelected,
   setIsAdjustSelected,
+  contractAddress,
   collateralTypeName,
   adjustLoan,
   newCollateralRatio,
@@ -58,11 +59,23 @@ let AdjustLoan = ({
   cryptoFromLenderName,
   collateralAmount,
   collateralRatio,
-  formValues
+  formValues,
+  change
 }) => {
   const [actionType, setActionType] = useState(); // true = adding; false = removing
+  const setContractAddress = useCallback(() => {
+    change('contractAddress', contractAddress);
+  }, [contractAddress]);
+  const setCollateralTypeName = useCallback(() => {
+    change('collateralTypeName', collateralTypeName);
+  }, [collateralTypeName]);
 
   const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
+
+  useEffect(() => {
+    setContractAddress();
+    setCollateralTypeName();
+  }, [setContractAddress, setCollateralTypeName]);
 
   const calcNewRatio = (collateralAmount) => {
     isAdjustSelected && calcNewCollateralRatio(collateralAmount, actionType);
@@ -71,6 +84,7 @@ let AdjustLoan = ({
   const setAction = (type, collateralAmount) => {
     setIsAdjustSelected(true);
     setActionType(type);
+    change('actionType', type);
     collateralAmount !== '' && calcNewCollateralRatio(collateralAmount, type);
   };
 
@@ -174,10 +188,15 @@ AdjustLoan = reduxForm({
 })(AdjustLoan);
 
 const mapStateToProps = (state) => ({
-  initialValues: { collateralAmount: '' },
+  initialValues: {
+    collateralAmount: '',
+    actionType: '',
+    collateralTypeName: '',
+    contractAddress: ''
+  },
   formValues: getFormValues('adjustLoan')(state)
 });
 
-AdjustLoan = connect(mapStateToProps, {})(AdjustLoan);
+AdjustLoan = connect(mapStateToProps, { change })(AdjustLoan);
 
 export { AdjustLoan };

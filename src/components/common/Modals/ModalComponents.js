@@ -244,7 +244,23 @@ const ModalFormGrp = styled.div`
     margin: 6px 0 0 0;
   }
 `
-
+const TableContentCardWrapper = styled.div`
+  min-height: 66px;
+`;
+const TableContentCard = styled.div`
+  display: flex;
+  align-items: center;
+  min-height: 66px;
+  padding: 0 39px 0 47px;
+  border-bottom: 1px solid #efefef;
+  cursor: pointer;
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    align-items: flex-end;
+    border-bottom: 3px solid #efefef;
+    padding: 0 12px;
+  }
+`;
 
 const ModalFormGrpNewLoan = styled.div`
   position: relative;
@@ -674,6 +690,8 @@ export {
     ModalFormGrpNewLoan,
     ModalFormInputNewLoan,
     FormInputsWrapper,
+    TableContentCardWrapper,
+    TableContentCard,
     NewLoanInputWrapper,
     LoanCustomSelect,
     NewLoanFormInput,

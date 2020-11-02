@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
+import { calcAdjustCollateralRatio } from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
 import {
@@ -15,7 +15,13 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
+import {
+  addrShortener,
+  valShortner,
+  readyToTransact,
+  isGreaterThan,
+  roundNumber
+} from 'utils';
 import {
   statuses,
   PagesData,
@@ -28,25 +34,7 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
-import { StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
-
-const TableContentCardWrapper = styled.div`
-  min-height: 66px;
-`;
-const TableContentCard = styled.div`
-  display: flex;
-  align-items: center;
-  min-height: 66px;
-  padding: 0 39px 0 47px;
-  border-bottom: 1px solid #efefef;
-  cursor: pointer;
-  @media (max-width: 1200px) {
-    flex-direction: column;
-    align-items: flex-end;
-    border-bottom: 3px solid #efefef;
-    padding: 0 12px;
-  }
-`;
+import { TableContentCard, TableContentCardWrapper, StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
 
 const TableCard = ({
   loan: {
@@ -66,12 +54,12 @@ const TableCard = ({
     name
   },
   path,
+  avatar,
   loansFetchData,
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  change,
   ethereum: { address, network, balance, wallet, web3, notify },
   form
 }) => {
@@ -156,13 +144,8 @@ const TableCard = ({
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
-      const result = await JLoan.methods
-        .calcRatioAdjustingCollateral(toWei(amount), actionType)
-        .call();
+      const result = await calcAdjustCollateralRatio(collateralTypeName, contractAddress, amount, actionType);
       setNewCollateralRatio(result);
-      change('adjustLoan', 'newCollateralRatio', result);
     } catch (error) {
       console.error(error);
     }
@@ -326,7 +309,7 @@ const TableCard = ({
         status === statuses['At_Risk'].status
       ) {
         await JLoan.methods
-          .initiateLoanForeClose()
+          .initiateLoanForeclose()
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -543,8 +526,6 @@ const TableCard = ({
     }
   };
 
-  
-
   return (
     <TableContentCardWrapper>
       <TableContentCard
@@ -554,7 +535,8 @@ const TableCard = ({
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
-              <img src={UserImg} alt='User' />
+              <img src={avatar} alt='User' />
+              
             </div>
             <div className='first-col-content'>
               <div className='first-col-title'>
@@ -600,7 +582,8 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {interestPaid && (interestPaid % 1 !== 0 ? roundNumber(interestPaid) : interestPaid)}{' '}
+              {interestPaid &&
+                (interestPaid % 1 !== 0 ? roundNumber(interestPaid) : interestPaid)}{' '}
               <span>{collateralTypeName}</span>
             </h2>
           </div>
@@ -612,7 +595,7 @@ const TableCard = ({
               color={Object.values(searchObj(status))[0].color}
               backgroundColor={Object.values(searchObj(status))[0].background}
             >
-              {valShortner(Object.values(searchObj(status))[0].key)}
+              { Object.values(searchObj(status))[0].key === "Under Collateralized" ? "Under" : valShortner(Object.values(searchObj(status))[0].key)}
             </StatusTextWrapper>
           </div>
         </div>
@@ -638,18 +621,13 @@ const TableCard = ({
               />
             </AdjustModalBtn>
           </div>
-          <div className='star-btn-wrapper'>
-            <button>
-              <img src={Star} alt='' />
-            </button>
-          </div>
           <LoanModal
             status={status}
             path={path}
             interestPaid={interestPaid}
-            collateralTypeName={collateralTypeName}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
+            contractAddress={contractAddress}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
             accruedInterest={accruedInterest}
@@ -666,6 +644,7 @@ const TableCard = ({
             collateralAmount={collateralAmount}
             collateralRatio={collateralRatio}
             remainingLoan={remainingLoan}
+            collateralTypeName={collateralTypeName}
             cryptoFromLenderName={cryptoFromLenderName}
           />
         </div>
@@ -732,5 +711,4 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  change
 })(TableCard);

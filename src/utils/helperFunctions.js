@@ -34,8 +34,8 @@ export const valShortner = (val) => {
 
 export const roundNumber = (num) => {
   const formatter = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 3,      
-    maximumFractionDigits: 3,
+    minimumFractionDigits: 5,      
+    maximumFractionDigits: 5,
  });
  
  return formatter.format(num)

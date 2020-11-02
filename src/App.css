@@ -67,6 +67,10 @@ html{
   display: flex;
   align-items: center;
 }
+.first-col-img img{
+  border-radius: 50%;
+  height: 37px;
+}
 .first-col-title h2{
   font-family: 'Open Sans', sans-serif;
   font-style: normal;
@@ -169,6 +173,7 @@ html{
 }
 .table-sixth-col{
   display: flex;
+  justify-content: center;
 }
 .table-sixth-col button{
   cursor: pointer;
@@ -885,11 +890,14 @@ table, th, td {
   align-items: center;
 }
 .footerLinks{
-  max-width: 200px; 
+  max-width: 200px;
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 50px 0 5px 0;
+  margin: 50px 0 20px 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .footerLinks a{
   color: #AEAEAE;
@@ -911,6 +919,7 @@ table, th, td {
 }
 
 .footer-container{
+  position: relative;
   padding-bottom: 15px;
 }
 
