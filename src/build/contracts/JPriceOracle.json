@@ -10431,12 +10431,150 @@
         }
       },
       "links": {},
-      "address": "0x376678B442aB8C5AC0DdB8E0eC8d003F24287fbf",
-      "transactionHash": "0x34c2c444378fc4876af0efebf27707ef51d52b17d6571929164f77a38082f994"
+      "address": "0xB6A29b512B94BAbdCC70442905510859aDf09283",
+      "transactionHash": "0xd6a1c8cd57b412f0d60a428597d91e672e03791618f94a37ae0a24f616b9b9f2"
+    },
+    "5777": {
+      "events": {
+        "0x191c33c4db02b29dcf62df443c1c3a565f4628da46040183c5c24ab61e6e42ae": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "_pairId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "_pairName",
+              "type": "string"
+            }
+          ],
+          "name": "NewPair",
+          "type": "event"
+        },
+        "0xb75bcc6f033131f7305f4f99dac19fdd494c402b75eda28eeebf214d95b347e2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "pairId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "pairName",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "baseAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "quoteAddress",
+              "type": "address"
+            }
+          ],
+          "name": "NewPairAddresses",
+          "type": "event"
+        },
+        "0x0c7c54329d4708979e5479f990e4abb586ffb676d9b402b2459467c86721efc7": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "pairId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "pairName",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "baseDecimals",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "quoteDecimals",
+              "type": "uint8"
+            }
+          ],
+          "name": "NewPairDecimals",
+          "type": "event"
+        },
+        "0x8faf8b67d977271b82c52dedfc0bf5414b0c347fd7cb985a8661863fb6954c1c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "pairId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "pairName",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "pairValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "pairDecimals",
+              "type": "uint8"
+            }
+          ],
+          "name": "NewPrice",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x91fCbAf109539d86CE18f4428A85D6e4dC9455AE",
+      "transactionHash": "0xc5ff6b1cd82ab952df7228ad26de08e21a2bef23a1e8f8d7c2820a8d764837ba"
     }
   },
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-11-01T07:00:13.206Z",
+  "updatedAt": "2020-11-01T10:47:33.992Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
