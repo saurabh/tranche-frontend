@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'components/common/Form/NewLoan';
-import { JFactorySetup } from 'utils/contractConstructor';
+import { JFactorySetup, JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { JLoanTokenDeployerAddress } from 'config/constants';
 import { pairData } from 'config/constants';
 import { ModalHeader } from './ModalComponents';
 import { CloseModal } from 'assets';
@@ -59,8 +58,9 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      await JFactory.methods
-        .createNewEthLoan(pairId, borrowedAskAmount, rpbRate)
+      const JLoan = JLoanSetup(web3, pairData[pairId].loanContractAddress);
+      await JLoan.methods
+        .openNewLoan(borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
@@ -86,20 +86,21 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      const { collateralTokenSetup } = pairData[pairId];
+      const { collateralTokenSetup, loanContractAddress } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       let userAllowance = await collateralToken.methods
-        .allowance(address, JLoanTokenDeployerAddress)
+        .allowance(address, loanContractAddress)
         .call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await collateralToken.methods
-          .approve(JLoanTokenDeployerAddress, collateralAmount)
+          .approve(loanContractAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
           });
-        await JFactory.methods
-          .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
+        await JLoan.methods
+          .openNewLoan(borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -114,8 +115,8 @@ const CreateLoan = ({
             });
           });
       } else {
-        await JFactory.methods
-          .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
+        await JLoan.methods
+          .openNewLoan(borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -144,7 +145,7 @@ const CreateLoan = ({
       collateralAmount = toWei(collateralAmount);
       if (pairId === pairData[0].value) {
         createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
-      } else if (pairId === pairData[1].value) {
+      } else {
         createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       }
       handleCloseModal();

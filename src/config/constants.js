@@ -2,15 +2,7 @@ import DAIicon from 'assets/images/svg/dai.svg';
 import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
-import {
-  JLoanEthSetup,
-  JLoanTokenSetup,
-  DAISetup,
-  JPTSetup,
-  USDCSetup
-} from 'utils/contractConstructor';
-import { networks as JLoanTokenDeployerNetworks } from 'build/contracts/JLoanTokenDeployer.json';
-export const JLoanTokenDeployerAddress = JLoanTokenDeployerNetworks[42].address;
+import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -19,6 +11,8 @@ export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyProviderUrl = process.env.REACT_APP_ALCHEMY_PROVIDER_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
+const Pair0Address = process.env.REACT_APP_PAIR_0;
+const Pair1Address = process.env.REACT_APP_PAIR_1;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
@@ -87,7 +81,7 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup,
-    loanContractSetup: JLoanEthSetup
+    loanContractAddress: Pair0Address
   },
   {
     key: 'USDC',
@@ -98,7 +92,7 @@ export const pairData = [
     colIcon: JNTicon,
     collateralTokenSetup: JPTSetup,
     lendTokenSetup: USDCSetup,
-    loanContractSetup: JLoanTokenSetup
+    loanContractAddress: Pair1Address
   }
 ];
 
@@ -115,7 +109,7 @@ export const USDC = 'USDC';
 
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
-  foreclosureWindow: 50,
+  foreclosureWindow: 18000,
   earlySettlementWindow: 540000
 };
 

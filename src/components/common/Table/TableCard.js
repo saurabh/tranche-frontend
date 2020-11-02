@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
+import { JLoanSetup } from 'utils/contractConstructor';
 import { calcAdjustCollateralRatio } from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
@@ -108,10 +108,10 @@ const TableCard = ({
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const { loanContractSetup } = searchArr(cryptoFromLenderName);
-          const JLoan = loanContractSetup(web3, contractAddress);
-          const result = await JLoan.methods.isShareholder(address).call();
-          setIsShareholder(result);
+          const { loanContractAddress } = searchArr(cryptoFromLenderName);
+          const JLoan = JLoanSetup(web3, loanContractAddress);
+          // const result = await JLoan.methods.isShareholder(address).call();
+          // setIsShareholder(result);
         }
       } catch (error) {
         console.error(error);
@@ -124,10 +124,10 @@ const TableCard = ({
   useEffect(() => {
     const getAccruedInterest = async () => {
       try {
-        const { loanContractSetup } = searchArr(cryptoFromLenderName);
-        const JLoan = loanContractSetup(web3, contractAddress);
-        const result = await JLoan.methods.getAccruedInterests().call();
-        setAccruedInterest(web3.utils.fromWei(result));
+        const { loanContractAddress } = searchArr(cryptoFromLenderName);
+        const JLoan = JLoanSetup(web3, loanContractAddress);
+        // const result = await JLoan.methods.getAccruedInterests().call();
+        // setAccruedInterest(web3.utils.fromWei(result));
       } catch (error) {
         console.error(error);
       }
