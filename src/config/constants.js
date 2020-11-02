@@ -109,7 +109,7 @@ export const USDC = 'USDC';
 
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
-  foreclosureWindow: 50,
+  foreclosureWindow: 18000,
   earlySettlementWindow: 540000
 }
 
