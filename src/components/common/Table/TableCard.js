@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
-import { postRequest } from 'services/axios'
+import { postRequest } from 'services/axios';
+import { calcAdjustCollateralRatio } from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
 import {
@@ -15,7 +15,13 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
+import {
+  addrShortener,
+  valShortner,
+  readyToTransact,
+  isGreaterThan,
+  roundNumber
+} from 'utils';
 import {
   statuses,
   PagesData,
@@ -54,7 +60,6 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  change,
   ethereum: { address, network, balance, wallet, web3, notify },
   form
 }) => {
@@ -139,13 +144,8 @@ const TableCard = ({
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
-      const result = await JLoan.methods
-        .calcRatioAdjustingCollateral(toWei(amount), actionType)
-        .call();
+      const result = await calcAdjustCollateralRatio(collateralTypeName, contractAddress, amount, actionType);
       setNewCollateralRatio(result);
-      change('adjustLoan', 'newCollateralRatio', result);
     } catch (error) {
       console.error(error);
     }
@@ -309,7 +309,7 @@ const TableCard = ({
         status === statuses['At_Risk'].status
       ) {
         await JLoan.methods
-          .initiateLoanForeClose()
+          .initiateLoanForeclose()
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -526,8 +526,6 @@ const TableCard = ({
     }
   };
 
-  
-
   return (
     <TableContentCardWrapper>
       <TableContentCard
@@ -584,7 +582,8 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {interestPaid && (interestPaid % 1 !== 0 ? roundNumber(interestPaid) : interestPaid)}{' '}
+              {interestPaid &&
+                (interestPaid % 1 !== 0 ? roundNumber(interestPaid) : interestPaid)}{' '}
               <span>{collateralTypeName}</span>
             </h2>
           </div>
@@ -626,9 +625,9 @@ const TableCard = ({
             status={status}
             path={path}
             interestPaid={interestPaid}
-            collateralTypeName={collateralTypeName}
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
+            contractAddress={contractAddress}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
             accruedInterest={accruedInterest}
@@ -645,6 +644,7 @@ const TableCard = ({
             collateralAmount={collateralAmount}
             collateralRatio={collateralRatio}
             remainingLoan={remainingLoan}
+            collateralTypeName={collateralTypeName}
             cryptoFromLenderName={cryptoFromLenderName}
           />
         </div>
@@ -711,5 +711,4 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  change
 })(TableCard);
