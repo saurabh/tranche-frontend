@@ -2,12 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-import { loansFetchData, changeFilter } from 'redux/actions/loans';
+import ReactLoading from 'react-loading';
+import { loansFetchData, changeFilter, loansIsLoading } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
 import styled from 'styled-components';
+import blockies from 'ethereum-blockies'
+import { TableContentCardWrapper, TableContentCard } from '../Modals/ModalComponents';
+
+
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -46,7 +51,8 @@ const Table = ({
   loans,
   changePath,
   pathChanged,
-  filterChanged
+  filterChanged,
+  loansLoading
 }) => {
   const { pathname } = useLocation();
   const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');
@@ -109,6 +115,14 @@ const Table = ({
     loanListing(page.current, sort);
   }
 
+  const generateAvatar = () => {
+    let avatar = blockies.create({ 
+      size: 7,
+      scale: 6
+    });
+    console.log(avatar)
+    return avatar.toDataURL();
+  }
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -119,12 +133,27 @@ const Table = ({
             <div className='table-content'>
               {loans &&
                 loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} path={pathChanged} />
+                  <TableCard key={i} loan={loan} avatar={generateAvatar()} path={pathChanged} />
                 ))}
             </div>
           </div>
         </TableWrapper>
-        {loans && loans.count > limit ? (
+        
+          
+          
+        {
+        loansLoading ? 
+        <TableContentCardWrapper>
+          <TableContentCard>
+            <ReactLoading
+              className='TableMoreLoading'
+              type={'bubbles'}
+              color='#ffffff'
+            />
+          </TableContentCard>
+        </TableContentCardWrapper> :
+        
+        loans && loans.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
               total={loans && loans.count}
@@ -227,10 +256,11 @@ const mapStateToProps = (state) => {
     loans: state.loans,
     isLoading: state.loansIsLoading,
     pathChanged: state.changePath,
-    filterChanged: state.changeFilter
+    filterChanged: state.changeFilter,
+    loansLoading: state.loansIsLoading
   };
 };
 
-export default connect(mapStateToProps, { loansFetchData, changePath, changeFilter })(
+export default connect(mapStateToProps, { loansFetchData, changePath, changeFilter, loansIsLoading })(
   Table
 );

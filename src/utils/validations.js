@@ -1,6 +1,9 @@
 import { SubmissionError } from 'redux-form';
 import { isLessThan, isGreaterThan } from './helperFunctions';
-import { calcMinCollateralAmount, calcMaxBorrowedAmount } from 'services/contractMethods';
+import {
+  calcMinCollateralAmount,
+  calcAdjustCollateralRatio
+} from 'services/contractMethods';
 import { generalParams } from 'config/constants';
 
 const validate = (values) => {
@@ -39,22 +42,12 @@ let submitValidations = async (values) => {
   return sleep(0).then(async () => {
     let { borrowedAskAmount, collateralAmount, pairId } = values;
     let minCollateralAmount = await calcMinCollateralAmount(pairId, borrowedAskAmount);
-    let maxBorrowedAskAmount = await calcMaxBorrowedAmount(pairId, collateralAmount);
     if (
       borrowedAskAmount &&
       (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))
     ) {
       throw new SubmissionError({
         borrowedAskAmount: 'Ask amount is too high',
-        _error: 'Create New Loan failed!'
-      });
-    }
-    if (
-      collateralAmount &&
-      (!borrowedAskAmount || isGreaterThan(borrowedAskAmount, maxBorrowedAskAmount))
-    ) {
-      throw new SubmissionError({
-        collateralAmount: 'Not enough collateral',
         _error: 'Create New Loan failed!'
       });
     }
@@ -81,10 +74,16 @@ let asyncValidateCreate = (values) => {
 
 let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
-    let { newCollateralRatio } = values;
-    console.log(parseFloat(newCollateralRatio))
-    console.log(isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw))
-    if (isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)) {
+    let { collateralAmount, actionType, collateralTypeName, contractAddress } = values;
+    let newCollateralRatio = await calcAdjustCollateralRatio(
+      collateralTypeName,
+      contractAddress,
+      collateralAmount,
+      actionType
+    );
+    if (
+      isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)
+    ) {
       throw {
         collateralAmount: 'New collateral ratio is below acceptable threshold',
         _error: 'Ratio too low'
