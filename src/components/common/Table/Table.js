@@ -120,7 +120,6 @@ const Table = ({
       size: 7,
       scale: 6
     });
-    console.log(avatar)
     return avatar.toDataURL();
   }
   return (
