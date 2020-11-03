@@ -145,9 +145,9 @@ const TableCard = ({
     getAccruedInterest();
   }, [contractAddress, cryptoFromLenderName, loanActiveBlock, loanId, web3]);
 
-  const calcNewCollateralRatio = async (amount) => {
+  const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount);
+      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount, actionType);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);

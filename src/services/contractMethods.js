@@ -31,12 +31,13 @@ export const getPairDetails = async (pairId) => {
 export const calcAdjustCollateralRatio = async (
   contractAddress,
   loanId,
-  amount
+  amount,
+  actionType
 ) => {
   try {
     const JLoan = JLoanSetup(web3, contractAddress);
     const result = await JLoan.methods
-      .calcRatioAdjustingCollateral(loanId, toWei(amount))
+      .calcRatioAdjustingCollateral(loanId, toWei(amount), actionType)
       .call();
     return result;
   } catch (error) {
