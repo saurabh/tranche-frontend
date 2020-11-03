@@ -61,9 +61,10 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { address, network, balance, wallet, web3, notify },
+  ethereum: { address, wallet, web3, notify },
   form
 }) => {
+  const JLoan = JLoanSetup(web3, contractAddress);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -144,9 +145,9 @@ const TableCard = ({
     getAccruedInterest();
   }, [contractAddress, cryptoFromLenderName, loanActiveBlock, loanId, web3]);
 
-  const calcNewCollateralRatio = async (amount, actionType) => {
+  const calcNewCollateralRatio = async (amount) => {
     try {
-      const result = await calcAdjustCollateralRatio(collateralTypeName, contractAddress, amount, actionType);
+      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -155,8 +156,7 @@ const TableCard = ({
 
   const approveLoan = async () => {
     try {
-      const { lendTokenSetup, loanContractAddress } = searchArr(cryptoFromLenderName);
-      const JLoan = JLoanSetup(web3, loanContractAddress);
+      const { lendTokenSetup } = searchArr(cryptoFromLenderName);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       let userAllowance = await lendToken.methods
@@ -208,8 +208,7 @@ const TableCard = ({
 
   const closeLoan = async () => {
     try {
-      const { lendTokenSetup, loanContractAddress } = searchArr(cryptoFromLenderName);
-      const JLoan = JLoanSetup(web3, loanContractAddress);
+      const { lendTokenSetup } = searchArr(cryptoFromLenderName);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       if (status === 0) {
@@ -279,8 +278,6 @@ const TableCard = ({
 
   const withdrawInterest = async () => {
     try {
-      const { loanContractAddress } = searchArr(cryptoFromLenderName);
-      const JLoan = JLoanSetup(web3, loanContractAddress);
       await JLoan.methods
         .withdrawInterests(loanId)
         .send({ from: address })
@@ -303,8 +300,6 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const { loanContractAddress } = searchArr(cryptoFromLenderName);
-      const JLoan = JLoanSetup(web3, loanContractAddress);
       const currentBlock = await web3.eth.getBlockNumber();
       if (
         status === statuses['Under_Collateralized'].status ||
@@ -354,8 +349,6 @@ const TableCard = ({
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     try {
-      const { loanContractAddress } = searchArr(cryptoFromLenderName);
-      const JLoan = JLoanSetup(web3, loanContractAddress);
       await JLoan.methods
         .withdrawCollateral(loanId, collateralAmount)
         .send({ from: address })
@@ -378,12 +371,9 @@ const TableCard = ({
 
   const addCollateralToEthLoan = async (contractAddress, collateralAmount) => {
     try {
-      await web3.eth
-        .sendTransaction({
-          from: address,
-          to: contractAddress,
-          value: collateralAmount
-        })
+      await JLoan.methods
+          .depositEthCollateral(loanId)
+          .send({ value: collateralAmount ,from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
         })
@@ -404,11 +394,10 @@ const TableCard = ({
   const addCollateralToTokenLoan = async (
     contractAddress,
     collateralAmount,
-    cryptoFromLender
+    collateralAddress
   ) => {
     try {
-      const { collateralTokenSetup, loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoanToken = loanContractSetup(web3, contractAddress);
+      const { collateralTokenSetup } = searchArr(cryptoFromLenderName);
       const collateralToken = collateralTokenSetup(web3);
       let userAllowance = await collateralToken.methods
         .allowance(address, contractAddress)
@@ -420,8 +409,8 @@ const TableCard = ({
           .on('transactionHash', (hash) => {
             notify.hash(hash);
           });
-        await JLoanToken.methods
-          .depositCollateral(cryptoFromLender, collateralAmount)
+        await JLoan.methods
+          .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -436,8 +425,8 @@ const TableCard = ({
             });
           });
       } else {
-        await JLoanToken.methods
-          .depositCollateral(cryptoFromLender, collateralAmount)
+        await JLoan.methods
+          .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
