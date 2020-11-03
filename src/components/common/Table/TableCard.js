@@ -38,8 +38,9 @@ import { TableContentCard, TableContentCardWrapper, StatusTextWrapper, AdjustMod
 
 const TableCard = ({
   loan: {
-    borrowerAddress,
+    loanId,
     status,
+    borrowerAddress,
     loanActiveBlock,
     contractAddress,
     remainingLoan,
@@ -74,6 +75,7 @@ const TableCard = ({
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
+  console.log(loanId)
 
   const onboard = initOnboard({
     address: setAddress,
@@ -110,8 +112,8 @@ const TableCard = ({
         if (address) {
           const { loanContractAddress } = searchArr(cryptoFromLenderName);
           const JLoan = JLoanSetup(web3, loanContractAddress);
-          // const result = await JLoan.methods.isShareholder(address).call();
-          // setIsShareholder(result);
+          const result = await JLoan.methods.isShareholder(loanId, address).call();
+          setIsShareholder(result);
         }
       } catch (error) {
         console.error(error);
@@ -119,15 +121,15 @@ const TableCard = ({
     };
 
     isShareholderCheck();
-  }, [address, contractAddress, cryptoFromLenderName, web3]);
-
+  }, [address, contractAddress, cryptoFromLenderName, loanId, web3]);
+  
   useEffect(() => {
     const getAccruedInterest = async () => {
       try {
         const { loanContractAddress } = searchArr(cryptoFromLenderName);
         const JLoan = JLoanSetup(web3, loanContractAddress);
-        // const result = await JLoan.methods.getAccruedInterests().call();
-        // setAccruedInterest(web3.utils.fromWei(result));
+        const result = await JLoan.methods.getAccruedInterests(loanId).call();
+        setAccruedInterest(web3.utils.fromWei(result));
       } catch (error) {
         console.error(error);
       }
@@ -140,7 +142,7 @@ const TableCard = ({
 
     forecloseWindowCheck();
     getAccruedInterest();
-  }, [contractAddress, cryptoFromLenderName, loanActiveBlock, web3]);
+  }, [contractAddress, cryptoFromLenderName, loanActiveBlock, loanId, web3]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
@@ -153,8 +155,8 @@ const TableCard = ({
 
   const approveLoan = async () => {
     try {
-      const { lendTokenSetup, loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { lendTokenSetup, loanContractAddress } = searchArr(cryptoFromLenderName);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       let userAllowance = await lendToken.methods
@@ -168,7 +170,7 @@ const TableCard = ({
             notify.hash(hash);
           });
         await JLoan.methods
-          .lenderSendStableCoins(cryptoFromLender)
+          .lenderSendStableCoins(loanId, cryptoFromLender)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -184,7 +186,7 @@ const TableCard = ({
           });
       } else {
         await JLoan.methods
-          .lenderSendStableCoins(cryptoFromLender)
+          .lenderSendStableCoins(loanId, cryptoFromLender)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -206,13 +208,13 @@ const TableCard = ({
 
   const closeLoan = async () => {
     try {
-      const { lendTokenSetup, loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { lendTokenSetup, loanContractAddress } = searchArr(cryptoFromLenderName);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       if (status === 0) {
         JLoan.methods
-          .setLoanCancelled()
+          .setLoanCancelled(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -238,7 +240,7 @@ const TableCard = ({
               notify.hash(hash);
             });
           await JLoan.methods
-            .loanClosingByBorrower()
+            .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
               notify.hash(hash);
@@ -254,7 +256,7 @@ const TableCard = ({
             });
         } else {
           await JLoan.methods
-            .loanClosingByBorrower()
+            .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
               notify.hash(hash);
@@ -277,10 +279,10 @@ const TableCard = ({
 
   const withdrawInterest = async () => {
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { loanContractAddress } = searchArr(cryptoFromLenderName);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       await JLoan.methods
-        .withdrawInterests()
+        .withdrawInterests(loanId)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
@@ -301,15 +303,15 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { loanContractAddress } = searchArr(cryptoFromLenderName);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       const currentBlock = await web3.eth.getBlockNumber();
       if (
         status === statuses['Under_Collateralized'].status ||
         status === statuses['At_Risk'].status
       ) {
         await JLoan.methods
-          .initiateLoanForeclose()
+          .initiateLoanForeclose(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -328,7 +330,7 @@ const TableCard = ({
         status === statuses['Foreclosing'].status
       ) {
         await JLoan.methods
-          .setLoanInForeclosedByTime()
+          .setLoanInForeclosedByTime(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -352,10 +354,10 @@ const TableCard = ({
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { loanContractAddress } = searchArr(cryptoFromLenderName);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       await JLoan.methods
-        .withdrawCollateral(collateralAmount)
+        .withdrawCollateral(loanId, collateralAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
@@ -510,8 +512,9 @@ const TableCard = ({
         {
           data: {
             skip: 0,
-            limit: 10,
+            limit: 100,
             filter: {
+              loanId,
               contractAddress: hash
             }
           }
@@ -667,12 +670,12 @@ const TableCard = ({
                   key={i}
                   ethImg={ETH}
                   arrow='downArrow'
+                  status={i.loanStatus}
                   ratio={i.collateralRatio}
+                  createdAt={i.createdAt}
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
-                  status={i.loanStatus}
-                  createdAt={i.createdAt}
                   eventName={i.eventName}
                 />
               );

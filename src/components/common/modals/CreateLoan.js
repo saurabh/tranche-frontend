@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'components/common/Form/NewLoan';
-import { JFactorySetup, JLoanSetup } from 'utils/contractConstructor';
+import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData } from 'config/constants';
 import { ModalHeader } from './ModalComponents';
@@ -38,13 +38,12 @@ const AdjustPositionStyles = {
 };
 
 const CreateLoan = ({
-  ethereum: { address, network, balance, wallet, web3, notify },
+  ethereum: { address, web3, notify },
   form,
   loansFetchData,
   openModal,
   closeModal
 }) => {
-  const JFactory = JFactorySetup(web3);
   const toWei = web3.utils.toWei;
 
   function handleCloseModal() {
@@ -58,7 +57,8 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      const JLoan = JLoanSetup(web3, pairData[pairId].loanContractAddress);
+      const { loanContractAddress } = pairData[pairId];
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       await JLoan.methods
         .openNewLoan(borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
