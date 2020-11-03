@@ -9,6 +9,7 @@ import {
   ModalFormGrp,
   ModalFormLabel,
   ModalFormSubmit,
+  AdjustBtnsWrapper,
   FormInputsWrapper,
   ModalFormButton,
   NewLoanInputWrapper,
@@ -63,6 +64,8 @@ let AdjustLoan = ({
   change
 }) => {
   const [actionType, setActionType] = useState(); // true = adding; false = removing
+  const [toggleInput, setToggleInput] = useState(false);
+  const [addedRemovedCollateral, setAddedRemovedCollateral] = useState(0);
   const setContractAddress = useCallback(() => {
     change('contractAddress', contractAddress);
   }, [contractAddress]);
@@ -78,10 +81,12 @@ let AdjustLoan = ({
   }, [setContractAddress, setCollateralTypeName]);
 
   const calcNewRatio = (collateralAmount) => {
+    setAddedRemovedCollateral(collateralAmount);
     isAdjustSelected && calcNewCollateralRatio(collateralAmount, actionType);
   };
 
   const setAction = (type, collateralAmount) => {
+    setToggleInput(true);
     setIsAdjustSelected(true);
     setActionType(type);
     change('actionType', type);
@@ -115,7 +120,7 @@ let AdjustLoan = ({
           </LoanDetailsRow>
 
           <LoanDetailsRow newValue={true}>
-            <LoanDetailsRowTitle>NEW COLLATERAL RATIO</LoanDetailsRowTitle>
+            <LoanDetailsRowTitle>New Collateralization Ratio</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>{newCollateralRatio}%</LoanDetailsRowValue>
           </LoanDetailsRow>
@@ -123,13 +128,16 @@ let AdjustLoan = ({
       </ModalNewLoanDetails>
 
       <ModalAdjustForm className='modalAdjustFormStyle'>
+        
         <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoan(e, actionType)}>
+        {
+          toggleInput ?
           <FormInputsWrapper>
             <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
               <NewLoanFormInput>
                 <NewLoanInputWrapper>
                   <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
-                    New Collateral Amount
+                    {actionType ? "Collateral Amount To Add" : "Collateral Amount To Remove"}
                   </ModalFormLabel>
                   <Field
                     component={InputField}
@@ -146,10 +154,12 @@ let AdjustLoan = ({
                 </NewLoanInputWrapper>
               </NewLoanFormInput>
             </ModalFormGrp>
-          </FormInputsWrapper>
-          <ModalFormSubmit>
+          </FormInputsWrapper> : ""
+        }
+          <ModalFormSubmit adjustBtns={true}>
+            <h2>Would you like to add or remove collateral?</h2>
             {!isAdjustSelected && (
-              <>
+              <AdjustBtnsWrapper>
                 <BtnGrpLoanModal submitBtn={true}>
                   <ModalFormButton
                     adjustCollateralBtn={true}
@@ -166,11 +176,11 @@ let AdjustLoan = ({
                     Remove Collateral
                   </ModalFormButton>
                 </BtnGrpLoanModal>
-              </>
+              </AdjustBtnsWrapper>
             )}
             {isAdjustSelected && (
               <BtnGrpLoanModal>
-                <ModalFormButton type='submit' disabled={pristine || submitting || error}>
+                <ModalFormButton type='submit' disabled={pristine || submitting || error || !addedRemovedCollateral || newCollateralRatio < 150}>
                   Confirm
                 </ModalFormButton>
               </BtnGrpLoanModal>

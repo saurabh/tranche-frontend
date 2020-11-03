@@ -16,8 +16,10 @@ const TableHeadWrapper = styled.div`
     }
 `;
 const TableHeadTitle = styled.div`
+
     & > div {
         position: relative;
+        cursor: pointer;
         & > h2{
             font-family: 'Roboto', sans-serif;
             font-style: normal;
@@ -28,6 +30,13 @@ const TableHeadTitle = styled.div`
             color: rgba(56, 56, 56, 0.3);
         }
     }
+    ${({ defaultCursor }) => defaultCursor && `
+        & > div {
+            cursor: default;
+        }
+    `}
+        
+    
 `;
 
 const SortChevronWrapper = styled.div`
@@ -47,46 +56,53 @@ const SortChevronWrapper = styled.div`
 
 
 const TableHead = ({handleSorting}) => {
+
+    const [order, setOrder] = useState("asc")
+
+    const sortLoans = (val) => {
+        handleSorting(val, order)
+        setOrder(order === "asc" ? "desc" : "asc")
+    }
     return (
         <TableHeadWrapper>
-            <TableHeadTitle className="address-wrapper">
+            <TableHeadTitle className="address-wrapper" defaultCursor={true}>
                 <div className="address-title-content">
                     <h2>Address</h2>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="remaining-wrapper">
-                <div className="remaining-title-content">
+                <div className="remaining-title-content" onClick={() => sortLoans("remainingLoan")}>
                     <h2>Remaining</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} onClick={() => handleSorting("remainingLoan", "asc")}/>
-                        <img src={downChevron} onClick={() => handleSorting("remainingLoan", "desc")}/>
+                        <img src={upChevron} />
+                        <img src={downChevron} />
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="ratio-wrapper">
-                <div className="ratio-title-content">
+                <div className="ratio-title-content" onClick={() => sortLoans("collateralRatio")}>
                     <h2>Ratio</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} onClick={() => handleSorting("collateralRatio", "asc")}/>
-                        <img src={downChevron} onClick={() => handleSorting("collateralRatio", "desc")}/>
+                        <img src={upChevron} />
+                        <img src={downChevron} />
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="interest-paid-wrapper">
-                <div className="interest-paid-title-content">
+                <div className="interest-paid-title-content" onClick={() => sortLoans("interestPaid")}>
                     <h2>Interest Paid</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} onClick={() => handleSorting("interestPaid", "asc")}/>
-                        <img src={downChevron} onClick={() => handleSorting("interestPaid", "desc")}/>
+                        <img src={upChevron}/>
+                        <img src={downChevron}/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="status-wrapper">
-                <div className="status-title-content">
+                <div className="status-title-content" onClick={() => sortLoans("status")}>
                     <h2>Status</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} onClick={() => handleSorting("status", "asc")}/>
-                        <img src={downChevron} onClick={() => handleSorting("status", "desc")}/>
+                        <img src={upChevron}/>
+                        <img src={downChevron}/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
