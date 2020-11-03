@@ -413,7 +413,20 @@ const ModalFormSubmit = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  ${({ adjustBtns }) => adjustBtns && `
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    h2{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      margin: 12px 0;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: #4F4F4F;
+    }
+  `}
   @media (max-width: 633px){
     flex-direction: column;
   }
@@ -436,6 +449,10 @@ const ModalFormButton = styled.button`
   border: none;
   box-sizing: border-box;
   text-transform: uppercase;
+  :disabled{
+    opacity: 0.5;
+    cursor: default;
+  }
 
   ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
     font-size: 10px;
@@ -665,7 +682,18 @@ const LoanDetailsRowValue = styled.h2`
     cursor: ${cursor}
   `}
 `
-
+const AdjustBtnsWrapper = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  //border-top: 1px solid rgba(63,63,63,0.1);
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 633px){
+    flex-direction: column;
+  }
+`
 
 
 
@@ -709,6 +737,7 @@ export {
     ModalNewLoanDetailsContent,
     ModalActionDetails,
     ModalActionsContent,
+    AdjustBtnsWrapper,
     ModalUserActions,
     BtnGrpLoanModalWrapper,
     ModalActionDetailsContent

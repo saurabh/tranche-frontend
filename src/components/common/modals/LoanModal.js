@@ -320,7 +320,7 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>Review Loan Request</h2>
+          <h2>{status === statuses['Pending'].status ? "Review Loan Request" : "Manage Earning Asset"}</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
