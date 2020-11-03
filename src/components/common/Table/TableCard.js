@@ -369,7 +369,7 @@ const TableCard = ({
     }
   };
 
-  const addCollateralToEthLoan = async (contractAddress, collateralAmount) => {
+  const addCollateralToEthLoan = async (collateralAmount) => {
     try {
       await JLoan.methods
           .depositEthCollateral(loanId)
@@ -392,7 +392,6 @@ const TableCard = ({
   };
 
   const addCollateralToTokenLoan = async (
-    contractAddress,
     collateralAmount,
     collateralAddress
   ) => {
@@ -450,9 +449,9 @@ const TableCard = ({
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === searchArr(DAI).key) {
-      addCollateralToEthLoan(contractAddress, collateralAmount);
+      addCollateralToEthLoan(collateralAmount);
     } else if (cryptoFromLenderName === searchArr(USDC).key) {
-      addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
+      addCollateralToTokenLoan(collateralAmount, collateralType);
     }
   };
 
