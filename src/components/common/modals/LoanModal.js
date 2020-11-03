@@ -83,6 +83,7 @@ export default function LoanModal({
   modalIsOpen,
   closeModal,
   path,
+  loanId,
   contractAddress,
   status,
   isShareholder,
@@ -294,6 +295,7 @@ export default function LoanModal({
             <AdjustLoan
               isAdjustSelected={isAdjustSelected}
               setIsAdjustSelected={setIsAdjustSelected}
+              loanId={loanId}
               contractAddress={contractAddress}
               collateralTypeName={collateralTypeName}
               adjustLoan={adjustLoan}

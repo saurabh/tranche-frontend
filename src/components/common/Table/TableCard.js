@@ -76,7 +76,6 @@ const TableCard = ({
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
-  console.log(loanId)
 
   const onboard = initOnboard({
     address: setAddress,
@@ -483,6 +482,7 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
+    console.log(loanId)
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -613,6 +613,7 @@ const TableCard = ({
             </AdjustModalBtn>
           </div>
           <LoanModal
+            loanId={loanId}
             status={status}
             path={path}
             interestPaid={interestPaid}

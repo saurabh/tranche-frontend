@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
+import { useDebouncedCallback } from 'utils/lodash';
 import { required, number, asyncValidateAdjust } from 'utils/validations';
 import {
   BtnGrpLoanModal,
@@ -51,6 +52,7 @@ let AdjustLoan = ({
   submitting,
   isAdjustSelected,
   setIsAdjustSelected,
+  loanId,
   contractAddress,
   collateralTypeName,
   adjustLoan,
@@ -65,25 +67,28 @@ let AdjustLoan = ({
 }) => {
   const [actionType, setActionType] = useState(); // true = adding; false = removing
   const [toggleInput, setToggleInput] = useState(false);
-  const [addedRemovedCollateral, setAddedRemovedCollateral] = useState(0);
+  const [newCollateralAmount, setNewCollateralAmount] = useState(0);
   const setContractAddress = useCallback(() => {
     change('contractAddress', contractAddress);
   }, [contractAddress]);
-  const setCollateralTypeName = useCallback(() => {
-    change('collateralTypeName', collateralTypeName);
-  }, [collateralTypeName]);
+  const setLoanId = useCallback(() => {
+    change('loanId', loanId);
+  }, [loanId]);
 
   const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
 
   useEffect(() => {
     setContractAddress();
-    setCollateralTypeName();
-  }, [setContractAddress, setCollateralTypeName]);
+    setLoanId();
+  }, [setContractAddress, setLoanId]);
 
-  const calcNewRatio = (collateralAmount) => {
-    setAddedRemovedCollateral(collateralAmount);
-    isAdjustSelected && calcNewCollateralRatio(collateralAmount, actionType);
-  };
+  const [debounceCalcNewRatio] = useDebouncedCallback(
+    (isAdjustSelected, collateralAmount, actionType) => {
+      setNewCollateralAmount(collateralAmount);
+      isAdjustSelected && calcNewCollateralRatio(collateralAmount, actionType);
+    },
+    500
+  );
 
   const setAction = (type, collateralAmount) => {
     setToggleInput(true);
@@ -128,34 +133,36 @@ let AdjustLoan = ({
       </ModalNewLoanDetails>
 
       <ModalAdjustForm className='modalAdjustFormStyle'>
-        
         <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoan(e, actionType)}>
-        {
-          toggleInput ?
-          <FormInputsWrapper>
-            <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
-              <NewLoanFormInput>
-                <NewLoanInputWrapper>
-                  <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
-                    {actionType ? "Collateral Amount To Add" : "Collateral Amount To Remove"}
-                  </ModalFormLabel>
-                  <Field
-                    component={InputField}
-                    className={`ModalFormInput ${
-                      'ModalFormInput' + searchArr(collateralTypeName).collateral
-                    }`}
-                    name='collateralAmount'
-                    onChange={(event, newValue) => calcNewRatio(newValue)}
-                    validate={[required, number]}
-                    type='number'
-                    id='COLLATERALIZINGInput'
-                    step='0.0001'
-                  />
-                </NewLoanInputWrapper>
-              </NewLoanFormInput>
-            </ModalFormGrp>
-          </FormInputsWrapper> : ""
-        }
+          {toggleInput ? (
+            <FormInputsWrapper>
+              <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
+                <NewLoanFormInput>
+                  <NewLoanInputWrapper>
+                    <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
+                      {actionType
+                        ? 'Collateral Amount To Add'
+                        : 'Collateral Amount To Remove'}
+                    </ModalFormLabel>
+                    <Field
+                      component={InputField}
+                      className={`ModalFormInput ${
+                        'ModalFormInput' + searchArr(collateralTypeName).collateral
+                      }`}
+                      name='collateralAmount'
+                      onChange={(event, newValue) => debounceCalcNewRatio(isAdjustSelected, newValue, actionType)}
+                      validate={[required, number]}
+                      type='number'
+                      id='COLLATERALIZINGInput'
+                      step='0.0001'
+                    />
+                  </NewLoanInputWrapper>
+                </NewLoanFormInput>
+              </ModalFormGrp>
+            </FormInputsWrapper>
+          ) : (
+            ''
+          )}
           <ModalFormSubmit adjustBtns={true}>
             <h2>Would you like to add or remove collateral?</h2>
             {!isAdjustSelected && (
@@ -180,7 +187,16 @@ let AdjustLoan = ({
             )}
             {isAdjustSelected && (
               <BtnGrpLoanModal>
-                <ModalFormButton type='submit' disabled={pristine || submitting || error || !addedRemovedCollateral || newCollateralRatio < 150}>
+                <ModalFormButton
+                  type='submit'
+                  disabled={
+                    pristine ||
+                    submitting ||
+                    error ||
+                    !newCollateralAmount ||
+                    newCollateralRatio < 150
+                  }
+                >
                   Confirm
                 </ModalFormButton>
               </BtnGrpLoanModal>
@@ -199,10 +215,10 @@ AdjustLoan = reduxForm({
 
 const mapStateToProps = (state) => ({
   initialValues: {
+    contractAddress: '',
+    loanId: '',
     collateralAmount: '',
-    actionType: '',
-    collateralTypeName: '',
-    contractAddress: ''
+    actionType: ''
   },
   formValues: getFormValues('adjustLoan')(state)
 });
