@@ -99,9 +99,17 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     500
   );
 
-  const handleBorrowingChange = (pair, newValue) => {
+  const [debounceCalcCollateralRatio] = useDebouncedCallback(
+    (borrowedAskAmount, collateralAmount) => {
+      calcCollateralRatio(borrowedAskAmount, collateralAmount);
+    },
+    250
+  );
+
+  const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
     debounceCalcMinCollateralAmount(pair, newValue);
+    collateralAmount && debounceCalcCollateralRatio(newValue, collateralAmount)
   };
 
   const setCollateralAmount = (borrowedAskAmount) => {
@@ -110,6 +118,14 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     setCollateralValue(minCollateralAmount);
   };
 
+  const handleCollateralizingChange = (borrowingValue, newValue) => {
+    if (!newValue) {
+      setTimeout(() => setCollateralRatio(0), 500);
+    }
+    setCollateralValue(newValue);
+    debounceCalcCollateralRatio(borrowingValue, newValue);
+  };
+  
   const calcCollateralRatio = async (borrowedAskAmount, collateralAmount) => {
     try {
       if (!borrowedAskAmount) return;
@@ -135,18 +151,6 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const [debounceCalcCollateralRatio] = useDebouncedCallback((newValue) => {
-    setCollateralRatio(newValue);
-  }, 500);
-
-  const handleCollateralizingChange = (borrowingValue, newValue) => {
-    if (!newValue) {
-      setTimeout(() => debounceCalcCollateralRatio(0), 500);
-    }
-    setCollateralValue(newValue);
-    calcCollateralRatio(borrowingValue, newValue);
   };
 
   const calculateRPB = async (amount, APY) => {
@@ -206,7 +210,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                     component={InputField}
                     className='ModalFormInputNewLoan'
                     name='borrowedAskAmount'
-                    onChange={(e, newValue) => handleBorrowingChange(pair, newValue)}
+                    onChange={(e, newValue) => handleBorrowingChange(pair, newValue, formValues.collateralAmount)}
                     type='number'
                     step='0.0001'
                     id='BORROWINGInput'
