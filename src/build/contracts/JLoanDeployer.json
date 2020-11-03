@@ -91,7 +91,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -104,7 +105,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -197,7 +199,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.6.11+commit.5ef660b1\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pairId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_factAddr\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_collToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_lendToken\",\"type\":\"address\"}],\"name\":\"deployNewLoanContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getFeesCollector\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"loanParams\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"earlySettlementWindow\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"foreclosureWindow\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"requiredCollateralRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"foreclosingRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"instantForeclosureRatio\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"limitCollRatioForWithdraw\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"factoryAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"pairLoanDeployerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"pairPriceOracleAddress\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"collDecimals\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"lendDecimals\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"pairId\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeColl\",\"type\":\"address\"}],\"name\":\"setFeesCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_factAddr\",\"type\":\"address\"}],\"name\":\"setLoanFactory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"deployNewLoanContract(uint256,address,address,address)\":{\"details\":\"deploy a new eth loan contract, add its address to internal variables\",\"params\":{\"_collToken\":\", collateral token address\",\"_factAddr\":\", factory address\",\"_lendToken\":\", lender token address\",\"_pairId\":\", id of the pair\"},\"returns\":{\"_0\":\"address of new pair contract\"}},\"getFeesCollector()\":{\"details\":\"get the fee collector contract address\",\"returns\":{\"_0\":\"fee collector address\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"setFeesCollector(address)\":{\"details\":\"set the fee collector contract address\",\"params\":{\"_feeColl\":\"fees collectro address\"}},\"setLoanFactory(address)\":{\"details\":\"set loan factory contract address\",\"params\":{\"_factAddr\":\", address of loan factory contract to add\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/JLoanDeployer.sol\":\"JLoanDeployer\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJFactory.sol\":{\"keccak256\":\"0x39d6bc29dc47fdc9d60d0898cf5442ad11015dd6ea1ef280c91efd8a0ee98827\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a4741751c2ea8293815919ddcf7f51e0ca754edb7f00532c0da86c3caecc5b21\",\"dweb:/ipfs/QmZ3RFzjr9kPjaoXtK2Spsk9eLDcVUKaREYomB1BpLBQPd\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoan.sol\":{\"keccak256\":\"0xcffc50be02da58b03d375f29cb4fb3ace7e7cfc9a833f420f7d33e818841920d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://654ed9694e26318b83ac462a399c0fb06152818f9bcac7a4105ebd3bfbbda255\",\"dweb:/ipfs/QmS7XxwVBvY7Ede5MENjDxsEDkYd7iWRPRSgyQWRmew9Mh\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJLoanCommons.sol\":{\"keccak256\":\"0xd7de34d10c2803e577d173f963f1b05e5a0485e3e61d22022b3d28d4adad2c7a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://57cd7464a436a318b0abe2158d3ecffb0ab37452ce929d5e559a5d6007d8c8ce\",\"dweb:/ipfs/QmZDzDgRQz2ZSopu9EMdYLMKFGrnYT67oeyT6Nof9wqYMX\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/IJPriceOracle.sol\":{\"keccak256\":\"0xd6e22e6c252c0222b005cf4a128691c33e9f62958314e55a61e66a995cde699b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://01eebedd143342c187686c370ea27f9418a182d79dc85a99d5dd17da6cfe92f6\",\"dweb:/ipfs/QmTGmHy36thUZwdNMGjUWYwro9VGfGSpMb1YQGAoz4wKCc\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/JLoan.sol\":{\"keccak256\":\"0x2bad7663ed40808741eab49dc9496bb18ca6793c25ce28e5a47a03c827d6a1a0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ddc85133ef4d4d5ca12ef1f9394ce314b1ce6298327e0e767d530b72bbb2fd4d\",\"dweb:/ipfs/Qmc1kRoJXwZ5nAUtsApFY9pgaKxqYB7o89baCVxas9aKdz\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/JLoanDeployer.sol\":{\"keccak256\":\"0xfea39430f86483bf25b9be74933658227b10cd6e2eb9638d1620ced550215f2a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c10374d6ca8b21eb76506ed8c45958e1d0edbdc2780cc52dfd96dd06de99ec32\",\"dweb:/ipfs/QmZFG7QRPMdEzDjiUzATbuBvkujScmwa93PZcQaAbwMufj\"]},\"/C/Users/saurabh/code/Jibrel/defi-smartcontracts/LoansFactoryV2/contracts/TransferHelper.sol\":{\"keccak256\":\"0x252fc2f412c3ebf1bd6806cad48eafc5ef08745fce41769117fad9f08f64e8ae\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://83164749e197723aae60899e4e4e474f497da8a00cb6163f9bbc5f6dafea67e8\",\"dweb:/ipfs/QmTr6aqytQwzCQdarmCp35xnFtDvnzcd3LrascUdXVg3Si\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]},\"@openzeppelin/contracts/math/Math.sol\":{\"keccak256\":\"0x6c234834003dfb86e2c23d12dfdde7cc01e78013d71b52162cb308b4873562cb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f0e3f39b2ec26694a42c89a5d9e489d5228f1880fcf5e375c5c975ba816e5ffe\",\"dweb:/ipfs/QmUErheHopnbBUSLDQAtWsmw6HsEvqTNp1QiBEuSJhmhHn\"]},\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5\",\"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x5c26b39d26f7ed489e555d955dcd3e01872972e71fdd1528e93ec164e4f23385\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://efdc632af6960cf865dbc113665ea1f5b90eab75cc40ec062b2f6ae6da582017\",\"dweb:/ipfs/QmfAZFDuG62vxmAN9DnXApv7e7PMzPqi4RkqqZHLMSQiY5\"]},\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\":{\"keccak256\":\"0x7ff0067f2d7df4187eaa1cb4800949b929602c9d9cb20fcaee6922a7613ef2fb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://78aa63fd7fbb8df2942b6c6e7bd89349507e306edbd5909ee8d9575c31be57e5\",\"dweb:/ipfs/Qmf6z9KWKCJCfEVokgTBhBVq5yHtE6is31N8AV5BHdMkqQ\"]}},\"version\":1}",
@@ -2646,38 +2649,13 @@
         }
       },
       "links": {},
-      "address": "0xbb094406E176BeA673e4fcf2C3bb2acc6104de73",
-      "transactionHash": "0xe1b34b3906b78925ae869ef29ee8017e7c1ffe678042bc30b994ef95b71496e1"
-    },
-    "5777": {
-      "events": {
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0x225161B17b2cdeE6D1C4d05Ab8cF20d01e5ac777",
-      "transactionHash": "0x6fa1ef8232831b244b8ab0d0119ccf79c3a31d4741ee6b83564e9c01874e59fb"
+      "address": "0x98546D162a1F42C49AD239631176CA17ef6E2D1C",
+      "transactionHash": "0xb92b32dde00f93412db0b909f502fe55517db1de697f1b472771b8e601bc1c1c"
     }
   },
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-11-03T09:16:42.715Z",
+  "updatedAt": "2020-11-03T12:03:49.148Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {
