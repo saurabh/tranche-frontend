@@ -6,6 +6,7 @@ import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { calcAdjustCollateralRatio } from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
+
 import ETH from 'assets/images/svg/EthForm.svg';
 import {
   setAddress,
@@ -600,22 +601,10 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <AdjustModalBtn
               disabeldBtn={path === 'trade' || disableBtn}
-              background={PagesData[path].btnColor}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
             >
-              <img
-                src={
-                  path === 'borrow'
-                    ? Adjust
-                    : path === 'earn'
-                    ? AdjustEarn
-                    : path === 'trade'
-                    ? AdjustTrade
-                    : Adjust
-                }
-                alt=''
-              />
+              
             </AdjustModalBtn>
           </div>
           <LoanModal

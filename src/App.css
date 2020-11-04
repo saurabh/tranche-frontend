@@ -183,9 +183,8 @@ html{
 }
 
 .adjust-btn-wrapper button{
-  border: 1px solid #EEE5FF;
   box-sizing: border-box;
-  box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);
+  box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
   border-radius: 4px;
   width: 50px;
   height: 27px;
@@ -259,16 +258,20 @@ html{
   text-transform: uppercase;
   color: #838186;
 }
-.adjust-btn-wrapper button:disabled, .adjust-btn-wrapper
+/*.adjust-btn-wrapper button:disabled, .adjust-btn-wrapper
 button[disabled]{
   opacity: 0.5 !important;
-  background-color: rgba(204, 204, 204, 0.5) !important;
+  background-color: #F1F1F1;
+  color: #666666;
+  cursor: default;
+  border: 1px solid #F1F1F1;
+  box-shadow: none;
 }
 .adjust-btn-wrapper button:disabled img, .adjust-btn-wrapper
 button[disabled] img{
   filter: grayscale(1) !important;
   opacity: 0.5 !important;
-}
+}*/
 
 .table-more-row-first-content a img{
   height: 12px;
