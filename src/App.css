@@ -313,7 +313,7 @@ button[disabled] img{
   text-align: right;
 }
 .table-more-row-fifth{
-  width: 150px;
+  width: 180px;
 }
 .table-more-row-fifth-content{
   display: flex;
@@ -325,7 +325,7 @@ button[disabled] img{
   margin-right: 7px;
 }
 .table-more-row-sixth{
-  width: 67px;
+  width: 37px;
 }
 .TableMoreLoading{
   margin: 0 auto;
