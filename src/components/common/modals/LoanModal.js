@@ -330,7 +330,7 @@ export default function LoanModal({
 
         <ModalActionsContent>
           <ModalActionDetails>
-            <ModalActionDetailsContent>
+            <ModalActionDetailsContent row4={status !== statuses["Pending"].status}>
               <LoanDetailsRow>
                 <LoanDetailsRowTitle>Loan amount</LoanDetailsRowTitle>
 
@@ -352,6 +352,13 @@ export default function LoanModal({
 
                 <LoanDetailsRowValue>{collateralRatio}%</LoanDetailsRowValue>
               </LoanDetailsRow>
+              { status !== statuses["Pending"].status ?
+                <LoanDetailsRow>
+                  <LoanDetailsRowTitle>Interest accrued</LoanDetailsRowTitle>
+
+                  <LoanDetailsRowValue>{accruedInterest} {collateralTypeName}</LoanDetailsRowValue>
+                </LoanDetailsRow> : ""
+              }
 
               {/*<div>
               <h2>

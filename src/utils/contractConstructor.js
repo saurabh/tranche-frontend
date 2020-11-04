@@ -2,14 +2,14 @@ import { abi as JFactoryABI, networks as JFactoryNetworks } from 'build/contract
 import { abi as JPriceOracleABI, networks as JPONetworks } from 'build/contracts/JPriceOracle.json';
 import { abi as JLoanABI } from 'build/contracts/JLoan.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
-import { DAIAddress, JPTAddress, USDCAddress } from 'config/constants';
+import { DAIAddress, JPTAddress, USDCAddress, networkId } from 'config/constants';
 
 export function JFactorySetup(web3) {
-  return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[42].address);
+  return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[networkId].address);
 }
 
 export function JPriceOracleSetup(web3) {
-  return new web3.eth.Contract(JPriceOracleABI, JPONetworks[42].address);
+  return new web3.eth.Contract(JPriceOracleABI, JPONetworks[networkId].address);
 }
 
 export function JLoanSetup(web3, address) {

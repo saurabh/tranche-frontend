@@ -70,9 +70,9 @@ const TableMoreRow = ({
               : eventName === events["APPROVE_LOAN"].toLowerCase()
               ? "Loan Approved"
               : eventName === events["NEW_DEPOSIT_TOKEN"].toLowerCase()
-              ? "Collateral Adjustment"
+              ? "Collateral Adjusted"
               : eventName === events["NEW_DEPOSIT_ETH"].toLowerCase()
-              ? "Collateral Adjustment"
+              ? "Collateral Adjusted"
               : eventName === events["FORECLOSING"].toLowerCase()
               ? "Loan Foreclosing"
               : eventName === events["FORECLOSED"].toLowerCase()

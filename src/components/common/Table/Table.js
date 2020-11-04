@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
 import ReactLoading from 'react-loading';
-import { loansFetchData, changeFilter, loansIsLoading } from 'redux/actions/loans';
+import { loansFetchData, changeFilter, loansIsLoading, paginationOffset, paginationCurrent } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
@@ -52,7 +52,11 @@ const Table = ({
   changePath,
   pathChanged,
   filterChanged,
-  loansLoading
+  loansLoading,
+  paginationSkip,
+  paginationOffset,
+  paginationCurrent,
+  paginationCurrentPage
 }) => {
   const { pathname } = useLocation();
   const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');
@@ -61,17 +65,11 @@ const Table = ({
   const [limit, setLimit] = useState(20);
   const [pageCount, setPageCount] = useState(5);
 
-  const loanListing = async (p = page.current, sort = null) => {
-    let currentPage = page.current;
-    if (!currentPage || currentPage === 0) {
-      currentPage = 1;
-    }
-
-    const offset = (currentPage - 1) * limit;
+  const loanListing = async (sort = null) => {
     if(sort){
       await loansFetchData({
         sort: sort,
-        skip: offset,
+        skip: paginationSkip,
         limit: limit,
         filter: {
           type: filterChanged //ETH/JNT keep these in constant file
@@ -80,14 +78,14 @@ const Table = ({
     }
     else{
       await loansFetchData({
-        skip: offset,
+        skip: paginationSkip,
         limit: limit,
         filter: {
           type: filterChanged //ETH/JNT keep these in constant file
         }
       });
     }
-    page.current = currentPage;
+    //page.current = currentPage;
   };
 
   useEffect(() => {
@@ -99,11 +97,18 @@ const Table = ({
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [loansFetchData, pathname, changePath, filterChanged]);
+  }, [loansFetchData, pathname, changePath, filterChanged, paginationCurrentPage]);
 
   const handlePageChange = (p) => {
-    page.current = p;
-    loanListing();
+    //page.current = p;
+
+    // let currentPage = paginationCurrentPage;
+    // if (!currentPage || currentPage === 0) {
+    //   currentPage = 1;
+    // }
+    //const offset = currentPage * limit;
+    paginationOffset((p - 1) * limit);
+    paginationCurrent(p)
   };
 
   const handleSorting = (name, type) => {
@@ -111,7 +116,7 @@ const Table = ({
         name: name,
         type: type
     }
-    loanListing(page.current, sort);
+    loanListing(sort);
   }
 
   const generateAvatar = () => {
@@ -140,16 +145,6 @@ const Table = ({
           
           
         {
-        loansLoading ? 
-        <TableContentCardWrapper>
-          <TableContentCard>
-            <ReactLoading
-              className='TableMoreLoading'
-              type={'bubbles'}
-              color='#ffffff'
-            />
-          </TableContentCard>
-        </TableContentCardWrapper> :
         
         loans && loans.count > limit ? (
           <div className='paginationWrapper'>
@@ -157,7 +152,7 @@ const Table = ({
               total={loans && loans.count}
               limit={limit}
               pageCount={pageCount}
-              currentPage={page ? parseInt(page, 10) : 1}
+              currentPage={paginationCurrentPage ? parseInt(paginationCurrentPage, 10) : 1}
             >
               {({
                 pages,
@@ -255,10 +250,12 @@ const mapStateToProps = (state) => {
     isLoading: state.loansIsLoading,
     pathChanged: state.changePath,
     filterChanged: state.changeFilter,
-    loansLoading: state.loansIsLoading
+    loansLoading: state.loansIsLoading,
+    paginationSkip: state.paginationOffset,
+    paginationCurrentPage: state.paginationCurrent
   };
 };
 
-export default connect(mapStateToProps, { loansFetchData, changePath, changeFilter, loansIsLoading })(
+export default connect(mapStateToProps, { loansFetchData, changePath, changeFilter, loansIsLoading, paginationOffset, paginationCurrent })(
   Table
 );
