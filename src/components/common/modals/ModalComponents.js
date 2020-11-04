@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {Input} from 'semantic-ui-react';
+import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 
 const ModalHeader = styled.div` 
   position: absolute;
@@ -563,12 +564,39 @@ const MoreRowSpan = styled.span`
   color: ${props => props.color ? props.color : ""};
 `
 const AdjustModalBtn = styled.button`
-  background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  border: 1px solid #39295A;
+  box-sizing: border-box;
+  background-color: #39295A;
+  box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
+  //background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  background-image: url(${WhiteAdjust});
+  background-repeat: no-repeat;
+  background-position: 50%;
+  :hover {
+    border: 1px solid #39295A;
+    background-image: url(${DarkAdjust});
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
+  }
 
-  ${({ disabledBtn }) => disabledBtn && `
-    background-color: #cccccc;
+  :disabled{
+    background-image: url(${GrayAdjust}) !important;
+    background-color: #F1F1F1;
     color: #666666;
-    cursor: default;
+    cursor: default !important;
+    border: 1px solid #F1F1F1;
+    pointer-events: none;
+    box-shadow: none;
+  }
+  
+  ${({ disabledBtn }) => disabledBtn && `
+    background-image: url(${GrayAdjust}) !important;
+    background-color: #F1F1F1;
+    color: #666666;
+    cursor: default !important;
+    border: 1px solid #F1F1F1;
+    pointer-events: none;
+    box-shadow: none;
   `}
 `
 
@@ -652,6 +680,9 @@ const ModalActionDetailsContent = styled.div`
   @media (max-width: 633px){
     max-height: 190px;
   }
+  ${({ row4 }) => row4 && `
+    min-height: 210px;
+  `}
 `
 const LoanDetailsRow = styled.div`
   position: relative;

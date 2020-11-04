@@ -1,6 +1,6 @@
 import { apiUri } from 'config/constants';
 import { postRequest } from 'services/axios';
-import { LOANS_IS_LOADING, LOANS_SUCCESS, CHANGE_FILTER } from './constants';
+import { LOANS_IS_LOADING, LOANS_SUCCESS, CHANGE_FILTER, PAGINATION_SKIP, PAGINATION_CURRENT } from './constants';
 const { loanList: loanListUrl } = apiUri;
 
 export const loansIsLoading = (bool) => (dispatch) => {
@@ -22,6 +22,19 @@ export const changeFilter = (filter)  => {
     type: CHANGE_FILTER,
     filter
   };
+};
+
+export const paginationOffset = (skip) => (dispatch)  => {
+  dispatch({
+    type: PAGINATION_SKIP,
+    skip
+  });
+};
+export const paginationCurrent = (current) => (dispatch)  => {
+  dispatch({
+    type: PAGINATION_CURRENT,
+    current
+  });
 };
 
 export const loansFetchData = (data) => async (dispatch) => {
