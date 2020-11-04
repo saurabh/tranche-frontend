@@ -15,14 +15,11 @@ import NotFound from "components/pages/NotFound";
 import NetworkDetector from "./common/NetworkDetector";
 import Privacy from "./pages/Privacy";
 import TermsAndConditions from "./pages/Terms&Conditions";
-// Redux
-import { Provider } from "react-redux";
-import store from "../redux/store";
 import "../App.css";
 
 const App = () => {
   return (
-    <Provider store={store}>
+    <>
       <GlobalStyle />
       <Router>
         <Switch>
@@ -37,7 +34,7 @@ const App = () => {
           <Route component={NotFound} />
         </Switch>
       </Router>
-    </Provider>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { JFactorySetup, JPriceOracleSetup } from 'utils/contractConstructor';
+import { JFactorySetup, JLoanSetup, JPriceOracleSetup } from 'utils/contractConstructor';
 import { web3 } from 'utils/getWeb3';
 import { pairData } from 'config/constants';
 const JFactory = JFactorySetup(web3);
@@ -29,16 +29,15 @@ export const getPairDetails = async (pairId) => {
 };
 
 export const calcAdjustCollateralRatio = async (
-  collateralTypeName,
   contractAddress,
+  loanId,
   amount,
   actionType
 ) => {
   try {
-    const { loanContractSetup } = searchArr(collateralTypeName);
-    const JLoan = loanContractSetup(web3, contractAddress);
+    const JLoan = JLoanSetup(web3, contractAddress);
     const result = await JLoan.methods
-      .calcRatioAdjustingCollateral(toWei(amount), actionType)
+      .calcRatioAdjustingCollateral(loanId, toWei(amount), actionType)
       .call();
     return result;
   } catch (error) {

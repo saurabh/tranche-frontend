@@ -83,6 +83,7 @@ export default function LoanModal({
   modalIsOpen,
   closeModal,
   path,
+  loanId,
   contractAddress,
   status,
   isShareholder,
@@ -294,6 +295,7 @@ export default function LoanModal({
             <AdjustLoan
               isAdjustSelected={isAdjustSelected}
               setIsAdjustSelected={setIsAdjustSelected}
+              loanId={loanId}
               contractAddress={contractAddress}
               collateralTypeName={collateralTypeName}
               adjustLoan={adjustLoan}
@@ -320,7 +322,7 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>Review Loan Request</h2>
+          <h2>{status === statuses['Pending'].status ? "Review Loan Request" : "Manage Earning Asset"}</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
