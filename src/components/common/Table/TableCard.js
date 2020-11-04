@@ -34,7 +34,12 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
-import { TableContentCard, TableContentCardWrapper, StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
+import {
+  TableContentCard,
+  TableContentCardWrapper,
+  StatusTextWrapper,
+  AdjustModalBtn
+} from '../Modals/ModalComponents';
 
 const TableCard = ({
   loan: {
@@ -110,26 +115,10 @@ const TableCard = ({
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const { loanContractAddress } = searchArr(cryptoFromLenderName);
-          const JLoan = JLoanSetup(web3, loanContractAddress);
+          const JLoan = JLoanSetup(web3, contractAddress);
           const result = await JLoan.methods.isShareholder(loanId, address).call();
           setIsShareholder(result);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    isShareholderCheck();
-  }, [address, contractAddress, cryptoFromLenderName, loanId, web3]);
-  
-  useEffect(() => {
-    const getAccruedInterest = async () => {
-      try {
-        const { loanContractAddress } = searchArr(cryptoFromLenderName);
-        const JLoan = JLoanSetup(web3, loanContractAddress);
-        const result = await JLoan.methods.getAccruedInterests(loanId).call();
-        setAccruedInterest(web3.utils.fromWei(result));
       } catch (error) {
         console.error(error);
       }
@@ -141,12 +130,31 @@ const TableCard = ({
     };
 
     forecloseWindowCheck();
+    isShareholderCheck();
+  }, [address, contractAddress, loanId, status, loanActiveBlock, web3]);
+
+  useEffect(() => {
+    const getAccruedInterest = async () => {
+      try {
+        const JLoan = JLoanSetup(web3, contractAddress);
+        const result = await JLoan.methods.getAccruedInterests(loanId).call();
+        setAccruedInterest(web3.utils.fromWei(result));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getAccruedInterest();
-  }, [contractAddress, cryptoFromLenderName, loanActiveBlock, loanId, web3]);
+  }, [contractAddress, loanId, web3]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount, actionType);
+      const result = await calcAdjustCollateralRatio(
+        contractAddress,
+        loanId,
+        amount,
+        actionType
+      );
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -371,8 +379,8 @@ const TableCard = ({
   const addCollateralToEthLoan = async (collateralAmount) => {
     try {
       await JLoan.methods
-          .depositEthCollateral(loanId)
-          .send({ value: collateralAmount ,from: address })
+        .depositEthCollateral(loanId)
+        .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
         })
@@ -390,10 +398,7 @@ const TableCard = ({
     }
   };
 
-  const addCollateralToTokenLoan = async (
-    collateralAmount,
-    collateralAddress
-  ) => {
+  const addCollateralToTokenLoan = async (collateralAmount, collateralAddress) => {
     try {
       const { collateralTokenSetup } = searchArr(cryptoFromLenderName);
       const collateralToken = collateralTokenSetup(web3);
@@ -482,7 +487,7 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
-    console.log(loanId)
+    console.log(loanId);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -527,7 +532,6 @@ const TableCard = ({
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
               <img src={avatar} alt='User' />
-              
             </div>
             <div className='first-col-content'>
               <div className='first-col-title'>
@@ -586,7 +590,9 @@ const TableCard = ({
               color={Object.values(searchObj(status))[0].color}
               backgroundColor={Object.values(searchObj(status))[0].background}
             >
-              { Object.values(searchObj(status))[0].key === "Under Collateralized" ? "Under" : valShortner(Object.values(searchObj(status))[0].key)}
+              {Object.values(searchObj(status))[0].key === 'Under Collateralized'
+                ? 'Under'
+                : valShortner(Object.values(searchObj(status))[0].key)}
             </StatusTextWrapper>
           </div>
         </div>
@@ -702,5 +708,5 @@ export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3,
+  setWalletAndWeb3
 })(TableCard);
