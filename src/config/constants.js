@@ -9,10 +9,11 @@ export const serverUrl = process.env.REACT_APP_SERVER_URL;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
-export const alchemyProviderUrl = process.env.REACT_APP_ALCHEMY_PROVIDER_URL;
+export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
+export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
-const Pair0Address = process.env.REACT_APP_PAIR_0;
-const Pair1Address = process.env.REACT_APP_PAIR_1;
+export const Pair0Contract = process.env.REACT_APP_PAIR_0;
+export const Pair1Contract = process.env.REACT_APP_PAIR_1;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
@@ -81,7 +82,7 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup,
-    loanContractAddress: Pair0Address
+    loanContractAddress: Pair0Contract
   },
   {
     key: 'USDC',
@@ -92,7 +93,7 @@ export const pairData = [
     colIcon: JNTicon,
     collateralTokenSetup: JPTSetup,
     lendTokenSetup: USDCSetup,
-    loanContractAddress: Pair1Address
+    loanContractAddress: Pair1Contract
   }
 ];
 
