@@ -137,18 +137,23 @@ export const actionTypes = {
 };
 
 export const events = {
-  LOAN_CREATED_ETH: 'NewEthLoanCreated',
-  LOAN_CREATED_TOKEN: 'NewTokenLoanCreated',
-  APPROVE_LOAN: 'LenderAccepted',
-  NEW_DEPOSIT_TOKEN: 'NewDeposit',
-  NEW_DEPOSIT_ETH: 'EthReceived',
-  FORECLOSING: 'LoanForeclosing',
-  FORECLOSED: 'LoanForeclosed',
-  LOAN_CANCEL: 'LoanCancelled',
-  LOAN_CLOSING_BORROWER: 'LoanClosingByBorrower',
-  LOAN_CLOSED: 'LoanClosed',
-  INTEREST_WITHDRAWN: 'InterestsWithdrawed',
-  REMOVE_COLLATERAL: 'WithdrawCollateral'
+  COLLATERAL_RECEIVED: 'collateralreceived',
+  LOAN_CREATED: 'loancreated',
+  NEW_LOAN_STATUS: "loanstatuschanged",
+  APPROVE_LOAN: "lenderaccepted",
+  LOAN_CLOSING_BORROWER: "loanclosingbyborrower",
+  FORECLOSING: "loanforeclosing",
+  FORECLOSED: "loanforeclosed",
+  LOAN_CANCEL: "loancancelled",
+  INTEREST_WITHDRAWN: 'interestswithdrawed',
+  REMOVE_COLLATERAL: 'withdrawcollateral',
+  APPROVE_LOAN_FEES: 'approve_loan_fees',
+  INITIATE_FORECLOSE_FEES: 'initiate_foreclose_fees',
+  FORECLOSED_FEES: 'foreclosed_fees',
+  EARLY_CLOSING_FEES: 'early_closing_fees',
+  LOAN_CANCEL_FEES: 'loan_cancel_fees',
+  INITIATE_FORECLOSE_REWARD: 'initiate_foreclose_reward',
+  FORECLOSED_REWARD: 'foreclosed_reward'
 };
 
 export const statuses = {
