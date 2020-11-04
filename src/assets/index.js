@@ -21,10 +21,17 @@ import UserIcon from 'assets/images/svg/UserIcon.svg';
 import UserImg from 'assets/images/svg/userImg.svg';
 import downChevron from 'assets/images/svg/downChevron.svg';
 import upChevron from 'assets/images/svg/upChevron.svg';
+import WhiteAdjust from 'assets/images/svg/adjustIconWhite.svg';
+import DarkAdjust from 'assets/images/svg/adjustIconDark.svg';
+import GrayAdjust from 'assets/images/svg/adjustIconGray.svg';
+
 
 export {
   Adjust,
   AdjustEarn,
+  WhiteAdjust,
+  DarkAdjust,
+  GrayAdjust,
   AdjustTrade,
   CloseModal,
   Create,
