@@ -29,7 +29,7 @@ const Borrow = ({
 
   useEffect(() => {
     changeFilter(null);
-  }, [pathname]);
+  }, [pathname, changeFilter]);
 
   const onboard = initOnboard({
     address: setAddress,
@@ -66,7 +66,6 @@ Borrow.propTypes = {
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  filterChanged: state.changeFilter
 });
 
 export default connect(mapStateToProps, {

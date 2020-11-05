@@ -12,6 +12,7 @@ export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
+export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const Pair0Contract = process.env.REACT_APP_PAIR_0;
 export const Pair1Contract = process.env.REACT_APP_PAIR_1;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;

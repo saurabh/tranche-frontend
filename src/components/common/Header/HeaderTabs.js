@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { loansFetchData, changeFilter } from 'redux/actions/loans';
+import { changeFilter } from 'redux/actions/loans';
 import { ETH, JNT, PagesData } from 'config/constants';
 import {
   HeaderTabsWrapper,
@@ -8,11 +8,11 @@ import {
   HeaderTabBtn
 } from './HeaderComponents';
 
-const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }) => {
+const HeaderTabs = ({ path, changeFilter }) => {
   const [filterValue, setFilter] = useState(null);
   const loanListing = async (filter = null) => {
     setFilter(filter);
-    changeFilter(filter)
+    changeFilter(filter);
   };
   return (
     <div className='container content-container'>
@@ -22,7 +22,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }
             onClick={() => loanListing(null)}
             id='all-markets-tab'
             active={filterValue === null}
-            color={PagesData[pathChanged].secondaryColor}
+            color={PagesData[path].secondaryColor}
           >
             All Markets
           </HeaderTabBtn>
@@ -30,7 +30,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }
             onClick={() => loanListing(ETH)}
             id='eth markets'
             active={filterValue === ETH}
-            color={PagesData[pathChanged].secondaryColor}
+            color={PagesData[path].secondaryColor}
           >
             Eth Markets
           </HeaderTabBtn>
@@ -38,7 +38,7 @@ const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }
             onClick={() => loanListing(JNT)}
             id='jnt markets'
             active={filterValue === JNT}
-            color={PagesData[pathChanged].secondaryColor}
+            color={PagesData[path].secondaryColor}
           >
             Jnt Markets
           </HeaderTabBtn>
@@ -54,9 +54,8 @@ const HeaderTabs = ({ loansFetchData, pathChanged, changeFilter, filterChanged }
 
 const mapStateToProps = (state) => {
   return {
-    pathChanged: state.changePath,
-    filterChanged: state.changeFilter
+    path: state.path,
   };
 };
 
-export default connect(mapStateToProps, { loansFetchData, changeFilter })(HeaderTabs);
+export default connect(mapStateToProps, { changeFilter })(HeaderTabs);

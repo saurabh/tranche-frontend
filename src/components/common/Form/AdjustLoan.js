@@ -193,8 +193,7 @@ let AdjustLoan = ({
                     pristine ||
                     submitting ||
                     error ||
-                    !newCollateralAmount ||
-                    newCollateralRatio < 150
+                    !newCollateralAmount
                   }
                 >
                   Confirm

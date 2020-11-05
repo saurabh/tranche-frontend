@@ -18,9 +18,7 @@ const validate = (values) => {
   } else if (isNaN(Number(collateralAmount))) {
     errors.collateralAmount = 'Must be a number';
   }
-  if (!apy) {
-    errors.apy = 'Required';
-  } else if (isNaN(Number(apy))) {
+  if (isNaN(Number(apy))) {
     errors.apy = 'Must be a number';
   }
   return errors;
@@ -58,19 +56,24 @@ let asyncValidateCreate = (values) => {
 let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
     let { contractAddress, loanId, collateralAmount, actionType } = values;
-    let newCollateralRatio = await calcAdjustCollateralRatio(
-      contractAddress,
-      loanId,
-      collateralAmount,
-      actionType
-    );
-    if (
-      isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)
-    ) {
-      throw {
-        collateralAmount: 'New collateral ratio is below acceptable threshold',
-        _error: 'Ratio too low'
-      };
+    if (!actionType) {
+      let newCollateralRatio = await calcAdjustCollateralRatio(
+        contractAddress,
+        loanId,
+        collateralAmount,
+        actionType
+      );
+      if (
+        isLessThan(
+          parseFloat(newCollateralRatio),
+          generalParams.limitCollRatioForWithdraw
+        )
+      ) {
+        throw {
+          collateralAmount: 'New collateral ratio is below acceptable threshold',
+          _error: 'Ratio too low'
+        };
+      }
     }
   });
 };

@@ -64,15 +64,6 @@ const CreateLoan = ({
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
-        })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null //ETH/JNT keep these in constant file
-            }
-          });
         });
     } catch (error) {
       console.error(error);
@@ -104,15 +95,6 @@ const CreateLoan = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null //ETH/JNT keep these in constant file
-              }
-            });
           });
       } else {
         await JLoan.methods
@@ -120,15 +102,6 @@ const CreateLoan = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null //ETH/JNT keep these in constant file
-              }
-            });
           });
       }
     } catch (error) {

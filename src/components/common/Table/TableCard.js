@@ -182,15 +182,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         await JLoan.methods
@@ -198,15 +189,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -225,15 +207,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         let userAllowance = await lendToken.methods
@@ -318,15 +291,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else if (
         currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
@@ -337,15 +301,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -418,15 +373,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         await JLoan.methods
@@ -434,15 +380,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -603,9 +540,7 @@ const TableCard = ({
               disabeldBtn={path === 'trade' || disableBtn}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
-            >
-              
-            </AdjustModalBtn>
+            ></AdjustModalBtn>
           </div>
           <LoanModal
             loanId={loanId}
@@ -648,10 +583,10 @@ const TableCard = ({
             />
           ) : (
             moreList &&
-            moreList.map((i) => {
+            moreList.map((i, index) => {
               return (
                 <TableMoreRow
-                  key={i}
+                  key={index}
                   ethImg={ETH}
                   arrow='downArrow'
                   status={i.loanStatus}
