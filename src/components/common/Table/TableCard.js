@@ -282,6 +282,7 @@ const TableCard = ({
   const forecloseLoan = async () => {
     try {
       const currentBlock = await web3.eth.getBlockNumber();
+      const onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
       if (
         status === statuses['Under_Collateralized'].status ||
         status === statuses['At_Risk'].status
@@ -293,11 +294,21 @@ const TableCard = ({
             notify.hash(hash);
           });
       } else if (
+        onChainStatus === statuses['Foreclosing'].status &&
+        status === statuses['At_Risk'].status
+      ) {
+        await JLoan.methods
+          .setLoanToForeclosed(loanId)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
+          });
+      } else if (
         currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
         status === statuses['Foreclosing'].status
       ) {
         await JLoan.methods
-          .setLoanInForeclosedByTime(loanId)
+          .setLoanToForeclosed(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
@@ -425,6 +436,7 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
+    console.log(loanId);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
