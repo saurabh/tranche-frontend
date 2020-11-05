@@ -23,6 +23,7 @@ import {
   LoanDetailsRowValue
 } from '../Modals/ModalComponents';
 import { pairData } from 'config/constants';
+import { act } from 'react-dom/test-utils';
 
 const InputField = ({
   input,
@@ -63,7 +64,8 @@ let AdjustLoan = ({
   collateralAmount,
   collateralRatio,
   formValues,
-  change
+  change,
+  adjustPositionToggle
 }) => {
   const [actionType, setActionType] = useState(); // true = adding; false = removing
   const [toggleInput, setToggleInput] = useState(false);
@@ -97,6 +99,13 @@ let AdjustLoan = ({
     change('actionType', type);
     collateralAmount !== '' && calcNewCollateralRatio(collateralAmount, type);
   };
+
+  const adjustLoanHandler = (e, actionType) =>{
+    e.preventDefault();
+    setIsAdjustSelected(false);
+    adjustPositionToggle(false);
+    adjustLoan(e, actionType);
+  }
 
   return (
     <ModalNewLoanContent>
@@ -133,7 +142,7 @@ let AdjustLoan = ({
       </ModalNewLoanDetails>
 
       <ModalAdjustForm className='modalAdjustFormStyle'>
-        <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoan(e, actionType)}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoanHandler(e, actionType)}>
           {toggleInput ? (
             <FormInputsWrapper>
               <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
