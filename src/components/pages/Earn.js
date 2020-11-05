@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import { Layout } from "components/common";
-import SummaryCards from "../common/Summary/SummaryCards";
-import { PagesData } from "config/constants";
-import Table from "../common/Table/Table";
-import { changeFilter } from "redux/actions/loans";
-import { useLocation } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useEffect } from 'react';
+import { Layout } from 'components/common';
+import SummaryCards from '../common/Summary/SummaryCards';
+import { PagesData } from 'config/constants';
+import Table from '../common/Table/Table';
+import { changeFilter } from 'redux/actions/loans';
+import { useLocation } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 function Earn({ changeFilter }) {
   const { pathname } = useLocation();
 
   useEffect(() => {
     changeFilter(null);
-  }, [pathname]);
+  }, [pathname, changeFilter]);
 
   return (
     <Layout>
@@ -22,10 +22,6 @@ function Earn({ changeFilter }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  filterChanged: state.changeFilter,
-});
-
-export default connect(mapStateToProps, {
-  changeFilter,
+export default connect(null, {
+  changeFilter
 })(Earn);

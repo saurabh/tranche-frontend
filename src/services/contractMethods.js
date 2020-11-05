@@ -10,10 +10,12 @@ export const fromWei = web3.utils.fromWei;
 
 export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
-    const result = await JFactory.methods
-      .calcMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount))
-      .call();
-    return web3.utils.fromWei(result);
+    if (askAmount !== '' && askAmount !== 0) {
+      const result = await JFactory.methods
+        .calcMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount))
+        .call();
+      return web3.utils.fromWei(result);
+    }
   } catch (error) {
     console.error(error);
   }
@@ -35,11 +37,13 @@ export const calcAdjustCollateralRatio = async (
   actionType
 ) => {
   try {
-    const JLoan = JLoanSetup(web3, contractAddress);
-    const result = await JLoan.methods
-      .calcRatioAdjustingCollateral(loanId, toWei(amount), actionType)
-      .call();
-    return result;
+    if (amount !== '' && amount !== 0) {
+      const JLoan = JLoanSetup(web3, contractAddress);
+      const result = await JLoan.methods
+        .calcRatioAdjustingCollateral(loanId, toWei(amount), actionType)
+        .call();
+      return result;
+    }
   } catch (error) {
     console.error(error);
   }

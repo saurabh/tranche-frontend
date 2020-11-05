@@ -295,6 +295,7 @@ export default function LoanModal({
             <AdjustLoan
               isAdjustSelected={isAdjustSelected}
               setIsAdjustSelected={setIsAdjustSelected}
+              adjustPositionToggle={adjustPositionToggle}
               loanId={loanId}
               contractAddress={contractAddress}
               collateralTypeName={collateralTypeName}

@@ -182,15 +182,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         await JLoan.methods
@@ -198,15 +189,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -225,15 +207,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         let userAllowance = await lendToken.methods
@@ -309,6 +282,7 @@ const TableCard = ({
   const forecloseLoan = async () => {
     try {
       const currentBlock = await web3.eth.getBlockNumber();
+      const onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
       if (
         status === statuses['Under_Collateralized'].status ||
         status === statuses['At_Risk'].status
@@ -318,34 +292,26 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
+          });
+      } else if (
+        onChainStatus === statuses['Foreclosing'].status &&
+        status === statuses['At_Risk'].status
+      ) {
+        await JLoan.methods
+          .setLoanToForeclosed(loanId)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            notify.hash(hash);
           });
       } else if (
         currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
         status === statuses['Foreclosing'].status
       ) {
         await JLoan.methods
-          .setLoanInForeclosedByTime(loanId)
+          .setLoanToForeclosed(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -418,15 +384,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         await JLoan.methods
@@ -434,15 +391,6 @@ const TableCard = ({
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -603,9 +551,7 @@ const TableCard = ({
               disabeldBtn={path === 'trade' || disableBtn}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
-            >
-              
-            </AdjustModalBtn>
+            ></AdjustModalBtn>
           </div>
           <LoanModal
             loanId={loanId}
@@ -648,10 +594,10 @@ const TableCard = ({
             />
           ) : (
             moreList &&
-            moreList.map((i) => {
+            moreList.map((i, index) => {
               return (
                 <TableMoreRow
-                  key={i}
+                  key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
                   ethImg={ETH}
                   arrow='downArrow'
                   status={i.loanStatus}

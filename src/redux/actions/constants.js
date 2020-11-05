@@ -12,6 +12,7 @@ export const SET_WEB3 = 'SET_WEB3';
 //Loans
 export const LOANS_IS_LOADING = 'LOANS_IS_LOADING';
 export const LOANS_SUCCESS = 'LOANS_SUCCESS';
+export const LOANS_COUNT = 'LOANS_COUNT';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const PAGINATION_SKIP = 'PAGINATION_SKIP';
 export const PAGINATION_CURRENT = 'PAGINATION_CURRENT';
