@@ -1,2 +1,0 @@
-(this["webpackJsonpjibrel-defi-dapp"]=this["webpackJsonpjibrel-defi-dapp"]||[]).push([[18,37],{1312:function(n,i){},1424:function(n,i){},1578:function(n,i){},1586:function(n,i){},1608:function(n,i){},1614:function(n,i){}}]);
-//# sourceMappingURL=18.b4f4e271.chunk.js.map
