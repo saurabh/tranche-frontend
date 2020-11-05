@@ -9,6 +9,17 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
+      - echo creating SSH...
+      - mkdir -p ~/.ssh
+      - aws s3 ls s3://git-ssh
+      - aws s3 cp s3://git-ssh/id_rsa ~/.ssh/id_rsa
+      - echo "${ssh_pub}" > ~/.ssh/id_rsa.pub
+      - chmod 600 ~/.ssh/id_rsa
+      - eval "$(ssh-agent -s)"
+      - git checkout stage-build
+      - git branch 
+      - ls -ltr ~/.ssh
+      - git submodule add  -b frontend-master https://github.com/tranche-jibrel/defi-abis.git ./src/build
       - echo Installing dependencies...
       - yarn
   post_build:
