@@ -63,30 +63,40 @@ const TableMoreRow = ({
             •
           </MoreRowSpan>
           <h2>
-            {eventName === events["LOAN_CREATED_ETH"].toLowerCase()
+            {   eventName === events["LOAN_CREATED"].toLowerCase()
               ? "Loan Requested"
-              : eventName === events["LOAN_CREATED_TOKEN"].toLowerCase()
-              ? "Loan Requested"
+              : eventName === events["NEW_LOAN_STATUS"].toLowerCase()
+              ? "Status Changed"
               : eventName === events["APPROVE_LOAN"].toLowerCase()
               ? "Loan Approved"
-              : eventName === events["NEW_DEPOSIT_TOKEN"].toLowerCase()
-              ? "Collateral Adjustment"
-              : eventName === events["NEW_DEPOSIT_ETH"].toLowerCase()
-              ? "Collateral Adjustment"
+              : eventName === events["LOAN_CLOSING_BORROWER"].toLowerCase()
+              ? "Loan Closing"
               : eventName === events["FORECLOSING"].toLowerCase()
               ? "Loan Foreclosing"
               : eventName === events["FORECLOSED"].toLowerCase()
               ? "Loan Foreclosed"
               : eventName === events["LOAN_CANCEL"].toLowerCase()
               ? "Loan Cancelled"
-              : eventName === events["LOAN_CLOSING_BORROWER"].toLowerCase()
-              ? "Loan Closing"
-              : eventName === events["LOAN_CLOSED"].toLowerCase()
-              ? "Loan Closed"
               : eventName === events["INTEREST_WITHDRAWN"].toLowerCase()
               ? "Interest Withdrawal"
+              : eventName === events["COLLATERAL_RECEIVED"].toLowerCase()
+              ? "Collateral Adjusted"
               : eventName === events["REMOVE_COLLATERAL"].toLowerCase()
-              ? "Collateral Removed"
+              ? "Collateral Adjusted"
+              : eventName === events["APPROVE_LOAN_FEES"].toLowerCase()
+              ? "Approval Fee"
+              : eventName === events["INITIATE_FORECLOSE_FEES"].toLowerCase()
+              ? "Closure Initiation Fee"
+              : eventName === events["FORECLOSED_FEES"].toLowerCase()
+              ? "Foreclosure Fee"
+              : eventName === events["EARLY_CLOSING_FEES"].toLowerCase()
+              ? "Early Closing Fee"
+              : eventName === events["LOAN_CANCEL_FEES"].toLowerCase()
+              ? "Loan Cancellation Fee"
+              : eventName === events["INITIATE_FORECLOSE_REWARD"].toLowerCase()
+              ? "Closing Initiation Reward"
+              : eventName === events["FORECLOSED_REWARD"].toLowerCase()
+              ? "Foreclosure Reward"
               : "N/A"}
           </h2>
         </div>

@@ -1,19 +1,19 @@
 import { abi as JFactoryABI, networks as JFactoryNetworks } from 'build/contracts/JFactory.json';
+import { abi as JPriceOracleABI, networks as JPONetworks } from 'build/contracts/JPriceOracle.json';
+import { abi as JLoanABI } from 'build/contracts/JLoan.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
-import { abi as JLoanEthABI } from 'build/contracts/JLoanEth.json';
-import { abi as JLoanTokenABI } from 'build/contracts/JLoanToken.json';
-import { DAIAddress, JPTAddress, USDCAddress } from 'config/constants';
+import { DAIAddress, JPTAddress, USDCAddress, networkId } from 'config/constants';
 
 export function JFactorySetup(web3) {
-  return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[42].address);
+  return new web3.eth.Contract(JFactoryABI, JFactoryNetworks[networkId].address);
 }
 
-export function JLoanEthSetup(web3, address) {
-  return new web3.eth.Contract(JLoanEthABI, address);
+export function JPriceOracleSetup(web3) {
+  return new web3.eth.Contract(JPriceOracleABI, JPONetworks[networkId].address);
 }
 
-export function JLoanTokenSetup(web3, address) {
-  return new web3.eth.Contract(JLoanTokenABI, address);
+export function JLoanSetup(web3, address) {
+  return new web3.eth.Contract(JLoanABI, address);
 }
 
 export function DAISetup(web3) {

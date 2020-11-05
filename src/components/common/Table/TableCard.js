@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
+import { JLoanSetup } from 'utils/contractConstructor';
 import { calcAdjustCollateralRatio } from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
+
 import ETH from 'assets/images/svg/EthForm.svg';
 import {
   setAddress,
@@ -34,12 +35,18 @@ import {
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
-import { TableContentCard, TableContentCardWrapper, StatusTextWrapper, AdjustModalBtn } from '../Modals/ModalComponents';
+import {
+  TableContentCard,
+  TableContentCardWrapper,
+  StatusTextWrapper,
+  AdjustModalBtn
+} from '../Modals/ModalComponents';
 
 const TableCard = ({
   loan: {
-    borrowerAddress,
+    loanId,
     status,
+    borrowerAddress,
     loanActiveBlock,
     contractAddress,
     remainingLoan,
@@ -60,9 +67,10 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { address, network, balance, wallet, web3, notify },
+  ethereum: { address, wallet, web3, notify },
   form
 }) => {
+  const JLoan = JLoanSetup(web3, contractAddress);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -108,26 +116,10 @@ const TableCard = ({
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const { loanContractSetup } = searchArr(cryptoFromLenderName);
-          const JLoan = loanContractSetup(web3, contractAddress);
-          const result = await JLoan.methods.isShareholder(address).call();
+          const JLoan = JLoanSetup(web3, contractAddress);
+          const result = await JLoan.methods.isShareholder(loanId, address).call();
           setIsShareholder(result);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    isShareholderCheck();
-  }, [address, contractAddress, cryptoFromLenderName, web3]);
-
-  useEffect(() => {
-    const getAccruedInterest = async () => {
-      try {
-        const { loanContractSetup } = searchArr(cryptoFromLenderName);
-        const JLoan = loanContractSetup(web3, contractAddress);
-        const result = await JLoan.methods.getAccruedInterests().call();
-        setAccruedInterest(web3.utils.fromWei(result));
       } catch (error) {
         console.error(error);
       }
@@ -139,12 +131,31 @@ const TableCard = ({
     };
 
     forecloseWindowCheck();
+    isShareholderCheck();
+  }, [address, contractAddress, loanId, status, loanActiveBlock, web3]);
+
+  useEffect(() => {
+    const getAccruedInterest = async () => {
+      try {
+        const JLoan = JLoanSetup(web3, contractAddress);
+        const result = await JLoan.methods.getAccruedInterests(loanId).call();
+        setAccruedInterest(web3.utils.fromWei(result));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getAccruedInterest();
-  }, [contractAddress, cryptoFromLenderName, loanActiveBlock, web3]);
+  }, [contractAddress, loanId, web3]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(collateralTypeName, contractAddress, amount, actionType);
+      const result = await calcAdjustCollateralRatio(
+        contractAddress,
+        loanId,
+        amount,
+        actionType
+      );
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -153,8 +164,7 @@ const TableCard = ({
 
   const approveLoan = async () => {
     try {
-      const { lendTokenSetup, loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { lendTokenSetup } = searchArr(cryptoFromLenderName);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       let userAllowance = await lendToken.methods
@@ -168,35 +178,17 @@ const TableCard = ({
             notify.hash(hash);
           });
         await JLoan.methods
-          .lenderSendStableCoins(cryptoFromLender)
+          .lenderSendStableCoins(loanId, cryptoFromLender)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         await JLoan.methods
-          .lenderSendStableCoins(cryptoFromLender)
+          .lenderSendStableCoins(loanId, cryptoFromLender)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -206,25 +198,15 @@ const TableCard = ({
 
   const closeLoan = async () => {
     try {
-      const { lendTokenSetup, loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
+      const { lendTokenSetup } = searchArr(cryptoFromLenderName);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       if (status === 0) {
         JLoan.methods
-          .setLoanCancelled()
+          .setLoanCancelled(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
         let userAllowance = await lendToken.methods
@@ -238,7 +220,7 @@ const TableCard = ({
               notify.hash(hash);
             });
           await JLoan.methods
-            .loanClosingByBorrower()
+            .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
               notify.hash(hash);
@@ -254,7 +236,7 @@ const TableCard = ({
             });
         } else {
           await JLoan.methods
-            .loanClosingByBorrower()
+            .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
               notify.hash(hash);
@@ -277,10 +259,8 @@ const TableCard = ({
 
   const withdrawInterest = async () => {
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
       await JLoan.methods
-        .withdrawInterests()
+        .withdrawInterests(loanId)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
@@ -301,46 +281,31 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
       const currentBlock = await web3.eth.getBlockNumber();
+      let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
+      onChainStatus = parseInt(onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
-        status === statuses['At_Risk'].status
+        (status === statuses['At_Risk'].status &&
+          onChainStatus === statuses['Active'].status)
       ) {
         await JLoan.methods
-          .initiateLoanForeclose()
+          .initiateLoanForeclose(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else if (
-        currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
-        status === statuses['Foreclosing'].status
+        (onChainStatus === statuses['Foreclosing'].status &&
+          status === statuses['At_Risk'].status) ||
+        (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
+          status === statuses['Foreclosing'].status)
       ) {
         await JLoan.methods
-          .setLoanInForeclosedByTime()
+          .setLoanToForeclosed(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -352,10 +317,8 @@ const TableCard = ({
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     try {
-      const { loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoan = loanContractSetup(web3, contractAddress);
       await JLoan.methods
-        .withdrawCollateral(collateralAmount)
+        .withdrawCollateral(loanId, collateralAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
@@ -374,14 +337,11 @@ const TableCard = ({
     }
   };
 
-  const addCollateralToEthLoan = async (contractAddress, collateralAmount) => {
+  const addCollateralToEthLoan = async (collateralAmount) => {
     try {
-      await web3.eth
-        .sendTransaction({
-          from: address,
-          to: contractAddress,
-          value: collateralAmount
-        })
+      await JLoan.methods
+        .depositEthCollateral(loanId)
+        .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
         })
@@ -399,14 +359,9 @@ const TableCard = ({
     }
   };
 
-  const addCollateralToTokenLoan = async (
-    contractAddress,
-    collateralAmount,
-    cryptoFromLender
-  ) => {
+  const addCollateralToTokenLoan = async (collateralAmount, collateralAddress) => {
     try {
-      const { collateralTokenSetup, loanContractSetup } = searchArr(cryptoFromLenderName);
-      const JLoanToken = loanContractSetup(web3, contractAddress);
+      const { collateralTokenSetup } = searchArr(cryptoFromLenderName);
       const collateralToken = collateralTokenSetup(web3);
       let userAllowance = await collateralToken.methods
         .allowance(address, contractAddress)
@@ -418,36 +373,18 @@ const TableCard = ({
           .on('transactionHash', (hash) => {
             notify.hash(hash);
           });
-        await JLoanToken.methods
-          .depositCollateral(cryptoFromLender, collateralAmount)
+        await JLoan.methods
+          .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       } else {
-        await JLoanToken.methods
-          .depositCollateral(cryptoFromLender, collateralAmount)
+        await JLoan.methods
+          .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null
-              }
-            });
           });
       }
     } catch (error) {
@@ -459,9 +396,9 @@ const TableCard = ({
     let { collateralAmount } = form.adjustLoan.values;
     collateralAmount = toWei(collateralAmount);
     if (cryptoFromLenderName === searchArr(DAI).key) {
-      addCollateralToEthLoan(contractAddress, collateralAmount);
+      addCollateralToEthLoan(collateralAmount);
     } else if (cryptoFromLenderName === searchArr(USDC).key) {
-      addCollateralToTokenLoan(contractAddress, collateralAmount, collateralType);
+      addCollateralToTokenLoan(collateralAmount, collateralType);
     }
   };
 
@@ -493,6 +430,7 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
+    console.log(loanId);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -510,8 +448,9 @@ const TableCard = ({
         {
           data: {
             skip: 0,
-            limit: 10,
+            limit: 100,
             filter: {
+              loanId,
               contractAddress: hash
             }
           }
@@ -536,7 +475,6 @@ const TableCard = ({
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
               <img src={avatar} alt='User' />
-              
             </div>
             <div className='first-col-content'>
               <div className='first-col-title'>
@@ -595,7 +533,9 @@ const TableCard = ({
               color={Object.values(searchObj(status))[0].color}
               backgroundColor={Object.values(searchObj(status))[0].background}
             >
-              { Object.values(searchObj(status))[0].key === "Under Collateralized" ? "Under" : valShortner(Object.values(searchObj(status))[0].key)}
+              {Object.values(searchObj(status))[0].key === 'Under Collateralized'
+                ? 'Under'
+                : valShortner(Object.values(searchObj(status))[0].key)}
             </StatusTextWrapper>
           </div>
         </div>
@@ -603,25 +543,12 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <AdjustModalBtn
               disabeldBtn={path === 'trade' || disableBtn}
-              background={PagesData[path].btnColor}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
               disabled={path === 'trade' || disableBtn}
-            >
-              <img
-                src={
-                  path === 'borrow'
-                    ? Adjust
-                    : path === 'earn'
-                    ? AdjustEarn
-                    : path === 'trade'
-                    ? AdjustTrade
-                    : Adjust
-                }
-                alt=''
-              />
-            </AdjustModalBtn>
+            ></AdjustModalBtn>
           </div>
           <LoanModal
+            loanId={loanId}
             status={status}
             path={path}
             interestPaid={interestPaid}
@@ -661,18 +588,18 @@ const TableCard = ({
             />
           ) : (
             moreList &&
-            moreList.map((i) => {
+            moreList.map((i, index) => {
               return (
                 <TableMoreRow
-                  key={i}
+                  key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
                   ethImg={ETH}
                   arrow='downArrow'
+                  status={i.loanStatus}
                   ratio={i.collateralRatio}
+                  createdAt={i.createdAt}
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   interest={i.interestPaid}
-                  status={i.loanStatus}
-                  createdAt={i.createdAt}
                   eventName={i.eventName}
                 />
               );
@@ -710,5 +637,5 @@ export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3,
+  setWalletAndWeb3
 })(TableCard);

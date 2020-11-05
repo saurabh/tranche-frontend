@@ -1,18 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
 import ReactLoading from 'react-loading';
-import { loansFetchData, changeFilter, loansIsLoading } from 'redux/actions/loans';
+import {
+  loansFetchData,
+  changeFilter,
+  loansIsLoading,
+  paginationOffset,
+  paginationCurrent
+} from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
 import styled from 'styled-components';
-import blockies from 'ethereum-blockies'
+import blockies from 'ethereum-blockies';
 import { TableContentCardWrapper, TableContentCard } from '../Modals/ModalComponents';
-
-
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -49,116 +53,100 @@ const Table = ({
   HandleNewLoan,
   loansFetchData,
   loans,
+  path,
   changePath,
-  pathChanged,
-  filterChanged,
-  loansLoading
+  paginationOffset,
+  paginationCurrent,
 }) => {
   const { pathname } = useLocation();
-  const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');
-  const page = useRef(1);
-  const [data, setData] = useState({});
-  const [limit, setLimit] = useState(20);
   const [pageCount, setPageCount] = useState(5);
-  const [isLoading, setIsLoading] = useState(true);
+  const { filter, skip, limit, current } = loans;
 
-  const loanListing = async (p = page.current, sort = null) => {
-    let currentPage = page.current;
-    if (!currentPage || currentPage === 0) {
-      currentPage = 1;
-    }
-
-    const offset = (currentPage - 1) * limit;
-    if(sort){
+  const loanListing = async (sort = null) => {
+    if (sort) {
       await loansFetchData({
-        sort: sort,
-        skip: offset,
-        limit: limit,
+        sort,
+        skip,
+        limit,
         filter: {
-          type: filterChanged //ETH/JNT keep these in constant file
+          type: filter //ETH/JNT keep these in constant file
+        }
+      });
+    } else {
+      await loansFetchData({
+        skip,
+        limit,
+        filter: {
+          type: filter //ETH/JNT keep these in constant file
         }
       });
     }
-    else{
-      await loansFetchData({
-        skip: offset,
-        limit: limit,
-        filter: {
-          type: filterChanged //ETH/JNT keep these in constant file
-        }
-      });
-    }
-    page.current = currentPage;
+    //page.current = currentPage;
   };
 
   useEffect(() => {
     const parsePath = () => {
-      setPath(pathname.split('/')[1]);
+      changePath(pathname.split('/')[1]);
     };
 
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [loansFetchData, pathname, changePath, filterChanged]);
+  }, [loansFetchData, pathname, changePath, filter, current]);
 
   const handlePageChange = (p) => {
-    page.current = p;
-    loanListing();
+    //page.current = p;
+
+    // let currentPage = current;
+    // if (!currentPage || currentPage === 0) {
+    //   currentPage = 1;
+    // }
+    //const offset = currentPage * limit;
+    paginationOffset((p - 1) * limit);
+    paginationCurrent(p);
   };
 
   const handleSorting = (name, type) => {
     let sort = {
-        name: name,
-        type: type
-    }
-    loanListing(page.current, sort);
-  }
+      name: name,
+      type: type
+    };
+    loanListing(sort);
+  };
 
   const generateAvatar = () => {
-    let avatar = blockies.create({ 
+    let avatar = blockies.create({
       size: 7,
       scale: 6
     });
     return avatar.toDataURL();
-  }
+  };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={pathChanged} />
+          <TableHeader HandleNewLoan={HandleNewLoan} path={path} />
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)}/>
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
               {loans &&
                 loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} avatar={generateAvatar()} path={pathChanged} />
+                  <TableCard key={i} loan={loan} avatar={generateAvatar()} path={path} />
                 ))}
             </div>
           </div>
         </TableWrapper>
-        
-          
-          
-        {
-        loansLoading ? 
-        <TableContentCardWrapper>
-          <TableContentCard>
-            <ReactLoading
-              className='TableMoreLoading'
-              type={'bubbles'}
-              color='#ffffff'
-            />
-          </TableContentCard>
-        </TableContentCardWrapper> :
-        
-        loans && loans.count > limit ? (
+
+        {loans && loans.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
               total={loans && loans.count}
               limit={limit}
               pageCount={pageCount}
-              currentPage={page ? parseInt(page, 10) : 1}
+              currentPage={
+                parseInt(current, 10)
+              }
             >
               {({
                 pages,
@@ -253,13 +241,15 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     loans: state.loans,
-    isLoading: state.loansIsLoading,
-    pathChanged: state.changePath,
-    filterChanged: state.changeFilter,
-    loansLoading: state.loansIsLoading
+    path: state.path
   };
 };
 
-export default connect(mapStateToProps, { loansFetchData, changePath, changeFilter, loansIsLoading })(
-  Table
-);
+export default connect(mapStateToProps, {
+  loansFetchData,
+  changePath,
+  changeFilter,
+  loansIsLoading,
+  paginationOffset,
+  paginationCurrent
+})(Table);

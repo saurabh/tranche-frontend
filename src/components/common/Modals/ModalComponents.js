@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {Input} from 'semantic-ui-react';
+import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 
 const ModalHeader = styled.div` 
   position: absolute;
@@ -413,7 +414,20 @@ const ModalFormSubmit = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  ${({ adjustBtns }) => adjustBtns && `
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    h2{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      margin: 12px 0;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: #4F4F4F;
+    }
+  `}
   @media (max-width: 633px){
     flex-direction: column;
   }
@@ -436,6 +450,10 @@ const ModalFormButton = styled.button`
   border: none;
   box-sizing: border-box;
   text-transform: uppercase;
+  :disabled{
+    opacity: 0.5;
+    cursor: default;
+  }
 
   ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
     font-size: 10px;
@@ -546,12 +564,39 @@ const MoreRowSpan = styled.span`
   color: ${props => props.color ? props.color : ""};
 `
 const AdjustModalBtn = styled.button`
-  background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  border: 1px solid #39295A;
+  box-sizing: border-box;
+  background-color: #39295A;
+  box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
+  //background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  background-image: url(${WhiteAdjust});
+  background-repeat: no-repeat;
+  background-position: 50%;
+  :hover {
+    border: 1px solid #39295A;
+    background-image: url(${DarkAdjust});
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
+  }
 
-  ${({ disabledBtn }) => disabledBtn && `
-    background-color: #cccccc;
+  :disabled{
+    background-image: url(${GrayAdjust}) !important;
+    background-color: #F1F1F1;
     color: #666666;
-    cursor: default;
+    cursor: default !important;
+    border: 1px solid #F1F1F1;
+    pointer-events: none;
+    box-shadow: none;
+  }
+  
+  ${({ disabledBtn }) => disabledBtn && `
+    background-image: url(${GrayAdjust}) !important;
+    background-color: #F1F1F1;
+    color: #666666;
+    cursor: default !important;
+    border: 1px solid #F1F1F1;
+    pointer-events: none;
+    box-shadow: none;
   `}
 `
 
@@ -635,6 +680,9 @@ const ModalActionDetailsContent = styled.div`
   @media (max-width: 633px){
     max-height: 190px;
   }
+  ${({ row4 }) => row4 && `
+    min-height: 210px;
+  `}
 `
 const LoanDetailsRow = styled.div`
   position: relative;
@@ -665,7 +713,18 @@ const LoanDetailsRowValue = styled.h2`
     cursor: ${cursor}
   `}
 `
-
+const AdjustBtnsWrapper = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  //border-top: 1px solid rgba(63,63,63,0.1);
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 633px){
+    flex-direction: column;
+  }
+`
 
 
 
@@ -709,6 +768,7 @@ export {
     ModalNewLoanDetailsContent,
     ModalActionDetails,
     ModalActionsContent,
+    AdjustBtnsWrapper,
     ModalUserActions,
     BtnGrpLoanModalWrapper,
     ModalActionDetailsContent

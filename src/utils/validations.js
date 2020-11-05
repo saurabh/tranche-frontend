@@ -1,5 +1,4 @@
-import { SubmissionError } from 'redux-form';
-import { isLessThan, isGreaterThan } from './helperFunctions';
+import { isLessThan } from './helperFunctions';
 import {
   calcMinCollateralAmount,
   calcAdjustCollateralRatio
@@ -19,9 +18,7 @@ const validate = (values) => {
   } else if (isNaN(Number(collateralAmount))) {
     errors.collateralAmount = 'Must be a number';
   }
-  if (!apy) {
-    errors.apy = 'Required';
-  } else if (isNaN(Number(apy))) {
+  if (isNaN(Number(apy))) {
     errors.apy = 'Must be a number';
   }
   return errors;
@@ -37,22 +34,6 @@ const maxValue = (max) => (value) =>
   value && value >= max ? `Must be ${max}% at most` : undefined;
 const maxValue100 = maxValue(100);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-let submitValidations = async (values) => {
-  return sleep(0).then(async () => {
-    let { borrowedAskAmount, collateralAmount, pairId } = values;
-    let minCollateralAmount = await calcMinCollateralAmount(pairId, borrowedAskAmount);
-    if (
-      borrowedAskAmount &&
-      (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))
-    ) {
-      throw new SubmissionError({
-        borrowedAskAmount: 'Ask amount is too high',
-        _error: 'Create New Loan failed!'
-      });
-    }
-  });
-};
 
 let asyncValidateCreate = (values) => {
   return sleep(0).then(async () => {
@@ -74,20 +55,25 @@ let asyncValidateCreate = (values) => {
 
 let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
-    let { collateralAmount, actionType, collateralTypeName, contractAddress } = values;
-    let newCollateralRatio = await calcAdjustCollateralRatio(
-      collateralTypeName,
-      contractAddress,
-      collateralAmount,
-      actionType
-    );
-    if (
-      isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)
-    ) {
-      throw {
-        collateralAmount: 'New collateral ratio is below acceptable threshold',
-        _error: 'Ratio too low'
-      };
+    let { contractAddress, loanId, collateralAmount, actionType } = values;
+    if (!actionType) {
+      let newCollateralRatio = await calcAdjustCollateralRatio(
+        contractAddress,
+        loanId,
+        collateralAmount,
+        actionType
+      );
+      if (
+        isLessThan(
+          parseFloat(newCollateralRatio),
+          generalParams.limitCollRatioForWithdraw
+        )
+      ) {
+        throw {
+          collateralAmount: 'New collateral ratio is below acceptable threshold',
+          _error: 'Ratio too low'
+        };
+      }
     }
   });
 };
@@ -97,7 +83,6 @@ export {
   number,
   minValue0,
   maxValue100,
-  submitValidations,
   validate,
   asyncValidateCreate,
   asyncValidateAdjust

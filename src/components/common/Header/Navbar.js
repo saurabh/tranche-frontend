@@ -48,7 +48,7 @@ function Navbar({ path }) {
             <NavLink
               to='/trade'
               onClick={(e) => e.preventDefault()}
-              className="navLinkDisabled"
+              className='navLinkDisabled'
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
@@ -66,7 +66,7 @@ function Navbar({ path }) {
 }
 const mapStateToProps = (state) => {
   return {
-    path: state.changePath
+    path: state.path
   };
 };
 export default connect(mapStateToProps, null)(Navbar);

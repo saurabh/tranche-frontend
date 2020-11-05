@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'components/common/Form/NewLoan';
-import { JFactorySetup } from 'utils/contractConstructor';
+import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { submitValidations } from 'utils/validations';
-import { JLoanTokenDeployerAddress } from 'config/constants';
 import { pairData } from 'config/constants';
 import { ModalHeader } from './ModalComponents';
 import { CloseModal } from 'assets';
@@ -40,13 +38,12 @@ const AdjustPositionStyles = {
 };
 
 const CreateLoan = ({
-  ethereum: { address, network, balance, wallet, web3, notify },
+  ethereum: { address, web3, notify },
   form,
   loansFetchData,
   openModal,
   closeModal
 }) => {
-  const JFactory = JFactorySetup(web3);
   const toWei = web3.utils.toWei;
 
   function handleCloseModal() {
@@ -60,20 +57,13 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      await JFactory.methods
-        .createNewEthLoan(pairId, borrowedAskAmount, rpbRate)
+      const { loanContractAddress } = pairData[pairId];
+      const JLoan = JLoanSetup(web3, loanContractAddress);
+      await JLoan.methods
+        .openNewLoan(borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           notify.hash(hash);
-        })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null //ETH/JNT keep these in constant file
-            }
-          });
         });
     } catch (error) {
       console.error(error);
@@ -87,48 +77,31 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      const { collateralTokenSetup } = pairData[pairId];
+      const { collateralTokenSetup, loanContractAddress } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
+      const JLoan = JLoanSetup(web3, loanContractAddress);
       let userAllowance = await collateralToken.methods
-        .allowance(address, JLoanTokenDeployerAddress)
+        .allowance(address, loanContractAddress)
         .call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await collateralToken.methods
-          .approve(JLoanTokenDeployerAddress, collateralAmount)
+          .approve(loanContractAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
           });
-        await JFactory.methods
-          .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
+        await JLoan.methods
+          .openNewLoan(borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null //ETH/JNT keep these in constant file
-              }
-            });
           });
       } else {
-        await JFactory.methods
-          .createNewTokenLoan(pairId, borrowedAskAmount, rpbRate)
+        await JLoan.methods
+          .openNewLoan(borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             notify.hash(hash);
-          })
-          .on('receipt', async () => {
-            await loansFetchData({
-              skip: 0,
-              limit: 100,
-              filter: {
-                type: null //ETH/JNT keep these in constant file
-              }
-            });
           });
       }
     } catch (error) {
@@ -141,13 +114,11 @@ const CreateLoan = ({
       e.preventDefault();
       let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
       pairId = parseFloat(pairId);
-      // submitValidations(form.newLoan.values).then(() => {
-      // }).catch(error => console.error)
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       if (pairId === pairData[0].value) {
         createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
-      } else if (pairId === pairData[1].value) {
+      } else {
         createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       }
       handleCloseModal();

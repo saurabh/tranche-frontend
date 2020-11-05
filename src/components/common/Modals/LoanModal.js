@@ -83,6 +83,7 @@ export default function LoanModal({
   modalIsOpen,
   closeModal,
   path,
+  loanId,
   contractAddress,
   status,
   isShareholder,
@@ -294,6 +295,8 @@ export default function LoanModal({
             <AdjustLoan
               isAdjustSelected={isAdjustSelected}
               setIsAdjustSelected={setIsAdjustSelected}
+              adjustPositionToggle={adjustPositionToggle}
+              loanId={loanId}
               contractAddress={contractAddress}
               collateralTypeName={collateralTypeName}
               adjustLoan={adjustLoan}
@@ -320,7 +323,7 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>Review Loan Request</h2>
+          <h2>{status === statuses['Pending'].status ? "Review Loan Request" : "Manage Earning Asset"}</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
@@ -328,7 +331,7 @@ export default function LoanModal({
 
         <ModalActionsContent>
           <ModalActionDetails>
-            <ModalActionDetailsContent>
+            <ModalActionDetailsContent row4={status !== statuses["Pending"].status}>
               <LoanDetailsRow>
                 <LoanDetailsRowTitle>Loan amount</LoanDetailsRowTitle>
 
@@ -350,6 +353,13 @@ export default function LoanModal({
 
                 <LoanDetailsRowValue>{collateralRatio}%</LoanDetailsRowValue>
               </LoanDetailsRow>
+              { status !== statuses["Pending"].status ?
+                <LoanDetailsRow>
+                  <LoanDetailsRowTitle>Interest accrued</LoanDetailsRowTitle>
+
+                  <LoanDetailsRowValue>{accruedInterest} {collateralTypeName}</LoanDetailsRowValue>
+                </LoanDetailsRow> : ""
+              }
 
               {/*<div>
               <h2>
