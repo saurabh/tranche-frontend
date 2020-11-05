@@ -488,7 +488,6 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
-    console.log(loanId);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -651,7 +650,7 @@ const TableCard = ({
             moreList.map((i) => {
               return (
                 <TableMoreRow
-                  key={i}
+                  key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
                   ethImg={ETH}
                   arrow='downArrow'
                   status={i.loanStatus}
