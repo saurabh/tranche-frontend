@@ -65,7 +65,8 @@ let AdjustLoan = ({
   collateralRatio,
   formValues,
   change,
-  adjustPositionToggle
+  adjustPositionToggle,
+  setNewCollateralRatio
 }) => {
   const [actionType, setActionType] = useState(); // true = adding; false = removing
   const [toggleInput, setToggleInput] = useState(false);
@@ -104,6 +105,7 @@ let AdjustLoan = ({
     e.preventDefault();
     setIsAdjustSelected(false);
     adjustPositionToggle(false);
+    setNewCollateralRatio(0);
     adjustLoan(e, actionType);
   }
 
