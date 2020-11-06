@@ -300,6 +300,7 @@ export default function LoanModal({
               contractAddress={contractAddress}
               collateralTypeName={collateralTypeName}
               adjustLoan={adjustLoan}
+              setNewCollateralRatio={setNewCollateralRatio}
               remainingLoan={remainingLoan}
               cryptoFromLenderName={cryptoFromLenderName}
               collateralAmount={collateralAmount}
