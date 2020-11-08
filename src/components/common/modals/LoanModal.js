@@ -416,13 +416,13 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
+                      <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
                       >
-                        Instantly Foreclose
+                        Initiate Foreclosure
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
