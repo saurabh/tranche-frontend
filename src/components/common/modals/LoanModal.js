@@ -416,13 +416,13 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
+                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
                       >
-                        Foreclose Loan
+                        Instantly Foreclose
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -441,13 +441,13 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
+                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
                       >
-                        Foreclose Loan
+                        Instantly Foreclose
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -466,14 +466,14 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
+                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
                         disabled={!canBeForeclosed}
                       >
-                        Foreclose Loan
+                        Instantly Foreclose
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
