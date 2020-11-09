@@ -88,6 +88,8 @@ const TableCard = ({
   const [APY, setAPY] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
+  const { rpbRate } = loanCommonParams;
+  const { pairId } = contractParams;
   const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
@@ -139,28 +141,30 @@ const TableCard = ({
     };
 
     const calculateAPY = async () => {
-      if (remainingLoan && loanCommonParams.rpbRate > 0) {
-        console.log(contractParams.pairId)
-        const result = await getPairDetails(contractParams.pairId);
-        console.log(result)
-        let { pairValue, pairDecimals } = result;
-        let APY =
-          (fromWei(loanCommonParams.rpbRate) *
-            blocksPerYear *
-            100 *
-            (pairValue / 10 ** pairDecimals)) /
-          remainingLoan;
-        APY = APY.toFixed(2).toString();
-        setAPY(APY);
-      } else {
-        setAPY(0);
+      try {
+        if (remainingLoan && rpbRate > 0) {
+          const result = await getPairDetails(pairId);
+          let { pairValue, pairDecimals } = result;
+          let APY =
+            (fromWei(rpbRate) *
+              blocksPerYear *
+              100 *
+              (pairValue / 10 ** pairDecimals)) /
+            remainingLoan;
+          APY = APY.toFixed(2).toString();
+          setAPY(APY);
+        } else {
+          setAPY(0);
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 
     calculateAPY();
     forecloseWindowCheck();
     isShareholderCheck();
-  }, [address, contractAddress, loanId, status, loanActiveBlock, web3]);
+  }, [address, contractAddress, loanId, status, rpbRate, pairId, remainingLoan, loanActiveBlock, web3]);
 
   useEffect(() => {
     const getAccruedInterest = async () => {
@@ -596,7 +600,7 @@ const TableCard = ({
             newCollateralRatio={newCollateralRatio}
             setNewCollateralRatio={setNewCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
-            rpbRate={loanCommonParams && fromWei(loanCommonParams.rpbRate)}
+            rpbRate={loanCommonParams && fromWei(rpbRate)}
             collateralAmount={collateralAmount}
             collateralRatio={collateralRatio}
             remainingLoan={remainingLoan}
