@@ -146,10 +146,7 @@ const TableCard = ({
           const result = await getPairDetails(pairId);
           let { pairValue, pairDecimals } = result;
           let APY =
-            (fromWei(rpbRate) *
-              blocksPerYear *
-              100 *
-              (pairValue / 10 ** pairDecimals)) /
+            (fromWei(rpbRate) * blocksPerYear * 100 * (pairValue / 10 ** pairDecimals)) /
             remainingLoan;
           APY = APY.toFixed(2).toString();
           setAPY(APY);
@@ -164,7 +161,17 @@ const TableCard = ({
     calculateAPY();
     forecloseWindowCheck();
     isShareholderCheck();
-  }, [address, contractAddress, loanId, status, rpbRate, pairId, remainingLoan, loanActiveBlock, web3]);
+  }, [
+    address,
+    contractAddress,
+    loanId,
+    status,
+    rpbRate,
+    pairId,
+    remainingLoan,
+    loanActiveBlock,
+    web3
+  ]);
 
   useEffect(() => {
     const getAccruedInterest = async () => {
@@ -207,20 +214,35 @@ const TableCard = ({
           .approve(contractAddress, remainingLoan)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });
           });
         await JLoan.methods
           .lenderSendStableCoins(loanId, cryptoFromLender)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });
           });
       } else {
         await JLoan.methods
           .lenderSendStableCoins(loanId, cryptoFromLender)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });
           });
       }
     } catch (error) {
@@ -238,7 +260,12 @@ const TableCard = ({
           .setLoanCancelled(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
           });
       } else {
         let userAllowance = await lendToken.methods
@@ -249,13 +276,23 @@ const TableCard = ({
             .approve(contractAddress, remainingLoan)
             .send({ from: address })
             .on('transactionHash', (hash) => {
-              notify.hash(hash);
+              const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
             });
           await JLoan.methods
             .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
-              notify.hash(hash);
+              const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
             })
             .on('receipt', async () => {
               await loansFetchData({
@@ -271,7 +308,12 @@ const TableCard = ({
             .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
-              notify.hash(hash);
+              const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
             })
             .on('receipt', async () => {
               await loansFetchData({
@@ -295,7 +337,12 @@ const TableCard = ({
         .withdrawInterests(loanId)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          notify.hash(hash);
+          const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
         })
         .on('receipt', async () => {
           await loansFetchData({
@@ -325,7 +372,12 @@ const TableCard = ({
           .initiateLoanForeclose(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
           });
       } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
@@ -337,7 +389,12 @@ const TableCard = ({
           .setLoanToForeclosed(loanId)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
           });
       }
     } catch (error) {
@@ -353,7 +410,12 @@ const TableCard = ({
         .withdrawCollateral(loanId, collateralAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          notify.hash(hash);
+          const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
         })
         .on('receipt', async () => {
           await loansFetchData({
@@ -375,7 +437,12 @@ const TableCard = ({
         .depositEthCollateral(loanId)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
-          notify.hash(hash);
+          const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
         })
         .on('receipt', async () => {
           await loansFetchData({
@@ -403,20 +470,35 @@ const TableCard = ({
           .approve(contractAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
           });
         await JLoan.methods
           .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
           });
       } else {
         await JLoan.methods
           .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              };
+            });;
           });
       }
     } catch (error) {
