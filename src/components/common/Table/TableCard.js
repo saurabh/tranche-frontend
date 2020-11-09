@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
-import { calcAdjustCollateralRatio } from 'services/contractMethods';
+import {
+  calcAdjustCollateralRatio,
+  fromWei,
+  getPairDetails
+} from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
 
 import ETH from 'assets/images/svg/EthForm.svg';
@@ -31,7 +35,8 @@ import {
   apiUri,
   USDC,
   DAI,
-  generalParams
+  generalParams,
+  blocksPerYear
 } from 'config/constants';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
@@ -46,6 +51,7 @@ const TableCard = ({
   loan: {
     loanId,
     status,
+    contractParams,
     borrowerAddress,
     loanActiveBlock,
     contractAddress,
@@ -79,6 +85,7 @@ const TableCard = ({
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
+  const [APY, setAPY] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const toWei = web3.utils.toWei;
@@ -124,12 +131,33 @@ const TableCard = ({
         console.error(error);
       }
     };
+
     const forecloseWindowCheck = async () => {
       const currentBlock = await web3.eth.getBlockNumber();
       if (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow)
         setCanBeForeclosed(true);
     };
 
+    const calculateAPY = async () => {
+      if (remainingLoan && loanCommonParams.rpbRate > 0) {
+        console.log(contractParams.pairId)
+        const result = await getPairDetails(contractParams.pairId);
+        console.log(result)
+        let { pairValue, pairDecimals } = result;
+        let APY =
+          (fromWei(loanCommonParams.rpbRate) *
+            blocksPerYear *
+            100 *
+            (pairValue / 10 ** pairDecimals)) /
+          remainingLoan;
+        APY = APY.toFixed(2).toString();
+        setAPY(APY);
+      } else {
+        setAPY(0);
+      }
+    };
+
+    calculateAPY();
     forecloseWindowCheck();
     isShareholderCheck();
   }, [address, contractAddress, loanId, status, loanActiveBlock, web3]);
@@ -557,6 +585,7 @@ const TableCard = ({
             contractAddress={contractAddress}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
+            APY={APY}
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
@@ -567,7 +596,7 @@ const TableCard = ({
             newCollateralRatio={newCollateralRatio}
             setNewCollateralRatio={setNewCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
-            rpbRate={loanCommonParams && loanCommonParams.rpbRate}
+            rpbRate={loanCommonParams && fromWei(loanCommonParams.rpbRate)}
             collateralAmount={collateralAmount}
             collateralRatio={collateralRatio}
             remainingLoan={remainingLoan}
