@@ -265,7 +265,7 @@ const TableCard = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       } else {
         let userAllowance = await lendToken.methods
@@ -277,22 +277,22 @@ const TableCard = ({
             .send({ from: address })
             .on('transactionHash', (hash) => {
               const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+              emitter.on('txPool', (transaction) => {
+                return {
+                  message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                };
+              });
             });
           await JLoan.methods
             .loanClosingByBorrower(loanId)
             .send({ from: address })
             .on('transactionHash', (hash) => {
               const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+              emitter.on('txPool', (transaction) => {
+                return {
+                  message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                };
+              });
             })
             .on('receipt', async () => {
               await loansFetchData({
@@ -309,11 +309,11 @@ const TableCard = ({
             .send({ from: address })
             .on('transactionHash', (hash) => {
               const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+              emitter.on('txPool', (transaction) => {
+                return {
+                  message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                };
+              });
             })
             .on('receipt', async () => {
               await loansFetchData({
@@ -338,11 +338,11 @@ const TableCard = ({
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+            };
+          });
         })
         .on('receipt', async () => {
           await loansFetchData({
@@ -377,7 +377,7 @@ const TableCard = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
@@ -394,7 +394,7 @@ const TableCard = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       }
     } catch (error) {
@@ -411,11 +411,11 @@ const TableCard = ({
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+            };
+          });
         })
         .on('receipt', async () => {
           await loansFetchData({
@@ -438,11 +438,11 @@ const TableCard = ({
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+            };
+          });
         })
         .on('receipt', async () => {
           await loansFetchData({
@@ -475,7 +475,7 @@ const TableCard = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
         await JLoan.methods
           .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
@@ -486,7 +486,7 @@ const TableCard = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       } else {
         await JLoan.methods
@@ -498,7 +498,7 @@ const TableCard = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       }
     } catch (error) {

@@ -64,11 +64,11 @@ const CreateLoan = ({
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
-              };
-            });;
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+            };
+          });
         });
     } catch (error) {
       console.error(error);
@@ -98,7 +98,7 @@ const CreateLoan = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
         await JLoan.methods
           .openNewLoan(borrowedAskAmount, rpbRate)
@@ -109,7 +109,7 @@ const CreateLoan = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       } else {
         await JLoan.methods
@@ -121,7 +121,7 @@ const CreateLoan = ({
               return {
                 message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
               };
-            });;
+            });
           });
       }
     } catch (error) {
