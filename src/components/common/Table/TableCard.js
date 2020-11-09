@@ -36,8 +36,9 @@ import {
   USDC,
   DAI,
   generalParams,
-  blocksPerYear
-} from 'config/constants';
+  blocksPerYear,
+  txMessage
+} from 'config';
 import LoanModal from '../Modals/LoanModal';
 import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 import {
@@ -217,7 +218,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -228,7 +229,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -240,7 +241,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -263,7 +264,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -279,7 +280,7 @@ const TableCard = ({
               const { emitter } = notify.hash(hash);
               emitter.on('txPool', (transaction) => {
                 return {
-                  message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                  message: txMessage(transaction.hash)
                 };
               });
             });
@@ -290,7 +291,7 @@ const TableCard = ({
               const { emitter } = notify.hash(hash);
               emitter.on('txPool', (transaction) => {
                 return {
-                  message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                  message: txMessage(transaction.hash)
                 };
               });
             })
@@ -311,7 +312,7 @@ const TableCard = ({
               const { emitter } = notify.hash(hash);
               emitter.on('txPool', (transaction) => {
                 return {
-                  message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                  message: txMessage(transaction.hash)
                 };
               });
             })
@@ -340,7 +341,7 @@ const TableCard = ({
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
-              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              message: txMessage(transaction.hash)
             };
           });
         })
@@ -375,7 +376,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -392,7 +393,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -413,7 +414,7 @@ const TableCard = ({
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
-              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              message: txMessage(transaction.hash)
             };
           });
         })
@@ -440,7 +441,7 @@ const TableCard = ({
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
-              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              message: txMessage(transaction.hash)
             };
           });
         })
@@ -473,7 +474,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -484,7 +485,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -496,7 +497,7 @@ const TableCard = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });

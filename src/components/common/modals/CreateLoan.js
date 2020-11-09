@@ -6,7 +6,7 @@ import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'components/common/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { pairData, etherScanUrl } from 'config/constants';
+import { pairData, txMessage } from 'config';
 import { ModalHeader } from './ModalComponents';
 import { CloseModal } from 'assets';
 
@@ -66,7 +66,7 @@ const CreateLoan = ({
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
-              message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+              message: txMessage(transaction.hash)
             };
           });
         });
@@ -96,7 +96,7 @@ const CreateLoan = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -107,7 +107,7 @@ const CreateLoan = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
@@ -119,7 +119,7 @@ const CreateLoan = ({
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
-                message: `Your transaction is pending, click <a href="${etherScanUrl}/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`
+                message: txMessage(transaction.hash)
               };
             });
           });
