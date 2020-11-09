@@ -109,6 +109,8 @@ export const DAI = 'DAI';
 export const JNT = 'JNT';
 export const USDC = 'USDC';
 
+export const blocksPerYear = 2372500;
+
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
   foreclosureWindow: 18000,

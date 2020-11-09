@@ -87,6 +87,7 @@ export default function LoanModal({
   contractAddress,
   status,
   isShareholder,
+  APY,
   accruedInterest,
   canBeForeclosed,
   approveLoan,
@@ -98,6 +99,7 @@ export default function LoanModal({
   setNewCollateralRatio,
   calcNewCollateralRatio,
   interestPaid,
+  rpbRate,
   collateralTypeName,
   remainingLoan,
   collateralRatio,
@@ -225,6 +227,18 @@ export default function LoanModal({
                     <LoanDetailsRowValue>{collateralRatio}%</LoanDetailsRowValue>
                   </LoanDetailsRow>
 
+                  <LoanDetailsRow>
+                    <LoanDetailsRowTitle>Rpb Rate</LoanDetailsRowTitle>
+
+                    <LoanDetailsRowValue>{rpbRate}</LoanDetailsRowValue>
+                  </LoanDetailsRow>
+
+                  <LoanDetailsRow>
+                    <LoanDetailsRowTitle>APY</LoanDetailsRowTitle>
+
+                    <LoanDetailsRowValue>{APY}%</LoanDetailsRowValue>
+                  </LoanDetailsRow>
+
                   {/*<div>
                     <h2>
                       <span>APY</span>
@@ -324,7 +338,11 @@ export default function LoanModal({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>{status === statuses['Pending'].status ? "Review Loan Request" : "Manage Earning Asset"}</h2>
+          <h2>
+            {status === statuses['Pending'].status
+              ? 'Review Loan Request'
+              : 'Manage Earning Asset'}
+          </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
@@ -332,7 +350,7 @@ export default function LoanModal({
 
         <ModalActionsContent>
           <ModalActionDetails>
-            <ModalActionDetailsContent row4={status !== statuses["Pending"].status}>
+            <ModalActionDetailsContent row4={status !== statuses['Pending'].status}>
               <LoanDetailsRow>
                 <LoanDetailsRowTitle>Loan amount</LoanDetailsRowTitle>
 
@@ -354,13 +372,30 @@ export default function LoanModal({
 
                 <LoanDetailsRowValue>{collateralRatio}%</LoanDetailsRowValue>
               </LoanDetailsRow>
-              { status !== statuses["Pending"].status ?
+
+              <LoanDetailsRow>
+                <LoanDetailsRowTitle>Rpb Rate</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue>{rpbRate}</LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow>
+                    <LoanDetailsRowTitle>APY</LoanDetailsRowTitle>
+
+                    <LoanDetailsRowValue>{APY}%</LoanDetailsRowValue>
+                  </LoanDetailsRow>
+
+              {status !== statuses['Pending'].status ? (
                 <LoanDetailsRow>
                   <LoanDetailsRowTitle>Interest accrued</LoanDetailsRowTitle>
 
-                  <LoanDetailsRowValue>{accruedInterest} {collateralTypeName}</LoanDetailsRowValue>
-                </LoanDetailsRow> : ""
-              }
+                  <LoanDetailsRowValue>
+                    {accruedInterest} {collateralTypeName}
+                  </LoanDetailsRowValue>
+                </LoanDetailsRow>
+              ) : (
+                ''
+              )}
 
               {/*<div>
               <h2>
@@ -416,13 +451,13 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
+                      <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
                       >
-                        Instantly Foreclose
+                        Initiate Foreclosure
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -441,7 +476,9 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
+                      <h2>
+                        You can instantly foreclose this loan and collect penalty fees.
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
@@ -466,7 +503,9 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
+                      <h2>
+                        You can instantly foreclose this loan and collect penalty fees.
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'

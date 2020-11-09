@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change, reset } from 'redux-form';
-import { pairData } from 'config/constants';
+import { pairData, blocksPerYear } from 'config/constants';
 import {
   calcMinCollateralAmount,
   getPairDetails,
@@ -155,7 +155,6 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
 
   const calculateRPB = async (amount, APY) => {
     if (amount && APY > 0) {
-      let blocksPerYear = 2372500;
       const result = await getPairDetails(pair);
       let { pairValue, pairDecimals } = result;
       let rpb =
@@ -304,8 +303,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
                   submitting ||
                   error ||
                   !borrowAsk ||
-                  !collateralValue ||
-                  !rpb
+                  !collateralValue
                 }
               >
                 Request Loan
@@ -327,7 +325,7 @@ NewLoan = reduxForm({
 })(NewLoan);
 
 const mapStateToProps = (state) => ({
-  initialValues: { pairId: pairData[0].value },
+  initialValues: { pairId: pairData[0].value, rpbRate: 0 },
   formValues: getFormValues('newLoan')(state)
 });
 

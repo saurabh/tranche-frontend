@@ -672,13 +672,13 @@ const ModalNewLoanDetailsContent = styled.div`
 `
 
 const ModalActionDetailsContent = styled.div`
-  min-height: 190px;
+  min-height: 290px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   @media (max-width: 633px){
-    max-height: 190px;
+    max-height: 290px;
   }
   ${({ row4 }) => row4 && `
     min-height: 210px;
