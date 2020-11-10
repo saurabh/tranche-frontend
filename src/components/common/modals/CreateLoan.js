@@ -6,7 +6,7 @@ import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'components/common/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { pairData } from 'config/constants';
+import { pairData, txMessage } from 'config';
 import { ModalHeader } from './ModalComponents';
 import { CloseModal } from 'assets';
 
@@ -63,7 +63,12 @@ const CreateLoan = ({
         .openNewLoan(borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
-          notify.hash(hash);
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
         });
     } catch (error) {
       console.error(error);
@@ -88,20 +93,35 @@ const CreateLoan = ({
           .approve(loanContractAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
           });
         await JLoan.methods
           .openNewLoan(borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
           });
       } else {
         await JLoan.methods
           .openNewLoan(borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            notify.hash(hash);
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
           });
       }
     } catch (error) {
