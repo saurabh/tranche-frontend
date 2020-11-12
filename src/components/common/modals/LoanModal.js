@@ -230,7 +230,7 @@ export default function LoanModal({
                   <LoanDetailsRow>
                     <LoanDetailsRowTitle>Rpb Rate</LoanDetailsRowTitle>
 
-                    <LoanDetailsRowValue>{rpbRate}</LoanDetailsRowValue>
+                    <LoanDetailsRowValue>{rpbRate * 10**9} * 10e-9</LoanDetailsRowValue>
                   </LoanDetailsRow>
 
                   <LoanDetailsRow>
@@ -376,7 +376,7 @@ export default function LoanModal({
               <LoanDetailsRow>
                 <LoanDetailsRowTitle>Rpb Rate</LoanDetailsRowTitle>
 
-                <LoanDetailsRowValue>{rpbRate}</LoanDetailsRowValue>
+                <LoanDetailsRowValue>{rpbRate * 10**9} * 10e-9</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow>

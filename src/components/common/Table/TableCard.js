@@ -596,9 +596,9 @@ const TableCard = ({
                 <h2>{name && name}</h2>
               </div>
               <div className='first-col-subtitle'>
-                <h2>{addrShortener(contractAddress)}</h2>
+                <h2>{addrShortener(borrowerAddress)}</h2>
                 <a
-                  href={etherScanUrl + 'address/' + contractAddress + '/#internaltx'}
+                  href={etherScanUrl + 'address/' + borrowerAddress}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
