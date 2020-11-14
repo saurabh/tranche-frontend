@@ -126,7 +126,7 @@ const Table = ({
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={path} />
+          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
