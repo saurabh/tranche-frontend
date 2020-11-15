@@ -39,6 +39,7 @@ html{
 }
 .remaining-title-content{
   max-width: 64px;
+  text-align: right;
 }
 .ratio-title-content{
   max-width: 33px;
@@ -944,6 +945,7 @@ table, th, td {
 
 .navLinkDisabled{
   pointer-events: none;
+  opacity: 0.09 !important;
 }
 
 .modalAdjustFormStyle{

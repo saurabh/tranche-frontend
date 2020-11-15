@@ -50,7 +50,7 @@ const CreateLoadBtn = styled.div`
         }
     }
 `;
-const TableHeader = ({HandleNewLoan, path}) => {
+const TableHeader = ({HandleNewLoan, path, filter}) => {
     return (
         <TableContainerHeader>
             <div className="table-header-titles">
@@ -61,7 +61,7 @@ const TableHeader = ({HandleNewLoan, path}) => {
                 }
                 </TableTitle>
                 <TableSubTitle>
-                    <h2>All Markets</h2>
+                    <h2>{`${filter === null ? 'All': filter} Markets`}</h2>
                 </TableSubTitle>
             </div>
 
