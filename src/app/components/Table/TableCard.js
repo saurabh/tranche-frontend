@@ -113,7 +113,6 @@ const TableCard = ({
       img: Agree
     }
   }
-  console.log(apy)
   const searchArr = (key) => pairData.find((i) => i.key === key);
   const checkLoan = (path === "borrow" && address === borrowerAddress) ? userTags['borrower'] : (path === "earn" && isShareholder) ? userTags['lender'] : false;
   useEffect(() => {

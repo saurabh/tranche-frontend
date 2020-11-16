@@ -39,6 +39,7 @@ import {
   ModalNewLoanDetails,
   ModalNewLoanDetailsContent
 } from './styles/FormComponents';
+import ethereum from 'redux/reducers/ethereum';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -51,7 +52,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 );
 
-let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change }) => {
+let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change, ethereum: { address, web3, notify, balance, tokenBalance } }) => {
   const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
   const [minCollateralAmount, setminCollateralAmount] = useState(0);
@@ -60,6 +61,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
 
+  const fromWei = web3.utils.fromWei;
   const inputChange = (val) => {
     const input = document.getElementById('selectPair');
 
@@ -170,6 +172,8 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
     }
   };
 
+  const collateralBalance = pairData[pair].collateral === 'ETH' ? fromWei(balance) : pairData[pair].collateral === 'JNT' ? fromWei(tokenBalance.JPT) : undefined;
+
   return (
     <ModalNewLoanContent>
       <ModalNewLoanDetails>
@@ -178,7 +182,7 @@ let NewLoan = ({ error, pristine, submitting, createNewLoan, formValues, change 
             <LoanDetailsRowTitle>COLLATERAL BALANCE</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-             0
+              {`${collateralBalance} ${pairData[pair].collateral}`}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
 
@@ -334,6 +338,7 @@ NewLoan = reduxForm({
 })(NewLoan);
 
 const mapStateToProps = (state) => ({
+  ethereum: state.ethereum,
   initialValues: { pairId: pairData[0].value, rpbRate: 0 },
   formValues: getFormValues('newLoan')(state)
 });
