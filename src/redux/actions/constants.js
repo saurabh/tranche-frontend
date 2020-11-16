@@ -6,6 +6,7 @@ export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const SET_ADDRESS = 'SET_ADDRESS';
 export const SET_NETWORK = 'SET_NETWORK';
 export const SET_BALANCE = 'SET_BALANCE';
+export const SET_TOKEN_BALANCES = 'SET_TOKEN_BALANCES';
 export const SET_WALLET = 'SET_WALLET';
 export const SET_WEB3 = 'SET_WEB3';
 
