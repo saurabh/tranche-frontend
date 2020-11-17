@@ -26,17 +26,7 @@ export const calcMaxBorrowedAmount = async (pairId, collAmount) => {
       //   .calcMinCollateralWithFeesAmount(pairId, web3.utils.toWei(collAmount))
       //   .call();
       // return web3.utils.fromWei(result);
-      
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getPairDetails = async (pairId) => {
-  try {
-    const result = await JPriceOracle.methods.pairs(pairId).call();
-    return result;
   } catch (error) {
     console.error(error);
   }
@@ -56,6 +46,45 @@ export const calcAdjustCollateralRatio = async (
         .call();
       return result;
     }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getPairDetails = async (pairId) => {
+  try {
+    const result = await JPriceOracle.methods.pairs(pairId).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getLoanForeclosingBlock = async (contractAddress, loanId) => {
+  try {
+    const JLoan = JLoanSetup(web3, contractAddress);
+    const result = await JLoan.methods.loanForeclosingBlock(loanId).call();
+    return Number(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const shareholderCheck = async (contractAddress, loanId, address) => {
+  try {
+    const JLoan = JLoanSetup(web3, contractAddress);
+    const result = await JLoan.methods.isShareholder(loanId, address).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getAccruedInterests = async (contractAddress, loanId) => {
+  try {
+    const JLoan = JLoanSetup(web3, contractAddress);
+    const result = await JLoan.methods.getAccruedInterests(loanId).call();
+    return web3.utils.fromWei(result);
   } catch (error) {
     console.error(error);
   }
