@@ -45,10 +45,31 @@ const CreateLoan = ({
   closeModal
 }) => {
   const toWei = web3.utils.toWei;
+  const fromWei = web3.utils.fromWei;
 
   function handleCloseModal() {
     closeModal();
   }
+
+  const calculateFees = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
+    try {
+      const { loanContractAddress } = pairData[pairId];
+      const JLoan = JLoanSetup(web3, loanContractAddress);
+      let gasLimit;
+      if (pairId === pairData[0].value) {
+        gasLimit = await JLoan.methods
+          .openNewLoan(borrowedAskAmount, rpbRate)
+          .estimateGas({ value: collateralAmount, from: address });
+      } else {
+        gasLimit = await JLoan.methods
+          .openNewLoan(borrowedAskAmount, rpbRate)
+          .estimateGas({ from: address });
+      }
+      console.log(gasLimit);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const createNewEthLoan = async (
     pairId,
@@ -136,6 +157,7 @@ const CreateLoan = ({
       pairId = parseFloat(pairId);
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
+      calculateFees(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       if (pairId === pairData[0].value) {
         createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       } else {

@@ -1,9 +1,7 @@
 import { JFactorySetup, JLoanSetup, JPriceOracleSetup } from 'utils/contractConstructor';
 import { web3 } from 'utils/getWeb3';
-import { pairData } from 'config/constants';
 const JFactory = JFactorySetup(web3);
 const JPriceOracle = JPriceOracleSetup(web3);
-const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
 
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
@@ -15,6 +13,20 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
         .calcMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount))
         .call();
       return web3.utils.fromWei(result);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const calcMaxBorrowedAmount = async (pairId, collAmount) => {
+  try {
+    if (collAmount > 0) {
+      // const result = await JFactory.methods
+      //   .calcMinCollateralWithFeesAmount(pairId, web3.utils.toWei(collAmount))
+      //   .call();
+      // return web3.utils.fromWei(result);
+      
     }
   } catch (error) {
     console.error(error);
