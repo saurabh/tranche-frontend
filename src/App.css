@@ -46,6 +46,7 @@ html{
 }
 .interest-paid-title-content{
   max-width: 85px;
+  text-align: right;
 }
 .status-title-content{
   max-width: 60px;
@@ -941,6 +942,7 @@ table, th, td {
 .InputStylingError{
   box-shadow: inset 0 0 3px red;
 }
+
 
 
 .navLinkDisabled{

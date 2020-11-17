@@ -24,6 +24,8 @@ import upChevron from 'assets/images/svg/upChevron.svg';
 import WhiteAdjust from 'assets/images/svg/adjustIconWhite.svg';
 import DarkAdjust from 'assets/images/svg/adjustIconDark.svg';
 import GrayAdjust from 'assets/images/svg/adjustIconGray.svg';
+import Key from 'assets/images/svg/Key.svg';
+import Agree from 'assets/images/svg/Agree.svg';
 
 
 export {
@@ -52,5 +54,7 @@ export {
   UserIcon,
   UserImg,
   downChevron,
-  upChevron
+  upChevron,
+  Key,
+  Agree
 };
