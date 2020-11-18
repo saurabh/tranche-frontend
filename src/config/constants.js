@@ -13,8 +13,7 @@ export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
-export const Pair0Contract = process.env.REACT_APP_PAIR_0;
-export const Pair1Contract = process.env.REACT_APP_PAIR_1;
+export const PairContractAddress = process.env.REACT_APP_PAIR_CONTRACT;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
@@ -83,7 +82,6 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup,
-    loanContractAddress: Pair0Contract
   },
   {
     key: 'USDC',
@@ -94,7 +92,6 @@ export const pairData = [
     colIcon: JNTicon,
     collateralTokenSetup: JPTSetup,
     lendTokenSetup: USDCSetup,
-    loanContractAddress: Pair1Contract
   }
 ];
 

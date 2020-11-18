@@ -73,6 +73,7 @@ const TableCard = ({
     collateralType,
     name
   },
+  loan,
   path,
   avatar,
   loansFetchData,
@@ -146,7 +147,7 @@ const TableCard = ({
     const calculateAPY = async () => {
       try {
         if (remainingLoan && rpbRate > 0) {
-          const result = await getPairDetails(pairId);
+          const result = await getPairDetails(1);
           let { pairValue, pairDecimals } = result;
           let APYValue =
             (fromWei(rpbRate) * blocksPerYear * 100 * (pairValue / 10 ** pairDecimals)) /
@@ -564,6 +565,7 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log(loanId);
+    console.log(loan);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };

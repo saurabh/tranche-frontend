@@ -54,6 +54,7 @@ export const calcAdjustCollateralRatio = async (
 export const getPairDetails = async (pairId) => {
   try {
     const result = await JPriceOracle.methods.pairs(pairId).call();
+    console.log(result)
     return result;
   } catch (error) {
     console.error(error);

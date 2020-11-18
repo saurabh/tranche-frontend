@@ -6,7 +6,7 @@ import { loansFetchData } from 'redux/actions/loans';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { pairData, txMessage } from 'config';
+import { pairData, PairContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
 
@@ -53,16 +53,15 @@ const CreateLoan = ({
 
   const calculateFees = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
-      const { loanContractAddress } = pairData[pairId];
-      const JLoan = JLoanSetup(web3, loanContractAddress);
+      const JLoan = JLoanSetup(web3, PairContractAddress);
       let gasLimit;
       if (pairId === pairData[0].value) {
         gasLimit = await JLoan.methods
-          .openNewLoan(borrowedAskAmount, rpbRate)
+          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
           .estimateGas({ value: collateralAmount, from: address });
       } else {
         gasLimit = await JLoan.methods
-          .openNewLoan(borrowedAskAmount, rpbRate)
+          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
           .estimateGas({ from: address });
       }
       console.log(gasLimit);
@@ -78,10 +77,9 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      const { loanContractAddress } = pairData[pairId];
-      const JLoan = JLoanSetup(web3, loanContractAddress);
+      const JLoan = JLoanSetup(web3, PairContractAddress);
       await JLoan.methods
-        .openNewLoan(borrowedAskAmount, rpbRate)
+        .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
@@ -103,15 +101,15 @@ const CreateLoan = ({
     collateralAmount
   ) => {
     try {
-      const { collateralTokenSetup, loanContractAddress } = pairData[pairId];
+      const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
-      const JLoan = JLoanSetup(web3, loanContractAddress);
+      const JLoan = JLoanSetup(web3, PairContractAddress);
       let userAllowance = await collateralToken.methods
-        .allowance(address, loanContractAddress)
+        .allowance(address, PairContractAddress)
         .call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await collateralToken.methods
-          .approve(loanContractAddress, collateralAmount)
+          .approve(PairContractAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);
@@ -122,7 +120,7 @@ const CreateLoan = ({
             });
           });
         await JLoan.methods
-          .openNewLoan(borrowedAskAmount, rpbRate)
+          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);
@@ -134,7 +132,7 @@ const CreateLoan = ({
           });
       } else {
         await JLoan.methods
-          .openNewLoan(borrowedAskAmount, rpbRate)
+          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);
