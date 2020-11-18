@@ -40,30 +40,38 @@ export const setBalance = (balance) => (dispatch) => {
 };
 
 export const setTokenBalance = (tokenName, address) => async (dispatch) => {
-  await timeout(3000);
-  const { lendTokenSetup } = searchArr(tokenName);
-  const lendToken = lendTokenSetup(web3);
-  const tokenBalance = await lendToken.methods.balanceOf(address).call();
-
-  dispatch({
-    type: SET_TOKEN_BALANCE,
-    payload: { tokenName, tokenBalance }
-  });
+  try {
+    await timeout(3000);
+    const { lendTokenSetup } = searchArr(tokenName);
+    const lendToken = lendTokenSetup(web3);
+    const tokenBalance = await lendToken.methods.balanceOf(address).call();
+  
+    dispatch({
+      type: SET_TOKEN_BALANCE,
+      payload: { tokenName, tokenBalance }
+    });
+  } catch (error) {
+    console.error(error)
+  }
 };
 
 export const setTokenBalances = (address) => async (dispatch) => {
-  const DAI = DAISetup(web3);
-  const JPT = JPTSetup(web3);
-  const USDC = USDCSetup(web3);
-  const daiBalance = await DAI.methods.balanceOf(address).call();
-  const jptBalance = await JPT.methods.balanceOf(address).call();
-  const usdcBalance = await USDC.methods.balanceOf(address).call();
-
-  const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance }
-  dispatch({
-    type: SET_TOKEN_BALANCES,
-    payload: tokenBalances
-  });
+  try {
+    const DAI = DAISetup(web3);
+    const JPT = JPTSetup(web3);
+    const USDC = USDCSetup(web3);
+    const daiBalance = await DAI.methods.balanceOf(address).call();
+    const jptBalance = await JPT.methods.balanceOf(address).call();
+    const usdcBalance = await USDC.methods.balanceOf(address).call();
+  
+    const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance }
+    dispatch({
+      type: SET_TOKEN_BALANCES,
+      payload: tokenBalances
+    });    
+  } catch (error) {
+    console.error(error)
+  }
 };
 
 export const setWalletAndWeb3 = (wallet) => (dispatch) => {

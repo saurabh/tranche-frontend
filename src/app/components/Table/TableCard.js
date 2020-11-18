@@ -377,18 +377,18 @@ const TableCard = ({
       const currentBlock = await web3.eth.getBlockNumber();
       let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
       onChainStatus = parseInt(onChainStatus);
-      console.log('backend status:' + status);
-      console.log('onChain status' + onChainStatus);
+      console.log('backend status: ' + status);
+      console.log('onChain status: ' + onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
         (status === statuses['At_Risk'].status &&
           onChainStatus === statuses['Active'].status) ||
-        status === statuses['At_Risk'].status
+        onChainStatus === statuses['At_Risk'].status
       ) {
         console.log('initiateLoanForeclose');
         await JLoan.methods
-        .initiateLoanForeclose(loanId)
-        .send({ from: address })
+          .initiateLoanForeclose(loanId)
+          .send({ from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -397,11 +397,11 @@ const TableCard = ({
               };
             });
           });
-        } else if (
+      } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
-        status === statuses['At_Risk'].status) ||
+          status === statuses['At_Risk'].status) ||
         (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow) &&
-        status === statuses['Foreclosing'].status)
+          status === statuses['Foreclosing'].status)
       ) {
         console.log('setLoanToForeclosed');
         await JLoan.methods
