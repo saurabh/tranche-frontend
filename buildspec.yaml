@@ -19,7 +19,7 @@ phases:
       - git checkout stage-build
       - git branch 
       - ls -ltr ~/.ssh
-      - git submodule add  -b frontend-master git@github.com:tranche-jibrel/defi-abis.git ./src/build
+      - git submodule add  -b frontend-preprod-build git@github.com:tranche-jibrel/defi-abis.git ./src/build
       - echo Installing dependencies...
       - yarn
   post_build:
