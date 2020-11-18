@@ -6,8 +6,12 @@ import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
 import {
   calcAdjustCollateralRatio,
+  toWei,
   fromWei,
-  getPairDetails
+  getPairDetails,
+  getLoanForeclosingBlock,
+  shareholderCheck,
+  getAccruedInterests
 } from 'services/contractMethods';
 import TableMoreRow from './TableMoreRow';
 
@@ -30,13 +34,11 @@ import {
 } from 'utils';
 import {
   statuses,
-  PagesData,
   pairData,
   etherScanUrl,
   apiUri,
   USDC,
   DAI,
-  generalParams,
   blocksPerYear,
   txMessage
 } from 'config';
@@ -58,7 +60,7 @@ const TableCard = ({
     status,
     contractParams,
     borrowerAddress,
-    loanActiveBlock,
+    contractParams: { foreclosureWindow },
     contractAddress,
     remainingLoan,
     apy,
@@ -72,6 +74,7 @@ const TableCard = ({
     collateralType,
     name
   },
+  loan,
   path,
   avatar,
   loansFetchData,
@@ -92,11 +95,11 @@ const TableCard = ({
   const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [APYValue, setAPY] = useState(0);
+  const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const { rpbRate } = loanCommonParams;
   const { pairId } = contractParams;
-  const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -106,16 +109,21 @@ const TableCard = ({
   });
   const userTags = {
     borrower: {
-      color: "#5411e2",
+      color: '#5411e2',
       img: Key
     },
     lender: {
-      color: "#1ebb1b",
+      color: '#1ebb1b',
       img: Agree
     }
-  }
+  };
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  const checkLoan = (path === "borrow" && address === borrowerAddress) ? userTags['borrower'] : (path === "earn" && isShareholder) ? userTags['lender'] : false;
+  const checkLoan =
+    path === 'borrow' && address === borrowerAddress
+      ? userTags['borrower']
+      : path === 'earn' && isShareholder
+      ? userTags['lender']
+      : false;
   useEffect(() => {
     if (
       (path === 'borrow' && borrowerAddress !== address) ||
@@ -137,33 +145,15 @@ const TableCard = ({
   }, [status, path, address, isShareholder, borrowerAddress]);
 
   useEffect(() => {
-    const isShareholderCheck = async () => {
-      try {
-        if (address) {
-          const JLoan = JLoanSetup(web3, contractAddress);
-          const result = await JLoan.methods.isShareholder(loanId, address).call();
-          setIsShareholder(result);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const forecloseWindowCheck = async () => {
-      const currentBlock = await web3.eth.getBlockNumber();
-      if (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow)
-        setCanBeForeclosed(true);
-    };
-
     const calculateAPY = async () => {
       try {
         if (remainingLoan && rpbRate > 0) {
-          const result = await getPairDetails(pairId);
+          const result = await getPairDetails(1);
           let { pairValue, pairDecimals } = result;
           let APYValue =
             (fromWei(rpbRate) * blocksPerYear * 100 * (pairValue / 10 ** pairDecimals)) /
             remainingLoan;
-            APYValue = APYValue.toFixed(2).toString();
+          APYValue = APYValue.toFixed(2).toString();
           setAPY(APYValue);
         } else {
           setAPY(0);
@@ -174,33 +164,44 @@ const TableCard = ({
     };
 
     calculateAPY();
-    forecloseWindowCheck();
-    isShareholderCheck();
-  }, [
-    address,
-    contractAddress,
-    loanId,
-    status,
-    rpbRate,
-    pairId,
-    remainingLoan,
-    loanActiveBlock,
-    web3
-  ]);
+  }, [rpbRate, pairId, remainingLoan]);
 
   useEffect(() => {
     const getAccruedInterest = async () => {
       try {
-        const JLoan = JLoanSetup(web3, contractAddress);
-        const result = await JLoan.methods.getAccruedInterests(loanId).call();
-        setAccruedInterest(web3.utils.fromWei(result));
+        const result = await getAccruedInterests(contractAddress, loanId);
+        setAccruedInterest(result);
       } catch (error) {
         console.error(error);
       }
     };
 
+    const isShareholderCheck = async () => {
+      try {
+        if (address) {
+          const result = await shareholderCheck(contractAddress, loanId, address);
+          setIsShareholder(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const forecloseWindowCheck = async () => {
+      try {
+        const currentBlock = await web3.eth.getBlockNumber();
+        const result = await getLoanForeclosingBlock(contractAddress, loanId);
+        setLoanForeclosingBlock(result);
+        if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    isShareholderCheck();
+    forecloseWindowCheck();
     getAccruedInterest();
-  }, [contractAddress, loanId, web3]);
+  }, [contractAddress, loanId, foreclosureWindow, address, web3]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
@@ -378,11 +379,15 @@ const TableCard = ({
       const currentBlock = await web3.eth.getBlockNumber();
       let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
       onChainStatus = parseInt(onChainStatus);
+      console.log('backend status: ' + status);
+      console.log('onChain status: ' + onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
         (status === statuses['At_Risk'].status &&
-          onChainStatus === statuses['Active'].status)
+          onChainStatus === statuses['Active'].status) ||
+        onChainStatus === statuses['At_Risk'].status
       ) {
+        console.log('initiateLoanForeclose');
         await JLoan.methods
           .initiateLoanForeclose(loanId)
           .send({ from: address })
@@ -397,9 +402,10 @@ const TableCard = ({
       } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
           status === statuses['At_Risk'].status) ||
-        (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
+        (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow) &&
           status === statuses['Foreclosing'].status)
       ) {
+        console.log('setLoanToForeclosed');
         await JLoan.methods
           .setLoanToForeclosed(loanId)
           .send({ from: address })
@@ -560,6 +566,7 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log(loanId);
+    console.log(loan);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -600,11 +607,13 @@ const TableCard = ({
         onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
-        { checkLoan ?
+        {checkLoan ? (
           <TableCardTag color={checkLoan.color}>
             <img src={checkLoan.img} />
-          </TableCardTag> : ''
-        }
+          </TableCardTag>
+        ) : (
+          ''
+        )}
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
@@ -653,9 +662,7 @@ const TableCard = ({
         </div>
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
-            <h2>
-              {apy}%
-            </h2>
+            <h2>{apy}%</h2>
           </div>
         </div>
         <div className='table-second-col table-col'>

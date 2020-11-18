@@ -2,6 +2,7 @@ import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
+  SET_TOKEN_BALANCE,
   SET_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3
@@ -27,6 +28,8 @@ export default function (state = initialState, action) {
       return { ...state, network: payload };
     case SET_BALANCE:
       return { ...state, balance: payload };
+    case SET_TOKEN_BALANCE:
+      return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenName]: payload.tokenBalance } };
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
     case SET_WALLET:
