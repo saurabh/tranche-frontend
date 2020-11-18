@@ -12,7 +12,7 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
-import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
+import { WalletBtn, WalletBtnIcon, WalletBtnText } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
 
 const ConnectWallet = ({

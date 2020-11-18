@@ -6,7 +6,7 @@ import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
   HeaderTabBtn
-} from './HeaderComponents';
+} from './styles/HeaderComponents';
 
 const HeaderTabs = ({ path, changeFilter }) => {
   const [filterValue, setFilter] = useState(null);
@@ -19,28 +19,20 @@ const HeaderTabs = ({ path, changeFilter }) => {
       <HeaderTabsWrapper>
         <MarketsTabsContainer>
           <HeaderTabBtn
-            onClick={() => loanListing(null)}
-            id='all-markets-tab'
+            /*onClick={() => loanListing(null)}*/
+            id='my'
             active={filterValue === null}
             color={PagesData[path].secondaryColor}
           >
-            All Markets
+           {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
           </HeaderTabBtn>
           <HeaderTabBtn
-            onClick={() => loanListing(ETH)}
-            id='eth markets'
+            /*onClick={() => loanListing(ETH)}*/
+            id='all'
             active={filterValue === ETH}
             color={PagesData[path].secondaryColor}
           >
-            Eth Markets
-          </HeaderTabBtn>
-          <HeaderTabBtn
-            onClick={() => loanListing(JNT)}
-            id='jnt markets'
-            active={filterValue === JNT}
-            color={PagesData[path].secondaryColor}
-          >
-            Jnt Markets
+            {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
           </HeaderTabBtn>
         </MarketsTabsContainer>
 

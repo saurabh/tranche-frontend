@@ -87,6 +87,19 @@ const Table = ({
     loanListing();
   }, [loansFetchData, pathname, changePath, filter, current]);
 
+  useEffect(() => {
+    if(path === 'borrow'){
+      loanListing();
+    }
+    else if(path === 'earn'){
+      let sort = {
+        name: 'status',
+        type: 'asc'
+      };
+      loanListing(sort)
+    }
+  }, [path]);
+
   const handlePageChange = (p) => {
     //page.current = p;
 

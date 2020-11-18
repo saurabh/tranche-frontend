@@ -42,11 +42,12 @@ import {
 } from 'config';
 
 import LoanModal from '../Modals/LoanModal';
-import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow, Key, Agree} from 'assets';
+import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow, Key, Agree } from 'assets';
 import {
   TableContentCard,
   TableContentCardWrapper,
   StatusTextWrapper,
+  AdjustLoanBtn,
   TableCardTag,
   AdjustModalBtn
 } from './styles/TableComponents';
@@ -629,7 +630,7 @@ const TableCard = ({
 
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
-            <h2>
+            <h2 onMouseEnter={() => remainingToggle(true)} onMouseLeave={() => remainingToggle(false)}>
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
@@ -672,11 +673,23 @@ const TableCard = ({
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
-            <AdjustModalBtn
-              disabeldBtn={path === 'trade' || disableBtn}
+
+            <AdjustLoanBtn color={PagesData[path].btnColor} disabled={path === 'trade' || disableBtn}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
-              disabled={path === 'trade' || disableBtn}
-            ></AdjustModalBtn>
+            >
+              <img
+                src={
+                  path === 'borrow'
+                    ? Adjust
+                    : path === 'earn'
+                      ? AdjustEarn
+                      : path === 'trade'
+                        ? AdjustTrade
+                        : Adjust
+                }
+                alt=''
+              />
+            </AdjustLoanBtn>
           </div>
           <LoanModal
             loanId={loanId}
