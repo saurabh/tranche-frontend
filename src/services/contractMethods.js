@@ -32,12 +32,7 @@ export const calcMaxBorrowedAmount = async (pairId, collAmount) => {
   }
 };
 
-export const calcAdjustCollateralRatio = async (
-  contractAddress,
-  loanId,
-  amount,
-  actionType
-) => {
+export const calcAdjustCollateralRatio = async (contractAddress, loanId, amount, actionType) => {
   try {
     if (amount !== '' && amount !== 0) {
       const JLoan = JLoanSetup(web3, contractAddress);
@@ -54,8 +49,17 @@ export const calcAdjustCollateralRatio = async (
 export const getPairDetails = async (pairId) => {
   try {
     const result = await JPriceOracle.methods.pairs(pairId).call();
-    console.log(result)
     return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getLoanStatus = async (contractAddress, loanId) => {
+  try {
+    const JLoan = JLoanSetup(web3, contractAddress);
+    let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
+    return parseInt(onChainStatus);
   } catch (error) {
     console.error(error);
   }

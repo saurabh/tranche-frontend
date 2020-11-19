@@ -8,43 +8,20 @@ import {
   calcAdjustCollateralRatio,
   toWei,
   fromWei,
-  getPairDetails,
+  getLoanStatus,
   getLoanForeclosingBlock,
   shareholderCheck,
   getAccruedInterests
 } from 'services/contractMethods';
-import TableMoreRow from './TableMoreRow';
-
-import ETH from 'assets/images/svg/EthForm.svg';
-
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3
-} from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import {
-  addrShortener,
-  valShortner,
-  readyToTransact,
-  isGreaterThan,
-  roundNumber
-} from 'utils';
-import {
-  statuses,
-  pairData,
-  etherScanUrl,
-  apiUri,
-  USDC,
-  DAI,
-  blocksPerYear,
-  txMessage
-} from 'config';
-
+import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
+import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
-import { LinkArrow, Key, Agree } from 'assets';
+import TableMoreRow from './TableMoreRow';
+import ETH from 'assets/images/svg/EthForm.svg';
+import { LinkArrow } from 'assets';
 import {
   TableContentCard,
   TableContentCardWrapper,
@@ -57,7 +34,6 @@ const TableCard = ({
   loan: {
     loanId,
     status,
-    contractParams,
     borrowerAddress,
     contractParams: { foreclosureWindow },
     contractAddress,
@@ -69,11 +45,10 @@ const TableCard = ({
     interestPaid,
     collateralTypeName,
     collateralAmount,
-    loanCommonParams,
+    loanCommonParams: { rpbRate },
     collateralType,
     name
   },
-  loan,
   path,
   avatar,
   loansFetchData,
@@ -93,12 +68,16 @@ const TableCard = ({
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
-  const [APYValue, setAPY] = useState(0);
+  const [currentBlock, setCurrentBlock] = useState(false);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
-  const { rpbRate } = loanCommonParams;
-  const { pairId } = contractParams;
+  const checkLoan =
+    path === 'borrow' && address === borrowerAddress
+      ? PagesData[path].userTag
+      : path === 'earn' && isShareholder
+      ? PagesData[path].userTag
+      : false;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -106,23 +85,9 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-  const userTags = {
-    borrower: {
-      color: '#5411e2',
-      img: Key
-    },
-    lender: {
-      color: '#1ebb1b',
-      img: Agree
-    }
-  };
+
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  const checkLoan =
-    path === 'borrow' && address === borrowerAddress
-      ? userTags['borrower']
-      : path === 'earn' && isShareholder
-      ? userTags['lender']
-      : false;
+
   useEffect(() => {
     if (
       (path === 'borrow' && borrowerAddress !== address) ||
@@ -142,28 +107,6 @@ const TableCard = ({
       setDisableBtn(true);
     } else setDisableBtn(false);
   }, [status, path, address, isShareholder, borrowerAddress]);
-
-  useEffect(() => {
-    const calculateAPY = async () => {
-      try {
-        if (remainingLoan && rpbRate > 0) {
-          const result = await getPairDetails(1);
-          let { pairValue, pairDecimals } = result;
-          let APYValue =
-            (fromWei(rpbRate) * blocksPerYear * 100 * (pairValue / 10 ** pairDecimals)) /
-            remainingLoan;
-          APYValue = APYValue.toFixed(2).toString();
-          setAPY(APYValue);
-        } else {
-          setAPY(0);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    calculateAPY();
-  }, [rpbRate, pairId, remainingLoan]);
 
   useEffect(() => {
     const getAccruedInterest = async () => {
@@ -189,6 +132,7 @@ const TableCard = ({
     const forecloseWindowCheck = async () => {
       try {
         const currentBlock = await web3.eth.getBlockNumber();
+        setCurrentBlock(currentBlock);
         const result = await getLoanForeclosingBlock(contractAddress, loanId);
         setLoanForeclosingBlock(result);
         if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
@@ -200,16 +144,11 @@ const TableCard = ({
     isShareholderCheck();
     forecloseWindowCheck();
     getAccruedInterest();
-  }, [contractAddress, loanId, foreclosureWindow, address, web3]);
+  }, [status, contractAddress, loanId, foreclosureWindow, address, web3]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(
-        contractAddress,
-        loanId,
-        amount,
-        actionType
-      );
+      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount, actionType);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -221,9 +160,7 @@ const TableCard = ({
       const { lendTokenSetup } = searchArr(cryptoFromLenderName);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
-      let userAllowance = await lendToken.methods
-        .allowance(address, contractAddress)
-        .call();
+      let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(remainingLoan, userAllowance)) {
         await lendToken.methods
           .approve(contractAddress, remainingLoan)
@@ -283,9 +220,7 @@ const TableCard = ({
             });
           });
       } else {
-        let userAllowance = await lendToken.methods
-          .allowance(address, contractAddress)
-          .call();
+        let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
         if (isGreaterThan(remainingLoan, userAllowance)) {
           await lendToken.methods
             .approve(contractAddress, remainingLoan)
@@ -375,15 +310,12 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const currentBlock = await web3.eth.getBlockNumber();
-      let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
-      onChainStatus = parseInt(onChainStatus);
+      const onChainStatus = await getLoanStatus(contractAddress, loanId);
       console.log('backend status: ' + status);
       console.log('onChain status: ' + onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
-        (status === statuses['At_Risk'].status &&
-          onChainStatus === statuses['Active'].status) ||
+        (status === statuses['At_Risk'].status && onChainStatus === statuses['Active'].status) ||
         onChainStatus === statuses['At_Risk'].status
       ) {
         console.log('initiateLoanForeclose');
@@ -482,9 +414,7 @@ const TableCard = ({
     try {
       const { collateralTokenSetup } = searchArr(cryptoFromLenderName);
       const collateralToken = collateralTokenSetup(web3);
-      let userAllowance = await collateralToken.methods
-        .allowance(address, contractAddress)
-        .call();
+      let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await collateralToken.methods
           .approve(contractAddress, collateralAmount)
@@ -565,7 +495,6 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log(loanId);
-    console.log(loan);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -643,8 +572,7 @@ const TableCard = ({
             </h2>
             <h2
               className={
-                'table-tool-tip ' +
-                (tooltipToggleRemaining ? 'table-tool-tip-toggle' : '')
+                'table-tool-tip ' + (tooltipToggleRemaining ? 'table-tool-tip-toggle' : '')
               }
             >
               {remainingLoan} <span>{cryptoFromLenderName}</span>
@@ -706,7 +634,7 @@ const TableCard = ({
             newCollateralRatio={newCollateralRatio}
             setNewCollateralRatio={setNewCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
-            rpbRate={loanCommonParams && fromWei(rpbRate)}
+            rpbRate={rpbRate && fromWei(rpbRate)}
             collateralAmount={collateralAmount}
             collateralRatio={collateralRatio}
             remainingLoan={remainingLoan}
@@ -715,9 +643,7 @@ const TableCard = ({
           />
         </div>
       </TableContentCard>
-      <div
-        className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
-      >
+      <div className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
         <div className='table-card-more-content'>
           {isLoading ? (
             <ReactLoading

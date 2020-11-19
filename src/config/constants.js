@@ -2,6 +2,7 @@ import DAIicon from 'assets/images/svg/dai.svg';
 import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
+import { Key, Agree } from 'assets';
 import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -32,7 +33,11 @@ export const PagesData = {
     btnColor: '#EEE5FF',
     cardColor: '#DFD2FB',
     title: 'Borrower Markets',
-    description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
+    description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY',
+    userTag: {
+      color: '#5411e2',
+      img: Key
+    }
   },
   earn: {
     pageType: 'earn',
@@ -41,7 +46,11 @@ export const PagesData = {
     btnColor: '#D7FCD6',
     cardColor: '#D7FFB7',
     title: 'Earning Markets',
-    description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
+    description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS',
+    userTag: {
+      color: '#1ebb1b',
+      img: Agree
+    }
   },
   trade: {
     pageType: 'trade',
