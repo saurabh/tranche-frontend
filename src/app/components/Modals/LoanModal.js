@@ -456,6 +456,7 @@ export default function LoanModal({
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
+                        disabled={!canBeForeclosed}
                       >
                         Initiate Foreclosure
                       </ModalButton>

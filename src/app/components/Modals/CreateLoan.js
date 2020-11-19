@@ -40,12 +40,10 @@ const AdjustPositionStyles = {
 const CreateLoan = ({
   ethereum: { address, web3, notify },
   form,
-  loansFetchData,
   openModal,
   closeModal
 }) => {
   const toWei = web3.utils.toWei;
-  const fromWei = web3.utils.fromWei;
 
   function handleCloseModal() {
     closeModal();
