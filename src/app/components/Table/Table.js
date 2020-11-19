@@ -50,7 +50,7 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address, wallet, web3, notify },
+  ethereum: { address },
 }) => {
   const { pathname } = useLocation();
   const [pageCount, setPageCount] = useState(5);
