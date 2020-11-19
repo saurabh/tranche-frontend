@@ -4,7 +4,8 @@ import {
   LOANS_COUNT,
   CHANGE_FILTER,
   PAGINATION_SKIP,
-  PAGINATION_CURRENT
+  PAGINATION_CURRENT,
+  CHANGE_OWN_ALL_FILTER
 } from '../actions/constants';
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
   skip: 0,
   current: 1,
   limit: 20,
-  filter: null
+  filter: null,
+  filterType: 'own'
 };
 
 export default function (state = initialState, action) {
@@ -33,6 +35,8 @@ export default function (state = initialState, action) {
       return { ...state, current: payload };
     case CHANGE_FILTER:
       return { ...state, filter: payload };
+    case CHANGE_OWN_ALL_FILTER:
+      return { ...state, filterType: payload };
     default:
       return state;
   }

@@ -228,7 +228,7 @@ export default function LoanModal({
                   </LoanDetailsRow>
 
                   <LoanDetailsRow>
-                    <LoanDetailsRowTitle>Rpb Rate</LoanDetailsRowTitle>
+                    <LoanDetailsRowTitle>Rpb</LoanDetailsRowTitle>
 
                     <LoanDetailsRowValue>{rpbRate * 10**9} * 10e-9</LoanDetailsRowValue>
                   </LoanDetailsRow>
@@ -456,6 +456,7 @@ export default function LoanModal({
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
+                        disabled={!canBeForeclosed}
                       >
                         Initiate Foreclosure
                       </ModalButton>

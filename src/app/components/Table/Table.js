@@ -8,7 +8,8 @@ import {
   changeFilter,
   loansIsLoading,
   paginationOffset,
-  paginationCurrent
+  paginationCurrent,
+  changeOwnAllFilter
 } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
@@ -49,11 +50,11 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
+  ethereum: { address, wallet, web3, notify },
 }) => {
   const { pathname } = useLocation();
   const [pageCount, setPageCount] = useState(5);
-  const { filter, skip, limit, current } = loans;
-
+  const { filter, skip, limit, current, filterType } = loans;
   const loanListing = async (sort = null) => {
     if (sort) {
       await loansFetchData({
@@ -61,6 +62,8 @@ const Table = ({
         skip,
         limit,
         filter: {
+          borrowerAddress: (pathname === '/borrow' && filterType === 'own') ? address : undefined,
+          lenderAddress: (pathname === '/earn' && filterType === 'own') ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
@@ -69,13 +72,14 @@ const Table = ({
         skip,
         limit,
         filter: {
+          borrowerAddress: (pathname === '/borrow' && filterType === 'own') ? address : undefined,
+          lenderAddress: (pathname === '/earn' && filterType === 'own') ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
     }
     //page.current = currentPage;
   };
-
   useEffect(() => {
     const parsePath = () => {
       changePath(pathname.split('/')[1]);
@@ -85,7 +89,24 @@ const Table = ({
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [loansFetchData, pathname, changePath, filter, current]);
+  }, [loansFetchData,filter, filterType, current, address]);
+
+  useEffect(() => {
+    let currentPath = pathname.split('/')[1];
+    changePath(currentPath);
+    changeOwnAllFilter('own')
+    if(path === 'borrow'){
+      loanListing();
+    }
+    else if(path === 'earn'){
+      let sort = {
+        name: 'status',
+        type: 'asc'
+      };
+      loanListing(sort)
+    }
+  }, [path, changePath]);
+
 
   const handlePageChange = (p) => {
     //page.current = p;
@@ -232,6 +253,7 @@ const Table = ({
 
 const mapStateToProps = (state) => {
   return {
+    ethereum: state.ethereum,
     loans: state.loans,
     path: state.path
   };
@@ -243,5 +265,6 @@ export default connect(mapStateToProps, {
   changeFilter,
   loansIsLoading,
   paginationOffset,
-  paginationCurrent
+  paginationCurrent,
+  changeOwnAllFilter
 })(Table);

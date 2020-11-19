@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { loansFetchData } from 'redux/actions/loans';
 import { web3 } from 'utils/getWeb3';
-import { Pair0Contract, Pair1Contract, PriceOracleAddress } from 'config/constants';
+import { PairContractAddress, PriceOracleAddress } from 'config/constants';
 
 // Routes
 import Earn from 'app/pages/Earn';
@@ -23,24 +23,9 @@ const App = ({ loansFetchData, loans: { skip, limit, filter } }) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
-    const pair0 = web3.eth
+    const pairContract = web3.eth
       .subscribe('logs', {
-        address: Pair0Contract
-      })
-      .on('data', async () => {
-        await timeout(3000);
-        await loansFetchData({
-          skip,
-          limit,
-          filter: {
-            type: filter
-          }
-        });
-      });
-
-    const pair1 = web3.eth
-      .subscribe('logs', {
-        address: Pair1Contract
+        address: PairContractAddress
       })
       .on('data', async () => {
         await timeout(3000);
@@ -69,14 +54,10 @@ const App = ({ loansFetchData, loans: { skip, limit, filter } }) => {
       });
 
     return () => {
-      pair0.unsubscribe((error, success) => {
+      pairContract.unsubscribe((error, success) => {
         if (error) console.log(error);
         if (success) console.log('Successfully unsubscribed!');
       });
-      pair1.unsubscribe((error, success) => {
-        if (error) console.log(error);
-        if (success) console.log('Successfully unsubscribed!');
-      });     
       priceOracle.unsubscribe((error, success) => {
         if (error) console.log(error);
         if (success) console.log('Successfully unsubscribed!');

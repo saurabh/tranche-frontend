@@ -42,7 +42,7 @@ const TableHead = ({handleSorting}) => {
             </TableHeadTitle>
             <TableHeadTitle className="interest-paid-wrapper">
                 <div className="interest-paid-title-content" onClick={() => sortLoans("interestPaid")}>
-                    <h2>APY</h2>
+                    <h2>Payout/Rate</h2>
                     <SortChevronWrapper>
                         <img src={upChevron}/>
                         <img src={downChevron}/>

@@ -1,9 +1,9 @@
-import { CHANGE_PATH } from './constants';
+import { CHANGE_PATH, CHANGE_OWN_ALL_FILTER } from './constants';
 
-export function changePath(path) {
-    return {
+export const changePath = (path) => (dispatch) => {
+    dispatch({
         type: CHANGE_PATH,
         path
-    };
+    })
 }
 

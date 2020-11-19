@@ -2,6 +2,7 @@ import DAIicon from 'assets/images/svg/dai.svg';
 import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
+import { Key, Agree } from 'assets';
 import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -13,8 +14,7 @@ export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
-export const Pair0Contract = process.env.REACT_APP_PAIR_0;
-export const Pair1Contract = process.env.REACT_APP_PAIR_1;
+export const PairContractAddress = process.env.REACT_APP_PAIR_CONTRACT;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
@@ -33,7 +33,11 @@ export const PagesData = {
     btnColor: '#EEE5FF',
     cardColor: '#DFD2FB',
     title: 'Borrower Markets',
-    description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY'
+    description: 'APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY',
+    userTag: {
+      color: '#5411e2',
+      img: Key
+    }
   },
   earn: {
     pageType: 'earn',
@@ -42,7 +46,11 @@ export const PagesData = {
     btnColor: '#D7FCD6',
     cardColor: '#D7FFB7',
     title: 'Earning Markets',
-    description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS'
+    description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS',
+    userTag: {
+      color: '#1ebb1b',
+      img: Agree
+    }
   },
   trade: {
     pageType: 'trade',
@@ -83,7 +91,6 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup,
-    loanContractAddress: Pair0Contract
   },
   {
     key: 'USDC',
@@ -94,7 +101,6 @@ export const pairData = [
     colIcon: JNTicon,
     collateralTokenSetup: JPTSetup,
     lendTokenSetup: USDCSetup,
-    loanContractAddress: Pair1Contract
   }
 ];
 

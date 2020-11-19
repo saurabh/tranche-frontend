@@ -38,23 +38,19 @@ html{
   height: auto;
 }
 .remaining-title-content{
-  max-width: 64px;
-  text-align: right;
+  text-align: center;
 }
 .ratio-title-content{
-  max-width: 33px;
 }
 .interest-paid-title-content{
-  max-width: 85px;
-  text-align: right;
+  text-align: center;
 }
 .status-title-content{
-  max-width: 60px;
 }
 .table-first-col{
   display: flex;
   align-items: center;
-  width: 200px;
+  width: 28%;
 }
 .table-first-col-wrapper{
   display: flex;
@@ -100,27 +96,32 @@ html{
   margin-left: 2px;
 }
 .table-second-col{
-  width: 119px;
+  width: 12%;
 }
 .table-third-col{
-  width: 149px;
+  width: 12%;
   position: relative;
 }
+
 .third-col-content{
-  max-width: 64px;
+}
+.third-col-content h2{
+  text-align: center !important;
 }
 .table-tool-tip{
   position: absolute;
-  width: 160%;
+  width: auto;
   top: -75px;
   color: #39295A;
-  background: #EEE5FF;
-  box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);
+  background: #FFFFFF;
+  box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.14);
   transition: 300ms;
   padding: 15px;
   border-radius: 7px;
+  z-index: 3000;
   visibility: hidden;
 }
+
 .table-tool-tip-toggle{
   top: -55px;
   visibility: visible;
@@ -134,31 +135,64 @@ html{
   height: 0;
   border-left: 3.5px solid transparent;
   border-right: 3.5px solid transparent;
-  border-top: 4px solid #EEE5FF;
+  border-top: 4px solid #FFFFFF;
   position: absolute;
   bottom: -4px;
   left: 12px;
 }
+.table-more-row-fourth-content  .table-tool-tip{
+  padding: 12px;
+  left: -24px;
+}
+
+.table-more-row-fourth-content .table-tool-tip-toggle{
+  top: -15px;
+  left: -24px;
+}
+.table-more-row-fourth-content  .table-tool-tip:before{
+  content: "";
+  width: 0;
+  height: 0;
+  border-bottom: 3.5px solid transparent;
+  border-top: 3.5px solid transparent;
+  border-left: 4px solid #FFFFFF;
+  position: absolute;
+  bottom: 18px;
+  right: -8px !important;
+  left: unset;
+}
 
 .table-fourth-col{
-  width: 110px;
+  width: 12%;
 }
 .fourth-col-content{
-  max-width: 33px;
+}
+.fourth-col-content h2{
+  text-align: center !important;
 }
 
 .table-fifth-col{
-  width: 146px;
-}
-.fifth-col-content{
-  max-width: 84px;
+  width: 12%;
 }
 
+.fifth-col-content{
+  position: relative;
+}
+.fifth-col-content h2{
+  text-align: center !important;
+}
+.fifth-col-content h2 span:nth-child(2){
+  position: relative;
+  bottom: 1px;
+  font-size: 10px;
+  font-weight: bold !important;
+  color: rgba(56,56,56,0.3);
+}
 .content-3-col h2{
   text-align: right;
 }
 .table-sixth-col{
-  width: 100px;
+  width: 12%;
 }
 
 .second-4-col-content h2{
@@ -169,6 +203,9 @@ html{
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #39295A;
+}
+.second-4-col-content .table-tool-tip{
+  right: 0 !important;
 }
 .second-4-col-content h2 span{
   font-weight: 400;
@@ -186,17 +223,29 @@ html{
 
 .adjust-btn-wrapper button{
   box-sizing: border-box;
-  box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
+  /*box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);*/
   border-radius: 4px;
+  border: none;
   width: 50px;
   height: 27px;
   align-items: center;
   justify-content: center;
   display: flex;
 }
+
 .adjust-btn-wrapper button img{
   pointer-events: none;
 }
+.adjust-btn-wrapper button:disabled{
+  background-color: #F1F1F1;
+  color: #666666;
+  cursor: default
+}
+.adjust-btn-wrapper button:disabled img{
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+
 .star-btn-wrapper button{
   background: #FFF7DA;
   border-radius: 0.2px;
@@ -219,7 +268,7 @@ html{
 .table-more-row-first{
   display: flex;
   align-items: center;
-  width: 200px;
+  width: 28%;
 }
 .table-more-row-first-img{
   position: relative;
@@ -290,32 +339,32 @@ button[disabled] img{
   color: #39295A;
 }
 .table-more-row-second{
-  width: 149px;
+  width: 12%;
 }
 
 .table-more-row-third{
-  width: 110px;
+  width: 12%;
 }
 
 .table-more-row-third-content{
-  max-width: 33px;
 }
 .table-more-row-third-content h2{
-  text-align: right;
+  text-align: center;
 }
 
 .table-more-row-fourth{
-  width: 146px;
+  width: 12%;
 }
 
 .table-more-row-fourth-content{
-  max-width: 84px;
+  position: relative;
+  cursor: pointer;
 }
 .table-more-row-fourth-content h2{
-  text-align: right;
+  text-align: center;
 }
 .table-more-row-fifth{
-  width: 180px;
+  width: 24%;
 }
 .table-more-row-fifth-content{
   display: flex;
@@ -327,7 +376,7 @@ button[disabled] img{
   margin-right: 7px;
 }
 .table-more-row-sixth{
-  width: 37px;
+  width: 0%;
 }
 .TableMoreLoading{
   margin: 0 auto;
@@ -1031,6 +1080,7 @@ table, th, td {
   .table-tool-tip{
     width: auto;
   }
+
   .table-card-more{
     /*padding: 30px 12px 30px 12px;*/
     padding: 0 39px 0 47px;

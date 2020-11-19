@@ -6,47 +6,28 @@ import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
 import {
   calcAdjustCollateralRatio,
+  toWei,
   fromWei,
-  getPairDetails
+  getLoanStatus,
+  getLoanForeclosingBlock,
+  shareholderCheck,
+  getAccruedInterests
 } from 'services/contractMethods';
-import TableMoreRow from './TableMoreRow';
-
-import ETH from 'assets/images/svg/EthForm.svg';
-
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3
-} from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import {
-  addrShortener,
-  valShortner,
-  readyToTransact,
-  isGreaterThan,
-  roundNumber
-} from 'utils';
-import {
-  statuses,
-  PagesData,
-  pairData,
-  etherScanUrl,
-  apiUri,
-  USDC,
-  DAI,
-  generalParams,
-  blocksPerYear,
-  txMessage
-} from 'config';
-
+import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
+import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
-import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow, Key, Agree} from 'assets';
+import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow, Key, Agree } from 'assets';
+import TableMoreRow from './TableMoreRow';
+import ETH from 'assets/images/svg/EthForm.svg';
+
 import {
   TableContentCard,
   TableContentCardWrapper,
   StatusTextWrapper,
+  AdjustLoanBtn,
   TableCardTag,
   AdjustModalBtn
 } from './styles/TableComponents';
@@ -55,9 +36,8 @@ const TableCard = ({
   loan: {
     loanId,
     status,
-    contractParams,
     borrowerAddress,
-    loanActiveBlock,
+    contractParams: { foreclosureWindow },
     contractAddress,
     remainingLoan,
     apy,
@@ -67,7 +47,7 @@ const TableCard = ({
     interestPaid,
     collateralTypeName,
     collateralAmount,
-    loanCommonParams,
+    loanCommonParams: { rpbRate },
     collateralType,
     name
   },
@@ -86,16 +66,21 @@ const TableCard = ({
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
+  const [tooltipToggleInterest, settooltipToggleInterest] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
-  const [APYValue, setAPY] = useState(0);
+  const [currentBlock, setCurrentBlock] = useState(false);
+  const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
-  const { rpbRate } = loanCommonParams;
-  const { pairId } = contractParams;
-  const toWei = web3.utils.toWei;
+  const checkLoan =
+    path === 'borrow' && address === borrowerAddress
+      ? PagesData[path].userTag
+      : path === 'earn' && isShareholder
+      ? PagesData[path].userTag
+      : false;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -103,19 +88,9 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-  const userTags = {
-    borrower: {
-      color: "#5411e2",
-      img: Key
-    },
-    lender: {
-      color: "#1ebb1b",
-      img: Agree
-    }
-  }
-  console.log(apy)
+
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  const checkLoan = (path === "borrow" && address === borrowerAddress) ? userTags['borrower'] : (path === "earn" && isShareholder) ? userTags['lender'] : false;
+
   useEffect(() => {
     if (
       (path === 'borrow' && borrowerAddress !== address) ||
@@ -137,11 +112,19 @@ const TableCard = ({
   }, [status, path, address, isShareholder, borrowerAddress]);
 
   useEffect(() => {
+    const getAccruedInterest = async () => {
+      try {
+        const result = await getAccruedInterests(contractAddress, loanId);
+        setAccruedInterest(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const JLoan = JLoanSetup(web3, contractAddress);
-          const result = await JLoan.methods.isShareholder(loanId, address).call();
+          const result = await shareholderCheck(contractAddress, loanId, address);
           setIsShareholder(result);
         }
       } catch (error) {
@@ -150,66 +133,25 @@ const TableCard = ({
     };
 
     const forecloseWindowCheck = async () => {
-      const currentBlock = await web3.eth.getBlockNumber();
-      if (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow)
-        setCanBeForeclosed(true);
-    };
-
-    const calculateAPY = async () => {
       try {
-        if (remainingLoan && rpbRate > 0) {
-          const result = await getPairDetails(pairId);
-          let { pairValue, pairDecimals } = result;
-          let APYValue =
-            (fromWei(rpbRate) * blocksPerYear * 100 * (pairValue / 10 ** pairDecimals)) /
-            remainingLoan;
-            APYValue = APYValue.toFixed(2).toString();
-          setAPY(APYValue);
-        } else {
-          setAPY(0);
-        }
+        const currentBlock = await web3.eth.getBlockNumber();
+        setCurrentBlock(currentBlock);
+        const result = await getLoanForeclosingBlock(contractAddress, loanId);
+        setLoanForeclosingBlock(result);
+        if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
-    calculateAPY();
-    forecloseWindowCheck();
     isShareholderCheck();
-  }, [
-    address,
-    contractAddress,
-    loanId,
-    status,
-    rpbRate,
-    pairId,
-    remainingLoan,
-    loanActiveBlock,
-    web3
-  ]);
-
-  useEffect(() => {
-    const getAccruedInterest = async () => {
-      try {
-        const JLoan = JLoanSetup(web3, contractAddress);
-        const result = await JLoan.methods.getAccruedInterests(loanId).call();
-        setAccruedInterest(web3.utils.fromWei(result));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+    forecloseWindowCheck();
     getAccruedInterest();
-  }, [contractAddress, loanId, web3]);
+  }, [status, contractAddress, loanId, foreclosureWindow, address, web3]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(
-        contractAddress,
-        loanId,
-        amount,
-        actionType
-      );
+      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount, actionType);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -221,9 +163,7 @@ const TableCard = ({
       const { lendTokenSetup } = searchArr(cryptoFromLenderName);
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
-      let userAllowance = await lendToken.methods
-        .allowance(address, contractAddress)
-        .call();
+      let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(remainingLoan, userAllowance)) {
         await lendToken.methods
           .approve(contractAddress, remainingLoan)
@@ -283,9 +223,7 @@ const TableCard = ({
             });
           });
       } else {
-        let userAllowance = await lendToken.methods
-          .allowance(address, contractAddress)
-          .call();
+        let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
         if (isGreaterThan(remainingLoan, userAllowance)) {
           await lendToken.methods
             .approve(contractAddress, remainingLoan)
@@ -375,14 +313,15 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const currentBlock = await web3.eth.getBlockNumber();
-      let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
-      onChainStatus = parseInt(onChainStatus);
+      const onChainStatus = await getLoanStatus(contractAddress, loanId);
+      console.log('backend status: ' + status);
+      console.log('onChain status: ' + onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
-        (status === statuses['At_Risk'].status &&
-          onChainStatus === statuses['Active'].status)
+        (status === statuses['At_Risk'].status && onChainStatus === statuses['Active'].status) ||
+        onChainStatus === statuses['At_Risk'].status
       ) {
+        console.log('initiateLoanForeclose');
         await JLoan.methods
           .initiateLoanForeclose(loanId)
           .send({ from: address })
@@ -397,9 +336,10 @@ const TableCard = ({
       } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
           status === statuses['At_Risk'].status) ||
-        (currentBlock >= loanActiveBlock + generalParams.foreclosureWindow &&
+        (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow) &&
           status === statuses['Foreclosing'].status)
       ) {
+        console.log('setLoanToForeclosed');
         await JLoan.methods
           .setLoanToForeclosed(loanId)
           .send({ from: address })
@@ -477,9 +417,7 @@ const TableCard = ({
     try {
       const { collateralTokenSetup } = searchArr(cryptoFromLenderName);
       const collateralToken = collateralTokenSetup(web3);
-      let userAllowance = await collateralToken.methods
-        .allowance(address, contractAddress)
-        .call();
+      let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await collateralToken.methods
           .approve(contractAddress, collateralAmount)
@@ -567,6 +505,9 @@ const TableCard = ({
   const remainingToggle = (hover) => {
     setTooltipToggleRemaining(hover);
   };
+  const interestToggle = (hover) => {
+    settooltipToggleInterest(hover);
+  }
 
   const getTransaction = async (hash) => {
     const { transaction: transactionUrl } = apiUri;
@@ -600,11 +541,13 @@ const TableCard = ({
         onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
-        { checkLoan ?
+        {checkLoan ? (
           <TableCardTag color={checkLoan.color}>
             <img src={checkLoan.img} />
-          </TableCardTag> : ''
-        }
+          </TableCardTag>
+        ) : (
+          ''
+        )}
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
@@ -630,13 +573,12 @@ const TableCard = ({
 
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
-            <h2>
+            <h2 onMouseEnter={() => remainingToggle(true)} onMouseLeave={() => remainingToggle(false)}>
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
               className={
-                'table-tool-tip ' +
-                (tooltipToggleRemaining ? 'table-tool-tip-toggle' : '')
+                'table-tool-tip ' + (tooltipToggleRemaining ? 'table-tool-tip-toggle' : '')
               }
             >
               {remainingLoan} <span>{cryptoFromLenderName}</span>
@@ -653,8 +595,16 @@ const TableCard = ({
         </div>
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
-            <h2>
-              {apy}%
+            <h2
+              onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
+            >{Math.round(interestPaid)} <span>{collateralTypeName}</span> <span>({apy}%)</span></h2>
+            <h2
+              className={
+                'table-tool-tip ' +
+                (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
+              }
+            >
+              {interestPaid} <span>{collateralTypeName}</span>
             </h2>
           </div>
         </div>
@@ -673,11 +623,23 @@ const TableCard = ({
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
-            <AdjustModalBtn
-              disabeldBtn={path === 'trade' || disableBtn}
+
+            <AdjustLoanBtn color={PagesData[path].btnColor} disabled={path === 'trade' || disableBtn}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
-              disabled={path === 'trade' || disableBtn}
-            ></AdjustModalBtn>
+            >
+              <img
+                src={
+                  path === 'borrow'
+                    ? Adjust
+                    : path === 'earn'
+                      ? AdjustEarn
+                      : path === 'trade'
+                        ? AdjustTrade
+                        : Adjust
+                }
+                alt=''
+              />
+            </AdjustLoanBtn>
           </div>
           <LoanModal
             loanId={loanId}
@@ -700,7 +662,7 @@ const TableCard = ({
             newCollateralRatio={newCollateralRatio}
             setNewCollateralRatio={setNewCollateralRatio}
             calcNewCollateralRatio={calcNewCollateralRatio}
-            rpbRate={loanCommonParams && fromWei(rpbRate)}
+            rpbRate={rpbRate && fromWei(rpbRate)}
             collateralAmount={collateralAmount}
             collateralRatio={collateralRatio}
             remainingLoan={remainingLoan}
@@ -709,9 +671,7 @@ const TableCard = ({
           />
         </div>
       </TableContentCard>
-      <div
-        className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
-      >
+      <div className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
         <div className='table-card-more-content'>
           {isLoading ? (
             <ReactLoading
