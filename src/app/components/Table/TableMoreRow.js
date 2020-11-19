@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { LinkArrow } from "assets";
 import { etherScanUrl } from "config/constants";
 import { statuses, events } from "config/constants";
@@ -16,6 +16,11 @@ const TableMoreRow = ({
   createdAt,
   eventName,
 }) => {
+  const [tooltipToggleInterest, settooltipToggleInterest] = useState(true);
+
+  const interestToggle = (hover) => {
+    settooltipToggleInterest(hover);
+  }
   const searchObj = (val) => {
     return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
@@ -49,8 +54,18 @@ const TableMoreRow = ({
         </div>
       </div>
       <div className="table-more-row-fourth table-more-second-4 table-more-row-content">
-        <div className="table-more-row-fourth-content">
+        <div className="table-more-row-fourth-content"
+          onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
+        >
           <h2>
+            {Math.round(interest)} <span>{collateralTypeName}</span> 
+          </h2>
+          <h2
+            className={
+              'table-tool-tip ' +
+              (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
+            }
+          >
             {interest} <span>{collateralTypeName}</span>
           </h2>
         </div>

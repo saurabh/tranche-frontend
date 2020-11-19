@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
+import { PagesData } from 'config/constants';
+
 import {
   calcAdjustCollateralRatio,
   toWei,
@@ -90,6 +92,7 @@ const TableCard = ({
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [tooltipToggleRemaining, setTooltipToggleRemaining] = useState(false);
+  const [tooltipToggleInterest, settooltipToggleInterest] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
@@ -574,6 +577,9 @@ const TableCard = ({
   const remainingToggle = (hover) => {
     setTooltipToggleRemaining(hover);
   };
+  const interestToggle = (hover) => {
+    settooltipToggleInterest(hover);
+  }
 
   const getTransaction = async (hash) => {
     const { transaction: transactionUrl } = apiUri;
@@ -662,7 +668,17 @@ const TableCard = ({
         </div>
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
-            <h2>{apy}%</h2>
+            <h2
+              onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
+            >{Math.round(interestPaid)} <span>{collateralTypeName}</span> <span>({apy}%)</span></h2>
+            <h2
+              className={
+                'table-tool-tip ' +
+                (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
+              }
+            >
+              {interestPaid} <span>{collateralTypeName}</span>
+            </h2>
           </div>
         </div>
         <div className='table-second-col table-col'>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { changeFilter } from 'redux/actions/loans';
+import { changeOwnAllFilter } from 'redux/actions/loans';
 import { ETH, JNT, PagesData } from 'config/constants';
 import {
   HeaderTabsWrapper,
@@ -8,28 +8,32 @@ import {
   HeaderTabBtn
 } from './styles/HeaderComponents';
 
-const HeaderTabs = ({ path, changeFilter }) => {
-  const [filterValue, setFilter] = useState(null);
-  const loanListing = async (filter = null) => {
+const HeaderTabs = ({ path, changeOwnAllFilter }) => {
+  const [filterValue, setFilter] = useState('own');
+  const loanListing = (filter) => {
     setFilter(filter);
-    changeFilter(filter);
+    changeOwnAllFilter(filter);
   };
+  useEffect(() => {
+    setFilter('own');
+    changeOwnAllFilter('own');
+  }, [path]);
   return (
     <div className='container content-container'>
       <HeaderTabsWrapper>
         <MarketsTabsContainer>
           <HeaderTabBtn
-            /*onClick={() => loanListing(null)}*/
-            id='my'
-            active={filterValue === null}
+            onClick={() => loanListing('own')}
+            id='own'
+            active={filterValue === 'own'}
             color={PagesData[path].secondaryColor}
           >
            {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
           </HeaderTabBtn>
           <HeaderTabBtn
-            /*onClick={() => loanListing(ETH)}*/
+            onClick={() => loanListing('all')}
             id='all'
-            active={filterValue === ETH}
+            active={filterValue === 'all'}
             color={PagesData[path].secondaryColor}
           >
             {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
@@ -46,8 +50,8 @@ const HeaderTabs = ({ path, changeFilter }) => {
 
 const mapStateToProps = (state) => {
   return {
-    path: state.path,
+    path: state.path
   };
 };
 
-export default connect(mapStateToProps, { changeFilter })(HeaderTabs);
+export default connect(mapStateToProps, { changeOwnAllFilter })(HeaderTabs);

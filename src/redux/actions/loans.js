@@ -6,7 +6,8 @@ import {
   LOANS_COUNT,
   CHANGE_FILTER,
   PAGINATION_SKIP,
-  PAGINATION_CURRENT
+  PAGINATION_CURRENT,
+  CHANGE_OWN_ALL_FILTER
 } from './constants';
 const { loanList: loanListUrl } = apiUri;
 
@@ -35,6 +36,13 @@ export const changeFilter = (filter) => {
   return {
     type: CHANGE_FILTER,
     payload: filter
+  };
+};
+
+export const changeOwnAllFilter = (filterType) => {
+  return {
+    type: CHANGE_OWN_ALL_FILTER,
+    payload: filterType
   };
 };
 

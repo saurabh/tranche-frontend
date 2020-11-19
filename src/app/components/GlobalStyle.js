@@ -59,6 +59,9 @@ const GlobalStyle = createGlobalStyle`
     width: 28%;
   }
   .status-wrapper{
+    .status-title-content div{
+      right: 50px !important;
+    }
     width: 12%;
   }
   .status-wrapper h2{
@@ -67,7 +70,7 @@ const GlobalStyle = createGlobalStyle`
   .remaining-wrapper{
     width: 12%;
     .remaining-title-content div{
-      right: -4px !important;
+      right: 23px !important;
     }
     h2{
       text-align: center;
@@ -75,6 +78,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .ratio-wrapper{
     width: 12%;
+    .ratio-title-content div{
+      right: 33px !important;
+    }
     h2{
       text-align: center;
     }
@@ -83,7 +89,7 @@ const GlobalStyle = createGlobalStyle`
   .interest-paid-wrapper{
     width: 12%;
     .interest-paid-title-content div{
-      right: 19px !important;
+      right: 9px !important;
     }
     h2{
       text-align: center;
