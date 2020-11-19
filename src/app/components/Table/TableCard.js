@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
-import { PagesData } from 'config/constants';
-
 import {
   calcAdjustCollateralRatio,
   toWei,
