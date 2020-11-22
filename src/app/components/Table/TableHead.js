@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import { connect } from 'react-redux';
 import { downChevron, upChevron } from 'assets';
+import {
+    changeSorting
+  } from 'redux/actions/loans';
 import {
     TableHeadWrapper,
     TableHeadTitle,
@@ -7,12 +11,17 @@ import {
   } from './styles/TableComponents';
 
 
-const TableHead = ({handleSorting}) => {
+const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
 
     const [order, setOrder] = useState("asc")
 
     const sortLoans = (val) => {
-        handleSorting(val, order)
+        let sortObj = {
+            name: val,
+            type: order
+        };
+        changeSorting(sortObj);
+        handleSorting();
         setOrder(order === "asc" ? "desc" : "asc")
     }
     return (
@@ -64,5 +73,13 @@ const TableHead = ({handleSorting}) => {
         </TableHeadWrapper>  
     );
 }
-
-export default TableHead;
+const mapStateToProps = (state) => {
+    return {
+      loans: state.loans,
+    };
+  };
+  
+export default connect(mapStateToProps, {
+    changeSorting
+})(TableHead);
+  
