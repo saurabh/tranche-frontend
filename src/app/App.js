@@ -17,7 +17,7 @@ import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
-const App = ({ loansFetchData, loans: { skip, limit, filter } }) => {
+const App = ({ loansFetchData, path, ethereum: { address }, loans: { skip, limit, filter, filterType } }) => {
   useEffect(() => {
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,6 +33,8 @@ const App = ({ loansFetchData, loans: { skip, limit, filter } }) => {
           skip,
           limit,
           filter: {
+            borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
+            lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
             type: filter
           }
         });
@@ -48,6 +50,8 @@ const App = ({ loansFetchData, loans: { skip, limit, filter } }) => {
           skip,
           limit,
           filter: {
+            borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
+            lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
             type: filter
           }
         });
@@ -90,7 +94,9 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  loans: state.loans
+  ethereum: state.ethereum,
+  loans: state.loans,
+  path: state.path
 });
 
 export default connect(mapStateToProps, {

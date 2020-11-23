@@ -9,27 +9,19 @@ import {
 } from './styles/HeaderComponents';
 
 const HeaderTabs = ({ path, changeOwnAllFilter }) => {
-  const [filterValue, setFilter] = useState('own');
+  const [filterValue, setFilter] = useState('all');
   const loanListing = (filter) => {
     setFilter(filter);
     changeOwnAllFilter(filter);
   };
   useEffect(() => {
-    setFilter('own');
-    changeOwnAllFilter('own');
+    setFilter('all');
+    changeOwnAllFilter('all');
   }, [path]);
   return (
     <div className='container content-container'>
       <HeaderTabsWrapper>
         <MarketsTabsContainer>
-          <HeaderTabBtn
-            onClick={() => loanListing('own')}
-            id='own'
-            active={filterValue === 'own'}
-            color={PagesData[path].secondaryColor}
-          >
-           {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
-          </HeaderTabBtn>
           <HeaderTabBtn
             onClick={() => loanListing('all')}
             id='all'
@@ -37,6 +29,15 @@ const HeaderTabs = ({ path, changeOwnAllFilter }) => {
             color={PagesData[path].secondaryColor}
           >
             {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
+          </HeaderTabBtn>
+
+          <HeaderTabBtn
+            onClick={() => loanListing('own')}
+            id='own'
+            active={filterValue === 'own'}
+            color={PagesData[path].secondaryColor}
+          >
+           {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
           </HeaderTabBtn>
         </MarketsTabsContainer>
 

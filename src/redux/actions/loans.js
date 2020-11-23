@@ -7,7 +7,8 @@ import {
   CHANGE_FILTER,
   PAGINATION_SKIP,
   PAGINATION_CURRENT,
-  CHANGE_OWN_ALL_FILTER
+  CHANGE_OWN_ALL_FILTER,
+  CHANGE_SORTING
 } from './constants';
 const { loanList: loanListUrl } = apiUri;
 
@@ -38,6 +39,14 @@ export const changeFilter = (filter) => {
     payload: filter
   };
 };
+
+export const changeSorting = (sort) => {
+  return {
+    type: CHANGE_SORTING,
+    payload: sort
+  }
+};
+
 
 export const changeOwnAllFilter = (filterType) => {
   return {

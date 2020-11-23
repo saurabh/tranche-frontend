@@ -16,7 +16,7 @@ const TableMoreRow = ({
   createdAt,
   eventName,
 }) => {
-  const [tooltipToggleInterest, settooltipToggleInterest] = useState(true);
+  const [tooltipToggleInterest, settooltipToggleInterest] = useState(false);
 
   const interestToggle = (hover) => {
     settooltipToggleInterest(hover);

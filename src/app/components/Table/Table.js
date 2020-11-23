@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-import ReactLoading from 'react-loading';
+//import ReactLoading from 'react-loading';
 import {
   loansFetchData,
   changeFilter,
   loansIsLoading,
   paginationOffset,
   paginationCurrent,
-  changeOwnAllFilter
+  changeOwnAllFilter,
+  changeSorting
 } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
@@ -50,12 +51,12 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address, wallet, web3, notify },
+  ethereum: { address },
 }) => {
   const { pathname } = useLocation();
   const [pageCount, setPageCount] = useState(5);
-  const { filter, skip, limit, current, filterType } = loans;
-  const loanListing = async (sort = null) => {
+  const { filter, skip, limit, current, filterType, sort } = loans;
+  const loanListing = async () => {
     if (sort) {
       await loansFetchData({
         sort,
@@ -89,21 +90,17 @@ const Table = ({
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [loansFetchData,filter, filterType, current, address]);
+  }, [loansFetchData, filter, filterType, current, address, sort]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
-    changeOwnAllFilter('own')
+    changeOwnAllFilter('all')
     if(path === 'borrow'){
       loanListing();
     }
     else if(path === 'earn'){
-      let sort = {
-        name: 'status',
-        type: 'asc'
-      };
-      loanListing(sort)
+      loanListing()
     }
   }, [path, changePath]);
 
@@ -120,12 +117,8 @@ const Table = ({
     paginationCurrent(p);
   };
 
-  const handleSorting = (name, type) => {
-    let sort = {
-      name: name,
-      type: type
-    };
-    loanListing(sort);
+  const handleSorting = () => {
+    loanListing();
   };
 
   const generateAvatar = () => {
@@ -266,5 +259,6 @@ export default connect(mapStateToProps, {
   loansIsLoading,
   paginationOffset,
   paginationCurrent,
+  changeSorting,
   changeOwnAllFilter
 })(Table);
