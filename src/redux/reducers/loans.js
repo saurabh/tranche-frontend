@@ -18,7 +18,7 @@ const initialState = {
   limit: 20,
   filter: null,
   sort: null,
-  filterType: 'own'
+  filterType: 'all'
 };
 
 export default function (state = initialState, action) {
