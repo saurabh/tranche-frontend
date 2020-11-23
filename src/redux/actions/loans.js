@@ -48,11 +48,11 @@ export const changeSorting = (sort) => {
 };
 
 
-export const changeOwnAllFilter = (filterType) => {
-  return {
+export const changeOwnAllFilter = (filterType) => (dispatch) => {
+  dispatch({
     type: CHANGE_OWN_ALL_FILTER,
     payload: filterType
-  };
+  });
 };
 
 export const paginationOffset = (skip) => (dispatch) => {

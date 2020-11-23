@@ -63,8 +63,8 @@ const Table = ({
         skip,
         limit,
         filter: {
-          borrowerAddress: (pathname === '/borrow' && filterType === 'own') ? address : undefined,
-          lenderAddress: (pathname === '/earn' && filterType === 'own') ? address : undefined,
+          borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
+          lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
@@ -73,8 +73,8 @@ const Table = ({
         skip,
         limit,
         filter: {
-          borrowerAddress: (pathname === '/borrow' && filterType === 'own') ? address : undefined,
-          lenderAddress: (pathname === '/earn' && filterType === 'own') ? address : undefined,
+          borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
+          lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
@@ -90,7 +90,11 @@ const Table = ({
     changePath(currentPath);
     parsePath();
     loanListing();
-  }, [loansFetchData, filter, filterType, current, address, sort]);
+  }, [loansFetchData, filter, current, address, sort]);
+
+  useEffect(() => {
+    loanListing();
+  }, [filterType]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
