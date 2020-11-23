@@ -95,7 +95,7 @@ const Table = ({
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
-    changeOwnAllFilter('own')
+    changeOwnAllFilter('all')
     if(path === 'borrow'){
       loanListing();
     }
