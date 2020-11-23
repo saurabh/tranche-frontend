@@ -7,7 +7,6 @@ import {
   setAddress,
   setNetwork,
   setBalance,
-  setTokenBalances,
   setWalletAndWeb3
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
@@ -19,7 +18,6 @@ const ConnectWallet = ({
   setAddress,
   setNetwork,
   setBalance,
-  setTokenBalances,
   setWalletAndWeb3,
   ethereum: { address, balance },
 }) => {
@@ -38,9 +36,8 @@ const ConnectWallet = ({
 
     if (previouslySelectedWallet && onboard) {
       onboard.walletSelect(previouslySelectedWallet);
-      address && setTokenBalances(address)
     }
-  }, [onboard, address, setTokenBalances]);
+  }, [onboard]);
 
   useEffect(() => {
     const parsePath = () => {
@@ -101,6 +98,5 @@ export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setTokenBalances,
   setWalletAndWeb3
 })(ConnectWallet);

@@ -14,10 +14,6 @@ import {
 
 const searchArr = (key) => pairData.find((i) => i.key === key);
 
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 export const setAddress = (address) => (dispatch) => {
   dispatch({
     type: SET_ADDRESS,
@@ -39,9 +35,8 @@ export const setBalance = (balance) => (dispatch) => {
   });
 };
 
-export const setTokenBalance = (tokenName, address) => async (dispatch) => {
+export const setTokenBalance = (web3, tokenName, address) => async (dispatch) => {
   try {
-    await timeout(3000);
     const { lendTokenSetup } = searchArr(tokenName);
     const lendToken = lendTokenSetup(web3);
     const tokenBalance = await lendToken.methods.balanceOf(address).call();
@@ -55,7 +50,7 @@ export const setTokenBalance = (tokenName, address) => async (dispatch) => {
   }
 };
 
-export const setTokenBalances = (address) => async (dispatch) => {
+export const setTokenBalances = (web3, address) => async (dispatch) => {
   try {
     const DAI = DAISetup(web3);
     const JPT = JPTSetup(web3);
