@@ -6,7 +6,6 @@ export const readyToTransact = async (wallet, onboard) => {
     const walletSelected = await onboard.walletSelect();
     if (!walletSelected) return false;
   }
-
   const ready = await onboard.walletCheck();
   return ready;
 };
@@ -58,11 +57,11 @@ export const roundNumber = (input, roundTo) => {
   }
 };
 
-export const gweiOrEther = (input, roundTo) => {
+export const gweiOrEther = (input) => {
   try {
-    if (input <= 0.000099) {
-      return roundNumber(input * 10 ** 9, roundTo) + ' (Gwei)';
-    } else return roundNumber(input, roundTo);
+    if (input <= 0.00099) {
+      return 'gwei';
+    } else return 'ether';
   } catch (error) {
     console.error(error);
   }

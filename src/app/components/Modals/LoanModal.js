@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { setTokenBalances } from 'redux/actions/ethereum';
 import { statuses, actionTypes } from 'config/constants';
 import { roundNumber, gweiOrEther } from 'utils';
 import {
@@ -108,17 +105,19 @@ const LoanModal = ({
   remainingLoan,
   collateralRatio,
   collateralAmount,
-  cryptoFromLenderName,
-  ethereum: { web3, address },
-  setTokenBalances
+  cryptoFromLenderName
 }) => {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
 
-  useEffect(() => {
-    address && setTokenBalances(web3, address);
-  }, [web3, address, setTokenBalances]);
+  const getCollateralTypeName = (input) => {
+    if (collateralTypeName === 'ETH') {
+      return gweiOrEther(input) === 'gwei' ? ' Gwei' : ' ETH';
+    } else if (collateralTypeName === 'JNT') {
+      return gweiOrEther(input) === 'gwei' ? ' nJNT' : ' JNT';
+    }
+  };
 
   const confirm = (type) => {
     confirmAlert({
@@ -237,7 +236,11 @@ const LoanModal = ({
                   <LoanDetailsRow>
                     <LoanDetailsRowTitle>Rpb</LoanDetailsRowTitle>
 
-                    <LoanDetailsRowValue>{gweiOrEther(rpbRate, 4)}</LoanDetailsRowValue>
+                    <LoanDetailsRowValue>
+                      {gweiOrEther(rpbRate) === 'gwei'
+                        ? roundNumber(rpbRate * 10 ** 9, 3)
+                        : roundNumber(rpbRate, 3)}
+                    </LoanDetailsRowValue>
                   </LoanDetailsRow>
 
                   <LoanDetailsRow>
@@ -387,7 +390,11 @@ const LoanModal = ({
                   Rpb Rate
                 </LoanDetailsRowTitle>
 
-                <LoanDetailsRowValue>{gweiOrEther(rpbRate, 4)}</LoanDetailsRowValue>
+                <LoanDetailsRowValue>
+                  {gweiOrEther(rpbRate) === 'gwei'
+                    ? roundNumber(rpbRate * 10 ** 9, 3)
+                    : roundNumber(rpbRate, 3)}
+                </LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow>
@@ -405,7 +412,10 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {gweiOrEther(accruedInterest, 4)} {collateralTypeName}
+                    {gweiOrEther(accruedInterest) === 'gwei'
+                      ? roundNumber(accruedInterest * 10 ** 9, 3)
+                      : roundNumber(accruedInterest, 3)}
+                    {getCollateralTypeName(accruedInterest)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
@@ -575,13 +585,4 @@ const LoanModal = ({
   return path === 'borrow' ? borrowModal() : path === 'earn' ? earnModal() : false;
 };
 
-LoanModal.propTypes = {
-  ethereum: PropTypes.object.isRequired,
-  setTokenBalances: PropTypes.func.isRequired
-};
-
-const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
-});
-
-export default connect(mapStateToProps, { setTokenBalances })(LoanModal);
+export default LoanModal;
