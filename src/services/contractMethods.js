@@ -19,13 +19,13 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
   }
 };
 
-export const calcMaxBorrowedAmount = async (pairId, collAmount) => {
+export const calcMaxBorrowAmount = async (pairId, collAmount) => {
   try {
     if (collAmount > 0) {
-      // const result = await JFactory.methods
-      //   .calcMinCollateralWithFeesAmount(pairId, web3.utils.toWei(collAmount))
-      //   .call();
-      // return web3.utils.fromWei(result);
+      const result = await JFactory.methods
+        .calcMaxStableCoinWithFeesAmount(pairId, collAmount)
+        .call();
+      return web3.utils.fromWei(result);
     }
   } catch (error) {
     console.error(error);

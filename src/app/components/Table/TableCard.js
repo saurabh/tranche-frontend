@@ -13,7 +13,13 @@ import {
   shareholderCheck,
   getAccruedInterests
 } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
+import {
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
+  setTokenBalances
+} from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
@@ -58,8 +64,10 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  ethereum,
   ethereum: { address, wallet, web3, notify },
-  form
+  form,
+  setTokenBalances
 }) => {
   const JLoan = JLoanSetup(web3, contractAddress);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -483,6 +491,10 @@ const TableCard = ({
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
+    if (!address) {
+      const { address } = onboard.getState();
+      setTokenBalances(web3, address);
+    } else setTokenBalances(web3, address);
     setIsOpen(true);
   };
 
@@ -507,7 +519,7 @@ const TableCard = ({
   };
   const interestToggle = (hover) => {
     settooltipToggleInterest(hover);
-  }
+  };
 
   const getTransaction = async (hash) => {
     const { transaction: transactionUrl } = apiUri;
@@ -573,7 +585,10 @@ const TableCard = ({
 
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
-            <h2 onMouseEnter={() => remainingToggle(true)} onMouseLeave={() => remainingToggle(false)}>
+            <h2
+              onMouseEnter={() => remainingToggle(true)}
+              onMouseLeave={() => remainingToggle(false)}
+            >
               {Math.round(remainingLoan)} <span>{cryptoFromLenderName}</span>
             </h2>
             <h2
@@ -596,13 +611,13 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2
-              onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
-            >{Math.round(interestPaid)} <span>{collateralTypeName}</span> <span>({apy}%)</span></h2>
+              onMouseEnter={() => interestToggle(true)}
+              onMouseLeave={() => interestToggle(false)}
+            >
+              {Math.round(interestPaid)} <span>{collateralTypeName}</span> <span>({apy}%)</span>
+            </h2>
             <h2
-              className={
-                'table-tool-tip ' +
-                (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
-              }
+              className={'table-tool-tip ' + (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')}
             >
               {interestPaid} <span>{collateralTypeName}</span>
             </h2>
@@ -623,8 +638,9 @@ const TableCard = ({
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
-
-            <AdjustLoanBtn color={PagesData[path].btnColor} disabled={path === 'trade' || disableBtn}
+            <AdjustLoanBtn
+              color={PagesData[path].btnColor}
+              disabled={path === 'trade' || disableBtn}
               onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
             >
               <img
@@ -632,10 +648,10 @@ const TableCard = ({
                   path === 'borrow'
                     ? Adjust
                     : path === 'earn'
-                      ? AdjustEarn
-                      : path === 'trade'
-                        ? AdjustTrade
-                        : Adjust
+                    ? AdjustEarn
+                    : path === 'trade'
+                    ? AdjustTrade
+                    : Adjust
                 }
                 alt=''
               />
@@ -730,5 +746,6 @@ export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3
+  setWalletAndWeb3,
+  setTokenBalances
 })(TableCard);

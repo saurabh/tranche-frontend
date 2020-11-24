@@ -8,7 +8,7 @@ import {
   HeaderTabBtn
 } from './styles/HeaderComponents';
 
-const HeaderTabs = ({ path, changeOwnAllFilter }) => {
+const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
   const [filterValue, setFilter] = useState('all');
   const loanListing = (filter) => {
     setFilter(filter);
@@ -30,15 +30,18 @@ const HeaderTabs = ({ path, changeOwnAllFilter }) => {
           >
             {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
           </HeaderTabBtn>
-
-          <HeaderTabBtn
-            onClick={() => loanListing('own')}
-            id='own'
-            active={filterValue === 'own'}
-            color={PagesData[path].secondaryColor}
-          >
-           {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
-          </HeaderTabBtn>
+          {
+            address ? 
+              <HeaderTabBtn
+                onClick={() => loanListing('own')}
+                id='own'
+                active={filterValue === 'own'}
+                color={PagesData[path].secondaryColor}
+              >
+                {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
+              </HeaderTabBtn>
+            : ""
+          }
         </MarketsTabsContainer>
 
         <div id='other-tabs-container'>
@@ -51,6 +54,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter }) => {
 
 const mapStateToProps = (state) => {
   return {
+    ethereum: state.ethereum,
     path: state.path
   };
 };

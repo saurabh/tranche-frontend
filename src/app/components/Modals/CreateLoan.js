@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import { loansFetchData } from 'redux/actions/loans';
+import { setTokenBalances } from 'redux/actions/ethereum';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
@@ -41,9 +41,14 @@ const CreateLoan = ({
   ethereum: { address, web3, notify },
   form,
   openModal,
-  closeModal
+  closeModal,
+  setTokenBalances
 }) => {
   const toWei = web3.utils.toWei;
+
+  useEffect(() => {
+    address && setTokenBalances(web3, address)
+  }, [web3, address, setTokenBalances]);
 
   function handleCloseModal() {
     closeModal();
@@ -68,12 +73,7 @@ const CreateLoan = ({
     }
   };
 
-  const createNewEthLoan = async (
-    pairId,
-    borrowedAskAmount,
-    rpbRate,
-    collateralAmount
-  ) => {
+  const createNewEthLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
       const JLoan = JLoanSetup(web3, PairContractAddress);
       await JLoan.methods
@@ -92,12 +92,7 @@ const CreateLoan = ({
     }
   };
 
-  const createNewTokenLoan = async (
-    pairId,
-    borrowedAskAmount,
-    rpbRate,
-    collateralAmount
-  ) => {
+  const createNewTokenLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
@@ -185,6 +180,7 @@ const CreateLoan = ({
 };
 
 CreateLoan.propTypes = {
+  setTokenBalances: PropTypes.func.isRequired,
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired
 };
@@ -195,5 +191,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData
+  setTokenBalances
 })(CreateLoan);
