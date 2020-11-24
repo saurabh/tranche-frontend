@@ -119,7 +119,7 @@ let NewLoan = ({
       let result = await calcMinCollateralAmount(pairId, borrowedAskAmount);
       result = roundNumber(result, 4);
       result = round('up' ,Number(result), 3);
-      setMinCollateralAmount(result);
+      setMinCollateralAmount(result.toString());
     }
     let collBalance =
       pairData[newPairId].collateral === 'ETH'
@@ -137,7 +137,7 @@ let NewLoan = ({
       let result = await calcMinCollateralAmount(pair, borrowedAskAmount);
       result = roundNumber(result, 4);
       result = round('up' ,Number(result), 3);
-      setMinCollateralAmount(result);
+      setMinCollateralAmount(result.toString());
     },
     500
   );
