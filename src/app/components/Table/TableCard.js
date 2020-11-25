@@ -22,10 +22,10 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
-import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow, Key, Agree } from 'assets';
+import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
 
@@ -35,7 +35,6 @@ import {
   StatusTextWrapper,
   AdjustLoanBtn,
   TableCardTag,
-  AdjustModalBtn
 } from './styles/TableComponents';
 
 const TableCard = ({

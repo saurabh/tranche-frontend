@@ -73,7 +73,7 @@ const App = ({
         if (success) console.log('Successfully unsubscribed!');
       });
     };
-  }, [loansFetchData, skip, limit, filter]);
+  }, [address, filterType, path, loansFetchData, skip, limit, filter]);
 
   return (
     <>
