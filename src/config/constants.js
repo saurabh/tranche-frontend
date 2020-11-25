@@ -14,7 +14,7 @@ export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
-export const PairContractAddress = process.env.REACT_APP_PAIR_CONTRACT;
+export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
@@ -90,7 +90,7 @@ export const pairData = [
     collateral: 'ETH',
     img: DAIicon,
     colIcon: ETHicon,
-    lendTokenSetup: DAISetup,
+    lendTokenSetup: DAISetup
   },
   {
     key: 'USDC',
@@ -100,7 +100,7 @@ export const pairData = [
     img: USDCicon,
     colIcon: JNTicon,
     collateralTokenSetup: JPTSetup,
-    lendTokenSetup: USDCSetup,
+    lendTokenSetup: USDCSetup
   }
 ];
 
@@ -149,12 +149,12 @@ export const actionTypes = {
 export const events = {
   COLLATERAL_RECEIVED: 'collateralreceived',
   LOAN_CREATED: 'loancreated',
-  NEW_LOAN_STATUS: "loanstatuschanged",
-  APPROVE_LOAN: "lenderaccepted",
-  LOAN_CLOSING_BORROWER: "loanclosingbyborrower",
-  FORECLOSING: "loanforeclosing",
-  FORECLOSED: "loanforeclosed",
-  LOAN_CANCEL: "loancancelled",
+  NEW_LOAN_STATUS: 'loanstatuschanged',
+  APPROVE_LOAN: 'lenderaccepted',
+  LOAN_CLOSING_BORROWER: 'loanclosingbyborrower',
+  FORECLOSING: 'loanforeclosing',
+  FORECLOSED: 'loanforeclosed',
+  LOAN_CANCEL: 'loancancelled',
   INTEREST_WITHDRAWN: 'interestswithdrawed',
   REMOVE_COLLATERAL: 'withdrawcollateral',
   APPROVE_LOAN_FEES: 'approve_loan_fees',

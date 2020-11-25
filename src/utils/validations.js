@@ -55,10 +55,9 @@ let asyncValidateCreate = (values) => {
 
 let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
-    let { contractAddress, loanId, collateralAmount, actionType } = values;
+    let { loanId, collateralAmount, actionType } = values;
     if (!actionType) {
       let newCollateralRatio = await calcAdjustCollateralRatio(
-        contractAddress,
         loanId,
         collateralAmount,
         actionType
