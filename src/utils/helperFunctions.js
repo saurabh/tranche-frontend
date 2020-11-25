@@ -58,11 +58,17 @@ export const roundNumber = (input, roundTo) => {
   }
 };
 
-export const gweiOrEther = (input) => {
+export const gweiOrEther = (input, cryptoName) => {
   try {
-    if (input <= 0.00099) {
-      return 'gwei';
-    } else return 'ether';
+    if (cryptoName === 'ETH') {
+      if (input <= 0.00099) {
+        return 'Gwei';
+      } else return 'ETH';
+    } else if (cryptoName === 'JNT') {
+      if (input <= 0.00099) {
+        return 'nJNT';
+      } else return 'JNT';
+    }
   } catch (error) {
     console.error(error);
   }
