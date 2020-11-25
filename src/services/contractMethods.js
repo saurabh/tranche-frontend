@@ -23,7 +23,7 @@ export const calcMaxBorrowAmount = async (pairId, collAmount) => {
   try {
     if (collAmount > 0) {
       const result = await JLoan.methods
-        .calcMaxStableCoinWithFeesAmount(pairId, collAmount)
+        .getMaxStableCoinWithFeesAmount(pairId, collAmount)
         .call();
       return web3.utils.fromWei(result);
     }
