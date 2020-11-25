@@ -388,7 +388,7 @@ const LoanModal = ({
 
               <LoanDetailsRow>
                 <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
-                  Rpb Rate
+                  Rpb
                 </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>

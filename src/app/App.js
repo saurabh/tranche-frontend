@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
+import Banner from 'app/components/Banner/Banner';
 import { loansFetchData } from 'redux/actions/loans';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
@@ -77,6 +78,7 @@ const App = ({
   return (
     <>
       <GlobalStyle />
+      <Banner />
       <Router>
         <Switch>
           <Redirect exact from='/' to='/borrow' />
