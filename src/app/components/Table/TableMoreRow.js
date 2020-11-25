@@ -29,7 +29,7 @@ const TableMoreRow = ({
   };
 
   const cryptoNameDisplay = (eventName)=>{
-     if(eventName === events["LOAN_CLOSING_BORROWER"].toLowerCase() || eventName === events["APPROVE_LOAN"].toLowerCase()) {
+     if(eventName === events["APPROVE_LOAN"].toLowerCase()) {
        return cryptoFromLenderName
      }
      return collateralTypeName
