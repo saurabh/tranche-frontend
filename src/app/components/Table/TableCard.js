@@ -493,7 +493,6 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log(loanId);
-    console.log(loan);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
