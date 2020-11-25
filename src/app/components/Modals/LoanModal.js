@@ -237,9 +237,10 @@ const LoanModal = ({
                     <LoanDetailsRowTitle>Rpb</LoanDetailsRowTitle>
 
                     <LoanDetailsRowValue>
-                      {gweiOrEther(rpbRate) === 'gwei'
+                      {gweiOrEther(rpbRate, collateralTypeName) === 'Gwei' || 'nJNT'
                         ? roundNumber(rpbRate * 10 ** 9, 3)
-                        : roundNumber(rpbRate, 3)}
+                        : roundNumber(rpbRate, 3)}{' '}
+                      {gweiOrEther(rpbRate, collateralTypeName)}
                     </LoanDetailsRowValue>
                   </LoanDetailsRow>
 
@@ -391,9 +392,10 @@ const LoanModal = ({
                 </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>
-                  {gweiOrEther(rpbRate) === 'gwei'
+                  {gweiOrEther(rpbRate, collateralTypeName) === 'Gwei' || 'nJNT'
                     ? roundNumber(rpbRate * 10 ** 9, 3)
-                    : roundNumber(rpbRate, 3)}
+                    : roundNumber(rpbRate, 3)}{' '}
+                  {gweiOrEther(rpbRate, collateralTypeName)}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
 
@@ -412,10 +414,10 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {gweiOrEther(accruedInterest) === 'gwei'
+                    {gweiOrEther(accruedInterest, collateralTypeName) === 'Gwei' || 'nJNT'
                       ? roundNumber(accruedInterest * 10 ** 9, 3)
-                      : roundNumber(accruedInterest, 3)}
-                    {getCollateralTypeName(accruedInterest)}
+                      : roundNumber(accruedInterest, 3)}{' '}
+                    {gweiOrEther(accruedInterest, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (

@@ -10,7 +10,7 @@ import {
   fromWei
 } from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
-import { safeSubtract, round, roundNumber } from 'utils/helperFunctions';
+import { safeSubtract, round, roundNumber, gweiOrEther } from 'utils/helperFunctions';
 import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
@@ -112,13 +112,13 @@ let NewLoan = ({
     toggleCurrency(false);
   };
 
-  const onPairChange = async (pairId, borrowedAskAmount) => {
+  const onPairChange = async (pairId, borrowedAskAmount, APY) => {
     const newPairId = parseFloat(pairId);
     setPair(newPairId);
     if (borrowedAskAmount) {
       let result = await calcMinCollateralAmount(pairId, borrowedAskAmount);
       result = roundNumber(result, 4);
-      result = round('up' ,Number(result), 3);
+      result = round('up', Number(result), 3);
       setMinCollateralAmount(result.toString());
     }
     let collBalance =
@@ -130,13 +130,14 @@ let NewLoan = ({
     setCollateralBalance(roundNumber(fromWei(collBalance), 3));
     const result = await calcMaxBorrowAmount(newPairId, collBalance);
     setMaxBorrowedAskAmount(round('down', Number(result), 2));
+    calculateRPB(pairId, borrowedAskAmount, APY);
   };
 
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     async (pair, borrowedAskAmount) => {
       let result = await calcMinCollateralAmount(pair, borrowedAskAmount);
       result = roundNumber(result, 4);
-      result = round('up' ,Number(result), 3);
+      result = round('up', Number(result), 3);
       setMinCollateralAmount(result.toString());
     },
     500
@@ -195,7 +196,7 @@ let NewLoan = ({
     }
   };
 
-  const calculateRPB = async (amount, APY) => {
+  const calculateRPB = async (pair, amount, APY) => {
     if (amount && APY > 0) {
       const result = await getPairDetails(pair);
       let { pairValue, pairDecimals } = result;
@@ -262,7 +263,7 @@ let NewLoan = ({
                     name='pairId'
                     component='input'
                     id='selectPair'
-                    onChange={(e, newValue) => onPairChange(newValue, formValues.borrowedAskAmount)}
+                    onChange={(e, newValue) => onPairChange(newValue, formValues.borrowedAskAmount, formValues.apy)}
                     className='fieldStylingDisplay'
                   />
                   <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
@@ -326,10 +327,16 @@ let NewLoan = ({
                 type='number'
                 // step='0.0001'
                 id='LOAN APYInput'
-                onChange={(e, newValue) => calculateRPB(formValues.borrowedAskAmount, newValue)}
+                onChange={(e, newValue) => calculateRPB(formValues.pairId, formValues.borrowedAskAmount, newValue)}
               />
               <h2>
-                RPB: <span>{rpb}</span>
+                RPB:{' '}
+                <span>
+                  {gweiOrEther(rpb, pairData[pair].collateral) === 'Gwei' || 'nJNT'
+                    ? roundNumber(rpb * 10 ** 9, 3)
+                    : roundNumber(rpb, 3)}{' '}
+                  {gweiOrEther(rpb, pairData[pair].collateral)}
+                </span>
               </h2>
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
