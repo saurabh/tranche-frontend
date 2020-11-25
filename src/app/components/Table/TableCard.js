@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
@@ -66,11 +66,12 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   ethereum,
-  ethereum: { address, wallet, web3, notify },
+  ethereum: { balance, tokenBalance, address, wallet, web3, notify },
   form,
   setTokenBalances
 }) => {
   const JLoan = JLoanSetup(web3);
+  const userBalance = useRef(0);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -79,6 +80,7 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
+  const [hasBalance, setHasBalance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [currentBlock, setCurrentBlock] = useState(false);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
@@ -99,6 +101,20 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
+
+  useEffect(() => {
+    const balanceCheck = () => {
+      userBalance.current = tokenBalance[cryptoFromLenderName];
+      console.log(collateralTypeName);
+      console.log(balance);
+      console.log(userBalance.current);
+      console.log(toWei(remainingLoan.toString()));
+      console.log(userBalance.current > toWei(remainingLoan.toString()));
+      if (userBalance.current >= toWei(remainingLoan.toString())) setHasBalance(true);
+    };
+
+    balanceCheck();
+  }, [balance, tokenBalance, cryptoFromLenderName, collateralTypeName, remainingLoan]);
 
   useEffect(() => {
     if (
@@ -493,6 +509,7 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log(loanId);
+    console.log(hasBalance);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -648,6 +665,7 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             contractAddress={contractAddress}
+            hasBalance={hasBalance}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
             accruedInterest={accruedInterest}

@@ -87,6 +87,7 @@ const LoanModal = ({
   loanId,
   contractAddress,
   status,
+  hasBalance,
   isShareholder,
   APY,
   accruedInterest,
@@ -215,7 +216,7 @@ const LoanModal = ({
                     <LoanDetailsRowTitle>Collateral amount</LoanDetailsRowTitle>
 
                     <LoanDetailsRowValue>
-                      {/* {roundNumber(collateralAmount, 3)} {collateralTypeName} */}
+                      {roundNumber(collateralAmount, 3)} {collateralTypeName}
                     </LoanDetailsRowValue>
                   </LoanDetailsRow>
 
@@ -281,9 +282,15 @@ const LoanModal = ({
                     <BtnGrpLoanModalWrapper>
                       <h2>Return the loan amount and pay outstanding interest.</h2>
                       <ModalButton
+                        title={
+                          !hasBalance
+                            ? `You don't have enough ${cryptoFromLenderName} for this action`
+                            : ''
+                        }
                         onClick={() => confirm('Close')}
                         backgroundColor='#0A66E1'
                         btnColor='#FFFFFF'
+                        disabled={!hasBalance}
                       >
                         Close Loan
                       </ModalButton>
@@ -415,15 +422,6 @@ const LoanModal = ({
               ) : (
                 ''
               )}
-
-              {/*<div>
-              <h2>
-                <span>APY</span>
-              </h2>
-              <h2>
-                {interestPaid} {collateralTypeName}
-              </h2>
-            </div>*/}
             </ModalActionDetailsContent>
           </ModalActionDetails>
           <ModalUserActions>
@@ -437,9 +435,15 @@ const LoanModal = ({
                     </h2>
 
                     <ModalButton
+                      title={
+                        !hasBalance
+                          ? `You don't have enough ${cryptoFromLenderName} for this action`
+                          : ''
+                      }
                       onClick={() => confirm('Approve')}
                       btnColor='#ffffff'
                       backgroundColor='#2ECC71'
+                      disabled={!hasBalance}
                     >
                       Accept Loan request
                     </ModalButton>
