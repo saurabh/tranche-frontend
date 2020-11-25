@@ -691,7 +691,8 @@ const TableCard = ({
                   createdAt={i.createdAt}
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
-                  interest={i.interestPaid}
+                  cryptoFromLenderName={cryptoFromLenderName}
+                  interest={i.amount}
                   eventName={i.eventName}
                 />
               );
