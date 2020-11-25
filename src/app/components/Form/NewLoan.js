@@ -200,9 +200,10 @@ let NewLoan = ({
     if (amount && APY > 0) {
       const result = await getPairDetails(pair);
       let { pairValue, pairDecimals } = result;
-      let rpb = (toWei(amount) * (APY / 100)) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
-      setRpb(fromWei(Math.ceil(rpb).toString()));
-      change('rpbRate', Math.ceil(rpb).toString());
+      let rpbValue = (toWei(amount) * (APY / 100)) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
+      rpbValue = fromWei(Math.ceil(rpbValue).toString());
+      setRpb(rpbValue);
+      change('rpbRate', Math.ceil(rpbValue).toString());
     } else {
       setRpb(0);
     }
@@ -263,7 +264,9 @@ let NewLoan = ({
                     name='pairId'
                     component='input'
                     id='selectPair'
-                    onChange={(e, newValue) => onPairChange(newValue, formValues.borrowedAskAmount, formValues.apy)}
+                    onChange={(e, newValue) =>
+                      onPairChange(newValue, formValues.borrowedAskAmount, formValues.apy)
+                    }
                     className='fieldStylingDisplay'
                   />
                   <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
@@ -327,12 +330,14 @@ let NewLoan = ({
                 type='number'
                 // step='0.0001'
                 id='LOAN APYInput'
-                onChange={(e, newValue) => calculateRPB(formValues.pairId, formValues.borrowedAskAmount, newValue)}
+                onChange={(e, newValue) =>
+                  calculateRPB(formValues.pairId, formValues.borrowedAskAmount, newValue)
+                }
               />
               <h2>
                 RPB:{' '}
                 <span>
-                  {gweiOrEther(rpb, pairData[pair].collateral) === 'Gwei' || 'nJNT'
+                  {gweiOrEther(rpb, pairData[pair].collateral) === ('Gwei' || 'nJNT')
                     ? roundNumber(rpb * 10 ** 9, 3)
                     : roundNumber(rpb, 3)}{' '}
                   {gweiOrEther(rpb, pairData[pair].collateral)}
