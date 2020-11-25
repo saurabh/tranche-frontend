@@ -11,6 +11,7 @@ const TableMoreRow = ({
   ratio,
   hash,
   collateralTypeName,
+  cryptoFromLenderName,
   interest,
   status,
   createdAt,
@@ -26,6 +27,13 @@ const TableMoreRow = ({
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
   };
+
+  const cryptoNameDisplay = (eventName)=>{
+     if(eventName === events["APPROVE_LOAN"].toLowerCase()) {
+       return cryptoFromLenderName
+     }
+     return collateralTypeName
+  }
   return (
     <div className="table-more-row">
       <div className="table-more-row-first table-more-row-content">
@@ -58,7 +66,7 @@ const TableMoreRow = ({
           onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
         >
           <h2>
-            {Math.round(interest)} <span>{collateralTypeName}</span> 
+            {Math.round(interest)} <span>{cryptoNameDisplay(eventName)}</span> 
           </h2>
           <h2
             className={
@@ -66,7 +74,7 @@ const TableMoreRow = ({
               (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
             }
           >
-            {interest} <span>{collateralTypeName}</span>
+            {interest} <span>{cryptoNameDisplay(eventName)}</span>
           </h2>
         </div>
       </div>
