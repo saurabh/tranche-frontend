@@ -34,7 +34,7 @@ import {
   TableContentCardWrapper,
   StatusTextWrapper,
   AdjustLoanBtn,
-  TableCardTag,
+  TableCardTag
 } from './styles/TableComponents';
 
 const TableCard = ({
@@ -81,7 +81,8 @@ const TableCard = ({
   const [disableBtn, setDisableBtn] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
-  const [currentBlock, setCurrentBlock] = useState(false);
+  const [currentBlock, setCurrentBlock] = useState(0);
+  const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
@@ -158,6 +159,7 @@ const TableCard = ({
         const result = await getLoanForeclosingBlock(loanId);
         setLoanForeclosingBlock(result);
         if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
+        setBlocksUntilForeclosure(result + Number(foreclosureWindow) - currentBlock);
       } catch (error) {
         console.log(error);
       }
@@ -503,7 +505,6 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log(loanId);
-    console.log(hasBalance);
     setMoreCardToggle(!moreCardToggle);
     getTransaction(hash);
   };
@@ -662,6 +663,7 @@ const TableCard = ({
             hasBalance={hasBalance}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
+            blocksUntilForeclosure={blocksUntilForeclosure}
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}

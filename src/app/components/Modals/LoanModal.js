@@ -92,6 +92,7 @@ const LoanModal = ({
   APY,
   accruedInterest,
   canBeForeclosed,
+  blocksUntilForeclosure,
   approveLoan,
   closeLoan,
   adjustLoan,
@@ -483,6 +484,7 @@ const LoanModal = ({
                       >
                         Initiate Foreclosure
                       </ModalButton>
+                      <h2 style={{marginTop: '12px'}}>{!canBeForeclosed ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}` : ''}</h2>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['At_Risk'].status ? (
@@ -534,6 +536,7 @@ const LoanModal = ({
                       >
                         Instantly Foreclose
                       </ModalButton>
+                      <h2 style={{marginTop: '12px'}}>{!canBeForeclosed ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}` : ''}</h2>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['Foreclosed'].status ? (
