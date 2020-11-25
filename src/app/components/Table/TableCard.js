@@ -105,11 +105,6 @@ const TableCard = ({
   useEffect(() => {
     const balanceCheck = () => {
       userBalance.current = tokenBalance[cryptoFromLenderName];
-      console.log(collateralTypeName);
-      console.log(balance);
-      console.log(userBalance.current);
-      console.log(toWei(remainingLoan.toString()));
-      console.log(userBalance.current > toWei(remainingLoan.toString()));
       if (userBalance.current >= toWei(remainingLoan.toString())) setHasBalance(true);
     };
 
