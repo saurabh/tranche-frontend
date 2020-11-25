@@ -111,14 +111,6 @@ const LoanModal = ({
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
 
-  const getCollateralTypeName = (input) => {
-    if (collateralTypeName === 'ETH') {
-      return gweiOrEther(input) === 'gwei' ? ' Gwei' : ' ETH';
-    } else if (collateralTypeName === 'JNT') {
-      return gweiOrEther(input) === 'gwei' ? ' nJNT' : ' JNT';
-    }
-  };
-
   const confirm = (type) => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -237,7 +229,7 @@ const LoanModal = ({
                     <LoanDetailsRowTitle>Rpb</LoanDetailsRowTitle>
 
                     <LoanDetailsRowValue>
-                      {gweiOrEther(rpbRate, collateralTypeName) === 'Gwei' || 'nJNT'
+                      {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
                         ? roundNumber(rpbRate * 10 ** 9, 3)
                         : roundNumber(rpbRate, 3)}{' '}
                       {gweiOrEther(rpbRate, collateralTypeName)}
@@ -388,11 +380,11 @@ const LoanModal = ({
 
               <LoanDetailsRow>
                 <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
-                  Rpb Rate
+                  Rpb
                 </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>
-                  {gweiOrEther(rpbRate, collateralTypeName) === 'Gwei' || 'nJNT'
+                  {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
                     ? roundNumber(rpbRate * 10 ** 9, 3)
                     : roundNumber(rpbRate, 3)}{' '}
                   {gweiOrEther(rpbRate, collateralTypeName)}
@@ -414,7 +406,7 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {gweiOrEther(accruedInterest, collateralTypeName) === 'Gwei' || 'nJNT'
+                    {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
                       ? roundNumber(accruedInterest * 10 ** 9, 3)
                       : roundNumber(accruedInterest, 3)}{' '}
                     {gweiOrEther(accruedInterest, collateralTypeName)}

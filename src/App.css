@@ -16,8 +16,9 @@ html{
   background: #ffffff;
   width: 23px;
 }
-#logo-wrapper a img{
+#logo-wrapper img{
   height: 25px;
+  pointer-events: none;
 }
 .table-card-more{
   height: 0;
