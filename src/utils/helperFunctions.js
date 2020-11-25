@@ -40,6 +40,7 @@ export const round = (type, input, roundTo) => {
 
 export const roundNumber = (input, roundTo) => {
   try {
+    if (input === 'N/A') return;
     if (typeof input === 'number') {
       const formatter = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: roundTo,

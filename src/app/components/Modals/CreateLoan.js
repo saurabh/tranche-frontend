@@ -6,7 +6,7 @@ import { setTokenBalances } from 'redux/actions/ethereum';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
-import { pairData, PairContractAddress, txMessage } from 'config';
+import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
 
@@ -47,7 +47,7 @@ const CreateLoan = ({
   const toWei = web3.utils.toWei;
 
   useEffect(() => {
-    address && setTokenBalances(web3, address)
+    address && setTokenBalances(web3, address);
   }, [web3, address, setTokenBalances]);
 
   function handleCloseModal() {
@@ -56,7 +56,7 @@ const CreateLoan = ({
 
   const calculateFees = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
-      const JLoan = JLoanSetup(web3, PairContractAddress);
+      const JLoan = JLoanSetup(web3, LoanContractAddress);
       let gasLimit;
       if (pairId === pairData[0].value) {
         gasLimit = await JLoan.methods
@@ -75,7 +75,7 @@ const CreateLoan = ({
 
   const createNewEthLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
-      const JLoan = JLoanSetup(web3, PairContractAddress);
+      const JLoan = JLoanSetup(web3, LoanContractAddress);
       await JLoan.methods
         .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
@@ -96,13 +96,13 @@ const CreateLoan = ({
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
-      const JLoan = JLoanSetup(web3, PairContractAddress);
+      const JLoan = JLoanSetup(web3, LoanContractAddress);
       let userAllowance = await collateralToken.methods
-        .allowance(address, PairContractAddress)
+        .allowance(address, LoanContractAddress)
         .call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
         await collateralToken.methods
-          .approve(PairContractAddress, collateralAmount)
+          .approve(LoanContractAddress, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);

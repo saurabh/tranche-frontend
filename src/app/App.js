@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { loansFetchData } from 'redux/actions/loans';
 import { web3 } from 'utils/getWeb3';
-import { PairContractAddress, PriceOracleAddress } from 'config/constants';
+import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
 
 // Routes
 import Earn from 'app/pages/Earn';
@@ -17,7 +17,12 @@ import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
-const App = ({ loansFetchData, path, ethereum: { address }, loans: { skip, limit, filter, filterType } }) => {
+const App = ({
+  loansFetchData,
+  path,
+  ethereum: { address },
+  loans: { skip, limit, filter, filterType }
+}) => {
   useEffect(() => {
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -25,7 +30,7 @@ const App = ({ loansFetchData, path, ethereum: { address }, loans: { skip, limit
 
     const pairContract = web3.eth
       .subscribe('logs', {
-        address: PairContractAddress
+        address: LoanContractAddress
       })
       .on('data', async () => {
         await timeout(3000);
@@ -33,8 +38,8 @@ const App = ({ loansFetchData, path, ethereum: { address }, loans: { skip, limit
           skip,
           limit,
           filter: {
-            borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
-            lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
+            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
             type: filter
           }
         });
@@ -50,8 +55,8 @@ const App = ({ loansFetchData, path, ethereum: { address }, loans: { skip, limit
           skip,
           limit,
           filter: {
-            borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
-            lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
+            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
             type: filter
           }
         });

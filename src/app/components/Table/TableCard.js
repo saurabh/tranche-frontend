@@ -57,6 +57,7 @@ const TableCard = ({
     collateralType,
     name
   },
+  loan,
   path,
   avatar,
   loansFetchData,
@@ -69,7 +70,7 @@ const TableCard = ({
   form,
   setTokenBalances
 }) => {
-  const JLoan = JLoanSetup(web3, contractAddress);
+  const JLoan = JLoanSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -122,7 +123,7 @@ const TableCard = ({
   useEffect(() => {
     const getAccruedInterest = async () => {
       try {
-        const result = await getAccruedInterests(contractAddress, loanId);
+        const result = await getAccruedInterests(loanId);
         setAccruedInterest(result);
       } catch (error) {
         console.error(error);
@@ -132,7 +133,7 @@ const TableCard = ({
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const result = await shareholderCheck(contractAddress, loanId, address);
+          const result = await shareholderCheck(loanId, address);
           setIsShareholder(result);
         }
       } catch (error) {
@@ -144,7 +145,7 @@ const TableCard = ({
       try {
         const currentBlock = await web3.eth.getBlockNumber();
         setCurrentBlock(currentBlock);
-        const result = await getLoanForeclosingBlock(contractAddress, loanId);
+        const result = await getLoanForeclosingBlock(loanId);
         setLoanForeclosingBlock(result);
         if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
       } catch (error) {
@@ -159,7 +160,7 @@ const TableCard = ({
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(contractAddress, loanId, amount, actionType);
+      const result = await calcAdjustCollateralRatio(loanId, amount, actionType);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -254,15 +255,6 @@ const TableCard = ({
                   message: txMessage(transaction.hash)
                 };
               });
-            })
-            .on('receipt', async () => {
-              await loansFetchData({
-                skip: 0,
-                limit: 100,
-                filter: {
-                  type: null
-                }
-              });
             });
         } else {
           await JLoan.methods
@@ -274,15 +266,6 @@ const TableCard = ({
                 return {
                   message: txMessage(transaction.hash)
                 };
-              });
-            })
-            .on('receipt', async () => {
-              await loansFetchData({
-                skip: 0,
-                limit: 100,
-                filter: {
-                  type: null
-                }
               });
             });
         }
@@ -321,7 +304,7 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const onChainStatus = await getLoanStatus(contractAddress, loanId);
+      const onChainStatus = await getLoanStatus(loanId);
       console.log('backend status: ' + status);
       console.log('onChain status: ' + onChainStatus);
       if (
