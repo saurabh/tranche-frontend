@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
+import { useDebouncedCallback } from 'utils/lodash';
 //import ReactLoading from 'react-loading';
 import {
   loansFetchData,
@@ -54,31 +55,34 @@ const Table = ({
   const [pageCount, setPageCount] = useState(5);
   const { filter, skip, limit, current, filterType, sort } = loans;
 
-  const loanListing = useCallback(async () => {
-    if (sort) {
-      await loansFetchData({
-        sort,
-        skip,
-        limit,
-        filter: {
-          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
-        }
-      });
-    } else {
-      await loansFetchData({
-        skip,
-        limit,
-        filter: {
-          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
-        }
-      });
-    }
-    //page.current = currentPage;
-  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  const [loanListing] = useCallback(
+    useDebouncedCallback(async () => {
+      if (sort) {
+        await loansFetchData({
+          sort,
+          skip,
+          limit,
+          filter: {
+            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+            type: filter //ETH/JNT keep these in constant file
+          }
+        });
+      } else {
+        await loansFetchData({
+          skip,
+          limit,
+          filter: {
+            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+            type: filter //ETH/JNT keep these in constant file
+          }
+        });
+      }
+      //page.current = currentPage;
+    }, 1000),
+    [loansFetchData, filter, skip, limit, filterType, sort, address, path]
+  );
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
