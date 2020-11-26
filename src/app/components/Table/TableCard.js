@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
@@ -22,10 +22,10 @@ import {
 } from 'redux/actions/ethereum';
 import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan, roundNumber } from 'utils';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
-import { UserImg, Star, Adjust, AdjustEarn, AdjustTrade, LinkArrow, Key, Agree } from 'assets';
+import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
 
@@ -34,8 +34,7 @@ import {
   TableContentCardWrapper,
   StatusTextWrapper,
   AdjustLoanBtn,
-  TableCardTag,
-  AdjustModalBtn
+  TableCardTag
 } from './styles/TableComponents';
 
 const TableCard = ({
@@ -66,11 +65,12 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   ethereum,
-  ethereum: { address, wallet, web3, notify },
+  ethereum: { balance, tokenBalance, address, wallet, web3, notify },
   form,
   setTokenBalances
 }) => {
   const JLoan = JLoanSetup(web3);
+  const userBalance = useRef(0);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -79,8 +79,10 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
+  const [hasBalance, setHasBalance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
-  const [currentBlock, setCurrentBlock] = useState(false);
+  const [currentBlock, setCurrentBlock] = useState(0);
+  const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
@@ -99,6 +101,15 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
+
+  useEffect(() => {
+    const balanceCheck = () => {
+      userBalance.current = tokenBalance[cryptoFromLenderName];
+      if (userBalance.current >= toWei(remainingLoan.toString())) setHasBalance(true);
+    };
+
+    balanceCheck();
+  }, [balance, tokenBalance, cryptoFromLenderName, collateralTypeName, remainingLoan]);
 
   useEffect(() => {
     if (
@@ -148,6 +159,7 @@ const TableCard = ({
         const result = await getLoanForeclosingBlock(loanId);
         setLoanForeclosingBlock(result);
         if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
+        setBlocksUntilForeclosure(result + Number(foreclosureWindow) - currentBlock);
       } catch (error) {
         console.log(error);
       }
@@ -648,8 +660,10 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             closeModal={() => closeModal()}
             contractAddress={contractAddress}
+            hasBalance={hasBalance}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
+            blocksUntilForeclosure={blocksUntilForeclosure}
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
