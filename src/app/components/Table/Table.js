@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
@@ -6,7 +6,6 @@ import Pagination from 'react-paginating';
 import {
   loansFetchData,
   changeFilter,
-  loansIsLoading,
   paginationOffset,
   paginationCurrent,
   changeOwnAllFilter,
@@ -18,8 +17,6 @@ import TableHead from './TableHead';
 import TableCard from './TableCard';
 import blockies from 'ethereum-blockies';
 import { TableWrapper } from './styles/TableComponents';
-
-
 
 const style = {
   pageItem: {
@@ -51,20 +48,21 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address },
+  ethereum: { address }
 }) => {
   const { pathname } = useLocation();
   const [pageCount, setPageCount] = useState(5);
   const { filter, skip, limit, current, filterType, sort } = loans;
-  const loanListing = async () => {
+
+  const loanListing = useCallback(async () => {
     if (sort) {
       await loansFetchData({
         sort,
         skip,
         limit,
         filter: {
-          borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
-          lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
+          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
@@ -73,41 +71,23 @@ const Table = ({
         skip,
         limit,
         filter: {
-          borrowerAddress: (path === 'borrow' && filterType === 'own') ? address : undefined,
-          lenderAddress: (path === 'earn' && filterType === 'own') ? address : undefined,
+          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
     }
     //page.current = currentPage;
-  };
-  useEffect(() => {
-    const parsePath = () => {
-      changePath(pathname.split('/')[1]);
-    };
-
-    let currentPath = pathname.split('/')[1];
-    changePath(currentPath);
-    parsePath();
-    loanListing();
-  }, [loansFetchData, filter, current, address, sort]);
-
-  useEffect(() => {
-    loanListing();
-  }, [filterType]);
+  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
-    changeOwnAllFilter('all')
-    if(path === 'borrow'){
-      loanListing();
-    }
-    else if(path === 'earn'){
-      loanListing()
-    }
-  }, [path, changePath]);
+  }, [changePath, pathname]);
 
+  useEffect(() => {
+    loanListing();
+  }, [loanListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
     //page.current = p;
@@ -154,9 +134,7 @@ const Table = ({
               total={loans && loans.count}
               limit={limit}
               pageCount={pageCount}
-              currentPage={
-                parseInt(current, 10)
-              }
+              currentPage={parseInt(current, 10)}
             >
               {({
                 pages,
@@ -260,7 +238,6 @@ export default connect(mapStateToProps, {
   loansFetchData,
   changePath,
   changeFilter,
-  loansIsLoading,
   paginationOffset,
   paginationCurrent,
   changeSorting,

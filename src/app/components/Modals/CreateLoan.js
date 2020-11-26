@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import { setTokenBalances } from 'redux/actions/ethereum';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
@@ -42,13 +41,8 @@ const CreateLoan = ({
   form,
   openModal,
   closeModal,
-  setTokenBalances
 }) => {
   const toWei = web3.utils.toWei;
-
-  useEffect(() => {
-    address && setTokenBalances(web3, address);
-  }, [web3, address, setTokenBalances]);
 
   function handleCloseModal() {
     closeModal();
@@ -180,7 +174,6 @@ const CreateLoan = ({
 };
 
 CreateLoan.propTypes = {
-  setTokenBalances: PropTypes.func.isRequired,
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired
 };
@@ -190,6 +183,4 @@ const mapStateToProps = (state) => ({
   form: state.form
 });
 
-export default connect(mapStateToProps, {
-  setTokenBalances
-})(CreateLoan);
+export default connect(mapStateToProps, {})(CreateLoan);
