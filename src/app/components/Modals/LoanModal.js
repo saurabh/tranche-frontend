@@ -281,13 +281,12 @@ const LoanModal = ({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Return the loan amount and pay outstanding interest.</h2>
+                      <h2>
+                        {!hasBalance
+                          ? `You don't have enough ${cryptoFromLenderName} for this action.`
+                          : 'Return the loan amount and pay outstanding interest.'}
+                      </h2>
                       <ModalButton
-                        title={
-                          !hasBalance
-                            ? `You don't have enough ${cryptoFromLenderName} for this action`
-                            : ''
-                        }
                         onClick={() => confirm('Close')}
                         backgroundColor='#0A66E1'
                         btnColor='#FFFFFF'
@@ -431,16 +430,13 @@ const LoanModal = ({
                 {status === statuses['Pending'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      You are lending {remainingLoan + ' ' + cryptoFromLenderName} backed by a
-                      collateral ratio of {collateralRatio}%.
+                      {!hasBalance
+                        ? `You don't have enough ${cryptoFromLenderName} for this action.`
+                        : `You are lending ${remainingLoan + ' ' + cryptoFromLenderName} backed by a
+                      collateral ratio of ${collateralRatio}%.`}
                     </h2>
 
                     <ModalButton
-                      title={
-                        !hasBalance
-                          ? `You don't have enough ${cryptoFromLenderName} for this action`
-                          : ''
-                      }
                       onClick={() => confirm('Approve')}
                       btnColor='#ffffff'
                       backgroundColor='#2ECC71'
@@ -484,7 +480,11 @@ const LoanModal = ({
                       >
                         Initiate Foreclosure
                       </ModalButton>
-                      <h2 style={{marginTop: '12px'}}>{!canBeForeclosed ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}` : ''}</h2>
+                      <h2 style={{ marginTop: '12px' }}>
+                        {!canBeForeclosed
+                          ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}`
+                          : ''}
+                      </h2>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['At_Risk'].status ? (
@@ -536,7 +536,11 @@ const LoanModal = ({
                       >
                         Instantly Foreclose
                       </ModalButton>
-                      <h2 style={{marginTop: '12px'}}>{!canBeForeclosed ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}` : ''}</h2>
+                      <h2 style={{ marginTop: '12px' }}>
+                        {!canBeForeclosed
+                          ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}`
+                          : ''}
+                      </h2>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['Foreclosed'].status ? (

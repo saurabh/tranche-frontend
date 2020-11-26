@@ -167,8 +167,8 @@ const TableCard = ({
       }
     };
 
-    forecloseWindowCheck()
-  }, [currentBlock, foreclosureWindow, loanId])
+    forecloseWindowCheck();
+  }, [currentBlock, foreclosureWindow, loanId]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
