@@ -126,7 +126,7 @@ const Table = ({
             <div className='table-content'>
               {loans &&
                 loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} avatar={loan.image} path={path} />
+                  <TableCard key={i} loan={loan} path={path} />
                 ))}
             </div>
           </div>

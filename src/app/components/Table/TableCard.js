@@ -53,11 +53,11 @@ const TableCard = ({
     collateralAmount,
     loanCommonParams: { rpbRate },
     collateralType,
+    image,
     name
   },
   loan,
   path,
-  avatar,
   setAddress,
   setNetwork,
   setBalance,
@@ -76,7 +76,7 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
-  const [hasBalance, setHasBalance] = useState(true);
+  const [hasBalance, setHasBalance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
@@ -99,25 +99,20 @@ const TableCard = ({
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
   // Need to debug later
-  // useEffect(() => {
-  //   const balanceCheck = () => {
-  //     console.log('----------------------------');
-  //     console.log('loanId = ' + loanId);
-  //     console.log('cryptoFromLenderName = ' + cryptoFromLenderName);
-  //     console.log('tokenBalance = ' + tokenBalance[cryptoFromLenderName]);
-  //     console.log('loanAmount = ' + toWei(remainingLoan.toString()));
-  //     console.log(
-  //       'balanceCheckResult = ' +
-  //         (tokenBalance[cryptoFromLenderName] >= toWei(remainingLoan.toString()))
-  //     );
-  //     console.log('----------------------------');
-  //     if (status === statuses['Pending'].status || status === statuses['Active'].status)
-  //       if (tokenBalance[cryptoFromLenderName] >= toWei(remainingLoan.toString()))
-  //         setHasBalance(true);
-  //   };
+  useEffect(() => {
+    const balanceCheck = () => {
+      if (status === statuses['Pending'].status || status === statuses['Active'].status)
+        if (
+          isGreaterThan(
+            Number(tokenBalance[cryptoFromLenderName]),
+            Number(toWei(remainingLoan.toString()))
+          )
+        )
+          setHasBalance(true);
+    };
 
-  //   balanceCheck();
-  // }, [address, balance, tokenBalance, cryptoFromLenderName, collateralTypeName, remainingLoan]);
+    balanceCheck();
+  }, [status, address, tokenBalance, cryptoFromLenderName, remainingLoan]);
 
   useEffect(() => {
     if (
@@ -162,7 +157,7 @@ const TableCard = ({
 
     isShareholderCheck();
     getAccruedInterest();
-  }, [loanId, address, web3]);
+  }, [loanId, address]);
 
   useEffect(() => {
     const forecloseWindowCheck = async () => {
@@ -177,7 +172,7 @@ const TableCard = ({
     };
 
     forecloseWindowCheck();
-  }, [currentBlock, foreclosureWindow, loanId]);
+  }, [status, currentBlock, foreclosureWindow, loanId]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
@@ -308,7 +303,7 @@ const TableCard = ({
               message: txMessage(transaction.hash)
             };
           });
-        })
+        });
     } catch (error) {
       console.error(error);
     }
@@ -374,7 +369,7 @@ const TableCard = ({
               message: txMessage(transaction.hash)
             };
           });
-        })
+        });
     } catch (error) {
       console.error(error);
     }
@@ -392,7 +387,7 @@ const TableCard = ({
               message: txMessage(transaction.hash)
             };
           });
-        })
+        });
     } catch (error) {
       console.error(error);
     }
@@ -540,7 +535,7 @@ const TableCard = ({
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
-              <img src={avatar} alt='User' />
+              <img src={image} alt='User' />
             </div>
             <div className='first-col-content'>
               <div className='first-col-title'>
