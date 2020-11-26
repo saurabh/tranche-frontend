@@ -29,6 +29,24 @@ const App = ({
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
+    // why won't it work?
+    // https://web3js.readthedocs.io/en/v1.3.0/web3-eth-subscribe.html#id10
+    const currentBlock = web3.eth
+      .subscribe('newBlockHeaders', (error, result) => {
+        if (!error) {
+          console.log(result);
+          return;
+        }
+        console.error(error);
+      })
+      .on('connected', (subscriptionId) => {
+        console.log(subscriptionId);
+      })
+      .on('data', (blockHeader) => {
+        console.log(blockHeader);
+      })
+      .on('error', console.error);
+
     const pairContract = web3.eth
       .subscribe('logs', {
         address: LoanContractAddress
@@ -64,6 +82,10 @@ const App = ({
       });
 
     return () => {
+      currentBlock.unsubscribe((error, success) => {
+        if (error) console.log(error);
+        if (success) console.log('Successfully unsubscribed!');
+      });
       pairContract.unsubscribe((error, success) => {
         if (error) console.log(error);
         if (success) console.log('Successfully unsubscribed!');
