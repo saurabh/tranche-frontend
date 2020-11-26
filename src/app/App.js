@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
 import { loansFetchData } from 'redux/actions/loans';
+import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
 
@@ -20,6 +21,7 @@ import '../App.css';
 
 const App = ({
   loansFetchData,
+  setCurrentBlock,
   path,
   ethereum: { address },
   loans: { skip, limit, filter, filterType }
@@ -29,23 +31,13 @@ const App = ({
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
-    // why won't it work?
-    // https://web3js.readthedocs.io/en/v1.3.0/web3-eth-subscribe.html#id10
-    const currentBlock = web3.eth
-      .subscribe('newBlockHeaders', (error, result) => {
-        if (!error) {
-          console.log(result);
-          return;
-        }
-        console.error(error);
-      })
-      .on('connected', (subscriptionId) => {
-        console.log(subscriptionId);
-      })
-      .on('data', (blockHeader) => {
-        console.log(blockHeader);
-      })
-      .on('error', console.error);
+    const currentBlock = web3.eth.subscribe('newBlockHeaders', (error, blockHeader) => {
+      if (!error) {
+        setCurrentBlock(blockHeader.number);
+        return;
+      }
+      console.error(error);
+    });
 
     const pairContract = web3.eth
       .subscribe('logs', {
@@ -68,7 +60,8 @@ const App = ({
       .subscribe('logs', {
         address: PriceOracleAddress
       })
-      .on('data', async () => {
+      .on('data', async (data) => {
+        console.log(data);
         await timeout(3000);
         await loansFetchData({
           skip,
@@ -95,7 +88,7 @@ const App = ({
         if (success) console.log('Successfully unsubscribed!');
       });
     };
-  }, [address, filterType, path, loansFetchData, skip, limit, filter]);
+  }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
 
   return (
     <>
@@ -129,5 +122,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData
+  loansFetchData,
+  setCurrentBlock
 })(NetworkDetector(App));

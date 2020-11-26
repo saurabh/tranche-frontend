@@ -201,9 +201,11 @@ let NewLoan = ({
       const result = await getPairDetails(pair);
       let { pairValue, pairDecimals } = result;
       let rpbValue = (toWei(amount) * (APY / 100)) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
-      rpbValue = fromWei(Math.ceil(rpbValue).toString());
-      setRpb(rpbValue);
-      change('rpbRate', Math.ceil(rpbValue).toString());
+      rpbValue = Math.ceil(rpbValue).toString();
+      setRpb(fromWei(rpbValue));
+      console.log(fromWei(rpbValue))
+      console.log(gweiOrEther(fromWei(rpbValue), pairData[pair].collateral))
+      change('rpbRate', rpbValue);
     } else {
       setRpb(0);
     }
@@ -338,8 +340,8 @@ let NewLoan = ({
                 RPB:{' '}
                 <span>
                   {gweiOrEther(rpb, pairData[pair].collateral) === ('Gwei' || 'nJNT')
-                    ? roundNumber(rpb * 10 ** 9, 3)
-                    : roundNumber(rpb, 3)}{' '}
+                    ? roundNumber(rpb * 10 ** 9, 5)
+                    : roundNumber(rpb, 5)}{' '}
                   {gweiOrEther(rpb, pairData[pair].collateral)}
                 </span>
               </h2>
