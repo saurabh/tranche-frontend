@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
@@ -20,7 +20,6 @@ import {
   setWalletAndWeb3,
   setTokenBalances
 } from 'redux/actions/ethereum';
-import { loansFetchData } from 'redux/actions/loans';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
@@ -59,7 +58,6 @@ const TableCard = ({
   loan,
   path,
   avatar,
-  loansFetchData,
   setAddress,
   setNetwork,
   setBalance,
@@ -70,7 +68,6 @@ const TableCard = ({
   setTokenBalances
 }) => {
   const JLoan = JLoanSetup(web3);
-  const userBalance = useRef(0);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -79,7 +76,7 @@ const TableCard = ({
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
-  const [hasBalance, setHasBalance] = useState(false);
+  const [hasBalance, setHasBalance] = useState(true);
   const [isShareholder, setIsShareholder] = useState(false);
   const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
@@ -101,14 +98,26 @@ const TableCard = ({
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
-  useEffect(() => {
-    const balanceCheck = () => {
-      userBalance.current = tokenBalance[cryptoFromLenderName];
-      if (userBalance.current >= toWei(remainingLoan.toString())) setHasBalance(true);
-    };
+  // Need to debug later
+  // useEffect(() => {
+  //   const balanceCheck = () => {
+  //     console.log('----------------------------');
+  //     console.log('loanId = ' + loanId);
+  //     console.log('cryptoFromLenderName = ' + cryptoFromLenderName);
+  //     console.log('tokenBalance = ' + tokenBalance[cryptoFromLenderName]);
+  //     console.log('loanAmount = ' + toWei(remainingLoan.toString()));
+  //     console.log(
+  //       'balanceCheckResult = ' +
+  //         (tokenBalance[cryptoFromLenderName] >= toWei(remainingLoan.toString()))
+  //     );
+  //     console.log('----------------------------');
+  //     if (status === statuses['Pending'].status || status === statuses['Active'].status)
+  //       if (tokenBalance[cryptoFromLenderName] >= toWei(remainingLoan.toString()))
+  //         setHasBalance(true);
+  //   };
 
-    balanceCheck();
-  }, [balance, tokenBalance, cryptoFromLenderName, collateralTypeName, remainingLoan]);
+  //   balanceCheck();
+  // }, [address, balance, tokenBalance, cryptoFromLenderName, collateralTypeName, remainingLoan]);
 
   useEffect(() => {
     if (
@@ -300,15 +309,6 @@ const TableCard = ({
             };
           });
         })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null
-            }
-          });
-        });
     } catch (error) {
       console.error(error);
     }
@@ -375,15 +375,6 @@ const TableCard = ({
             };
           });
         })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null
-            }
-          });
-        });
     } catch (error) {
       console.error(error);
     }
@@ -402,15 +393,6 @@ const TableCard = ({
             };
           });
         })
-        .on('receipt', async () => {
-          await loansFetchData({
-            skip: 0,
-            limit: 100,
-            filter: {
-              type: null
-            }
-          });
-        });
     } catch (error) {
       console.error(error);
     }
@@ -740,7 +722,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData,
   setAddress,
   setNetwork,
   setBalance,

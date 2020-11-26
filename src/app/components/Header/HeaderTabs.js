@@ -14,10 +14,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
     setFilter(filter);
     changeOwnAllFilter(filter);
   };
-  useEffect(() => {
-    setFilter('all');
-    changeOwnAllFilter('all');
-  }, [path]);
+  
   return (
     <div className='container content-container'>
       <HeaderTabsWrapper>

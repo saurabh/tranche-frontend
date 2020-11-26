@@ -1,7 +1,6 @@
 import Web3 from 'web3';
-import { web3 } from 'utils/getWeb3';
-import { pairData } from 'config/constants'
-import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor'
+import { pairData } from 'config/constants';
+import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -47,7 +46,7 @@ export const setTokenBalance = (web3, tokenName, address) => async (dispatch) =>
       payload: { tokenName, tokenBalance }
     });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 };
 
@@ -59,19 +58,28 @@ export const setTokenBalances = (web3, address) => async (dispatch) => {
     const daiBalance = await DAI.methods.balanceOf(address).call();
     const jptBalance = await JPT.methods.balanceOf(address).call();
     const usdcBalance = await USDC.methods.balanceOf(address).call();
-  
-    const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance }
+
+    const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance };
     dispatch({
       type: SET_TOKEN_BALANCES,
       payload: tokenBalances
-    });    
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 };
 
-export const setWalletAndWeb3 = (wallet) => (dispatch) => {
+export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
   let web3 = new Web3(wallet.provider);
+  let address = await web3.eth.getAccounts();
+  const DAI = DAISetup(web3);
+  const JPT = JPTSetup(web3);
+  const USDC = USDCSetup(web3);
+  const daiBalance = await DAI.methods.balanceOf(address[0]).call();
+  const jptBalance = await JPT.methods.balanceOf(address[0]).call();
+  const usdcBalance = await USDC.methods.balanceOf(address[0]).call();
+  const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance };
+
   dispatch({
     type: SET_WALLET,
     payload: wallet
@@ -80,7 +88,11 @@ export const setWalletAndWeb3 = (wallet) => (dispatch) => {
     type: SET_WEB3,
     payload: web3
   });
-  window.localStorage.setItem('selectedWallet', wallet.name)
+  dispatch({
+    type: SET_TOKEN_BALANCES,
+    payload: tokenBalances
+  });
+  window.localStorage.setItem('selectedWallet', wallet.name);
 };
 
 export const setCurrentBlock = (blockNumber) => (dispatch) => {
