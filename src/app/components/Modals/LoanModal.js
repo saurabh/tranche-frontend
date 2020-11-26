@@ -37,7 +37,7 @@ const FirstCustomStyles = {
     position: 'relative',
     maxWidth: '831px',
     width: '100%',
-    minHeight: '454px',
+    minHeight: '554px',
     //height: '326px',
     height: 'auto',
     border: 'none',
