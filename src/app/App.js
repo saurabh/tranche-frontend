@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
 import { loansFetchData } from 'redux/actions/loans';
+import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
 
@@ -20,6 +21,7 @@ import '../App.css';
 
 const App = ({
   loansFetchData,
+  setCurrentBlock,
   path,
   ethereum: { address },
   loans: { skip, limit, filter, filterType }
@@ -28,6 +30,14 @@ const App = ({
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
+
+    const currentBlock = web3.eth.subscribe('newBlockHeaders', (error, blockHeader) => {
+      if (!error) {
+        setCurrentBlock(blockHeader.number);
+        return;
+      }
+      console.error(error);
+    });
 
     const pairContract = web3.eth
       .subscribe('logs', {
@@ -50,7 +60,8 @@ const App = ({
       .subscribe('logs', {
         address: PriceOracleAddress
       })
-      .on('data', async () => {
+      .on('data', async (data) => {
+        console.log(data);
         await timeout(3000);
         await loansFetchData({
           skip,
@@ -64,6 +75,10 @@ const App = ({
       });
 
     return () => {
+      currentBlock.unsubscribe((error, success) => {
+        if (error) console.log(error);
+        if (success) console.log('Successfully unsubscribed!');
+      });
       pairContract.unsubscribe((error, success) => {
         if (error) console.log(error);
         if (success) console.log('Successfully unsubscribed!');
@@ -73,7 +88,7 @@ const App = ({
         if (success) console.log('Successfully unsubscribed!');
       });
     };
-  }, [address, filterType, path, loansFetchData, skip, limit, filter]);
+  }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
 
   return (
     <>
@@ -107,5 +122,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData
+  loansFetchData,
+  setCurrentBlock
 })(NetworkDetector(App));

@@ -65,7 +65,7 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   ethereum,
-  ethereum: { balance, tokenBalance, address, wallet, web3, notify },
+  ethereum: { balance, tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
   setTokenBalances
 }) => {
@@ -81,7 +81,6 @@ const TableCard = ({
   const [disableBtn, setDisableBtn] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
-  const [currentBlock, setCurrentBlock] = useState(0);
   const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
@@ -152,10 +151,13 @@ const TableCard = ({
       }
     };
 
+    isShareholderCheck();
+    getAccruedInterest();
+  }, [loanId, address, web3]);
+
+  useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
-        const currentBlock = await web3.eth.getBlockNumber();
-        setCurrentBlock(currentBlock);
         const result = await getLoanForeclosingBlock(loanId);
         setLoanForeclosingBlock(result);
         if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
@@ -165,10 +167,8 @@ const TableCard = ({
       }
     };
 
-    isShareholderCheck();
     forecloseWindowCheck();
-    getAccruedInterest();
-  }, [status, contractAddress, loanId, foreclosureWindow, address, web3]);
+  }, [currentBlock, foreclosureWindow, loanId]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {

@@ -10,6 +10,7 @@ export const SET_TOKEN_BALANCE = 'SET_TOKEN_BALANCE';
 export const SET_TOKEN_BALANCES = 'SET_TOKEN_BALANCES';
 export const SET_WALLET = 'SET_WALLET';
 export const SET_WEB3 = 'SET_WEB3';
+export const SET_CURRENT_BLOCK = 'SET_CURRENT_BLOCK';
 
 //Loans
 export const LOANS_IS_LOADING = 'LOANS_IS_LOADING';

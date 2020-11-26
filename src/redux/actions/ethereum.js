@@ -10,6 +10,7 @@ import {
   SET_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
+  SET_CURRENT_BLOCK
 } from './constants';
 
 const searchArr = (key) => pairData.find((i) => i.key === key);
@@ -80,4 +81,11 @@ export const setWalletAndWeb3 = (wallet) => (dispatch) => {
     payload: web3
   });
   window.localStorage.setItem('selectedWallet', wallet.name)
+};
+
+export const setCurrentBlock = (blockNumber) => (dispatch) => {
+  dispatch({
+    type: SET_CURRENT_BLOCK,
+    payload: blockNumber
+  });
 };
