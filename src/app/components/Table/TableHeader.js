@@ -3,7 +3,7 @@ import Create from "assets/images/svg/create.svg";
 import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
 import { changeFilter } from 'redux/actions/loans';
-import { ETH, JNT, PagesData } from 'config/constants';
+import { ETH, JNT } from 'config/constants';
 import {
     TableContainerHeader,
     TableHeaderTitles,

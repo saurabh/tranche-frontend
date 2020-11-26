@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { LinkArrow } from "assets";
 import { etherScanUrl } from "config/constants";
 import { statuses, events } from "config/constants";
-import { addrShortener } from "utils";
 import { MoreRowSpan } from "./styles/TableComponents";
 
 const TableMoreRow = ({
-  ethImg,
-  arrow,
   ratio,
   hash,
   collateralTypeName,

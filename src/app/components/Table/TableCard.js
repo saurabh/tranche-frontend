@@ -527,7 +527,7 @@ const TableCard = ({
       >
         {checkLoan ? (
           <TableCardTag color={checkLoan.color}>
-            <img src={checkLoan.img} />
+            <img src={checkLoan.img} alt="checkLoan"/>
           </TableCardTag>
         ) : (
           ''

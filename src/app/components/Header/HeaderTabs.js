@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
-import { ETH, JNT, PagesData } from 'config/constants';
+import { PagesData } from 'config/constants';
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
