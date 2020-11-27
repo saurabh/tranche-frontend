@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -23,7 +23,7 @@ const AdjustPositionStyles = {
     position: 'relative',
     maxWidth: '831px',
     width: '100%',
-    minHeight: '454px',
+    minHeight: '554px',
     height: 'auto',
     border: 'none',
     boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',

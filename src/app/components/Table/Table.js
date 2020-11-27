@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
+import { useDebouncedCallback } from 'utils/lodash';
 //import ReactLoading from 'react-loading';
 import {
   loansFetchData,
@@ -15,7 +16,6 @@ import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import blockies from 'ethereum-blockies';
 import { TableWrapper } from './styles/TableComponents';
 
 const style = {
@@ -51,34 +51,37 @@ const Table = ({
   ethereum: { address }
 }) => {
   const { pathname } = useLocation();
-  const [pageCount, setPageCount] = useState(5);
+  const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort } = loans;
 
-  const loanListing = useCallback(async () => {
-    if (sort) {
-      await loansFetchData({
-        sort,
-        skip,
-        limit,
-        filter: {
-          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
-        }
-      });
-    } else {
-      await loansFetchData({
-        skip,
-        limit,
-        filter: {
-          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
-        }
-      });
-    }
-    //page.current = currentPage;
-  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  const [loanListing] = useCallback(
+    useDebouncedCallback(async () => {
+      if (sort) {
+        await loansFetchData({
+          sort,
+          skip,
+          limit,
+          filter: {
+            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+            type: filter //ETH/JNT keep these in constant file
+          }
+        });
+      } else {
+        await loansFetchData({
+          skip,
+          limit,
+          filter: {
+            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+            type: filter //ETH/JNT keep these in constant file
+          }
+        });
+      }
+      //page.current = currentPage;
+    }, 1000),
+    [loansFetchData, filter, skip, limit, filterType, sort, address, path]
+  );
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -105,13 +108,13 @@ const Table = ({
     loanListing();
   };
 
-  const generateAvatar = () => {
-    let avatar = blockies.create({
-      size: 7,
-      scale: 6
-    });
-    return avatar.toDataURL();
-  };
+  // const generateAvatar = () => {
+  //   let avatar = blockies.create({
+  //     size: 7,
+  //     scale: 6
+  //   });
+  //   return avatar.toDataURL();
+  // };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -122,7 +125,7 @@ const Table = ({
             <div className='table-content'>
               {loans &&
                 loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} avatar={loan.image} path={path} />
+                  <TableCard key={i} loan={loan} path={path} />
                 ))}
             </div>
           </div>

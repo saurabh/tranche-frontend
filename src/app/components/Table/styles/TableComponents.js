@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { WhiteAdjust, DarkAdjust, GrayAdjust, Key } from 'assets';
+import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 
 
 const TableContentCardWrapper = styled.div`

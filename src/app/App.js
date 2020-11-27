@@ -31,13 +31,13 @@ const App = ({
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
-    // const currentBlock = web3.eth.subscribe('newBlockHeaders', (error, blockHeader) => {
-    //   if (!error) {
-    //     setCurrentBlock(blockHeader.number);
-    //     return;
-    //   }
-    //   console.error(error);
-    // });
+    const currentBlock = web3.eth.subscribe('newBlockHeaders', (error, blockHeader) => {
+      if (!error) {
+        setCurrentBlock(blockHeader.number);
+        return;
+      }
+      console.error(error);
+    });
 
     const pairContract = web3.eth
       .subscribe('logs', {
@@ -60,8 +60,7 @@ const App = ({
       .subscribe('logs', {
         address: PriceOracleAddress
       })
-      .on('data', async (data) => {
-        console.log(data);
+      .on('data', async () => {
         await timeout(3000);
         await loansFetchData({
           skip,
@@ -75,10 +74,10 @@ const App = ({
       });
 
     return () => {
-      // currentBlock.unsubscribe((error, success) => {
-      //   if (error) console.log(error);
-      //   if (success) console.log('Successfully unsubscribed!');
-      // });
+      currentBlock.unsubscribe((error, success) => {
+        if (error) console.log(error);
+        if (success) console.log('Successfully unsubscribed!');
+      });
       pairContract.unsubscribe((error, success) => {
         if (error) console.log(error);
         if (success) console.log('Successfully unsubscribed!');

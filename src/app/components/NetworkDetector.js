@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import JibrelLogo from "assets/images/svg/JibrelLogo.svg";
 import JibrelLogoError from "assets/images/svg/JibrelLogoError.svg";
 import closeModal from "assets/images/svg/closeModal.svg";
 export default function (ComposedComponent) {

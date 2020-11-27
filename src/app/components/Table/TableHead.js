@@ -35,8 +35,8 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
                 <div className="remaining-title-content" onClick={() => sortLoans("remainingLoan")}>
                     <h2>Amount</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} />
-                        <img src={downChevron} />
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -44,17 +44,17 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
                 <div className="ratio-title-content" onClick={() => sortLoans("collateralRatio")}>
                     <h2>Ratio</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} />
-                        <img src={downChevron} />
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="interest-paid-wrapper">
                 <div className="interest-paid-title-content" onClick={() => sortLoans("interestPaid")}>
-                    <h2>Payout/Rate</h2>
+                    <h2>Rate/Payout</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -62,8 +62,8 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
                 <div className="status-title-content" onClick={() => sortLoans("status")}>
                     <h2>Status</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>

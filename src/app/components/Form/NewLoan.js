@@ -221,7 +221,7 @@ let NewLoan = ({
             <LoanDetailsRowTitle>COLLATERAL BALANCE</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-              {`${collateralBalance} ${pairData[pair].collateral}`}
+              {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
 
