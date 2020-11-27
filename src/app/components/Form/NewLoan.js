@@ -70,6 +70,9 @@ let NewLoan = ({
   const [borrowAsk, setBorrowAskValue] = useState(0);
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
+  const [platformFee, setPlatformFee] = useState(0);
+
+  
 
   useEffect(() => {
     const getMaxBorrowed = async () => {
@@ -167,6 +170,8 @@ let NewLoan = ({
       setTimeout(() => setCollateralRatio(0), 500);
     }
     setCollateralValue(newValue);
+    let fee = newValue*(0.5/100);
+    setPlatformFee(fee);
     debounceCalcCollateralRatio(borrowingValue, newValue);
   };
 
@@ -234,9 +239,9 @@ let NewLoan = ({
           </LoanDetailsRow>
 
           <LoanDetailsRow>
-            <LoanDetailsRowTitle>TOTAL FEES</LoanDetailsRowTitle>
+            <LoanDetailsRowTitle>Platform Fee</LoanDetailsRowTitle>
 
-            <LoanDetailsRowValue>0</LoanDetailsRowValue>
+            <LoanDetailsRowValue>{platformFee + ' ' + pairData[pair].collateral}</LoanDetailsRowValue>
           </LoanDetailsRow>
         </ModalNewLoanDetailsContent>
       </ModalNewLoanDetails>
@@ -298,7 +303,7 @@ let NewLoan = ({
                   )}
                 </LoanCustomSelect>
               </NewLoanFormInput>
-              <h2>MAX BORROW AMOUNT: ~ {maxBorrowedAskAmount}</h2>
+              <h2>BORROW LIMIT: ~ {(maxBorrowedAskAmount ? maxBorrowedAskAmount : 0)  + ' ' + pairData[pair].text}</h2>
             </ModalFormGrpNewLoan>
 
             <ModalFormGrp currency={pairData[pair].collateral} cursor='pointer'>

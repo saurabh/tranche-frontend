@@ -112,7 +112,7 @@ const LoanModal = ({
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
-
+  
   const confirm = (type) => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -353,7 +353,7 @@ const LoanModal = ({
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
-
+  
         <ModalActionsContent>
           <ModalActionDetails>
             <ModalActionDetailsContent row4={status !== statuses['Pending'].status}>
@@ -447,7 +447,7 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -459,7 +459,7 @@ const LoanModal = ({
                 ) : status === statuses['Under_Collateralized'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can withdraw accrued interest at any point.</h2>
+                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -490,7 +490,7 @@ const LoanModal = ({
                 ) : status === statuses['At_Risk'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can withdraw accrued interest at any point.</h2>
+                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -515,7 +515,7 @@ const LoanModal = ({
                 ) : status === statuses['Foreclosing'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can withdraw accrued interest at any point.</h2>
+                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -527,7 +527,9 @@ const LoanModal = ({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
+                      <h2>Blocks left to foreclose: ({!canBeForeclosed
+                          ? `${blocksUntilForeclosure}`
+                          : ''} of blocks)</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
@@ -536,16 +538,11 @@ const LoanModal = ({
                       >
                         Instantly Foreclose
                       </ModalButton>
-                      <h2 style={{ marginTop: '12px' }}>
-                        {!canBeForeclosed
-                          ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}`
-                          : ''}
-                      </h2>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['Foreclosed'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -556,7 +553,7 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Early_closing'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -567,7 +564,7 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Closing'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
