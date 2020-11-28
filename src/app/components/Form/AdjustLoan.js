@@ -27,7 +27,6 @@ import {
 } from './styles/FormComponents';
 
 import { pairData } from 'config/constants';
-import { act } from 'react-dom/test-utils';
 
 const InputField = ({
   input,
@@ -77,10 +76,10 @@ let AdjustLoan = ({
   const [newCollateralAmount, setNewCollateralAmount] = useState(0);
   const setContractAddress = useCallback(() => {
     change('contractAddress', contractAddress);
-  }, [contractAddress]);
+  }, [contractAddress, change]);
   const setLoanId = useCallback(() => {
     change('loanId', loanId);
-  }, [loanId]);
+  }, [loanId, change]);
 
   const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
 

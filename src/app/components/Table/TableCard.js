@@ -485,9 +485,10 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
-    console.log(loanId);
     setMoreCardToggle(!moreCardToggle);
-    getTransaction(hash);
+    if(!moreCardToggle){
+      getTransaction(hash);
+    }
   };
 
   const remainingToggle = (hover) => {
@@ -531,7 +532,7 @@ const TableCard = ({
       >
         {checkLoan ? (
           <TableCardTag color={checkLoan.color}>
-            <img src={checkLoan.img} />
+            <img src={checkLoan.img} alt="checkLoan"/>
           </TableCardTag>
         ) : (
           ''
@@ -590,7 +591,7 @@ const TableCard = ({
               onMouseEnter={() => interestToggle(true)}
               onMouseLeave={() => interestToggle(false)}
             >
-              {Math.round(interestPaid)} <span>{collateralTypeName}</span> <span>({apy}%)</span>
+              {apy}% <span>({Math.round(interestPaid)} {collateralTypeName})</span>
             </h2>
             <h2
               className={'table-tool-tip ' + (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')}

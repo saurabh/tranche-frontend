@@ -1,4 +1,4 @@
-import { CHANGE_PATH, CHANGE_OWN_ALL_FILTER } from './constants';
+import { CHANGE_PATH } from './constants';
 
 export const changePath = (path) => (dispatch) => {
     dispatch({

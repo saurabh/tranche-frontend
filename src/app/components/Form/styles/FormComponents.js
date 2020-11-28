@@ -117,7 +117,7 @@ const AdjustBtnsWrapper = styled.div`
 const FormInputsWrapper = styled.div`
   transform: translateY(50%);
   padding:10px 35px;
-  max-height: 215px;
+  max-height: 266px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -169,7 +169,7 @@ const NewLoanFormInput = styled.div`
 
 const ModalNewLoanContent = styled.div`
   width: 100%;
-  min-height: 454px;
+  min-height: 554px;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -188,7 +188,7 @@ const ModalNewLoanDetails = styled.div`
   text-align: center;
   max-width: 413px;
   width: 100%;
-  min-height: 454px;
+  min-height: 554px;
   height: 100%;
   background: #FAFAFA;
   @media (max-width: 633px){

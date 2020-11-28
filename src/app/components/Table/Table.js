@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
@@ -15,7 +15,6 @@ import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import blockies from 'ethereum-blockies';
 import { TableWrapper } from './styles/TableComponents';
 
 const style = {
@@ -51,7 +50,7 @@ const Table = ({
   ethereum: { address }
 }) => {
   const { pathname } = useLocation();
-  const [pageCount, setPageCount] = useState(5);
+  const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort } = loans;
 
   const loanListing = useCallback(async () => {
@@ -105,13 +104,13 @@ const Table = ({
     loanListing();
   };
 
-  const generateAvatar = () => {
-    let avatar = blockies.create({
-      size: 7,
-      scale: 6
-    });
-    return avatar.toDataURL();
-  };
+  // const generateAvatar = () => {
+  //   let avatar = blockies.create({
+  //     size: 7,
+  //     scale: 6
+  //   });
+  //   return avatar.toDataURL();
+  // };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
