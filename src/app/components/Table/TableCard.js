@@ -157,13 +157,17 @@ const TableCard = ({
 
     isShareholderCheck();
     getAccruedInterest();
-  }, [loanId, address]);
+  }, [status, loanId, address]);
 
   useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
         const result = await getLoanForeclosingBlock(loanId);
         setLoanForeclosingBlock(result);
+        // if (loanId === 20) {
+        //   console.log(currentBlock >= result + Number(foreclosureWindow))
+        //   console.log(result + Number(foreclosureWindow) - currentBlock)
+        // }
         if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
         setBlocksUntilForeclosure(result + Number(foreclosureWindow) - currentBlock);
       } catch (error) {

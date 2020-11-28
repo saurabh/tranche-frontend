@@ -476,15 +476,10 @@ const LoanModal = ({
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
-                        disabled={!canBeForeclosed}
+
                       >
                         Initiate Foreclosure
                       </ModalButton>
-                      <h2 style={{ marginTop: '12px' }}>
-                        {!canBeForeclosed
-                          ? `Number of Blocks till loan can be foreclosed: ${blocksUntilForeclosure}`
-                          : ''}
-                      </h2>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['At_Risk'].status ? (
@@ -534,6 +529,7 @@ const LoanModal = ({
                         backgroundColor='#EAEAEA'
                         disabled={!canBeForeclosed}
                       >
+                        {/* {loanId === 20 ? console.log(!canBeForeclosed, blocksUntilForeclosure) : ''} */}
                         Instantly Foreclose
                       </ModalButton>
                       <h2 style={{ marginTop: '12px' }}>
