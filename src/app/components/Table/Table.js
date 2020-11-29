@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
+// import { useDebouncedCallback } from 'utils/lodash';
 //import ReactLoading from 'react-loading';
 import {
   loansFetchData,
   changeFilter,
   paginationOffset,
   paginationCurrent,
-  changeOwnAllFilter,
   changeSorting
 } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import blockies from 'ethereum-blockies';
 import { TableWrapper } from './styles/TableComponents';
 
 const style = {
@@ -51,7 +50,7 @@ const Table = ({
   ethereum: { address }
 }) => {
   const { pathname } = useLocation();
-  const [pageCount, setPageCount] = useState(5);
+  const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort } = loans;
 
   const loanListing = useCallback(async () => {
@@ -105,13 +104,13 @@ const Table = ({
     loanListing();
   };
 
-  const generateAvatar = () => {
-    let avatar = blockies.create({
-      size: 7,
-      scale: 6
-    });
-    return avatar.toDataURL();
-  };
+  // const generateAvatar = () => {
+  //   let avatar = blockies.create({
+  //     size: 7,
+  //     scale: 6
+  //   });
+  //   return avatar.toDataURL();
+  // };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -120,10 +119,7 @@ const Table = ({
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-              {loans &&
-                loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} avatar={loan.image} path={path} />
-                ))}
+              {loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)}
             </div>
           </div>
         </TableWrapper>
@@ -240,6 +236,5 @@ export default connect(mapStateToProps, {
   changeFilter,
   paginationOffset,
   paginationCurrent,
-  changeSorting,
-  changeOwnAllFilter
+  changeSorting
 })(Table);
