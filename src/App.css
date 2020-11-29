@@ -301,6 +301,9 @@ html{
   display: flex;
   align-items: center;
 }
+.table-more-row-first-content a{
+  display: flex;
+}
 .table-more-row-first-content h2{
   font-family: "Open Sans", sans-serif;
   font-style: normal;
