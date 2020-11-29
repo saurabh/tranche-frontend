@@ -1,47 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { connect } from 'react-redux';
-import { changeFilter } from 'redux/actions/loans';
-import { ETH, JNT, PagesData } from 'config/constants';
+import { changeOwnAllFilter } from 'redux/actions/loans';
+import { PagesData } from 'config/constants';
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
   HeaderTabBtn
-} from './HeaderComponents';
+} from './styles/HeaderComponents';
 
-const HeaderTabs = ({ path, changeFilter }) => {
-  const [filterValue, setFilter] = useState(null);
-  const loanListing = async (filter = null) => {
+const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
+  const [filterValue, setFilter] = useState('all');
+  const loanListing = (filter) => {
     setFilter(filter);
-    changeFilter(filter);
+    changeOwnAllFilter(filter);
   };
+  
   return (
     <div className='container content-container'>
       <HeaderTabsWrapper>
         <MarketsTabsContainer>
           <HeaderTabBtn
-            onClick={() => loanListing(null)}
-            id='all-markets-tab'
-            active={filterValue === null}
+            onClick={() => loanListing('all')}
+            id='all'
+            active={filterValue === 'all'}
             color={PagesData[path].secondaryColor}
           >
-            All Markets
+            {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
           </HeaderTabBtn>
-          <HeaderTabBtn
-            onClick={() => loanListing(ETH)}
-            id='eth markets'
-            active={filterValue === ETH}
-            color={PagesData[path].secondaryColor}
-          >
-            Eth Markets
-          </HeaderTabBtn>
-          <HeaderTabBtn
-            onClick={() => loanListing(JNT)}
-            id='jnt markets'
-            active={filterValue === JNT}
-            color={PagesData[path].secondaryColor}
-          >
-            Jnt Markets
-          </HeaderTabBtn>
+          {
+            address ? 
+              <HeaderTabBtn
+                onClick={() => loanListing('own')}
+                id='own'
+                active={filterValue === 'own'}
+                color={PagesData[path].secondaryColor}
+              >
+                {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
+              </HeaderTabBtn>
+            : ""
+          }
         </MarketsTabsContainer>
 
         <div id='other-tabs-container'>
@@ -54,8 +51,9 @@ const HeaderTabs = ({ path, changeFilter }) => {
 
 const mapStateToProps = (state) => {
   return {
-    path: state.path,
+    ethereum: state.ethereum,
+    path: state.path
   };
 };
 
-export default connect(mapStateToProps, { changeFilter })(HeaderTabs);
+export default connect(mapStateToProps, { changeOwnAllFilter })(HeaderTabs);

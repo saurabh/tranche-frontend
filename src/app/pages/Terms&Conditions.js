@@ -52,16 +52,7 @@ const TermsAndConditions = () => {
           </div>
         </div>
 
-        <div className="staticContentSection">
-          <div className="sectionTitle">
-            <h2></h2>
-          </div>
-          <div className="sectionContent">
-            <p>
-              
-            </p>
-          </div>
-        </div>
+
 
         <div className="staticContentSection">
           <div className="sectionTitle">

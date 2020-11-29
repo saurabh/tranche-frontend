@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Logo from 'assets/images/svg/Logo.svg';
-import { NavbarWrapper, NavbarContainer, NavbarLinks } from './HeaderComponents';
+import { NavbarWrapper, NavbarContainer, NavbarLinks } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
 
 import { NavLink } from 'react-router-dom';
@@ -14,9 +14,7 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer className='container navbar-container'>
         <div id='logo-wrapper'>
-          <a href='/'>
             <img src={Logo} alt='Logo' />
-          </a>
         </div>
         <div id='navbar-icon' onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>

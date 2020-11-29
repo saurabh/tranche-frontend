@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
       width: 770px;
     }
     .content-container{
-      width: 500px;
+      width: 770px;
     }
   }
 
@@ -56,33 +56,54 @@ const GlobalStyle = createGlobalStyle`
   
   
   .address-wrapper{
-    width: 200px;
+    width: 28%;
   }
   .status-wrapper{
-    width: 109px;
+    .status-title-content div{
+      right: 50px !important;
+    }
+    width: 12%;
   }
   .status-wrapper h2{
     margin-left: 15px;
   }
   .remaining-wrapper{
-    width: 149px;
+    width: 12%;
+    .remaining-title-content div{
+      right: 23px !important;
+    }
+    h2{
+      text-align: center;
+    }
   }
   .ratio-wrapper{
-    width: 110px;
+    width: 12%;
+    .ratio-title-content div{
+      right: 33px !important;
+    }
+    h2{
+      text-align: center;
+    }
   }
   
   .interest-paid-wrapper{
-    width: 146px;
+    width: 12%;
+    .interest-paid-title-content div{
+      right: 9px !important;
+    }
+    h2{
+      text-align: center;
+    }
   }
   .head-btns-wrapper{
-    width: 103px;
+    width: 12%;
   }
   @media (min-width: 992px){
     .navbar-container{
       width: 990px;
     }
     .content-container{
-     width: 626px; 
+      width: 990px;
     }
   }
   @media (min-width: 1200px){
@@ -90,7 +111,7 @@ const GlobalStyle = createGlobalStyle`
       width: 1126px;
     }
     .content-container{
-      width: 942px;
+      width: 1126px;
     }
   }
  

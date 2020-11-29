@@ -2,26 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setTokenBalances,
-  setWalletAndWeb3
-} from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
-import { WalletBtn, WalletBtnIcon, WalletBtnText } from './HeaderComponents';
+import { WalletBtn, WalletBtnIcon, WalletBtnText } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
 
 const ConnectWallet = ({
   setAddress,
   setNetwork,
   setBalance,
-  setTokenBalances,
   setWalletAndWeb3,
-  ethereum: { address, balance },
+  ethereum: { address, balance }
 }) => {
   const { pathname } = useLocation();
   const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');
@@ -38,9 +30,8 @@ const ConnectWallet = ({
 
     if (previouslySelectedWallet && onboard) {
       onboard.walletSelect(previouslySelectedWallet);
-      address && setTokenBalances(address)
     }
-  }, [onboard, address, setTokenBalances]);
+  }, [onboard]);
 
   useEffect(() => {
     const parsePath = () => {
@@ -48,7 +39,7 @@ const ConnectWallet = ({
     };
 
     parsePath();
-  }, [pathname])
+  }, [pathname]);
 
   const handleConnect = async () => {
     await onboard.walletSelect();
@@ -94,13 +85,12 @@ ConnectWallet.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum,
+  ethereum: state.ethereum
 });
 
 export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setTokenBalances,
   setWalletAndWeb3
 })(ConnectWallet);

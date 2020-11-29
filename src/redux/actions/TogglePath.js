@@ -1,9 +1,9 @@
 import { CHANGE_PATH } from './constants';
 
-export function changePath(path) {
-    return {
+export const changePath = (path) => (dispatch) => {
+    dispatch({
         type: CHANGE_PATH,
         path
-    };
+    })
 }
 

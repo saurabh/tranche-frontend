@@ -5,14 +5,15 @@ import {
   SET_TOKEN_BALANCE,
   SET_TOKEN_BALANCES,
   SET_WALLET,
-  SET_WEB3
+  SET_WEB3,
+  SET_CURRENT_BLOCK
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: 0, JPT: 0, USDC: 0 },
+  tokenBalance: { DAI: '0', JPT: '0', USDC: '0' },
   address: undefined,
   web3,
   notify: initNotify()
@@ -36,6 +37,8 @@ export default function (state = initialState, action) {
       return { ...state, wallet: payload };
     case SET_WEB3:
       return { ...state, web3: payload };
+    case SET_CURRENT_BLOCK:
+      return { ...state, currentBlock: payload };
     default:
       return state;
   }

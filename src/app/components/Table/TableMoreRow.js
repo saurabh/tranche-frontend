@@ -1,26 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { LinkArrow } from "assets";
 import { etherScanUrl } from "config/constants";
 import { statuses, events } from "config/constants";
-import { addrShortener } from "utils";
 import { MoreRowSpan } from "./styles/TableComponents";
 
 const TableMoreRow = ({
-  ethImg,
-  arrow,
   ratio,
   hash,
   collateralTypeName,
+  cryptoFromLenderName,
   interest,
   status,
   createdAt,
   eventName,
 }) => {
+  const [tooltipToggleInterest, settooltipToggleInterest] = useState(false);
+
+  const interestToggle = (hover) => {
+    settooltipToggleInterest(hover);
+  }
   const searchObj = (val) => {
     return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
   };
+
+  const cryptoNameDisplay = (eventName)=>{
+     if(eventName === events["APPROVE_LOAN"].toLowerCase()) {
+       return cryptoFromLenderName
+     }
+     return collateralTypeName
+  }
   return (
     <div className="table-more-row">
       <div className="table-more-row-first table-more-row-content">
@@ -49,9 +59,19 @@ const TableMoreRow = ({
         </div>
       </div>
       <div className="table-more-row-fourth table-more-second-4 table-more-row-content">
-        <div className="table-more-row-fourth-content">
+        <div className="table-more-row-fourth-content"
+          onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
+        >
           <h2>
-            {interest} <span>{collateralTypeName}</span>
+            {Math.round(interest)} <span>{cryptoNameDisplay(eventName)}</span> 
+          </h2>
+          <h2
+            className={
+              'table-tool-tip ' +
+              (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
+            }
+          >
+            {interest} <span>{cryptoNameDisplay(eventName)}</span>
           </h2>
         </div>
       </div>

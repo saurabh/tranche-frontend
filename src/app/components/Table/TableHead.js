@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import { connect } from 'react-redux';
 import { downChevron, upChevron } from 'assets';
+import {
+    changeSorting
+  } from 'redux/actions/loans';
 import {
     TableHeadWrapper,
     TableHeadTitle,
@@ -7,12 +11,17 @@ import {
   } from './styles/TableComponents';
 
 
-const TableHead = ({handleSorting}) => {
+const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
 
     const [order, setOrder] = useState("asc")
 
     const sortLoans = (val) => {
-        handleSorting(val, order)
+        let sortObj = {
+            name: val,
+            type: order
+        };
+        changeSorting(sortObj);
+        handleSorting();
         setOrder(order === "asc" ? "desc" : "asc")
     }
     return (
@@ -26,8 +35,8 @@ const TableHead = ({handleSorting}) => {
                 <div className="remaining-title-content" onClick={() => sortLoans("remainingLoan")}>
                     <h2>Amount</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} />
-                        <img src={downChevron} />
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -35,17 +44,17 @@ const TableHead = ({handleSorting}) => {
                 <div className="ratio-title-content" onClick={() => sortLoans("collateralRatio")}>
                     <h2>Ratio</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron} />
-                        <img src={downChevron} />
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="interest-paid-wrapper">
                 <div className="interest-paid-title-content" onClick={() => sortLoans("interestPaid")}>
-                    <h2>APY</h2>
+                    <h2>Rate/Payout</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -53,8 +62,8 @@ const TableHead = ({handleSorting}) => {
                 <div className="status-title-content" onClick={() => sortLoans("status")}>
                     <h2>Status</h2>
                     <SortChevronWrapper>
-                        <img src={upChevron}/>
-                        <img src={downChevron}/>
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
@@ -64,5 +73,13 @@ const TableHead = ({handleSorting}) => {
         </TableHeadWrapper>  
     );
 }
-
-export default TableHead;
+const mapStateToProps = (state) => {
+    return {
+      loans: state.loans,
+    };
+  };
+  
+export default connect(mapStateToProps, {
+    changeSorting
+})(TableHead);
+  

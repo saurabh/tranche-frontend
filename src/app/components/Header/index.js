@@ -5,7 +5,7 @@ import {
   HeaderContent,
   HeaderTitle,
   HeaderSubtitle
-} from './HeaderComponents';
+} from './styles/HeaderComponents';
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
 import { PagesData } from 'config/constants';

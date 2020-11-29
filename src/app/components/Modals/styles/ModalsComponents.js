@@ -30,7 +30,7 @@ padding: 0 35px;
 `
 const ModalContent = styled.div`
 padding: 33px;
-min-height: 454px;
+min-height: 554px;
 height: 100%;
 display: flex;
 justify-content: center;
@@ -262,7 +262,7 @@ const ModalActionDetails = styled.div`
   text-align: center;
   max-width: 413px;
   width: 100%;
-  min-height: 454px;
+  min-height: 554px;
   height: 100%;
   background: #FAFAFA;
   @media (max-width: 633px){
@@ -280,10 +280,10 @@ const ModalActionDetailsContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   @media (max-width: 633px){
-    max-height: 290px;
+    max-height: 310px;
   }
   ${({ row4 }) => row4 && `
-    min-height: 317px;
+    min-height: 350px;
   `}
 
 `

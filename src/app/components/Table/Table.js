@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-import ReactLoading from 'react-loading';
+// import { useDebouncedCallback } from 'utils/lodash';
+//import ReactLoading from 'react-loading';
 import {
   loansFetchData,
   changeFilter,
-  loansIsLoading,
   paginationOffset,
-  paginationCurrent
+  paginationCurrent,
+  changeSorting
 } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import blockies from 'ethereum-blockies';
 import { TableWrapper } from './styles/TableComponents';
-
-
 
 const style = {
   pageItem: {
@@ -49,18 +47,21 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
+  ethereum: { address }
 }) => {
   const { pathname } = useLocation();
-  const [pageCount, setPageCount] = useState(5);
-  const { filter, skip, limit, current } = loans;
+  const pageCount = 5;
+  const { filter, skip, limit, current, filterType, sort } = loans;
 
-  const loanListing = async (sort = null) => {
+  const loanListing = useCallback(async () => {
     if (sort) {
       await loansFetchData({
         sort,
         skip,
         limit,
         filter: {
+          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
@@ -69,23 +70,23 @@ const Table = ({
         skip,
         limit,
         filter: {
+          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
     }
     //page.current = currentPage;
-  };
+  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
   useEffect(() => {
-    const parsePath = () => {
-      changePath(pathname.split('/')[1]);
-    };
-
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
-    parsePath();
+  }, [changePath, pathname]);
+
+  useEffect(() => {
     loanListing();
-  }, [loansFetchData, pathname, changePath, filter, current]);
+  }, [loanListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
     //page.current = p;
@@ -99,21 +100,17 @@ const Table = ({
     paginationCurrent(p);
   };
 
-  const handleSorting = (name, type) => {
-    let sort = {
-      name: name,
-      type: type
-    };
-    loanListing(sort);
+  const handleSorting = () => {
+    loanListing();
   };
 
-  const generateAvatar = () => {
-    let avatar = blockies.create({
-      size: 7,
-      scale: 6
-    });
-    return avatar.toDataURL();
-  };
+  // const generateAvatar = () => {
+  //   let avatar = blockies.create({
+  //     size: 7,
+  //     scale: 6
+  //   });
+  //   return avatar.toDataURL();
+  // };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -122,10 +119,7 @@ const Table = ({
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-              {loans &&
-                loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} avatar={generateAvatar()} path={path} />
-                ))}
+              {loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)}
             </div>
           </div>
         </TableWrapper>
@@ -136,9 +130,7 @@ const Table = ({
               total={loans && loans.count}
               limit={limit}
               pageCount={pageCount}
-              currentPage={
-                parseInt(current, 10)
-              }
+              currentPage={parseInt(current, 10)}
             >
               {({
                 pages,
@@ -232,6 +224,7 @@ const Table = ({
 
 const mapStateToProps = (state) => {
   return {
+    ethereum: state.ethereum,
     loans: state.loans,
     path: state.path
   };
@@ -241,7 +234,7 @@ export default connect(mapStateToProps, {
   loansFetchData,
   changePath,
   changeFilter,
-  loansIsLoading,
   paginationOffset,
-  paginationCurrent
+  paginationCurrent,
+  changeSorting
 })(Table);

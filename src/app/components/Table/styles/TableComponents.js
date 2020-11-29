@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { WhiteAdjust, DarkAdjust, GrayAdjust, Key } from 'assets';
+import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 
 
 const TableContentCardWrapper = styled.div`
@@ -10,8 +10,9 @@ const TableContentCard = styled.div`
   display: flex;
   align-items: center;
   min-height: 66px;
-  padding: 0 39px 0 47px;
+  padding: 0 47px;
   border-bottom: 1px solid #efefef;
+  justify-content: space-between;
   cursor: pointer;
   @media (max-width: 1200px) {
     flex-direction: column;
@@ -169,6 +170,7 @@ const TableSubTitle = styled.div`
         text-transform: uppercase;
         font-weight: 400;
         font-size: 10px;
+        cursor: pointer;
         color: #292929;
     }
 `;
@@ -193,6 +195,49 @@ const CreateLoadBtn = styled.div`
         }
     }
 `;
+const AdjustLoanBtn = styled.button`
+  background-color: ${({color}) => color};
+`;
+
+
+const TableHeaderTitles = styled.div`
+  position: relative;
+`;
+const TableMarketsDropdown = styled.div`
+  position: absolute;
+  width: 150px;
+  height: 90px;
+  margin-top: 7px;
+  overflow: hidden;
+  right: -26px;
+  background: #FFFFFF;
+  box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
+  border-radius: 6px;
+  z-index: 1000;
+`;
+const TableMarketsDropdownContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+`;
+const TableMarketBtn = styled.button`
+  height: 33%;  
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: rgba(56,56,56,0.7);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1.09px;
+  :hover{
+    background: #FAFAFA;
+  }
+  :focus{
+    outline: none;
+  }
+`;
+
 export {
     TableWrapper,
     TableContentCardWrapper,
@@ -206,7 +251,12 @@ export {
     TableContainerHeader,
     TableTitle,
     TableSubTitle,
+    TableHeaderTitles,
     CreateLoadBtn,
-    AdjustModalBtn
+    AdjustLoanBtn,
+    AdjustModalBtn,
+    TableMarketsDropdown,
+    TableMarketsDropdownContent,
+    TableMarketBtn
 };
   

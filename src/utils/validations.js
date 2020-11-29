@@ -45,20 +45,19 @@ let asyncValidateCreate = (values) => {
       borrowedAskAmount &&
       (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))
     ) {
-      throw {
+      throw new Error({
         collateralAmount: 'Not enough collateral',
         _error: 'Not enough collateral'
-      };
+      });
     }
   });
 };
 
 let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
-    let { contractAddress, loanId, collateralAmount, actionType } = values;
+    let { loanId, collateralAmount, actionType } = values;
     if (!actionType) {
       let newCollateralRatio = await calcAdjustCollateralRatio(
-        contractAddress,
         loanId,
         collateralAmount,
         actionType
@@ -69,10 +68,10 @@ let asyncValidateAdjust = (values) => {
           generalParams.limitCollRatioForWithdraw
         )
       ) {
-        throw {
+        throw new Error({
           collateralAmount: 'New collateral ratio is below acceptable threshold',
           _error: 'Ratio too low'
-        };
+        });
       }
     }
   });

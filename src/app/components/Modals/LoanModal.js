@@ -5,6 +5,7 @@ import { AdjustLoan } from 'app/components/Form/AdjustLoan';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
+import { roundNumber, gweiOrEther } from 'utils';
 import {
   ModalHeader,
   ModalContent,
@@ -36,7 +37,7 @@ const FirstCustomStyles = {
     position: 'relative',
     maxWidth: '831px',
     width: '100%',
-    minHeight: '454px',
+    minHeight: '554px',
     //height: '326px',
     height: 'auto',
     border: 'none',
@@ -79,17 +80,19 @@ const AdjustPositionStyles = {
 
 Modal.setAppElement('#root');
 
-export default function LoanModal({
+const LoanModal = ({
   modalIsOpen,
   closeModal,
   path,
   loanId,
   contractAddress,
   status,
+  hasBalance,
   isShareholder,
   APY,
   accruedInterest,
   canBeForeclosed,
+  blocksUntilForeclosure,
   approveLoan,
   closeLoan,
   adjustLoan,
@@ -105,21 +108,18 @@ export default function LoanModal({
   collateralRatio,
   collateralAmount,
   cryptoFromLenderName
-}) {
+}) => {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
-
+  
   const confirm = (type) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
           <ConfirmAlertWrapper>
             {type === 'Close' ? (
-              <h2>
-                Are you sure you want to return{' '}
-                {remainingLoan + ' ' + cryptoFromLenderName}?
-              </h2>
+              <h2>Are you sure you want to return {remainingLoan + ' ' + cryptoFromLenderName}?</h2>
             ) : (
               <h2>{actionTypes[type].confirmationText}</h2>
             )}
@@ -217,7 +217,7 @@ export default function LoanModal({
                     <LoanDetailsRowTitle>Collateral amount</LoanDetailsRowTitle>
 
                     <LoanDetailsRowValue>
-                      {collateralAmount} {collateralTypeName}
+                      {roundNumber(collateralAmount, 3)} {collateralTypeName}
                     </LoanDetailsRowValue>
                   </LoanDetailsRow>
 
@@ -228,9 +228,14 @@ export default function LoanModal({
                   </LoanDetailsRow>
 
                   <LoanDetailsRow>
-                    <LoanDetailsRowTitle>Rpb Rate</LoanDetailsRowTitle>
+                    <LoanDetailsRowTitle>Rpb</LoanDetailsRowTitle>
 
-                    <LoanDetailsRowValue>{rpbRate * 10**9} * 10e-9</LoanDetailsRowValue>
+                    <LoanDetailsRowValue>
+                      {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
+                        ? roundNumber(rpbRate * 10 ** 9, 5)
+                        : roundNumber(rpbRate, 5)}{' '}
+                      {gweiOrEther(rpbRate, collateralTypeName)}
+                    </LoanDetailsRowValue>
                   </LoanDetailsRow>
 
                   <LoanDetailsRow>
@@ -256,13 +261,11 @@ export default function LoanModal({
                     <BtnGrpLoanModalWrapper>
                       {status === statuses['Under_Collateralized'].status ? (
                         <h2>
-                          Your loan is undercollateralized, add collateral to avoid
-                          foreclosure.
+                          Your loan is undercollateralized, add collateral to avoid foreclosure.
                         </h2>
                       ) : (
                         <h2>
-                          Increase or decrease your collateral amount based on market
-                          conditions.
+                          Increase or decrease your collateral amount based on market conditions.
                         </h2>
                       )}
 
@@ -278,11 +281,16 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Return the loan amount and pay outstanding interest.</h2>
+                      <h2>
+                        {!hasBalance
+                          ? `You don't have enough ${cryptoFromLenderName} for this action.`
+                          : 'Return the loan amount and pay outstanding interest.'}
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('Close')}
                         backgroundColor='#0A66E1'
                         btnColor='#FFFFFF'
+                        disabled={!hasBalance}
                       >
                         Close Loan
                       </ModalButton>
@@ -339,20 +347,20 @@ export default function LoanModal({
       >
         <ModalHeader>
           <h2>
-            {status === statuses['Pending'].status
-              ? 'Review Loan Request'
-              : 'Manage Earning Asset'}
+            {status === statuses['Pending'].status ? 'Review Loan Request' : 'Manage Earning Asset'}
           </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
-
+  
         <ModalActionsContent>
           <ModalActionDetails>
             <ModalActionDetailsContent row4={status !== statuses['Pending'].status}>
               <LoanDetailsRow>
-                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>Loan amount</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
+                  Loan amount
+                </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>
                   {remainingLoan} {cryptoFromLenderName}
@@ -360,51 +368,60 @@ export default function LoanModal({
               </LoanDetailsRow>
 
               <LoanDetailsRow>
-                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>Collateral amount</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
+                  Collateral amount
+                </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>
-                  {collateralAmount} {collateralTypeName}
+                  {roundNumber(collateralAmount, 3)} {collateralTypeName}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow>
-                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>Collateral ratio</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
+                  Collateral ratio
+                </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>{collateralRatio}%</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow>
-                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>Rpb Rate</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
+                  Rpb
+                </LoanDetailsRowTitle>
 
-                <LoanDetailsRowValue>{rpbRate * 10**9} * 10e-9</LoanDetailsRowValue>
+                <LoanDetailsRowValue>
+                  {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
+                    ? roundNumber(rpbRate * 10 ** 9, 5)
+                    : roundNumber(rpbRate, 5)}{' '}
+                  {gweiOrEther(rpbRate, collateralTypeName)}
+                </LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow>
-                    <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>APY</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
+                  APY
+                </LoanDetailsRowTitle>
 
-                    <LoanDetailsRowValue>{APY}%</LoanDetailsRowValue>
-                  </LoanDetailsRow>
+                <LoanDetailsRowValue>{APY}%</LoanDetailsRowValue>
+              </LoanDetailsRow>
 
               {status !== statuses['Pending'].status ? (
                 <LoanDetailsRow>
-                  <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>Interest accrued</LoanDetailsRowTitle>
+                  <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
+                    Interest accrued
+                  </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {accruedInterest} {collateralTypeName}
+                    {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
+                      ? roundNumber(accruedInterest * 10 ** 9, 4)
+                      : roundNumber(accruedInterest, 4)}{' '}
+                    {gweiOrEther(accruedInterest, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
                 ''
               )}
-
-              {/*<div>
-              <h2>
-                <span>APY</span>
-              </h2>
-              <h2>
-                {interestPaid} {collateralTypeName}
-              </h2>
-            </div>*/}
             </ModalActionDetailsContent>
           </ModalActionDetails>
           <ModalUserActions>
@@ -413,21 +430,24 @@ export default function LoanModal({
                 {status === statuses['Pending'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      You are lending {remainingLoan + ' ' + cryptoFromLenderName} backed
-                      by a collateral ratio of {collateralRatio}%.
+                      {!hasBalance
+                        ? `You don't have enough ${cryptoFromLenderName} for this action.`
+                        : `You are lending ${remainingLoan + ' ' + cryptoFromLenderName} backed by a
+                      collateral ratio of ${collateralRatio}%.`}
                     </h2>
 
                     <ModalButton
                       onClick={() => confirm('Approve')}
                       btnColor='#ffffff'
                       backgroundColor='#2ECC71'
+                      disabled={!hasBalance}
                     >
                       Accept Loan request
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -439,7 +459,7 @@ export default function LoanModal({
                 ) : status === statuses['Under_Collateralized'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can withdraw accrued interest at any point.</h2>
+                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -456,6 +476,7 @@ export default function LoanModal({
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
+
                       >
                         Initiate Foreclosure
                       </ModalButton>
@@ -464,7 +485,7 @@ export default function LoanModal({
                 ) : status === statuses['At_Risk'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can withdraw accrued interest at any point.</h2>
+                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -476,9 +497,7 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>
-                        You can instantly foreclose this loan and collect penalty fees.
-                      </h2>
+                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
@@ -491,7 +510,7 @@ export default function LoanModal({
                 ) : status === statuses['Foreclosing'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>You can withdraw accrued interest at any point.</h2>
+                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -503,22 +522,23 @@ export default function LoanModal({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>
-                        You can instantly foreclose this loan and collect penalty fees.
-                      </h2>
+                      <h2>Blocks left to foreclose: ({!canBeForeclosed
+                          ? `${blocksUntilForeclosure}`
+                          : ''} of blocks)</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
                         disabled={!canBeForeclosed}
                       >
+                        {/* {loanId === 20 ? console.log(!canBeForeclosed, blocksUntilForeclosure) : ''} */}
                         Instantly Foreclose
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 ) : status === statuses['Foreclosed'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -529,7 +549,7 @@ export default function LoanModal({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Early_closing'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -540,7 +560,7 @@ export default function LoanModal({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Closing'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>You can withdraw accrued interest at any point.</h2>
+                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -561,4 +581,6 @@ export default function LoanModal({
   };
 
   return path === 'borrow' ? borrowModal() : path === 'earn' ? earnModal() : false;
-}
+};
+
+export default LoanModal;

@@ -6,7 +6,9 @@ import {
   LOANS_COUNT,
   CHANGE_FILTER,
   PAGINATION_SKIP,
-  PAGINATION_CURRENT
+  PAGINATION_CURRENT,
+  CHANGE_OWN_ALL_FILTER,
+  CHANGE_SORTING
 } from './constants';
 const { loanList: loanListUrl } = apiUri;
 
@@ -36,6 +38,21 @@ export const changeFilter = (filter) => {
     type: CHANGE_FILTER,
     payload: filter
   };
+};
+
+export const changeSorting = (sort) => {
+  return {
+    type: CHANGE_SORTING,
+    payload: sort
+  }
+};
+
+
+export const changeOwnAllFilter = (filterType) => (dispatch) => {
+  dispatch({
+    type: CHANGE_OWN_ALL_FILTER,
+    payload: filterType
+  });
 };
 
 export const paginationOffset = (skip) => (dispatch) => {
