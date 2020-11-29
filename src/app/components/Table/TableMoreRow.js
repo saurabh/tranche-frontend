@@ -1,4 +1,6 @@
 import React from "react";
+import { LinkArrow } from "assets";
+import { etherScanUrl } from "config/constants";
 import { statuses, events } from "config/constants";
 import { MoreRowSpan } from "./styles/TableComponents";
 import { roundNumber } from 'utils/helperFunctions';
@@ -35,8 +37,14 @@ const TableMoreRow = ({
                 </div>*/}
         <div className="table-more-row-first-content">
           {/* <h2>apr 15, 2020 - 1:53 pm</h2>*/}
-          <h2>{createdAt}</h2>
-
+          <h2>{ createdAt ? createdAt.substring(0, createdAt.length - 5) : '' }</h2>
+          <a
+            href={etherScanUrl + "tx/" + hash}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={LinkArrow} alt="" />
+          </a>
         </div>
       </div>
       <div className="table-more-row-second table-more-second-4 table-more-row-content">
@@ -46,7 +54,7 @@ const TableMoreRow = ({
             {roundNumber(interest, 4)} <span>{cryptoNameDisplay(eventName)}</span> 
           </h2>
         </div>
-      
+        
       </div>
       <div className="table-more-row-third table-more-second-4 table-more-row-content">
         <div className="table-more-row-third-content">
