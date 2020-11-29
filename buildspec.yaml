@@ -16,10 +16,10 @@ phases:
       - echo "${ssh_pub}" > ~/.ssh/id_rsa.pub
       - chmod 600 ~/.ssh/id_rsa
       - eval "$(ssh-agent -s)"
-      - git checkout stage-build
+      - git checkout ${BRANCH}
       - git branch 
       - ls -ltr ~/.ssh
-      - git submodule add  -b frontend-preprod-build git@github.com:tranche-jibrel/defi-abis.git ./src/build
+      - git submodule add  -b frontend-${BRANCH} git@github.com:tranche-jibrel/defi-abis.git ./src/build
       - echo Installing dependencies...
       - yarn
   post_build:
@@ -29,7 +29,6 @@ phases:
       - aws s3 cp --recursive --acl public-read ./build s3://${DeployBucket}/ 
       - aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build/service-worker.js s3://${DeployBucket}/
       - aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build/index.html s3://${DeployBucket}/
-      - aws cloudfront create-invalidation --distribution-id ${Distribution} --paths /index.html /service-worker.js
   build:
     commands:
       - echo Building...
