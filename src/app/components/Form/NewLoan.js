@@ -163,6 +163,8 @@ let NewLoan = ({
     change('collateralAmount', minCollateralAmount);
     calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
     setCollateralValue(minCollateralAmount);
+    let fee = minCollateralAmount*(0.5/100);
+    setPlatformFee(fee);
   };
 
   const handleCollateralizingChange = (borrowingValue, newValue) => {
