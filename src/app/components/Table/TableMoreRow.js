@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { LinkArrow } from "assets";
 import { etherScanUrl } from "config/constants";
 import { statuses, events } from "config/constants";
 import { MoreRowSpan } from "./styles/TableComponents";
+import { roundNumber } from 'utils/helperFunctions';
 
 const TableMoreRow = ({
   ratio,
@@ -14,11 +15,7 @@ const TableMoreRow = ({
   createdAt,
   eventName,
 }) => {
-  const [tooltipToggleInterest, settooltipToggleInterest] = useState(false);
 
-  const interestToggle = (hover) => {
-    settooltipToggleInterest(hover);
-  }
   const searchObj = (val) => {
     return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
@@ -40,7 +37,7 @@ const TableMoreRow = ({
                 </div>*/}
         <div className="table-more-row-first-content">
           {/* <h2>apr 15, 2020 - 1:53 pm</h2>*/}
-          <h2>{createdAt}</h2>
+          <h2>{ createdAt ? createdAt.substring(0, createdAt.length - 5) : '' }</h2>
           <a
             href={etherScanUrl + "tx/" + hash}
             target="_blank"
@@ -51,7 +48,13 @@ const TableMoreRow = ({
         </div>
       </div>
       <div className="table-more-row-second table-more-second-4 table-more-row-content">
-        {/*<h2>12.85 <span>DAI</span></h2>*/}
+        <div className="table-more-row-second-content">
+          {/*<h2>12.85 <span>DAI</span></h2>*/}
+          <h2>
+            {roundNumber(interest, 4)} <span>{cryptoNameDisplay(eventName)}</span> 
+          </h2>
+        </div>
+        
       </div>
       <div className="table-more-row-third table-more-second-4 table-more-row-content">
         <div className="table-more-row-third-content">
@@ -59,20 +62,8 @@ const TableMoreRow = ({
         </div>
       </div>
       <div className="table-more-row-fourth table-more-second-4 table-more-row-content">
-        <div className="table-more-row-fourth-content"
-          onMouseEnter={() => interestToggle(true)} onMouseLeave={() => interestToggle(false)}
-        >
-          <h2>
-            {Math.round(interest)} <span>{cryptoNameDisplay(eventName)}</span> 
-          </h2>
-          <h2
-            className={
-              'table-tool-tip ' +
-              (tooltipToggleInterest ? 'table-tool-tip-toggle' : '')
-            }
-          >
-            {interest} <span>{cryptoNameDisplay(eventName)}</span>
-          </h2>
+        <div className="table-more-row-fourth-content">
+          
         </div>
       </div>
       <div className="table-more-row-fifth table-more-second-4 table-more-row-content">

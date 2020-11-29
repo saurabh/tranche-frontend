@@ -112,7 +112,7 @@ const LoanModal = ({
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
-  
+
   const confirm = (type) => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -232,8 +232,8 @@ const LoanModal = ({
 
                     <LoanDetailsRowValue>
                       {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
-                        ? roundNumber(rpbRate * 10 ** 9, 5)
-                        : roundNumber(rpbRate, 5)}{' '}
+                        ? roundNumber(rpbRate * 10 ** 9, 4)
+                        : roundNumber(rpbRate, 4)}{' '}
                       {gweiOrEther(rpbRate, collateralTypeName)}
                     </LoanDetailsRowValue>
                   </LoanDetailsRow>
@@ -353,7 +353,7 @@ const LoanModal = ({
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
-  
+
         <ModalActionsContent>
           <ModalActionDetails>
             <ModalActionDetailsContent row4={status !== statuses['Pending'].status}>
@@ -392,8 +392,8 @@ const LoanModal = ({
 
                 <LoanDetailsRowValue>
                   {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
-                    ? roundNumber(rpbRate * 10 ** 9, 5)
-                    : roundNumber(rpbRate, 5)}{' '}
+                    ? roundNumber(rpbRate * 10 ** 9, 4)
+                    : roundNumber(rpbRate, 4)}{' '}
                   {gweiOrEther(rpbRate, collateralTypeName)}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
@@ -447,7 +447,13 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                    <h2>
+                      Available Interest:{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                        ? roundNumber(interestPaid * 10 ** 9, 4)
+                        : roundNumber(interestPaid, 4)}{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName)}
+                    </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -459,7 +465,13 @@ const LoanModal = ({
                 ) : status === statuses['Under_Collateralized'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                      <h2>
+                        Available Interest:{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                          ? roundNumber(interestPaid * 10 ** 9, 4)
+                          : roundNumber(interestPaid, 4)}{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName)}
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -476,7 +488,6 @@ const LoanModal = ({
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
-
                       >
                         Initiate Foreclosure
                       </ModalButton>
@@ -485,7 +496,13 @@ const LoanModal = ({
                 ) : status === statuses['At_Risk'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                      <h2>
+                        Available Interest:{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                          ? roundNumber(interestPaid * 10 ** 9, 4)
+                          : roundNumber(interestPaid, 4)}{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName)}
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -510,7 +527,13 @@ const LoanModal = ({
                 ) : status === statuses['Foreclosing'].status ? (
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
-                      <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                      <h2>
+                        Available Interest:{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                          ? roundNumber(interestPaid * 10 ** 9, 4)
+                          : roundNumber(interestPaid, 4)}{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName)}
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
@@ -522,9 +545,10 @@ const LoanModal = ({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Blocks left to foreclose: ({!canBeForeclosed
-                          ? `${blocksUntilForeclosure}`
-                          : ''} of blocks)</h2>
+                      <h2>
+                        Blocks left to foreclose:{' '}
+                        {!canBeForeclosed ? `${blocksUntilForeclosure}` : '0'}
+                      </h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
@@ -538,7 +562,13 @@ const LoanModal = ({
                   </BtnGrpLoanModal>
                 ) : status === statuses['Foreclosed'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                    <h2>
+                      Available Interest:{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                        ? roundNumber(interestPaid * 10 ** 9, 4)
+                        : roundNumber(interestPaid, 4)}{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName)}
+                    </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -549,7 +579,13 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Early_closing'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                    <h2>
+                      Available Interest:{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                        ? roundNumber(interestPaid * 10 ** 9, 4)
+                        : roundNumber(interestPaid, 4)}{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName)}
+                    </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'
@@ -560,7 +596,13 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Closing'].status ? (
                   <BtnGrpLoanModalWrapper>
-                    <h2>Available Interest: {interestPaid + ' ' + collateralTypeName}</h2>
+                    <h2>
+                      Available Interest:{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
+                        ? roundNumber(interestPaid * 10 ** 9, 4)
+                        : roundNumber(interestPaid, 4)}{' '}
+                      {gweiOrEther(interestPaid, collateralTypeName)}
+                    </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
                       btnColor='#234566'

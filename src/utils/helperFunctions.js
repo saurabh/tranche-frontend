@@ -47,7 +47,7 @@ export const roundNumber = (input, roundTo) => {
         maximumFractionDigits: roundTo
       });
       return formatter.format(input);
-    } else if (typeof input === 'string') {
+    } else if (typeof input === 'string' && input !== '0') {
       let string = input.split('.');
       string[1] = string[1].substr(0, roundTo);
       string = string[0].concat('.', string[1]);

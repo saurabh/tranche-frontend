@@ -6,6 +6,7 @@ import {
   calcMinCollateralAmount,
   calcMaxBorrowAmount,
   getPairDetails,
+  calculateFees,
   toWei,
   fromWei
 } from 'services/contractMethods';
@@ -153,26 +154,33 @@ let NewLoan = ({
     250
   );
 
+  const [debounceCalculateFees] = useDebouncedCallback(
+    (collateralAmount) => {
+      calculateFees( collateralAmount);
+    },
+    250
+  );
+
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
     debounceCalcMinCollateralAmount(pair, newValue);
     collateralAmount && debounceCalcCollateralRatio(newValue, collateralAmount);
   };
 
-  const setCollateralAmount = (borrowedAskAmount) => {
+  const setCollateralAmount = async (borrowedAskAmount) => {
     change('collateralAmount', minCollateralAmount);
     calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
     setCollateralValue(minCollateralAmount);
-    let fee = minCollateralAmount*(0.5/100);
+    let fee = await debounceCalculateFees(toWei(minCollateralAmount.toString()));
     setPlatformFee(fee);
   };
-
-  const handleCollateralizingChange = (borrowingValue, newValue) => {
+  
+  const handleCollateralizingChange = async (borrowingValue, newValue) => {
     if (!newValue) {
       setTimeout(() => setCollateralRatio(0), 500);
     }
     setCollateralValue(newValue);
-    let fee = newValue*(0.5/100);
+    let fee = await debounceCalculateFees(toWei(newValue.toString()));
     setPlatformFee(fee);
     debounceCalcCollateralRatio(borrowingValue, newValue);
   };
@@ -210,8 +218,6 @@ let NewLoan = ({
       let rpbValue = (toWei(amount) * (APY / 100)) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
       rpbValue = Math.ceil(rpbValue).toString();
       setRpb(fromWei(rpbValue));
-      console.log(fromWei(rpbValue))
-      console.log(gweiOrEther(fromWei(rpbValue), pairData[pair].collateral))
       change('rpbRate', rpbValue);
     } else {
       setRpb(0);

@@ -77,9 +77,9 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   .ratio-wrapper{
-    width: 12%;
+    width: 11%;
     .ratio-title-content div{
-      right: 33px !important;
+      right: 29px !important;
     }
     h2{
       text-align: center;
@@ -87,9 +87,9 @@ const GlobalStyle = createGlobalStyle`
   }
   
   .interest-paid-wrapper{
-    width: 12%;
+    width: 13%;
     .interest-paid-title-content div{
-      right: 9px !important;
+      right: 15px !important;
     }
     h2{
       text-align: center;

@@ -74,17 +74,14 @@ const App = ({
       });
 
     return () => {
-      currentBlock.unsubscribe((error, success) => {
-        if (error) console.log(error);
-        if (success) console.log('Successfully unsubscribed!');
+      currentBlock.unsubscribe((error) => {
+        if (error) console.error(error);
       });
-      pairContract.unsubscribe((error, success) => {
-        if (error) console.log(error);
-        if (success) console.log('Successfully unsubscribed!');
+      pairContract.unsubscribe((error) => {
+        if (error) console.error(error);
       });
-      priceOracle.unsubscribe((error, success) => {
-        if (error) console.log(error);
-        if (success) console.log('Successfully unsubscribed!');
+      priceOracle.unsubscribe((error) => {
+        if (error) console.error(error);
       });
     };
   }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
