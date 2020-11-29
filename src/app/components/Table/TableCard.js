@@ -96,6 +96,7 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
+  let interestAccrued = accruedInterest + interestPaid;
 
   // Need to debug later
   useEffect(() => {
@@ -573,10 +574,10 @@ const TableCard = ({
               {apy}%{' '}
               <span>
                 (
-                {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
-                  ? roundNumber(accruedInterest * 10 ** 9, 4)
-                  : roundNumber(accruedInterest, 4)}{' '}
-                {gweiOrEther(accruedInterest, collateralTypeName)})
+                {gweiOrEther(interestAccrued, collateralTypeName) === ('Gwei' || 'nJNT')
+                  ? roundNumber(interestAccrued * 10 ** 9, 4)
+                  : roundNumber(interestAccrued, 4)}{' '}
+                {gweiOrEther(interestAccrued, collateralTypeName)})
               </span>
             </h2>
           </div>
@@ -632,6 +633,7 @@ const TableCard = ({
             closeLoan={closeLoan}
             APY={apy}
             adjustLoan={adjustLoan}
+            interestAccrued = {interestAccrued}
             withdrawCollateral={withdrawCollateral}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
