@@ -164,7 +164,7 @@ html{
 }
 
 .table-fourth-col{
-  width: 12%;
+  width: 11%;
 }
 .fourth-col-content{
 }
@@ -173,7 +173,7 @@ html{
 }
 
 .table-fifth-col{
-  width: 12%;
+  width: 13%;
 }
 
 .fifth-col-content{
@@ -342,7 +342,9 @@ button[disabled] img{
 .table-more-row-second{
   width: 12%;
 }
-
+.table-more-row-second-content h2{
+  text-align: center;
+}
 .table-more-row-third{
   width: 12%;
 }

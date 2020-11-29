@@ -522,9 +522,9 @@ const LoanModal = ({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>Blocks left to foreclose: ({!canBeForeclosed
+                      <h2>Blocks left to foreclose: {!canBeForeclosed
                           ? `${blocksUntilForeclosure}`
-                          : ''} of blocks)</h2>
+                          : '0'}</h2>
                       <ModalButton
                         onClick={() => confirm('Foreclose')}
                         btnColor='#234566'
