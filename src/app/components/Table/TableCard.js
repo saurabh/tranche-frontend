@@ -22,7 +22,7 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { roundNumber } from 'utils/helperFunctions';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan } from 'utils';
+import { addrShortener, valShortner, readyToTransact, isGreaterThan, gweiOrEther } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
 import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
@@ -570,7 +570,14 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {apy}% <span>({roundNumber(accruedInterest, 4) + ' ' + collateralTypeName})</span>
+              {apy}%{' '}
+              <span>
+                (
+                {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
+                  ? roundNumber(accruedInterest * 10 ** 9, 4)
+                  : roundNumber(accruedInterest, 4)}{' '}
+                {gweiOrEther(accruedInterest, collateralTypeName)})
+              </span>
             </h2>
           </div>
         </div>
