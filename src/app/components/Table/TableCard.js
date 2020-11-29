@@ -57,13 +57,11 @@ const TableCard = ({
     image,
     name
   },
-  loan,
   path,
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum,
   ethereum: { balance, tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
   setTokenBalances
@@ -485,6 +483,10 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
+    console.log(loanId);
+    console.log('api Interest: ' + interestPaid);
+    console.log('contract call: ' + accruedInterest);
+    // console.log('total: '+interestAccrued)
     setMoreCardToggle(!moreCardToggle);
     if (!moreCardToggle) {
       getTransaction(hash);
@@ -633,7 +635,7 @@ const TableCard = ({
             closeLoan={closeLoan}
             APY={apy}
             adjustLoan={adjustLoan}
-            interestAccrued = {interestAccrued}
+            interestAccrued={interestAccrued}
             withdrawCollateral={withdrawCollateral}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
