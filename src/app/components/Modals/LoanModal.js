@@ -105,6 +105,7 @@ const LoanModal = ({
   rpbRate,
   collateralTypeName,
   remainingLoan,
+  interestAccrued,
   collateralRatio,
   collateralAmount,
   cryptoFromLenderName
@@ -232,8 +233,8 @@ const LoanModal = ({
 
                     <LoanDetailsRowValue>
                       {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
-                        ? roundNumber(rpbRate * 10 ** 9, 5)
-                        : roundNumber(rpbRate, 5)}{' '}
+                        ? roundNumber(rpbRate * 10 ** 9, 4)
+                        : roundNumber(rpbRate, 4)}{' '}
                       {gweiOrEther(rpbRate, collateralTypeName)}
                     </LoanDetailsRowValue>
                   </LoanDetailsRow>
@@ -392,8 +393,8 @@ const LoanModal = ({
 
                 <LoanDetailsRowValue>
                   {gweiOrEther(rpbRate, collateralTypeName) === ('Gwei' || 'nJNT')
-                    ? roundNumber(rpbRate * 10 ** 9, 5)
-                    : roundNumber(rpbRate, 5)}{' '}
+                    ? roundNumber(rpbRate * 10 ** 9, 4)
+                    : roundNumber(rpbRate, 4)}{' '}
                   {gweiOrEther(rpbRate, collateralTypeName)}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
@@ -413,10 +414,10 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
-                      ? roundNumber(accruedInterest * 10 ** 9, 4)
-                      : roundNumber(accruedInterest, 4)}{' '}
-                    {gweiOrEther(accruedInterest, collateralTypeName)}
+                    {gweiOrEther(interestAccrued, collateralTypeName) === ('Gwei' || 'nJNT')
+                      ? roundNumber(interestAccrued * 10 ** 9, 4)
+                      : roundNumber(interestAccrued, 4)}{' '}
+                    {gweiOrEther(interestAccrued, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
