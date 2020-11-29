@@ -75,11 +75,16 @@ export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
   const DAI = DAISetup(web3);
   const JPT = JPTSetup(web3);
   const USDC = USDCSetup(web3);
-  const daiBalance = await DAI.methods.balanceOf(address[0]).call();
-  const jptBalance = await JPT.methods.balanceOf(address[0]).call();
-  const usdcBalance = await USDC.methods.balanceOf(address[0]).call();
-  const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance };
-
+  if (address[0]) {
+    const daiBalance = await DAI.methods.balanceOf(address[0]).call();
+    const jptBalance = await JPT.methods.balanceOf(address[0]).call();
+    const usdcBalance = await USDC.methods.balanceOf(address[0]).call();
+    const tokenBalances = { DAI: daiBalance, JPT: jptBalance, USDC: usdcBalance };
+    dispatch({
+      type: SET_TOKEN_BALANCES,
+      payload: tokenBalances
+    });
+  }
   dispatch({
     type: SET_WALLET,
     payload: wallet
@@ -87,10 +92,6 @@ export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
   dispatch({
     type: SET_WEB3,
     payload: web3
-  });
-  dispatch({
-    type: SET_TOKEN_BALANCES,
-    payload: tokenBalances
   });
   window.localStorage.setItem('selectedWallet', wallet.name);
 };

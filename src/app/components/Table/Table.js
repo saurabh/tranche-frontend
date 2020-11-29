@@ -2,14 +2,13 @@ import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-import { useDebouncedCallback } from 'utils/lodash';
+// import { useDebouncedCallback } from 'utils/lodash';
 //import ReactLoading from 'react-loading';
 import {
   loansFetchData,
   changeFilter,
   paginationOffset,
   paginationCurrent,
-  changeOwnAllFilter,
   changeSorting
 } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
@@ -54,34 +53,31 @@ const Table = ({
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort } = loans;
 
-  const [loanListing] = useCallback(
-    useDebouncedCallback(async () => {
-      if (sort) {
-        await loansFetchData({
-          sort,
-          skip,
-          limit,
-          filter: {
-            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-            type: filter //ETH/JNT keep these in constant file
-          }
-        });
-      } else {
-        await loansFetchData({
-          skip,
-          limit,
-          filter: {
-            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-            type: filter //ETH/JNT keep these in constant file
-          }
-        });
-      }
-      //page.current = currentPage;
-    }, 1000),
-    [loansFetchData, filter, skip, limit, filterType, sort, address, path]
-  );
+  const loanListing = useCallback(async () => {
+    if (sort) {
+      await loansFetchData({
+        sort,
+        skip,
+        limit,
+        filter: {
+          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+          type: filter //ETH/JNT keep these in constant file
+        }
+      });
+    } else {
+      await loansFetchData({
+        skip,
+        limit,
+        filter: {
+          borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+          type: filter //ETH/JNT keep these in constant file
+        }
+      });
+    }
+    //page.current = currentPage;
+  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -123,10 +119,7 @@ const Table = ({
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-              {loans &&
-                loans.list.map((loan, i) => (
-                  <TableCard key={i} loan={loan} path={path} />
-                ))}
+              {loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)}
             </div>
           </div>
         </TableWrapper>
@@ -243,6 +236,5 @@ export default connect(mapStateToProps, {
   changeFilter,
   paginationOffset,
   paginationCurrent,
-  changeSorting,
-  changeOwnAllFilter
+  changeSorting
 })(Table);
