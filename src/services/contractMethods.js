@@ -1,10 +1,25 @@
-import { JLoanSetup, JPriceOracleSetup } from 'utils/contractConstructor';
+import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup } from 'utils/contractConstructor';
 import { web3 } from 'utils/getWeb3';
-const JLoan = JLoanSetup(web3)
+import { factoryFees } from 'config';
+const JLoan = JLoanSetup(web3);
+const JLoanHelper = JLoanHelperSetup(web3);
 const JPriceOracle = JPriceOracleSetup(web3);
 
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
+
+export const calculateFees = async (collateralAmount) => {
+  try {
+    if (collateralAmount) {
+      const result = await JLoanHelper.methods
+        .calculateCollFeesOnActivation(collateralAmount, factoryFees.toString())
+        .call();
+      return fromWei(result);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
@@ -22,9 +37,7 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
 export const calcMaxBorrowAmount = async (pairId, collAmount) => {
   try {
     if (collAmount > 0) {
-      const result = await JLoan.methods
-        .getMaxStableCoinWithFeesAmount(pairId, collAmount)
-        .call();
+      const result = await JLoan.methods.getMaxStableCoinWithFeesAmount(pairId, collAmount).call();
       return web3.utils.fromWei(result);
     }
   } catch (error) {

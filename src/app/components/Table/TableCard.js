@@ -485,12 +485,10 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     setMoreCardToggle(!moreCardToggle);
-    if(!moreCardToggle){
+    if (!moreCardToggle) {
       getTransaction(hash);
     }
   };
-
-
 
   const getTransaction = async (hash) => {
     const { transaction: transactionUrl } = apiUri;
@@ -526,7 +524,7 @@ const TableCard = ({
       >
         {checkLoan ? (
           <TableCardTag color={checkLoan.color}>
-            <img src={checkLoan.img} alt="checkLoan"/>
+            <img src={checkLoan.img} alt='checkLoan' />
           </TableCardTag>
         ) : (
           ''
@@ -572,7 +570,7 @@ const TableCard = ({
         <div className='table-fifth-col table-col'>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {apy}% <span>({(roundNumber(accruedInterest, 4) ? roundNumber(accruedInterest, 4) : 'N/A') + ' ' + collateralTypeName})</span>
+              {apy}% <span>({roundNumber(accruedInterest, 4) + ' ' + collateralTypeName})</span>
             </h2>
           </div>
         </div>

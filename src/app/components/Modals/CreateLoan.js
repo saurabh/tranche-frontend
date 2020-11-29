@@ -8,6 +8,7 @@ import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
+import { toWei } from 'services/contractMethods';
 
 const AdjustPositionStyles = {
   overlay: {
@@ -36,40 +37,15 @@ const AdjustPositionStyles = {
   }
 };
 
-const CreateLoan = ({
-  ethereum: { address, web3, notify },
-  form,
-  openModal,
-  closeModal,
-}) => {
-  const toWei = web3.utils.toWei;
+const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, closeModal }) => {
+  const JLoan = JLoanSetup(web3);
 
   function handleCloseModal() {
     closeModal();
   }
 
-  const calculateFees = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
-    try {
-      const JLoan = JLoanSetup(web3, LoanContractAddress);
-      let gasLimit;
-      if (pairId === pairData[0].value) {
-        gasLimit = await JLoan.methods
-          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-          .estimateGas({ value: collateralAmount, from: address });
-      } else {
-        gasLimit = await JLoan.methods
-          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-          .estimateGas({ from: address });
-      }
-      console.log(gasLimit);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const createNewEthLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
-      const JLoan = JLoanSetup(web3, LoanContractAddress);
       await JLoan.methods
         .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
@@ -90,7 +66,7 @@ const CreateLoan = ({
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
-      const JLoan = JLoanSetup(web3, LoanContractAddress);
+
       let userAllowance = await collateralToken.methods
         .allowance(address, LoanContractAddress)
         .call();
@@ -142,7 +118,6 @@ const CreateLoan = ({
       pairId = parseFloat(pairId);
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
-      calculateFees(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       if (pairId === pairData[0].value) {
         createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
       } else {
