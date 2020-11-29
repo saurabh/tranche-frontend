@@ -8,7 +8,7 @@ import {
     TableHeadWrapper,
     TableHeadTitle,
     SortChevronWrapper,
-  } from './styles/TableComponents';
+} from './styles/TableComponents';
 
 
 const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {

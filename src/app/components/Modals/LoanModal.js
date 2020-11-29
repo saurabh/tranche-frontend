@@ -105,6 +105,7 @@ const LoanModal = ({
   rpbRate,
   collateralTypeName,
   remainingLoan,
+  interestAccrued,
   collateralRatio,
   collateralAmount,
   cryptoFromLenderName
@@ -413,10 +414,10 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
-                      ? roundNumber(accruedInterest * 10 ** 9, 4)
-                      : roundNumber(accruedInterest, 4)}{' '}
-                    {gweiOrEther(accruedInterest, collateralTypeName)}
+                    {gweiOrEther(interestAccrued, collateralTypeName) === ('Gwei' || 'nJNT')
+                      ? roundNumber(interestAccrued * 10 ** 9, 4)
+                      : roundNumber(interestAccrued, 4)}{' '}
+                    {gweiOrEther(interestAccrued, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
