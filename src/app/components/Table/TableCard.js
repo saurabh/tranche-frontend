@@ -96,7 +96,9 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  let interestAccrued = accruedInterest + interestPaid;
+
+  let interestAccrued = parseFloat(accruedInterest) + parseFloat(interestPaid);
+
 
   // Need to debug later
   useEffect(() => {
