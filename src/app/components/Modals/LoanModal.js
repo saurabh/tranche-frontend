@@ -105,7 +105,7 @@ const LoanModal = ({
   rpbRate,
   collateralTypeName,
   remainingLoan,
-  interestAccrued,
+  totalInterest,
   collateralRatio,
   collateralAmount,
   cryptoFromLenderName
@@ -414,10 +414,10 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {gweiOrEther(interestAccrued, collateralTypeName) === ('Gwei' || 'nJNT')
-                      ? roundNumber(interestAccrued * 10 ** 9, 4)
-                      : roundNumber(interestAccrued, 4)}{' '}
-                    {gweiOrEther(interestAccrued, collateralTypeName)}
+                    {gweiOrEther(totalInterest, collateralTypeName) === ('Gwei' || 'nJNT')
+                      ? roundNumber(totalInterest * 10 ** 9, 4)
+                      : roundNumber(totalInterest, 4)}{' '}
+                    {gweiOrEther(totalInterest, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
@@ -450,10 +450,10 @@ const LoanModal = ({
                   <BtnGrpLoanModalWrapper>
                     <h2>
                       Available Interest:{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName) === ('Gwei' || 'nJNT')
-                        ? roundNumber(interestPaid * 10 ** 9, 4)
-                        : roundNumber(interestPaid, 4)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      {gweiOrEther(accruedInterest, collateralTypeName) === ('Gwei' || 'nJNT')
+                        ? roundNumber(accruedInterest * 10 ** 9, 4)
+                        : roundNumber(accruedInterest, 4)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
