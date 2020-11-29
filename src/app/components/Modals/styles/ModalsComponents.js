@@ -290,6 +290,7 @@ const ModalActionDetailsContent = styled.div`
 
 const LoanDetailsRow = styled.div`
   position: relative;
+  margin: 15px auto;
   
   ${({ newValue }) => newValue && `
     bottom: -50px;
