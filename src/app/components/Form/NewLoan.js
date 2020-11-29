@@ -6,7 +6,6 @@ import {
   calcMinCollateralAmount,
   calcMaxBorrowAmount,
   getPairDetails,
-  calculateFees,
   toWei,
   fromWei
 } from 'services/contractMethods';
@@ -71,7 +70,7 @@ let NewLoan = ({
   const [borrowAsk, setBorrowAskValue] = useState(0);
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
-  const [platformFee, setPlatformFee] = useState(0);
+  //const [platformFee, setPlatformFee] = useState(0);
 
   
 
@@ -154,12 +153,12 @@ let NewLoan = ({
     250
   );
 
-  const [debounceCalculateFees] = useDebouncedCallback(
-    (collateralAmount) => {
-      calculateFees( collateralAmount);
-    },
-    250
-  );
+  // const [debounceCalculateFees] = useDebouncedCallback(
+  //   (collateralAmount) => {
+  //     calculateFees( collateralAmount);
+  //   },
+  //   250
+  // );
 
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
@@ -171,8 +170,8 @@ let NewLoan = ({
     change('collateralAmount', minCollateralAmount);
     calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
     setCollateralValue(minCollateralAmount);
-    let fee = await debounceCalculateFees(toWei(minCollateralAmount.toString()));
-    setPlatformFee(fee);
+    // let fee = await debounceCalculateFees(toWei(minCollateralAmount.toString()));
+    // setPlatformFee(fee);
   };
   
   const handleCollateralizingChange = async (borrowingValue, newValue) => {
@@ -180,9 +179,9 @@ let NewLoan = ({
       setTimeout(() => setCollateralRatio(0), 500);
     }
     setCollateralValue(newValue);
-    let fee = await debounceCalculateFees(toWei(newValue.toString()));
-    setPlatformFee(fee);
-    debounceCalcCollateralRatio(borrowingValue, newValue);
+    //let fee = await debounceCalculateFees(toWei(newValue.toString()));
+    // setPlatformFee(fee);
+    // debounceCalcCollateralRatio(borrowingValue, newValue);
   };
 
   const calcCollateralRatio = async (borrowedAskAmount, collateralAmount) => {
@@ -246,11 +245,11 @@ let NewLoan = ({
             </LoanDetailsRowValue>
           </LoanDetailsRow>
 
-          <LoanDetailsRow>
+          {/*<LoanDetailsRow>
             <LoanDetailsRowTitle>Platform Fee</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>{platformFee + ' ' + pairData[pair].collateral}</LoanDetailsRowValue>
-          </LoanDetailsRow>
+          </LoanDetailsRow>*/}
         </ModalNewLoanDetailsContent>
       </ModalNewLoanDetails>
 

@@ -198,7 +198,7 @@ const ModalNewLoanDetails = styled.div`
 `
 
 const ModalNewLoanDetailsContent = styled.div`
-  min-height: 190px;
+  max-height: 190px;
   height: 100%;
   display: flex;
   flex-direction: column;
