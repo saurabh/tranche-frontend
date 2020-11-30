@@ -1,4 +1,0 @@
-[submodule "src/src/build"]
-	path = src/src/build
-	url = git@github.com:tranche-jibrel/defi-abis.git
-	branch = frontend-master
