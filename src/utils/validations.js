@@ -1,8 +1,5 @@
 import { isLessThan } from './helperFunctions';
-import {
-  calcMinCollateralAmount,
-  calcAdjustCollateralRatio
-} from 'services/contractMethods';
+import { calcMinCollateralAmount, calcAdjustCollateralRatio } from 'services/contractMethods';
 import { generalParams } from 'config/constants';
 
 const validate = (values) => {
@@ -18,15 +15,16 @@ const validate = (values) => {
   } else if (isNaN(Number(collateralAmount))) {
     errors.collateralAmount = 'Must be a number';
   }
-  if (isNaN(Number(apy))) {
+  if (!apy) {
+    errors.apy = 'Required';
+  } else if (isNaN(Number(apy))) {
     errors.apy = 'Must be a number';
   }
   return errors;
 };
 
 const required = (value) => (value ? undefined : 'Required');
-const number = (value) =>
-  value && isNaN(Number(value)) ? 'Must be a number' : undefined;
+const number = (value) => (value && isNaN(Number(value)) ? 'Must be a number' : undefined);
 const minValue = (min) => (value) =>
   value && value <= min ? `Must be at least ${min}%` : undefined;
 const minValue0 = minValue(0);
@@ -62,12 +60,7 @@ let asyncValidateAdjust = (values) => {
         collateralAmount,
         actionType
       );
-      if (
-        isLessThan(
-          parseFloat(newCollateralRatio),
-          generalParams.limitCollRatioForWithdraw
-        )
-      ) {
+      if (isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)) {
         throw new Error({
           collateralAmount: 'New collateral ratio is below acceptable threshold',
           _error: 'Ratio too low'
