@@ -362,7 +362,7 @@ let NewLoan = ({
             <BtnLoanModal>
               <ModalFormButton
                 type='submit'
-                disabled={pristine || submitting || error || !borrowAsk || !collateralValue}
+                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb }
               >
                 Request Loan
               </ModalFormButton>
