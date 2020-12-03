@@ -76,10 +76,12 @@ let AdjustLoan = ({
   const [newCollateralAmount, setNewCollateralAmount] = useState(0);
   const setContractAddress = useCallback(() => {
     change('contractAddress', contractAddress);
-  }, [contractAddress, change]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contractAddress]);
   const setLoanId = useCallback(() => {
     change('loanId', loanId);
-  }, [loanId, change]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loanId]);
 
   const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
 
