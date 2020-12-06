@@ -67,7 +67,7 @@ let NewLoan = ({
   createNewLoan,
   formValues,
   change,
-  ethereum: { balance, tokenBalance }
+  ethereum: { balance, tokenBalance, web3 }
 }) => {
   const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
@@ -125,7 +125,7 @@ let NewLoan = ({
     const newPairId = parseFloat(pairId);
     setPair(newPairId);
     if (borrowedAskAmount) {
-      let result = await calcMinCollateralAmount(pairId, borrowedAskAmount);
+      let result = await calcMinCollateralAmount(pairId, borrowedAskAmount, web3);
       result = roundNumber(result, 4);
       result = round('up', Number(result), 3);
       setMinCollateralAmount(result.toString());
@@ -137,14 +137,14 @@ let NewLoan = ({
         ? tokenBalance.JPT
         : undefined;
     setCollateralBalance(roundNumber(fromWei(collBalance), 3));
-    const result = await calcMaxBorrowAmount(newPairId, collBalance);
+    const result = await calcMaxBorrowAmount(newPairId, collBalance, web3);
     setMaxBorrowedAskAmount(round('down', Number(result), 2));
     calculateRPB(pairId, borrowedAskAmount, APY);
   };
 
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     async (pair, borrowedAskAmount) => {
-      let result = await calcMinCollateralAmount(pair, borrowedAskAmount);
+      let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
       result = roundNumber(result, 4);
       result = round('up', Number(result), 3);
       setMinCollateralAmount(result.toString());
@@ -169,7 +169,7 @@ let NewLoan = ({
     change('collateralAmount', minCollateralAmount);
     calcCollateralRatio(borrowedAskAmount, minCollateralAmount);
     setCollateralValue(minCollateralAmount);
-    let fee = await calculateFees(toWei(minCollateralAmount.toString()));
+    let fee = await calculateFees(toWei(minCollateralAmount.toString()), web3);
     if (fee > 0) setPlatformFee(fee);
   };
 
@@ -178,7 +178,7 @@ let NewLoan = ({
       setTimeout(() => setCollateralRatio(0), 500);
     }
     setCollateralValue(newValue);
-    let fee = await calculateFees(toWei(newValue.toString()));
+    let fee = await calculateFees(toWei(newValue.toString()), web3);
     if (fee > 0) setPlatformFee(fee);
     debounceCalcCollateralRatio(borrowingValue, newValue);
   };
@@ -189,7 +189,7 @@ let NewLoan = ({
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
       let newCollRatio;
-      const result = await getPairDetails(pair);
+      const result = await getPairDetails(pair, web3);
       let { baseDecimals, quoteDecimals, pairValue, pairDecimals } = result;
       let diffBaseQuoteDecimals = safeSubtract(baseDecimals, quoteDecimals);
       if (baseDecimals >= quoteDecimals) {
@@ -211,7 +211,7 @@ let NewLoan = ({
 
   const calculateRPB = async (pair, amount, APY) => {
     if (amount && APY > 0) {
-      const result = await getPairDetails(pair);
+      const result = await getPairDetails(pair, web3);
       let { pairValue, pairDecimals } = result;
       let rpbValue =
         (toWei(amount) * (APY / 100)) / (blocksPerYear * (pairValue / 10 ** pairDecimals));

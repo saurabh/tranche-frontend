@@ -10,7 +10,6 @@ import {
   fromWei,
   getLoanStatus,
   getLoanForeclosingBlock,
-  shareholderCheck,
   getAccruedInterests
 } from 'services/contractMethods';
 import {
@@ -48,8 +47,9 @@ const TableCard = ({
     loanId,
     status,
     borrowerAddress,
-    contractParams: { foreclosureWindow },
+    lenderAddress,
     contractAddress,
+    contractParams: { foreclosureWindow },
     remainingLoan,
     apy,
     cryptoFromLender,
@@ -63,6 +63,7 @@ const TableCard = ({
     image,
     name
   },
+  loan,
   path,
   setAddress,
   setNetwork,
@@ -156,8 +157,8 @@ const TableCard = ({
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const result = await shareholderCheck(loanId, address);
-          setIsShareholder(result);
+          const result = lenderAddress.indexOf(address.toLowerCase())
+          if (result !== -1) setIsShareholder(true);
         }
       } catch (error) {
         console.error(error);
@@ -165,7 +166,7 @@ const TableCard = ({
     };
 
     isShareholderCheck();
-  }, [status, loanId, address]);
+  }, [status, address, lenderAddress]);
 
   useEffect(() => {
     const forecloseWindowCheck = async () => {
@@ -188,7 +189,7 @@ const TableCard = ({
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(loanId, amount, actionType);
+      const result = await calcAdjustCollateralRatio(loanId, amount, actionType, web3);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -323,7 +324,7 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const onChainStatus = await getLoanStatus(loanId);
+      const onChainStatus = await getLoanStatus(loanId, web3);
       console.log('backend status: ' + status);
       console.log('onChain status: ' + onChainStatus);
       if (
@@ -476,7 +477,7 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     if (!address) {
-      const { address } = onboard.getState();
+      const { address, web3 } = onboard.getState();
       setTokenBalances(web3, address);
     } else setTokenBalances(web3, address);
     setIsOpen(true);
@@ -494,6 +495,10 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log('Loan ID: ' + loanId);
+    console.log(loan);
+    console.log(interestPaid);
+    console.log(accruedInterest);
+    console.log(totalInterest);
     setMoreCardToggle(!moreCardToggle);
     if (!moreCardToggle) {
       getTransaction(hash);
