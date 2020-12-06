@@ -61,14 +61,37 @@ export const roundNumber = (input, roundTo) => {
 export const gweiOrEther = (input, cryptoName) => {
   try {
     if (cryptoName === 'ETH') {
-      if (input <= 0.00099) {
+      if (input <= 0.0001) {
         return 'Gwei';
       } else return 'ETH';
     } else if (cryptoName === 'JNT') {
       if (input <= 0.00099) {
         return 'nJNT';
       } else return 'JNT';
+    } else if (cryptoName === 'DAI') {
+      return 'DAI';
+    } else if (cryptoName === 'USDC') {
+      return 'USDC';
     }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const roundBasedOnUnit = (input, cryptoName) => {
+  try {
+    if (gweiOrEther(input, cryptoName) === ('Gwei' || 'nJNT')) {
+      input *= 10 ** 9;
+    }
+    let decimalPoints = 0;
+    if (input >= 10000) decimalPoints = 0;
+    if (input < 10000 && input >= 1000) decimalPoints = 1;
+    if (input < 1000 && input >= 100) decimalPoints = 2;
+    if (input < 100 && input >= 10) decimalPoints = 3;
+    if (input < 10 && input >= 1) decimalPoints = 4;
+    if (input < 1 && input > 0) decimalPoints = 5;
+    const result = roundNumber(input, decimalPoints);
+    return result;
   } catch (error) {
     console.error(error);
   }

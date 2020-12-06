@@ -8,10 +8,17 @@ import {
   getPairDetails,
   calculateFees,
   toWei,
-  fromWei
+  fromWei,
+  toBN
 } from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
-import { safeSubtract, round, roundNumber, gweiOrEther } from 'utils/helperFunctions';
+import {
+  safeSubtract,
+  round,
+  roundNumber,
+  gweiOrEther,
+  roundBasedOnUnit
+} from 'utils/helperFunctions';
 import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
@@ -208,7 +215,7 @@ let NewLoan = ({
       let { pairValue, pairDecimals } = result;
       let rpbValue =
         (toWei(amount) * (APY / 100)) / (blocksPerYear * (pairValue / 10 ** pairDecimals));
-      rpbValue = Math.ceil(rpbValue).toString();
+      rpbValue = toBN(Math.ceil(rpbValue));
       setRpb(fromWei(rpbValue));
       change('rpbRate', rpbValue);
     } else {
@@ -349,9 +356,7 @@ let NewLoan = ({
               <h2>
                 RPB:{' '}
                 <span>
-                  {gweiOrEther(rpb, pairData[pair].collateral) === ('Gwei' || 'nJNT')
-                    ? roundNumber(rpb * 10 ** 9, 5)
-                    : roundNumber(rpb, 5)}{' '}
+                  {roundBasedOnUnit(rpb, pairData[pair].collateral)}{' '}
                   {gweiOrEther(rpb, pairData[pair].collateral)}
                 </span>
               </h2>
@@ -362,7 +367,7 @@ let NewLoan = ({
             <BtnLoanModal>
               <ModalFormButton
                 type='submit'
-                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb }
+                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb}
               >
                 Request Loan
               </ModalFormButton>

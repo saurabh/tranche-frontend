@@ -7,6 +7,7 @@ const JPriceOracle = JPriceOracleSetup(web3);
 
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
+export const toBN = web3.utils.toBN;
 
 export const calculateFees = async (collateralAmount) => {
   try {
