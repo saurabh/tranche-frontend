@@ -132,6 +132,10 @@ const HeaderTabBtn = styled.button`
         padding: 0;
         margin: 12px 0;
     }
+    :hover{
+        color: #FFFFFF;
+        opacity: 0.5;
+    }
 `;
 
 const WalletBtn = styled.button`
