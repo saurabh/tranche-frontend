@@ -21,7 +21,6 @@ import {
   setTokenBalances
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import { roundNumber } from 'utils/helperFunctions';
 import {
   addrShortener,
   valShortner,
