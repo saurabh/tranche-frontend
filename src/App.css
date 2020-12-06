@@ -164,7 +164,7 @@ html{
 }
 
 .table-fourth-col{
-  width: 9%;
+  width: 7%;
 }
 .fourth-col-content{
 }
@@ -173,7 +173,7 @@ html{
 }
 
 .table-fifth-col{
-  width: 15%;
+  width: 17%;
 }
 
 .fifth-col-content{
@@ -181,10 +181,11 @@ html{
 }
 .fifth-col-content h2{
   text-align: center !important;
+  display: flex;
+  flex-direction: column;
 }
 .fifth-col-content h2 span{
   position: relative;
-  bottom: 1px;
   font-size: 10px;
   font-weight: bold !important;
   color: rgba(56,56,56,0.3);

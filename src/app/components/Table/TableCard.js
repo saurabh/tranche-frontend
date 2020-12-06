@@ -57,14 +57,12 @@ const TableCard = ({
     image,
     name
   },
-  loan,
   path,
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum,
-  ethereum: { balance, tokenBalance, address, wallet, web3, currentBlock, notify },
+  ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
   setTokenBalances
 }) => {
@@ -96,7 +94,8 @@ const TableCard = ({
   });
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
-  let interestAccrued = accruedInterest + interestPaid;
+
+  let totalInterest = parseFloat(accruedInterest) + parseFloat(interestPaid);
 
   // Need to debug later
   useEffect(() => {
@@ -144,6 +143,10 @@ const TableCard = ({
       }
     };
 
+    getAccruedInterest();
+  }, [status, loanId, address, interestPaid]);
+
+  useEffect(() => {
     const isShareholderCheck = async () => {
       try {
         if (address) {
@@ -156,7 +159,6 @@ const TableCard = ({
     };
 
     isShareholderCheck();
-    getAccruedInterest();
   }, [status, loanId, address]);
 
   useEffect(() => {
@@ -485,6 +487,7 @@ const TableCard = ({
   };
 
   const cardToggle = (hash) => {
+    console.log('Loan ID: ' + loanId);
     setMoreCardToggle(!moreCardToggle);
     if (!moreCardToggle) {
       getTransaction(hash);
@@ -574,10 +577,10 @@ const TableCard = ({
               {apy}%{' '}
               <span>
                 (
-                {gweiOrEther(interestAccrued, collateralTypeName) === ('Gwei' || 'nJNT')
-                  ? roundNumber(interestAccrued * 10 ** 9, 4)
-                  : roundNumber(interestAccrued, 4)}{' '}
-                {gweiOrEther(interestAccrued, collateralTypeName)})
+                {gweiOrEther(totalInterest, collateralTypeName) === ('Gwei' || 'nJNT')
+                  ? roundNumber(totalInterest * 10 ** 9, 2)
+                  : roundNumber(totalInterest, 2)}{' '}
+                {gweiOrEther(totalInterest, collateralTypeName)})
               </span>
             </h2>
           </div>
@@ -628,12 +631,12 @@ const TableCard = ({
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
             blocksUntilForeclosure={blocksUntilForeclosure}
+            totalInterest={totalInterest}
             accruedInterest={accruedInterest}
             approveLoan={approveLoan}
             closeLoan={closeLoan}
             APY={apy}
             adjustLoan={adjustLoan}
-            interestAccrued = {interestAccrued}
             withdrawCollateral={withdrawCollateral}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
@@ -659,7 +662,7 @@ const TableCard = ({
             />
           ) : (
             moreList &&
-            moreList.map((i, index) => {
+            moreList.map((i) => {
               return (
                 <TableMoreRow
                   key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
