@@ -42,7 +42,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
         </MarketsTabsContainer>
 
         <div id='other-tabs-container'>
-          <HeaderTabBtn id='how-to-tab'>How-to</HeaderTabBtn>
+          <HeaderTabBtn as="a" href="https://docs.tranche.finance" target="_blank" id='how-to-tab'>How-to</HeaderTabBtn>
         </div>
       </HeaderTabsWrapper>
     </div>
