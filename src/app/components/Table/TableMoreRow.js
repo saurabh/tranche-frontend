@@ -3,14 +3,14 @@ import { LinkArrow } from 'assets';
 import { etherScanUrl } from 'config/constants';
 import { statuses, events } from 'config/constants';
 import { MoreRowSpan } from './styles/TableComponents';
-import { roundNumber, gweiOrEther } from 'utils/helperFunctions';
+import { roundBasedOnUnit, gweiOrEther } from 'utils/helperFunctions';
 
 const TableMoreRow = ({
   ratio,
   hash,
   collateralTypeName,
   cryptoFromLenderName,
-  interest,
+  amount,
   status,
   createdAt,
   eventName
@@ -21,13 +21,6 @@ const TableMoreRow = ({
     );
   };
 
-  // const cryptoNameDisplay = (eventName) => {
-  //   if (eventName === events['APPROVE_LOAN'].toLowerCase()) {
-  //     return cryptoFromLenderName;
-  //   }
-  //   return collateralTypeName;
-  // };
-  
   return (
     <div className='table-more-row'>
       <div className='table-more-row-first table-more-row-content'>
@@ -47,10 +40,10 @@ const TableMoreRow = ({
         <div className='table-more-row-second-content'>
           {/*<h2>12.85 <span>DAI</span></h2>*/}
           <h2>
-            {gweiOrEther(interest, collateralTypeName) === ('Gwei' || 'nJNT')
-              ? roundNumber(interest * 10 ** 9, 2)
-              : roundNumber(interest, 2)}{' '}
-            {gweiOrEther(interest, collateralTypeName)}
+            {roundBasedOnUnit(amount, collateralTypeName)}{' '}
+            {eventName === events['APPROVE_LOAN'].toLowerCase()
+              ? gweiOrEther(amount, cryptoFromLenderName)
+              : gweiOrEther(amount, collateralTypeName)}
           </h2>
         </div>
       </div>
@@ -87,7 +80,7 @@ const TableMoreRow = ({
               : eventName === events['REMOVE_COLLATERAL'].toLowerCase()
               ? 'Collateral Adjusted'
               : eventName === events['APPROVE_LOAN_FEES'].toLowerCase()
-              ? 'Approval Fee'
+              ? 'Platform Fees'
               : eventName === events['INITIATE_FORECLOSE_FEES'].toLowerCase()
               ? 'Closure Initiation Fee'
               : eventName === events['FORECLOSED_FEES'].toLowerCase()

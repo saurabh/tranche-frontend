@@ -22,7 +22,14 @@ import {
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { roundNumber } from 'utils/helperFunctions';
-import { addrShortener, valShortner, readyToTransact, isGreaterThan, gweiOrEther } from 'utils';
+import {
+  addrShortener,
+  valShortner,
+  readyToTransact,
+  isGreaterThan,
+  gweiOrEther,
+  roundBasedOnUnit
+} from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
 import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
@@ -576,10 +583,7 @@ const TableCard = ({
             <h2>
               {apy}%{' '}
               <span>
-                (
-                {gweiOrEther(totalInterest, collateralTypeName) === ('Gwei' || 'nJNT')
-                  ? roundNumber(totalInterest * 10 ** 9, 2)
-                  : roundNumber(totalInterest, 2)}{' '}
+                ({roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
                 {gweiOrEther(totalInterest, collateralTypeName)})
               </span>
             </h2>
@@ -674,7 +678,7 @@ const TableCard = ({
                   hash={i.transactionHash}
                   collateralTypeName={collateralTypeName}
                   cryptoFromLenderName={cryptoFromLenderName}
-                  interest={i.amount}
+                  amount={i.amount}
                   eventName={i.eventName}
                 />
               );
