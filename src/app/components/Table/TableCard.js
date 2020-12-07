@@ -58,7 +58,6 @@ const TableCard = ({
     interestPaid,
     collateralTypeName,
     collateralAmount,
-    loanCommonParams: { rpbRate },
     collateralType,
     image,
     name
@@ -73,6 +72,7 @@ const TableCard = ({
   form,
   setTokenBalances
 }) => {
+  let rpbRate; // TEMP NEEDS TO BE DELETED
   const JLoan = JLoanSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
@@ -108,6 +108,7 @@ const TableCard = ({
     const balanceCheck = () => {
       if (status === statuses['Pending'].status || status === statuses['Active'].status)
         if (
+          cryptoFromLenderName !== 'N/A' &&
           isGreaterThan(
             Number(tokenBalance[cryptoFromLenderName]),
             Number(toWei(remainingLoan.toString()))
@@ -140,19 +141,6 @@ const TableCard = ({
   }, [status, path, address, isShareholder, borrowerAddress]);
 
   useEffect(() => {
-    const getAccruedInterest = async () => {
-      try {
-        const result = await getAccruedInterests(loanId);
-        setAccruedInterest(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getAccruedInterest();
-  }, [status, loanId, address, interestPaid]);
-
-  useEffect(() => {
     const isShareholderCheck = async () => {
       try {
         if (address) {
@@ -170,21 +158,15 @@ const TableCard = ({
   useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
-        const result = await getLoanForeclosingBlock(loanId, web3);
-        setLoanForeclosingBlock(result);
-        // if (loanId === 20) {
-        //   console.log(currentBlock >= result + Number(foreclosureWindow))
-        //   console.log(result + Number(foreclosureWindow) - currentBlock)
-        // }
-        if (currentBlock >= result + Number(foreclosureWindow)) setCanBeForeclosed(true);
-        setBlocksUntilForeclosure(result + Number(foreclosureWindow) - currentBlock);
+        if (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow)) setCanBeForeclosed(true);
+        setBlocksUntilForeclosure(loanForeclosingBlock + Number(foreclosureWindow) - currentBlock);
       } catch (error) {
         console.log(error);
       }
     };
 
     forecloseWindowCheck();
-  }, [web3, status, currentBlock, foreclosureWindow, loanId]);
+  }, [status, currentBlock, foreclosureWindow, loanForeclosingBlock]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
@@ -481,6 +463,14 @@ const TableCard = ({
     } else setTokenBalances(web3, address);
     const availableInterest = await getAccruedInterests(loanId, web3);
     setAccruedInterest(availableInterest);
+    const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
+    setLoanForeclosingBlock(loanClosingBlock);
+    // if (loanId === 20) {
+    //   console.log(currentBlock >= result + Number(foreclosureWindow))
+    //   console.log(result + Number(foreclosureWindow) - currentBlock)
+    // }
+    // if (currentBlock >= loanClosingBlock + Number(foreclosureWindow)) setCanBeForeclosed(true);
+    // setBlocksUntilForeclosure(loanClosingBlock + Number(foreclosureWindow) - currentBlock);
     setIsOpen(true);
   };
 

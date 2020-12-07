@@ -67,6 +67,9 @@ export const getPairDetails = async (pairId, web3) => {
   try {
     const JPriceOracle = JPriceOracleSetup(web3);
     const result = await JPriceOracle.methods.pairs(pairId).call();
+    // const pairValue = await JPriceOracle.methods.getPairValue(pairId).call();
+    // console.log(result)
+    // console.log(pairValue)
     return result;
   } catch (error) {
     console.error(error);
