@@ -104,7 +104,6 @@ const TableCard = ({
 
   let totalInterest = parseFloat(accruedInterest) + parseFloat(interestPaid);
 
-  // Need to debug later
   useEffect(() => {
     const balanceCheck = () => {
       if (status === statuses['Pending'].status || status === statuses['Active'].status)
@@ -157,7 +156,7 @@ const TableCard = ({
     const isShareholderCheck = async () => {
       try {
         if (address) {
-          const result = lenderAddress.indexOf(address.toLowerCase())
+          const result = lenderAddress.indexOf(address.toLowerCase());
           if (result !== -1) setIsShareholder(true);
         }
       } catch (error) {
@@ -171,7 +170,7 @@ const TableCard = ({
   useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
-        const result = await getLoanForeclosingBlock(loanId);
+        const result = await getLoanForeclosingBlock(loanId, web3);
         setLoanForeclosingBlock(result);
         // if (loanId === 20) {
         //   console.log(currentBlock >= result + Number(foreclosureWindow))
@@ -185,7 +184,7 @@ const TableCard = ({
     };
 
     forecloseWindowCheck();
-  }, [status, currentBlock, foreclosureWindow, loanId]);
+  }, [web3, status, currentBlock, foreclosureWindow, loanId]);
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
@@ -477,9 +476,11 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     if (!address) {
-      const { address, web3 } = onboard.getState();
+      const { address } = onboard.getState();
       setTokenBalances(web3, address);
     } else setTokenBalances(web3, address);
+    const availableInterest = await getAccruedInterests(loanId, web3);
+    setAccruedInterest(availableInterest);
     setIsOpen(true);
   };
 
@@ -495,10 +496,6 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log('Loan ID: ' + loanId);
-    console.log(loan);
-    console.log(interestPaid);
-    console.log(accruedInterest);
-    console.log(totalInterest);
     setMoreCardToggle(!moreCardToggle);
     if (!moreCardToggle) {
       getTransaction(hash);

@@ -11,7 +11,7 @@ export const readyToTransact = async (wallet, onboard) => {
 };
 
 export const addrShortener = (addr) => {
-  if (addr.length > 5) {
+  if (addr && addr.length > 5) {
     return ReactHtmlParser(
       addr.substring(0, 5) + '...' + addr.substring(addr.length - 4, addr.length)
     );
