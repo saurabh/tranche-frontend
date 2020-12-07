@@ -118,7 +118,7 @@ let AdjustLoan = ({
             <LoanDetailsRowTitle>Collateral amount</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-              {roundNumber(collateralAmount, 3)} {collateralTypeName}
+              {roundNumber(collateralAmount)} {collateralTypeName}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
 
@@ -168,26 +168,28 @@ let AdjustLoan = ({
             ''
           )}
           <ModalFormSubmit adjustBtns={true}>
-            <h2>Would you like to add or remove collateral?</h2>
             {!isAdjustSelected && (
-              <AdjustBtnsWrapper>
-                <BtnGrpLoanModal submitBtn={true}>
-                  <ModalFormButton
-                    adjustCollateralBtn={true}
-                    onClick={() => setAction(true, formValues.collateralAmount)}
-                  >
-                    Add Collateral
-                  </ModalFormButton>
-                </BtnGrpLoanModal>
-                <BtnGrpLoanModal submitBtn={true}>
-                  <ModalFormButton
-                    adjustCollateralBtn={true}
-                    onClick={() => setAction(false, formValues.collateralAmount)}
-                  >
-                    Remove Collateral
-                  </ModalFormButton>
-                </BtnGrpLoanModal>
-              </AdjustBtnsWrapper>
+              <>
+                <h2>Would you like to add or remove collateral?</h2>
+                <AdjustBtnsWrapper>
+                  <BtnGrpLoanModal submitBtn={true}>
+                    <ModalFormButton
+                      adjustCollateralBtn={true}
+                      onClick={() => setAction(true, formValues.collateralAmount)}
+                    >
+                      Add Collateral
+                    </ModalFormButton>
+                  </BtnGrpLoanModal>
+                  <BtnGrpLoanModal submitBtn={true}>
+                    <ModalFormButton
+                      adjustCollateralBtn={true}
+                      onClick={() => setAction(false, formValues.collateralAmount)}
+                    >
+                      Remove Collateral
+                    </ModalFormButton>
+                  </BtnGrpLoanModal>
+                </AdjustBtnsWrapper>
+              </>
             )}
             {isAdjustSelected && (
               <BtnGrpLoanModal>

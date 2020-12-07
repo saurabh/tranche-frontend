@@ -218,7 +218,7 @@ const LoanModal = ({
                     <LoanDetailsRowTitle>Collateral amount</LoanDetailsRowTitle>
 
                     <LoanDetailsRowValue>
-                      {roundNumber(collateralAmount, 3)} {collateralTypeName}
+                      {roundNumber(collateralAmount)} {collateralTypeName}
                     </LoanDetailsRowValue>
                   </LoanDetailsRow>
 
@@ -372,7 +372,7 @@ const LoanModal = ({
                 </LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue>
-                  {roundNumber(collateralAmount, 3)} {collateralTypeName}
+                  {roundNumber(collateralAmount)} {collateralTypeName}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
 

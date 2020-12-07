@@ -28,10 +28,10 @@ export const valShortner = (val) => {
 
 export const round = (type, input, roundTo) => {
   try {
-    let result = input * 10 ** roundTo;
+    let result = safeMultiply(input, 10 ** roundTo);
     if (type === 'up') result = Math.ceil(result);
     if (type === 'down') result = Math.floor(result);
-    result /= 10 ** roundTo;
+    result = safeDivide(result, 10 ** roundTo);
     return result;
   } catch (error) {
     console.error(error);
@@ -41,18 +41,20 @@ export const round = (type, input, roundTo) => {
 export const roundNumber = (input, roundTo) => {
   try {
     if (input === 'N/A') return;
-    if (typeof input === 'number') {
-      const formatter = new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: roundTo,
-        maximumFractionDigits: roundTo
-      });
-      return formatter.format(input);
-    } else if (typeof input === 'string' && input !== '0') {
-      let string = input.split('.');
-      string[1] = string[1].substr(0, roundTo);
-      string = string[0].concat('.', string[1]);
-      return string;
-    }
+    if (typeof input === 'string') input = Number(input);
+    let decimalPoints = 0;
+    if (input >= 10000) decimalPoints = 0;
+    if (input < 10000 && input >= 1000) decimalPoints = 1;
+    if (input < 1000 && input >= 100) decimalPoints = 2;
+    if (input < 100 && input >= 10) decimalPoints = 3;
+    if (input < 10 && input >= 1) decimalPoints = 4;
+    if (input < 1 && input > 0) decimalPoints = 5;
+    if (roundTo) decimalPoints = roundTo;
+    const formatter = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: decimalPoints,
+      maximumFractionDigits: decimalPoints
+    });
+    return formatter.format(input);
   } catch (error) {
     console.error(error);
   }
@@ -83,14 +85,20 @@ export const roundBasedOnUnit = (input, cryptoName) => {
     if (gweiOrEther(input, cryptoName) === ('Gwei' || 'nJNT')) {
       input *= 10 ** 9;
     }
-    let decimalPoints = 0;
-    if (input >= 10000) decimalPoints = 0;
-    if (input < 10000 && input >= 1000) decimalPoints = 1;
-    if (input < 1000 && input >= 100) decimalPoints = 2;
-    if (input < 100 && input >= 10) decimalPoints = 3;
-    if (input < 10 && input >= 1) decimalPoints = 4;
-    if (input < 1 && input > 0) decimalPoints = 5;
-    const result = roundNumber(input, decimalPoints);
+    const result = roundNumber(input);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const formatString = (input) => {
+  try {
+    let array = input.split(',');
+    let result = array[0];
+    for (let i = 1; i < array.length; i++) {
+     result += array[i];
+    }
     return result;
   } catch (error) {
     console.error(error);
