@@ -12,10 +12,11 @@ import CloseModal from './images/svg/closeModal.svg';
 import selectDown from './images/svg/selectDown.svg';
 import selectUp from './images/svg/selectUp.svg';
 import Agree from './images/svg/Agree.svg';
+import ServerError from './images/svg/ServerError.svg';
 
 
 
 
 export {
-    Adjust, Agree, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };

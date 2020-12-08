@@ -8,6 +8,7 @@ import { loansFetchData } from 'redux/actions/loans';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
+import ErrorModal from 'app/components/Modals/Error';
 
 // Routes
 import Earn from 'app/pages/Earn';
