@@ -19,6 +19,7 @@ import {
   setWalletAndWeb3,
   setTokenBalances
 } from 'redux/actions/ethereum';
+import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
@@ -70,7 +71,8 @@ const TableCard = ({
   setWalletAndWeb3,
   ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
-  setTokenBalances
+  setTokenBalances,
+  checkServer
 }) => {
   let rpbRate; // TEMP NEEDS TO BE DELETED
   const JLoan = JLoanSetup(web3);
@@ -511,9 +513,16 @@ const TableCard = ({
         null,
         true
       );
-      setIsLoading(false);
-      setMoreList(result.result.list);
+      if(result.status){
+        checkServer(true);
+        setIsLoading(false);
+        setMoreList(result.result.list);
+      }
+      else{
+        checkServer(false);
+      }
     } catch (error) {
+      checkServer(false);
       console.log(error);
     }
   };
@@ -707,5 +716,6 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
+  setTokenBalances,
+  checkServer
 })(TableCard);
