@@ -101,7 +101,7 @@ const App = ({
   const checkServer = async () => {
     try {
       const { data: result } = await postRequest(loanListUrl, { data: { skip: 0, limit: 20 } }, null, true);
-      if(result){
+      if(result.status){
         setServerStatus(true);
       }
       else{
