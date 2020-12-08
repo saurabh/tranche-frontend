@@ -20,6 +20,9 @@ export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
 
+//Text
+export const serverDown = 'Our server is down. We will be back soon!'
+
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {

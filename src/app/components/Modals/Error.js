@@ -1,15 +1,17 @@
 
-import React, { useState } from 'react';
+import React  from 'react';
 import Modal from 'react-modal';
 
 import {
-  ModalHeader,
+  ModalErrorWrapper,
   ModalTextConfirm,
   ModalTextConfirmBtn,
   ModalTextConfirmBtnWrapper
 } from './styles/ModalsComponents';
+import { serverDown } from 'config/constants';
 
-import { CloseModal } from 'assets';
+
+import { ServerError } from 'assets';
 const ErrorModalStyles = {
   overlay: {
     display: 'flex',
@@ -43,30 +45,14 @@ const ErrorModalStyles = {
 
 Modal.setAppElement('#root');
 
-const ErrorModal = () => {
+const ErrorModal = ({
+  openModal,
+  closeModal
+}) => {
   
-
-  const modalClose = (step = 'notFirst') => {
-    if(step === 'first'){
-      closeModal();
-      toggleEarning(false);
-    }
-    else{
-      closeModal();
-    }
-  };
-  const EarningHandler = () => {
-    toggleEarning(true);
-    changeOwnAllFilter('own');
-    closeModal();
-  };
-
-  const ErrorModalHandler = ({
-    openModal,
-    closeModal
-  }) => {
+  const ErrorModalHandler = () => {
     return (
-      <div className="earningModal">
+      <div className="errorModal">
           <Modal
             isOpen={openModal}
             onRequestClose={closeModal}
@@ -74,24 +60,21 @@ const ErrorModal = () => {
             shouldCloseOnOverlayClick={false}
             contentLabel='Error'
           >
-            <ModalHeader earning>
-              <h2>
-                SERVER DOWN
-              </h2>
-              <button onClick={() => modalClose('first')}>
-                <img src={CloseModal} alt='' />
-              </button>
-            </ModalHeader>
-            <ModalTextConfirm>
-              <h2>
-                Server is Down
-              </h2>
-            </ModalTextConfirm>
-            <ModalTextConfirmBtnWrapper>
-              <ModalTextConfirmBtn>
-                REFRESH PAGE
-              </ModalTextConfirmBtn>
-            </ModalTextConfirmBtnWrapper>
+            <ModalErrorWrapper>
+              <div>
+                <img src={ServerError} alt="error"/>
+              </div>
+              <ModalTextConfirm>
+                <h2>
+                  {serverDown}
+                </h2>
+              </ModalTextConfirm>
+              <ModalTextConfirmBtnWrapper>
+                <ModalTextConfirmBtn onClick={() => window.location.reload()} errorBtn={true}>
+                  REFRESH PAGE
+                </ModalTextConfirmBtn>
+              </ModalTextConfirmBtnWrapper>
+            </ModalErrorWrapper>
           </Modal>
       </div>
     );
