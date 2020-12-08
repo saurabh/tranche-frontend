@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,6 +8,9 @@ import { loansFetchData } from 'redux/actions/loans';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
+import ErrorModal from 'app/components/Modals/Error';
+import { apiUri } from 'config/constants';
+import { postRequest } from 'services/axios';
 
 // Routes
 import Earn from 'app/pages/Earn';
@@ -19,6 +22,8 @@ import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
+const { loanList: loanListUrl } = apiUri;
+
 const App = ({
   loansFetchData,
   setCurrentBlock,
@@ -26,6 +31,9 @@ const App = ({
   ethereum: { address },
   loans: { skip, limit, filter, filterType }
 }) => {
+  const [showModal, setShowModal] = useState(true);
+  const [serverStatus, setServerStatus] = useState(null);
+
   useEffect(() => {
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -86,25 +94,52 @@ const App = ({
     };
   }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
 
-  return (
-    <>
-      <GlobalStyle />
-      <Banner />
-      <Router>
-        <Switch>
-          <Redirect exact from='/' to='/borrow' />
-          <Route exact path='/earn' component={Earn} />
-          <Route exact path='/borrow' component={Borrow} />
-          <Route exact path='/trade' component={Trade}>
-            <Redirect to='/borrow' />
-          </Route>
-          <Route exact path='/privacy' component={Privacy} />
-          <Route exact path='/terms' component={TermsAndConditions} />
-          <Route component={NotFound} />
-        </Switch>
-      </Router>
-    </>
-  );
+  useEffect(() => {
+    checkServer();
+  }, [])
+
+  const checkServer = async () => {
+    try {
+      const { data: result } = await postRequest(loanListUrl, { data: { skip: 0, limit: 20 } }, null, true);
+      if(result.status){
+        setServerStatus(true);
+      }
+      else{
+        setServerStatus(false);
+      }
+    } catch (error) {
+      setServerStatus(false);
+      console.log(error);
+    }
+  }
+
+  const serverError = () => {
+    return(
+      <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />
+    )
+  }
+  const initApp = () => {
+    return (
+        <>
+          <GlobalStyle />
+          <Banner />
+          <Router>
+            <Switch>
+              <Redirect exact from='/' to='/borrow' />
+              <Route exact path='/earn' component={Earn} />
+              <Route exact path='/borrow' component={Borrow} />
+              <Route exact path='/trade' component={Trade}>
+                <Redirect to='/borrow' />
+              </Route>
+              <Route exact path='/privacy' component={Privacy} />
+              <Route exact path='/terms' component={TermsAndConditions} />
+              <Route component={NotFound} />
+            </Switch>
+          </Router>
+        </>
+      );
+  }
+  return (serverStatus === false) ? serverError() : (serverStatus === true) ? initApp() : '';
 };
 
 App.propTypes = {

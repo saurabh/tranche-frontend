@@ -26,6 +26,9 @@ padding: 0 35px;
 @media (max-width: 633px){
   position: relative;
 }
+${({ error }) => error && `
+  position: relative;
+`}
 
 `
 const ModalContent = styled.div`
@@ -319,6 +322,51 @@ const LoanDetailsRowValue = styled.h2`
     cursor: ${cursor}
   `}
 `
+const ModalTextConfirm = styled.div`
+  padding: 0 35px;
+  h2{
+    width: 535px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    margin: 0 auto;
+    line-height: 19px;
+    text-align: center;
+    color: #3F3F3F;
+    margin: 10px auto 29px auto;
+  }
+`
+
+const ModalTextConfirmBtnWrapper = styled.div`
+  text-align: center;
+`
+const ModalTextConfirmBtn = styled.button`
+  max-width: 323px;
+  width: 100%;
+  height: 32px;
+  background: ${props => props.errorBtn ? "#EE2222" : "#1EBB1B"};
+  opacity: 0.75;
+  box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
+  border-radius: 4px;
+  font-style: normal;
+  border: none;
+  font-weight: 500;
+  font-size: 9px;
+  line-height: 11px;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+`
+const ModalErrorWrapper = styled.div`
+  text-align: center;
+  padding: 33px;
+  div{
+    text-align: center;
+    img{
+      width: 150px;
+    }
+  }
+`
 
 export {
     ModalHeader, 
@@ -339,5 +387,9 @@ export {
     ModalActionDetailsContent,
     LoanDetailsRow,
     LoanDetailsRowTitle,
-    LoanDetailsRowValue
+    LoanDetailsRowValue,
+    ModalErrorWrapper,
+    ModalTextConfirm,
+    ModalTextConfirmBtn,
+    ModalTextConfirmBtnWrapper
 };
