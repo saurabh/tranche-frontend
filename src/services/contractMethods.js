@@ -67,10 +67,13 @@ export const getPairDetails = async (pairId, web3) => {
   try {
     const JPriceOracle = JPriceOracleSetup(web3);
     const result = await JPriceOracle.methods.pairs(pairId).call();
-    // const pairValue = await JPriceOracle.methods.getPairValue(pairId).call();
-    // console.log(result)
-    // console.log(pairValue)
-    return result;
+    const pairValue = await JPriceOracle.methods.getPairValue(pairId).call();
+    return {
+      baseDecimals: result.baseDecimals,
+      quoteDecimals: result.quoteDecimals,
+      pairDecimals: result.pairDecimals,
+      pairValue
+    };
   } catch (error) {
     console.error(error);
   }

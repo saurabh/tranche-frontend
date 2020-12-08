@@ -15,7 +15,6 @@ export function initOnboard(subscriptions) {
     onboard = Onboard({
       subscriptions,
       hideBranding: true,
-      darkMode: true,
       networkId,
       walletSelect: {
         wallets: [

@@ -14,7 +14,6 @@ import {
 import { useDebouncedCallback } from 'utils/lodash';
 import {
   safeSubtract,
-  round,
   roundNumber,
   gweiOrEther,
   roundBasedOnUnit,
@@ -84,8 +83,9 @@ let NewLoan = ({
   useEffect(() => {
     const getMaxBorrowed = async () => {
       let result = await calcMaxBorrowAmount(pair, balance);
-      result = round('down', Number(result), 2);
-      result = roundNumber(result);
+      result = roundNumber(result, undefined, 'down')
+      // result = round('down', Number(result), 2);
+      // result = roundNumber(result);
       setMaxBorrowedAskAmount(result);
     };
 
@@ -129,8 +129,7 @@ let NewLoan = ({
     setPair(newPairId);
     if (borrowedAskAmount) {
       let result = await calcMinCollateralAmount(pairId, borrowedAskAmount, web3);
-      result = round('up', Number(result), 3);
-      result = roundNumber(result);
+      result = roundNumber(result, undefined, 'up');
       setMinCollateralAmount(result.toString());
     }
     let collBalance =
@@ -141,8 +140,7 @@ let NewLoan = ({
         : undefined;
     setCollateralBalance(roundNumber(fromWei(collBalance)));
     let result = await calcMaxBorrowAmount(newPairId, collBalance, web3);
-    result = round('down', Number(result), 2);
-    result = roundNumber(result);
+    result = roundNumber(result, undefined, 'down');
     setMaxBorrowedAskAmount(result);
     calculateRPB(pairId, borrowedAskAmount, APY);
   };
@@ -150,8 +148,7 @@ let NewLoan = ({
   const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
     async (pair, borrowedAskAmount) => {
       let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
-      result = round('up', Number(result), 3);
-      result = roundNumber(result);
+      result = roundNumber(result, undefined, 'up');
       setMinCollateralAmount(result.toString());
     },
     500
@@ -250,7 +247,7 @@ let NewLoan = ({
             <LoanDetailsRowTitle>COLLATERALIZATION RATIO</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-              {collateralRatio ? roundNumber(collateralRatio) : 0}%
+              {collateralRatio ? roundNumber(collateralRatio, 1) : 0}%
             </LoanDetailsRowValue>
           </LoanDetailsRow>
 

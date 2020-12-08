@@ -38,18 +38,26 @@ export const round = (type, input, roundTo) => {
   }
 };
 
-export const roundNumber = (input, roundTo) => {
+export const roundNumber = (input, roundTo, type = false) => {
   try {
     if (input === 'N/A') return;
     if (typeof input === 'string') input = Number(input);
     let decimalPoints = 0;
-    if (input >= 10000) decimalPoints = 0;
-    if (input < 10000 && input >= 1000) decimalPoints = 1;
-    if (input < 1000 && input >= 100) decimalPoints = 2;
-    if (input < 100 && input >= 10) decimalPoints = 3;
-    if (input < 10 && input >= 1) decimalPoints = 4;
-    if (input < 1 && input > 0) decimalPoints = 5;
-    if (roundTo) decimalPoints = roundTo;
+    if (!roundTo) {
+      if (input >= 10000) decimalPoints = 0;
+      if (input < 10000 && input >= 1000) decimalPoints = 1;
+      if (input < 1000 && input >= 100) decimalPoints = 2;
+      if (input < 100 && input >= 10) decimalPoints = 3;
+      if (input < 10 && input >= 1) decimalPoints = 4;
+      if (input < 1 && input > 0) decimalPoints = 5;
+    } else decimalPoints = roundTo;
+    if (type) {
+      let result = safeMultiply(input, 10 ** decimalPoints);
+      if (type === 'up') result = Math.ceil(result);
+      if (type === 'down') result = Math.floor(result);
+      result = safeDivide(result, 10 ** decimalPoints);
+      return result;
+    }
     const formatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: decimalPoints,
       maximumFractionDigits: decimalPoints
@@ -97,7 +105,7 @@ export const formatString = (input) => {
     let array = input.split(',');
     let result = array[0];
     for (let i = 1; i < array.length; i++) {
-     result += array[i];
+      result += array[i];
     }
     return result;
   } catch (error) {
