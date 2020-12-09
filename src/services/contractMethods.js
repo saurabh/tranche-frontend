@@ -82,7 +82,7 @@ export const getPairDetails = async (pairId, web3) => {
 export const getLoanStatus = async (loanId, web3) => {
   try {
     const JLoan = JLoanSetup(web3);
-    let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
+    let onChainStatus = await JLoan.methods.loanStatus(loanId).call();
     return parseInt(onChainStatus);
   } catch (error) {
     console.error(error);
