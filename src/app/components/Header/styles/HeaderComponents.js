@@ -65,10 +65,13 @@ const NavbarLinks = styled.div`
     justify-content: space-between;
     width: 336px;
     & > a{
+        position: relative;
+        display: inline-block;
         font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 15px;
+        transition: clip-path 275ms ease;
         line-height: 18px;
         letter-spacing: 0.05em;
         text-decoration: none;
@@ -78,6 +81,32 @@ const NavbarLinks = styled.div`
         @media (max-width: 992px){
             margin: 5px 0;
         }
+        span {
+            position: absolute;
+            display: inline-block;
+            color: #ffffff;
+                :before {
+                    position: absolute;
+                    top: 0;
+                    content: attr(data-content);
+                    color: #ffffff;
+                    text-decoration: underline;
+                    text-decoration-color: #ffffff;
+                    clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
+                    transition: clip-path 275ms ease;
+                }
+          }
+        :hover{
+            span:before{
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+        :focus{
+            span:before{
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+
     }
     @media (max-width: 992px){
         flex-direction: column;

@@ -6,6 +6,7 @@ import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
 import { roundNumber, gweiOrEther, roundBasedOnUnit } from 'utils';
+
 import {
   ModalHeader,
   ModalContent,
@@ -276,6 +277,7 @@ const LoanModal = ({
                         btnColor='#234566'
                       >
                         Adjust Collateral
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
 
@@ -292,6 +294,7 @@ const LoanModal = ({
                         disabled={!hasBalance}
                       >
                         Close Loan
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>

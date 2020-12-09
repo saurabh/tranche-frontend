@@ -141,16 +141,31 @@ const ModalFormButton = styled.button`
   border: none;
   box-sizing: border-box;
   text-transform: uppercase;
+  transition: 500ms;
+  position: relative;
+  overflow: hidden;
+  outline: none;
   :disabled{
     opacity: 0.5;
     cursor: default;
+    :hover{
+      filter: brightness(1);
+    }
   }
+
+  :hover{
+    filter: brightness(1.1);
+  }
+  
+
+    
 
   ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
     font-size: 10px;
     background: #EAEAEA;
     color: rgba(35, 69, 102, 0.7);
   `}
+
 `
 const NewLoanInputWrapper = styled.div`
   width: 100% !important;  

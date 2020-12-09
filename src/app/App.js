@@ -92,6 +92,7 @@ const App = ({
   }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
 
 
+
   const serverError = () => {
     return(
       <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />
