@@ -92,8 +92,8 @@ export const getLoanStatus = async (loanId, web3) => {
 export const getLoanForeclosingBlock = async (loanId, web3 = alchemyWeb3) => {
   try {
     const JLoan = JLoanSetup(web3);
-    const result = await JLoan.methods.loanForeclosingBlock(loanId).call();
-    return Number(result);
+    const result = await JLoan.methods.loanBlocks(loanId).call();
+    return Number(result.loanForeclosingBlock);
   } catch (error) {
     console.error(error);
   }
