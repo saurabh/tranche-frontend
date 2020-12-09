@@ -1,5 +1,7 @@
 import { apiUri } from 'config/constants';
 import { postRequest } from 'services/axios';
+import { checkServer } from './checkServer';
+
 import {
   LOANS_IS_LOADING,
   LOANS_SUCCESS,
@@ -73,12 +75,19 @@ export const loansFetchData = (data) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(loanListUrl, { data }, null, true);
-    dispatch(loansIsLoading(false));
-    dispatch(loansFetchSuccess(result.result.list));
-    dispatch(loansSetCount(result.result.count));
+    if(result.status){
+      dispatch(checkServer(true));
+      dispatch(loansIsLoading(false));
+      dispatch(loansFetchSuccess(result.result.list));
+      dispatch(loansSetCount(result.result.count));
+    }
+    else{
+      dispatch(checkServer(false));
+    }
     return result;
   } catch (error) {
     //TODO : error handling
     console.log(error);
+    dispatch(checkServer(false));
   }
 };

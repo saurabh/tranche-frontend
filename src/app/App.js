@@ -9,8 +9,6 @@ import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
-import { apiUri } from 'config/constants';
-import { postRequest } from 'services/axios';
 
 // Routes
 import Earn from 'app/pages/Earn';
@@ -22,17 +20,16 @@ import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
-const { loanList: loanListUrl } = apiUri;
 
 const App = ({
   loansFetchData,
   setCurrentBlock,
   path,
   ethereum: { address },
-  loans: { skip, limit, filter, filterType }
+  loans: { skip, limit, filter, filterType },
+  checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
-  const [serverStatus, setServerStatus] = useState(null);
 
   useEffect(() => {
     const timeout = (ms) => {
@@ -94,24 +91,6 @@ const App = ({
     };
   }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
 
-  useEffect(() => {
-    checkServer();
-  }, [])
-
-  const checkServer = async () => {
-    try {
-      const { data: result } = await postRequest(loanListUrl, { data: { skip: 0, limit: 20 } }, null, true);
-      if(result.status){
-        setServerStatus(true);
-      }
-      else{
-        setServerStatus(false);
-      }
-    } catch (error) {
-      setServerStatus(false);
-      console.log(error);
-    }
-  }
 
   const serverError = () => {
     return(
@@ -139,7 +118,7 @@ const App = ({
         </>
       );
   }
-  return (serverStatus === false) ? serverError() : (serverStatus === true) ? initApp() : '';
+  return checkServerStatus ? initApp() : serverError()
 };
 
 App.propTypes = {
@@ -149,7 +128,8 @@ App.propTypes = {
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   loans: state.loans,
-  path: state.path
+  path: state.path,
+  checkServerStatus: state.checkServerStatus
 });
 
 export default connect(mapStateToProps, {
