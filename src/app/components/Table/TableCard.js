@@ -160,8 +160,12 @@ const TableCard = ({
   useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
-        if (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow))
+        if (
+          loanForeclosingBlock !== 0 &&
+          currentBlock >= loanForeclosingBlock + Number(foreclosureWindow)
+        ) {
           setCanBeForeclosed(true);
+        }
         setBlocksUntilForeclosure(loanForeclosingBlock + Number(foreclosureWindow) - currentBlock);
       } catch (error) {
         console.log(error);
