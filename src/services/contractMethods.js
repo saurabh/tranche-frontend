@@ -66,14 +66,8 @@ export const calcAdjustCollateralRatio = async (loanId, amount, actionType, web3
 export const getPairDetails = async (pairId, web3) => {
   try {
     const JPriceOracle = JPriceOracleSetup(web3);
-    const result = await JPriceOracle.methods.pairs(pairId).call();
-    const pairValue = await JPriceOracle.methods.getPairValue(pairId).call();
-    return {
-      baseDecimals: result.baseDecimals,
-      quoteDecimals: result.quoteDecimals,
-      pairDecimals: result.pairDecimals,
-      pairValue
-    };
+    const result = await JPriceOracle.methods.getPairDetails(pairId).call();
+    return result;
   } catch (error) {
     console.error(error);
   }
