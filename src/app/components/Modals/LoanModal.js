@@ -441,6 +441,7 @@ const LoanModal = ({
                       disabled={!hasBalance}
                     >
                       Accept Loan request
+                      <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
@@ -455,6 +456,7 @@ const LoanModal = ({
                       backgroundColor='#EAEAEA'
                     >
                       Withdraw Interest
+                      <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Under_Collateralized'].status ? (
@@ -471,6 +473,7 @@ const LoanModal = ({
                         display={!isShareholder ? 'none' : ''}
                       >
                         Withdraw Interest
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
 
@@ -482,6 +485,7 @@ const LoanModal = ({
                         backgroundColor='#EAEAEA'
                       >
                         Initiate Foreclosure
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -499,6 +503,7 @@ const LoanModal = ({
                         display={!isShareholder ? 'none' : ''}
                       >
                         Withdraw Interest
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
 
@@ -510,6 +515,7 @@ const LoanModal = ({
                         backgroundColor='#EAEAEA'
                       >
                         Instantly Foreclose
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -527,6 +533,7 @@ const LoanModal = ({
                         display={!isShareholder ? 'none' : ''}
                       >
                         Withdraw Interest
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
 
@@ -543,6 +550,7 @@ const LoanModal = ({
                       >
                         {/* {loanId === 20 ? console.log(!canBeForeclosed, blocksUntilForeclosure) : ''} */}
                         Instantly Foreclose
+                        <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -558,6 +566,7 @@ const LoanModal = ({
                       backgroundColor='#EAEAEA'
                     >
                       Withdraw Interest
+                      <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Early_closing'].status ? (
@@ -572,6 +581,7 @@ const LoanModal = ({
                       backgroundColor='#EAEAEA'
                     >
                       Withdraw Interest
+                      <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Closing'].status ? (
@@ -586,6 +596,7 @@ const LoanModal = ({
                       backgroundColor='#EAEAEA'
                     >
                       Withdraw Interest
+                      <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
                 ) : (

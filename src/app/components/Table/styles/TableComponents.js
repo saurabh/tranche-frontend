@@ -174,7 +174,7 @@ const TableSubTitle = styled.div`
         color: #292929;
     }
 `;
-const CreateLoadBtn = styled.div`
+const CreateLoanBtn = styled.div`
     & > button{
         background-color: transparent;
         border: none;
@@ -186,12 +186,16 @@ const CreateLoadBtn = styled.div`
         text-transform: uppercase;
         cursor: pointer;
         color: #39295A;
+        transition: 300ms;
         &:focus{
             outline: none;
         }
         & > img{
             margin-bottom: -1px;
             pointer-events: none;
+        }
+        :active{
+          transform: scale(0.9);
         }
     }
 `;
@@ -252,7 +256,7 @@ export {
     TableTitle,
     TableSubTitle,
     TableHeaderTitles,
-    CreateLoadBtn,
+    CreateLoanBtn,
     AdjustLoanBtn,
     AdjustModalBtn,
     TableMarketsDropdown,

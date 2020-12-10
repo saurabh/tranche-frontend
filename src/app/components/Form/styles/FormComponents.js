@@ -154,7 +154,10 @@ const ModalFormButton = styled.button`
   }
 
   :hover{
-    filter: brightness(1.1);
+    filter: brightness(102%);
+  }
+  :active{
+    filter: brightness(97%);
   }
   
 

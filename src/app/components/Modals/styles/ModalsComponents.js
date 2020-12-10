@@ -22,6 +22,7 @@ padding: 0 35px;
   background: transparent;
   border: none;
   cursor: pointer;
+  outline: none;
 }
 @media (max-width: 633px){
   position: relative;

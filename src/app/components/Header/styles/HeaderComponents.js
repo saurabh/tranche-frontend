@@ -90,18 +90,12 @@ const NavbarLinks = styled.div`
                     top: 0;
                     content: attr(data-content);
                     color: #ffffff;
-                    text-decoration: underline;
-                    text-decoration-color: #ffffff;
+                    border-bottom: 2px solid #ffffff;
                     clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
                     transition: clip-path 275ms ease;
                 }
           }
         :hover{
-            span:before{
-                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            }
-        }
-        :focus{
             span:before{
                 clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
             }

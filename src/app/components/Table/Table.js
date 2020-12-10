@@ -15,7 +15,7 @@ import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import { TableWrapper } from './styles/TableComponents';
+import { TableWrapper, TableContentCard } from './styles/TableComponents';
 
 const style = {
   pageItem: {
@@ -51,7 +51,7 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   const pageCount = 5;
-  const { filter, skip, limit, current, filterType, sort } = loans;
+  const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
 
   const loanListing = useCallback(async () => {
     if (sort) {
@@ -119,7 +119,37 @@ const Table = ({
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-              {loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)}
+              {
+                isLoading ? <div>
+                  {
+                   [...Array(5)].map((i, idx) =>
+
+                   <TableContentCard key={idx}>
+                    <div className="loadingCard">
+                      <div className="loadingFirstCol">
+                        <div className="loadingFirslColContent">
+                          <div className="loadingAvatar loadingContent "></div>
+                          <div className="loadingText loadingContentWrapper loadingContent">
+                          </div>
+                        </div>
+                      </div>
+                      <div className="loadingSecondCol">
+                        <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
+                      </div>
+                      <div className="loadingFifthCol">
+                        <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
+                      </div>
+                      <div className="loadingSixthCol">
+                        <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
+                      </div>
+                    </div>
+                  </TableContentCard>)
+                  }
+                  
+              
+              </div> : loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+              }
+              
             </div>
           </div>
         </TableWrapper>
