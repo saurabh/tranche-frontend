@@ -320,7 +320,7 @@ let NewLoan = ({
               </NewLoanFormInput>
               <h2>
                 BORROW LIMIT: ~{' '}
-                {(maxBorrowedAskAmount ? maxBorrowedAskAmount : 0) + ' ' + pairData[pair].text}
+               {(maxBorrowedAskAmount ? roundNumber(maxBorrowedAskAmount) : 0) + ' ' + pairData[pair].text}
               </h2>
             </ModalFormGrpNewLoan>
 
@@ -341,7 +341,7 @@ let NewLoan = ({
               <h2 onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}>
                 MINIMUM COLLATERAL:{' '}
                 <span>
-                  {minCollateralAmount ? minCollateralAmount : 0} {pairData[pair].collateral}
+                  {minCollateralAmount ? roundNumber(minCollateralAmount) : 0} {pairData[pair].collateral}
                 </span>
               </h2>
             </ModalFormGrp>
