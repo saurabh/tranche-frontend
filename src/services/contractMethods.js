@@ -66,14 +66,8 @@ export const calcAdjustCollateralRatio = async (loanId, amount, actionType, web3
 export const getPairDetails = async (pairId, web3) => {
   try {
     const JPriceOracle = JPriceOracleSetup(web3);
-    const result = await JPriceOracle.methods.pairs(pairId).call();
-    const pairValue = await JPriceOracle.methods.getPairValue(pairId).call();
-    return {
-      baseDecimals: result.baseDecimals,
-      quoteDecimals: result.quoteDecimals,
-      pairDecimals: result.pairDecimals,
-      pairValue
-    };
+    const result = await JPriceOracle.methods.getPairDetails(pairId).call();
+    return result;
   } catch (error) {
     console.error(error);
   }
@@ -82,7 +76,7 @@ export const getPairDetails = async (pairId, web3) => {
 export const getLoanStatus = async (loanId, web3) => {
   try {
     const JLoan = JLoanSetup(web3);
-    let onChainStatus = await JLoan.methods.getLoanStatus(loanId).call();
+    let onChainStatus = await JLoan.methods.loanStatus(loanId).call();
     return parseInt(onChainStatus);
   } catch (error) {
     console.error(error);
@@ -92,8 +86,8 @@ export const getLoanStatus = async (loanId, web3) => {
 export const getLoanForeclosingBlock = async (loanId, web3 = alchemyWeb3) => {
   try {
     const JLoan = JLoanSetup(web3);
-    const result = await JLoan.methods.loanForeclosingBlock(loanId).call();
-    return Number(result);
+    const result = await JLoan.methods.loanBlocks(loanId).call();
+    return Number(result.loanForeclosingBlock);
   } catch (error) {
     console.error(error);
   }

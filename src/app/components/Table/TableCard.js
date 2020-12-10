@@ -51,6 +51,7 @@ const TableCard = ({
     lenderAddress,
     contractAddress,
     contractParams: { foreclosureWindow },
+    loanCommonParams: { rpbRate },
     remainingLoan,
     apy,
     cryptoFromLender,
@@ -74,7 +75,6 @@ const TableCard = ({
   setTokenBalances,
   checkServer
 }) => {
-  let rpbRate; // TEMP NEEDS TO BE DELETED
   const JLoan = JLoanSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [newCollateralRatio, setNewCollateralRatio] = useState(0);
@@ -160,7 +160,12 @@ const TableCard = ({
   useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
-        if (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow)) setCanBeForeclosed(true);
+        if (
+          loanForeclosingBlock !== 0 &&
+          currentBlock >= loanForeclosingBlock + Number(foreclosureWindow)
+        ) {
+          setCanBeForeclosed(true);
+        }
         setBlocksUntilForeclosure(loanForeclosingBlock + Number(foreclosureWindow) - currentBlock);
       } catch (error) {
         console.log(error);
@@ -513,12 +518,11 @@ const TableCard = ({
         null,
         true
       );
-      if(result.status){
+      if (result.status) {
         checkServer(true);
         setIsLoading(false);
         setMoreList(result.result.list);
-      }
-      else{
+      } else {
         checkServer(false);
       }
     } catch (error) {
