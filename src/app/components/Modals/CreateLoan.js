@@ -163,7 +163,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
           <img src={CloseModal} alt='' />
         </button>
       </ModalHeader>
-      <NewLoan createNewLoan={createNewLoan} />
+      <NewLoan createNewLoan={createNewLoan} approveContract={approveContract} />
     </Modal>
   );
 };
