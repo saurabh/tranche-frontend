@@ -44,6 +44,26 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
     closeModal();
   }
 
+  const approveContract = async (pairId, collateralAmount) => {
+    try {
+      const { collateralTokenSetup } = pairData[pairId];
+      const collateralToken = collateralTokenSetup(web3);
+      await collateralToken.methods
+        .approve(LoanContractAddress, collateralAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const createNewEthLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
     try {
       await JLoan.methods

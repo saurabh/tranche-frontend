@@ -317,8 +317,7 @@ const TableCard = ({
       console.log('onChain status: ' + onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
-        (status === statuses['At_Risk'].status && onChainStatus === statuses['Active'].status) ||
-        onChainStatus === statuses['At_Risk'].status
+        (status === statuses['At_Risk'].status && onChainStatus === statuses['Active'].status)
       ) {
         console.log('initiateLoanForeclose');
         await JLoan.methods
@@ -335,6 +334,7 @@ const TableCard = ({
       } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
           status === statuses['At_Risk'].status) ||
+        onChainStatus === statuses['At_Risk'].status ||
         (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow) &&
           status === statuses['Foreclosing'].status)
       ) {
