@@ -22,6 +22,7 @@ padding: 0 35px;
   background: transparent;
   border: none;
   cursor: pointer;
+  outline: none;
 }
 @media (max-width: 633px){
   position: relative;
@@ -108,6 +109,7 @@ width: 100%;
 
 
 const ModalButton = styled.button`
+position: relative;
 max-width: 241px;
 width: 100%;
 height: 38px;
@@ -122,6 +124,9 @@ font-style: normal;
 font-weight: normal;
 font-size: 12px;
 letter-spacing: 0.15em;
+transition: 500ms;
+outline: none;
+overflow: hidden;
 color: #FFFFFF;
 text-transform: uppercase;
 /*color: rgba(131, 129, 134, 0.4);*/
@@ -139,7 +144,40 @@ ${({ display }) => display && `
   color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
   opacity: 0.5;
   cursor: default;
+  :hover{
+    filter: brightness(1);
+  }
+  span{
+    display: none;
+  }
 }
+
+
+
+span{
+  transform: translate(-581px,-399px) rotate(-45deg);
+  transition: 600ms;
+  background: #ffffff;
+  height: 500px;
+  width: 500px;
+  display: block;
+  position: absolute;
+  opacity: 0.3;
+  filter: brightness(1.5);
+}
+:hover{
+  span{
+    transform: translate(-370px,-399px) rotate(-45deg);
+  }
+}
+
+:active{
+  span{
+    transform: translate(370px,-399px) rotate(-45deg);
+  }
+}
+
+
 `
 
 const ConfirmAlertWrapper = styled.div`

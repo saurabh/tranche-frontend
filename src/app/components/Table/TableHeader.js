@@ -9,7 +9,7 @@ import {
     TableHeaderTitles,
     TableTitle,
     TableSubTitle,
-    CreateLoadBtn,
+    CreateLoanBtn,
     TableMarketsDropdown,
     TableMarketsDropdownContent,
     TableMarketBtn
@@ -61,9 +61,9 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
 
             <div className="create-loan-wrapper">
                 {   path !== "earn" ?
-                    <CreateLoadBtn>
+                    <CreateLoanBtn>
                         <button onClick={HandleNewLoan}><img src={Create} alt="Create"/> <span>New loan</span></button>
-                    </CreateLoadBtn> : ""
+                    </CreateLoanBtn> : ""
                 }
                 
             </div>
