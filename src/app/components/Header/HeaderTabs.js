@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
 import { PagesData } from 'config/constants';
@@ -10,10 +10,14 @@ import {
 
 const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
   const [filterValue, setFilter] = useState('all');
-  const loanListing = (filter) => {
+  const loanListing = useCallback((filter) => {
     setFilter(filter);
     changeOwnAllFilter(filter);
-  };
+  }, [changeOwnAllFilter]);
+
+  useEffect(() => {
+    loanListing('all')
+  }, [path, loanListing])
   
   return (
     <div className='container content-container'>

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { isGreaterThan } from 'utils/helperFunctions';
+import { useDebouncedCallback } from 'utils/lodash';
 import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
@@ -39,10 +40,26 @@ const AdjustPositionStyles = {
 
 const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, closeModal }) => {
   const JLoan = JLoanSetup(web3);
+  const [hasAllowance, setHasAllowance] = useState(false);
 
   function handleCloseModal() {
     closeModal();
   }
+
+  const [allowanceCheck] = useDebouncedCallback(async (pairId, collateralAmount) => {
+    try {
+      const { collateralTokenSetup } = pairData[pairId];
+      const collateralToken = collateralTokenSetup(web3);
+
+      let userAllowance = await collateralToken.methods
+        .allowance(address, LoanContractAddress)
+        .call();
+
+      if (isGreaterThan(userAllowance, collateralAmount)) setHasAllowance(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, 200);
 
   const approveContract = async (pairId, collateralAmount) => {
     try {
@@ -163,7 +180,12 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
           <img src={CloseModal} alt='' />
         </button>
       </ModalHeader>
-      <NewLoan createNewLoan={createNewLoan} approveContract={approveContract} />
+      <NewLoan
+        hasAllowance={hasAllowance}
+        allowanceCheck={allowanceCheck}
+        approveContract={approveContract}
+        createNewLoan={createNewLoan}
+      />
     </Modal>
   );
 };
