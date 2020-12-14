@@ -48,7 +48,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
 
   const allowanceCheck = async (pairId, collateralAmount) => {
     try {
-      if (pairId === 1) {
+      if (pairId === 1 && collateralAmount !== '') {
         collateralAmount = toWei(collateralAmount);
         const { collateralTokenSetup } = pairData[pairId];
         const collateralToken = collateralTokenSetup(web3);

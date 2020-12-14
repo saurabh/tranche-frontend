@@ -170,7 +170,7 @@ const ModalFormButton = styled.button`
   
 
   
-  ${({ loading }) => loading && `
+  ${({ loading }) => loading === 'true' && `
     background: transparent;
     cursor: unset;
     border: 1px solid #936CE6;

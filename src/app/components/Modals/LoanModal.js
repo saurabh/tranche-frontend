@@ -445,16 +445,6 @@ const LoanModal = ({
                         : `You are lending ${remainingLoan + ' ' + cryptoFromLenderName} backed by a
                       collateral ratio of ${collateralRatio}%.`}
                     </h2>
-
-                    {/* <ModalButton
-                      onClick={() => confirm('Approve')}
-                      btnColor='#ffffff'
-                      backgroundColor='#2ECC71'
-                      disabled={!hasBalance}
-                    >
-                      Accept Loan request
-                      <span></span>
-                    </ModalButton> */}
                     <ModalButton
                       onClick={() => confirm('Approve')} //handle onClick todo
                       btnColor='#ffffff'
