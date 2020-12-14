@@ -86,7 +86,7 @@ let NewLoan = ({
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
-  console.log(hasAllowance)
+  
   useEffect(() => {
     if(pair === 1){
       setHasAllowance(false)
@@ -94,7 +94,8 @@ let NewLoan = ({
     else{
       setHasAllowance(true);
     }
-  }, [pair])
+  }, [pair, setHasAllowance])
+
   useEffect(() => {
     const getMaxBorrowed = async () => {
       let result = await calcMaxBorrowAmount(pair, balance);
@@ -185,6 +186,7 @@ let NewLoan = ({
   const setCollateralAmount = async (borrowedAskAmount) => {
     let formattedAmount = formatString(minCollateralAmount.toString());
     change('collateralAmount', formattedAmount);
+    allowanceCheck(pair, formattedAmount);
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
     let fee = await calculateFees(toWei(formattedAmount), web3);

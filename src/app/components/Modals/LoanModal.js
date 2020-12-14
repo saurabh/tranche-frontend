@@ -125,7 +125,7 @@ const LoanModal = ({
     else{
       setApproved(true);
     }
-  }, [])
+  }, [cryptoFromLenderName])
 
   const confirm = (type) => {
     confirmAlert({

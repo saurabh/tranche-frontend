@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
-import { isGreaterThan } from 'utils/helperFunctions';
-import { useDebouncedCallback } from 'utils/lodash';
+import { isEqualTo, isGreaterThan } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
@@ -47,24 +46,29 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
     closeModal();
   }
 
-  const [allowanceCheck] = useDebouncedCallback(async (pairId, collateralAmount) => {
+  const allowanceCheck = async (pairId, collateralAmount) => {
     try {
-      const { collateralTokenSetup } = pairData[pairId];
-      const collateralToken = collateralTokenSetup(web3);
+      if (pairId === 1) {
+        collateralAmount = toWei(collateralAmount);
+        const { collateralTokenSetup } = pairData[pairId];
+        const collateralToken = collateralTokenSetup(web3);
 
-      let userAllowance = await collateralToken.methods
-        .allowance(address, LoanContractAddress)
-        .call();
-
-      if (isGreaterThan(userAllowance, collateralAmount)) {
-        setHasAllowance(true);
-      }else{
-        setHasAllowance(false);
+        let userAllowance = await collateralToken.methods
+          .allowance(address, LoanContractAddress)
+          .call();
+        if (
+          isGreaterThan(userAllowance, collateralAmount) ||
+          isEqualTo(userAllowance, collateralAmount)
+        ) {
+          setHasAllowance(true);
+        } else {
+          setHasAllowance(false);
+        }
       }
     } catch (error) {
       console.error(error);
     }
-  }, 200);
+  };
 
   const approveContract = async (pairId, collateralAmount) => {
     try {
@@ -72,7 +76,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       const collateralToken = collateralTokenSetup(web3);
       setLoading(true);
       await collateralToken.methods
-        .approve(LoanContractAddress, collateralAmount)
+        .approve(LoanContractAddress, toWei(collateralAmount))
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
@@ -81,7 +85,8 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
               message: txMessage(transaction.hash)
             };
           });
-        }).on('txConfirmed', () => {
+        })
+        .on('confirmation', () => {
           setHasAllowance(true);
           setLoading(false);
         });
