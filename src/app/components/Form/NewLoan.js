@@ -66,6 +66,11 @@ let NewLoan = ({
   error,
   pristine,
   submitting,
+  setHasAllowance,
+  hasAllowance,
+  loading,
+  approveContract,
+  allowanceCheck,
   createNewLoan,
   formValues,
   change,
@@ -81,15 +86,13 @@ let NewLoan = ({
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
-  const [approved, setApproved] = useState(false);
-  const [loading, setLoading] = useState(false);
-
+  console.log(hasAllowance)
   useEffect(() => {
     if(pair === 1){
-      setApproved(false)
+      setHasAllowance(false)
     }
     else{
-      setApproved(true);
+      setHasAllowance(true);
     }
   }, [pair])
   useEffect(() => {
@@ -192,6 +195,7 @@ let NewLoan = ({
     if (!newValue) {
       setTimeout(() => setCollateralRatio(0), 500);
     }
+    allowanceCheck(pair, newValue);
     setCollateralValue(newValue);
     let formattedAmount = formatString(newValue.toString());
     if (newValue) {
@@ -387,31 +391,30 @@ let NewLoan = ({
                 pair === 1 ?
                 <ApproveBtnWrapper>
                   <ModalFormButton
-                    type='submit'
+                    type='button'
                     loading={loading}
-                    approved={approved}
+                    approved={hasAllowance}
+                    onClick={() => approveContract(pair, formValues.collateralAmount)}
                   >
                     {
-                      (!approved && !loading) ?
+                      (!hasAllowance && !loading) ?
                       <h2>Approve</h2> :
-                      (!approved && loading) ?
+                      (!hasAllowance && loading) ?
                       <div className="btnLoadingIconWrapper">
                         <div className="btnLoadingIconCut">
                           <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
                         </div>
                       </div> :
-                      (approved && !loading) ?
+                      (hasAllowance && !loading) ?
                       <h2><span></span> Approved</h2> : ''
                     }
-                    
-                  
                   </ModalFormButton>
                 </ApproveBtnWrapper> : ''
               }
               
               <ModalFormButton
                 type='submit'
-                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb || !approved}
+                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb || !hasAllowance}
               >
                 <h2>Request Loan</h2>
               </ModalFormButton>

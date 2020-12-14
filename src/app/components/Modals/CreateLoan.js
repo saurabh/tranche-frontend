@@ -41,6 +41,7 @@ const AdjustPositionStyles = {
 const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, closeModal }) => {
   const JLoan = JLoanSetup(web3);
   const [hasAllowance, setHasAllowance] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleCloseModal() {
     closeModal();
@@ -55,7 +56,11 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
         .allowance(address, LoanContractAddress)
         .call();
 
-      if (isGreaterThan(userAllowance, collateralAmount)) setHasAllowance(true);
+      if (isGreaterThan(userAllowance, collateralAmount)) {
+        setHasAllowance(true);
+      }else{
+        setHasAllowance(false);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -65,6 +70,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
+      setLoading(true);
       await collateralToken.methods
         .approve(LoanContractAddress, collateralAmount)
         .send({ from: address })
@@ -75,6 +81,9 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
               message: txMessage(transaction.hash)
             };
           });
+        }).on('txConfirmed', () => {
+          setHasAllowance(true);
+          setLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -182,6 +191,8 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       </ModalHeader>
       <NewLoan
         hasAllowance={hasAllowance}
+        loading={loading}
+        setHasAllowance={setHasAllowance}
         allowanceCheck={allowanceCheck}
         approveContract={approveContract}
         createNewLoan={createNewLoan}
