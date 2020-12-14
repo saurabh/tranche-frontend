@@ -394,7 +394,7 @@ let NewLoan = ({
                 <ApproveBtnWrapper>
                   <ModalFormButton
                     type='button'
-                    loading={approveLoading.toString()}
+                    loading={approveLoading ? 'true' : ''}
                     approved={hasAllowance}
                     onClick={() => approveContract(pair, formValues.collateralAmount)}
                   >

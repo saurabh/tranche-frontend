@@ -178,26 +178,48 @@ const TableCard = ({
     forecloseWindowCheck();
   }, [status, currentBlock, foreclosureWindow, loanForeclosingBlock]);
 
-  const approveContract = async (pairId, collateralAmount) => {
+  const approveContract = async (pairId, amount, adjust = false) => {
     try {
-      const { lendTokenSetup } = pairData[pairId];
-      const lendToken = lendTokenSetup(web3);
-      setApproveLoading(true);
-      await lendToken.methods
-        .approve(contractAddress, toWei(collateralAmount))
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
+      amount = toWei(amount);
+      if (adjust) {
+        const { collateralTokenSetup } = pairData[pairId];
+        const token = collateralTokenSetup(web3);
+        setApproveLoading(true);
+        await token.methods
+          .approve(contractAddress, toWei(amount))
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+          })
+          .on('confirmation', () => {
+            setHasAllowance(true);
+            setApproveLoading(false);
           });
-        })
-        .on('confirmation', () => {
-          setHasAllowance(true);
-          setApproveLoading(false);
-        });
+      } else {
+        const { lendTokenSetup } = pairData[pairId];
+        const token = lendTokenSetup(web3);
+        setApproveLoading(true);
+        await token.methods
+          .approve(contractAddress, toWei(amount))
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+          })
+          .on('confirmation', () => {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -503,36 +525,36 @@ const TableCard = ({
     setAccruedInterest(availableInterest);
     const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
     setLoanForeclosingBlock(loanClosingBlock);
-    // // Allowance Check
-    // if (path === 'borrow' && pairId !== 0) {
-    //   const { collateralTokenSetup } = pairData[pairId];
-    //   const collateralToken = collateralTokenSetup(web3);
-    //   let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
-    //   if (
-    //     isGreaterThan(userAllowance, collateralAmount) ||
-    //     isEqualTo(userAllowance, collateralAmount)
-    //   ) {
-    //     setHasAllowance(true);
-    //     console.log('borrow true')
-    //   } else {
-    //     setHasAllowance(false);
-    //     console.log('borrow false')
-    //   }
-    // } else if (path === 'earn') {
-    //   const { lendTokenSetup } = pairData[pairId];
-    //   const lendToken = lendTokenSetup(web3);
-    //   let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
-    //   if (
-    //     isGreaterThan(userAllowance, collateralAmount) ||
-    //     isEqualTo(userAllowance, collateralAmount)
-    //     ) {
-    //       setHasAllowance(true);
-    //       console.log('earn true')
-    //     } else {
-    //       setHasAllowance(false);
-    //       console.log('earn false')
-    //   }
-    // }
+    // Allowance Check
+    if (path === 'borrow' && pairId !== 0) {
+      const { collateralTokenSetup } = pairData[pairId];
+      const collateralToken = collateralTokenSetup(web3);
+      let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
+      if (
+        isGreaterThan(userAllowance, collateralAmount) ||
+        isEqualTo(userAllowance, collateralAmount)
+      ) {
+        setHasAllowance(true);
+        console.log('borrow true');
+      } else {
+        setHasAllowance(false);
+        console.log('borrow false');
+      }
+    } else if (path === 'earn') {
+      const { lendTokenSetup } = pairData[pairId];
+      const lendToken = lendTokenSetup(web3);
+      let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
+      if (
+        isGreaterThan(userAllowance, collateralAmount) ||
+        isEqualTo(userAllowance, collateralAmount)
+      ) {
+        setHasAllowance(true);
+        console.log('earn true');
+      } else {
+        setHasAllowance(false);
+        console.log('earn false');
+      }
+    }
     // if (loanId === 20) {
     //   console.log(currentBlock >= result + Number(foreclosureWindow))
     //   console.log(result + Number(foreclosureWindow) - currentBlock)

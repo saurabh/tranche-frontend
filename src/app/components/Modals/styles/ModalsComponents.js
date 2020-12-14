@@ -158,7 +158,7 @@ ${({ display }) => display && `
   }
 }
 
-${({ loading, backgroundColor }) => loading && `
+${({ loading, backgroundColor }) => loading === 'true' && `
   border: 1px solid ${backgroundColor};
   background: transparent;
   cursor: unset;
