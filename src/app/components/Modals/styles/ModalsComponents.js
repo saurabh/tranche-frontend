@@ -78,6 +78,12 @@ max-height: 200px;
 height: 100%;
 width: 100%;
 
+${({ confirmBtn }) => confirmBtn && `
+  flex-direction: row;
+  justify-content: flex-end;
+`}
+
+
 ${({ submitBtn }) => submitBtn && `
   max-width: 164px;
 `}

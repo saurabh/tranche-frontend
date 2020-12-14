@@ -114,7 +114,7 @@ const LoanModal = ({
 }) => {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
-  const [approved, setApproved] = useState(true);
+  const [approved, setApproved] = useState(false);
   const [loading, setLoading] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
 
@@ -303,10 +303,24 @@ const LoanModal = ({
                         onClick={() => confirm('Close')}
                         backgroundColor='#0A66E1'
                         btnColor='#FFFFFF'
+                        loading={(!approved && loading) ? true : false}
                         disabled={!hasBalance}
                       >
-                        Close Loan
-                        <span></span>
+                        
+                        {(!approved && !loading && (status === statuses['Active'].status)) ? 'Request Approval' : (approved && !loading) ? ' Close Loan' : ''}
+                       
+                        {
+                          ((!approved && !loading) || (approved && !loading)) ?
+                          <span></span> : ''
+                        }
+                        {
+                          loading ? 
+                          <div className="btnLoadingIconWrapper">
+                            <div className="btnLoadingIconCut">
+                              <BtnLoadingIcon loadingColor='#0A66E1'></BtnLoadingIcon>
+                            </div>
+                          </div> : ''
+                        }
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
