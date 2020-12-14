@@ -152,6 +152,10 @@ const ModalFormButton = styled.button`
       filter: brightness(1);
     }
   }
+  h2{
+    font-size: 12px;
+    font-weight: normal;
+  }
 
   :hover{
     filter: brightness(102%);
@@ -159,9 +163,42 @@ const ModalFormButton = styled.button`
   :active{
     filter: brightness(97%);
   }
+
+  span{
+    display: none
+  }
   
 
-    
+  
+  ${({ loading }) => loading && `
+    background: transparent;
+    cursor: unset;
+    border: 1px solid #936CE6;
+    pointer-events: none;
+  `}
+  ${({ approved }) => approved && `
+    background: transparent;
+    cursor: unset;
+    border: 1px solid #2ECC71;
+    color: #2ECC71;
+    pointer-events: none;
+    h2{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span{
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2ECC71;
+      display: block;
+      margin-right: 9px;
+    }
+  `}
 
   ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
     font-size: 10px;
@@ -448,6 +485,14 @@ const ModalFormGrpNewLoan = styled.div`
   `}
 `
 
+const ApproveBtnWrapper = styled.div`
+  display: flex;
+  margin-right: 12px;
+  button{
+    width: 133px !important;
+  }
+`
+
 
 
 export {
@@ -472,5 +517,6 @@ export {
     ModalFormInput,
     ModalFormInputAPY,
     ModalFormInputNewLoan,
-    ModalNewLoanDetailsContent
+    ModalNewLoanDetailsContent,
+    ApproveBtnWrapper
 };

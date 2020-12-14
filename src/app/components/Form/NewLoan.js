@@ -25,7 +25,8 @@ import {
   BtnLoanModal,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue
+  LoanDetailsRowValue,
+  BtnLoadingIcon
 } from '../Modals/styles/ModalsComponents';
 
 import {
@@ -46,7 +47,8 @@ import {
   NewLoanFormInput,
   ModalNewLoanContent,
   ModalNewLoanDetails,
-  ModalNewLoanDetailsContent
+  ModalNewLoanDetailsContent,
+  ApproveBtnWrapper
 } from './styles/FormComponents';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -79,7 +81,17 @@ let NewLoan = ({
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
+  const [approved, setApproved] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if(pair === 1){
+      setApproved(false)
+    }
+    else{
+      setApproved(true);
+    }
+  }, [pair])
   useEffect(() => {
     const getMaxBorrowed = async () => {
       let result = await calcMaxBorrowAmount(pair, balance);
@@ -371,12 +383,39 @@ let NewLoan = ({
 
           <ModalFormSubmit>
             <BtnLoanModal>
+              {
+                pair === 1 ?
+                <ApproveBtnWrapper>
+                  <ModalFormButton
+                    type='submit'
+                    loading={loading}
+                    approved={approved}
+                  >
+                    {
+                      (!approved && !loading) ?
+                      <h2>Approve</h2> :
+                      (!approved && loading) ?
+                      <div className="btnLoadingIconWrapper">
+                        <div className="btnLoadingIconCut">
+                          <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
+                        </div>
+                      </div> :
+                      (approved && !loading) ?
+                      <h2><span></span> Approved</h2> : ''
+                    }
+                    
+                  
+                  </ModalFormButton>
+                </ApproveBtnWrapper> : ''
+              }
+              
               <ModalFormButton
                 type='submit'
-                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb}
+                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb || !approved}
               >
-                Request Loan
+                <h2>Request Loan</h2>
               </ModalFormButton>
+              
             </BtnLoanModal>
           </ModalFormSubmit>
         </Form>

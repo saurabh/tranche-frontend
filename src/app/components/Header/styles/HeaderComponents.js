@@ -203,19 +203,95 @@ const WalletBtnText = styled.div`
         margin: 0;
     }
 `;
- 
+const RatesWrapper = styled.div`
+    position: relative;
+`;
+
+const RatesBoxWrapper = styled.div`
+    position: absolute;
+    top: -107px;
+    left: -220px;
+    width: 298px;
+    height: auto;
+    background: #FFFFFF;
+    border: 1px solid #EFEFEF;
+    box-sizing: border-box;
+`;
+const RatesRowWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    height: 46px;
+    ${({ border }) => border && `
+        border-bottom: 1px solid #EFEFEF;
+    `}
+`;
+const RatesRowContent = styled.div`
+    padding: 14px 21px;
+    display: flex;
+    align-items: center;
+`;
+const RatesValue = styled.div`
+    display: flex;
+    align-items: center;
+    h2{
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        letter-spacing: 0.055em;
+        color: #39295A;
+        margin-left: 8px;
+    }
+`;
+const RatesValueImg = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    background: transparent;
+    border: 1px solid #F2F2F2;
+    box-sizing: border-box;
+    border-radius: 50%;
+    img{
+        height: 14.66px;
+    }
+`;
+const RatesValueText = styled.div`
+    position: relative;
+`;
+const RatesRowDash = styled.div`
+    h2{
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        letter-spacing: 0.175em;
+        color: #000000;
+        margin: 0 18px;
+    }
+`;
+
+
 export {
-  HeaderWrapper,
-  HeaderContent,
-  HeaderTitle,
-  HeaderSubtitle,
-  NavbarWrapper,
-  NavbarContainer,
-  NavbarLinks,
-  HeaderTabsWrapper,
-  MarketsTabsContainer,
-  HeaderTabBtn,
-  WalletBtn,
-  WalletBtnIcon,
-  WalletBtnText
+    HeaderWrapper,
+    HeaderContent,
+    HeaderTitle,
+    HeaderSubtitle,
+    NavbarWrapper,
+    NavbarContainer,
+    NavbarLinks,
+    HeaderTabsWrapper,
+    MarketsTabsContainer,
+    HeaderTabBtn,
+    WalletBtn,
+    WalletBtnIcon,
+    WalletBtnText,
+    RatesWrapper,
+    RatesBoxWrapper,
+    RatesRowWrapper,
+    RatesRowContent,
+    RatesValue,
+    RatesValueImg,
+    RatesValueText,
+    RatesRowDash
+    
 };

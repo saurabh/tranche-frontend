@@ -20,6 +20,13 @@ html{
   height: 25px;
   pointer-events: none;
 }
+#other-tabs-container{
+  position: relative;
+  width: 150px;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
 .table-card-more{
   height: 0;
   overflow: hidden;
@@ -1142,6 +1149,11 @@ table, th, td {
 
 
 @media (max-width: 992px){
+  #other-tabs-container{
+    flex-direction: column;
+    width: auto;
+    text-align: center;
+  }
   .navbar-right{
     width: 100% !important;
     flex-direction: column !important;
@@ -1319,4 +1331,102 @@ table, th, td {
   to {
     background-position: 0% 50%;
   }
+}
+.btnLoadingIconWrapper{
+  margin: 0 auto;
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+  -webkit-animation: clockwise 500ms linear infinite;
+  animation: clockwise 500ms linear infinite;
+}
+
+.btnLoadingIconCut{
+  position: relative;
+  width: 8px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.btnLoadingIcon{
+  box-sizing: border-box;
+  width: 16px;
+	height: 16px;	
+  border: 2px solid #936CE6;
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+	position: absolute;
+  top: 0;
+  left: 0; 
+	background: none;
+	margin:0;
+  -webkit-animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
+  animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
+}
+
+
+@-webkit-keyframes clockwise {
+  0% { -webkit-transform: rotate(0deg) }
+  100% { -webkit-transform: rotate(360deg) }
+}
+@keyframes clockwise {
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+}
+@-webkit-keyframes donut-rotate {
+  0% { -webkit-transform: rotate(0) }
+  50% { -webkit-transform: rotate(-140deg) }
+  100% { -webkit-transform: rotate(0) }
+}
+@keyframes donut-rotate {
+  0% { transform: rotate(0) }
+  50% { transform: rotate(-140deg) }
+  100% { transform: rotate(0) }
+}
+
+
+.ratesBoxWrapper{
+  border-radius: 19px;
+  z-index: 1;
+  opacity: 1;
+  transition: z-index 150ms step-start, opacity 100ms linear, transform 150ms linear, border-radius 150ms linear;
+}
+
+.ratesBoxWrapperDisplay{
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  transform: scale(0.5) !important; 
+  z-index: -1 !important;
+  opacity: 0 !important;
+  transition: z-index 150ms step-end, opacity 100ms linear, transform 150ms linear, border-radius 150ms linear !important;
+}
+
+
+/* .ReactModal__Overlay {
+  transform: translateY(-100px);
+  transition: all 300ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  transform: translateX(0px);
+}
+
+.ReactModal__Overlay--before-close {
+  transform: translateY(-100px);
+} */
+
+.ReactModal__Content{
+  transform: scale(0.5);
+  transition: all 300ms ease-in-out;
+}
+
+.ReactModal__Content--after-open{
+  transform: scale(1);
 }

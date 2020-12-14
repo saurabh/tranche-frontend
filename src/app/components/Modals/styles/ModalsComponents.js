@@ -98,8 +98,8 @@ width: 100%;
 `
 const BtnLoanModal = styled.div`
 display: flex;
-flex-direction: column;
-justify-content: space-between;
+flex-direction: row;
+justify-content: flex-end;
 width: 100%;
 & > button:disabled{
   opacity: 0.5;
@@ -151,6 +151,14 @@ ${({ display }) => display && `
     display: none;
   }
 }
+
+${({ loading, backgroundColor }) => loading && `
+  border: 1px solid ${backgroundColor};
+  background: transparent;
+  cursor: unset;
+  pointer-events: none;
+  box-shadow: none;
+`}
 
 
 
@@ -406,6 +414,28 @@ const ModalErrorWrapper = styled.div`
   }
 `
 
+const BtnLoadingIcon = styled.div`
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;	
+  border: 2px solid ${props => props.loadingColor};
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  left: 0; 
+  background: none;
+  margin:0;
+  -webkit-animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
+  animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
+`
+
+
+
 export {
     ModalHeader, 
     ModalContent,
@@ -429,5 +459,6 @@ export {
     ModalErrorWrapper,
     ModalTextConfirm,
     ModalTextConfirmBtn,
-    ModalTextConfirmBtnWrapper
+    ModalTextConfirmBtnWrapper,
+    BtnLoadingIcon
 };

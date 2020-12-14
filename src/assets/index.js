@@ -13,10 +13,14 @@ import selectDown from './images/svg/selectDown.svg';
 import selectUp from './images/svg/selectUp.svg';
 import Agree from './images/svg/Agree.svg';
 import ServerError from './images/svg/ServerError.svg';
+import DAI from './images/svg/dai.svg';
+import ETH from './images/svg/EthForm.svg';
+import USDC from './images/svg/usdc.svg';
+import JNT from './images/svg/jnt.svg';
 
 
 
 
 export {
-    Adjust, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, DAI, ETH, USDC, JNT, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };

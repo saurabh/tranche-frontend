@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
@@ -21,7 +21,8 @@ import {
   ModalActionDetailsContent,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue
+  LoanDetailsRowValue,
+  BtnLoadingIcon
 } from './styles/ModalsComponents';
 
 const FirstCustomStyles = {
@@ -113,7 +114,18 @@ const LoanModal = ({
 }) => {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
+  const [approved, setApproved] = useState(true);
+  const [loading, setLoading] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
+
+  useEffect(() => {
+    if(cryptoFromLenderName === 'USDC'){
+      setApproved(false)
+    }
+    else{
+      setApproved(true);
+    }
+  }, [])
 
   const confirm = (type) => {
     confirmAlert({
@@ -434,7 +446,7 @@ const LoanModal = ({
                       collateral ratio of ${collateralRatio}%.`}
                     </h2>
 
-                    <ModalButton
+                    {/* <ModalButton
                       onClick={() => confirm('Approve')}
                       btnColor='#ffffff'
                       backgroundColor='#2ECC71'
@@ -442,7 +454,31 @@ const LoanModal = ({
                     >
                       Accept Loan request
                       <span></span>
+                    </ModalButton> */}
+                    <ModalButton
+                      onClick={() => confirm('Approve')} //handle onClick todo
+                      btnColor='#ffffff'
+                      backgroundColor='#2ECC71'
+                      loading={(!approved && loading) ? true : false}
+                      disabled={!hasBalance}
+                    >
+                      {(!approved && !loading) ? 'Request Approval' : (approved && !loading) ? 'Accept loan Request' : ''}
+                      {
+                        ((!approved && !loading) || (approved && !loading)) ?
+                        <span></span> : ''
+                      }
+                      {
+                        loading ? 
+                        <div className="btnLoadingIconWrapper">
+                          <div className="btnLoadingIconCut">
+                            <BtnLoadingIcon loadingColor='#2ECC71'></BtnLoadingIcon>
+                          </div>
+                        </div> : ''
+                      }
+                      
                     </ModalButton>
+                    
+
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>
