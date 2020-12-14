@@ -171,25 +171,37 @@ const ModalFormButton = styled.button`
 
   
   ${({ loading }) => loading === 'true' && `
-    background: transparent;
-    cursor: unset;
-    border: 1px solid #936CE6;
-    pointer-events: none;
+    background: transparent !important;
+    cursor: unset !important;
+    border: 1px solid #936CE6 !important;
+    pointer-events: none !important;
+  `}
+  ${({ approveBtn, approved }) => (approveBtn && !approved) && `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    h2{
+      color: #ffffff !important;
+    }
   `}
   ${({ approved }) => approved && `
-    background: transparent;
-    cursor: unset;
-    border: 1px solid #2ECC71;
-    color: #2ECC71;
-    pointer-events: none;
     h2{
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      color: #2ECC71 !important;
     }
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: transparent !important;
+    cursor: unset !important;
+    border: 1px solid #2ECC71 !important;
+    color: #2ECC71 !important;
+    pointer-events: none !important;
+    h2{
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     span{
       width: 6px;
       height: 6px;

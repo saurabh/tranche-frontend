@@ -7,7 +7,8 @@ import {
   BtnGrpLoanModal,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue
+  LoanDetailsRowValue,
+  BtnLoadingIcon
 } from '../Modals/styles/ModalsComponents';
 
 import {
@@ -67,6 +68,11 @@ let AdjustLoan = ({
   const [actionType, setActionType] = useState(); // true = adding; false = removing
   const [toggleInput, setToggleInput] = useState(false);
   const [newCollateralAmount, setNewCollateralAmount] = useState(0);
+  const [approved, setApproved] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+
+
   const setLoanId = useCallback(() => {
     change('loanId', loanId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,7 +198,30 @@ let AdjustLoan = ({
               </>
             )}
             {isAdjustSelected && (
-              <BtnGrpLoanModal>
+              <BtnGrpLoanModal confirmBtn={true}>
+                {
+                  (actionType && cryptoFromLenderName === 'USDC') ?
+                  <ModalFormButton
+                    type='button'
+                    approveBtn={true}
+                    loading={loading}
+                    approved={approved}
+                  >
+                    {
+                      (!approved && !loading) ?
+                      <h2>Approve</h2> :
+                      (!approved && loading) ?
+                      <div className="btnLoadingIconWrapper">
+                        <div className="btnLoadingIconCut">
+                          <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
+                        </div>
+                      </div> :
+                      (approved && !loading) ?
+                      <h2><span></span> Approved</h2> : ''
+                    }
+                  </ModalFormButton> : ''
+                }
+                
                 <ModalFormButton
                   type='submit'
                   disabled={pristine || submitting || error || !newCollateralAmount}

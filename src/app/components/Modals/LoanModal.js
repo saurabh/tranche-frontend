@@ -296,13 +296,27 @@ const LoanModal = ({
                           : 'Return the loan amount and pay outstanding interest.'}
                       </h2>
                       <ModalButton
-                        onClick={() => confirm('Close')}
+                        onClick={hasAllowance ? () => confirm('Close') : () => approveContract(pairId, remainingLoan)}
                         backgroundColor='#0A66E1'
                         btnColor='#FFFFFF'
+                        loading={(!hasAllowance && approveLoading) ? true : false}
                         disabled={!hasBalance}
                       >
-                        Close Loan
-                        <span></span>
+                        
+                        {(!hasAllowance && !approveLoading && (status === statuses['Active'].status)) ? 'Request Approval' : (hasAllowance && !approveLoading) ? ' Close Loan' : ''}
+                       
+                        {
+                          ((!hasAllowance && !approveLoading) || (hasAllowance && !approveLoading)) ?
+                          <span></span> : ''
+                        }
+                        {
+                          approveLoading ? 
+                          <div className="btnLoadingIconWrapper">
+                            <div className="btnLoadingIconCut">
+                              <BtnLoadingIcon loadingColor='#0A66E1'></BtnLoadingIcon>
+                            </div>
+                          </div> : ''
+                        }
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
