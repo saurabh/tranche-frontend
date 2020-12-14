@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
@@ -95,6 +95,7 @@ const LoanModal = ({
   accruedInterest,
   totalInterest,
   newCollateralRatio,
+  setHasAllowance,
   setNewCollateralRatio,
   // Functions
   closeModal,
@@ -309,7 +310,7 @@ const LoanModal = ({
                           onClick={
                             hasAllowance
                               ? () => confirm('Close')
-                              : () => approveContract(pairId, remainingLoan)
+                              : () => approveContract(pairId, remainingLoan.toString())
                           }
                           backgroundColor='#0A66E1'
                           btnColor='#FFFFFF'
@@ -360,20 +361,27 @@ const LoanModal = ({
               </button>
             </ModalHeader>
             <AdjustLoan
+              // State Values
               isAdjustSelected={isAdjustSelected}
-              setIsAdjustSelected={setIsAdjustSelected}
               adjustPositionToggle={adjustPositionToggle}
-              loanId={loanId}
-              contractAddress={contractAddress}
-              collateralTypeName={collateralTypeName}
-              adjustLoan={adjustLoan}
+              approveLoading={approveLoading}
+              hasAllowance={hasAllowance}
+              newCollateralRatio={newCollateralRatio}
+              setIsAdjustSelected={setIsAdjustSelected}
               setNewCollateralRatio={setNewCollateralRatio}
+              setHasAllowance={setHasAllowance}
+              // Functions
+              approveContract={approveContract}
+              adjustLoan={adjustLoan}
+              calcNewCollateralRatio={calcNewCollateralRatio}
+              // API Values
+              loanId={loanId}
+              pairId={pairId}
               remainingLoan={remainingLoan}
               cryptoFromLenderName={cryptoFromLenderName}
               collateralAmount={collateralAmount}
-              newCollateralRatio={newCollateralRatio}
+              collateralTypeName={collateralTypeName}
               collateralRatio={collateralRatio}
-              calcNewCollateralRatio={calcNewCollateralRatio}
             />
           </Modal>
         )}

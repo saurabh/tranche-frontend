@@ -5,12 +5,13 @@ import ReactLoading from 'react-loading';
 import { postRequest } from 'services/axios';
 import { JLoanSetup } from 'utils/contractConstructor';
 import {
-  calcAdjustCollateralRatio,
   toWei,
   fromWei,
   getLoanStatus,
+  calcAdjustCollateralRatio,
   getLoanForeclosingBlock,
-  getAccruedInterests
+  getAccruedInterests,
+  allowanceCheck
 } from 'services/contractMethods';
 import {
   setAddress,
@@ -26,7 +27,6 @@ import {
   valShortner,
   readyToTransact,
   isGreaterThan,
-  isEqualTo,
   gweiOrEther,
   roundBasedOnUnit
 } from 'utils';
@@ -181,45 +181,24 @@ const TableCard = ({
   const approveContract = async (pairId, amount, adjust = false) => {
     try {
       amount = toWei(amount);
-      if (adjust) {
-        const { collateralTokenSetup } = pairData[pairId];
-        const token = collateralTokenSetup(web3);
-        setApproveLoading(true);
-        await token.methods
-          .approve(contractAddress, toWei(amount))
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          })
-          .on('confirmation', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
+      const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
+      const token = adjust ? collateralTokenSetup(web3) : lendTokenSetup(web3);
+      await token.methods
+        .approve(contractAddress, toWei(amount))
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          setApproveLoading(true);
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
           });
-      } else {
-        const { lendTokenSetup } = pairData[pairId];
-        const token = lendTokenSetup(web3);
-        setApproveLoading(true);
-        await token.methods
-          .approve(contractAddress, toWei(amount))
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          })
-          .on('confirmation', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
-      }
+        })
+        .on('confirmation', () => {
+          setHasAllowance(true);
+          setApproveLoading(false);
+        });
     } catch (error) {
       console.error(error);
     }
@@ -514,47 +493,14 @@ const TableCard = ({
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
-    // setTokenBalances
-    if (!address) {
-      const { address } = onboard.getState();
-      setTokenBalances(web3, address);
-    } else {
-      setTokenBalances(web3, address);
-    }
+    address = !address ? onboard.getState().address : address;
+    setTokenBalances(web3, address);
+    const allowanceResult = await allowanceCheck(pairId, remainingLoan.toString(), address, web3);
+    setHasAllowance(allowanceResult);
     const availableInterest = await getAccruedInterests(loanId, web3);
     setAccruedInterest(availableInterest);
     const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
     setLoanForeclosingBlock(loanClosingBlock);
-    // Allowance Check
-    if (path === 'borrow' && pairId !== 0) {
-      const { collateralTokenSetup } = pairData[pairId];
-      const collateralToken = collateralTokenSetup(web3);
-      let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
-      if (
-        isGreaterThan(userAllowance, collateralAmount) ||
-        isEqualTo(userAllowance, collateralAmount)
-      ) {
-        setHasAllowance(true);
-        console.log('borrow true');
-      } else {
-        setHasAllowance(false);
-        console.log('borrow false');
-      }
-    } else if (path === 'earn') {
-      const { lendTokenSetup } = pairData[pairId];
-      const lendToken = lendTokenSetup(web3);
-      let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
-      if (
-        isGreaterThan(userAllowance, collateralAmount) ||
-        isEqualTo(userAllowance, collateralAmount)
-      ) {
-        setHasAllowance(true);
-        console.log('earn true');
-      } else {
-        setHasAllowance(false);
-        console.log('earn false');
-      }
-    }
     // if (loanId === 20) {
     //   console.log(currentBlock >= result + Number(foreclosureWindow))
     //   console.log(result + Number(foreclosureWindow) - currentBlock)
@@ -723,6 +669,7 @@ const TableCard = ({
             accruedInterest={accruedInterest}
             totalInterest={totalInterest}
             newCollateralRatio={newCollateralRatio}
+            setHasAllowance={setHasAllowance}
             setNewCollateralRatio={setNewCollateralRatio}
             // Functions
             closeModal={() => closeModal()}
