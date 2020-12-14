@@ -1,13 +1,33 @@
 import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup } from 'utils/contractConstructor';
 import { web3 as alchemyWeb3 } from 'utils/getWeb3';
-import { factoryFees } from 'config';
-// const JLoan = JLoanSetup(web3);
-// const JLoanHelper = JLoanHelperSetup(web3);
-// const JPriceOracle = JPriceOracleSetup(web3);
+import { pairData, LoanContractAddress, factoryFees, txMessage } from 'config';
+import { initNotify } from 'services/blocknative';
 
 export const toWei = alchemyWeb3.utils.toWei;
 export const fromWei = alchemyWeb3.utils.fromWei;
 export const toBN = alchemyWeb3.utils.toBN;
+const notify = initNotify();
+
+export const approveContract = async (pairId, collateralAmount, address, web3) => {
+  try {
+    const { collateralTokenSetup } = pairData[pairId];
+    const collateralToken = collateralTokenSetup(web3);
+    await collateralToken.methods
+      .approve(LoanContractAddress, collateralAmount)
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+      });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 export const calculateFees = async (collateralAmount, web3) => {
   try {
