@@ -40,7 +40,7 @@ const AdjustPositionStyles = {
 const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, closeModal }) => {
   const JLoan = JLoanSetup(web3);
   const [hasAllowance, setHasAllowance] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
 
   function handleCloseModal() {
     closeModal();
@@ -74,7 +74,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
-      setLoading(true);
+      setApproveLoading(true);
       await collateralToken.methods
         .approve(LoanContractAddress, toWei(collateralAmount))
         .send({ from: address })
@@ -88,7 +88,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
         })
         .on('confirmation', () => {
           setHasAllowance(true);
-          setLoading(false);
+          setApproveLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -196,7 +196,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       </ModalHeader>
       <NewLoan
         hasAllowance={hasAllowance}
-        loading={loading}
+        loading={approveLoading}
         setHasAllowance={setHasAllowance}
         allowanceCheck={allowanceCheck}
         approveContract={approveContract}

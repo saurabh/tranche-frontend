@@ -26,6 +26,7 @@ import {
   valShortner,
   readyToTransact,
   isGreaterThan,
+  isEqualTo,
   gweiOrEther,
   roundBasedOnUnit
 } from 'utils';
@@ -47,6 +48,7 @@ const TableCard = ({
   loan: {
     loanId,
     status,
+    pairId,
     borrowerAddress,
     lenderAddress,
     contractAddress,
@@ -81,8 +83,10 @@ const TableCard = ({
   const [moreCardToggle, setMoreCardToggle] = useState(false);
   const [moreList, setMoreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
   const [disableBtn, setDisableBtn] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
+  const [hasAllowance, setHasAllowance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
   const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
@@ -174,6 +178,31 @@ const TableCard = ({
     forecloseWindowCheck();
   }, [status, currentBlock, foreclosureWindow, loanForeclosingBlock]);
 
+  const approveContract = async (pairId, collateralAmount) => {
+    try {
+      const { lendTokenSetup } = pairData[pairId];
+      const lendToken = lendTokenSetup(web3);
+      setApproveLoading(true);
+      await lendToken.methods
+        .approve(contractAddress, toWei(collateralAmount))
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        })
+        .on('confirmation', () => {
+          setHasAllowance(true);
+          setApproveLoading(false);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
       const result = await calcAdjustCollateralRatio(loanId, amount, actionType, web3);
@@ -185,7 +214,7 @@ const TableCard = ({
 
   const approveLoan = async () => {
     try {
-      const { lendTokenSetup } = searchArr(cryptoFromLenderName);
+      const { lendTokenSetup } = pairData[pairId];
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
@@ -232,7 +261,7 @@ const TableCard = ({
 
   const closeLoan = async () => {
     try {
-      const { lendTokenSetup } = searchArr(cryptoFromLenderName);
+      const { lendTokenSetup } = pairData[pairId];
       const lendToken = lendTokenSetup(web3);
       remainingLoan = toWei(remainingLoan.toString());
       if (status === 0) {
@@ -395,7 +424,7 @@ const TableCard = ({
 
   const addCollateralToTokenLoan = async (collateralAmount, collateralAddress) => {
     try {
-      const { collateralTokenSetup } = searchArr(cryptoFromLenderName);
+      const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
       let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(collateralAmount, userAllowance)) {
@@ -463,14 +492,47 @@ const TableCard = ({
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
+    // setTokenBalances
     if (!address) {
       const { address } = onboard.getState();
       setTokenBalances(web3, address);
-    } else setTokenBalances(web3, address);
+    } else {
+      setTokenBalances(web3, address);
+    }
     const availableInterest = await getAccruedInterests(loanId, web3);
     setAccruedInterest(availableInterest);
     const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
     setLoanForeclosingBlock(loanClosingBlock);
+    // // Allowance Check
+    // if (path === 'borrow' && pairId !== 0) {
+    //   const { collateralTokenSetup } = pairData[pairId];
+    //   const collateralToken = collateralTokenSetup(web3);
+    //   let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
+    //   if (
+    //     isGreaterThan(userAllowance, collateralAmount) ||
+    //     isEqualTo(userAllowance, collateralAmount)
+    //   ) {
+    //     setHasAllowance(true);
+    //     console.log('borrow true')
+    //   } else {
+    //     setHasAllowance(false);
+    //     console.log('borrow false')
+    //   }
+    // } else if (path === 'earn') {
+    //   const { lendTokenSetup } = pairData[pairId];
+    //   const lendToken = lendTokenSetup(web3);
+    //   let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
+    //   if (
+    //     isGreaterThan(userAllowance, collateralAmount) ||
+    //     isEqualTo(userAllowance, collateralAmount)
+    //     ) {
+    //       setHasAllowance(true);
+    //       console.log('earn true')
+    //     } else {
+    //       setHasAllowance(false);
+    //       console.log('earn false')
+    //   }
+    // }
     // if (loanId === 20) {
     //   console.log(currentBlock >= result + Number(foreclosureWindow))
     //   console.log(result + Number(foreclosureWindow) - currentBlock)
@@ -627,35 +689,41 @@ const TableCard = ({
             </AdjustLoanBtn>
           </div>
           <LoanModal
-            loanId={loanId}
-            status={status}
+            // State Values
             path={path}
-            interestPaid={interestPaid}
             modalIsOpen={modalIsOpen}
-            closeModal={() => closeModal()}
-            contractAddress={contractAddress}
+            approveLoading={approveLoading}
             hasBalance={hasBalance}
+            hasAllowance={hasAllowance}
             isShareholder={isShareholder}
             canBeForeclosed={canBeForeclosed}
             blocksUntilForeclosure={blocksUntilForeclosure}
-            totalInterest={totalInterest}
             accruedInterest={accruedInterest}
-            approveLoan={approveLoan}
-            closeLoan={closeLoan}
-            APY={apy}
-            adjustLoan={adjustLoan}
-            withdrawCollateral={withdrawCollateral}
-            withdrawInterest={withdrawInterest}
-            forecloseLoan={forecloseLoan}
+            totalInterest={totalInterest}
             newCollateralRatio={newCollateralRatio}
             setNewCollateralRatio={setNewCollateralRatio}
+            // Functions
+            closeModal={() => closeModal()}
+            approveContract={approveContract}
+            adjustLoan={adjustLoan}
             calcNewCollateralRatio={calcNewCollateralRatio}
-            rpbRate={rpbRate && fromWei(rpbRate)}
-            collateralAmount={collateralAmount}
-            collateralRatio={collateralRatio}
+            closeLoan={closeLoan}
+            approveLoan={approveLoan}
+            withdrawInterest={withdrawInterest}
+            forecloseLoan={forecloseLoan}
+            // API Values
+            loanId={loanId}
+            status={status}
+            pairId={pairId}
+            contractAddress={contractAddress}
             remainingLoan={remainingLoan}
-            collateralTypeName={collateralTypeName}
             cryptoFromLenderName={cryptoFromLenderName}
+            collateralAmount={collateralAmount}
+            collateralTypeName={collateralTypeName}
+            collateralRatio={collateralRatio}
+            interestPaid={interestPaid}
+            APY={apy}
+            rpbRate={rpbRate && fromWei(rpbRate)}
           />
         </div>
       </TableContentCard>

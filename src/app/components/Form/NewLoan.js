@@ -68,7 +68,7 @@ let NewLoan = ({
   submitting,
   setHasAllowance,
   hasAllowance,
-  loading,
+  approveLoading,
   approveContract,
   allowanceCheck,
   createNewLoan,
@@ -394,20 +394,20 @@ let NewLoan = ({
                 <ApproveBtnWrapper>
                   <ModalFormButton
                     type='button'
-                    loading={loading.toString()}
+                    loading={approveLoading.toString()}
                     approved={hasAllowance}
                     onClick={() => approveContract(pair, formValues.collateralAmount)}
                   >
                     {
-                      (!hasAllowance && !loading) ?
+                      (!hasAllowance && !approveLoading) ?
                       <h2>Approve</h2> :
-                      (!hasAllowance && loading) ?
+                      (!hasAllowance && approveLoading) ?
                       <div className="btnLoadingIconWrapper">
                         <div className="btnLoadingIconCut">
                           <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
                         </div>
                       </div> :
-                      (hasAllowance && !loading) ?
+                      (hasAllowance && !approveLoading) ?
                       <h2><span></span> Approved</h2> : ''
                     }
                   </ModalFormButton>

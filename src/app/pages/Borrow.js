@@ -6,7 +6,8 @@ import {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3
+  setWalletAndWeb3,
+  setTokenBalances
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
@@ -21,7 +22,7 @@ const Borrow = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { address, network, balance, wallet, web3 },
+  ethereum: { address, wallet, web3 },
   changeFilter
 }) => {
   const { pathname } = useLocation();
@@ -42,6 +43,10 @@ const Borrow = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     setShowModal(true);
+    if (!address) {
+      const { address } = onboard.getState();
+      setTokenBalances(web3, address);
+    } else setTokenBalances(web3, address);
   };
 
   return (
