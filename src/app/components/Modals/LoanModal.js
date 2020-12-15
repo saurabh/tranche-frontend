@@ -291,54 +291,63 @@ const LoanModal = ({
                     </BtnGrpLoanModalWrapper>
 
                     <BtnGrpLoanModalWrapper>
-                      <h2>
-                        {!hasBalance
-                          ? `You don't have enough ${cryptoFromLenderName} for this action.`
-                          : 'Return the loan amount and pay outstanding interest.'}
-                      </h2>
                       {status === statuses['Pending'].status ? (
-                        <ModalButton
-                          onClick={() => confirm('Cancel')}
-                          backgroundColor='#0A66E1'
-                          btnColor='#FFFFFF'
-                          disabled={!hasBalance}
-                        >
-                          Cancel Loan
-                        </ModalButton>
+                        <>
+                          <h2>Cancel this loan request</h2>
+                          <ModalButton
+                            onClick={() => confirm('Cancel')}
+                            backgroundColor='#0A66E1'
+                            btnColor='#FFFFFF'
+                            disabled={!hasBalance}
+                          >
+                            Cancel Loan
+                          </ModalButton>
+                        </>
                       ) : (
-                        <ModalButton
-                          onClick={
-                            hasAllowance
-                              ? () => confirm('Close')
-                              : () => approveContract(pairId, remainingLoan.toString())
-                          }
-                          backgroundColor='#0A66E1'
-                          btnColor='#FFFFFF'
-                          loading={!hasAllowance && approveLoading ? 'true' : ''}
-                          disabled={!hasBalance}
-                        >
-                          {!hasAllowance && !approveLoading
-                            ? 'Request Approval'
-                            : hasAllowance && !approveLoading
-                            ? 'Close Loan'
-                            : ''}
-
-                          {(!hasAllowance && !approveLoading) ||
-                          (hasAllowance && !approveLoading) ? (
-                            <span></span>
-                          ) : (
-                            ''
-                          )}
-                          {approveLoading ? (
-                            <div className='btnLoadingIconWrapper'>
-                              <div className='btnLoadingIconCut'>
-                                <BtnLoadingIcon loadingColor='#0A66E1'></BtnLoadingIcon>
+                        <>
+                          <h2>
+                            {!hasBalance
+                              ? `You don't have enough ${cryptoFromLenderName} for this action.`
+                              : 'Return the loan amount and pay outstanding interest.'}
+                          </h2>
+                          <ModalButton
+                            onClick={
+                              hasAllowance
+                                ? () => confirm('Close')
+                                : () => approveContract(pairId, remainingLoan.toString())
+                            }
+                            backgroundColor='#0A66E1'
+                            btnColor='#FFFFFF'
+                            loading={!hasAllowance && approveLoading ? 'true' : ''}
+                            disabled={!hasBalance}
+                          >
+                            {!hasAllowance && !approveLoading
+                              ? 'Approve'
+                              : hasAllowance && !approveLoading
+                              ? 'Close Loan'
+                              : ''}
+                            {(!hasAllowance && !approveLoading) ||
+                            (hasAllowance && !approveLoading) ? (
+                              <span></span>
+                            ) : (
+                              ''
+                            )}
+                            {approveLoading ? (
+                              <div className='btnLoadingIconWrapper'>
+                                <div className='btnLoadingIconCut'>
+                                  <BtnLoadingIcon loadingColor='#0A66E1'></BtnLoadingIcon>
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            ''
-                          )}
-                        </ModalButton>
+                            ) : (
+                              ''
+                            )}
+                          </ModalButton>
+                          <h2>
+                            {!hasAllowance && !approveLoading
+                              ? 'This is 1 of 2 transactions required to close a loan.'
+                              : ''}
+                          </h2>
+                        </>
                       )}
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
@@ -496,7 +505,7 @@ const LoanModal = ({
                       disabled={!hasBalance}
                     >
                       {!hasAllowance && !approveLoading
-                        ? 'Request Approval'
+                        ? 'Approve'
                         : hasAllowance && !approveLoading
                         ? 'Accept loan Request'
                         : ''}
@@ -515,6 +524,11 @@ const LoanModal = ({
                         ''
                       )}
                     </ModalButton>
+                    <h2 style={{ marginTop: '10px' }}>
+                      {!hasAllowance && !approveLoading
+                        ? 'This is 1 of 2 transactions required to accept a loan request.'
+                        : ''}
+                    </h2>
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>
