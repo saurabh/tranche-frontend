@@ -186,7 +186,7 @@ let NewLoan = ({
   const setCollateralAmount = async (borrowedAskAmount) => {
     let formattedAmount = formatString(minCollateralAmount.toString());
     change('collateralAmount', formattedAmount);
-    const allowanceResult = await allowanceCheck(pair, formattedAmount, address, web3);
+    const allowanceResult = await allowanceCheck(pair, formattedAmount, address, web3, true);
     setHasAllowance(allowanceResult)
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
@@ -198,7 +198,7 @@ let NewLoan = ({
     if (!newValue) {
       setTimeout(() => setCollateralRatio(0), 500);
     }
-    const allowanceResult = await allowanceCheck(pair, newValue, address, web3);
+    const allowanceResult = await allowanceCheck(pair, newValue, address, web3, true);
     setHasAllowance(allowanceResult)
     setCollateralValue(newValue);
     let formattedAmount = formatString(newValue.toString());

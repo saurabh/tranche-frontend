@@ -9,7 +9,7 @@ export const fromWei = alchemyWeb3.utils.fromWei;
 export const toBN = alchemyWeb3.utils.toBN;
 const notify = initNotify();
 
-export const allowanceCheck = async (pairId, amount, address, web3, adjust = false) => {
+export const allowanceCheck = async (pairId, amount, address, web3, collateral = false) => {
   try {
     amount = toWei(amount);
     const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];

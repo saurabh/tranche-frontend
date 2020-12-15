@@ -30,7 +30,7 @@ import {
   gweiOrEther,
   roundBasedOnUnit
 } from 'utils';
-import { statuses, PagesData, pairData, etherScanUrl, apiUri, USDC, DAI, txMessage } from 'config';
+import { statuses, PagesData, pairData, etherScanUrl, apiUri, DAI, txMessage } from 'config';
 import LoanModal from '../Modals/LoanModal';
 import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -215,46 +215,17 @@ const TableCard = ({
 
   const approveLoan = async () => {
     try {
-      const { lendTokenSetup } = pairData[pairId];
-      const lendToken = lendTokenSetup(web3);
-      remainingLoan = toWei(remainingLoan.toString());
-      let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
-      if (isGreaterThan(remainingLoan, userAllowance)) {
-        await lendToken.methods
-          .approve(contractAddress, remainingLoan)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
+      await JLoan.methods
+        .lenderSendStableCoins(loanId, cryptoFromLender)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
           });
-        await JLoan.methods
-          .lenderSendStableCoins(loanId, cryptoFromLender)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      } else {
-        await JLoan.methods
-          .lenderSendStableCoins(loanId, cryptoFromLender)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      }
+        });
     } catch (error) {
       console.error(error);
     }
@@ -262,9 +233,6 @@ const TableCard = ({
 
   const closeLoan = async () => {
     try {
-      const { lendTokenSetup } = pairData[pairId];
-      const lendToken = lendTokenSetup(web3);
-      remainingLoan = toWei(remainingLoan.toString());
       if (status === 0) {
         JLoan.methods
           .setLoanCancelled(loanId)
@@ -278,43 +246,17 @@ const TableCard = ({
             });
           });
       } else {
-        let userAllowance = await lendToken.methods.allowance(address, contractAddress).call();
-        if (isGreaterThan(remainingLoan, userAllowance)) {
-          await lendToken.methods
-            .approve(contractAddress, remainingLoan)
-            .send({ from: address })
-            .on('transactionHash', (hash) => {
-              const { emitter } = notify.hash(hash);
-              emitter.on('txPool', (transaction) => {
-                return {
-                  message: txMessage(transaction.hash)
-                };
-              });
+        await JLoan.methods
+          .loanClosingByBorrower(loanId)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
             });
-          await JLoan.methods
-            .loanClosingByBorrower(loanId)
-            .send({ from: address })
-            .on('transactionHash', (hash) => {
-              const { emitter } = notify.hash(hash);
-              emitter.on('txPool', (transaction) => {
-                return {
-                  message: txMessage(transaction.hash)
-                };
-              });
-            });
-        } else {
-          await JLoan.methods
-            .loanClosingByBorrower(loanId)
-            .send({ from: address })
-            .on('transactionHash', (hash) => {
-              const { emitter } = notify.hash(hash);
-              emitter.on('txPool', (transaction) => {
-                return {
-                  message: txMessage(transaction.hash)
-                };
-              });
-            });
-        }
+          });
       }
     } catch (error) {
       console.error(error);
@@ -386,9 +328,9 @@ const TableCard = ({
   };
 
   const withdrawCollateral = async () => {
-    let { collateralAmount } = form.adjustLoan.values;
-    collateralAmount = toWei(collateralAmount);
     try {
+      let { collateralAmount } = form.adjustLoan.values;
+      collateralAmount = toWei(collateralAmount);
       await JLoan.methods
         .withdrawCollateral(loanId, collateralAmount)
         .send({ from: address })
@@ -405,44 +347,14 @@ const TableCard = ({
     }
   };
 
-  const addCollateralToEthLoan = async (collateralAmount) => {
+  const addCollateral = async () => {
     try {
-      await JLoan.methods
-        .depositEthCollateral(loanId)
-        .send({ value: collateralAmount, from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const addCollateralToTokenLoan = async (collateralAmount, collateralAddress) => {
-    try {
-      const { collateralTokenSetup } = pairData[pairId];
-      const collateralToken = collateralTokenSetup(web3);
-      let userAllowance = await collateralToken.methods.allowance(address, contractAddress).call();
-      if (isGreaterThan(collateralAmount, userAllowance)) {
-        await collateralToken.methods
-          .approve(contractAddress, collateralAmount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
+      let { collateralAmount } = form.adjustLoan.values;
+      collateralAmount = toWei(collateralAmount);
+      if (cryptoFromLenderName === searchArr(DAI).key) {
         await JLoan.methods
-          .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
-          .send({ from: address })
+          .depositEthCollateral(loanId)
+          .send({ value: collateralAmount, from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -453,7 +365,7 @@ const TableCard = ({
           });
       } else {
         await JLoan.methods
-          .depositTokenCollateral(loanId, collateralAddress, collateralAmount)
+          .depositTokenCollateral(loanId, collateralType, collateralAmount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
             const { emitter } = notify.hash(hash);
@@ -466,16 +378,6 @@ const TableCard = ({
       }
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  const addCollateral = () => {
-    let { collateralAmount } = form.adjustLoan.values;
-    collateralAmount = toWei(collateralAmount);
-    if (cryptoFromLenderName === searchArr(DAI).key) {
-      addCollateralToEthLoan(collateralAmount);
-    } else if (cryptoFromLenderName === searchArr(USDC).key) {
-      addCollateralToTokenLoan(collateralAmount, collateralType);
     }
   };
 
