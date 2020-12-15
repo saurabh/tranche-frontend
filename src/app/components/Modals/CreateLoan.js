@@ -185,6 +185,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       isOpen={openModal}
       onRequestClose={handleCloseModal}
       style={AdjustPositionStyles}
+      closeTimeoutMS={200}
       shouldCloseOnOverlayClick={false}
       contentLabel='NewLoan'
     >

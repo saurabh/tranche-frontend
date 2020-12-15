@@ -23,6 +23,10 @@ padding: 0 35px;
   border: none;
   cursor: pointer;
   outline: none;
+  transition: 300ms;
+  :active{
+    transform: scale(0.9);
+  }
 }
 @media (max-width: 633px){
   position: relative;
@@ -195,33 +199,56 @@ span{
 `
 
 const ConfirmAlertWrapper = styled.div`
-position: relative;
-width: auto;
-//height: 326px;
-height: auto;
-border-radius: 12px;
-background: #ffffff;
-border: none;
-box-shadow: 0px 2px 4px rgba(99,99,99,0.7);
-padding: 33px 100px;
-& > h2{
-  font-style: normal;
-  font-weight: normal;
-  font-size: 15px;
-  color: #3F3F3F;
-}
+  position: relative;
+  width: 100% !important;
+  min-height: 120px;
+  border-radius: 7px !important;
+  background: #ffffff !important;
+  border: none !important;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.19) !important;
+  padding: 13px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > h2{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    color: #3F3F3F;
+  }
 
 `
 
 const ConfirmAlertBtnWrapper = styled.div`
-display: flex;
-justify-content: space-around;
-& > button{
-  max-width: 100px;
-  font-size: 14px;
-  font-weight: 700;
-  margin: 12px 0 0 0;
-} 
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border-radius: 7px;
+
+  & > button{
+    max-width: 100px;
+    height: 33px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    box-shadow: none;
+    border-radius: 3px;
+    transition: 300ms;
+
+    :hover{
+      filter: brightness(0.93);
+    }
+    :active{
+      filter: brightness(0.9);
+    }
+  }
+  & > button:first-child{
+    margin-right: 12px;
+  }       
 `
 
 

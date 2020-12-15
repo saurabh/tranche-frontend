@@ -1409,6 +1409,10 @@ table, th, td {
 }
 
 
+.ReactModal__Overlay{
+  opacity: 1;
+  transition: all 300ms ease-in-out;
+}
 .ReactModal__Content{
   transform: scale(0.5);
   transition: all 300ms ease-in-out;
@@ -1416,4 +1420,16 @@ table, th, td {
 
 .ReactModal__Content--after-open{
   transform: scale(1);
+}
+.ReactModal__Content--before-close {
+  transform: scale(0.5);
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+.react-confirm-alert{
+  max-width: 500px !important;
+  width: 100% !important;
+  transition: none !important;
 }

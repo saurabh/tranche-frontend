@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
+import { Spring } from 'react-spring/renderprops'
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
@@ -131,7 +132,17 @@ const LoanModal = ({
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <ConfirmAlertWrapper>
+          <Spring
+            from={{
+              transform: 'translate3d(0,-400px,0) scale(2)'
+            }}
+            to={{
+              transform: 'translate3d(0,0px,0) scale(1)'
+            }}
+          >
+          {props => (
+           
+          <ConfirmAlertWrapper style={props}>
             {type === 'Close' ? (
               <h2>Are you sure you want to return {remainingLoan + ' ' + cryptoFromLenderName}?</h2>
             ) : (
@@ -159,7 +170,10 @@ const LoanModal = ({
                 Yes
               </ModalButton>
             </ConfirmAlertBtnWrapper>
-          </ConfirmAlertWrapper>
+          </ConfirmAlertWrapper>)}
+
+          </Spring>
+
         );
       }
     });
@@ -200,6 +214,7 @@ const LoanModal = ({
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             style={FirstCustomStyles}
+            closeTimeoutMS={200}
             shouldCloseOnOverlayClick={false}
             contentLabel='Adjust'
           >
@@ -333,6 +348,7 @@ const LoanModal = ({
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             style={AdjustPositionStyles}
+            closeTimeoutMS={200}
             shouldCloseOnOverlayClick={false}
             contentLabel='AdjustPosition'
           >
@@ -370,6 +386,7 @@ const LoanModal = ({
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={FirstCustomStyles}
+        closeTimeoutMS={200}
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
       >
