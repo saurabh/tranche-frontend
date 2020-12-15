@@ -86,20 +86,19 @@ let NewLoan = ({
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
-  
+
   useEffect(() => {
-    if(pair === 1){
-      setHasAllowance(false)
-    }
-    else{
+    if (pair === 1) {
+      setHasAllowance(false);
+    } else {
       setHasAllowance(true);
     }
-  }, [pair, setHasAllowance])
+  }, [pair, setHasAllowance]);
 
   useEffect(() => {
     const getMaxBorrowed = async () => {
       let result = await calcMaxBorrowAmount(pair, balance);
-      result = roundNumber(result, undefined, 'down')
+      result = roundNumber(result, undefined, 'down');
       // result = round('down', Number(result), 2);
       // result = roundNumber(result);
       setMaxBorrowedAskAmount(result);
@@ -167,12 +166,22 @@ let NewLoan = ({
       result = roundNumber(result, undefined, 'up');
       setMinCollateralAmount(result.toString());
     },
-    500
+    250
   );
 
   const [debounceCalcCollateralRatio] = useDebouncedCallback(
     (borrowedAskAmount, collateralAmount, pair) => {
       calcCollateralRatio(borrowedAskAmount, collateralAmount, pair);
+    },
+    250
+  );
+
+  const [debounceAllowanceCheck] = useDebouncedCallback(
+    async (pair, collateralAmount, address, web3) => {
+      if (pair === 1) {
+        const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
+        setHasAllowance(allowanceResult);
+      }
     },
     250
   );
@@ -186,8 +195,10 @@ let NewLoan = ({
   const setCollateralAmount = async (borrowedAskAmount) => {
     let formattedAmount = formatString(minCollateralAmount.toString());
     change('collateralAmount', formattedAmount);
-    const allowanceResult = await allowanceCheck(pair, formattedAmount, address, web3, true);
-    setHasAllowance(allowanceResult)
+    if (pair === 1) {
+      const allowanceResult = await debounceAllowanceCheck(pair, formattedAmount, address, web3);
+      setHasAllowance(allowanceResult);
+    }
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
     let fee = await calculateFees(toWei(formattedAmount), web3);
@@ -198,8 +209,10 @@ let NewLoan = ({
     if (!newValue) {
       setTimeout(() => setCollateralRatio(0), 500);
     }
-    const allowanceResult = await allowanceCheck(pair, newValue, address, web3, true);
-    setHasAllowance(allowanceResult)
+    if (pair === 1) {
+      const allowanceResult = await debounceAllowanceCheck(pair, newValue, address, web3);
+      setHasAllowance(allowanceResult);
+    }
     setCollateralValue(newValue);
     let formattedAmount = formatString(newValue.toString());
     if (newValue) {
@@ -340,7 +353,9 @@ let NewLoan = ({
               </NewLoanFormInput>
               <h2>
                 BORROW LIMIT: ~{' '}
-               {(maxBorrowedAskAmount ? roundNumber(maxBorrowedAskAmount) : 0) + ' ' + pairData[pair].text}
+                {(maxBorrowedAskAmount ? roundNumber(maxBorrowedAskAmount) : 0) +
+                  ' ' +
+                  pairData[pair].text}
               </h2>
             </ModalFormGrpNewLoan>
 
@@ -361,7 +376,8 @@ let NewLoan = ({
               <h2 onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}>
                 MINIMUM COLLATERAL:{' '}
                 <span>
-                  {minCollateralAmount ? roundNumber(minCollateralAmount) : 0} {pairData[pair].collateral}
+                  {minCollateralAmount ? roundNumber(minCollateralAmount) : 0}{' '}
+                  {pairData[pair].collateral}
                 </span>
               </h2>
             </ModalFormGrp>
@@ -391,8 +407,7 @@ let NewLoan = ({
 
           <ModalFormSubmit>
             <BtnLoanModal>
-              {
-                pair === 1 ?
+              {pair === 1 ? (
                 <ApproveBtnWrapper>
                   <ModalFormButton
                     type='button'
@@ -400,29 +415,41 @@ let NewLoan = ({
                     approved={hasAllowance}
                     onClick={() => approveContract(pair, formValues.collateralAmount)}
                   >
-                    {
-                      (!hasAllowance && !approveLoading) ?
-                      <h2>Approve</h2> :
-                      (!hasAllowance && approveLoading) ?
-                      <div className="btnLoadingIconWrapper">
-                        <div className="btnLoadingIconCut">
+                    {!hasAllowance && !approveLoading ? (
+                      <h2>Approve</h2>
+                    ) : !hasAllowance && approveLoading ? (
+                      <div className='btnLoadingIconWrapper'>
+                        <div className='btnLoadingIconCut'>
                           <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
                         </div>
-                      </div> :
-                      (hasAllowance && !approveLoading) ?
-                      <h2><span></span> Approved</h2> : ''
-                    }
+                      </div>
+                    ) : hasAllowance && !approveLoading ? (
+                      <h2>
+                        <span></span> Approved
+                      </h2>
+                    ) : (
+                      ''
+                    )}
                   </ModalFormButton>
-                </ApproveBtnWrapper> : ''
-              }
-              
+                </ApproveBtnWrapper>
+              ) : (
+                ''
+              )}
+
               <ModalFormButton
                 type='submit'
-                disabled={pristine || submitting || error || !borrowAsk || !collateralValue || !rpb || !hasAllowance}
+                disabled={
+                  pristine ||
+                  submitting ||
+                  error ||
+                  !borrowAsk ||
+                  !collateralValue ||
+                  !rpb ||
+                  !hasAllowance
+                }
               >
                 <h2>Request Loan</h2>
               </ModalFormButton>
-              
             </BtnLoanModal>
           </ModalFormSubmit>
         </Form>

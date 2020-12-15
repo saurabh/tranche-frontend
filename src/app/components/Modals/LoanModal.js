@@ -342,7 +342,7 @@ const LoanModal = ({
                               ''
                             )}
                           </ModalButton>
-                          <h2>
+                          <h2 style={{ marginTop: '12px' }}>
                             {!hasAllowance && !approveLoading
                               ? 'This is 1 of 2 transactions required to close a loan.'
                               : ''}
@@ -524,7 +524,7 @@ const LoanModal = ({
                         ''
                       )}
                     </ModalButton>
-                    <h2 style={{ marginTop: '10px' }}>
+                    <h2 style={{ marginTop: '12px' }}>
                       {!hasAllowance && !approveLoading
                         ? 'This is 1 of 2 transactions required to accept a loan request.'
                         : ''}
