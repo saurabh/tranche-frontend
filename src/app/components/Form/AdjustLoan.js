@@ -107,7 +107,7 @@ let AdjustLoan = ({
     }
   }, 250);
 
-  const handleCollateralizingChange = async (isAdjustSelected, collateralAmount, actionType) => {
+  const handleCollateralizingChange = async (collateralAmount, actionType) => {
     try {
       setNewCollateralAmount(collateralAmount);
       debounceCalcNewRatio(collateralAmount, actionType);
@@ -184,7 +184,7 @@ let AdjustLoan = ({
                       }`}
                       name='collateralAmount'
                       onChange={(event, newValue) =>
-                        handleCollateralizingChange(isAdjustSelected, newValue, actionType)
+                        handleCollateralizingChange(newValue, actionType)
                       }
                       validate={[required, number]}
                       type='number'
