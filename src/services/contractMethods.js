@@ -13,7 +13,7 @@ export const allowanceCheck = async (pairId, amount, address, web3, collateral =
   try {
     amount = toWei(amount);
     const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
-    const token = adjust ? collateralTokenSetup(web3) : lendTokenSetup(web3);
+    const token = collateral ? collateralTokenSetup(web3) : lendTokenSetup(web3);
     let userAllowance = await token.methods.allowance(address, LoanContractAddress).call();
     if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
       return true;
