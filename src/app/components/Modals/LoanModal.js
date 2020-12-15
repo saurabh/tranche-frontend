@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
@@ -7,6 +7,8 @@ import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
 import { roundNumber, gweiOrEther, roundBasedOnUnit } from 'utils';
+import { CloseModal } from 'assets';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
   ModalHeader,
@@ -84,49 +86,46 @@ const AdjustPositionStyles = {
 Modal.setAppElement('#root');
 
 const LoanModal = ({
-  modalIsOpen,
-  closeModal,
+  // State Values
   path,
-  loanId,
-  contractAddress,
-  status,
+  modalIsOpen,
+  approveLoading,
   hasBalance,
+  hasAllowance,
   isShareholder,
-  APY,
-  accruedInterest,
   canBeForeclosed,
   blocksUntilForeclosure,
-  approveLoan,
-  closeLoan,
+  accruedInterest,
+  totalInterest,
+  newCollateralRatio,
+  setHasAllowance,
+  setNewCollateralRatio,
+  // Functions
+  closeModal,
+  approveContract,
   adjustLoan,
+  calcNewCollateralRatio,
+  closeLoan,
+  approveLoan,
   withdrawInterest,
   forecloseLoan,
-  newCollateralRatio,
-  setNewCollateralRatio,
-  calcNewCollateralRatio,
-  interestPaid,
-  rpbRate,
-  collateralTypeName,
+  // API Values
+  loanId,
+  status,
+  pairId,
+  contractAddress,
   remainingLoan,
-  totalInterest,
-  collateralRatio,
+  cryptoFromLenderName,
   collateralAmount,
-  cryptoFromLenderName
+  collateralTypeName,
+  collateralRatio,
+  interestPaid,
+  APY,
+  rpbRate
 }) => {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
-  const [approved, setApproved] = useState(false);
-  const [loading, setLoading] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
-
-  useEffect(() => {
-    if(cryptoFromLenderName === 'USDC'){
-      setApproved(false)
-    }
-    else{
-      setApproved(true);
-    }
-  }, [cryptoFromLenderName])
 
   const confirm = (type) => {
     confirmAlert({
@@ -314,29 +313,50 @@ const LoanModal = ({
                           ? `You don't have enough ${cryptoFromLenderName} for this action.`
                           : 'Return the loan amount and pay outstanding interest.'}
                       </h2>
-                      <ModalButton
-                        onClick={() => confirm('Close')}
-                        backgroundColor='#0A66E1'
-                        btnColor='#FFFFFF'
-                        loading={(!approved && loading) ? true : false}
-                        disabled={!hasBalance}
-                      >
-                        
-                        {(!approved && !loading && (status === statuses['Active'].status)) ? 'Request Approval' : (approved && !loading) ? ' Close Loan' : ''}
-                       
-                        {
-                          ((!approved && !loading) || (approved && !loading)) ?
-                          <span></span> : ''
-                        }
-                        {
-                          loading ? 
-                          <div className="btnLoadingIconWrapper">
-                            <div className="btnLoadingIconCut">
-                              <BtnLoadingIcon loadingColor='#0A66E1'></BtnLoadingIcon>
+                      {status === statuses['Pending'].status ? (
+                        <ModalButton
+                          onClick={() => confirm('Cancel')}
+                          backgroundColor='#0A66E1'
+                          btnColor='#FFFFFF'
+                          disabled={!hasBalance}
+                        >
+                          Cancel Loan
+                        </ModalButton>
+                      ) : (
+                        <ModalButton
+                          onClick={
+                            hasAllowance
+                              ? () => confirm('Close')
+                              : () => approveContract(pairId, remainingLoan.toString())
+                          }
+                          backgroundColor='#0A66E1'
+                          btnColor='#FFFFFF'
+                          loading={!hasAllowance && approveLoading ? 'true' : ''}
+                          disabled={!hasBalance}
+                        >
+                          {!hasAllowance && !approveLoading
+                            ? 'Request Approval'
+                            : hasAllowance && !approveLoading
+                            ? 'Close Loan'
+                            : ''}
+
+                          {(!hasAllowance && !approveLoading) ||
+                          (hasAllowance && !approveLoading) ? (
+                            <span></span>
+                          ) : (
+                            ''
+                          )}
+                          {approveLoading ? (
+                            <div className='btnLoadingIconWrapper'>
+                              <div className='btnLoadingIconCut'>
+                                <BtnLoadingIcon loadingColor='#0A66E1'></BtnLoadingIcon>
+                              </div>
                             </div>
-                          </div> : ''
-                        }
-                      </ModalButton>
+                          ) : (
+                            ''
+                          )}
+                        </ModalButton>
+                      )}
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                 </ModalContent>
@@ -359,20 +379,27 @@ const LoanModal = ({
               </button>
             </ModalHeader>
             <AdjustLoan
+              // State Values
               isAdjustSelected={isAdjustSelected}
-              setIsAdjustSelected={setIsAdjustSelected}
               adjustPositionToggle={adjustPositionToggle}
-              loanId={loanId}
-              contractAddress={contractAddress}
-              collateralTypeName={collateralTypeName}
-              adjustLoan={adjustLoan}
+              approveLoading={approveLoading}
+              hasAllowance={hasAllowance}
+              newCollateralRatio={newCollateralRatio}
+              setIsAdjustSelected={setIsAdjustSelected}
               setNewCollateralRatio={setNewCollateralRatio}
+              setHasAllowance={setHasAllowance}
+              // Functions
+              approveContract={approveContract}
+              adjustLoan={adjustLoan}
+              calcNewCollateralRatio={calcNewCollateralRatio}
+              // API Values
+              loanId={loanId}
+              pairId={pairId}
               remainingLoan={remainingLoan}
               cryptoFromLenderName={cryptoFromLenderName}
               collateralAmount={collateralAmount}
-              newCollateralRatio={newCollateralRatio}
+              collateralTypeName={collateralTypeName}
               collateralRatio={collateralRatio}
-              calcNewCollateralRatio={calcNewCollateralRatio}
             />
           </Modal>
         )}
@@ -477,29 +504,36 @@ const LoanModal = ({
                       collateral ratio of ${collateralRatio}%.`}
                     </h2>
                     <ModalButton
-                      onClick={() => confirm('Approve')} //handle onClick todo
+                      onClick={
+                        hasAllowance
+                          ? () => confirm('Approve')
+                          : () => approveContract(pairId, remainingLoan.toString())
+                      }
                       btnColor='#ffffff'
                       backgroundColor='#2ECC71'
-                      loading={(!approved && loading) ? true : false}
+                      loading={!hasAllowance && approveLoading ? 'true' : ''}
                       disabled={!hasBalance}
                     >
-                      {(!approved && !loading) ? 'Request Approval' : (approved && !loading) ? 'Accept loan Request' : ''}
-                      {
-                        ((!approved && !loading) || (approved && !loading)) ?
-                        <span></span> : ''
-                      }
-                      {
-                        loading ? 
-                        <div className="btnLoadingIconWrapper">
-                          <div className="btnLoadingIconCut">
+                      {!hasAllowance && !approveLoading
+                        ? 'Request Approval'
+                        : hasAllowance && !approveLoading
+                        ? 'Accept loan Request'
+                        : ''}
+                      {(!hasAllowance && !approveLoading) || (hasAllowance && !approveLoading) ? (
+                        <span></span>
+                      ) : (
+                        ''
+                      )}
+                      {approveLoading ? (
+                        <div className='btnLoadingIconWrapper'>
+                          <div className='btnLoadingIconCut'>
                             <BtnLoadingIcon loadingColor='#2ECC71'></BtnLoadingIcon>
                           </div>
-                        </div> : ''
-                      }
-                      
+                        </div>
+                      ) : (
+                        ''
+                      )}
                     </ModalButton>
-                    
-
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>

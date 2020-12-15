@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
-import { isEqualTo, isGreaterThan } from 'utils/helperFunctions';
+import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
@@ -40,45 +40,21 @@ const AdjustPositionStyles = {
 const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, closeModal }) => {
   const JLoan = JLoanSetup(web3);
   const [hasAllowance, setHasAllowance] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
 
   function handleCloseModal() {
     closeModal();
   }
 
-  const allowanceCheck = async (pairId, collateralAmount) => {
-    try {
-      if (pairId === 1 && collateralAmount !== '') {
-        collateralAmount = toWei(collateralAmount);
-        const { collateralTokenSetup } = pairData[pairId];
-        const collateralToken = collateralTokenSetup(web3);
-
-        let userAllowance = await collateralToken.methods
-          .allowance(address, LoanContractAddress)
-          .call();
-        if (
-          isGreaterThan(userAllowance, collateralAmount) ||
-          isEqualTo(userAllowance, collateralAmount)
-        ) {
-          setHasAllowance(true);
-        } else {
-          setHasAllowance(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const approveContract = async (pairId, collateralAmount) => {
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
-      setLoading(true);
       await collateralToken.methods
         .approve(LoanContractAddress, toWei(collateralAmount))
         .send({ from: address })
         .on('transactionHash', (hash) => {
+          setApproveLoading(true);
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
@@ -88,7 +64,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
         })
         .on('confirmation', () => {
           setHasAllowance(true);
-          setLoading(false);
+          setApproveLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -197,9 +173,8 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       </ModalHeader>
       <NewLoan
         hasAllowance={hasAllowance}
-        loading={loading}
+        loading={approveLoading}
         setHasAllowance={setHasAllowance}
-        allowanceCheck={allowanceCheck}
         approveContract={approveContract}
         createNewLoan={createNewLoan}
       />

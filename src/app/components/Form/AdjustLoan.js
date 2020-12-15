@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
+import { allowanceCheck } from 'services/contractMethods';
 import { useDebouncedCallback, roundNumber } from 'utils';
 import { required, number, asyncValidateAdjust } from 'utils/validations';
+import { pairData } from 'config/constants';
 import {
   BtnGrpLoanModal,
   LoanDetailsRow,
@@ -27,8 +29,6 @@ import {
   ModalNewLoanDetailsContent
 } from './styles/FormComponents';
 
-import { pairData } from 'config/constants';
-
 const InputField = ({ input, type, placeholder, className, meta: { touched, error } }) => (
   <div>
     {touched && error ? (
@@ -46,32 +46,38 @@ const InputField = ({ input, type, placeholder, className, meta: { touched, erro
 );
 
 let AdjustLoan = ({
+  ethereum: { address, web3 },
+  // Redux-form
   error,
   pristine,
   submitting,
+  formValues,
+  change,
+  // State Values
   isAdjustSelected,
-  setIsAdjustSelected,
-  loanId,
-  collateralTypeName,
-  adjustLoan,
+  adjustPositionToggle,
+  approveLoading,
+  hasAllowance,
   newCollateralRatio,
+  setIsAdjustSelected,
+  setNewCollateralRatio,
+  setHasAllowance,
+  // Functions
+  approveContract,
+  adjustLoan,
   calcNewCollateralRatio,
+  // API Values
+  loanId,
+  pairId,
   remainingLoan,
   cryptoFromLenderName,
   collateralAmount,
-  collateralRatio,
-  formValues,
-  change,
-  adjustPositionToggle,
-  setNewCollateralRatio
+  collateralTypeName,
+  collateralRatio
 }) => {
   const [actionType, setActionType] = useState(); // true = adding; false = removing
   const [toggleInput, setToggleInput] = useState(false);
   const [newCollateralAmount, setNewCollateralAmount] = useState(0);
-  const [approved, setApproved] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-
 
   const setLoanId = useCallback(() => {
     change('loanId', loanId);
@@ -84,15 +90,26 @@ let AdjustLoan = ({
     setLoanId();
   }, [setLoanId]);
 
-  const [debounceCalcNewRatio] = useDebouncedCallback(
-    (isAdjustSelected, collateralAmount, actionType) => {
-      setNewCollateralAmount(collateralAmount);
-      isAdjustSelected && calcNewCollateralRatio(collateralAmount, actionType);
-    },
-    500
-  );
+  const [debounceCalcNewRatio] = useDebouncedCallback((collateralAmount, actionType) => {
+    calcNewCollateralRatio(collateralAmount, actionType);
+  }, 500);
 
-  const setAction = (type, collateralAmount) => {
+  const [debounceAllowanceCheck] = useDebouncedCallback(async (collateralAmount) => {
+    const allowanceResult = await allowanceCheck(pairId, collateralAmount, address, web3, true);
+    setHasAllowance(allowanceResult);
+  }, 250);
+
+  const handleCollateralizingChange = async (isAdjustSelected, collateralAmount, actionType) => {
+    try {
+      setNewCollateralAmount(collateralAmount);
+      debounceCalcNewRatio(collateralAmount, actionType);
+      if (collateralAmount !== '' && actionType) debounceAllowanceCheck(collateralAmount);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const setAction = async (type, collateralAmount) => {
     setToggleInput(true);
     setIsAdjustSelected(true);
     setActionType(type);
@@ -159,7 +176,7 @@ let AdjustLoan = ({
                       }`}
                       name='collateralAmount'
                       onChange={(event, newValue) =>
-                        debounceCalcNewRatio(isAdjustSelected, newValue, actionType)
+                        handleCollateralizingChange(isAdjustSelected, newValue, actionType)
                       }
                       validate={[required, number]}
                       type='number'
@@ -199,32 +216,39 @@ let AdjustLoan = ({
             )}
             {isAdjustSelected && (
               <BtnGrpLoanModal confirmBtn={true}>
-                {
-                  (actionType && cryptoFromLenderName === 'USDC') ?
+                {actionType && cryptoFromLenderName === 'USDC' ? (
                   <ModalFormButton
                     type='button'
+                    onClick={() => approveContract(pairId, formValues.collateralAmount, true)}
                     approveBtn={true}
-                    loading={loading}
-                    approved={approved}
+                    loading={approveLoading ? 'true' : ''}
+                    approved={hasAllowance}
                   >
-                    {
-                      (!approved && !loading) ?
-                      <h2>Approve</h2> :
-                      (!approved && loading) ?
-                      <div className="btnLoadingIconWrapper">
-                        <div className="btnLoadingIconCut">
+                    {!hasAllowance && !approveLoading ? (
+                      <h2>Approve</h2>
+                    ) : !hasAllowance && approveLoading ? (
+                      <div className='btnLoadingIconWrapper'>
+                        <div className='btnLoadingIconCut'>
                           <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
                         </div>
-                      </div> :
-                      (approved && !loading) ?
-                      <h2><span></span> Approved</h2> : ''
-                    }
-                  </ModalFormButton> : ''
-                }
-                
+                      </div>
+                    ) : hasAllowance && !approveLoading ? (
+                      <h2>
+                        <span></span> Approved
+                      </h2>
+                    ) : (
+                      ''
+                    )}
+                  </ModalFormButton>
+                ) : (
+                  ''
+                )}
+
                 <ModalFormButton
                   type='submit'
-                  disabled={pristine || submitting || error || !newCollateralAmount}
+                  disabled={
+                    pristine || submitting || error || !newCollateralAmount || !hasAllowance
+                  }
                 >
                   Confirm
                 </ModalFormButton>
@@ -243,6 +267,7 @@ AdjustLoan = reduxForm({
 })(AdjustLoan);
 
 const mapStateToProps = (state) => ({
+  ethereum: state.ethereum,
   initialValues: {
     loanId: '',
     collateralAmount: '',

@@ -1,5 +1,6 @@
 import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup } from 'utils/contractConstructor';
 import { web3 as alchemyWeb3 } from 'utils/getWeb3';
+import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, txMessage } from 'config';
 import { initNotify } from 'services/blocknative';
 
@@ -7,6 +8,22 @@ export const toWei = alchemyWeb3.utils.toWei;
 export const fromWei = alchemyWeb3.utils.fromWei;
 export const toBN = alchemyWeb3.utils.toBN;
 const notify = initNotify();
+
+export const allowanceCheck = async (pairId, amount, address, web3, adjust = false) => {
+  try {
+    amount = toWei(amount);
+    const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
+    const token = adjust ? collateralTokenSetup(web3) : lendTokenSetup(web3);
+    let userAllowance = await token.methods.allowance(address, LoanContractAddress).call();
+    if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const approveContract = async (pairId, collateralAmount, address, web3) => {
   try {
@@ -27,7 +44,6 @@ export const approveContract = async (pairId, collateralAmount, address, web3) =
     console.error(error);
   }
 };
-
 
 export const calculateFees = async (collateralAmount, web3) => {
   try {

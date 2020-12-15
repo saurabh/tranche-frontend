@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { pairData, blocksPerYear } from 'config/constants';
 import {
+  allowanceCheck,
   calcMinCollateralAmount,
   calcMaxBorrowAmount,
   getPairDetails,
@@ -68,13 +69,12 @@ let NewLoan = ({
   submitting,
   setHasAllowance,
   hasAllowance,
-  loading,
+  approveLoading,
   approveContract,
-  allowanceCheck,
   createNewLoan,
   formValues,
   change,
-  ethereum: { balance, tokenBalance, web3 }
+  ethereum: { address, balance, tokenBalance, web3 }
 }) => {
   const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
@@ -186,7 +186,8 @@ let NewLoan = ({
   const setCollateralAmount = async (borrowedAskAmount) => {
     let formattedAmount = formatString(minCollateralAmount.toString());
     change('collateralAmount', formattedAmount);
-    allowanceCheck(pair, formattedAmount);
+    const allowanceResult = await allowanceCheck(pair, formattedAmount, address, web3);
+    setHasAllowance(allowanceResult)
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
     let fee = await calculateFees(toWei(formattedAmount), web3);
@@ -197,7 +198,8 @@ let NewLoan = ({
     if (!newValue) {
       setTimeout(() => setCollateralRatio(0), 500);
     }
-    allowanceCheck(pair, newValue);
+    const allowanceResult = await allowanceCheck(pair, newValue, address, web3);
+    setHasAllowance(allowanceResult)
     setCollateralValue(newValue);
     let formattedAmount = formatString(newValue.toString());
     if (newValue) {
@@ -394,20 +396,20 @@ let NewLoan = ({
                 <ApproveBtnWrapper>
                   <ModalFormButton
                     type='button'
-                    loading={loading.toString()}
+                    loading={approveLoading ? 'true' : ''}
                     approved={hasAllowance}
                     onClick={() => approveContract(pair, formValues.collateralAmount)}
                   >
                     {
-                      (!hasAllowance && !loading) ?
+                      (!hasAllowance && !approveLoading) ?
                       <h2>Approve</h2> :
-                      (!hasAllowance && loading) ?
+                      (!hasAllowance && approveLoading) ?
                       <div className="btnLoadingIconWrapper">
                         <div className="btnLoadingIconCut">
                           <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
                         </div>
                       </div> :
-                      (hasAllowance && !loading) ?
+                      (hasAllowance && !approveLoading) ?
                       <h2><span></span> Approved</h2> : ''
                     }
                   </ModalFormButton>
