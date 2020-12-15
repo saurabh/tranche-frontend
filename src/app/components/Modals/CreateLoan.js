@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
-import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
@@ -71,8 +70,14 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
     }
   };
 
-  const createNewEthLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
+  const createNewLoan = async (e) => {
     try {
+      e.preventDefault();
+      let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
+      pairId = parseFloat(pairId);
+      borrowedAskAmount = toWei(borrowedAskAmount);
+      collateralAmount = toWei(collateralAmount);
+      if (pairId === pairData[1].value) collateralAmount = 0;
       await JLoan.methods
         .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
@@ -84,72 +89,6 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
             };
           });
         });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const createNewTokenLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
-    try {
-      const { collateralTokenSetup } = pairData[pairId];
-      const collateralToken = collateralTokenSetup(web3);
-
-      let userAllowance = await collateralToken.methods
-        .allowance(address, LoanContractAddress)
-        .call();
-      if (isGreaterThan(collateralAmount, userAllowance)) {
-        await collateralToken.methods
-          .approve(LoanContractAddress, collateralAmount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-        await JLoan.methods
-          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      } else {
-        await JLoan.methods
-          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const createNewLoan = async (e) => {
-    try {
-      e.preventDefault();
-      let { pairId, borrowedAskAmount, collateralAmount, rpbRate } = form.newLoan.values;
-      pairId = parseFloat(pairId);
-      borrowedAskAmount = toWei(borrowedAskAmount);
-      collateralAmount = toWei(collateralAmount);
-      if (pairId === pairData[0].value) {
-        createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
-      } else {
-        createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
-      }
       handleCloseModal();
     } catch (error) {
       console.error(error);
