@@ -9,14 +9,15 @@ import {
   changeFilter,
   paginationOffset,
   paginationCurrent,
-  changeSorting
+  changeSorting,
+  changeOwnAllFilter
 } from 'redux/actions/loans';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard } from './styles/TableComponents';
-
+import { TableWrapper, TableContentCard, CallToActionWrapper } from './styles/TableComponents';
+import { RequestLoan, EarningAsset } from 'assets';
 const style = {
   pageItem: {
     fontFamily: 'Roboto, sans-serif',
@@ -42,6 +43,7 @@ const style = {
 const Table = ({
   HandleNewLoan,
   loansFetchData,
+  changeOwnAllFilter,
   loans,
   path,
   changePath,
@@ -82,7 +84,8 @@ const Table = ({
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
-  }, [changePath, pathname]);
+    changeOwnAllFilter('all');
+  }, [changePath, pathname, changeOwnAllFilter]);
 
   useEffect(() => {
     loanListing();
@@ -119,37 +122,45 @@ const Table = ({
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-              {
-                isLoading ? <div>
-                  {
-                   [...Array(5)].map((i, idx) =>
+                {
+                    isLoading ? <div>
+                      {
+                      [...Array(5)].map((i, idx) =>
 
-                   <TableContentCard key={idx}>
-                    <div className="loadingCard">
-                      <div className="loadingFirstCol">
-                        <div className="loadingFirslColContent">
-                          <div className="loadingAvatar loadingContent "></div>
-                          <div className="loadingText loadingContentWrapper loadingContent">
+                      <TableContentCard key={idx}>
+                        <div className="loadingCard">
+                          <div className="loadingFirstCol">
+                            <div className="loadingFirslColContent">
+                              <div className="loadingAvatar loadingContent "></div>
+                              <div className="loadingText loadingContentWrapper loadingContent">
+                              </div>
+                            </div>
+                          </div>
+                          <div className="loadingSecondCol">
+                            <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
+                          </div>
+                          <div className="loadingFifthCol">
+                            <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
+                          </div>
+                          <div className="loadingSixthCol">
+                            <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
                           </div>
                         </div>
-                      </div>
-                      <div className="loadingSecondCol">
-                        <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
-                      </div>
-                      <div className="loadingFifthCol">
-                        <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
-                      </div>
-                      <div className="loadingSixthCol">
-                        <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
-                      </div>
-                    </div>
-                  </TableContentCard>)
-                  }
+                      </TableContentCard>)
+                      }
+                      
                   
-              
-              </div> : loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
-              }
-              
+                  </div> : (!isLoading && loans.list.length === 0 && filterType === 'own') ?
+
+                          <TableContentCard pointer={false}>
+                            <CallToActionWrapper>
+                              <h2>You don’t have any {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet</h2>
+                              <button onClick={() => changeOwnAllFilter('all')}><img src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''} alt="img"/> {path === 'borrow' ? 'Request New Loan' : path === 'earn' ? 'Start Earning  Assets' : ''}</button>
+                            </CallToActionWrapper>
+                          </TableContentCard>
+                  
+                  : loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                  }
             </div>
           </div>
         </TableWrapper>
@@ -266,5 +277,6 @@ export default connect(mapStateToProps, {
   changeFilter,
   paginationOffset,
   paginationCurrent,
-  changeSorting
+  changeSorting,
+  changeOwnAllFilter
 })(Table);

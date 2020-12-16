@@ -202,6 +202,7 @@ const ModalFormButton = styled.button`
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    margin-right: 12px;
     span{
       width: 6px;
       height: 6px;

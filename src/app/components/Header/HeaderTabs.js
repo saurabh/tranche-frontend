@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
 import { PagesData } from 'config/constants';
@@ -18,20 +18,22 @@ import {
   RatesRowDash
 } from './styles/HeaderComponents';
 
-const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
-  const [filterValue, setFilter] = useState('all');
+const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { filterType } }) => {
+  // const [filterValue, setFilter] = useState('all');
   const [ratesVisability, setRatesVisability] = useState(false);
   const innerRef = useOuterClick(e => {
     setRatesVisability(false);
   });
+
   const loanListing = useCallback((filter) => {
-    setFilter(filter);
+    // setFilter(filter);
     changeOwnAllFilter(filter);
   }, [changeOwnAllFilter]);
 
-  useEffect(() => {
-    loanListing('all')
-  }, [path, loanListing])
+  // useEffect(() => {
+  //   loanListing('all')
+  //   changeOwnAllFilter('all');
+  // }, [path, loanListing, changeOwnAllFilter])
   
   return (
     <div className='container content-container'>
@@ -40,7 +42,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
           <HeaderTabBtn
             onClick={() => loanListing('all')}
             id='all'
-            active={filterValue === 'all'}
+            active={filterType === 'all'}
             color={PagesData[path].secondaryColor}
           >
             {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
@@ -50,7 +52,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
               <HeaderTabBtn
                 onClick={() => loanListing('own')}
                 id='own'
-                active={filterValue === 'own'}
+                active={filterType === 'own'}
                 color={PagesData[path].secondaryColor}
               >
                 {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
@@ -126,6 +128,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address } }) => {
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
+    loans: state.loans,
     path: state.path
   };
 };

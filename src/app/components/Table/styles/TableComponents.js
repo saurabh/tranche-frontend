@@ -20,6 +20,9 @@ const TableContentCard = styled.div`
     border-bottom: 3px solid #efefef;
     padding: 0 12px;
   }
+  ${({ pointer }) => !pointer && `
+    cursor: default; 
+  `}
 `;
 const TableCardTag = styled.div`
   position: absolute;
@@ -241,6 +244,55 @@ const TableMarketBtn = styled.button`
     outline: none;
   }
 `;
+const CallToActionWrapper = styled.div`
+  width: 100%;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: #AEAEAE;
+    text-align: center;
+    margin: 9px 0;
+  }
+  button{
+    width: 320px;
+    height: 42px;
+    background: rgba(225, 225, 225, 0.27);
+    border-radius: 7px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.135em;
+    cursor: pointer;
+    border: none;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    outline: none;
+    color: #AEAEAE;
+    transition: 300ms;
+    :hover{
+      filter: brightness(0.9);
+    }
+    :active{
+      filter: brightness(0.8);
+    }
+    img{
+      margin-right: 12px;
+      height: 16px;
+    }
+  }
+`;
+
 
 export {
     TableWrapper,
@@ -261,6 +313,7 @@ export {
     AdjustModalBtn,
     TableMarketsDropdown,
     TableMarketsDropdownContent,
-    TableMarketBtn
+    TableMarketBtn,
+    CallToActionWrapper
 };
   

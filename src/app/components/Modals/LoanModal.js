@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
 import { Spring } from 'react-spring/renderprops'
-import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
 import { roundNumber, gweiOrEther, roundBasedOnUnit } from 'utils';
