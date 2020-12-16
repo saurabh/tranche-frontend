@@ -216,6 +216,11 @@ const RatesBoxWrapper = styled.div`
     background: #FFFFFF;
     border: 1px solid #EFEFEF;
     box-sizing: border-box;
+    @media (max-width: 992px){
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
 `;
 const RatesRowWrapper = styled.div`
     display: flex;
