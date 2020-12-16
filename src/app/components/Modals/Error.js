@@ -8,7 +8,7 @@ import {
   ModalTextConfirmBtn,
   ModalTextConfirmBtnWrapper
 } from './styles/ModalsComponents';
-import { serverDown } from 'config/constants';
+import { serverDown } from 'config/message';
 
 
 import { ServerError } from 'assets';
