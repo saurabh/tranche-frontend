@@ -84,7 +84,13 @@ let AdjustLoan = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loanId]);
 
-  const searchArr = (collateral) => pairData.find((i) => i.collateral === collateral);
+  useEffect(() => {
+    if (pairId === 1) {
+      setHasAllowance(false);
+    } else {
+      setHasAllowance(true);
+    }
+  }, [pairId, setHasAllowance]);
 
   useEffect(() => {
     setLoanId();
@@ -92,14 +98,16 @@ let AdjustLoan = ({
 
   const [debounceCalcNewRatio] = useDebouncedCallback((collateralAmount, actionType) => {
     calcNewCollateralRatio(collateralAmount, actionType);
-  }, 500);
-
-  const [debounceAllowanceCheck] = useDebouncedCallback(async (collateralAmount) => {
-    const allowanceResult = await allowanceCheck(pairId, collateralAmount, address, web3, true);
-    setHasAllowance(allowanceResult);
   }, 250);
 
-  const handleCollateralizingChange = async (isAdjustSelected, collateralAmount, actionType) => {
+  const [debounceAllowanceCheck] = useDebouncedCallback(async (collateralAmount) => {
+    if (pairId === 1) {
+      const allowanceResult = await allowanceCheck(pairId, collateralAmount, address, web3, true);
+      setHasAllowance(allowanceResult);
+    }
+  }, 250);
+
+  const handleCollateralizingChange = async (collateralAmount, actionType) => {
     try {
       setNewCollateralAmount(collateralAmount);
       debounceCalcNewRatio(collateralAmount, actionType);
@@ -163,7 +171,7 @@ let AdjustLoan = ({
         <Form component={ModalFormWrapper} onSubmit={(e) => adjustLoanHandler(e, actionType)}>
           {toggleInput ? (
             <FormInputsWrapper>
-              <ModalFormGrp currency={searchArr(collateralTypeName).collateral}>
+              <ModalFormGrp currency={pairData[pairId].collateral}>
                 <NewLoanFormInput>
                   <NewLoanInputWrapper>
                     <ModalFormLabel htmlFor='COLLATERALIZINGInput'>
@@ -172,11 +180,11 @@ let AdjustLoan = ({
                     <Field
                       component={InputField}
                       className={`ModalFormInput ${
-                        'ModalFormInput' + searchArr(collateralTypeName).collateral
+                        'ModalFormInput' + pairData[pairId].collateral
                       }`}
                       name='collateralAmount'
                       onChange={(event, newValue) =>
-                        handleCollateralizingChange(isAdjustSelected, newValue, actionType)
+                        handleCollateralizingChange(newValue, actionType)
                       }
                       validate={[required, number]}
                       type='number'
