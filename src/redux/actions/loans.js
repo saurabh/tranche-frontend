@@ -51,7 +51,6 @@ export const changeSorting = (sort) => {
 
 
 export const changeOwnAllFilter = (filterType) => (dispatch) => {
-  console.log(filterType)
   dispatch({
     type: CHANGE_OWN_ALL_FILTER,
     payload: filterType

@@ -155,7 +155,7 @@ const Table = ({
                           <TableContentCard pointer={false}>
                             <CallToActionWrapper>
                               <h2>You don’t have any {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet</h2>
-                              <button onClick={() => changeOwnAllFilter('all')}><img src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''} alt="img"/> {path === 'borrow' ? 'Request New Loan' : path === 'earn' ? 'Start Earning  Assets' : ''}</button>
+                              <button onClick={() => path === 'borrow' ? HandleNewLoan() : path === 'earn' ? changeOwnAllFilter('all') : false}><img src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''} alt="img"/> {path === 'borrow' ? 'Request New Loan' : path === 'earn' ? 'Start Earning  Assets' : ''}</button>
                             </CallToActionWrapper>
                           </TableContentCard>
                   

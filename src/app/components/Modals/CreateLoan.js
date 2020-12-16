@@ -112,7 +112,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       </ModalHeader>
       <NewLoan
         hasAllowance={hasAllowance}
-        loading={approveLoading}
+        approveLoading={approveLoading}
         setHasAllowance={setHasAllowance}
         approveContract={approveContract}
         createNewLoan={createNewLoan}
