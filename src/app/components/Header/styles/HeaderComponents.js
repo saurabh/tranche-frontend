@@ -120,6 +120,7 @@ const HeaderTabsWrapper = styled.div`
 `;
 
 const MarketsTabsContainer = styled.div`
+    position: relative;
     width: 200px; 
     display: flex;
     justify-content: space-between;
@@ -139,6 +140,7 @@ const HeaderTabBtn = styled.button`
     letter-spacing: 0.05em;
     padding: 0;
     padding-bottom: 6px;
+    transition: 300ms;
     text-transform: uppercase;
     color: #FFFFFF;
     cursor: pointer;
@@ -149,16 +151,20 @@ const HeaderTabBtn = styled.button`
     }
     ${({ active, color }) => active && `
         opacity: 1;
-        border-color: ${color};
+        @media (max-width: 992px){
+            border-color: ${color};
+        }
     `}
     @media (max-width: 992px){
         padding: 0;
         margin: 12px 0;
     }
-    :hover{
-        color: #FFFFFF;
-        opacity: 0.5;
-    }
+    ${({ link }) => link && `
+        :hover{
+            color: #FFFFFF;
+            opacity: 0.5;
+        }
+    `}
 `;
 
 const WalletBtn = styled.button`
@@ -274,6 +280,19 @@ const RatesRowDash = styled.div`
         margin: 0 18px;
     }
 `;
+const TabIndicator = styled.div`
+    height: 4px;
+    width: 81px;
+    background: #CEB7FF;
+    transition: 300ms;
+    bottom: 0;
+    position: absolute;
+    left: ${(props) => props.tab === 'all' ? '-2px' : 'calc(100% - 78px);'};
+    @media (max-width: 992px){
+        display: none;
+    }
+`;
+
 
 
 export {
@@ -297,6 +316,7 @@ export {
     RatesValue,
     RatesValueImg,
     RatesValueText,
-    RatesRowDash
+    RatesRowDash,
+    TabIndicator
     
 };

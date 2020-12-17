@@ -15,7 +15,8 @@ import {
   RatesValue,
   RatesValueImg,
   RatesValueText,
-  RatesRowDash
+  RatesRowDash,
+  TabIndicator
 } from './styles/HeaderComponents';
 
 const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { filterType } }) => {
@@ -31,7 +32,8 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
   }, [changeOwnAllFilter]);
 
   // useEffect(() => {
-  //   loanListing('all')
+  //   loanListing('all')import Tab from '@material/react-tab';
+
   //   changeOwnAllFilter('all');
   // }, [path, loanListing, changeOwnAllFilter])
   
@@ -59,6 +61,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
               </HeaderTabBtn>
             : ""
           }
+          <TabIndicator tab={filterType}></TabIndicator>
         </MarketsTabsContainer>
 
         <div id='other-tabs-container'>
@@ -117,7 +120,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
             </RatesBoxWrapper>
             <HeaderTabBtn onClick={() => setRatesVisability(!ratesVisability)} id=''>Rates</HeaderTabBtn>
           </RatesWrapper>
-          <HeaderTabBtn as="a" href="https://docs.tranche.finance" target="_blank" id='how-to-tab'>How-to</HeaderTabBtn>
+          <HeaderTabBtn link as="a" href="https://docs.tranche.finance" target="_blank" id='how-to-tab'>How-to</HeaderTabBtn>
           
         </div>
       </HeaderTabsWrapper>
