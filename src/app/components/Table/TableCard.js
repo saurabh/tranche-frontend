@@ -194,11 +194,11 @@ const TableCard = ({
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txConfirmed', () => {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          })
         })
-        .on('confirmation', () => {
-          setHasAllowance(true);
-          setApproveLoading(false);
-        });
     } catch (error) {
       console.error(error);
     }
