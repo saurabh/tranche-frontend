@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
-import { PagesData } from 'config/constants';
-import { useOuterClick } from 'services/useOuterClick'
+import { PagesData, apiUri, pairData } from 'config/constants';
+import { useOuterClick } from 'services/useOuterClick';
+import { getRequest } from 'services/axios';
+import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { ETH, USDC, JNT, DAI } from 'assets';
 import {
   HeaderTabsWrapper,
@@ -20,23 +22,37 @@ import {
 } from './styles/HeaderComponents';
 
 const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { filterType } }) => {
-  // const [filterValue, setFilter] = useState('all');
   const [ratesVisability, setRatesVisability] = useState(false);
-  const innerRef = useOuterClick(e => {
+  const [pair0Value, setPair0Value] = useState(0);
+  const [pair1Value, setPair1Value] = useState(0);
+
+  const innerRef = useOuterClick((e) => {
     setRatesVisability(false);
   });
 
-  const loanListing = useCallback((filter) => {
-    // setFilter(filter);
-    changeOwnAllFilter(filter);
-  }, [changeOwnAllFilter]);
+  const loanListing = useCallback(
+    (filter) => {
+      changeOwnAllFilter(filter);
+    },
+    [changeOwnAllFilter]
+  );
 
-  // useEffect(() => {
-  //   loanListing('all')import Tab from '@material/react-tab';
+  const getPriceFeed = async () => {
+    const { priceFeed: priceUrl } = apiUri;
+    setRatesVisability(!ratesVisability);
+    try {
+      const { data: result } = await getRequest(priceUrl, {}, null);
+      result.result.forEach(pair => {
+        let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
+        price = roundNumber(price);
+        if (pair.pairId === pairData[0].value) setPair0Value(price)
+        if (pair.pairId === pairData[1].value) setPair1Value(price)
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //   changeOwnAllFilter('all');
-  // }, [path, loanListing, changeOwnAllFilter])
-  
   return (
     <div className='container content-container'>
       <HeaderTabsWrapper>
@@ -47,7 +63,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
             active={filterType === 'all'}
             color={PagesData[path].secondaryColor}
           >
-            {path === "borrow" ? "All Loans" : path === "earn" ? "All Assets" : ""}
+            {path === 'borrow' ? 'All Loans' : path === 'earn' ? 'All Assets' : ''}
           </HeaderTabBtn>
           {
             address ? 
@@ -65,18 +81,18 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
         </MarketsTabsContainer>
 
         <div id='other-tabs-container'>
-        <RatesWrapper ref={innerRef}>
-
-            <RatesBoxWrapper className={ "ratesBoxWrapper " + (!ratesVisability ? "ratesBoxWrapperDisplay" : '') } >
-              
+          <RatesWrapper ref={innerRef}>
+            <RatesBoxWrapper
+              className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}
+            >
               <RatesRowWrapper border={true}>
                 <RatesRowContent>
                   <RatesValue>
                     <RatesValueImg>
-                      <img src={DAI} alt="DAI" />
+                      <img src={ETH} alt='ETH' />
                     </RatesValueImg>
                     <RatesValueText>
-                      <h2>1 DAI</h2>
+                      <h2>1 ETH</h2>
                     </RatesValueText>
                   </RatesValue>
                   <RatesRowDash>
@@ -84,10 +100,10 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
                   </RatesRowDash>
                   <RatesValue>
                     <RatesValueImg>
-                      <img src={ETH} alt="ETH" />
+                      <img src={DAI} alt='DAI' />
                     </RatesValueImg>
                     <RatesValueText>
-                      <h2>0.0000 ETH</h2>
+                      <h2>{pair0Value} DAI</h2>
                     </RatesValueText>
                   </RatesValue>
                 </RatesRowContent>
@@ -97,10 +113,10 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
                 <RatesRowContent>
                   <RatesValue>
                     <RatesValueImg>
-                      <img src={USDC} alt="USDC" />
+                      <img src={JNT} alt='JNT' />
                     </RatesValueImg>
                     <RatesValueText>
-                      <h2>1 USDC</h2>
+                      <h2>1 JNT</h2>
                     </RatesValueText>
                   </RatesValue>
                   <RatesRowDash>
@@ -108,20 +124,22 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
                   </RatesRowDash>
                   <RatesValue>
                     <RatesValueImg>
-                      <img src={JNT} alt="JNT" />
+                      <img src={USDC} alt='USDC' />
                     </RatesValueImg>
                     <RatesValueText>
-                      <h2>0.0000 JNT</h2>
+                      <h2>{pair1Value} USDC</h2>
                     </RatesValueText>
                   </RatesValue>
                 </RatesRowContent>
               </RatesRowWrapper>
-
             </RatesBoxWrapper>
-            <HeaderTabBtn onClick={() => setRatesVisability(!ratesVisability)} id=''>Rates</HeaderTabBtn>
+            <HeaderTabBtn onClick={() => getPriceFeed()} id=''>
+              Rates
+            </HeaderTabBtn>
           </RatesWrapper>
-          <HeaderTabBtn link as="a" href="https://docs.tranche.finance" target="_blank" id='how-to-tab'>How-to</HeaderTabBtn>
-          
+          <HeaderTabBtn as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+            How-to
+          </HeaderTabBtn>
         </div>
       </HeaderTabsWrapper>
     </div>
