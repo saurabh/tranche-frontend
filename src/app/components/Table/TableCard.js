@@ -197,8 +197,10 @@ const TableCard = ({
           emitter.on('txConfirmed', () => {
             setHasAllowance(true);
             setApproveLoading(false);
-          })
-        })
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
+        });
     } catch (error) {
       console.error(error);
     }
