@@ -36,7 +36,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
     },
     [changeOwnAllFilter]
   );
-
+console.log(path)
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
     setRatesVisability(!ratesVisability);
@@ -77,7 +77,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
               </HeaderTabBtn>
             : ""
           }
-          <TabIndicator tab={filterType}></TabIndicator>
+          <TabIndicator tab={filterType} path={path}></TabIndicator>
         </MarketsTabsContainer>
 
         <div id='other-tabs-container'>
