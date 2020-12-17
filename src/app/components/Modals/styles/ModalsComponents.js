@@ -147,9 +147,6 @@ color: ${props => props.btnColor ? props.btnColor : "#000000"};
   color: #ffffff !important;
   background: ${props => props.btnColor ? props.btnColor  : "#E42013"};*/
 }
-${({ display }) => display && `
-  display: ${display}
-`}
 :disabled{
   color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
   opacity: 0.5;

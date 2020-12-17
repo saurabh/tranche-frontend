@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { confirmAlert } from 'react-confirm-alert';
 import { AdjustLoan } from 'app/components/Form/AdjustLoan';
-import { Spring } from 'react-spring/renderprops'
+import { Spring } from 'react-spring/renderprops';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
 import { roundNumber, gweiOrEther, roundBasedOnUnit } from 'utils';
@@ -138,40 +138,40 @@ const LoanModal = ({
               transform: 'translate3d(0,0px,0) scale(1)'
             }}
           >
-          {props => (
-           
-          <ConfirmAlertWrapper style={props}>
-            {type === 'Close' ? (
-              <h2>Are you sure you want to return {remainingLoan + ' ' + cryptoFromLenderName}?</h2>
-            ) : (
-              <h2>{actionTypes[type].confirmationText}</h2>
-            )}
-            {/*{type === 'WithdrawInterest' && (
+            {(props) => (
+              <ConfirmAlertWrapper style={props}>
+                {type === 'Close' ? (
+                  <h2>
+                    Are you sure you want to return {remainingLoan + ' ' + cryptoFromLenderName}?
+                  </h2>
+                ) : (
+                  <h2>{actionTypes[type].confirmationText}</h2>
+                )}
+                {/*{type === 'WithdrawInterest' && (
               <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
             )}*/}
-            <ConfirmAlertBtnWrapper>
-              <ModalButton
-                onClick={onClose}
-                btnColor='rgba(35,69,102,0.7)'
-                backgroundColor='#EAEAEA'
-              >
-                No
-              </ModalButton>
-              <ModalButton
-                btnColor='rgba(35,69,102,0.7)'
-                backgroundColor='#EAEAEA'
-                confirmBtn={true}
-                onClick={() => {
-                  controlAction(type, onClose);
-                }}
-              >
-                Yes
-              </ModalButton>
-            </ConfirmAlertBtnWrapper>
-          </ConfirmAlertWrapper>)}
-
+                <ConfirmAlertBtnWrapper>
+                  <ModalButton
+                    onClick={onClose}
+                    btnColor='rgba(35,69,102,0.7)'
+                    backgroundColor='#EAEAEA'
+                  >
+                    No
+                  </ModalButton>
+                  <ModalButton
+                    btnColor='rgba(35,69,102,0.7)'
+                    backgroundColor='#EAEAEA'
+                    confirmBtn={true}
+                    onClick={() => {
+                      controlAction(type, onClose);
+                    }}
+                  >
+                    Yes
+                  </ModalButton>
+                </ConfirmAlertBtnWrapper>
+              </ConfirmAlertWrapper>
+            )}
           </Spring>
-
         );
       }
     });
@@ -565,21 +565,22 @@ const LoanModal = ({
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Under_Collateralized'].status ? (
                   <BtnGrpLoanModal>
-                    <BtnGrpLoanModalWrapper>
-                      <h2>
-                        Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                        {gweiOrEther(interestPaid, collateralTypeName)}
-                      </h2>
-                      <ModalButton
-                        onClick={() => confirm('WithdrawInterest')}
-                        btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                        display={!isShareholder ? 'none' : ''}
-                      >
-                        Withdraw Interest
-                        <span></span>
-                      </ModalButton>
-                    </BtnGrpLoanModalWrapper>
+                    {isShareholder && (
+                      <BtnGrpLoanModalWrapper>
+                        <h2>
+                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                          {gweiOrEther(interestPaid, collateralTypeName)}
+                        </h2>
+                        <ModalButton
+                          onClick={() => confirm('WithdrawInterest')}
+                          btnColor='#234566'
+                          backgroundColor='#EAEAEA'
+                        >
+                          Withdraw Interest
+                          <span></span>
+                        </ModalButton>
+                      </BtnGrpLoanModalWrapper>
+                    )}
 
                     <BtnGrpLoanModalWrapper>
                       <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
@@ -595,21 +596,22 @@ const LoanModal = ({
                   </BtnGrpLoanModal>
                 ) : status === statuses['At_Risk'].status ? (
                   <BtnGrpLoanModal>
-                    <BtnGrpLoanModalWrapper>
-                      <h2>
-                        Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                        {gweiOrEther(interestPaid, collateralTypeName)}
-                      </h2>
-                      <ModalButton
-                        onClick={() => confirm('WithdrawInterest')}
-                        btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                        display={!isShareholder ? 'none' : ''}
-                      >
-                        Withdraw Interest
-                        <span></span>
-                      </ModalButton>
-                    </BtnGrpLoanModalWrapper>
+                    {isShareholder && (
+                      <BtnGrpLoanModalWrapper>
+                        <h2>
+                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                          {gweiOrEther(interestPaid, collateralTypeName)}
+                        </h2>
+                        <ModalButton
+                          onClick={() => confirm('WithdrawInterest')}
+                          btnColor='#234566'
+                          backgroundColor='#EAEAEA'
+                        >
+                          Withdraw Interest
+                          <span></span>
+                        </ModalButton>
+                      </BtnGrpLoanModalWrapper>
+                    )}
 
                     <BtnGrpLoanModalWrapper>
                       <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
@@ -625,21 +627,22 @@ const LoanModal = ({
                   </BtnGrpLoanModal>
                 ) : status === statuses['Foreclosing'].status ? (
                   <BtnGrpLoanModal>
-                    <BtnGrpLoanModalWrapper>
-                      <h2>
-                        Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                        {gweiOrEther(interestPaid, collateralTypeName)}
-                      </h2>
-                      <ModalButton
-                        onClick={() => confirm('WithdrawInterest')}
-                        btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                        display={!isShareholder ? 'none' : ''}
-                      >
-                        Withdraw Interest
-                        <span></span>
-                      </ModalButton>
-                    </BtnGrpLoanModalWrapper>
+                    {isShareholder && (
+                      <BtnGrpLoanModalWrapper>
+                        <h2>
+                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                          {gweiOrEther(interestPaid, collateralTypeName)}
+                        </h2>
+                        <ModalButton
+                          onClick={() => confirm('WithdrawInterest')}
+                          btnColor='#234566'
+                          backgroundColor='#EAEAEA'
+                        >
+                          Withdraw Interest
+                          <span></span>
+                        </ModalButton>
+                      </BtnGrpLoanModalWrapper>
+                    )}
 
                     <BtnGrpLoanModalWrapper>
                       <h2>
