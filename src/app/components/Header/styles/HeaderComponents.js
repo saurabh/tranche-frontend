@@ -282,12 +282,12 @@ const RatesRowDash = styled.div`
 `;
 const TabIndicator = styled.div`
     height: 4px;
-    width: 81px;
-    background: #CEB7FF;
+    width: ${(props) => props.path === 'earn' ? '92px' : '81px'};
+    background: ${(props) => props.path === 'earn' ? '#D7FFB7' : '#CEB7FF'};
     transition: 300ms;
     bottom: 0;
     position: absolute;
-    left: ${(props) => props.tab === 'all' ? '-2px' : 'calc(100% - 78px);'};
+    left: ${(props) => (props.tab === 'all') ? '-2px' : (props.tab === 'own' &&  props.path === 'earn') ? 'calc(100% - 88px)' : (props.tab === 'own' &&  props.path === 'borrow') ? 'calc(100% - 78px)' : ''};
     @media (max-width: 992px){
         display: none;
     }
