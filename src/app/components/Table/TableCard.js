@@ -112,14 +112,19 @@ const TableCard = ({
 
   useEffect(() => {
     const balanceCheck = () => {
-      if (
-        cryptoFromLenderName !== 'N/A' &&
-        isGreaterThan(
-          Number(tokenBalance[cryptoFromLenderName]),
-          Number(toWei(remainingLoan.toString()))
+      try {
+        if (
+          cryptoFromLenderName !== 'N/A' &&
+          remainingLoan !== 'N/A' &&
+          isGreaterThan(
+            Number(tokenBalance[cryptoFromLenderName]),
+            Number(toWei(remainingLoan.toString()))
+          )
         )
-      )
-        setHasBalance(true);
+          setHasBalance(true);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     balanceCheck();
