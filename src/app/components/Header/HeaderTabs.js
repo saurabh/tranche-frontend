@@ -36,7 +36,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
     },
     [changeOwnAllFilter]
   );
-console.log(path)
+  
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
     setRatesVisability(!ratesVisability);
