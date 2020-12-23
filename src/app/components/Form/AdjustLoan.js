@@ -48,7 +48,6 @@ const InputField = ({ input, type, placeholder, className, meta: { touched, erro
 let AdjustLoan = ({
   ethereum: { address, web3 },
   // Redux-form
-  error,
   pristine,
   submitting,
   formValues,
@@ -179,9 +178,7 @@ let AdjustLoan = ({
                     </ModalFormLabel>
                     <Field
                       component={InputField}
-                      className={`ModalFormInput ${
-                        'ModalFormInput' + pairData[pairId].collateral
-                      }`}
+                      className={`ModalFormInput ${'ModalFormInput' + pairData[pairId].collateral}`}
                       name='collateralAmount'
                       onChange={(event, newValue) =>
                         handleCollateralizingChange(newValue, actionType)
@@ -255,7 +252,12 @@ let AdjustLoan = ({
                 <ModalFormButton
                   type='submit'
                   disabled={
-                    pristine || submitting || error || !newCollateralAmount || !hasAllowance
+                    pristine ||
+                    submitting ||
+                    !newCollateralAmount ||
+                    !hasAllowance ||
+                    Number(formValues.collateralAmount) <= 0 ||
+                    (!actionType && newCollateralRatio < 160)
                   }
                 >
                   Confirm

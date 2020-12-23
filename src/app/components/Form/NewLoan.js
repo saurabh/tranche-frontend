@@ -14,6 +14,7 @@ import {
 } from 'services/contractMethods';
 import { useDebouncedCallback } from 'utils/lodash';
 import {
+  isLessThan,
   safeSubtract,
   roundNumber,
   gweiOrEther,
@@ -64,7 +65,6 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let NewLoan = ({
-  error,
   pristine,
   submitting,
   setHasAllowance,
@@ -435,15 +435,14 @@ let NewLoan = ({
               ) : (
                 ''
               )}
-
               <ModalFormButton
                 type='submit'
                 disabled={
                   pristine ||
                   submitting ||
-                  error ||
                   !borrowAsk ||
                   !collateralValue ||
+                  isLessThan(Number(collateralValue), Number(minCollateralAmount)) ||
                   !rpb ||
                   !hasAllowance
                 }
