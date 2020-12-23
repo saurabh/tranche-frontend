@@ -3,7 +3,7 @@ import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
 import JNTicon from 'assets/images/svg/jnt.svg';
 import { Key, Agree } from 'assets';
-import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
+import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -17,7 +17,7 @@ export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
-export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
+export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
 
 // Site Banner Data (imported in Header component)
@@ -100,7 +100,7 @@ export const pairData = [
     collateral: 'JNT',
     img: USDCicon,
     colIcon: JNTicon,
-    collateralTokenSetup: JPTSetup,
+    collateralTokenSetup: SLICESetup,
     lendTokenSetup: USDCSetup
   }
 ];
