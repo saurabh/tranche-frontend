@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const SummaryCardWrapper = styled.div`
-    width: 250px;
+    width: 300px;
     height: 121px;
     background: #FFFFFF;
     border: 1px solid #EFEFEF;

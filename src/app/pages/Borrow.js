@@ -17,6 +17,7 @@ import CreateLoan from 'app/components/Modals/CreateLoan';
 import { PagesData } from 'config/constants';
 import Table from '../components/Table/Table';
 import { changeFilter } from 'redux/actions/loans';
+import SummaryCards from 'app/components/Summary/SummaryCards';
 
 const Borrow = ({
   setAddress,
@@ -52,6 +53,7 @@ const Borrow = ({
 
   return (
     <Layout>
+      <SummaryCards />
       <Table
         HandleNewLoan={handleNewLoanClick}
         openModal={showModal}

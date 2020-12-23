@@ -9,22 +9,25 @@ import {
 
 
 
-const SummaryCard = ({title, value, details, path}) => {
+const SummaryCard = ({title, value, type, details, path}) => {
     return (
         <SummaryCardWrapper color={PagesData[path].cardColor}>
+            {
+            value &&  
            <SummaryCardContainer>
                <SummaryCardTitle>
                     {title}
                </SummaryCardTitle>
 
                <SummaryCardValue>
-                    {value}
+                    {type === "loan" ? `$${value.amount}` : type === "collateral" ?`$${Math.round(value.amount)}` : type === "ratio" ? `${Math.round(value.total)}%` : ""}
                </SummaryCardValue>
 
                <SummaryCardDetails>
-                    {details}
+                    {type === "loan" ? value.total + " Loan Positions" : type === "collateral" ? `${value.coin1} ETH / ${value.coin2} JNT` : details}
                </SummaryCardDetails>
            </SummaryCardContainer>
+           }
         </SummaryCardWrapper>
     );
 }
