@@ -55,12 +55,12 @@ export const PagesData = {
   },
   trade: {
     pageType: 'trade',
-    color: '#1f1f1f',
+    color: 'rgba(0, 0, 0, 0.8)',
     secondaryColor: '#ffffff',
     btnColor: '#1f1f1f',
-    cardColor: 'rgba(0,0,0,0.4)',
+    cardColor: 'rgba(0, 0, 0, 0.8)',
     title: 'Trading Markets',
-    description: 'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
+    description: 'BUY AND SELL PERPETUAL BONDS PROVIDED BY THE PROTOCOL'
   },
   privacy: {
     pageType: 'privacy',

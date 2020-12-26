@@ -473,6 +473,7 @@ const TableCard = ({
   return (
     <TableContentCardWrapper>
       <TableContentCard
+      pointer={true}
         onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
@@ -562,7 +563,7 @@ const TableCard = ({
                     ? AdjustTrade
                     : Adjust
                 }
-                alt=''
+                alt='adjust'
               />
             </AdjustLoanBtn>
           </div>
@@ -602,7 +603,7 @@ const TableCard = ({
             collateralRatio={collateralRatio}
             interestPaid={interestPaid}
             APY={apy}
-            rpbRate={rpbRate && fromWei(rpbRate)}
+            rpbRate={rpbRate && fromWei(rpbRate.toString())}
           />
         </div>
       </TableContentCard>
