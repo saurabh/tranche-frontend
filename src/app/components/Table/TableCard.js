@@ -431,7 +431,7 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log('Loan ID: ' + loanId);
-    // console.log(loan);
+    console.log(loan);
     setMoreCardToggle(!moreCardToggle);
     if (!moreCardToggle) {
       getTransaction(hash);
@@ -602,7 +602,7 @@ const TableCard = ({
             collateralRatio={collateralRatio}
             interestPaid={interestPaid}
             APY={apy}
-            rpbRate={rpbRate && fromWei(rpbRate)}
+            rpbRate={rpbRate && fromWei(rpbRate.toString())}
           />
         </div>
       </TableContentCard>
