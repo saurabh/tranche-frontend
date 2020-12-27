@@ -31,7 +31,7 @@ import {
   roundBasedOnUnit
 } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, DAI, txMessage } from 'config';
-import LoanModal from '../Modals/LoanModal';
+import LoanModal from '../../Modals/LoanModal';
 import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
@@ -42,7 +42,7 @@ import {
   StatusTextWrapper,
   AdjustLoanBtn,
   TableCardTag
-} from './styles/TableComponents';
+} from '../../Table/styles/TableComponents';
 
 const TableCard = ({
   loan: {
@@ -473,7 +473,7 @@ const TableCard = ({
   return (
     <TableContentCardWrapper>
       <TableContentCard
-      pointer={true}
+        pointer={true}
         onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
@@ -514,7 +514,7 @@ const TableCard = ({
             </h2>
           </div>
         </div>
-        <div className='table-fourth-col table-col'>
+        <div className={'table-col ' + (path === "trade" ? "table-fourth-col-return " : "table-fourth-col")}>
           <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
               {collateralRatio}
@@ -522,7 +522,7 @@ const TableCard = ({
             </h2>
           </div>
         </div>
-        <div className='table-fifth-col table-col'>
+        <div className={'table-col ' + (path === "trade" ? "table-fifth-col-subscription " : "table-fifth-col")}>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
               {apy}%{' '}
@@ -550,8 +550,8 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <AdjustLoanBtn
               color={PagesData[path].btnColor}
-              disabled={path === 'trade' || disableBtn}
-              onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
+              disabled={disableBtn}
+              onClick={disableBtn ? undefined : () => openModal()}
             >
               <img
                 src={
@@ -559,7 +559,7 @@ const TableCard = ({
                     ? Adjust
                     : path === 'earn'
                     ? AdjustEarn
-                    : path === 'trade'
+                    : (path === 'trade' && !disableBtn)
                     ? AdjustTrade
                     : Adjust
                 }

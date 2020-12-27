@@ -48,14 +48,12 @@ function Navbar({ path }) {
             </NavLink>
             <NavLink
               to='/trade'
-              onClick={(e) => e.preventDefault()}
-              className='navLinkDisabled'
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >
+            ><span data-content="trade"></span>
               Trade
             </NavLink>
           </NavbarLinks>

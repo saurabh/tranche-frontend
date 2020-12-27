@@ -37,7 +37,9 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
         <TableContainerHeader>
             <TableHeaderTitles>
                 <TableTitle>
-                {   path === "earn" ?
+                {   path === "trade" ?
+                    <h2>AVAILABLE INSTRUMENTS</h2> :
+                    path === "earn" ?
                     <h2>Earning Assets</h2> :
                     <h2>Open Loans</h2>
                 }
@@ -46,7 +48,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                 </TableSubTitle>
                 {   menu ?
-                    <TableMarketsDropdown>
+                    <TableMarketsDropdown path={path}>
                         <TableMarketsDropdownContent>
                             <TableMarketBtn onClick={() => loanListing(null)}>
                                 All Markets
@@ -64,7 +66,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
             </TableHeaderTitles>
 
             <div className="create-loan-wrapper">
-                {   path !== "earn" ?
+                {   path === "borrow" ?
                     <CreateLoanBtn>
                         <button onClick={HandleNewLoan}><img src={Create} alt="Create"/> <span>New loan</span></button>
                     </CreateLoanBtn> : ""

@@ -19,10 +19,11 @@ import USDC from './images/svg/usdc.svg';
 import JNT from './images/svg/jnt.svg';
 import RequestLoan from './images/svg/RequestLoan.svg';
 import EarningAsset from './images/svg/EarningAsset.svg';
+import EmptyBox from './images/svg/emptyBox.svg';
 
 
 
 
 export {
-    Adjust, DAI, RequestLoan, EarningAsset, ETH, USDC, JNT, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, DAI, RequestLoan, EmptyBox, EarningAsset, ETH, USDC, JNT, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };

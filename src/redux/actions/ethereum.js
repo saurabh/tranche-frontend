@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { pairData } from 'config/constants';
-import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
+import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -40,7 +40,7 @@ export const setTokenBalance = (web3, tokenName, address) => async (dispatch) =>
     const { lendTokenSetup } = searchArr(tokenName);
     const lendToken = lendTokenSetup(web3);
     const tokenBalance = await lendToken.methods.balanceOf(address).call();
-  
+
     dispatch({
       type: SET_TOKEN_BALANCE,
       payload: { tokenName, tokenBalance }
@@ -53,7 +53,7 @@ export const setTokenBalance = (web3, tokenName, address) => async (dispatch) =>
 export const setTokenBalances = (web3, address) => async (dispatch) => {
   try {
     const DAI = DAISetup(web3);
-    const JPT = JPTSetup(web3);
+    const JPT = SLICESetup(web3);
     const USDC = USDCSetup(web3);
     const daiBalance = await DAI.methods.balanceOf(address).call();
     const jptBalance = await JPT.methods.balanceOf(address).call();
@@ -73,7 +73,7 @@ export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
   let web3 = new Web3(wallet.provider);
   let address = await web3.eth.getAccounts();
   const DAI = DAISetup(web3);
-  const JPT = JPTSetup(web3);
+  const JPT = SLICESetup(web3);
   const USDC = USDCSetup(web3);
   if (address[0]) {
     const daiBalance = await DAI.methods.balanceOf(address[0]).call();
