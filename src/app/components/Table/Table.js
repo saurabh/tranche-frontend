@@ -64,7 +64,7 @@ const Table = ({
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
           lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
+          type: filter
         }
       });
     } else {
@@ -74,7 +74,7 @@ const Table = ({
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
           lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
+          type: filter
         }
       });
     }

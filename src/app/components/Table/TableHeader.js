@@ -4,7 +4,7 @@ import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
 import { changeFilter } from 'redux/actions/loans';
 import { useOuterClick } from 'services/useOuterClick'
-import { ETH, JNT } from 'config/constants';
+import { ETH, SLICE } from 'config/constants';
 import {
     TableContainerHeader,
     TableHeaderTitles,
@@ -54,8 +54,8 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                             <TableMarketBtn onClick={() => loanListing(ETH)}>
                                 ETH Markets
                             </TableMarketBtn>
-                            <TableMarketBtn onClick={() => loanListing(JNT)}>
-                                JNT Markets
+                            <TableMarketBtn onClick={() => loanListing(SLICE)}>
+                                SLICE Markets
                             </TableMarketBtn>
                         </TableMarketsDropdownContent>
                     </TableMarketsDropdown> : ""

@@ -150,8 +150,8 @@ let NewLoan = ({
     let collBalance =
       pairData[newPairId].collateral === 'ETH'
         ? balance
-        : pairData[newPairId].collateral === 'JNT'
-        ? tokenBalance.JPT
+        : pairData[newPairId].collateral === 'SLICE'
+        ? tokenBalance.SLICE
         : undefined;
     setCollateralBalance(roundNumber(fromWei(collBalance)));
     let result = await calcMaxBorrowAmount(newPairId, collBalance, web3);
@@ -261,8 +261,6 @@ let NewLoan = ({
       setRpb(0);
     }
   };
-
-  // const collateralBalance = pairData[pair].collateral === 'ETH' ? fromWei(balance) : pairData[pair].collateral === 'JNT' ? fromWei(tokenBalance.JPT) : undefined;
 
   return (
     <ModalNewLoanContent>

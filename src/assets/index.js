@@ -16,7 +16,7 @@ import ServerError from './images/svg/ServerError.svg';
 import DAI from './images/svg/dai.svg';
 import ETH from './images/svg/EthForm.svg';
 import USDC from './images/svg/usdc.svg';
-import JNT from './images/svg/jnt.svg';
+import SLICE from './images/svg/jnt.svg';
 import RequestLoan from './images/svg/RequestLoan.svg';
 import EarningAsset from './images/svg/EarningAsset.svg';
 
@@ -24,5 +24,5 @@ import EarningAsset from './images/svg/EarningAsset.svg';
 
 
 export {
-    Adjust, DAI, RequestLoan, EarningAsset, ETH, USDC, JNT, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, DAI, RequestLoan, EarningAsset, ETH, USDC, SLICE, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };

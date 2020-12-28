@@ -1,7 +1,7 @@
 import DAIicon from 'assets/images/svg/dai.svg';
 import USDCicon from 'assets/images/svg/usdc.svg';
 import ETHicon from 'assets/images/svg/EthForm.svg';
-import JNTicon from 'assets/images/svg/jnt.svg';
+import SLICEicon from 'assets/images/svg/jnt.svg';
 import { Key, Agree } from 'assets';
 import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
@@ -97,9 +97,9 @@ export const pairData = [
     key: 'USDC',
     text: 'USDC',
     value: 1,
-    collateral: 'JNT',
+    collateral: 'SLICE',
     img: USDCicon,
-    colIcon: JNTicon,
+    colIcon: SLICEicon,
     collateralTokenSetup: SLICESetup,
     lendTokenSetup: USDCSetup
   }
@@ -114,7 +114,7 @@ export const apiUri = {
 // Filters
 export const ETH = 'ETH';
 export const DAI = 'DAI';
-export const JNT = 'JNT';
+export const SLICE = 'SLICE';
 export const USDC = 'USDC';
 
 export const blocksPerYear = 2372500;

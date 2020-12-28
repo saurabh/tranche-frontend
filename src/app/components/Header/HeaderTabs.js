@@ -5,7 +5,7 @@ import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
-import { ETH, USDC, JNT, DAI } from 'assets';
+import { ETH, USDC, SLICE, DAI } from 'assets';
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
@@ -113,10 +113,10 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
                 <RatesRowContent>
                   <RatesValue>
                     <RatesValueImg>
-                      <img src={JNT} alt='JNT' />
+                      <img src={SLICE} alt='SLICE' />
                     </RatesValueImg>
                     <RatesValueText>
-                      <h2>1 JNT</h2>
+                      <h2>1 SLICE</h2>
                     </RatesValueText>
                   </RatesValue>
                   <RatesRowDash>
