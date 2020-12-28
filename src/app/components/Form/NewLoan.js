@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
+import { setTokenBalances } from 'redux/actions/ethereum';
 import { pairData, blocksPerYear } from 'config/constants';
 import {
   allowanceCheck,
@@ -74,7 +75,8 @@ let NewLoan = ({
   createNewLoan,
   formValues,
   change,
-  ethereum: { address, balance, tokenBalance, web3 }
+  ethereum: { address, balance, tokenBalance, web3 },
+  setTokenBalances
 }) => {
   const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
@@ -86,6 +88,19 @@ let NewLoan = ({
   const [collateralValue, setCollateralValue] = useState(0);
   const [rpb, setRpb] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
+  let collBalance =
+    pairData[pair].collateral === 'ETH'
+      ? balance
+      : pairData[pair].collateral === 'SLICE'
+      ? tokenBalance.SLICE
+      : 0;
+
+  const fetchTokenBalances = useCallback(
+    () => {
+      setTokenBalances(web3, address)
+    },
+    [address, web3, setTokenBalances],
+  )
 
   useEffect(() => {
     if (pair === 1) {
@@ -97,21 +112,19 @@ let NewLoan = ({
 
   useEffect(() => {
     const getMaxBorrowed = async () => {
-      let result = await calcMaxBorrowAmount(pair, balance);
+      let result = await calcMaxBorrowAmount(pair, collBalance);
       result = roundNumber(result, undefined, 'down');
-      // result = round('down', Number(result), 2);
-      // result = roundNumber(result);
       setMaxBorrowedAskAmount(result);
     };
 
-    if (balance >= 0) {
-      let collBalance = fromWei(balance);
-      setCollateralBalance(roundNumber(collBalance));
+    if (collBalance >= 0) {
+      setCollateralBalance(roundNumber(fromWei(collBalance)));
     }
-    getMaxBorrowed();
 
+    fetchTokenBalances();
+    getMaxBorrowed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balance]);
+  }, [address, collBalance]);
 
   const inputChange = (val) => {
     const input = document.getElementById('selectPair');
@@ -270,6 +283,7 @@ let NewLoan = ({
             <LoanDetailsRowTitle>COLLATERAL BALANCE</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
+              {console.log(collateralBalance, pair)}
               {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
@@ -351,7 +365,11 @@ let NewLoan = ({
               </NewLoanFormInput>
               <h2>
                 BORROW LIMIT: ~{' '}
-                {(maxBorrowedAskAmount ? roundNumber(maxBorrowedAskAmount) : 0) +
+                {(maxBorrowedAskAmount
+                  ? roundNumber(maxBorrowedAskAmount) !== 'NaN'
+                    ? roundNumber(maxBorrowedAskAmount)
+                    : 0
+                  : 0) +
                   ' ' +
                   pairData[pair].text}
               </h2>
@@ -469,4 +487,4 @@ const mapStateToProps = (state) => ({
   formValues: getFormValues('newLoan')(state)
 });
 
-export default NewLoan = connect(mapStateToProps, { change })(NewLoan);
+export default NewLoan = connect(mapStateToProps, { change, setTokenBalances })(NewLoan);

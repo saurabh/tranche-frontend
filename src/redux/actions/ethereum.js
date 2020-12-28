@@ -71,20 +71,6 @@ export const setTokenBalances = (web3, address) => async (dispatch) => {
 
 export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
   let web3 = new Web3(wallet.provider);
-  let address = await web3.eth.getAccounts();
-  const DAI = DAISetup(web3);
-  const SLICE = SLICESetup(web3);
-  const USDC = USDCSetup(web3);
-  if (address[0]) {
-    const daiBalance = await DAI.methods.balanceOf(address[0]).call();
-    const sliceBalance = await SLICE.methods.balanceOf(address[0]).call();
-    const usdcBalance = await USDC.methods.balanceOf(address[0]).call();
-    const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance, USDC: usdcBalance };
-    dispatch({
-      type: SET_TOKEN_BALANCES,
-      payload: tokenBalances
-    });
-  }
   dispatch({
     type: SET_WALLET,
     payload: wallet
