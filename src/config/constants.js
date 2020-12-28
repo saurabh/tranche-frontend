@@ -1,8 +1,4 @@
-import DAIicon from 'assets/images/svg/dai.svg';
-import USDCicon from 'assets/images/svg/usdc.svg';
-import ETHicon from 'assets/images/svg/EthForm.svg';
-import SLICEicon from 'assets/images/svg/jnt.svg';
-import { Key, Agree } from 'assets';
+import { Key, Agree, DAI as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables

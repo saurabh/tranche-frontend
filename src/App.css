@@ -683,7 +683,7 @@ button[disabled] img{
   background-image: url("assets/images/svg/EthForm.svg");
 }
 .ModalFormInputSLICE{
-  background-image: url("assets/images/svg/jnt.svg");
+  background-image: url("assets/images/svg/SLICE.svg");
 }
 .ModalFormInput:focus{
   outline: none;
