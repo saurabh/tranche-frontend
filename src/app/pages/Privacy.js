@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from 'app/components';
 
 const Privacy = () => {
- let updateDate = "14/10/2020"
+ let updateDate = "11th of November 2020"
   return (
     <Layout updateDate={updateDate}>
       <div className="staticContentWrapper content-container container">
@@ -12,10 +12,10 @@ const Privacy = () => {
             </div>
             <div className="sectionContent">
               <p>
-                Jibrel Network is committed to protecting and respecting the privacy of its Users and is dedicated to controlling the use and disclosure of information provided by Users using the website [jibrel.network] and other websites which use subdomains of [jibrel.network] (the "Site"). This Privacy Policy (the “Privacy Policy”) sets forth Jibrel Network’s policies regarding collection, storage, access, use and disclosure of personal data or other information collected from the users of the Site. Any terms not defined herein shall have the meaning set forth in the Terms of Use. You should read this Privacy Policy carefully, so that you know what we are doing with your personal data. This Privacy Policy is legally binding when you use the Site.
+                Jibrel AG is committed to protecting and respecting the privacy of its Users and is dedicated to controlling the use and disclosure of information provided by Users using the website Tranche.Finance and other websites which use subdomains of Tranche.Finance (the "Site"). This Privacy Policy (the “Privacy Policy”) sets forth Jibrel AG’s policies regarding collection, storage, access, use and disclosure of personal data or other information collected from the users of the Site. Any terms not defined herein shall have the meaning set forth in the Terms of Use. You should read this Privacy Policy carefully, so that you know what we are doing with your personal data. This Privacy Policy is legally binding when you use the Site.
               </p>
               <p>
-                As used in this Privacy Policy, "we", "us" or "our" refers to Jibrel AG, a private limited company registered in Zug, Switzerland. You can reach us with any requests relating to this Privacy Policy via contact details provided in Section X.
+                As used in this Privacy Policy, "we", "us" or "our" refers to Jibrel AG, a private limited company registered in Zug, Switzerland. You can reach us with any requests relating to this Privacy Policy via contact details provided in Section 10.
               </p>
             </div>
           </div>
@@ -28,7 +28,7 @@ const Privacy = () => {
               <p>In this Privacy Policy we refer to the following terms, which have the following meanings:</p>
               <ul>
                 <li><strong>"Personal data"</strong> is any information that relates to an identifiable natural person. Your name, address and contact details are all examples of your personal data, if they identify you.</li>
-                <li>The term <strong>"process"</strong> means any activity relating to personal data, including, by way of example, collection, storage, use, consultation and transmission.</li>
+                <li>The term <strong>"process"</strong>  means any activity relating to personal data, including, by way of example, collection, storage, use, consultation and transmission.</li>
               </ul>
             </div>
           </div>
@@ -39,30 +39,18 @@ const Privacy = () => {
             </div>
             <div className="sectionContent">
               <p>
-                <u>Registration Information:</u> To ensure that only legitimate entities and individuals are able to access the non-public areas of the Site and enter into transactions, we require each potential User to, by using the Registration Page on the Site, provide:
+                <u>User Information:</u> Jibrel AG may collect, use and disclose both on and off the Site, for marketing and other purposes, certain general, demographic and statistical information regarding Site usage and transactions.
               </p>
-              <ol type="i">
-                <li>information regarding themselves (including name, bank details e-mail address, and work phone number), and </li>
-                <li>information regarding their Company (including Company name, bank details and parent Company’s name and address).</li>
-              </ol>
-
               <p>
-              Upon receipt of Your registration data, Jibrel Network may contact You or Your Company to obtain other background information. Other than as specified in this Privacy Policy, the registration information will be used only internally by Jibrel Network and will not be disclosed to third parties without the applicable User’s prior written consent.
+                <u>Technical and Usage Information:</u> To operate the Site, enhance its functionality, and ensure that User communications are convenient, dependable and secure, Jibrel AG may collect, store and use technical and Site usage information relating to a User’s activities on the Site.  Such information includes the Internet Protocol (“IP”) address from which a User accesses the Site, which is used only internally by Jibrel AG as required for server operation and other technical uses, and is not disclosed to any other persons.  Jibrel AG may also track the pages of the Site accessed by Users.
               </p>
 
               <p>
-                <u>User Information: </u>Jibrel Network may collect, use and disclose both on and off the Site, for marketing and other purposes, certain general, demographic and statistical information regarding Site usage and transactions.
+                <u>User Communications: </u>Jibrel AG may use User contact information, such as e-mail addresses, to communicate with Users regarding registration and transactions, to notify Users of changes in Site functionality and features, product and service updates, policy changes, billing and other activities relating to a Users's use of the Site, and for marketing purposes.
               </p>
 
               <p>
-                <u>Technical and Usage Information: </u>To operate the Site, enhance its functionality, and ensure that User communications are convenient, dependable and secure, Jibrel Network may collect, store and use technical and Site usage information relating to a User’s activities on the Site.  Such information includes the Internet Protocol (“IP”) address from which a User accesses the Site, which is used only internally by Jibrel network as required for server operation and other technical uses, and is not disclosed to any other persons.  Jibrel Network may also track the pages of the Site accessed by Users.
-              </p>
-
-              <p>
-                <u>User Communications: </u>Jibrel Network may use User contact information, such as e-mail addresses, to communicate with Users regarding registration and transactions, to notify Users of changes in Site functionality and features, product and service updates, policy changes, billing and other activities relating to a Users's use of the Site, and for marketing purposes.
-              </p>
-              <p>
-                <u>Legal Compliance: </u>In addition to the disclosures permitted pursuant to this Privacy Policy, Jibrel Network may provide User information in connection with legal, administrative or judicial inquiries, claims or orders to the extent necessary to comply therewith.
+                <u>Legal Compliance: </u>In addition to the disclosures permitted pursuant to this Privacy Policy, Jibrel AG may provide User information in connection with legal, administrative or judicial inquiries, claims or orders to the extent necessary to comply therewith.
               </p>
             </div>
           </div>
@@ -114,7 +102,7 @@ const Privacy = () => {
                       <p>Cookies that are used to deliver content that is more relevant to you and your interests. They may be used to deliver targeted advertising or to limit the number of times you see an advertisement. They also help us measure the effectiveness of advertising campaigns on the Website.</p>
                       <p>We may use these cookies to remember websites you have visited and we may share this information with other parties, including advertisers and our agencies.</p>
                     </td>
-                    <td><p>Most types of these cookies track consumers via their IP address so will collect some personal data.</p></td>
+                    <td><p>Most types of these cookies track consumers via their ​IP address​ so will collect some personal data.</p></td>
                   </tr>
                 </tbody>
               </table>
@@ -132,7 +120,7 @@ const Privacy = () => {
               <h2>4. Blockchain Data and Public Ethereum Address </h2>
             </div>
             <div className="sectionContent">
-              <p>Jibrel Network is not responsible for your use of the Ethereum blockchain and your data processed in this decentralized and permissionless network. We use public Ethereum addresses to identify a user’s journey through our product offerings. We group and analyse these user journeys collectively in order to improve user experience. We do not use this data for any purpose at an individual user level. The legal basis for this processing is that it is necessary to fulfil a contract with you, as well as our legitimate interests, such as monitoring and improving the Site and the proper protection of the Site against risks.</p>
+              <p>Jibrel AG is not responsible for your use of the Ethereum blockchain and your data processed in this decentralized and permissionless network. We use public Ethereum addresses to identify a user’s journey through our product offerings. We group and analyse these user journeys collectively in order to improve user experience. We do not use this data for any purpose at an individual user level. The legal basis for this processing is that it is necessary to fulfil a contract with you, as well as our legitimate interests, such as monitoring and improving the Site and the proper protection of the Site against risks.</p>
             </div>
           </div>
       
@@ -141,8 +129,8 @@ const Privacy = () => {
               <h2>5. Data Security</h2>
             </div>
             <div className="sectionContent">
-              <p>Jibrel Network is very concerned with the security of information relating to our Users' use of the Site and has implemented systems and procedures to protect your personal data from unlawful or unauthorised processing and accidental loss, destruction or damage. Our security measures are continuously improved in line with technical developments.  </p>
-              <p>Please note that any data transmission on the Internet can be compromised and we accept no liability for data transmitted to us via the Internet. Unfortunately, absolute protection is not technically possible. </p>
+              <p>Jibrel AG is very concerned with the security of information relating to our Users' use of the Site and has implemented systems and procedures to protect your personal data from unlawful or unauthorised processing and accidental loss, destruction or damage. Our security measures are continuously improved in line with technical developments.</p>
+              <p>Please note that any data transmission on the Internet can be compromised and we accept no liability for data transmitted to us via the Internet. Unfortunately, absolute protection is not technically possible.</p>
             </div>
           </div>
 
@@ -151,7 +139,7 @@ const Privacy = () => {
               <h2>6. Linked Sites  </h2>
             </div>
             <div className="sectionContent">
-              <p>The Site may contain hyperlinks through which other Internet websites may be accessed by Users.  Jibrel Network is not responsible for and cannot make any assurances regarding privacy, or other policies or practices of the operators of such websites.  Such links are provided only for the convenience of our Users and the presence of any link does not imply that Jibrel Network endorses, approves or is responsible for such websites. </p>
+              <p>The Site may contain hyperlinks through which other Internet websites may be accessed by Users.  Jibrel AG is not responsible for and cannot make any assurances regarding privacy, or other policies or practices of the operators of such websites.  Such links are provided only for the convenience of our Users and the presence of any link does not imply that Jibrel AG endorses, approves or is responsible for such websites. </p>
             </div>
           </div>
 
@@ -189,7 +177,7 @@ const Privacy = () => {
                 <h2>9. Updates to the Privacy Policy  </h2>
               </div>
               <div className="sectionContent">
-                <p>Jibrel Network may update this Privacy Policy from time to time as new features and services become available on the Site and to keep pace with technological developments.  The new terms shall be effective ten (10) days after they are initially posted on the Site.  It is the responsibility of the User to review the latest terms.  We also encourage you to check this notice on a regular basis – updated copies can be found at: [LINK]. If You do not agree with updated Privacy Policy, you should immediately cease use of the Site and our Services. </p>
+                <p>Jibrel AG may update this Privacy Policy from time to time as new features and services become available on the Site and to keep pace with technological developments.  The new terms shall be effective ten (10) days after they are initially posted on the Site.  It is the responsibility of the User to review the latest terms.  We also encourage you to check this notice on a regular basis – updated copies can be found at: Tranche.Finance. If You do not agree with updated Privacy Policy, you should immediately cease use of the Site and our Services.</p>
               </div>
             </div>
 
@@ -199,7 +187,7 @@ const Privacy = () => {
                 <h2>10.	Where can you find out more?</h2>
               </div>
               <div className="sectionContent">
-                  <p>If you want more information about any of the subjects covered in this Privacy Policy or if you would like to discuss any issues or concerns with us, you can contact us support@jibrel.network.</p>
+                  <p>If you want more information about any of the subjects covered in this Privacy Policy or if you would like to discuss any issues or concerns with us, you can contact us <a href="mailto:support@jibrel.network ">support@jibrel.network</a>.</p>
               </div>
             </div>
           </div>

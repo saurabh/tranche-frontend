@@ -2,11 +2,24 @@ import React from 'react';
 import { Layout } from 'app/components';
 
 const TermsAndConditions = () => {
-  let updateDate = "14/10/2020"
+  let updateDate = "11th of November 2020"
 
   return (
     <Layout updateDate={updateDate}>
       <div className="staticContentWrapper content-container container">
+
+        <div className="staticContentSection">
+          <div className="sectionTitle">
+            <h2>Introduction:</h2>
+          </div>
+          <div className="sectionContent">
+            <p>
+            In these Terms of Use (“<strong>Terms</strong>”), "we" and "us" refers to Jibrel AG and we own and operate the website <a href="https://tranche.finance">https://tranche.finance </a>/("<strong>the Site</strong>"). These Terms apply to you (“<strong></strong>you”) as a user of the Site, including all the products, services, tools and information made available on the Site.
+            </p>
+            <p>Please read these Terms carefully before using the Site. These Terms apply to any person accessing the Site and by using the Site you agree to be bound by them. If you don’t want to be bound by them, you should not access the Site. By using the Site in any capacity, you agree that you have read and understood these Terms.</p>
+            <p>You are advised to check these Terms periodically to ensure that you are aware and comply with the current version of these Terms. Changes are binding on users of the Site and will take effect immediately from posting of the revised documentation on the Sites. You agree to be bound by such variation and continued use of the Site shall constitute acceptance of such variation.</p>
+          </div>
+        </div>
 
         <div className="staticContentSection">
           <div className="sectionTitle">
@@ -47,7 +60,7 @@ const TermsAndConditions = () => {
           </div>
           <div className="sectionContent">
             <p>
-            In no event shall Jibrel Network or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Jibrel Network’s website, even if Jibrel Network or a Jibrel Network authorized representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.
+            In no event shall Jibrel AG or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Tranche.finance, even if Jibrel AG or a Jibrel AG authorized representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.
             </p>
           </div>
         </div>
@@ -61,7 +74,7 @@ const TermsAndConditions = () => {
           <div className="sectionContent">
             <p>
               
-              The materials appearing on the Jibrel Network website could include technical, typographical, or photographic errors. Jibrel Network does not warrant that any of the materials on its website are accurate, complete or current. Jibrel Network may make changes to the materials contained on its website at any time without notice. However Jibrel Network does not make any commitment to update the materials.
+           The materials appearing on the Tranche.finance website could include technical, typographical, or photographic errors. Jibrel AG does not warrant that any of the materials on its website are accurate, complete or current. Jibrel AG may make changes to the materials contained on its website at any time without notice. However Jibrel AG does not make any commitment to update the materials.
 
             </p>
           </div>
@@ -73,7 +86,7 @@ const TermsAndConditions = () => {
           </div>
           <div className="sectionContent">
             <p>
-            All information provided by the Website is for informational purposes only and should not be construed as professional advice. The Website is not, and should not be: (i) deemed to be an offer of, or invitation to engage in any investment activity; or (ii) construed as advice, or a personal recommendation by Jibrel Network or any of our partners. You should not take, or refrain from taking, any action based on any information contained in the Website. Before you make any financial, legal, or other decisions involving the Website, you should seek independent professional advice from an individual who is licensed and qualified in the area for which such advice would be appropriate.
+            All information provided by the Website is for informational purposes only and should not be construed as professional advice. The Website is not, and should not be: (i) deemed to be an offer of, or invitation to engage in any investment activity; or (ii) construed as advice, or a personal recommendation by Jibrel AG or any of our partners. You should not take, or refrain from taking, any action based on any information contained in the Website. Before you make any financial, legal, or other decisions involving the Website, you should seek independent professional advice from an individual who is licensed and qualified in the area for which such advice would be appropriate.
             </p>
           </div>
         </div>
@@ -107,7 +120,7 @@ const TermsAndConditions = () => {
           </div>
           <div className="sectionContent">
             <p>
-            Any links to third-party websites do not imply endorsement by Jibrel Network of any product, service, information or disclaimer presented therein, nor does Jibrel Network guarantee the accuracy of the information contained on them. If you suffer damages from using such third-party product and service, Jibrel Network will not be liable for such damages. In addition, since Jibrel Network has no control over the terms of use or privacy policies of third-party websites, you should read and understand those policies carefully.
+            Any links to third-party websites do not imply endorsement by Jibrel AG of any product, service, information or disclaimer presented therein, nor does Jibrel AG guarantee the accuracy of the information contained on them. If you suffer damages from using such third-party product and service, Jibrel AG will not be liable for such damages. In addition, since Jibrel AG has no control over the terms of use or privacy policies of third-party websites, you should read and understand those policies carefully.
             </p>
           </div>
         </div>
@@ -118,7 +131,7 @@ const TermsAndConditions = () => {
           </div>
           <div className="sectionContent">
             <p>
-            We reserve the right, in our sole discretion, to modify this Agreement at any time. If we make any modifications, we will notify you by updating the date at the top of the Agreement and by maintaining a current version of the Agreement at [Insert link]. All modifications will be effective when they are posted, and your continued use of the Website will serve as confirmation of your acceptance of those modifications. If you do not agree with any modifications to this Agreement, you must immediately stop accessing and using the Website.
+              We reserve the right, in our sole discretion, to modify this Agreement at any time. If we make any modifications, we will notify you by updating the date at the top of the Agreement and by maintaining a current version of the Agreement on the Tranche.Finance website. Modifications will be effective when they are posted, and your continued use of the Website will serve as confirmation of your acceptance of those modifications. If you do not agree with any modifications to this Agreement, you must immediately stop accessing and using the Website.
             </p>
           </div>
         </div>
@@ -130,7 +143,7 @@ const TermsAndConditions = () => {
           </div>
           <div className="sectionContent">
             <p>
-            These terms and conditions are governed by and construed in accordance with the laws of Switzerland, and you irrevocably submit to the exclusive jurisdiction of the courts in Zug, Switzerland.
+              These terms and conditions are governed by and construed in accordance with the laws of Switzerland, and you irrevocably submit to the exclusive jurisdiction of the courts in Zug, Switzerland.
             </p>
           </div>
         </div>

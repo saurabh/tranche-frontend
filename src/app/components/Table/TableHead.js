@@ -11,7 +11,7 @@ import {
 } from './styles/TableComponents';
 
 
-const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
+const TableHead = ({changeSorting, loans: {sort}}) => {
 
     const [order, setOrder] = useState("asc")
 
@@ -21,7 +21,6 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
             type: order
         };
         changeSorting(sortObj);
-        handleSorting();
         setOrder(order === "asc" ? "desc" : "asc")
     }
     return (
@@ -59,7 +58,7 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="status-wrapper">
-                <div className="status-title-content" onClick={() => sortLoans("status")}>
+                <div className="status-title-content" onClick={() => sortLoans("displayPriority")}>
                     <h2>Status</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
