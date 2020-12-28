@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
+import { sellBuyToggle } from 'redux/actions/trade';
+
 import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
@@ -21,7 +23,7 @@ import {
   TabIndicator
 } from './styles/HeaderComponents';
 
-const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { filterType } }) => {
+const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   const [pair1Value, setPair1Value] = useState(0);
@@ -56,7 +58,8 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
   return (
     <div className='container content-container'>
       <HeaderTabsWrapper>
-        <MarketsTabsContainer>
+        { (path === "borrow" || path === "earn") ?
+          <MarketsTabsContainer>
           <HeaderTabBtn
             onClick={() => loanListing('all')}
             id='all'
@@ -79,6 +82,32 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
           }
           <TabIndicator tab={filterType} path={path}></TabIndicator>
         </MarketsTabsContainer>
+        :
+        <MarketsTabsContainer page="trade">
+          <HeaderTabBtn
+            id='buy'
+            active={tradeType === 'buy'}
+            onClick={() => sellBuyToggle('buy')}
+            color={PagesData[path].secondaryColor}
+          >
+            Buy
+          </HeaderTabBtn>
+          {
+            address ? 
+              <HeaderTabBtn
+                id='sell'
+                active={tradeType === 'sell'}
+                onClick={() => sellBuyToggle('sell')}
+                color={PagesData[path].secondaryColor}
+              >
+                Sell
+              </HeaderTabBtn>
+            : ""
+          }
+          <TabIndicator tab={tradeType} path={path}></TabIndicator>
+        </MarketsTabsContainer>
+        }
+        
 
         <div id='other-tabs-container'>
           <RatesWrapper ref={innerRef}>
@@ -137,7 +166,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ethereum: { address }, loans: { 
               Rates
             </HeaderTabBtn>
           </RatesWrapper>
-          <HeaderTabBtn as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+          <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
             How-to
           </HeaderTabBtn>
         </div>
@@ -150,8 +179,9 @@ const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
     loans: state.loans,
-    path: state.path
+    path: state.path,
+    trade: state.trade
   };
 };
 
-export default connect(mapStateToProps, { changeOwnAllFilter })(HeaderTabs);
+export default connect(mapStateToProps, { changeOwnAllFilter, sellBuyToggle })(HeaderTabs);

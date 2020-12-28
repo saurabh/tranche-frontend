@@ -173,6 +173,9 @@ html{
 .table-fourth-col{
   width: 7%;
 }
+.table-fourth-col-return{
+  width: 9% !important;
+}
 .fourth-col-content{
 }
 .fourth-col-content h2{
@@ -181,6 +184,9 @@ html{
 
 .table-fifth-col{
   width: 17%;
+}
+.table-fifth-col-subscription{
+  width: 15%;
 }
 
 .fifth-col-content{
@@ -435,6 +441,7 @@ button[disabled] img{
   padding: 8px 0;
   text-align: center;
   border-radius: 19px;
+  margin: 0 auto;
 }
 .more-transactions h2{
   font-family: "Open Sans", sans-serif;

@@ -99,7 +99,7 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    background: #FAF8FF;
+    background: ${props => props.path === "borrow" ? "#FAF8FF" : props.path === "earn" ? " #FBFFF8" : "#F8F8F8"};
     border-top: 1px solid #EFEFEF;
     border-bottom: 1px solid #EFEFEF;
     padding: 0 47px;
@@ -216,7 +216,7 @@ const TableMarketsDropdown = styled.div`
   height: 90px;
   margin-top: 7px;
   overflow: hidden;
-  right: -26px;
+  right: ${({path}) => path === "trade" ? "26px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
@@ -293,27 +293,26 @@ const CallToActionWrapper = styled.div`
   }
 `;
 
-
 export {
-    TableWrapper,
-    TableContentCardWrapper,
-    TableCardTag,
-    TableHeadWrapper,
-    TableHeadTitle,
-    SortChevronWrapper,
-    TableContentCard,
-    StatusTextWrapper,
-    MoreRowSpan,
-    TableContainerHeader,
-    TableTitle,
-    TableSubTitle,
-    TableHeaderTitles,
-    CreateLoanBtn,
-    AdjustLoanBtn,
-    AdjustModalBtn,
-    TableMarketsDropdown,
-    TableMarketsDropdownContent,
-    TableMarketBtn,
-    CallToActionWrapper
-};
+  TableWrapper,
+  TableContentCardWrapper,
+  TableCardTag,
+  TableHeadWrapper,
+  TableHeadTitle,
+  SortChevronWrapper,
+  TableContentCard,
+  StatusTextWrapper,
+  MoreRowSpan,
+  TableContainerHeader,
+  TableTitle,
+  TableSubTitle,
+  TableHeaderTitles,
+  CreateLoanBtn,
+  AdjustLoanBtn,
+  AdjustModalBtn,
+  TableMarketsDropdown,
+  TableMarketsDropdownContent,
+  TableMarketBtn,
+  CallToActionWrapper
+  };
   
