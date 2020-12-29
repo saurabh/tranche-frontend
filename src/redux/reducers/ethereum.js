@@ -13,7 +13,7 @@ import { web3 } from 'utils/getWeb3';
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: '0', JPT: '0', USDC: '0' },
+  tokenBalance: { DAI: '0', SLICE: '0', USDC: '0' },
   address: undefined,
   web3,
   notify: initNotify()

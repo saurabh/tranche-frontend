@@ -74,10 +74,10 @@ export const gweiOrEther = (input, cryptoName) => {
       if (input <= 0.0001) {
         return 'Gwei';
       } else return 'ETH';
-    } else if (cryptoName === 'JNT') {
+    } else if (cryptoName === 'SLICE') {
       if (input <= 0.00099) {
-        return 'nJNT';
-      } else return 'JNT';
+        return 'nSLICE';
+      } else return 'SLICE';
     } else if (cryptoName === 'DAI') {
       return 'DAI';
     } else if (cryptoName === 'USDC') {
@@ -90,7 +90,7 @@ export const gweiOrEther = (input, cryptoName) => {
 
 export const roundBasedOnUnit = (input, cryptoName) => {
   try {
-    if (gweiOrEther(input, cryptoName) === ('Gwei' || 'nJNT')) {
+    if (gweiOrEther(input, cryptoName) === ('Gwei' || 'nSLICE')) {
       input *= 10 ** 9;
     }
     const result = roundNumber(input);

@@ -21,7 +21,6 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
             type: order
         };
         changeSorting(sortObj);
-        handleSorting();
         setOrder(order === "asc" ? "desc" : "asc")
     }
     return (

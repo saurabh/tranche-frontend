@@ -299,9 +299,9 @@ ${({ currency }) => currency === 'ETH' && `
     top: 27px;
   }  
 `}
-${({ currency }) => currency === 'JNT' && `
+${({ currency }) => currency === 'SLICE' && `
   &:after{
-    content: 'JNT';
+    content: 'SLICE';
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

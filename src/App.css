@@ -612,8 +612,8 @@ button[disabled] img{
   top: 27px;
 }
 
-.ModalFormGrpJNT:after{
-  content: 'JNT';
+.ModalFormGrpSLICE:after{
+  content: 'SLICE';
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -682,8 +682,8 @@ button[disabled] img{
 .ModalFormInputETH{
   background-image: url("assets/images/svg/EthForm.svg");
 }
-.ModalFormInputJNT{
-  background-image: url("assets/images/svg/jnt.svg");
+.ModalFormInputSLICE{
+  background-image: url("assets/images/svg/SLICE.svg");
 }
 .ModalFormInput:focus{
   outline: none;

@@ -527,8 +527,8 @@ const TableCard = ({
             <h2>
               {apy}%{' '}
               <span>
-                ({roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
-                {gweiOrEther(totalInterest, collateralTypeName)})
+                ({roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                {gweiOrEther(interestPaid, collateralTypeName)})
               </span>
             </h2>
           </div>

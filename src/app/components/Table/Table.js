@@ -64,7 +64,7 @@ const Table = ({
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
           lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
+          type: filter
         }
       });
     } else {
@@ -74,7 +74,7 @@ const Table = ({
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
           lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
+          type: filter
         }
       });
     }
@@ -103,9 +103,9 @@ const Table = ({
     paginationCurrent(p);
   };
 
-  const handleSorting = () => {
-    loanListing();
-  };
+  // const handleSorting = () => {
+  //   loanListing();
+  // };
 
   // const generateAvatar = () => {
   //   let avatar = blockies.create({
@@ -120,7 +120,7 @@ const Table = ({
         <TableWrapper>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
+            <TableHead />
             <div className='table-content'>
                 {
                     isLoading ? <div>
