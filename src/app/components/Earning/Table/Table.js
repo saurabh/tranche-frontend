@@ -16,13 +16,13 @@ import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from '../../Table/TableHeader';
 import TableHead from '../../Table/TableHead';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard, CallToActionWrapper,
+import { TableWrapper, TableContentCard,
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
   CallToActionTradetext
 } from '../../Table/styles/TableComponents';
-import { RequestLoan, EarningAsset, EmptyBox } from 'assets';
+import { EmptyBox } from 'assets';
 const style = {
   pageItem: {
     fontFamily: 'Roboto, sans-serif',
