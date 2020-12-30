@@ -145,9 +145,11 @@ const ModalFormButton = styled.button`
   position: relative;
   overflow: hidden;
   outline: none;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
   :disabled{
     opacity: 0.5;
     cursor: default;
+    box-shadow: none;
     :hover{
       filter: brightness(1);
     }
@@ -158,10 +160,11 @@ const ModalFormButton = styled.button`
   }
 
   :hover{
-    filter: brightness(102%);
+    filter: brightness(107%);
   }
   :active{
     filter: brightness(97%);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
   }
 
   span{
@@ -175,6 +178,7 @@ const ModalFormButton = styled.button`
     cursor: unset !important;
     border: 1px solid #936CE6 !important;
     pointer-events: none !important;
+    box-shadow: none !important;
   `}
   ${({ approveBtn, approved }) => (approveBtn && !approved) && `
     display: flex;
@@ -191,6 +195,7 @@ const ModalFormButton = styled.button`
     }
     background: transparent !important;
     cursor: unset !important;
+    box-shadow: none !important;
     border: 1px solid #2ECC71 !important;
     color: #2ECC71 !important;
     pointer-events: none !important;
