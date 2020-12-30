@@ -53,7 +53,10 @@ export const roundNumber = (input, roundTo, type = false) => {
     } else decimalPoints = roundTo;
     if (type) {
       let result = safeMultiply(input, 10 ** decimalPoints);
-      if (type === 'up') result = Math.ceil(result);
+      if (type === 'up') {
+        if (Number(result.toString().split('.')[0]) === Math.ceil(result)) result = safeAdd(result, 0.1);
+        result = Math.ceil(result);
+      }
       if (type === 'down') result = Math.floor(result);
       result = safeDivide(result, 10 ** decimalPoints);
       return result;
