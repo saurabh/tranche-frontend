@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { setTokenBalances } from 'redux/actions/ethereum';
@@ -13,7 +14,7 @@ import {
   fromWei,
   toBN
 } from 'services/contractMethods';
-import { useDebouncedCallback } from 'utils/lodash';
+import { validate, asyncValidateCreate } from 'utils';
 import {
   isLessThan,
   safeSubtract,
@@ -22,7 +23,6 @@ import {
   roundBasedOnUnit,
   formatString
 } from 'utils/helperFunctions';
-import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
   BtnLoanModal,
@@ -95,12 +95,9 @@ let NewLoan = ({
       ? tokenBalance.SLICE
       : 0;
 
-  const fetchTokenBalances = useCallback(
-    () => {
-      setTokenBalances(web3, address)
-    },
-    [address, web3, setTokenBalances],
-  )
+  const fetchTokenBalances = useCallback(_.debounce(() => {
+    setTokenBalances(web3, address);
+  }, 2000), [address, web3, setTokenBalances]);
 
   useEffect(() => {
     if (pair === 1) {
@@ -173,31 +170,22 @@ let NewLoan = ({
     calculateRPB(pairId, borrowedAskAmount, APY);
   };
 
-  const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
-    async (pair, borrowedAskAmount) => {
-      let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
-      result = roundNumber(result, undefined, 'up');
-      setMinCollateralAmount(result.toString());
-    },
-    250
-  );
+  const debounceCalcMinCollateralAmount = useCallback(_.debounce(async (pair, borrowedAskAmount) => {
+    let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
+    result = roundNumber(result, undefined, 'up');
+    setMinCollateralAmount(result.toString());
+  }, 250), []);
 
-  const [debounceCalcCollateralRatio] = useDebouncedCallback(
-    (borrowedAskAmount, collateralAmount, pair) => {
-      calcCollateralRatio(borrowedAskAmount, collateralAmount, pair);
-    },
-    250
-  );
+  const debounceCalcCollateralRatio = useCallback(_.debounce((borrowedAskAmount, collateralAmount, pair) => {
+    calcCollateralRatio(borrowedAskAmount, collateralAmount, pair);
+  }, 250), []);
 
-  const [debounceAllowanceCheck] = useDebouncedCallback(
-    async (pair, collateralAmount, address, web3) => {
-      if (pair === 1) {
-        const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
-        setHasAllowance(allowanceResult);
-      }
-    },
-    250
-  );
+  const debounceAllowanceCheck = useCallback(_.debounce(async (pair, collateralAmount, address, web3) => {
+    if (pair === 1) {
+      const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
+      setHasAllowance(allowanceResult);
+    }
+  }, 250), []);
 
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
@@ -283,7 +271,6 @@ let NewLoan = ({
             <LoanDetailsRowTitle>COLLATERAL BALANCE</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-              {console.log(collateralBalance, pair)}
               {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
