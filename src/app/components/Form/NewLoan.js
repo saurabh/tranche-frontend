@@ -283,7 +283,6 @@ let NewLoan = ({
             <LoanDetailsRowTitle>COLLATERAL BALANCE</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-              {console.log(collateralBalance, pair)}
               {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
