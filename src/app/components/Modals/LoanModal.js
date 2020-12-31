@@ -568,8 +568,8 @@ const LoanModal = ({
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                          {gweiOrEther(interestPaid, collateralTypeName)}
+                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
                         </h2>
                         <ModalButton
                           onClick={() => confirm('WithdrawInterest')}
@@ -599,8 +599,8 @@ const LoanModal = ({
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                          {gweiOrEther(interestPaid, collateralTypeName)}
+                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
                         </h2>
                         <ModalButton
                           onClick={() => confirm('WithdrawInterest')}
@@ -630,8 +630,8 @@ const LoanModal = ({
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                          {gweiOrEther(interestPaid, collateralTypeName)}
+                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
                         </h2>
                         <ModalButton
                           onClick={() => confirm('WithdrawInterest')}
@@ -664,8 +664,8 @@ const LoanModal = ({
                 ) : status === statuses['Foreclosed'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
@@ -679,8 +679,8 @@ const LoanModal = ({
                 ) : status === statuses['Early_closing'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
@@ -694,8 +694,8 @@ const LoanModal = ({
                 ) : status === statuses['Closing'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
