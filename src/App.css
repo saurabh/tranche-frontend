@@ -985,7 +985,7 @@ table, th, td {
   align-items: center;
 }
 .footerLinks{
-  max-width: 200px;
+  max-width: 300px;
   width: 100%;
   display: flex;
   justify-content: space-between;

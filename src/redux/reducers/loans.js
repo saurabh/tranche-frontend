@@ -15,7 +15,7 @@ const initialState = {
   isLoading: false,
   skip: 0,
   current: 1,
-  limit: 20,
+  limit: 50,
   filter: null,
   sort: null,
   filterType: 'all'
