@@ -82,6 +82,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
         .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
+          handleCloseModal(); 
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
@@ -89,7 +90,6 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
             };
           });
         });
-      handleCloseModal();
     } catch (error) {
       console.error(error);
     }

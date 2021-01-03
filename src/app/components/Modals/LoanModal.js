@@ -491,8 +491,8 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
-                    {gweiOrEther(totalInterest, collateralTypeName)}
+                    {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                    {gweiOrEther(interestPaid, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
