@@ -78,7 +78,7 @@ const Table = ({
       });
     }
     //page.current = currentPage;
-  }, 3000), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];

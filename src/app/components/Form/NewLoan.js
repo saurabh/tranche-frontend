@@ -97,7 +97,7 @@ let NewLoan = ({
 
   const fetchTokenBalances = useCallback(_.debounce(() => {
     setTokenBalances(web3, address);
-  }, 2000), [address, web3, setTokenBalances]);
+  }, 2000, {leading: true}), [address, web3, setTokenBalances]);
 
   useEffect(() => {
     if (pair === 1) {
@@ -185,7 +185,7 @@ let NewLoan = ({
       const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
       setHasAllowance(allowanceResult);
     }
-  }, 250), []);
+  }, 250, {leading: true}), []);
 
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
