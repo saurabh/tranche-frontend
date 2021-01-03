@@ -98,14 +98,14 @@ let AdjustLoan = ({
 
   const debounceCalcNewRatio = useCallback(_.debounce((collateralAmount, actionType) => {
     calcNewCollateralRatio(collateralAmount, actionType);
-  }, 250), []);
+  }, 500), []);
 
   const debounceAllowanceCheck = useCallback(_.debounce(async (collateralAmount) => {
     if (pairId === 1) {
       const allowanceResult = await allowanceCheck(pairId, collateralAmount, address, web3, true);
       setHasAllowance(allowanceResult);
     }
-  }, 250), []);
+  }, 500), []);
 
   const handleCollateralizingChange = async (collateralAmount, actionType) => {
     try {

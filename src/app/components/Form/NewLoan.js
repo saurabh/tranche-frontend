@@ -172,9 +172,11 @@ let NewLoan = ({
 
   const debounceCalcMinCollateralAmount = useCallback(_.debounce(async (pair, borrowedAskAmount) => {
     let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
-    result = roundNumber(result, undefined, 'up');
-    setMinCollateralAmount(result.toString());
-  }, 250), []);
+    if (result) {
+      result = roundNumber(result, undefined, 'up');
+      setMinCollateralAmount(result.toString());
+    } else setMinCollateralAmount(0)
+  }, 500), []);
 
   const debounceCalcCollateralRatio = useCallback(_.debounce((borrowedAskAmount, collateralAmount, pair) => {
     calcCollateralRatio(borrowedAskAmount, collateralAmount, pair);
@@ -185,12 +187,15 @@ let NewLoan = ({
       const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
       setHasAllowance(allowanceResult);
     }
-  }, 250, {leading: true}), []);
+  }, 500, {leading: true}), []);
 
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
     debounceCalcMinCollateralAmount(pair, newValue);
-    collateralAmount && debounceCalcCollateralRatio(newValue, collateralAmount, pair);
+    if (collateralAmount)  {
+      if (newValue === '') debounceCalcCollateralRatio('0', collateralAmount, pair);
+      else debounceCalcCollateralRatio(newValue, collateralAmount, pair);
+    }
   };
 
   const setCollateralAmount = async (borrowedAskAmount) => {
