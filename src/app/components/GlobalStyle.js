@@ -127,7 +127,7 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   .head-btns-wrapper{
-    width: 12%;
+    width: 18%;
   }
   @media (min-width: 992px){
     .navbar-container{

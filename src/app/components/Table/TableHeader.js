@@ -11,9 +11,9 @@ import {
     TableTitle,
     TableSubTitle,
     CreateLoanBtn,
-    TableMarketsDropdown,
-    TableMarketsDropdownContent,
-    TableMarketBtn
+    TableMarketsSortingDropdown,
+    TableMarketsSortingDropdownContent,
+    TableMarketSortingBtn
   } from './styles/TableComponents';
 
 const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
@@ -46,19 +46,19 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                 </TableSubTitle>
                 {   menu ?
-                    <TableMarketsDropdown>
-                        <TableMarketsDropdownContent>
-                            <TableMarketBtn onClick={() => loanListing(null)}>
+                    <TableMarketsSortingDropdown>
+                        <TableMarketsSortingDropdownContent>
+                            <TableMarketSortingBtn onClick={() => loanListing(null)}>
                                 All Markets
-                            </TableMarketBtn>
-                            <TableMarketBtn onClick={() => loanListing(ETH)}>
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => loanListing(ETH)}>
                                 ETH Markets
-                            </TableMarketBtn>
-                            <TableMarketBtn onClick={() => loanListing(SLICE)}>
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => loanListing(SLICE)}>
                                 SLICE Markets
-                            </TableMarketBtn>
-                        </TableMarketsDropdownContent>
-                    </TableMarketsDropdown> : ""
+                            </TableMarketSortingBtn>
+                        </TableMarketsSortingDropdownContent>
+                    </TableMarketsSortingDropdown> : ""
                 }
                 
             </TableHeaderTitles>

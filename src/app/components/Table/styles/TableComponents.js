@@ -106,12 +106,17 @@ const TableHeadWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    @media (max-width: 1200px){
-        display: none !important;
-    }
 `;
-const TableHeadTitle = styled.div`
+const SortingMenu = styled.div`
+  position: relative;
+  width: 100%;
+  display: none;
+  @media (max-width: 1200px) {
+    display: block;
+  }
+`;
 
+const TableHeadTitle = styled.div`
     & > div {
         position: relative;
         cursor: pointer;
@@ -124,6 +129,9 @@ const TableHeadTitle = styled.div`
             text-transform: uppercase;
             color: rgba(56, 56, 56, 0.3);
         }
+    }
+    @media (max-width: 1200px){
+      display: none !important;
     }
     ${({ defaultCursor }) => defaultCursor && `
         & > div {
@@ -175,6 +183,10 @@ const TableSubTitle = styled.div`
         font-size: 10px;
         cursor: pointer;
         color: #292929;
+        ${({ sorting }) => sorting && `
+          text-align: center;
+          letter-spacing: 2px;
+        `}
     }
 `;
 const CreateLoanBtn = styled.div`
@@ -210,7 +222,7 @@ const AdjustLoanBtn = styled.button`
 const TableHeaderTitles = styled.div`
   position: relative;
 `;
-const TableMarketsDropdown = styled.div`
+const TableMarketsSortingDropdown = styled.div`
   position: absolute;
   width: 150px;
   height: 90px;
@@ -221,14 +233,17 @@ const TableMarketsDropdown = styled.div`
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
   z-index: 1000;
+  ${({ sorting }) => sorting && `
+    right: 33px;  
+  `}
 `;
-const TableMarketsDropdownContent = styled.div`
+const TableMarketsSortingDropdownContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
 `;
-const TableMarketBtn = styled.button`
+const TableMarketSortingBtn = styled.button`
   height: 33%;  
   cursor: pointer;
   background: transparent;
@@ -310,9 +325,10 @@ export {
   CreateLoanBtn,
   AdjustLoanBtn,
   AdjustModalBtn,
-  TableMarketsDropdown,
-  TableMarketsDropdownContent,
-  TableMarketBtn,
-  CallToActionWrapper
-  };
+  TableMarketsSortingDropdown,
+  TableMarketsSortingDropdownContent,
+  TableMarketSortingBtn,
+  CallToActionWrapper,
+  SortingMenu
+};
   

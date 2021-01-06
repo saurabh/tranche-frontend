@@ -32,6 +32,8 @@ import {
   BtnLoadingIcon
 } from '../Modals/styles/ModalsComponents';
 
+import InputField from './Input';
+
 import {
   ModalFormGrp,
   ModalFormLabel,
@@ -54,16 +56,6 @@ import {
   ApproveBtnWrapper
 } from './styles/FormComponents';
 
-const InputField = ({ input, type, className, meta: { touched, error } }) => (
-  <div>
-    {touched && error ? (
-      <input {...input} type={type} className={`${className} InputStylingError`} />
-    ) : (
-      <input {...input} type={type} className={`${className} InputStyling`} />
-    )}
-    {touched && error && <span></span>}
-  </div>
-);
 
 let NewLoan = ({
   pristine,

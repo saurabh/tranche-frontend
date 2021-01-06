@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
 import Pagination from 'react-paginating';
+import { useHistory } from "react-router-dom";
 import {
   loansFetchData,
   changeFilter,
@@ -51,6 +52,7 @@ const Table = ({
   ethereum: { address }
 }) => {
   const { pathname } = useLocation();
+  const history = useHistory();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
 
@@ -174,7 +176,34 @@ const Table = ({
                     </button>
                   </CallToActionWrapper>
                 </TableContentCard>
-              ) : (
+              ) :
+              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'earn'
+                          ? history.push("/borrow")
+                          : false
+                      }
+                    >
+                      <img
+                        src={RequestLoan}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'earn'
+                        ? 'Navigate to Borrow'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              
+              (
                 loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>

@@ -208,7 +208,7 @@ html{
   text-align: right;
 }
 .table-sixth-col{
-  width: 12%;
+  width: 18%;
 }
 
 .second-4-col-content h2{
@@ -416,7 +416,7 @@ button[disabled] img{
   margin-right: 7px;
 }
 .table-more-row-sixth{
-  width: 0%;
+  width: 7%;
 }
 .TableMoreLoading{
   margin: 0 auto;
@@ -983,7 +983,11 @@ table, th, td {
   height: 33px;
   display: flex;
   align-items: center;
+  transform: translateX(-50%);
+  left: 50%;
 }
+
+
 .footerLinks{
   max-width: 300px;
   width: 100%;
@@ -1105,6 +1109,7 @@ table, th, td {
     display: flex;
     justify-content: space-between;
   }
+
   .table-col:before{
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -1466,6 +1471,3 @@ table, th, td {
   transform: translateX(-100%);
 }
 
-.indicator{
-  
-}

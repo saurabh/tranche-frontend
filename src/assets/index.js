@@ -19,8 +19,9 @@ import USDC from './images/svg/usdc.svg';
 import RequestLoan from './images/svg/RequestLoan.svg';
 import EarningAsset from './images/svg/EarningAsset.svg';
 import SLICE from './images/svg/SLICE.svg';
+import ChevronDown from './images/svg/chevronDown.svg';
 import SLICELogo from './images/svg/SLICELogo.svg';
 
 export {
-    Adjust, DAI, RequestLoan, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, DAI, RequestLoan, ChevronDown, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };
