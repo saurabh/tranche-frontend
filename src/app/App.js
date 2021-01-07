@@ -50,7 +50,7 @@ const App = ({
         address: LoanContractAddress
       })
       .on('data', async () => {
-        await timeout(3000);
+        await timeout(4000);
         await loansFetchData({
           skip,
           limit,
@@ -67,7 +67,7 @@ const App = ({
         address: PriceOracleAddress
       })
       .on('data', async () => {
-        await timeout(3000);
+        await timeout(4000);
         await loansFetchData({
           skip,
           limit,

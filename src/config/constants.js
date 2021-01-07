@@ -118,8 +118,6 @@ export const factoryFees = 5;
 
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
-  foreclosureWindow: 18000,
-  earlySettlementWindow: 540000
 };
 
 export const actionTypes = {
