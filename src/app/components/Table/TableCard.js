@@ -168,6 +168,10 @@ const TableCard = ({
   useEffect(() => {
     const forecloseWindowCheck = async () => {
       try {
+        if (status === statuses['Foreclosing'].status) {
+          const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
+          setLoanForeclosingBlock(loanClosingBlock);
+        }
         if (
           loanForeclosingBlock !== 0 &&
           currentBlock >= loanForeclosingBlock + Number(foreclosureWindow)
@@ -181,7 +185,7 @@ const TableCard = ({
     };
 
     forecloseWindowCheck();
-  }, [status, currentBlock, foreclosureWindow, loanForeclosingBlock]);
+  }, [status, loanId, currentBlock, foreclosureWindow, loanForeclosingBlock, web3]);
 
   const approveContract = async (pairId, amount, adjust = false) => {
     try {
@@ -295,6 +299,7 @@ const TableCard = ({
       console.log('onChain status: ' + onChainStatus);
       if (
         status === statuses['Under_Collateralized'].status ||
+        onChainStatus === statuses['At_Risk'].status ||
         (status === statuses['At_Risk'].status && onChainStatus === statuses['Active'].status)
       ) {
         console.log('initiateLoanForeclose');
@@ -312,7 +317,6 @@ const TableCard = ({
       } else if (
         (onChainStatus === statuses['Foreclosing'].status &&
           status === statuses['At_Risk'].status) ||
-        onChainStatus === statuses['At_Risk'].status ||
         (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow) &&
           status === statuses['Foreclosing'].status)
       ) {
@@ -473,7 +477,7 @@ const TableCard = ({
   return (
     <TableContentCardWrapper>
       <TableContentCard
-      pointer={true}
+        pointer={true}
         onClick={() => cardToggle(contractAddress)}
         className={moreCardToggle ? 'table-card-toggle' : ''}
       >
