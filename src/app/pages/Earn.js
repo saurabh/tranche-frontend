@@ -5,6 +5,7 @@ import Table from '../components/Table/Table';
 import { changeFilter } from 'redux/actions/loans';
 import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
+import SummaryCards from 'app/components/Summary/SummaryCards';
 
 function Earn({ changeFilter }) {
   const { pathname } = useLocation();
@@ -15,7 +16,7 @@ function Earn({ changeFilter }) {
 
   return (
     <Layout>
-      {/* <SummaryCards /> */}
+      <SummaryCards />
       <Table pageType={PagesData.borrow.pageType} />
     </Layout>
   );

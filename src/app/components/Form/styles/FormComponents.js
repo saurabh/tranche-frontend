@@ -21,9 +21,9 @@ ${({ currency }) => currency === 'ETH' && `
     top: 27px;
   }  
 `}
-${({ currency }) => currency === 'JNT' && `
+${({ currency }) => currency === 'SLICE' && `
   &:after{
-    content: 'JNT';
+    content: 'SLICE';
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -141,16 +141,89 @@ const ModalFormButton = styled.button`
   border: none;
   box-sizing: border-box;
   text-transform: uppercase;
+  transition: 500ms;
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
   :disabled{
     opacity: 0.5;
     cursor: default;
+    box-shadow: none;
+    :hover{
+      filter: brightness(1);
+    }
   }
+  h2{
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  :hover{
+    filter: brightness(107%);
+  }
+  :active{
+    filter: brightness(97%);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  span{
+    display: none
+  }
+  
+
+  
+  ${({ loading }) => loading === 'true' && `
+    background: transparent !important;
+    cursor: unset !important;
+    border: 1px solid #936CE6 !important;
+    pointer-events: none !important;
+    box-shadow: none !important;
+  `}
+  ${({ approveBtn, approved }) => (approveBtn && !approved) && `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    h2{
+      color: #ffffff !important;
+    }
+  `}
+  ${({ approved }) => approved && `
+    h2{
+      color: #2ECC71 !important;
+    }
+    background: transparent !important;
+    cursor: unset !important;
+    box-shadow: none !important;
+    border: 1px solid #2ECC71 !important;
+    color: #2ECC71 !important;
+    pointer-events: none !important;
+    h2{
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-right: 12px;
+    span{
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2ECC71;
+      display: block;
+      margin-right: 9px;
+    }
+  `}
 
   ${({ adjustCollateralBtn }) => adjustCollateralBtn && `
     font-size: 10px;
     background: #EAEAEA;
     color: rgba(35, 69, 102, 0.7);
   `}
+
 `
 const NewLoanInputWrapper = styled.div`
   width: 100% !important;  
@@ -430,6 +503,14 @@ const ModalFormGrpNewLoan = styled.div`
   `}
 `
 
+const ApproveBtnWrapper = styled.div`
+  display: flex;
+  margin-right: 12px;
+  button{
+    width: 133px !important;
+  }
+`
+
 
 
 export {
@@ -454,5 +535,6 @@ export {
     ModalFormInput,
     ModalFormInputAPY,
     ModalFormInputNewLoan,
-    ModalNewLoanDetailsContent
+    ModalNewLoanDetailsContent,
+    ApproveBtnWrapper
 };

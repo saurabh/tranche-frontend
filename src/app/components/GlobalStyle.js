@@ -54,23 +54,48 @@ const GlobalStyle = createGlobalStyle`
 
 
   
-  
+  .return-wrapper{
+    width: 9%;
+    .return-title-content div{
+      right: -9px !important;
+    }
+    h2{
+      text-align: center;
+    }
+  }
+  .subscription-wrapper{
+    width: 15%;
+    .subscription-title-content div{
+      right: 24px !important;
+    }
+    h2{
+      text-align: center;
+    }
+  }
   .address-wrapper{
     width: 28%;
   }
   .status-wrapper{
+    text-align: center;
     .status-title-content div{
-      right: 50px !important;
+      right: 27px !important;
+    }
+    .bondApy-title-content div{
+      right: 20px !important;
     }
     width: 12%;
   }
-  .status-wrapper h2{
-    margin-left: 15px;
-  }
+  // .status-wrapper h2{
+  //   margin-left: 15px;
+  // }
   .remaining-wrapper{
     width: 12%;
     .remaining-title-content div{
       right: 23px !important;
+    }
+
+    .value-title-content div{
+      right: 7px !important;
     }
     h2{
       text-align: center;
@@ -80,6 +105,9 @@ const GlobalStyle = createGlobalStyle`
     width: 7%;
     .ratio-title-content div{
       right: 9px !important;
+    }
+    .return-title-content div{
+      right: -27px !important;
     }
     h2{
       text-align: center;
@@ -91,12 +119,15 @@ const GlobalStyle = createGlobalStyle`
     .interest-paid-title-content div{
       right: 36px !important;
     }
+    .subscription-title-content div{
+      right: 33px !important;
+    }
     h2{
       text-align: center;
     }
   }
   .head-btns-wrapper{
-    width: 12%;
+    width: 18%;
   }
   @media (min-width: 992px){
     .navbar-container{

@@ -43,10 +43,11 @@ let asyncValidateCreate = (values) => {
       borrowedAskAmount &&
       (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))
     ) {
-      throw new Error({
+      // eslint-disable-next-line
+      throw {
         collateralAmount: 'Not enough collateral',
-        _error: 'Not enough collateral'
-      });
+        error: 'Not enough collateral'
+      };
     }
   });
 };
@@ -61,10 +62,11 @@ let asyncValidateAdjust = (values) => {
         actionType
       );
       if (isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)) {
-        throw new Error({
+        // eslint-disable-next-line
+        throw {
           collateralAmount: 'New collateral ratio is below acceptable threshold',
-          _error: 'Ratio too low'
-        });
+          error: 'Ratio too low'
+        };
       }
     }
   });

@@ -22,10 +22,18 @@ padding: 0 35px;
   background: transparent;
   border: none;
   cursor: pointer;
+  outline: none;
+  transition: 300ms;
+  :active{
+    transform: scale(0.9);
+  }
 }
 @media (max-width: 633px){
   position: relative;
 }
+${({ error }) => error && `
+  position: relative;
+`}
 
 `
 const ModalContent = styled.div`
@@ -74,6 +82,12 @@ max-height: 200px;
 height: 100%;
 width: 100%;
 
+${({ confirmBtn }) => confirmBtn && `
+  flex-direction: row;
+  justify-content: flex-end;
+`}
+
+
 ${({ submitBtn }) => submitBtn && `
   max-width: 164px;
 `}
@@ -94,8 +108,8 @@ width: 100%;
 `
 const BtnLoanModal = styled.div`
 display: flex;
-flex-direction: column;
-justify-content: space-between;
+flex-direction: row;
+justify-content: flex-end;
 width: 100%;
 & > button:disabled{
   opacity: 0.5;
@@ -105,6 +119,7 @@ width: 100%;
 
 
 const ModalButton = styled.button`
+position: relative;
 max-width: 241px;
 width: 100%;
 height: 38px;
@@ -119,6 +134,9 @@ font-style: normal;
 font-weight: normal;
 font-size: 12px;
 letter-spacing: 0.15em;
+transition: 500ms;
+outline: none;
+overflow: hidden;
 color: #FFFFFF;
 text-transform: uppercase;
 /*color: rgba(131, 129, 134, 0.4);*/
@@ -129,44 +147,105 @@ color: ${props => props.btnColor ? props.btnColor : "#000000"};
   color: #ffffff !important;
   background: ${props => props.btnColor ? props.btnColor  : "#E42013"};*/
 }
-${({ display }) => display && `
-  display: ${display}
-`}
 :disabled{
   color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
   opacity: 0.5;
   cursor: default;
+  :hover{
+    filter: brightness(1);
+  }
+  span{
+    display: none;
+  }
 }
+
+${({ loading, backgroundColor }) => loading === 'true' && `
+  border: 1px solid ${backgroundColor};
+  background: transparent;
+  cursor: unset;
+  pointer-events: none;
+  box-shadow: none;
+`}
+
+
+
+span{
+  transform: translate(-581px,-399px) rotate(-45deg);
+  transition: 600ms;
+  background: #ffffff;
+  height: 500px;
+  width: 500px;
+  display: block;
+  position: absolute;
+  opacity: 0.3;
+  filter: brightness(1.5);
+}
+:hover{
+  span{
+    transform: translate(-370px,-399px) rotate(-45deg);
+  }
+}
+
+:active{
+  span{
+    transform: translate(370px,-399px) rotate(-45deg);
+  }
+}
+
+
 `
 
 const ConfirmAlertWrapper = styled.div`
-position: relative;
-width: auto;
-//height: 326px;
-height: auto;
-border-radius: 12px;
-background: #ffffff;
-border: none;
-box-shadow: 0px 2px 4px rgba(99,99,99,0.7);
-padding: 33px 100px;
-& > h2{
-  font-style: normal;
-  font-weight: normal;
-  font-size: 15px;
-  color: #3F3F3F;
-}
+  position: relative;
+  width: 100% !important;
+  min-height: 120px;
+  border-radius: 7px !important;
+  background: #ffffff !important;
+  border: none !important;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.19) !important;
+  padding: 13px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > h2{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    color: #3F3F3F;
+  }
 
 `
 
 const ConfirmAlertBtnWrapper = styled.div`
-display: flex;
-justify-content: space-around;
-& > button{
-  max-width: 100px;
-  font-size: 14px;
-  font-weight: 700;
-  margin: 12px 0 0 0;
-} 
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border-radius: 7px;
+
+  & > button{
+    max-width: 100px;
+    height: 33px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    box-shadow: none;
+    border-radius: 3px;
+    transition: 300ms;
+
+    :hover{
+      filter: brightness(0.93);
+    }
+    :active{
+      filter: brightness(0.9);
+    }
+  }
+  & > button:first-child{
+    margin-right: 12px;
+  }       
 `
 
 
@@ -220,9 +299,9 @@ ${({ currency }) => currency === 'ETH' && `
     top: 27px;
   }  
 `}
-${({ currency }) => currency === 'JNT' && `
+${({ currency }) => currency === 'SLICE' && `
   &:after{
-    content: 'JNT';
+    content: 'SLICE';
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -319,6 +398,73 @@ const LoanDetailsRowValue = styled.h2`
     cursor: ${cursor}
   `}
 `
+const ModalTextConfirm = styled.div`
+  padding: 0 35px;
+  h2{
+    width: 535px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    margin: 0 auto;
+    line-height: 19px;
+    text-align: center;
+    color: #3F3F3F;
+    margin: 10px auto 29px auto;
+  }
+`
+
+const ModalTextConfirmBtnWrapper = styled.div`
+  text-align: center;
+`
+const ModalTextConfirmBtn = styled.button`
+  max-width: 323px;
+  width: 100%;
+  height: 32px;
+  background: ${props => props.errorBtn ? "#EE2222" : "#1EBB1B"};
+  opacity: 0.75;
+  box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
+  border-radius: 4px;
+  font-style: normal;
+  border: none;
+  font-weight: 500;
+  font-size: 9px;
+  line-height: 11px;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+`
+const ModalErrorWrapper = styled.div`
+  text-align: center;
+  padding: 33px;
+  div{
+    text-align: center;
+    img{
+      width: 150px;
+    }
+  }
+`
+
+const BtnLoadingIcon = styled.div`
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;	
+  border: 2px solid ${props => props.loadingColor};
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  left: 0; 
+  background: none;
+  margin:0;
+  -webkit-animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
+  animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
+`
+
+
 
 export {
     ModalHeader, 
@@ -339,5 +485,10 @@ export {
     ModalActionDetailsContent,
     LoanDetailsRow,
     LoanDetailsRowTitle,
-    LoanDetailsRowValue
+    LoanDetailsRowValue,
+    ModalErrorWrapper,
+    ModalTextConfirm,
+    ModalTextConfirmBtn,
+    ModalTextConfirmBtnWrapper,
+    BtnLoadingIcon
 };

@@ -1,6 +1,7 @@
 // Alerts
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const CHECK_SERVER = 'CHECK_SERVER';
 
 // Ethereum
 export const SET_ADDRESS = 'SET_ADDRESS';
@@ -23,3 +24,7 @@ export const PAGINATION_SKIP = 'PAGINATION_SKIP';
 export const PAGINATION_CURRENT = 'PAGINATION_CURRENT';
 //Path
 export const CHANGE_PATH = 'CHANGE_PATH';
+
+//TRADE
+export const SELL_BUY_TOGGLE = 'SELL_BUY_TOGGLE';
+

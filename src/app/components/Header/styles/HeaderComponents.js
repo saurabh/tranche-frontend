@@ -1,19 +1,21 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const HeaderWrapper = styled.div`
-    min-height: 330px;
-    background-color: ${(props) => props.color};
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  min-height: 330px;
+  background-color: ${(props) => props.color};
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 const HeaderContent = styled.div`
+  margin: 39px 0px;
+  @media (max-width: 992px) {
     margin: 39px 0px;
-    @media (max-width: 992px){
-        margin: 39px 0px;
-    }
-    ${({ path }) => (path === "privacy" || path === "terms") && `
+  }
+  ${({ path }) =>
+    (path === "privacy" || path === "terms") &&
+    `
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -23,164 +25,300 @@ const HeaderContent = styled.div`
     `}
 `;
 const HeaderTitle = styled.div`
-    & > h2{
-        font-weight: 500;
-        font-size: 36px;
-        line-height: 42px;
-    }
+  & > h2 {
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 42px;
+  }
 `;
 const HeaderSubtitle = styled.div`
-    & > h2{
-        font-weight: 400;
-        font-size: 12px;
-        letter-spacing: 0.05em;
-        margin-top: 9px;
-        text-transform: uppercase;
-        ${({ fontSize }) => fontSize && `
+  & > h2 {
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    margin-top: 9px;
+    text-transform: uppercase;
+    ${({ fontSize }) =>
+      fontSize &&
+      `
             font-size: 9px;
         `}
-    }
+  }
 `;
-  
+
 const NavbarWrapper = styled.div`
-    height: 85px;
-    position: relative;
-    @media (max-width: 992px){
-        height: auto;
-        padding: 15px 0;
-    }
+  height: 85px;
+  position: relative;
+  @media (max-width: 992px) {
+    height: auto;
+    padding: 15px 0;
+  }
 `;
 const NavbarContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    @media (max-width: 992px){
-        flex-wrap: wrap;
-    }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  @media (max-width: 992px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const NavbarLinks = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 336px;
-    & > a{
-        font-family: 'Roboto', sans-serif;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 15px;
-        line-height: 18px;
-        letter-spacing: 0.05em;
-        text-decoration: none;
-        text-transform: uppercase;
-        color: #FFFFFF;
-        opacity: 0.5;
-        @media (max-width: 992px){
-            margin: 5px 0;
-        }
+  display: flex;
+  justify-content: space-between;
+  width: 336px;
+  & > a {
+    position: relative;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    transition: clip-path 275ms ease;
+    line-height: 18px;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #ffffff;
+    opacity: 0.5;
+    @media (max-width: 992px) {
+      margin: 5px 0;
     }
-    @media (max-width: 992px){
-        flex-direction: column;
-        align-items: center; 
+    span {
+      position: absolute;
+      display: inline-block;
+      color: #ffffff;
+      :before {
+        position: absolute;
+        top: 0;
+        content: attr(data-content);
+        color: #ffffff;
+        border-bottom: 2px solid #ffffff;
+        clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
+        transition: clip-path 275ms ease;
+      }
     }
+    :hover {
+      span:before {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+    }
+  }
+  @media (max-width: 992px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 const HeaderTabsWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    @media (max-width: 992px){
-        flex-direction: column;
-        width: auto;
-        text-align: center;
-        margin: 26px 0;
-    }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  @media (max-width: 992px) {
+    flex-direction: column;
+    width: auto;
+    text-align: center;
+    margin: 26px 0;
+  }
 `;
 
 const MarketsTabsContainer = styled.div`
-    width: 200px; 
-    display: flex;
-    justify-content: space-between;
-    @media (max-width: 992px){
-        flex-direction: column;
-        width: auto;
-        text-align: center;
-    }
+  position: relative;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 992px) {
+    flex-direction: column;
+    width: auto;
+    text-align: center;
+  }
+  ${({ page }) =>
+    page === "trade" &&
+    `
+        width: 100px !important;
+    `}
 `;
 const HeaderTabBtn = styled.button`
-    font-family: 'Roboto', sans-serif;
-    background-color: transparent;
-    border: none;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.05em;
-    padding: 0;
-    padding-bottom: 6px;
-    text-transform: uppercase;
-    color: #FFFFFF;
-    cursor: pointer;
-    opacity: 0.5;
-    border-bottom: 4px solid transparent;
-    &:focus{
-        outline: none;
-    }
-    ${({ active, color }) => active && `
+  font-family: "Roboto", sans-serif;
+  background-color: transparent;
+  border: none;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  padding: 0;
+  padding-bottom: 6px;
+  transition: 300ms;
+  text-transform: uppercase;
+  color: #ffffff;
+  cursor: pointer;
+  opacity: 0.5;
+  border-bottom: 4px solid transparent;
+  &:focus {
+    outline: none;
+  }
+  ${({ active, color }) =>
+    active &&
+    `
         opacity: 1;
-        border-color: ${color};
+        @media (max-width: 992px){
+            border-color: ${color};
+        }
     `}
-    @media (max-width: 992px){
-        padding: 0;
-        margin: 12px 0;
-    }
-    :hover{
-        color: #FFFFFF;
-        opacity: 0.5;
-    }
+  @media (max-width: 992px) {
+    padding: 0;
+    margin: 12px 0;
+  }
+  ${({ link }) =>
+    link &&
+    `
+        :hover{
+            color: #FFFFFF;
+            opacity: 0.5;
+        }
+    `}
 `;
 
 const WalletBtn = styled.button`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 119px;
-    height: 30px;
-    background: ${props => props.background} !important;
-    border-radius: 9px;
-    padding: 0 13px;
-    border: none;
-    cursor: pointer;
-    ${({ icon }) => !icon && `
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 119px;
+  height: 30px;
+  background: ${(props) => props.background} !important;
+  border-radius: 9px;
+  padding: 0 13px;
+  border: none;
+  cursor: pointer;
+  ${({ icon }) =>
+    !icon &&
+    `
         justify-content: center;
     `}
-    &:focus{
-        outline: none;
-    }
-    @media (max-width: 992px){
-        margin: 5px 0;
-    }
+  &:focus {
+    outline: none;
+  }
+  @media (max-width: 992px) {
+    margin: 5px 0;
+  }
 `;
 
 const WalletBtnIcon = styled.div`
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 `;
 
 const WalletBtnText = styled.div`
-    & > h2{
-        font-family: 'Roboto', sans-serif;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 12px;
-        display: flex;
-        align-items: center;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: ${props => props.color} !important;
-        margin: 0;
-    }
+  & > h2 {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${(props) => props.color} !important;
+    margin: 0;
+  }
 `;
- 
+const RatesWrapper = styled.div`
+  position: relative;
+`;
+
+const RatesBoxWrapper = styled.div`
+  position: absolute;
+  top: -107px;
+  left: -220px;
+  width: 298px;
+  height: auto;
+  background: #ffffff;
+  border: 1px solid #efefef;
+  box-sizing: border-box;
+  @media (max-width: 992px) {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+`;
+const RatesRowWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 46px;
+  ${({ border }) =>
+    border &&
+    `
+        border-bottom: 1px solid #EFEFEF;
+    `}
+`;
+const RatesRowContent = styled.div`
+  padding: 14px 21px;
+  display: flex;
+  align-items: center;
+`;
+const RatesValue = styled.div`
+  display: flex;
+  align-items: center;
+  h2 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.055em;
+    color: #39295a;
+    margin-left: 8px;
+  }
+`;
+const RatesValueImg = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  border: 1px solid #f2f2f2;
+  box-sizing: border-box;
+  border-radius: 50%;
+  img {
+    height: 14.66px;
+  }
+`;
+const RatesValueText = styled.div`
+  position: relative;
+`;
+const RatesRowDash = styled.div`
+  h2 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    letter-spacing: 0.175em;
+    color: #000000;
+    margin: 0 18px;
+  }
+`;
+const TabIndicator = styled.div`
+  height: 4px;
+  width: ${(props) => (props.path === "earn" ? "92px" : props.path === "borrow" ? "81px" : props.path === "trade" ? "36px" : "0")};
+  background: ${(props) => (props.path === "earn" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "trade" ? "#ffffff" : "")};
+  transition: 300ms;
+  bottom: 0;
+  position: absolute;
+  left: ${(props) =>
+    props.tab === "all"
+      ? "-2px"
+      : props.tab === "own" && props.path === "earn"
+      ? "calc(100% - 88px)"
+      : props.tab === "own" && props.path === "borrow"
+      ? "calc(100% - 78px)"
+      : props.tab === "buy" && props.path === "trade"
+      ? "-4px"
+      : props.tab === "sell" && props.path === "trade"
+      ? "calc(100% - 36px)"
+      : ""};
+  @media (max-width: 992px) {
+    display: none;
+  }
+`;
+
 export {
   HeaderWrapper,
   HeaderContent,
@@ -194,5 +332,14 @@ export {
   HeaderTabBtn,
   WalletBtn,
   WalletBtnIcon,
-  WalletBtnText
+  WalletBtnText,
+  RatesWrapper,
+  RatesBoxWrapper,
+  RatesRowWrapper,
+  RatesRowContent,
+  RatesValue,
+  RatesValueImg,
+  RatesValueText,
+  RatesRowDash,
+  TabIndicator,
 };

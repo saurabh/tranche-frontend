@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
-import { downChevron, upChevron } from 'assets';
+import { downChevron, upChevron, ChevronDown } from 'assets';
+import { useOuterClick } from 'services/useOuterClick'
+
 import {
     changeSorting
   } from 'redux/actions/loans';
@@ -8,12 +10,22 @@ import {
     TableHeadWrapper,
     TableHeadTitle,
     SortChevronWrapper,
+    SortingMenu,
+    TableMarketsSortingDropdown,
+    TableMarketsSortingDropdownContent,
+    TableMarketSortingBtn,
+    TableSubTitle
 } from './styles/TableComponents';
 
 
-const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
+const TableHead = ({changeSorting, loans: {sort}}) => {
 
     const [order, setOrder] = useState("asc")
+    const [menu, toggleMenu] = useState(false);
+
+    const innerRef = useOuterClick(e => {
+        toggleMenu(false);
+    });
 
     const sortLoans = (val) => {
         let sortObj = {
@@ -21,8 +33,10 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
             type: order
         };
         changeSorting(sortObj);
-        handleSorting();
         setOrder(order === "asc" ? "desc" : "asc")
+    }
+    const toggleSelectMarkets = () => {
+        toggleMenu(!menu);
     }
     return (
         <TableHeadWrapper>
@@ -41,7 +55,7 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="ratio-wrapper">
-                <div className="ratio-title-content" onClick={() => sortLoans("collateralRatio")}>
+                <div className="ratio-title-content" onClick={() => sortLoans("remainingLoan")}>
                     <h2>Ratio</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
@@ -59,7 +73,7 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="status-wrapper">
-                <div className="status-title-content" onClick={() => sortLoans("status")}>
+                <div className="status-title-content" onClick={() => sortLoans("displayPriority")}>
                     <h2>Status</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
@@ -70,6 +84,30 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}}) => {
             <TableHeadTitle className="head-btns-wrapper">
 
             </TableHeadTitle>
+            <SortingMenu>
+                <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} sorting={true}>
+                    <h2>Sort <img src={ChevronDown} alt="img"/> </h2>
+                </TableSubTitle>
+                {   menu ?
+
+                 <TableMarketsSortingDropdown sorting={true}>
+                        <TableMarketsSortingDropdownContent>
+                            <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
+                                Amount
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
+                                Ratio
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => sortLoans("interestPaid")}>
+                                Rate/Payout
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => sortLoans("displayPriority")}>
+                                Status
+                            </TableMarketSortingBtn>
+                        </TableMarketsSortingDropdownContent>
+                    </TableMarketsSortingDropdown>  : ""
+                }
+            </SortingMenu>
         </TableHeadWrapper>  
     );
 }

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
-import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, txMessage } from 'config';
 import { ModalHeader } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
@@ -39,73 +38,35 @@ const AdjustPositionStyles = {
 
 const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, closeModal }) => {
   const JLoan = JLoanSetup(web3);
+  const [hasAllowance, setHasAllowance] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
 
   function handleCloseModal() {
     closeModal();
   }
 
-  const createNewEthLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
+  const approveContract = async (pairId, collateralAmount) => {
     try {
-      await JLoan.methods
-        .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-        .send({ value: collateralAmount, from: address })
+      const { collateralTokenSetup } = pairData[pairId];
+      const collateralToken = collateralTokenSetup(web3);
+      await collateralToken.methods
+        .approve(LoanContractAddress, toWei(collateralAmount))
+        .send({ from: address })
         .on('transactionHash', (hash) => {
+          setApproveLoading(true);
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txConfirmed', () => {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
         });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const createNewTokenLoan = async (pairId, borrowedAskAmount, rpbRate, collateralAmount) => {
-    try {
-      const { collateralTokenSetup } = pairData[pairId];
-      const collateralToken = collateralTokenSetup(web3);
-
-      let userAllowance = await collateralToken.methods
-        .allowance(address, LoanContractAddress)
-        .call();
-      if (isGreaterThan(collateralAmount, userAllowance)) {
-        await collateralToken.methods
-          .approve(LoanContractAddress, collateralAmount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-        await JLoan.methods
-          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      } else {
-        await JLoan.methods
-          .openNewLoan(pairId, borrowedAskAmount, rpbRate)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      }
     } catch (error) {
       console.error(error);
     }
@@ -118,12 +79,19 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       pairId = parseFloat(pairId);
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
-      if (pairId === pairData[0].value) {
-        createNewEthLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
-      } else {
-        createNewTokenLoan(pairId, borrowedAskAmount, rpbRate, collateralAmount);
-      }
-      handleCloseModal();
+      if (pairId === pairData[1].value) collateralAmount = 0;
+      await JLoan.methods
+        .openNewLoan(pairId, borrowedAskAmount, rpbRate)
+        .send({ value: collateralAmount, from: address })
+        .on('transactionHash', (hash) => {
+          handleCloseModal(); 
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
     } catch (error) {
       console.error(error);
     }
@@ -134,6 +102,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       isOpen={openModal}
       onRequestClose={handleCloseModal}
       style={AdjustPositionStyles}
+      closeTimeoutMS={200}
       shouldCloseOnOverlayClick={false}
       contentLabel='NewLoan'
     >
@@ -143,7 +112,13 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
           <img src={CloseModal} alt='' />
         </button>
       </ModalHeader>
-      <NewLoan createNewLoan={createNewLoan} />
+      <NewLoan
+        hasAllowance={hasAllowance}
+        approveLoading={approveLoading}
+        setHasAllowance={setHasAllowance}
+        approveContract={approveContract}
+        createNewLoan={createNewLoan}
+      />
     </Modal>
   );
 };

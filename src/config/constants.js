@@ -1,9 +1,5 @@
-import DAIicon from 'assets/images/svg/dai.svg';
-import USDCicon from 'assets/images/svg/usdc.svg';
-import ETHicon from 'assets/images/svg/EthForm.svg';
-import JNTicon from 'assets/images/svg/jnt.svg';
-import { Key, Agree } from 'assets';
-import { DAISetup, JPTSetup, USDCSetup } from 'utils/contractConstructor';
+import { Key, Agree, DAI as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
+import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -17,7 +13,7 @@ export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
-export const JPTAddress = process.env.REACT_APP_JPT_ADDRESS;
+export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
 
 // Site Banner Data (imported in Header component)
@@ -55,12 +51,12 @@ export const PagesData = {
   },
   trade: {
     pageType: 'trade',
-    color: '#1f1f1f',
+    color: 'rgba(0, 0, 0, 0.8)',
     secondaryColor: '#ffffff',
     btnColor: '#1f1f1f',
-    cardColor: 'rgba(0,0,0,0.4)',
+    cardColor: 'rgba(0, 0, 0, 0.8)',
     title: 'Trading Markets',
-    description: 'BUY & SELL TOKENIZED DERIVATIVES ON ETHEREUM'
+    description: 'BUY AND SELL PERPETUAL BONDS PROVIDED BY THE PROTOCOL'
   },
   privacy: {
     pageType: 'privacy',
@@ -97,15 +93,16 @@ export const pairData = [
     key: 'USDC',
     text: 'USDC',
     value: 1,
-    collateral: 'JNT',
+    collateral: 'SLICE',
     img: USDCicon,
-    colIcon: JNTicon,
-    collateralTokenSetup: JPTSetup,
+    colIcon: SLICEicon,
+    collateralTokenSetup: SLICESetup,
     lendTokenSetup: USDCSetup
   }
 ];
 
 export const apiUri = {
+  priceFeed: 'pairs',
   loanList: 'loans',
   transaction: 'loans/transaction'
 };
@@ -113,7 +110,7 @@ export const apiUri = {
 // Filters
 export const ETH = 'ETH';
 export const DAI = 'DAI';
-export const JNT = 'JNT';
+export const SLICE = 'SLICE';
 export const USDC = 'USDC';
 
 export const blocksPerYear = 2372500;
@@ -121,8 +118,6 @@ export const factoryFees = 5;
 
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
-  foreclosureWindow: 18000,
-  earlySettlementWindow: 540000
 };
 
 export const actionTypes = {

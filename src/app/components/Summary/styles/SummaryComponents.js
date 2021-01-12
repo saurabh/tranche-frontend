@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const SummaryCardWrapper = styled.div`
-    width: 250px;
+    width: 300px;
     height: 121px;
     background: #FFFFFF;
     border: 1px solid #EFEFEF;
@@ -11,6 +11,7 @@ const SummaryCardWrapper = styled.div`
     border-radius: 12px;
     @media (max-width: 992px){
         margin-bottom: 15px;
+        width: 100%;
     }
       
 `;
