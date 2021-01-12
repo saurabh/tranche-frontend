@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
+import { serverUrl } from 'config/constants'
 import axios from 'axios';
 
 const SummaryCards = ({ path }) => {
@@ -10,17 +11,17 @@ const SummaryCards = ({ path }) => {
   const [loan, setLoan] = useState(null);
 
   const getRatio = async () => {
-    const res = await axios('https://dev.tranche.finance/api/v1/summary/ratio');
+    const res = await axios(serverUrl + 'summary/ratio');
     const { result } = res.data;
     setRatio(result);
   };
   const getCollateral = async () => {
-    const res = await axios('https://dev.tranche.finance/api/v1/summary/collateral');
+    const res = await axios(serverUrl + 'summary/collateral');
     const { result } = res.data;
     setCollateral(result);
   };
   const getLoan = async () => {
-    const res = await axios('https://dev.tranche.finance/api/v1/summary/loan');
+    const res = await axios(serverUrl + 'summary/loan');
     const { result } = res.data;
     setLoan(result);
   };
