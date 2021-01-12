@@ -104,7 +104,10 @@ export const pairData = [
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
-  transaction: 'loans/transaction'
+  transaction: 'loans/transaction',
+  summaryRatio: 'summary/ratio',
+  summaryCollateral: 'summary/collateral',
+  summaryLoan: 'summary/loan'
 };
 
 // Filters
