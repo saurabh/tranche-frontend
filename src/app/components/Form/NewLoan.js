@@ -208,7 +208,12 @@ let NewLoan = ({
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
     let fee = await calculateFees(toWei(formattedAmount), web3);
-    if (fee > 0) setPlatformFee(fee);
+    if (fee > 0) {
+      setPlatformFee(fee)
+    }
+    else{
+      setPlatformFee(0)
+    }
   };
 
   const handleCollateralizingChange = async (borrowingValue, newValue) => {
@@ -223,7 +228,12 @@ let NewLoan = ({
     let formattedAmount = formatString(newValue.toString());
     if (newValue) {
       let fee = await calculateFees(toWei(formattedAmount), web3);
-      if (fee > 0) setPlatformFee(fee);
+      if (fee > 0) {
+        setPlatformFee(fee)
+      }
+      else{
+        setPlatformFee(0)
+      }
     }
     debounceCalcCollateralRatio(borrowingValue, formattedAmount, pair);
   };
