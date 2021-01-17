@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
-import { serverUrl } from 'config/constants'
+import { serverUrl } from 'config/constants';
 import axios from 'axios';
 import { apiUri } from 'config/constants';
-import { serverUrl } from 'config/constants'
 
 const { summaryRatio, summaryCollateral, summaryLoan} = apiUri;
 const BASE_URL = serverUrl;
