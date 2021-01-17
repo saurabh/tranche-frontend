@@ -31,7 +31,7 @@ import {
   roundBasedOnUnit
 } from 'utils';
 import { statuses, PagesData, pairData, etherScanUrl, apiUri, DAI, txMessage } from 'config';
-import LoanModal from '../../Modals/LoanModal';
+import TradeModal from '../../Modals/TradeModal';
 import { Adjust, AdjustEarn, AdjustTrade, LinkArrow } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import ETH from 'assets/images/svg/EthForm.svg';
@@ -567,7 +567,7 @@ const TableCard = ({
               />
             </AdjustLoanBtn>
           </div>
-          <LoanModal
+          <TradeModal
             // State Values
             path={path}
             modalIsOpen={modalIsOpen}

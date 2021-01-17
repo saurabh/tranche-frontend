@@ -651,7 +651,9 @@ button[disabled] img{
 }
 
 
-
+.tradeFormInput{
+  padding: 4px 10px !important;
+}
 
 .ModalFormLabel{
   font-style: normal;

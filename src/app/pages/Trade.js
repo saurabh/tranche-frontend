@@ -3,12 +3,19 @@ import { Layout } from 'app/components';
 import SummaryCards from '../components/Summary/SummaryCards';
 import Table from '../components/Earning/Table/Table';
 import { PagesData } from 'config/constants';
+import { changeFilter } from 'redux/actions/loans';
+import { connect } from 'react-redux';
 
-export default function Trade() {
+const Trade = () =>  {
   return (
     <Layout>
       <SummaryCards />
-      <Table pageType={PagesData.trade.pageType} />
+      <Table pageType={PagesData.borrow.pageType} />
     </Layout>
   );
 }
+
+
+export default connect(null, {
+  changeFilter
+})(Trade);

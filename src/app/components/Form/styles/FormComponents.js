@@ -21,6 +21,9 @@ ${({ currency }) => currency === 'ETH' && `
     top: 27px;
   }  
 `}
+${({ trade }) => trade && `
+  margin: 15px 0;
+`}
 ${({ currency }) => currency === 'SLICE' && `
   &:after{
     content: 'SLICE';
@@ -125,6 +128,9 @@ const FormInputsWrapper = styled.div`
   @media (max-width: 633px){
     transform: none;
   }
+  ${({ trade }) => trade && `
+    justify-content: center;
+  `}
 `
 const ModalFormButton = styled.button`
   width: 164px;
@@ -481,6 +487,7 @@ const ModalFormGrpNewLoan = styled.div`
     color: #B9B9B9;
     margin: 6px 0 0 0;
   }
+
   ${({ placeholder }) => placeholder === '%' && `
     &:after{
       content: '%';
@@ -496,6 +503,10 @@ const ModalFormGrpNewLoan = styled.div`
       top: 27px;
     }  
   `}
+  ${({ trade }) => trade && `
+    margin: 15px 0;
+  `}
+
 `
 
 const ApproveBtnWrapper = styled.div`
