@@ -4,6 +4,11 @@ import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import { serverUrl } from 'config/constants'
 import axios from 'axios';
+import { apiUri } from 'config/constants';
+import { serverUrl } from 'config/constants'
+
+const { summaryRatio, summaryCollateral, summaryLoan} = apiUri;
+const BASE_URL = serverUrl;
 
 const SummaryCards = ({ path }) => {
   const [ratio, setRatio] = useState(null);
@@ -11,17 +16,17 @@ const SummaryCards = ({ path }) => {
   const [loan, setLoan] = useState(null);
 
   const getRatio = async () => {
-    const res = await axios(serverUrl + 'summary/ratio');
+    const res = await axios(`${BASE_URL+summaryRatio}`); 
     const { result } = res.data;
     setRatio(result);
   };
   const getCollateral = async () => {
-    const res = await axios(serverUrl + 'summary/collateral');
+    const res = await axios(`${BASE_URL+summaryCollateral}`); 
     const { result } = res.data;
     setCollateral(result);
   };
   const getLoan = async () => {
-    const res = await axios(serverUrl + 'summary/loan');
+    const res = await axios(`${BASE_URL+summaryLoan}`); 
     const { result } = res.data;
     setLoan(result);
   };

@@ -115,10 +115,10 @@ const HeaderTabsWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   @media (max-width: 992px) {
-    flex-direction: column;
+    flex-direction: row;
     width: auto;
     text-align: center;
-    margin: 26px 0;
+    margin: 0;
   }
 `;
 
@@ -128,9 +128,11 @@ const MarketsTabsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   @media (max-width: 992px) {
-    flex-direction: column;
+    flex-direction: row;
     width: auto;
+    margin: 0 20px 0 0;
     text-align: center;
+    align-items: flex-end;
   }
   ${({ page }) =>
     page === "trade" &&
@@ -167,7 +169,9 @@ const HeaderTabBtn = styled.button`
     `}
   @media (max-width: 992px) {
     padding: 0;
-    margin: 12px 0;
+    margin: 0 2px;
+    font-size: 9px;
+    height: 24px;
   }
   ${({ link }) =>
     link &&
@@ -237,7 +241,7 @@ const RatesBoxWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   @media (max-width: 992px) {
-    left: 50%;
+    left: -29px;
     transform: translateX(-50%);
   }
 `;

@@ -1151,20 +1151,25 @@ table, th, td {
   }
 }
 
-
 .active span{
   display: none !important;
 }
 
-
-
-
+.FormDetails{
+  display: none !important;
+}
+@media (max-width: 633px){
+  .FormDetails{
+    display: block !important;
+  }
+}
 
 @media (max-width: 992px){
   #other-tabs-container{
-    flex-direction: column;
+    flex-direction: row;
     width: auto;
     text-align: center;
+    margin: 0 0 0 20px;
   }
   .navbar-right{
     width: 100% !important;
@@ -1180,11 +1185,11 @@ table, th, td {
   }
 
   .navbar-right-toggle{
-    height: auto !important;
+    height: 150px !important;
     padding: 12px 0;
     opacity: 1;
     transition-property: height, opacity;
-    transition-duration: 300ms, 100ms;
+    transition-duration: 300ms, 100ms, 300ms;;
     transition-timing-function: ease-in;
   }
 

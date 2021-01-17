@@ -30,6 +30,9 @@ padding: 0 35px;
 }
 @media (max-width: 633px){
   position: relative;
+  h2{
+    font-size: 12px;
+  }
 }
 ${({ error }) => error && `
   position: relative;
@@ -44,6 +47,9 @@ display: flex;
 justify-content: center;
 align-items: center;
 flex-direction: row;
+@media (max-width: 633px){
+  flex-direction: column;
+}
 `
 const ModalContentDetails = styled.div`
 width: 100%;
@@ -81,6 +87,9 @@ text-align: center;
 max-height: 200px;
 height: 100%;
 width: 100%;
+@media (max-width: 633px){
+  max-height: none;
+}
 
 ${({ confirmBtn }) => confirmBtn && `
   flex-direction: row;
@@ -346,6 +355,7 @@ const ModalActionDetails = styled.div`
   background: #FAFAFA;
   @media (max-width: 633px){
     max-width: initial;
+    display: none;
   }
 `
 
@@ -463,6 +473,27 @@ const BtnLoadingIcon = styled.div`
   -webkit-animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
   animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
 `
+const LoanDetailsMobile = styled.div`
+  display: none;  
+  h2{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8px;
+    text-align: center;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #4F4F4F;
+    max-width: 200px;
+    margin: 7px auto;
+    span{
+      font-weight: 600;
+    }
+  }
+  @media (max-width: 633px){
+    display: block !important;
+  }
+`
+
 
 
 
@@ -490,5 +521,6 @@ export {
     ModalTextConfirm,
     ModalTextConfirmBtn,
     ModalTextConfirmBtnWrapper,
-    BtnLoadingIcon
+    BtnLoadingIcon,
+    LoanDetailsMobile
 };
