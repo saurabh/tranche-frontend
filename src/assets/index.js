@@ -21,7 +21,8 @@ import EarningAsset from './images/svg/EarningAsset.svg';
 import SLICE from './images/svg/SLICE.svg';
 import ChevronDown from './images/svg/chevronDown.svg';
 import SLICELogo from './images/svg/SLICELogo.svg';
+import FilterChevron from './images/svg/FilterChevron.svg';
 
 export {
-    Adjust, DAI, RequestLoan, ChevronDown, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, DAI, RequestLoan, FilterChevron, ChevronDown, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };

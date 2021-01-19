@@ -235,6 +235,9 @@ let NewLoan = ({
         setPlatformFee(0)
       }
     }
+    else{
+      setPlatformFee(0)
+    }
     debounceCalcCollateralRatio(borrowingValue, formattedAmount, pair);
   };
 

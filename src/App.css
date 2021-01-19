@@ -1476,3 +1476,7 @@ table, th, td {
   transform: translateX(-100%);
 }
 
+.hideMenu{
+  height: 0 !important;
+  transition: 300ms;
+}

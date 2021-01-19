@@ -30,7 +30,6 @@ const App = ({
   checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
-
   
   useEffect(() => {
     const timeout = (ms) => {
