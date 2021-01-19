@@ -22,7 +22,7 @@ html{
 }
 #other-tabs-container{
   position: relative;
-  width: 150px;
+  /* width: 150px; */
   display: flex;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -1163,7 +1163,18 @@ table, th, td {
     display: block !important;
   }
 }
-
+@media (max-width: 767px){
+  #other-tabs-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    padding-right: 15px; 
+    padding-left: 15px; 
+    margin-right: auto; 
+    margin-left: auto; 
+  }
+}
 @media (max-width: 992px){
   #other-tabs-container{
     flex-direction: row;
