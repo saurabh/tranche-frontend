@@ -55,7 +55,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
       console.error(error);
     }
   };
-
+  
   return (
     <div className='content-container container'>
 
