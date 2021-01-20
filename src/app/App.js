@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { AnimatePresence } from 'framer-motion';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
 import { loansFetchData } from 'redux/actions/loans';
@@ -104,19 +103,17 @@ const App = ({
           <GlobalStyle />
           <Banner />
           <Router>
-            <AnimatePresence exitBeforeEnter>
-              <Switch location={window.location}>
-                <Redirect exact from='/' to='/borrow' />
-                <Route exact path='/earn' component={Earn} />
-                <Route exact path='/borrow' component={Borrow} />
-                <Route exact path='/trade' component={Trade}>
-                  <Redirect to='/borrow' />
-                </Route>
-                <Route exact path='/privacy' component={Privacy} />
-                <Route exact path='/terms' component={TermsAndConditions} />
-                <Route component={NotFound} />
-              </Switch>
-            </AnimatePresence>
+            <Switch location={window.location}>
+              <Redirect exact from='/' to='/borrow' />
+              <Route exact path='/earn' component={Earn} />
+              <Route exact path='/borrow' component={Borrow} />
+              <Route exact path='/trade' component={Trade}>
+                <Redirect to='/borrow' />
+              </Route>
+              <Route exact path='/privacy' component={Privacy} />
+              <Route exact path='/terms' component={TermsAndConditions} />
+              <Route component={NotFound} />
+            </Switch>
           </Router>
         </>
       );
