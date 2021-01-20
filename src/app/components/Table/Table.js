@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+import ReactLoading from 'react-loading';
 import Pagination from 'react-paginating';
 import { useHistory } from "react-router-dom";
 import {
@@ -15,9 +16,17 @@ import {
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
+import TableHeadMobile from './TableHeadMobile';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard, CallToActionWrapper } from './styles/TableComponents';
-import { RequestLoan, EarningAsset } from 'assets';
+import TableCardMobile from './TableCardMobile';
+import { TableWrapper, TableContentCard, CallToActionWrapper,
+  TableMobileFiltersWrapper,
+  TableMobileFilter,
+  TableMobileFiltersMenu,
+  TableMobileFiltersText
+} from './styles/TableComponents';
+import { RequestLoan, EarningAsset, FilterChevron } from 'assets';
+
 const style = {
   pageItem: {
     fontFamily: 'Roboto, sans-serif',
@@ -47,6 +56,7 @@ const Table = ({
   loans,
   path,
   changePath,
+  changeFilter,
   paginationOffset,
   paginationCurrent,
   ethereum: { address }
@@ -55,6 +65,8 @@ const Table = ({
   const history = useHistory();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
+  const [openFilterMenu, setOpenFilterMenu] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState("All loans");
 
   const loanListing = useCallback(_.debounce(async () => {
     if (sort) {
@@ -82,6 +94,16 @@ const Table = ({
     //page.current = currentPage;
   }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
+  const changeLoansFilter = useCallback(
+    (filter) => {
+      changeOwnAllFilter(filter);
+      let val = filter === "own" ? "My loans" : filter === "all" ? "All loans" : "";
+      setCurrentFilter(val);
+      setOpenFilterMenu(false);
+    },
+    [changeOwnAllFilter]
+  );
+
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
@@ -95,7 +117,6 @@ const Table = ({
 
   const handlePageChange = (p) => {
     //page.current = p;
-
     // let currentPage = current;
     // if (!currentPage || currentPage === 0) {
     //   currentPage = 1;
@@ -119,7 +140,96 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-        <TableWrapper>
+
+        <TableMobileFiltersWrapper>
+          <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
+            <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
+            <img alt="filter" src={FilterChevron} />
+          </TableMobileFilter>
+          <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
+            <TableMobileFilter menu onClick={() => changeLoansFilter('all')}>
+              <TableMobileFiltersText>All loans</TableMobileFiltersText>
+            </TableMobileFilter>
+            <TableMobileFilter menu onClick={() => changeLoansFilter('own')}>
+              <TableMobileFiltersText>My loans</TableMobileFiltersText>
+            </TableMobileFilter>
+          </TableMobileFiltersMenu>
+        </TableMobileFiltersWrapper>
+
+        <TableWrapper mobile>
+          <TableHeadMobile />
+          <div className='table-content'>
+              {isLoading ? (
+                <div>
+                  <TableContentCard>
+                    <ReactLoading
+                      className='TableMoreLoading'
+                      type={'bubbles'}
+                      color='rgba(56,56,56,0.3)'
+                    />
+                  </TableContentCard>
+                </div>
+              ) : !isLoading && loans.list.length === 0 && filterType === 'own' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <h2>
+                      You don’t have any{' '}
+                      {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet
+                    </h2>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'earn'
+                          ? changeOwnAllFilter('all')
+                          : false
+                      }
+                    >
+                      <img
+                        src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'earn'
+                        ? 'Start Earning  Assets'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'earn'
+                          ? history.push("/borrow")
+                          : false
+                      }
+                    >
+                      <img
+                        src={RequestLoan}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'earn'
+                        ? 'Navigate to Borrow'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              
+              (
+                loans && loans.list.map((loan, i) => <TableCardMobile key={i} loan={loan} path={path} />)
+              )}
+            </div>
+        </TableWrapper>
+        <TableWrapper desktop>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
             <TableHead />
@@ -171,7 +281,7 @@ const Table = ({
                       {path === 'borrow'
                         ? 'Request New Loan'
                         : path === 'earn'
-                        ? 'Buy Earning  Assets'
+                        ? 'Start Earning  Assets'
                         : ''}
                     </button>
                   </CallToActionWrapper>
