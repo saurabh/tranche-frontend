@@ -4,6 +4,7 @@ const GlobalStyle = createGlobalStyle`
   body{
     background-color: #F2F2F2;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
   }
 
   h2{
