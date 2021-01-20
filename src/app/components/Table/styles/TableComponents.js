@@ -52,6 +52,7 @@ const TableWrapper = styled.div`
   border-radius: 12px;
   ${({ mobile }) => mobile && `
     display: none;
+    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
     @media (max-width: 1200px){
       display: block;
     }
@@ -452,7 +453,7 @@ const TableMobileFilter = styled.div`
   `}
 `
 const TableMobileFiltersMenu = styled.div`
-  height: 126px;
+  height: 84px;
   transition: 300ms;
   overflow: hidden;
 `

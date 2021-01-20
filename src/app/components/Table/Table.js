@@ -19,7 +19,6 @@ import TableHead from './TableHead';
 import TableHeadMobile from './TableHeadMobile';
 import TableCard from './TableCard';
 import TableCardMobile from './TableCardMobile';
-import { ETH, SLICE } from 'config/constants';
 import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFiltersWrapper,
   TableMobileFilter,
@@ -95,12 +94,15 @@ const Table = ({
     //page.current = currentPage;
   }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
-  const selectMobileFilter = async (filter = null) =>{
-    let val = filter === null ? "All loans" : filter === "ETH" ? "ETH loans" : filter === "SLICE" ? "SLICE loans" : "";
-    setCurrentFilter(val)
-    changeFilter(filter);
-    setOpenFilterMenu(false);
-  }
+  const changeLoansFilter = useCallback(
+    (filter) => {
+      changeOwnAllFilter(filter);
+      let val = filter === "own" ? "My loans" : filter === "all" ? "All loans" : "";
+      setCurrentFilter(val);
+      setOpenFilterMenu(false);
+    },
+    [changeOwnAllFilter]
+  );
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -145,18 +147,15 @@ const Table = ({
             <img alt="filter" src={FilterChevron} />
           </TableMobileFilter>
           <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
-            <TableMobileFilter menu onClick={() => selectMobileFilter(null)}>  
+            <TableMobileFilter menu onClick={() => changeLoansFilter('all')}>
               <TableMobileFiltersText>All loans</TableMobileFiltersText>
             </TableMobileFilter>
-            <TableMobileFilter menu onClick={() => selectMobileFilter(ETH)}>  
-              <TableMobileFiltersText>ETH loans</TableMobileFiltersText>
-            </TableMobileFilter>
-            <TableMobileFilter menu onClick={() => selectMobileFilter(SLICE)}>  
-              <TableMobileFiltersText>SLICE loans</TableMobileFiltersText>
+            <TableMobileFilter menu onClick={() => changeLoansFilter('own')}>
+              <TableMobileFiltersText>My loans</TableMobileFiltersText>
             </TableMobileFilter>
           </TableMobileFiltersMenu>
         </TableMobileFiltersWrapper>
-    
+
         <TableWrapper mobile>
           <TableHeadMobile />
           <div className='table-content'>

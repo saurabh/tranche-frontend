@@ -8,6 +8,8 @@ import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { ETH, USDC, SLICE, DAI } from 'assets';
+import { NavLink } from 'react-router-dom';
+
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
@@ -57,7 +59,38 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
 
   return (
     <div className='content-container container'>
-      <HeaderTabsWrapper>
+      <HeaderTabsWrapper mobile>
+          <MarketsTabsContainer links>
+            <NavLink to="/borrow"
+              activeStyle={{
+                borderColor: PagesData[path].secondaryColor,
+                opacity: '1'
+              }}
+            >Borrow</NavLink>
+            <NavLink to="/earn"
+              activeStyle={{
+                borderColor: PagesData[path].secondaryColor,
+                opacity: '1'
+              }}
+            >Earn</NavLink>
+            <NavLink to="/trade"
+              activeStyle={{
+                borderColor: PagesData[path].secondaryColor,
+                opacity: '1'
+              }}
+            >Trade</NavLink>
+          </MarketsTabsContainer>
+              
+
+        <div id='other-tabs-container'>
+            <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+              DOCS
+            </HeaderTabBtn>
+        </div>
+      </HeaderTabsWrapper>
+
+
+      <HeaderTabsWrapper desktop>
         { (path === "borrow" || path === "earn") ?
           <MarketsTabsContainer>
           <HeaderTabBtn

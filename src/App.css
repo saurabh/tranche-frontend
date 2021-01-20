@@ -22,7 +22,7 @@ html{
 }
 #other-tabs-container{
   position: relative;
-  /* width: 150px; */
+  width: 150px;
   display: flex;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -1181,6 +1181,9 @@ table, th, td {
     width: auto;
     text-align: center;
     margin: 0 0 0 20px;
+  }
+  #other-tabs-container a:last-child{
+    margin-right: 0;
   }
   .navbar-right{
     width: 100% !important;

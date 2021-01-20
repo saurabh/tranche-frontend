@@ -114,12 +114,52 @@ const HeaderTabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  @media (max-width: 992px) {
+  @media (max-width: 992px){
     flex-direction: row;
     // width: auto;
     text-align: center;
     margin: 0;
   }
+
+  ${({ mobile }) => mobile && `
+    display: none;
+    a{
+      font-family: "Roboto", sans-serif;
+      background-color: transparent;
+      border: none;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      padding: 0;
+      transition: 300ms;
+      text-transform: uppercase;
+      color: #ffffff;
+      cursor: pointer;
+      opacity: 0.5;
+      border-bottom: 4px solid transparent;
+      margin-right: 12px;
+      &:focus {
+        outline: none;
+      }
+      :hover{
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
+    }
+    @media (max-width: 1200px){
+      display: flex;
+    }
+  `}
+  ${({ desktop }) => desktop && `
+    display: none;
+    @media (min-width: 1200px){
+      display: flex;
+    }
+  `}
+  
+  
+
 `;
 
 const MarketsTabsContainer = styled.div`
@@ -148,6 +188,14 @@ const MarketsTabsContainer = styled.div`
     page === "trade" &&
     `
         width: 100px !important;
+    `}
+  ${({ links }) =>
+    links &&
+    `
+      a:nth-child(3){
+        pointer-events: none;
+        opacity: 0.09 !important;
+      }
     `}
 `;
 const HeaderTabBtn = styled.button`
