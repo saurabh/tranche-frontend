@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 const BannerWrapper = styled.div` 
   position: relative;
+  background: #f7f7f7;
+  z-index: 2000;
 `
 const BannerContent = styled.div` 
   width: 100%;

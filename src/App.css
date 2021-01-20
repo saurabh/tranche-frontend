@@ -8,6 +8,7 @@ html{
   margin-left: auto;
   display: none;
   margin-top: -5px;
+  z-index: 2000;
 }
 #navbar-icon span{
   height: 2px;

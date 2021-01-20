@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Logo from 'assets/images/svg/Logo.svg';
-import { NavbarWrapper, NavbarContainer, NavbarLinks } from './styles/HeaderComponents';
+import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent  } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
 
 import { NavLink } from 'react-router-dom';
@@ -21,6 +21,11 @@ function Navbar({ path }) {
           <span></span>
           <span></span>
         </div>
+        <NavBarMobile>
+          <NavBarMobileContent>
+            
+          </NavBarMobileContent>
+        </NavBarMobile>
         <div className={'navbar-right ' + (menuOpen ? 'navbar-right-toggle' : '')}>
           <NavbarLinks>
             <NavLink

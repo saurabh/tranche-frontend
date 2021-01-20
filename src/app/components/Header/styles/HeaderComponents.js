@@ -381,6 +381,19 @@ const TabIndicator = styled.div`
   }
 `;
 
+const NavBarMobile = styled.div`
+  width: 100%;
+  height: 100vh;
+  background: #282828;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+`
+const NavBarMobileContent = styled.div`
+
+`
+
 export {
   HeaderWrapper,
   HeaderContent,
@@ -404,4 +417,6 @@ export {
   RatesValueText,
   RatesRowDash,
   TabIndicator,
+  NavBarMobile,
+  NavBarMobileContent
 };
