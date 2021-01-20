@@ -251,8 +251,8 @@ const RatesBoxWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   @media (max-width: 992px) {
-    left: -29px;
-    transform: translateX(-50%);
+    left: -217px;
+    transform: scale(0.9);
   }
 `;
 const RatesRowWrapper = styled.div`
