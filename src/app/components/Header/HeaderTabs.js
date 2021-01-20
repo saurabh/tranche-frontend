@@ -29,7 +29,6 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   const [pair1Value, setPair1Value] = useState(0);
-
   const innerRef = useOuterClick((e) => {
     setRatesVisability(false);
   });
@@ -59,6 +58,8 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
 
   return (
     <div className='content-container container'>
+
+
       <HeaderTabsWrapper mobile>
           <MarketsTabsContainer links>
             <NavLink to="/borrow"
