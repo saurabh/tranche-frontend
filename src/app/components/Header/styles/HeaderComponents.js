@@ -383,12 +383,17 @@ const TabIndicator = styled.div`
 
 const NavBarMobile = styled.div`
   width: 100%;
-  height: 100vh;
   background: #282828;
   position: fixed;
   right: 0;
-  bottom: 0;
+  top: 0;
   z-index: 1000;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition-property: height, opacity, padding;
+  transition-duration: 300ms, 100ms, 300ms;
+  transition-timing-function: ease;
 `
 const NavBarMobileContent = styled.div`
 

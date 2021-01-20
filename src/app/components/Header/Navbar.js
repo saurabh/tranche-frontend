@@ -16,17 +16,17 @@ function Navbar({ path }) {
         <div id='logo-wrapper'>
             <img src={Logo} alt='Logo' />
         </div>
-        <div id='navbar-icon' onClick={() => setMenuOpen(!menuOpen)}>
+        <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>
           <span></span>
           <span></span>
         </div>
-        <NavBarMobile>
+        <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""}>
           <NavBarMobileContent>
             
           </NavBarMobileContent>
         </NavBarMobile>
-        <div className={'navbar-right ' + (menuOpen ? 'navbar-right-toggle' : '')}>
+        <div className='navbar-right'>
           <NavbarLinks>
             <NavLink
               to='/borrow'
