@@ -58,8 +58,6 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
   
   return (
     <div className='content-container container'>
-
-
       <HeaderTabsWrapper mobile>
           <MarketsTabsContainer links>
             <NavLink to="/borrow"

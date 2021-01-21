@@ -396,7 +396,36 @@ const NavBarMobile = styled.div`
   transition-timing-function: ease;
 `
 const NavBarMobileContent = styled.div`
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+  h2:nth-child(2){
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #686565;
+    margin: 12px auto;
+  }
+  div{
+    margin: 25px auto;
+    display: flex;
+    flex-direction: column;
+    a{
+      font-style: normal;
+      font-weight: normal;
+      margin: 14px auto;
+      font-size: 28px;
+      text-align: center;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      opacity: 0.5;
+    }
+  }
 `
 
 export {
