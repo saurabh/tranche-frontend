@@ -43,6 +43,7 @@ function Navbar({ path }) {
                 opacity: '1'
               }}
             >
+              
               <span data-content="earn"></span>
               Earn
             </NavLink>

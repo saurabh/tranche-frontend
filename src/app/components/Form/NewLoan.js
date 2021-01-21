@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { setTokenBalances } from 'redux/actions/ethereum';
@@ -13,7 +14,7 @@ import {
   fromWei,
   toBN
 } from 'services/contractMethods';
-import { useDebouncedCallback } from 'utils/lodash';
+import { validate, asyncValidateCreate } from 'utils';
 import {
   isLessThan,
   safeSubtract,
@@ -22,7 +23,6 @@ import {
   roundBasedOnUnit,
   formatString
 } from 'utils/helperFunctions';
-import { validate, asyncValidateCreate } from 'utils/validations';
 import { selectUp, selectDown } from 'assets';
 import {
   BtnLoanModal,
@@ -95,12 +95,9 @@ let NewLoan = ({
       ? tokenBalance.SLICE
       : 0;
 
-  const fetchTokenBalances = useCallback(
-    () => {
-      setTokenBalances(web3, address)
-    },
-    [address, web3, setTokenBalances],
-  )
+  const fetchTokenBalances = useCallback(_.debounce(() => {
+    setTokenBalances(web3, address);
+  }, 2000, {leading: true}), [address, web3, setTokenBalances]);
 
   useEffect(() => {
     if (pair === 1) {
@@ -173,36 +170,32 @@ let NewLoan = ({
     calculateRPB(pairId, borrowedAskAmount, APY);
   };
 
-  const [debounceCalcMinCollateralAmount] = useDebouncedCallback(
-    async (pair, borrowedAskAmount) => {
-      let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
+  const debounceCalcMinCollateralAmount = useCallback(_.debounce(async (pair, borrowedAskAmount) => {
+    let result = await calcMinCollateralAmount(pair, borrowedAskAmount, web3);
+    if (result) {
       result = roundNumber(result, undefined, 'up');
       setMinCollateralAmount(result.toString());
-    },
-    250
-  );
+    } else setMinCollateralAmount(0)
+  }, 500), []);
 
-  const [debounceCalcCollateralRatio] = useDebouncedCallback(
-    (borrowedAskAmount, collateralAmount, pair) => {
-      calcCollateralRatio(borrowedAskAmount, collateralAmount, pair);
-    },
-    250
-  );
+  const debounceCalcCollateralRatio = useCallback(_.debounce((borrowedAskAmount, collateralAmount, pair) => {
+    calcCollateralRatio(borrowedAskAmount, collateralAmount, pair);
+  }, 250), []);
 
-  const [debounceAllowanceCheck] = useDebouncedCallback(
-    async (pair, collateralAmount, address, web3) => {
-      if (pair === 1) {
-        const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
-        setHasAllowance(allowanceResult);
-      }
-    },
-    250
-  );
+  const debounceAllowanceCheck = useCallback(_.debounce(async (pair, collateralAmount, address, web3) => {
+    if (pair === 1) {
+      const allowanceResult = await allowanceCheck(pair, collateralAmount, address, web3, true);
+      setHasAllowance(allowanceResult);
+    }
+  }, 500, {leading: true}), []);
 
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
     debounceCalcMinCollateralAmount(pair, newValue);
-    collateralAmount && debounceCalcCollateralRatio(newValue, collateralAmount, pair);
+    if (collateralAmount)  {
+      if (newValue === '') debounceCalcCollateralRatio('0', collateralAmount, pair);
+      else debounceCalcCollateralRatio(newValue, collateralAmount, pair);
+    }
   };
 
   const setCollateralAmount = async (borrowedAskAmount) => {
@@ -215,7 +208,12 @@ let NewLoan = ({
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
     let fee = await calculateFees(toWei(formattedAmount), web3);
-    if (fee > 0) setPlatformFee(fee);
+    if (fee > 0) {
+      setPlatformFee(fee)
+    }
+    else{
+      setPlatformFee(0)
+    }
   };
 
   const handleCollateralizingChange = async (borrowingValue, newValue) => {
@@ -230,7 +228,15 @@ let NewLoan = ({
     let formattedAmount = formatString(newValue.toString());
     if (newValue) {
       let fee = await calculateFees(toWei(formattedAmount), web3);
-      if (fee > 0) setPlatformFee(fee);
+      if (fee > 0) {
+        setPlatformFee(fee)
+      }
+      else{
+        setPlatformFee(0)
+      }
+    }
+    else{
+      setPlatformFee(0)
     }
     debounceCalcCollateralRatio(borrowingValue, formattedAmount, pair);
   };
@@ -283,7 +289,6 @@ let NewLoan = ({
             <LoanDetailsRowTitle>COLLATERAL BALANCE</LoanDetailsRowTitle>
 
             <LoanDetailsRowValue>
-              {console.log(collateralBalance, pair)}
               {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
             </LoanDetailsRowValue>
           </LoanDetailsRow>
@@ -309,6 +314,10 @@ let NewLoan = ({
       <ModalAdjustForm>
         <Form component={ModalFormWrapper} onSubmit={(e) => createNewLoan(e)}>
           <FormInputsWrapper>
+            <h2 className="FormDetails">
+              COLLATERAL BALANCE: {' '}
+              {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
+            </h2>
             <ModalFormGrpNewLoan>
               <NewLoanFormInput>
                 <NewLoanInputWrapper name='borrowedAskAmount'>
@@ -396,6 +405,12 @@ let NewLoan = ({
                   {pairData[pair].collateral}
                 </span>
               </h2>
+              <h2 className="FormDetails" onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}>
+                COLLATERALIZATION RATIO:{' '}
+                <span>
+                  {collateralRatio ? roundNumber(collateralRatio, 1) : 0}%
+                </span>
+              </h2>
             </ModalFormGrp>
 
             <ModalFormGrpNewLoan placeholder='%'>
@@ -418,6 +433,13 @@ let NewLoan = ({
                   {gweiOrEther(rpb, pairData[pair].collateral)}
                 </span>
               </h2>
+              <h2 className="FormDetails">
+                PLATFORM FEE:{' '}
+                <span>
+                {platformFee + ' ' + pairData[pair].collateral}
+                </span>
+              </h2>
+              
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
 

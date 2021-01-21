@@ -24,7 +24,8 @@ import {
   LoanDetailsRow,
   LoanDetailsRowTitle,
   LoanDetailsRowValue,
-  BtnLoadingIcon
+  BtnLoadingIcon,
+  LoanDetailsMobile
 } from './styles/ModalsComponents';
 
 const FirstCustomStyles = {
@@ -282,6 +283,7 @@ const LoanModal = ({
 
               <ModalUserActions>
                 <ModalContent>
+                 
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
                       {status === statuses['Under_Collateralized'].status ? (
@@ -367,6 +369,14 @@ const LoanModal = ({
                       )}
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
+                  <LoanDetailsMobile>
+                    <h2>Loan amount — <span>{remainingLoan} {cryptoFromLenderName}</span></h2>
+                    <h2>Collateral amount — <span>{roundNumber(collateralAmount)} {collateralTypeName}</span></h2>
+                    <h2>Collateral ratio — <span>{collateralRatio}%</span></h2>
+                    <h2>Rpb — <span>{roundBasedOnUnit(rpbRate, collateralTypeName)} {gweiOrEther(rpbRate, collateralTypeName)}</span></h2>
+                    <h2>APY — <span>{APY}%</span></h2>
+                    <h2>Interest accrued — <span>{roundBasedOnUnit(interestPaid, collateralTypeName)} {gweiOrEther(interestPaid, collateralTypeName)}</span></h2>
+                  </LoanDetailsMobile>
                 </ModalContent>
               </ModalUserActions>
             </ModalActionsContent>
@@ -409,6 +419,12 @@ const LoanModal = ({
               collateralTypeName={collateralTypeName}
               collateralRatio={collateralRatio}
             />
+            <LoanDetailsMobile>
+              <h2>Loan amount — <span>{remainingLoan} {cryptoFromLenderName}</span></h2>
+              <h2>Collateral amount — <span>{roundNumber(collateralAmount)} {collateralTypeName}</span></h2>
+              <h2>Collateral ratio — <span>{collateralRatio}%</span></h2>
+              <h2>NEW COLLATERALIZATION RATIO — <span>{newCollateralRatio}%</span></h2>
+            </LoanDetailsMobile>
           </Modal>
         )}
       </div>
@@ -491,8 +507,8 @@ const LoanModal = ({
                   </LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
-                    {gweiOrEther(totalInterest, collateralTypeName)}
+                    {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                    {gweiOrEther(interestPaid, collateralTypeName)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               ) : (
@@ -568,8 +584,8 @@ const LoanModal = ({
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                          {gweiOrEther(interestPaid, collateralTypeName)}
+                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
                         </h2>
                         <ModalButton
                           onClick={() => confirm('WithdrawInterest')}
@@ -599,8 +615,8 @@ const LoanModal = ({
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                          {gweiOrEther(interestPaid, collateralTypeName)}
+                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
                         </h2>
                         <ModalButton
                           onClick={() => confirm('WithdrawInterest')}
@@ -630,8 +646,8 @@ const LoanModal = ({
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                          Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                          {gweiOrEther(interestPaid, collateralTypeName)}
+                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
                         </h2>
                         <ModalButton
                           onClick={() => confirm('WithdrawInterest')}
@@ -664,8 +680,8 @@ const LoanModal = ({
                 ) : status === statuses['Foreclosed'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
@@ -679,8 +695,8 @@ const LoanModal = ({
                 ) : status === statuses['Early_closing'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
@@ -694,8 +710,8 @@ const LoanModal = ({
                 ) : status === statuses['Closing'].status ? (
                   <BtnGrpLoanModalWrapper>
                     <h2>
-                      Available Interest: {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
-                      {gweiOrEther(interestPaid, collateralTypeName)}
+                      Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                      {gweiOrEther(accruedInterest, collateralTypeName)}
                     </h2>
                     <ModalButton
                       onClick={() => confirm('WithdrawInterest')}
@@ -710,6 +726,19 @@ const LoanModal = ({
                   ''
                 )}
               </BtnGrpLoanModal>
+              <LoanDetailsMobile>
+                <h2>Loan amount — <span>{remainingLoan} {cryptoFromLenderName}</span></h2>
+                <h2>Collateral amount — <span>{roundNumber(collateralAmount)} {collateralTypeName}</span></h2>
+                <h2>Collateral ratio — <span>{collateralRatio}%</span></h2>
+                <h2>Rpb — <span>{roundBasedOnUnit(rpbRate, collateralTypeName)} {gweiOrEther(rpbRate, collateralTypeName)}</span></h2>
+                <h2>APY — <span>{APY}%</span></h2>
+                {
+                  status !== statuses['Pending'].status ? 
+                    <h2>Interest accrued — <span>{roundBasedOnUnit(interestPaid, collateralTypeName)} {gweiOrEther(interestPaid, collateralTypeName)}</span></h2>
+                  
+                  : ""
+                }
+              </LoanDetailsMobile>
             </ModalContent>
           </ModalUserActions>
         </ModalActionsContent>

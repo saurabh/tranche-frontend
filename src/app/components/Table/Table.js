@@ -1,9 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import _ from 'lodash';
 import Pagination from 'react-paginating';
-// import { useDebouncedCallback } from 'utils/lodash';
-//import ReactLoading from 'react-loading';
+import { useHistory } from "react-router-dom";
 import {
   loansFetchData,
   changeFilter,
@@ -52,10 +52,11 @@ const Table = ({
   ethereum: { address }
 }) => {
   const { pathname } = useLocation();
+  const history = useHistory();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
 
-  const loanListing = useCallback(async () => {
+  const loanListing = useCallback(_.debounce(async () => {
     if (sort) {
       await loansFetchData({
         sort,
@@ -79,7 +80,7 @@ const Table = ({
       });
     }
     //page.current = currentPage;
-  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -89,7 +90,8 @@ const Table = ({
 
   useEffect(() => {
     loanListing();
-  }, [loanListing, filter, skip, limit, filterType, sort]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
     //page.current = p;
@@ -122,45 +124,88 @@ const Table = ({
           <div className='table-container'>
             <TableHead />
             <div className='table-content'>
-                {
-                    isLoading ? <div>
-                      {
-                      [...Array(5)].map((i, idx) =>
-
-                      <TableContentCard key={idx}>
-                        <div className="loadingCard">
-                          <div className="loadingFirstCol">
-                            <div className="loadingFirslColContent">
-                              <div className="loadingAvatar loadingContent "></div>
-                              <div className="loadingText loadingContentWrapper loadingContent">
-                              </div>
-                            </div>
-                          </div>
-                          <div className="loadingSecondCol">
-                            <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
-                          </div>
-                          <div className="loadingFifthCol">
-                            <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
-                          </div>
-                          <div className="loadingSixthCol">
-                            <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
+              {isLoading ? (
+                <div>
+                  {[...Array(5)].map((i, idx) => (
+                    <TableContentCard key={idx}>
+                      <div className='loadingCard'>
+                        <div className='loadingFirstCol'>
+                          <div className='loadingFirslColContent'>
+                            <div className='loadingAvatar loadingContent '></div>
+                            <div className='loadingText loadingContentWrapper loadingContent'></div>
                           </div>
                         </div>
-                      </TableContentCard>)
+                        <div className='loadingSecondCol'>
+                          <div className='loadingContentCol loadingContentWrapper loadingContent'></div>
+                        </div>
+                        <div className='loadingFifthCol'>
+                          <div className='loadingFifthColContent loadingContentWrapper loadingContent'></div>
+                        </div>
+                        <div className='loadingSixthCol'>
+                          <div className='loadingSixthColContent loadingContentWrapper loadingContent'></div>
+                        </div>
+                      </div>
+                    </TableContentCard>
+                  ))}
+                </div>
+              ) : !isLoading && loans.list.length === 0 && filterType === 'own' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <h2>
+                      You don’t have any{' '}
+                      {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet
+                    </h2>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'earn'
+                          ? changeOwnAllFilter('all')
+                          : false
                       }
-                      
-                  
-                  </div> : (!isLoading && loans.list.length === 0 && filterType === 'own') ?
-
-                          <TableContentCard pointer={false}>
-                            <CallToActionWrapper>
-                              <h2>You don’t have any {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet</h2>
-                              <button onClick={() => path === 'borrow' ? HandleNewLoan() : path === 'earn' ? changeOwnAllFilter('all') : false}><img src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''} alt="img"/> {path === 'borrow' ? 'Request New Loan' : path === 'earn' ? 'Start Earning  Assets' : ''}</button>
-                            </CallToActionWrapper>
-                          </TableContentCard>
-                  
-                  : loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
-                  }
+                    >
+                      <img
+                        src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'earn'
+                        ? 'Buy Earning  Assets'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'earn'
+                          ? history.push("/borrow")
+                          : false
+                      }
+                    >
+                      <img
+                        src={RequestLoan}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'earn'
+                        ? 'Navigate to Borrow'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              
+              (
+                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+              )}
             </div>
           </div>
         </TableWrapper>

@@ -104,7 +104,10 @@ export const pairData = [
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
-  transaction: 'loans/transaction'
+  transaction: 'loans/transaction',
+  summaryRatio: 'summary/ratio',
+  summaryCollateral: 'summary/collateral',
+  summaryLoan: 'summary/loan'
 };
 
 // Filters
@@ -118,8 +121,6 @@ export const factoryFees = 5;
 
 export const generalParams = {
   limitCollRatioForWithdraw: 160,
-  foreclosureWindow: 18000,
-  earlySettlementWindow: 540000
 };
 
 export const actionTypes = {
