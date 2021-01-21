@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import {
   HeaderWrapper,
   HeaderContent,
@@ -44,7 +45,6 @@ export function Header({updateDate}) {
           (path === "borrow" || path === "earn" || path === "trade") ?
           <HeaderTabs /> : ""
         }
-        
     </HeaderWrapper>
   );
 }

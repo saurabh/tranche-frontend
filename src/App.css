@@ -208,7 +208,7 @@ html{
   text-align: right;
 }
 .table-sixth-col{
-  width: 12%;
+  width: 18%;
 }
 
 .second-4-col-content h2{
@@ -416,7 +416,7 @@ button[disabled] img{
   margin-right: 7px;
 }
 .table-more-row-sixth{
-  width: 0%;
+  width: 7%;
 }
 .TableMoreLoading{
   margin: 0 auto;
@@ -985,9 +985,13 @@ table, th, td {
   height: 33px;
   display: flex;
   align-items: center;
+  transform: translateX(-50%);
+  left: 50%;
 }
+
+
 .footerLinks{
-  max-width: 200px;
+  max-width: 300px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -1107,6 +1111,7 @@ table, th, td {
     display: flex;
     justify-content: space-between;
   }
+
   .table-col:before{
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -1148,20 +1153,35 @@ table, th, td {
   }
 }
 
-
 .active span{
   display: none !important;
 }
 
-
-
-
-
+.FormDetails{
+  display: none !important;
+}
+@media (max-width: 633px){
+  .FormDetails{
+    display: block !important;
+  }
+}
+@media (max-width: 767px){
+  #other-tabs-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-right: 15px; 
+    padding-left: 15px; 
+    margin-right: auto; 
+    margin-left: auto; 
+  }
+}
 @media (max-width: 992px){
   #other-tabs-container{
-    flex-direction: column;
+    flex-direction: row;
     width: auto;
     text-align: center;
+    margin: 0 0 0 20px;
   }
   .navbar-right{
     width: 100% !important;
@@ -1177,11 +1197,11 @@ table, th, td {
   }
 
   .navbar-right-toggle{
-    height: auto !important;
+    height: 150px !important;
     padding: 12px 0;
     opacity: 1;
     transition-property: height, opacity;
-    transition-duration: 300ms, 100ms;
+    transition-duration: 300ms, 100ms, 300ms;;
     transition-timing-function: ease-in;
   }
 
@@ -1468,6 +1488,7 @@ table, th, td {
   transform: translateX(-100%);
 }
 
-.indicator{
-  
+.hideMenu{
+  height: 0 !important;
+  transition: 300ms;
 }

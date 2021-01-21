@@ -48,7 +48,21 @@ const TableWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   margin: 24px auto;
+  overflow: hidden;
   border-radius: 12px;
+  ${({ mobile }) => mobile && `
+    display: none;
+    @media (max-width: 1200px){
+      display: block;
+    }
+  `}
+  ${({ desktop }) => desktop && `
+    display: none;
+    @media (min-width: 1200px){
+      display: block;
+    }
+  `}
+  
 `;
 
 
@@ -106,12 +120,17 @@ const TableHeadWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    @media (max-width: 1200px){
-        display: none !important;
-    }
 `;
-const TableHeadTitle = styled.div`
+const SortingMenu = styled.div`
+  position: relative;
+  width: 100%;
+  display: none;
+  @media (max-width: 1200px) {
+    display: block;
+  }
+`;
 
+const TableHeadTitle = styled.div`
     & > div {
         position: relative;
         cursor: pointer;
@@ -124,6 +143,9 @@ const TableHeadTitle = styled.div`
             text-transform: uppercase;
             color: rgba(56, 56, 56, 0.3);
         }
+    }
+    @media (max-width: 1200px){
+      display: none !important;
     }
     ${({ defaultCursor }) => defaultCursor && `
         & > div {
@@ -175,6 +197,10 @@ const TableSubTitle = styled.div`
         font-size: 10px;
         cursor: pointer;
         color: #292929;
+        ${({ sorting }) => sorting && `
+          text-align: center;
+          letter-spacing: 2px;
+        `}
     }
 `;
 const CreateLoanBtn = styled.div`
@@ -210,7 +236,7 @@ const AdjustLoanBtn = styled.button`
 const TableHeaderTitles = styled.div`
   position: relative;
 `;
-const TableMarketsDropdown = styled.div`
+const TableMarketsSortingDropdown = styled.div`
   position: absolute;
   width: 150px;
   height: 90px;
@@ -221,14 +247,17 @@ const TableMarketsDropdown = styled.div`
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
   z-index: 1000;
+  ${({ sorting }) => sorting && `
+    right: 33px;  
+  `}
 `;
-const TableMarketsDropdownContent = styled.div`
+const TableMarketsSortingDropdownContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
 `;
-const TableMarketBtn = styled.button`
+const TableMarketSortingBtn = styled.button`
   height: 33%;  
   cursor: pointer;
   background: transparent;
@@ -332,6 +361,150 @@ const CallToActionTradeBtn = styled.button`
   }
 `
 
+const TableHeadWrapperMobile = styled.div`
+  min-height: 22px;
+  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "earn" ? "rgba(30, 187, 27, 0.7)" : "#F8F8F8"};
+  border-top: 1px solid #EFEFEF;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom: 1px solid #EFEFEF;
+  padding-left: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+const TableColMobile = styled.div`
+  width: 19%; //14
+  ${({ address }) => address && `
+    width: 34%;
+  `}
+  ${({ btn }) => btn && `
+    width: 9%;
+  `}
+`
+
+const TableHeadTitleMobile = styled.div`
+  width: 100%;
+  h2{
+    font-style: normal;
+    font-weight: 500;
+    text-align: center;
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    ${({ address }) => address && `
+      text-align: left;
+    `}
+  }
+`
+
+const TableContentCardWrapperMobile = styled.div`
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid #F1F1F1;
+  //border-left: 4px solid ${props => props.color ? props.color  : ""};
+`
+const TableContentCardMobile = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 12px;
+  span{
+    height: 100%;
+    width: 4px;
+    background: ${props => props.color ? props.color  : ""};
+    position: absolute;
+    left: 0;
+  }
+`
+const TableMobilColContent = styled.div`
+  h2{
+    margin: 1px 0;
+  }
+  h2:first-child{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+
+  }
+  h2:last-child{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 7px;
+    line-height: 10px;    
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #838186;
+  }
+  ${({ col }) => col && `
+    text-align: center;
+  `}
+  
+`
+const TableMobilCardBtn = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  button{
+    width: 36px;
+    height: 60px;
+    background-color: ${({color}) => color};
+    border: none;
+    outline: none;
+    display: flex;
+    border-radius: 0 !important;
+    align-items: center;
+    justify-content: center;
+  }
+  img{
+    width: 7px;
+  }
+`
+const TableMobileFiltersWrapper = styled.div`
+  width: 100%;  
+  background: #FFFFFF;
+  box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
+  margin: 15px auto;
+  border-radius: 10px;
+  display: none;
+  @media (max-width: 1200px){
+    display: block;
+  }
+`
+const TableMobileFilter = styled.div`
+  width: 100%;  
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  ${({ menu }) => menu && `
+    :hover{
+      background: #f7f7f7;
+    }
+  `}
+`
+const TableMobileFiltersMenu = styled.div`
+  height: 126px;
+  transition: 300ms;
+  overflow: hidden;
+`
+const TableMobileFiltersText = styled.h2`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(56, 56, 56, 0.5);
+`
+
 export {
   TableWrapper,
   TableContentCardWrapper,
@@ -349,13 +522,24 @@ export {
   CreateLoanBtn,
   AdjustLoanBtn,
   AdjustModalBtn,
-  TableMarketsDropdown,
-  TableMarketsDropdownContent,
-  TableMarketBtn,
+  TableMarketsSortingDropdown,
+  TableMarketsSortingDropdownContent,
+  TableMarketSortingBtn,
   CallToActionWrapper,
+  SortingMenu,
+  TableHeadWrapperMobile,
+  TableHeadTitleMobile,
+  TableColMobile,
+  TableContentCardWrapperMobile,
+  TableContentCardMobile,
+  TableMobilColContent,
+  TableMobilCardBtn,
+  TableMobileFiltersWrapper,
+  TableMobileFilter,
+  TableMobileFiltersMenu,
+  TableMobileFiltersText,
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
   CallToActionTradetext
-  };
-  
+};

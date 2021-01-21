@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
-import { downChevron, upChevron } from 'assets';
+import { downChevron, upChevron, ChevronDown } from 'assets';
+import { useOuterClick } from 'services/useOuterClick'
+
 import {
     changeSorting
   } from 'redux/actions/loans';
@@ -8,12 +10,22 @@ import {
     TableHeadWrapper,
     TableHeadTitle,
     SortChevronWrapper,
+    SortingMenu,
+    TableMarketsSortingDropdown,
+    TableMarketsSortingDropdownContent,
+    TableMarketSortingBtn,
+    TableSubTitle
 } from './styles/TableComponents';
 
 
 const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
 
     const [order, setOrder] = useState("asc")
+    const [menu, toggleMenu] = useState(false);
+
+    const innerRef = useOuterClick(e => {
+        toggleMenu(false);
+    });
 
     const sortLoans = (val) => {
         let sortObj = {
@@ -22,6 +34,9 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
         };
         changeSorting(sortObj);
         setOrder(order === "asc" ? "desc" : "asc")
+    }
+    const toggleSelectMarkets = () => {
+        toggleMenu(!menu);
     }
     return (
         <TableHeadWrapper path={path}>
@@ -69,6 +84,30 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
             <TableHeadTitle className="head-btns-wrapper">
 
             </TableHeadTitle>
+            <SortingMenu>
+                <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} sorting={true}>
+                    <h2>Sort <img src={ChevronDown} alt="img"/> </h2>
+                </TableSubTitle>
+                {   menu ?
+
+                 <TableMarketsSortingDropdown sorting={true}>
+                        <TableMarketsSortingDropdownContent>
+                            <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
+                                Amount
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
+                                Ratio
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => sortLoans("interestPaid")}>
+                                Rate/Payout
+                            </TableMarketSortingBtn>
+                            <TableMarketSortingBtn onClick={() => sortLoans("displayPriority")}>
+                                Status
+                            </TableMarketSortingBtn>
+                        </TableMarketsSortingDropdownContent>
+                    </TableMarketsSortingDropdown>  : ""
+                }
+            </SortingMenu>
         </TableHeadWrapper>  
     );
 }

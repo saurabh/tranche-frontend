@@ -56,7 +56,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
   };
 
   return (
-    <div className='container content-container'>
+    <div className='content-container container'>
       <HeaderTabsWrapper>
         { (path === "borrow" || path === "earn") ?
           <MarketsTabsContainer>
@@ -166,9 +166,11 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
               Rates
             </HeaderTabBtn>
           </RatesWrapper>
-          <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
-            How-to
-          </HeaderTabBtn>
+          <div>
+            <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+              How-to
+            </HeaderTabBtn>
+          </div>
         </div>
       </HeaderTabsWrapper>
     </div>

@@ -46,6 +46,10 @@ ${({ currency }) => currency === 'SLICE' && `
   text-align: left;
   color: #B9B9B9;
   margin: 6px 0 0 0;
+  @media (max-width: 633px){
+    font-size: 7px;
+    margin: 2px 0 0 0;
+  }
 }
 ${({ cursor }) => cursor && `
   h2{
@@ -127,6 +131,17 @@ const FormInputsWrapper = styled.div`
   justify-content: space-around;    
   @media (max-width: 633px){
     transform: none;
+    max-height: none;
+  }
+  h2:first-child{
+    @media (max-width: 633px){
+      font-style: normal;
+      font-weight: normal;
+      font-size: 11px;
+      text-align: center;
+      color: #B9B9B9;
+      margin: 0 0 24px 0;
+    }
   }
   ${({ trade }) => trade && `
     justify-content: center;
@@ -151,9 +166,14 @@ const ModalFormButton = styled.button`
   position: relative;
   overflow: hidden;
   outline: none;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  @media (max-width: 633px){
+    margin: 12px auto;
+  }
   :disabled{
     opacity: 0.5;
     cursor: default;
+    box-shadow: none;
     :hover{
       filter: brightness(1);
     }
@@ -164,10 +184,11 @@ const ModalFormButton = styled.button`
   }
 
   :hover{
-    filter: brightness(102%);
+    filter: brightness(107%);
   }
   :active{
     filter: brightness(97%);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
   }
 
   span{
@@ -181,6 +202,7 @@ const ModalFormButton = styled.button`
     cursor: unset !important;
     border: 1px solid #936CE6 !important;
     pointer-events: none !important;
+    box-shadow: none !important;
   `}
   ${({ approveBtn, approved }) => (approveBtn && !approved) && `
     display: flex;
@@ -197,6 +219,7 @@ const ModalFormButton = styled.button`
     }
     background: transparent !important;
     cursor: unset !important;
+    box-shadow: none !important;
     border: 1px solid #2ECC71 !important;
     color: #2ECC71 !important;
     pointer-events: none !important;
@@ -249,9 +272,12 @@ const ModalNewLoanContent = styled.div`
   flex-direction: row;
   @media (max-width: 633px){
     flex-direction: column-reverse;
-    justify-content: space-around;
     margin: 50px auto;
+    justify-content: flex-end;
+    min-height: auto;
+    height: auto;
   }
+  
 `
 const ModalNewLoanDetails = styled.div`
   position: relative;
@@ -267,6 +293,9 @@ const ModalNewLoanDetails = styled.div`
   background: #FAFAFA;
   @media (max-width: 633px){
     max-width: initial;
+    display: none;
+    min-height: auto;
+    height: auto;
   }
   
 `
@@ -486,7 +515,15 @@ const ModalFormGrpNewLoan = styled.div`
     text-align: left;
     color: #B9B9B9;
     margin: 6px 0 0 0;
+    @media (max-width: 633px){
+      font-size: 7px;
+      margin: 2px 0 0 0;
+    }
   }
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 284a6edb23c3161f5b73eca93d5d3f75867eb04a
 
   ${({ placeholder }) => placeholder === '%' && `
     &:after{

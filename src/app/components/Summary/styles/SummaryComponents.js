@@ -11,6 +11,8 @@ const SummaryCardWrapper = styled.div`
     border-radius: 12px;
     @media (max-width: 992px){
         margin-bottom: 15px;
+        width: 100%;
+        display: none;
     }
       
 `;
