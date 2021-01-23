@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { setTokenBalances } from 'redux/actions/ethereum';
-import { pairData } from 'config/constants';
 import { validate, asyncValidateCreate } from 'utils/validations';
 import {
   BtnLoanModal
