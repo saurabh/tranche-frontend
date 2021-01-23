@@ -167,7 +167,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
             </HeaderTabBtn>
           </RatesWrapper>
           <div>
-            <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+            <HeaderTabBtn link as='a' href={" https://docs.tranche.finance/tranche-finance/use/" + (path === "borrow" ? "borrowing" : path === "earn" ? "earning" : "")} target='_blank' id='how-to-tab'>
               How-to
             </HeaderTabBtn>
           </div>
