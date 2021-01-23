@@ -2,8 +2,6 @@ import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-// import { useDebouncedCallback } from 'utils/lodash';
-//import ReactLoading from 'react-loading';
 import {
   loansFetchData,
   changeFilter,
@@ -12,6 +10,11 @@ import {
   changeSorting,
   changeOwnAllFilter
 } from 'redux/actions/loans';
+import {
+  sellBuyToggle
+} from 'redux/actions/trade';
+
+
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from '../../Table/TableHeader';
 import TableHead from '../../Table/TableHead';
@@ -55,7 +58,8 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address }
+  ethereum: { address },
+  sellBuyToggle
 }) => {
   const { pathname } = useLocation();
   const pageCount = 5;
@@ -69,7 +73,7 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : path === 'trade' && tradeType === "sell" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
@@ -79,32 +83,25 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'earn' && filterType === 'own' ? address : path === 'trade' && tradeType === "sell" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       });
     }
-    //page.current = currentPage;
-  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path, tradeType]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
     changeOwnAllFilter('all');
-  }, [changePath, pathname, changeOwnAllFilter]);
+    sellBuyToggle("buy");
+  }, [changePath, pathname, changeOwnAllFilter, sellBuyToggle]);
 
   useEffect(() => {
     loanListing();
   }, [loanListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
-    //page.current = p;
-
-    // let currentPage = current;
-    // if (!currentPage || currentPage === 0) {
-    //   currentPage = 1;
-    // }
-    //const offset = currentPage * limit;
     paginationOffset((p - 1) * limit);
     paginationCurrent(p);
   };
@@ -113,13 +110,6 @@ const Table = ({
     loanListing();
   };
 
-  // const generateAvatar = () => {
-  //   let avatar = blockies.create({
-  //     size: 7,
-  //     scale: 6
-  //   });
-  //   return avatar.toDataURL();
-  // };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -156,7 +146,7 @@ const Table = ({
                       }
                       
                   
-                      </div> : (!isLoading && tradeType === 'sell') ?
+                      </div> : (!isLoading && tradeType === 'sell' && loans.list.length === 0) ?
                   // </div> : (!isLoading && loans.list.length === 0 && tradeType === 'sell') ?
 
                           <TableContentCard pointer={false}>
@@ -300,5 +290,6 @@ export default connect(mapStateToProps, {
   paginationOffset,
   paginationCurrent,
   changeSorting,
-  changeOwnAllFilter
+  changeOwnAllFilter,
+  sellBuyToggle
 })(Table);

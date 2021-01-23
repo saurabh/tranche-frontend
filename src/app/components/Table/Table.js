@@ -323,5 +323,6 @@ export default connect(mapStateToProps, {
   paginationOffset,
   paginationCurrent,
   changeSorting,
-  changeOwnAllFilter
+  changeOwnAllFilter,
+
 })(Table);

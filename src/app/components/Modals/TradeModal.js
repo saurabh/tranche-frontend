@@ -117,11 +117,13 @@ const TradeModal = ({
   collateralAmount,
   collateralTypeName,
   collateralRatio,
+  tradeType
 //   interestPaid,
 //   APY,
 //   rpbRate
 }) => {
 const [sellProtocol, setSellProtocol] = useState(false);
+const [offerMarket, setOfferMarket] = useState(false);
 //   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
 //   const loanStatusPending = status === statuses['Pending'].status;
 
@@ -201,6 +203,8 @@ const [sellProtocol, setSellProtocol] = useState(false);
     // adjustPositionToggle(false);
     // setIsAdjustSelected(false);
     setNewCollateralRatio(0);
+    setSellProtocol(false);
+    setOfferMarket(false);
   };
 
   const tradeModal = () => {
@@ -270,44 +274,46 @@ const [sellProtocol, setSellProtocol] = useState(false);
               )} */}
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          {    sellProtocol ? 
+          {    sellProtocol || offerMarket ? 
 
-                <TradeForm />
+                <TradeForm  sellProtocol={sellProtocol} offerMarket={offerMarket} />
 
             :
               <ModalUserActions>
                 <ModalContent>
+                  {
+                    isShareholder && tradeType === "sell" ?
                     <BtnGrpLoanModal>
-                    {isShareholder && (
-                        <BtnGrpLoanModalWrapper>
+                      <BtnGrpLoanModalWrapper>
                         <h2>
                             You can sell this asset to the protocol at a 5% discount
                         </h2>
                         <ModalButton
-                           onClick={() => setSellProtocol(true)}
-                            btnColor='#FFFFFF'
-                            backgroundColor='#845AD9'
+                          onClick={() => setSellProtocol(true)}
+                          btnColor='#FFFFFF'
+                          backgroundColor='#845AD9'
                         >
                             SELL TO PROTOCOL
                             <span></span>
                         </ModalButton>
                         <h2>Instant Sale</h2>
-                        </BtnGrpLoanModalWrapper>
-                    )}
+                      </BtnGrpLoanModalWrapper>
 
-                    <BtnGrpLoanModalWrapper>
-                        <h2>You can offer this asset to buyers on the open market</h2>
-                        <ModalButton
-                        
-                        btnColor='#FFFFFF'
-                        backgroundColor='#2ECC71'
-                        >
-                        OFFER TO MARKET
-                        <span></span>
-                        </ModalButton>
-                        <h2>Requires a purchaser</h2>
-                    </BtnGrpLoanModalWrapper>
-                    </BtnGrpLoanModal>
+                      <BtnGrpLoanModalWrapper>
+                          <h2>You can offer this asset to buyers on the open market</h2>
+                          <ModalButton
+                          onClick={() => setOfferMarket(true)}
+                          btnColor='#FFFFFF'
+                          backgroundColor='#2ECC71'
+                          >
+                          OFFER TO MARKET
+                          <span></span>
+                          </ModalButton>
+                          <h2>Requires a purchaser</h2>
+                      </BtnGrpLoanModalWrapper>
+                    </BtnGrpLoanModal> : ""
+                  }
+                    
                 </ModalContent>
             </ModalUserActions>
           }

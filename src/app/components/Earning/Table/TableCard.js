@@ -67,6 +67,7 @@ const TableCard = ({
     name
   },
   loan,
+  trade: { tradeType },
   path,
   setAddress,
   setNetwork,
@@ -591,6 +592,7 @@ const TableCard = ({
             approveLoan={approveLoan}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
+            tradeType={tradeType}
             // API Values
             loanId={loanId}
             status={status}
@@ -659,7 +661,8 @@ TableCard.propTypes = {
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  form: state.form
+  form: state.form,
+  trade: state.trade
 });
 
 export default connect(mapStateToProps, {

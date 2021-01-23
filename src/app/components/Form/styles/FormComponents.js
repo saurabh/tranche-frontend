@@ -253,7 +253,7 @@ const NewLoanInputWrapper = styled.div`
   width: 100% !important;  
   display: flex;
   flex-direction: column;
-  ${({ name }) => name === 'borrowedAskAmount' && `
+  ${({ name }) => (name === 'borrowedAskAmount' || name === 'priceInput') && `
     width: auto;
   `}
 `

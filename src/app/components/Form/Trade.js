@@ -32,106 +32,110 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 );
 
-let TradeForm = () => {
-
+let TradeForm = ({ sellProtocol, offerMarket }) => {
 
   return (
       <ModalAdjustForm>
-        <Form component={ModalFormWrapper} 
-        // onSubmit={(e) => createNewLoan(e)}
-        >
+        {
+          offerMarket ?
+              <Form component={ModalFormWrapper}>
+                <FormInputsWrapper trade={true}>
+                  <ModalFormGrpNewLoan trade={true}>
+                    <NewLoanFormInput>
+                      <NewLoanInputWrapper name='priceInput'>
+                        <ModalFormLabel htmlFor='priceInput'>PRICE</ModalFormLabel>
+                        <Field
+                          component={InputField}
+                          className='ModalFormInputNewLoan tradeFormInput'
+                          name='priceInput'
+                          type='number'
+                          step='0.0001'
+                        />
+                      </NewLoanInputWrapper>
+
+                      
+                    </NewLoanFormInput>
+                    <h2>
+                      
+                    </h2>
+                  </ModalFormGrpNewLoan>
+
+                  <ModalFormGrp cursor='pointer' trade={true}>
+                    <ModalFormLabel htmlFor='sharesInput'>SHARES</ModalFormLabel>
+                    <Field
+                      component={InputField}
+                      className='ModalFormInput tradeFormInput'
+                      name='sharesInput'
+                      type='number'
+                      step='0.0001'
+                    />
+                    <h2>
+                      
+                      <span>
+                        
+                      </span>
+                    </h2>
+                  </ModalFormGrp>
+                </FormInputsWrapper>
+
+                <ModalFormSubmit>
+                  <BtnLoanModal>
+                    <ModalFormButton type='submit'>
+                      <h2>ACTION</h2>
+                    </ModalFormButton>
+                  </BtnLoanModal>
+                </ModalFormSubmit>
+              </Form> : 
+
+        <Form component={ModalFormWrapper}>
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true}>
               <NewLoanFormInput>
-                <NewLoanInputWrapper name='borrowedAskAmount'>
-                  <ModalFormLabel htmlFor='BORROWINGInput'>PRICE</ModalFormLabel>
+                <NewLoanInputWrapper name='priceInput'>
+                  <ModalFormLabel htmlFor='priceInput'>PRICE</ModalFormLabel>
                   <Field
                     component={InputField}
                     className='ModalFormInputNewLoan tradeFormInput'
-                    name='borrowedAskAmount'
-                    // onChange={(e, newValue) =>
-                    //   handleBorrowingChange(pair, newValue, formValues.collateralAmount)
-                    // }
+                    name='priceInput'
                     type='number'
                     step='0.0001'
-                    id='BORROWINGInput'
                   />
                 </NewLoanInputWrapper>
 
                 
               </NewLoanFormInput>
               <h2>
-                {/* BORROW LIMIT: ~{' '} */}
-                {/* {(maxBorrowedAskAmount
-                  ? roundNumber(maxBorrowedAskAmount) !== 'NaN'
-                    ? roundNumber(maxBorrowedAskAmount)
-                    : 0
-                  : 0) +
-                  ' ' +
-                  pairData[pair].text} */}
               </h2>
-            </ModalFormGrpNewLoan>
-
-            <ModalFormGrp cursor='pointer' trade={true}>
-              <ModalFormLabel htmlFor='COLLATERALIZINGInput'>SHARES</ModalFormLabel>
-              <Field
-                component={InputField}
-                className='ModalFormInput tradeFormInput'
-                name='collateralAmount'
-                // onChange={(e, newValue) =>
-                //   handleCollateralizingChange(formValues.borrowedAskAmount, newValue)
-                // }
-                type='number'
-                step='0.0001'
-                id='COLLATERALIZINGInput'
-              />
-              <h2 
-            //   onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}
-              >
-                {/* MINIMUM COLLATERAL:{' '} */}
-                <span>
-                  {/* {minCollateralAmount ? roundNumber(minCollateralAmount) : 0}{' '} */}
-                  {/* {pairData[pair].collateral} */}
-                </span>
-              </h2>
-            </ModalFormGrp>
+            </ModalFormGrpNewLoan>           
           </FormInputsWrapper>
 
           <ModalFormSubmit>
             <BtnLoanModal>
               <ModalFormButton
                 type='submit'
-                // disabled={
-                // //   pristine ||
-                //   submitting ||
-                //   !borrowAsk ||
-                //   !collateralValue ||
-                //   isLessThan(Number(collateralValue), Number(minCollateralAmount)) ||
-                //   !rpb ||
-                //   !hasAllowance
-                // }
               >
                 <h2>ACTION</h2>
               </ModalFormButton>
             </BtnLoanModal>
           </ModalFormSubmit>
         </Form>
+
+        }
+
       </ModalAdjustForm>
   );
 };
 
 TradeForm = reduxForm({
-  form: 'newLoan',
+  form: 'sell',
   validate,
   asyncValidate: asyncValidateCreate,
-  asyncChangeFields: ['borrowedAskAmount', 'collateralAmount'],
   enableReinitialize: true
 })(TradeForm);
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  initialValues: { pairId: pairData[0].value, rpbRate: 0 },
-  formValues: getFormValues('newLoan')(state)
+  formValues: getFormValues('sell')(state)
 });
 
 export default TradeForm = connect(mapStateToProps, { change, setTokenBalances })(TradeForm);

@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
 import { sellBuyToggle } from 'redux/actions/trade';
-
 import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
@@ -27,7 +26,6 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   const [pair1Value, setPair1Value] = useState(0);
-
   const innerRef = useOuterClick((e) => {
     setRatesVisability(false);
   });
