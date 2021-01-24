@@ -79,7 +79,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
       pairId = parseFloat(pairId);
       borrowedAskAmount = toWei(borrowedAskAmount);
       collateralAmount = toWei(collateralAmount);
-      if (pairId === pairData[1].value) collateralAmount = 0;
+      // if (pairId === pairData[1].value) collateralAmount = 0;
       await JLoan.methods
         .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
