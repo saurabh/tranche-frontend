@@ -113,6 +113,9 @@ width: 100%;
   color: #4F4F4F;
   max-width: 200px;
   margin: auto;
+  span{
+    color: red;
+  }
 }
 `
 const BtnLoanModal = styled.div`

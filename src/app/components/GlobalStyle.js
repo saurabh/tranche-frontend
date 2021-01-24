@@ -4,6 +4,7 @@ const GlobalStyle = createGlobalStyle`
   body{
     background-color: #F2F2F2;
     font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
   }
 
   h2{
@@ -15,27 +16,44 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
     color: rgba(255, 255, 255, 0.5);
   }
-  .container{
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+
+  .container{ 
+    padding-right: 15px; 
+    padding-left: 15px; 
+    margin-right: auto; 
+    margin-left: auto; 
   }
+
+  @media(min-width: 768px){ 
+      .container{ 
+          width: 750px; 
+      } 
+  } 
+
+  @media(min-width: 992px){ 
+      .container{ 
+          width: 970px; 
+      } 
+  } 
+
+  @media (min-width: 1200px){ 
+      .container{ 
+          width: 1170px;
+      } 
+  }
+
+
   #navbar-container{
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 100%;
   }
-  @media (min-width: 768px){
-    .navbar-container{
-      width: 770px;
-    }
-    .content-container{
-      width: 770px;
-    }
-  }
-
+  // @media (min-width: 768px){
+  //   container{
+  //     width: 770px;
+  //   }
+  // }
   
   .navbar-right{
     width: 66%;
@@ -52,8 +70,6 @@ const GlobalStyle = createGlobalStyle`
     width: 34%;
   }
 
-
-  
   .return-wrapper{
     width: 9%;
     .return-title-content div{
@@ -129,22 +145,16 @@ const GlobalStyle = createGlobalStyle`
   .head-btns-wrapper{
     width: 18%;
   }
-  @media (min-width: 992px){
-    .navbar-container{
-      width: 990px;
-    }
-    .content-container{
-      width: 990px;
-    }
-  }
-  @media (min-width: 1200px){
-    .navbar-container{
-      width: 1126px;
-    }
-    .content-container{
-      width: 1126px;
-    }
-  }
+  // @media (min-width: 992px){
+  //   container{
+  //     width: 990px;
+  //   }
+  // }
+  // @media (min-width: 1200px){
+  //   container{
+  //     width: 1126px;
+  //   }
+  // }
  
 
   @media only screen and (max-width: 700px) {
