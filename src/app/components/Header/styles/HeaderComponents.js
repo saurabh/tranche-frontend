@@ -243,7 +243,7 @@ const RatesWrapper = styled.div`
 
 const RatesBoxWrapper = styled.div`
   position: absolute;
-  top: -107px;
+  top: -55px;
   left: -220px;
   width: 298px;
   height: auto;
