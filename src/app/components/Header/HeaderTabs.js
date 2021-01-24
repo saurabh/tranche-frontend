@@ -7,7 +7,8 @@ import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
-import { ETH, USDC, SLICE, DaiLogo } from 'assets';
+import { ETH, DaiLogo } from 'assets';
+// import { ETH, USDC, SLICE, DaiLogo } from 'assets';
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
@@ -26,7 +27,7 @@ import {
 const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
-  const [pair1Value, setPair1Value] = useState(0);
+  // const [pair1Value, setPair1Value] = useState(0);
 
   const innerRef = useOuterClick((e) => {
     setRatesVisability(false);
@@ -48,7 +49,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
         let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
         price = roundNumber(price);
         if (pair.pairId === pairData[0].value) setPair0Value(price)
-        if (pair.pairId === pairData[1].value) setPair1Value(price)
+        // if (pair.pairId === pairData[1].value) setPair1Value(price)
       })
     } catch (error) {
       console.error(error);
@@ -114,7 +115,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
             <RatesBoxWrapper
               className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}
             >
-              <RatesRowWrapper border={true}>
+              <RatesRowWrapper border={false}>
                 <RatesRowContent>
                   <RatesValue>
                     <RatesValueImg>
@@ -137,7 +138,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
                   </RatesValue>
                 </RatesRowContent>
               </RatesRowWrapper>
-
+{/* 
               <RatesRowWrapper>
                 <RatesRowContent>
                   <RatesValue>
@@ -160,7 +161,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
                     </RatesValueText>
                   </RatesValue>
                 </RatesRowContent>
-              </RatesRowWrapper>
+              </RatesRowWrapper> */}
             </RatesBoxWrapper>
             <HeaderTabBtn onClick={() => getPriceFeed()} id=''>
               Rates
