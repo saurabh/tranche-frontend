@@ -44,8 +44,8 @@ export const PagesData = {
     secondaryColor: '#D7FFB7',
     btnColor: '#D7FCD6',
     cardColor: '#D7FFB7',
-    title: 'Earning Markets',
-    description: 'EARN INTEREST ON YOUR CRYPTOCURRENCY DEPOSITS',
+    title: 'Lending Markets',
+    description: 'LEND STABLE COINS TO RECEIVE CRYPTOCURRENCY RETURNS',
     userTag: {
       color: '#1ebb1b',
       img: Agree
@@ -57,8 +57,8 @@ export const PagesData = {
     secondaryColor: '#ffffff',
     btnColor: '#1f1f1f',
     cardColor: 'rgba(0, 0, 0, 0.8)',
-    title: 'Trading Markets',
-    description: 'BUY AND SELL PERPETUAL BONDS PROVIDED BY THE PROTOCOL'
+    title: 'Earning Markets',
+    description: 'DEPOSIT STABLE COINS FOR DIFFERENT RETURNS'
   },
   privacy: {
     pageType: 'privacy',
