@@ -171,7 +171,7 @@ const Table = ({
                       {path === 'borrow'
                         ? 'Request New Loan'
                         : path === 'earn'
-                        ? 'Start Earning  Assets'
+                        ? 'Buy Earning  Assets'
                         : ''}
                     </button>
                   </CallToActionWrapper>

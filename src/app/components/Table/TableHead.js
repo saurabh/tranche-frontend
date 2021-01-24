@@ -55,7 +55,7 @@ const TableHead = ({changeSorting, loans: {sort}}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="ratio-wrapper">
-                <div className="ratio-title-content" onClick={() => sortLoans("remainingLoan")}>
+                <div className="ratio-title-content" onClick={() => sortLoans("collateralRatio")}>
                     <h2>Ratio</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>

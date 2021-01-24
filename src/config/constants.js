@@ -1,4 +1,4 @@
-import { Key, Agree, DAI as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
+import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables

@@ -1163,7 +1163,17 @@ table, th, td {
     display: block !important;
   }
 }
-
+@media (max-width: 767px){
+  #other-tabs-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-right: 15px; 
+    padding-left: 15px; 
+    margin-right: auto; 
+    margin-left: auto; 
+  }
+}
 @media (max-width: 992px){
   #other-tabs-container{
     flex-direction: row;
@@ -1476,3 +1486,7 @@ table, th, td {
   transform: translateX(-100%);
 }
 
+.hideMenu{
+  height: 0 !important;
+  transition: 300ms;
+}

@@ -7,7 +7,7 @@ import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
-import { ETH, USDC, SLICE, DAI } from 'assets';
+import { ETH, USDC, SLICE, DaiLogo } from 'assets';
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
@@ -129,7 +129,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
                   </RatesRowDash>
                   <RatesValue>
                     <RatesValueImg>
-                      <img src={DAI} alt='DAI' />
+                      <img src={DaiLogo} alt='DAI' />
                     </RatesValueImg>
                     <RatesValueText>
                       <h2>{pair0Value} DAI</h2>
@@ -167,7 +167,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
             </HeaderTabBtn>
           </RatesWrapper>
           <div>
-            <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+            <HeaderTabBtn link as='a' href={" https://docs.tranche.finance/tranche-finance/use/" + (path === "borrow" ? "borrowing" : path === "earn" ? "earning" : "")} target='_blank' id='how-to-tab'>
               How-to
             </HeaderTabBtn>
           </div>

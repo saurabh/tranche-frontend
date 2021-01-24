@@ -116,7 +116,7 @@ const HeaderTabsWrapper = styled.div`
   justify-content: space-between;
   @media (max-width: 992px) {
     flex-direction: row;
-    width: auto;
+    width: unset;
     text-align: center;
     margin: 0;
   }
@@ -129,10 +129,20 @@ const MarketsTabsContainer = styled.div`
   justify-content: space-between;
   @media (max-width: 992px) {
     flex-direction: row;
-    width: auto;
+    // width: auto;
     margin: 0 20px 0 0;
     text-align: center;
     align-items: flex-end;
+  }
+  @media (max-width: 767px){
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    padding-right: 15px; 
+    padding-left: 15px; 
+    margin-right: auto; 
+    margin-left: auto; 
   }
   ${({ page }) =>
     page === "trade" &&
@@ -241,8 +251,8 @@ const RatesBoxWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   @media (max-width: 992px) {
-    left: -29px;
-    transform: translateX(-50%);
+    left: -217px;
+    transform: scale(0.9);
   }
 `;
 const RatesRowWrapper = styled.div`
@@ -345,5 +355,5 @@ export {
   RatesValueImg,
   RatesValueText,
   RatesRowDash,
-  TabIndicator,
+  TabIndicator
 };
