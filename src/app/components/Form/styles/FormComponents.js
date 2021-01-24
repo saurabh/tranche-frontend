@@ -349,7 +349,8 @@ const SelectCurrencyView = styled.div`
       color: rgba(57, 41, 90, 0.2);
     }
     & > img{
-      margin: 0 6px 2px 0;
+      margin: 0 6px -1px 0;
+      height: 14px;
     }
   }
   
@@ -360,6 +361,7 @@ const LoanCustomSelect = styled.div`
   right: 5px;
   bottom: 6px;
   align-self: flex-end;
+  
 
 `
 const SelectCurrencyOptions = styled.div`
@@ -368,6 +370,9 @@ const SelectCurrencyOptions = styled.div`
   margin-top: 7px;
   box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.12);
   z-index: 1000;
+  img{
+    height: 14px;
+  }
 `
 const SelectCurrencyOption = styled.div`
   & > button{
@@ -393,7 +398,7 @@ const SelectCurrencyOption = styled.div`
       background: #E7E7E7;
     } 
     & > img{
-      margin: 0 6px 2px 0;
+      margin: 0 6px 0 0;
     }
   }
   &:last-child{
