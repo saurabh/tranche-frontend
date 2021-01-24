@@ -7,11 +7,17 @@ const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 767px){
+    min-height: 100px;
+  }
 `;
 const HeaderContent = styled.div`
   margin: 39px 0px;
   @media (max-width: 992px) {
     margin: 39px 0px;
+  }
+  @media (max-width: 767px){
+    display: none;
   }
   ${({ path }) =>
     (path === "privacy" || path === "terms") &&
@@ -299,6 +305,14 @@ const RatesBoxWrapper = styled.div`
     left: -29px;
     transform: translateX(-50%);
   }
+  ${({ mobile }) =>mobile && ` 
+    left: 50% !important;
+    top: 0;
+    div{
+
+    }
+  `}
+  
 `;
 const RatesRowWrapper = styled.div`
   display: flex;
@@ -392,6 +406,8 @@ const NavBarMobile = styled.div`
   transition-duration: 300ms, 100ms, 300ms;
   transition-timing-function: ease;
   ${({ rates }) => rates && `
+    left: -100px;
+    transition: 300ms;
     background: #F1F1F1;
     z-index: 2000;
   `}
@@ -411,24 +427,32 @@ const NavBarMobileContent = styled.div`
     color: #686565;
     margin: 12px auto;
   }
-  div{
-    margin: 25px auto;
-    display: flex;
-    flex-direction: column;
-    a{
-      font-style: normal;
-      font-weight: normal;
-      margin: 14px auto;
-      font-size: 28px;
-      text-align: center;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #FFFFFF;
-      opacity: 0.5;
+  ${({ first }) => first && `
+    div{
+      margin: 25px auto;
+      display: flex;
+      flex-direction: column;
+      a{
+        font-style: normal;
+        font-weight: normal;
+        margin: 14px auto;
+        font-size: 28px;
+        text-align: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
     }
-  }
+  `}
+  
+  
   button{
-    
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 20px;
+    top: 20px;
   }
 `
 

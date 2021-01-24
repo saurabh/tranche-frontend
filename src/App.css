@@ -1105,6 +1105,9 @@ table, th, td {
   display: none;
 }
 
+.ratesToggle{
+  left: 0 !important;
+}
 
 
 @media (max-width: 1200px){
@@ -1177,6 +1180,7 @@ table, th, td {
   }
 }
 @media (max-width: 767px){
+  
   #other-tabs-container{
     position: absolute;
     bottom: 0;

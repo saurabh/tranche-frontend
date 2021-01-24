@@ -25,6 +25,7 @@ function Navbar({ path }) {
   const [pair0Value, setPair0Value] = useState(0);
   const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
+  const [ratesToggle, setRatesToggle] = useState(false);
 
 
   const getPriceFeed = async () => {
@@ -45,6 +46,11 @@ function Navbar({ path }) {
   useEffect(()=>{
     getPriceFeed();
   }, [])
+
+  const ratesToggleBtn = (e) =>{
+    e.preventDefault();
+    setRatesToggle(true);
+  }
   
   return (
     <NavbarWrapper>
@@ -58,29 +64,30 @@ function Navbar({ path }) {
           <span></span>
         </div>
         
-        <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} style={{display: "none"}}>
-          <NavBarMobileContent>
+        <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} >
+          <NavBarMobileContent first>
             <img src={TrancheIcon} alt="icon" />
             <h2>0xB51F1234DA3124124468</h2>
             <div>
-              <a href="">RATES</a>
-              <a href="">DASHBOARD</a>
-              <a href="">DOCUMENTATION</a>
-              <a href="">PRIVACY</a>
-              <a href="">TERMS</a>
-              <a href="">SUPPORT</a>
+              <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
+              <a href="/">DASHBOARD</a>
+              <a href="/">DOCUMENTATION</a>
+              <a href="/">PRIVACY</a>
+              <a href="/">TERMS</a>
+              <a href="/">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>
 
-        <NavBarMobile className={!menuOpen ? "NavbarMobileToggle" : ""} rates>
+        <NavBarMobile className={(ratesToggle && menuOpen) ? "NavbarMobileToggle ratesToggle" : ""} rates>
           <NavBarMobileContent>
-            <button><img src={BackArrow} alt="back" /></button>
+            <button onClick={() => setRatesToggle(false)}><img src={BackArrow} alt="back" /></button>
             <RatesWrapper>
               <RatesBoxWrapper
-                className='ratesBoxWrapper ratesBoxWrapperDisplay'
+                className='ratesBoxWrapper'
+                mobile
               >
-                <RatesRowWrapper border={true}>
+                <RatesRowWrapper border={false}>
                   <RatesRowContent>
                     <RatesValue>
                       <RatesValueImg>
