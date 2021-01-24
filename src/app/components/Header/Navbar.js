@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Logo from 'assets/images/svg/Logo.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent  } from './styles/HeaderComponents';
 import { PagesData, apiUri, pairData  } from 'config/constants';
-import { ETH, USDC, SLICE, DAI } from 'assets';
+import { ETH, USDC, SLICE, DAI, BackArrow } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
@@ -75,6 +75,7 @@ function Navbar({ path }) {
 
         <NavBarMobile className={!menuOpen ? "NavbarMobileToggle" : ""} rates>
           <NavBarMobileContent>
+            <button><img src={BackArrow} alt="back" /></button>
             <RatesWrapper>
               <RatesBoxWrapper
                 className='ratesBoxWrapper ratesBoxWrapperDisplay'

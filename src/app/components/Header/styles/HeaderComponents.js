@@ -391,6 +391,10 @@ const NavBarMobile = styled.div`
   transition-property: height, opacity, padding;
   transition-duration: 300ms, 100ms, 300ms;
   transition-timing-function: ease;
+  ${({ rates }) => rates && `
+    background: #F1F1F1;
+    z-index: 2000;
+  `}
 `
 const NavBarMobileContent = styled.div`
   display: flex;
@@ -422,6 +426,9 @@ const NavBarMobileContent = styled.div`
       color: #FFFFFF;
       opacity: 0.5;
     }
+  }
+  button{
+    
   }
 `
 
