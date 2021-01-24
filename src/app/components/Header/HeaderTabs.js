@@ -58,7 +58,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
   return (
     <div className='content-container container'>
       <HeaderTabsWrapper>
-        { (path === "borrow" || path === "earn") ?
+        { (path === "borrow" || path === "lend") ?
           <MarketsTabsContainer>
           <HeaderTabBtn
             onClick={() => loanListing('all')}
@@ -66,7 +66,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
             active={filterType === 'all'}
             color={PagesData[path].secondaryColor}
           >
-            {path === 'borrow' ? 'All Loans' : path === 'earn' ? 'All Assets' : ''}
+            {path === 'borrow' ? 'All Loans' : path === 'lend' ? 'All Assets' : ''}
           </HeaderTabBtn>
           {
             address ? 
@@ -76,14 +76,14 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
                 active={filterType === 'own'}
                 color={PagesData[path].secondaryColor}
               >
-                {path === "borrow" ? "My Loans" : path === "earn" ? "My Assets" : ""}
+                {path === "borrow" ? "My Loans" : path === "lend" ? "My Assets" : ""}
               </HeaderTabBtn>
             : ""
           }
           <TabIndicator tab={filterType} path={path}></TabIndicator>
         </MarketsTabsContainer>
         :
-        <MarketsTabsContainer page="trade">
+        <MarketsTabsContainer page="earn">
           <HeaderTabBtn
             id='buy'
             active={tradeType === 'buy'}
@@ -167,7 +167,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
             </HeaderTabBtn>
           </RatesWrapper>
           <div>
-            <HeaderTabBtn link as='a' href={" https://docs.tranche.finance/tranche-finance/use/" + (path === "borrow" ? "borrowing" : path === "earn" ? "earning" : "")} target='_blank' id='how-to-tab'>
+            <HeaderTabBtn link as='a' href={" https://docs.tranche.finance/tranche-finance/use/" + (path === "borrow" ? "borrowing" : path === "lend" ? "earning" : "")} target='_blank' id='how-to-tab'>
               How-to
             </HeaderTabBtn>
           </div>

@@ -95,7 +95,7 @@ const TableCard = ({
   const checkLoan =
     path === 'borrow' && address === borrowerAddress
       ? PagesData[path].userTag
-      : path === 'earn' && isShareholder
+      : path === 'lend' && isShareholder
       ? PagesData[path].userTag
       : false;
 
@@ -137,7 +137,7 @@ const TableCard = ({
         (status === statuses['Foreclosed'].status ||
           status === statuses['Early_closing'].status ||
           status === statuses['Closing'].status)) ||
-      (path === 'earn' &&
+      (path === 'lend' &&
         !isShareholder &&
         (status === statuses['Active'].status ||
           status === statuses['Foreclosed'].status ||
@@ -554,16 +554,16 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <AdjustLoanBtn
               color={PagesData[path].btnColor}
-              disabled={path === 'trade' || disableBtn}
-              onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
+              disabled={path === 'earn' || disableBtn}
+              onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
             >
               <img
                 src={
                   path === 'borrow'
                     ? Adjust
-                    : path === 'earn'
+                    : path === 'lend'
                     ? AdjustEarn
-                    : path === 'trade'
+                    : path === 'earn'
                     ? AdjustTrade
                     : Adjust
                 }
