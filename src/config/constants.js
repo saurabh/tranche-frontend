@@ -1,5 +1,7 @@
-import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
-import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
+import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon} from 'assets';
+// import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
+import { DAISetup } from 'utils/contractConstructor';
+// import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -36,8 +38,8 @@ export const PagesData = {
       img: Key
     }
   },
-  earn: {
-    pageType: 'earn',
+  lend: {
+    pageType: 'lend',
     color: '#1ebb1b',
     secondaryColor: '#D7FFB7',
     btnColor: '#D7FCD6',
@@ -49,8 +51,8 @@ export const PagesData = {
       img: Agree
     }
   },
-  trade: {
-    pageType: 'trade',
+  earn: {
+    pageType: 'earn',
     color: 'rgba(0, 0, 0, 0.8)',
     secondaryColor: '#ffffff',
     btnColor: '#1f1f1f',
@@ -89,16 +91,16 @@ export const pairData = [
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
   },
-  {
-    key: 'USDC',
-    text: 'USDC',
-    value: 1,
-    collateral: 'SLICE',
-    img: USDCicon,
-    colIcon: SLICEicon,
-    collateralTokenSetup: SLICESetup,
-    lendTokenSetup: USDCSetup
-  }
+  // {
+  //   key: 'USDC',
+  //   text: 'USDC',
+  //   value: 1,
+  //   collateral: 'SLICE',
+  //   img: USDCicon,
+  //   colIcon: SLICEicon,
+  //   collateralTokenSetup: SLICESetup,
+  //   lendTokenSetup: USDCSetup
+  // }
 ];
 
 export const apiUri = {

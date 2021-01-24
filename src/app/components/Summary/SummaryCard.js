@@ -30,7 +30,7 @@ const SummaryCard = ({ title, value, type, details, path }) => {
             {type === 'loan'
               ? value.total + ' Loan Positions'
               : type === 'collateral'
-              ? `${roundNumber(value.coin1)} ETH / ${roundNumber(value.coin2)} SLICE`
+              ? `${roundNumber(value.coin1)} ETH`
               : details}
           </SummaryCardDetails>
         </SummaryCardContainer>
