@@ -89,7 +89,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
       </HeaderTabsWrapper>
 
 
-      <HeaderTabsWrapper desktop>
+      <HeaderTabsWrapper desktop className="desktopViewTabs">
         { (path === "borrow" || path === "earn") ?
           <MarketsTabsContainer>
           <HeaderTabBtn

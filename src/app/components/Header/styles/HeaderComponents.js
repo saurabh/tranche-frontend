@@ -147,19 +147,16 @@ const HeaderTabsWrapper = styled.div`
         opacity: 0.5;
       }
     }
-    @media (max-width: 1200px){
+    @media (max-width: 992px){
       display: flex;
     }
   `}
   ${({ desktop }) => desktop && `
     display: none;
-    @media (min-width: 1200px){
+    @media (min-width: 992px){
       display: flex;
     }
   `}
-  
-  
-
 `;
 
 const MarketsTabsContainer = styled.div`

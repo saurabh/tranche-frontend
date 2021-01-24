@@ -1195,6 +1195,9 @@ table, th, td {
     text-align: center;
     margin: 0 0 0 20px;
   }
+  .desktopViewTabs{
+    display: none !important;
+  }
   #other-tabs-container a:last-child{
     margin-right: 0;
   }
