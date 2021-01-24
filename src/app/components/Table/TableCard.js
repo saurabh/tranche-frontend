@@ -156,6 +156,7 @@ const TableCard = ({
         if (address) {
           const result = lenderAddress.indexOf(address.toLowerCase());
           if (result !== -1) setIsShareholder(true);
+          else setIsShareholder(false);
         }
       } catch (error) {
         console.error(error);
