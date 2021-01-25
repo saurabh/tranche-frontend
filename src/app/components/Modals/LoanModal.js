@@ -565,7 +565,7 @@ const LoanModal = ({
                     {
                       hasAllowance && !approveLoading ?
                         <h2>
-                          <span>Caution!</span>This is an illiquid transaction. You will not be able to withdraw your DAI until the borrower repays his loan or defaults.
+                          <span>Caution! </span>This is an illiquid transaction. You will not be able to withdraw your DAI until the borrower repays his loan or defaults.
                         </h2> : ""
                     }
                   </BtnGrpLoanModalWrapper>
