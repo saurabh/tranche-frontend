@@ -429,10 +429,10 @@ const TableMobilCardBtn = styled.div`
   }
 `
 const TableMobileFiltersWrapper = styled.div`
-  width: 100%;  
+  width: 80%;  
   background: #FFFFFF;
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
-  margin: 15px auto;
+  margin: 15px 0;
   border-radius: 10px;
   display: none;
   @media (max-width: 1200px){
