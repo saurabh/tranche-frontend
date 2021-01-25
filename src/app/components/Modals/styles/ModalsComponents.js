@@ -138,7 +138,7 @@ height: 38px;
 box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
 border-radius: 27px;
 border: none;
-margin: 12px 0 0 0;
+margin: 12px 0;
 background: ${props => props.backgroundColor ? props.backgroundColor  : "#ECECEC"};
 /*opacity: 0.75;*/
 font-family: Roboto;
