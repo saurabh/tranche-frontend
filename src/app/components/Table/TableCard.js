@@ -95,7 +95,7 @@ const TableCard = ({
   const checkLoan =
     path === 'borrow' && address === borrowerAddress
       ? PagesData[path].userTag
-      : path === 'earn' && isShareholder
+      : path === 'lend' && isShareholder
       ? PagesData[path].userTag
       : false;
 
@@ -137,7 +137,7 @@ const TableCard = ({
         (status === statuses['Foreclosed'].status ||
           status === statuses['Early_closing'].status ||
           status === statuses['Closing'].status)) ||
-      (path === 'earn' &&
+      (path === 'lend' &&
         !isShareholder &&
         (status === statuses['Active'].status ||
           status === statuses['Foreclosed'].status ||
@@ -156,6 +156,7 @@ const TableCard = ({
         if (address) {
           const result = lenderAddress.indexOf(address.toLowerCase());
           if (result !== -1) setIsShareholder(true);
+          else setIsShareholder(false);
         }
       } catch (error) {
         console.error(error);
@@ -435,7 +436,7 @@ const TableCard = ({
 
   const cardToggle = (hash) => {
     console.log('Loan ID: ' + loanId);
-    // console.log(loan);
+    console.log(loan);
     setMoreCardToggle(!moreCardToggle);
     if (!moreCardToggle) {
       getTransaction(hash);
@@ -554,16 +555,16 @@ const TableCard = ({
           <div className='adjust-btn-wrapper'>
             <AdjustLoanBtn
               color={PagesData[path].btnColor}
-              disabled={path === 'trade' || disableBtn}
-              onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
+              disabled={path === 'earn' || disableBtn}
+              onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
             >
               <img
                 src={
                   path === 'borrow'
                     ? Adjust
-                    : path === 'earn'
+                    : path === 'lend'
                     ? AdjustEarn
-                    : path === 'trade'
+                    : path === 'earn'
                     ? AdjustTrade
                     : Adjust
                 }

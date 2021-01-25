@@ -64,7 +64,7 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
           type: filter
         }
       });
@@ -74,7 +74,7 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
           type: filter
         }
       });
@@ -153,24 +153,24 @@ const Table = ({
                   <CallToActionWrapper>
                     <h2>
                       You don’t have any{' '}
-                      {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet
+                      {path === 'borrow' ? 'loans' : path === 'lend' ? 'assets' : ''} yet
                     </h2>
                     <button
                       onClick={() =>
                         path === 'borrow'
                           ? HandleNewLoan()
-                          : path === 'earn'
+                          : path === 'lend'
                           ? changeOwnAllFilter('all')
                           : false
                       }
                     >
                       <img
-                        src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''}
+                        src={path === 'borrow' ? RequestLoan : path === 'lend' ? EarningAsset : ''}
                         alt='img'
                       />{' '}
                       {path === 'borrow'
                         ? 'Request New Loan'
-                        : path === 'earn'
+                        : path === 'lend'
                         ? 'Buy Earning  Assets'
                         : ''}
                     </button>
@@ -184,7 +184,7 @@ const Table = ({
                       onClick={() =>
                         path === 'borrow'
                           ? HandleNewLoan()
-                          : path === 'earn'
+                          : path === 'lend'
                           ? history.push("/borrow")
                           : false
                       }
@@ -195,7 +195,7 @@ const Table = ({
                       />{' '}
                       {path === 'borrow'
                         ? 'Request New Loan'
-                        : path === 'earn'
+                        : path === 'lend'
                         ? 'Navigate to Borrow'
                         : ''}
                     </button>
@@ -323,6 +323,5 @@ export default connect(mapStateToProps, {
   paginationOffset,
   paginationCurrent,
   changeSorting,
-  changeOwnAllFilter,
-
+  changeOwnAllFilter
 })(Table);

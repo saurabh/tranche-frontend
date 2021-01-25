@@ -316,7 +316,6 @@ const LoanModal = ({
                             onClick={() => confirm('Cancel')}
                             backgroundColor='#0A66E1'
                             btnColor='#FFFFFF'
-                            disabled={!hasBalance}
                           >
                             Cancel Loan
                           </ModalButton>
@@ -563,6 +562,12 @@ const LoanModal = ({
                         ? 'This is 1 of 2 transactions required to accept a loan request.'
                         : ''}
                     </h2>
+                    {
+                      hasAllowance && !approveLoading ?
+                        <h2>
+                          <span>Caution!</span>This is an illiquid transaction. You will not be able to withdraw your DAI until the borrower repays his loan or defaults.
+                        </h2> : ""
+                    }
                   </BtnGrpLoanModalWrapper>
                 ) : status === statuses['Active'].status ? (
                   <BtnGrpLoanModalWrapper>
@@ -746,7 +751,7 @@ const LoanModal = ({
     );
   };
 
-  return path === 'borrow' ? borrowModal() : path === 'earn' ? earnModal() : false;
+  return path === 'borrow' ? borrowModal() : path === 'lend' ? earnModal() : false;
 };
 
 export default LoanModal;

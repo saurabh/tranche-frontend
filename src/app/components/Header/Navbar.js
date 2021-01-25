@@ -33,29 +33,30 @@ function Navbar({ path }) {
             >
               <span data-content="borrow"></span>
               Borrow
-              
             </NavLink>
             <NavLink
-              to='/earn'
+              to='/lend'
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-              
-              <span data-content="earn"></span>
-              Earn
+
+              <span data-content="lend"></span>
+              Lend
             </NavLink>
             <NavLink
-              to='/trade'
+              to='/earn'
+              onClick={(e) => e.preventDefault()}
+              className='navLinkDisabled'
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            ><span data-content="trade"></span>
-              Trade
+            >
+              Earn
             </NavLink>
           </NavbarLinks>
           <ConnectWallet path={path} />

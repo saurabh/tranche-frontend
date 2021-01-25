@@ -21,9 +21,6 @@ ${({ currency }) => currency === 'ETH' && `
     top: 27px;
   }  
 `}
-${({ trade }) => trade && `
-  margin: 15px 0;
-`}
 ${({ currency }) => currency === 'SLICE' && `
   &:after{
     content: 'SLICE';
@@ -143,9 +140,6 @@ const FormInputsWrapper = styled.div`
       margin: 0 0 24px 0;
     }
   }
-  ${({ trade }) => trade && `
-    justify-content: center;
-  `}
 `
 const ModalFormButton = styled.button`
   width: 164px;
@@ -253,7 +247,7 @@ const NewLoanInputWrapper = styled.div`
   width: 100% !important;  
   display: flex;
   flex-direction: column;
-  ${({ name }) => (name === 'borrowedAskAmount' || name === 'priceInput') && `
+  ${({ name }) => name === 'borrowedAskAmount' && `
     width: auto;
   `}
 `
@@ -355,7 +349,8 @@ const SelectCurrencyView = styled.div`
       color: rgba(57, 41, 90, 0.2);
     }
     & > img{
-      margin: 0 6px 2px 0;
+      margin: 0 6px -1px 0;
+      height: 14px;
     }
   }
   
@@ -366,6 +361,7 @@ const LoanCustomSelect = styled.div`
   right: 5px;
   bottom: 6px;
   align-self: flex-end;
+  
 
 `
 const SelectCurrencyOptions = styled.div`
@@ -374,6 +370,9 @@ const SelectCurrencyOptions = styled.div`
   margin-top: 7px;
   box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.12);
   z-index: 1000;
+  img{
+    height: 14px;
+  }
 `
 const SelectCurrencyOption = styled.div`
   & > button{
@@ -399,7 +398,7 @@ const SelectCurrencyOption = styled.div`
       background: #E7E7E7;
     } 
     & > img{
-      margin: 0 6px 2px 0;
+      margin: 0 6px 0 0;
     }
   }
   &:last-child{
@@ -520,10 +519,7 @@ const ModalFormGrpNewLoan = styled.div`
       margin: 2px 0 0 0;
     }
   }
-<<<<<<< HEAD
-=======
   
->>>>>>> 284a6edb23c3161f5b73eca93d5d3f75867eb04a
 
   ${({ placeholder }) => placeholder === '%' && `
     &:after{
@@ -540,10 +536,6 @@ const ModalFormGrpNewLoan = styled.div`
       top: 27px;
     }  
   `}
-  ${({ trade }) => trade && `
-    margin: 15px 0;
-  `}
-
 `
 
 const ApproveBtnWrapper = styled.div`

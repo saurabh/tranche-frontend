@@ -4,7 +4,7 @@ import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
 import { changeFilter } from 'redux/actions/loans';
 import { useOuterClick } from 'services/useOuterClick'
-import { ETH, SLICE } from 'config/constants';
+import { ETH } from 'config/constants';
 import {
     TableContainerHeader,
     TableHeaderTitles,
@@ -37,9 +37,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
         <TableContainerHeader>
             <TableHeaderTitles>
                 <TableTitle>
-                {   path === "trade" ?
-                    <h2>AVAILABLE INSTRUMENTS</h2> :
-                    path === "earn" ?
+                {   path === "lend" ?
                     <h2>Earning Assets</h2> :
                     <h2>Open Loans</h2>
                 }
@@ -48,16 +46,13 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                 </TableSubTitle>
                 {   menu ?
-                    <TableMarketsSortingDropdown path={path}>
+                    <TableMarketsSortingDropdown>
                         <TableMarketsSortingDropdownContent>
                             <TableMarketSortingBtn onClick={() => loanListing(null)}>
                                 All Markets
                             </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => loanListing(ETH)}>
-                                    ETH Markets
-                                </TableMarketSortingBtn>
-                            <TableMarketSortingBtn onClick={() => loanListing(SLICE)}>
-                                SLICE Markets
+                            <TableMarketSortingBtn onClick={() => loanListing(ETH)}>
+                                ETH Markets
                             </TableMarketSortingBtn>
                         </TableMarketsSortingDropdownContent>
                     </TableMarketsSortingDropdown> : ""
@@ -66,7 +61,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
             </TableHeaderTitles>
 
             <div className="create-loan-wrapper">
-                {   path === "borrow" ?
+                {   path !== "lend" ?
                     <CreateLoanBtn>
                         <button onClick={HandleNewLoan}><img src={Create} alt="Create"/> <span>New loan</span></button>
                     </CreateLoanBtn> : ""

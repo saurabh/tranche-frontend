@@ -1,21 +1,18 @@
 import React from 'react';
 import { Layout } from 'app/components';
 import SummaryCards from '../components/Summary/SummaryCards';
-import Table from '../components/Earning/Table/Table';
+import Table from '../components/Table/Table';
+import { Redirect } from 'react-router-dom';
 import { PagesData } from 'config/constants';
-import { changeFilter } from 'redux/actions/loans';
-import { connect } from 'react-redux';
 
-const Trade = () =>  {
+export default function Trade() {
+  if(true){
+    return <Redirect to="/borrow" />
+  }
   return (
     <Layout>
       <SummaryCards />
-      <Table pageType={PagesData.borrow.pageType} />
+      <Table pageType={PagesData.trade.pageType} />
     </Layout>
   );
 }
-
-
-export default connect(null, {
-  changeFilter
-})(Trade);

@@ -102,22 +102,21 @@ ${({ submitBtn }) => submitBtn && `
 `}
 `
 const BtnGrpLoanModalWrapper = styled.div`
-  margin: 25px 0;
-  width: 100%;
-  & > h2{
-    font-style: normal;
-    font-weight: normal;
-    font-size: 10px;
-    text-align: center;
-    letter-spacing: 0.15em;
-    color: #4F4F4F;
-    max-width: 200px;
-    margin: auto;
+margin: 25px 0;
+width: 100%;
+& > h2{
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  text-align: center;
+  letter-spacing: 0.15em;
+  color: #4F4F4F;
+  max-width: 200px;
+  margin: auto;
+  span{
+    color: red;
   }
-  h2:nth-child(3){
-    margin: 9px auto;
-    color: #C4C4C4;
-  }
+}
 `
 const BtnLoanModal = styled.div`
 display: flex;
@@ -375,9 +374,6 @@ const ModalActionDetailsContent = styled.div`
   @media (max-width: 633px){
     max-height: 310px;
   }
-  ${({ trade }) => trade && `
-    min-height: 150px;
-  `}
   ${({ row4 }) => row4 && `
     min-height: 350px;
   `}
@@ -390,15 +386,6 @@ const LoanDetailsRow = styled.div`
   
   ${({ newValue }) => newValue && `
     bottom: -50px;
-  `}
-  ${({ trade }) => trade && `
-    display: flex;
-    align-items: center;
-    margin: 15px 0;
-
-    h2{
-      margin: 0 9px;
-    }
   `}
 `
 const LoanDetailsRowTitle = styled.h2`

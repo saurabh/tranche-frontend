@@ -18,7 +18,7 @@ import {
 } from './styles/TableComponents';
 
 
-const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
+const TableHead = ({changeSorting, loans: {sort}}) => {
 
     const [order, setOrder] = useState("asc")
     const [menu, toggleMenu] = useState(false);
@@ -39,33 +39,33 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
         toggleMenu(!menu);
     }
     return (
-        <TableHeadWrapper path={path}>
+        <TableHeadWrapper>
             <TableHeadTitle className="address-wrapper" defaultCursor={true}>
                 <div className="address-title-content">
-                    <h2>{path === "trade" ? "INSTRUMENT" : "Address"}</h2> 
+                    <h2>Address</h2>
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="remaining-wrapper">
-                <div className={path === "trade" ? "value-title-content" : "remaining-title-content"} onClick={() => sortLoans("remainingLoan")}>
-                    <h2>{path === "trade" ? "LOAN(S) VALUE" : "Amount"}</h2>
+                <div className="remaining-title-content" onClick={() => sortLoans("remainingLoan")}>
+                    <h2>Amount</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
                         <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
-            <TableHeadTitle className={path === "trade" ? "return-wrapper" : "ratio-wrapper" }>
-                <div className={path === "trade" ? "return-title-content" : "ratio-title-content"} onClick={() => sortLoans("collateralRatio")}>
-                    <h2>{path === "trade" ? "RETURN/BLOCK" : "Ratio"}</h2>
+            <TableHeadTitle className="ratio-wrapper">
+                <div className="ratio-title-content" onClick={() => sortLoans("collateralRatio")}>
+                    <h2>Ratio</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
                         <img src={downChevron} alt="downChevron"/>
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
-            <TableHeadTitle className={path === "trade" ? "subscription-wrapper" : "interest-paid-wrapper"}>
-                <div className={path === "trade" ? "subscription-title-content" : "interest-paid-title-content"} onClick={() => sortLoans("interestPaid")}>
-                    <h2>{path === "trade" ? "SUBSCRIPTION" : "Rate/Payout"}</h2>
+            <TableHeadTitle className="interest-paid-wrapper">
+                <div className="interest-paid-title-content" onClick={() => sortLoans("interestPaid")}>
+                    <h2>Rate/Payout</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
                         <img src={downChevron} alt="downChevron"/>
@@ -73,8 +73,8 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="status-wrapper">
-                <div className={path === "trade" ? "bondApy-title-content" : "status-title-content"} onClick={() => sortLoans("status")}>
-                    <h2>{path === "trade" ? "BOND APY" : "Status"}</h2>
+                <div className="status-title-content" onClick={() => sortLoans("displayPriority")}>
+                    <h2>Status</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
                         <img src={downChevron} alt="downChevron"/>
@@ -114,7 +114,6 @@ const TableHead = ({handleSorting, changeSorting, loans: {sort}, path}) => {
 const mapStateToProps = (state) => {
     return {
       loans: state.loans,
-      path: state.path
     };
   };
   

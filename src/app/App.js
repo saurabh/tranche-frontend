@@ -54,7 +54,7 @@ const App = ({
           limit,
           filter: {
             borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
             type: filter
           }
         });
@@ -71,7 +71,7 @@ const App = ({
           limit,
           filter: {
             borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-            lenderAddress: path === 'earn' && filterType === 'own' ? address : undefined,
+            lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
             type: filter
           }
         });
@@ -105,9 +105,11 @@ const App = ({
           <Router>
               <Switch location={window.location}>
                 <Redirect exact from='/' to='/borrow' />
-                <Route exact path='/earn' component={Earn} />
+                <Route exact path='/lend' component={Earn} />
                 <Route exact path='/borrow' component={Borrow} />
-                <Route exact path='/trade' component={Trade} />
+                <Route exact path='/earn' component={Trade}>
+                  <Redirect to='/borrow' />
+                </Route>
                 <Route exact path='/privacy' component={Privacy} />
                 <Route exact path='/terms' component={TermsAndConditions} />
                 <Route component={NotFound} />

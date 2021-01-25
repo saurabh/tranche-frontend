@@ -9,7 +9,7 @@ const Banner = () => {
     <BannerWrapper>
       { showBanner ? 
         <BannerContent>
-          <BannerText>Caution! Tranche is still in beta mode and is currently active on the Kovan test network. Please do not send funds directly to the contract.</BannerText>
+          <BannerText><span role="img" aria-label="Caution">⚠️</span>Caution! Tranche is still in beta. Use at your own risk.</BannerText>
           <Close src={CloseBanner} onClick={() => setShowBanner(false)}/>
         </BannerContent> : ""
       }
