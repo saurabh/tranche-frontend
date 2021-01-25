@@ -1,9 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import _ from 'lodash';
 import Pagination from 'react-paginating';
-import { useHistory } from "react-router-dom";
 import {
   loansFetchData,
   changeFilter,
@@ -12,12 +10,22 @@ import {
   changeSorting,
   changeOwnAllFilter
 } from 'redux/actions/loans';
+import {
+  sellBuyToggle
+} from 'redux/actions/trade';
+
+
 import { changePath } from 'redux/actions/TogglePath';
-import TableHeader from './TableHeader';
-import TableHead from './TableHead';
+import TableHeader from '../../Table/TableHeader';
+import TableHead from '../../Table/TableHead';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard, CallToActionWrapper } from './styles/TableComponents';
-import { RequestLoan, EarningAsset } from 'assets';
+import { TableWrapper, TableContentCard,
+  CallToActionTradeWrapper,
+  CallToActionTradeBtns,
+  CallToActionTradeBtn,
+  CallToActionTradetext
+} from '../../Table/styles/TableComponents';
+import { EmptyBox } from 'assets';
 const style = {
   pageItem: {
     fontFamily: 'Roboto, sans-serif',
@@ -46,17 +54,18 @@ const Table = ({
   changeOwnAllFilter,
   loans,
   path,
+  trade: { tradeType },
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address }
+  ethereum: { address },
+  sellBuyToggle
 }) => {
   const { pathname } = useLocation();
-  const history = useHistory();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
 
-  const loanListing = useCallback(_.debounce(async () => {
+  const loanListing = useCallback(async () => {
     if (sort) {
       await loansFetchData({
         sort,
@@ -64,8 +73,8 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-          type: filter
+          lenderAddress: path === 'lend' && filterType === 'own' ? address : path === 'earn' && tradeType === "sell" ? address : undefined,
+          type: filter //ETH/JNT keep these in constant file
         }
       });
     } else {
@@ -74,138 +83,95 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-          type: filter
+          lenderAddress: path === 'lend' && filterType === 'own' ? address : path === 'earn' && tradeType === "sell" ? address : undefined,
+          type: filter //ETH/JNT keep these in constant file
         }
       });
     }
-    //page.current = currentPage;
-  }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path, tradeType]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
     changePath(currentPath);
     changeOwnAllFilter('all');
-  }, [changePath, pathname, changeOwnAllFilter]);
+    sellBuyToggle("buy");
+  }, [changePath, pathname, changeOwnAllFilter, sellBuyToggle]);
 
   useEffect(() => {
     loanListing();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, skip, limit, filterType, sort]);
+  }, [loanListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
-    //page.current = p;
-
-    // let currentPage = current;
-    // if (!currentPage || currentPage === 0) {
-    //   currentPage = 1;
-    // }
-    //const offset = currentPage * limit;
     paginationOffset((p - 1) * limit);
     paginationCurrent(p);
   };
 
-  // const handleSorting = () => {
-  //   loanListing();
-  // };
+  const handleSorting = () => {
+    loanListing();
+  };
 
-  // const generateAvatar = () => {
-  //   let avatar = blockies.create({
-  //     size: 7,
-  //     scale: 6
-  //   });
-  //   return avatar.toDataURL();
-  // };
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
-            <TableHead />
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-              {isLoading ? (
-                <div>
-                  {[...Array(5)].map((i, idx) => (
-                    <TableContentCard key={idx}>
-                      <div className='loadingCard'>
-                        <div className='loadingFirstCol'>
-                          <div className='loadingFirslColContent'>
-                            <div className='loadingAvatar loadingContent '></div>
-                            <div className='loadingText loadingContentWrapper loadingContent'></div>
+                {
+                    isLoading ? <div>
+                      {
+                      [...Array(5)].map((i, idx) =>
+
+                      <TableContentCard key={idx}>
+                        <div className="loadingCard">
+                          <div className="loadingFirstCol">
+                            <div className="loadingFirslColContent">
+                              <div className="loadingAvatar loadingContent "></div>
+                              <div className="loadingText loadingContentWrapper loadingContent">
+                              </div>
+                            </div>
+                          </div>
+                          <div className="loadingSecondCol">
+                            <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
+                          </div>
+                          <div className="loadingFifthCol">
+                            <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
+                          </div>
+                          <div className="loadingSixthCol">
+                            <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
                           </div>
                         </div>
-                        <div className='loadingSecondCol'>
-                          <div className='loadingContentCol loadingContentWrapper loadingContent'></div>
-                        </div>
-                        <div className='loadingFifthCol'>
-                          <div className='loadingFifthColContent loadingContentWrapper loadingContent'></div>
-                        </div>
-                        <div className='loadingSixthCol'>
-                          <div className='loadingSixthColContent loadingContentWrapper loadingContent'></div>
-                        </div>
-                      </div>
-                    </TableContentCard>
-                  ))}
-                </div>
-              ) : !isLoading && loans.list.length === 0 && filterType === 'own' ? (
-                <TableContentCard pointer={false}>
-                  <CallToActionWrapper>
-                    <h2>
-                      You don’t have any{' '}
-                      {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet
-                    </h2>
-                    <button
-                      onClick={() =>
-                        path === 'borrow'
-                          ? HandleNewLoan()
-                          : path === 'earn'
-                          ? changeOwnAllFilter('all')
-                          : false
+                      </TableContentCard>)
                       }
-                    >
-                      <img
-                        src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''}
-                        alt='img'
-                      />{' '}
-                      {path === 'borrow'
-                        ? 'Request New Loan'
-                        : path === 'earn'
-                        ? 'Buy Earning  Assets'
-                        : ''}
-                    </button>
-                  </CallToActionWrapper>
-                </TableContentCard>
-              ) :
-              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
-                <TableContentCard pointer={false}>
-                  <CallToActionWrapper>
-                    <button
-                      onClick={() =>
-                        path === 'borrow'
-                          ? HandleNewLoan()
-                          : path === 'earn'
-                          ? history.push("/borrow")
-                          : false
-                      }
-                    >
-                      <img
-                        src={RequestLoan}
-                        alt='img'
-                      />{' '}
-                      {path === 'borrow'
-                        ? 'Request New Loan'
-                        : path === 'earn'
-                        ? 'Navigate to Borrow'
-                        : ''}
-                    </button>
-                  </CallToActionWrapper>
-                </TableContentCard>
-              ) :
-              
-              (
-                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
-              )}
+                      
+                  
+                      </div> : (!isLoading && tradeType === 'sell' && loans.list.length === 0) ?
+                  // </div> : (!isLoading && loans.list.length === 0 && tradeType === 'sell') ?
+
+                          <TableContentCard pointer={false}>
+
+                            <CallToActionTradeWrapper>
+                              <img src={EmptyBox} alt="EmptyBox"/>
+                              
+                              <CallToActionTradetext>
+                                <h2>You don’t have any loans, assets or instruments to sell.</h2>
+                                <h2>Buy a tranche or provide a loan to get started!</h2>
+                              </CallToActionTradetext>
+
+                              <CallToActionTradeBtns>
+
+                                <CallToActionTradeBtn type="loans">BROWSE <span>LOANS</span></CallToActionTradeBtn>
+                                <CallToActionTradeBtn>BROWSE <span>TRANCHES</span></CallToActionTradeBtn>
+
+                              </CallToActionTradeBtns>
+
+                            </CallToActionTradeWrapper>
+
+                          </TableContentCard>
+                  
+                  : loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                  }
             </div>
           </div>
         </TableWrapper>
@@ -312,6 +278,7 @@ const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
     loans: state.loans,
+    trade: state.trade,
     path: state.path
   };
 };
@@ -324,5 +291,5 @@ export default connect(mapStateToProps, {
   paginationCurrent,
   changeSorting,
   changeOwnAllFilter,
-
+  sellBuyToggle
 })(Table);

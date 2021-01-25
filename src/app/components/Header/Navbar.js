@@ -42,20 +42,18 @@ function Navbar({ path }) {
                 opacity: '1'
               }}
             >
-
-              <span data-content="lend"></span>
+            <span data-content="lend"></span>
               Lend
             </NavLink>
             <NavLink
               to='/earn'
-              onClick={(e) => e.preventDefault()}
-              className='navLinkDisabled'
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
+              <span data-content="earn"></span>
               Earn
             </NavLink>
           </NavbarLinks>

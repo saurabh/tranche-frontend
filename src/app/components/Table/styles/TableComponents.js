@@ -40,7 +40,6 @@ const TableCardTag = styled.div`
     left: ${({color}) => color === '#1ebb1b' ? '1px' : '3px'};
     top: ${({color}) => color === '#1ebb1b' ? '-22px' : '-20px'};
   }
-
 `
 const TableWrapper = styled.div`
   width: 100%;
@@ -90,7 +89,6 @@ const AdjustModalBtn = styled.button`
     background-color: #FFFFFF;
     box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
   }
-
   :disabled{
     background-image: url(${GrayAdjust}) !important;
     background-color: #F1F1F1;
@@ -113,7 +111,7 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    background: ${props => props.path === "borrow" ? "#FAF8FF" : props.path === "lend" ? " #FBFFF8" : "#F8F8F8"};
+    background: ${props => props.path === "borrow" ? "#FAF8FF" : props.path === "earn" ? " #FBFFF8" : "#F8F8F8"};
     border-top: 1px solid #EFEFEF;
     border-bottom: 1px solid #EFEFEF;
     padding: 0 47px;
@@ -239,10 +237,10 @@ const TableHeaderTitles = styled.div`
 const TableMarketsSortingDropdown = styled.div`
   position: absolute;
   width: 150px;
-  height: 60px;
+  height: 90px;
   margin-top: 7px;
   overflow: hidden;
-  right: ${({path}) => path === "earn" ? "26px" : " -26px"};
+  right: ${({path}) => path === "trade" ? "26px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
@@ -258,7 +256,7 @@ const TableMarketsSortingDropdownContent = styled.div`
   height: 100%;
 `;
 const TableMarketSortingBtn = styled.button`
-  height: 50%;  
+  height: 33%;  
   cursor: pointer;
   background: transparent;
   border: none;
@@ -321,10 +319,49 @@ const CallToActionWrapper = styled.div`
     }
   }
 `;
+const CallToActionTradeWrapper = styled.div`
+  width: 100%;
+  text-align: center;
+`
+const CallToActionTradeBtns = styled.div`
+  margin-bottom: 41px;
+`
+const CallToActionTradetext = styled.div`
+  margin: -12px auto 29px auto;
+  h2{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #838186;
+  }
+`
+const CallToActionTradeBtn = styled.button`
+  width: 148px;
+  height: 27px;
+  cursor: pointer;
+  margin: 2px 12px;
+  background: ${props => props.type === "loans" ? "#9B6BFF" : "#2ECC71"}; 
+  box-shadow: 0px 1px 1px #E5E5E5;
+  border-radius: 2px;
+  top: 716px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  text-align: center;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  span{
+    font-weight: bold;
+  }
+`
 
 const TableHeadWrapperMobile = styled.div`
   min-height: 22px;
-  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : "#F8F8F8"};
+  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "earn" ? "rgba(30, 187, 27, 0.7)" : "#F8F8F8"};
   border-top: 1px solid #EFEFEF;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -393,7 +430,6 @@ const TableMobilColContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #39295A;
-
   }
   h2:last-child{
     font-style: normal;
@@ -498,5 +534,9 @@ export {
   TableMobileFiltersWrapper,
   TableMobileFilter,
   TableMobileFiltersMenu,
-  TableMobileFiltersText
+  TableMobileFiltersText,
+  CallToActionTradeWrapper,
+  CallToActionTradeBtns,
+  CallToActionTradeBtn,
+  CallToActionTradetext
 };
