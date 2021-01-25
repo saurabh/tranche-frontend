@@ -316,7 +316,6 @@ const LoanModal = ({
                             onClick={() => confirm('Cancel')}
                             backgroundColor='#0A66E1'
                             btnColor='#FFFFFF'
-                            disabled={!hasBalance}
                           >
                             Cancel Loan
                           </ModalButton>
