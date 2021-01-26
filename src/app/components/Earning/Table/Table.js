@@ -64,7 +64,7 @@ const Table = ({
   const { pathname } = useLocation();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
-
+  
   const loanListing = useCallback(async () => {
     if (sort) {
       await loansFetchData({

@@ -78,7 +78,7 @@ let TradeForm = ({ sellProtocol, offerMarket }) => {
                 <ModalFormSubmit>
                   <BtnLoanModal>
                     <ModalFormButton type='submit'>
-                      <h2>ACTION</h2>
+                      <h2>SELL</h2>
                     </ModalFormButton>
                   </BtnLoanModal>
                 </ModalFormSubmit>
@@ -111,7 +111,7 @@ let TradeForm = ({ sellProtocol, offerMarket }) => {
               <ModalFormButton
                 type='submit'
               >
-                <h2>ACTION</h2>
+                <h2>SELL</h2>
               </ModalFormButton>
             </BtnLoanModal>
           </ModalFormSubmit>

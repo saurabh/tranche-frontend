@@ -364,6 +364,10 @@ const ModalActionDetails = styled.div`
 
 const ModalUserActions = styled.div`
   width: 100%;
+  ${({ form }) => form && `
+    display: flex;
+  `}
+
 `
 const ModalActionDetailsContent = styled.div`
   min-height: 290px;

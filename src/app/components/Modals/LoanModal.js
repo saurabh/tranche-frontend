@@ -5,6 +5,7 @@ import { AdjustLoan } from 'app/components/Form/AdjustLoan';
 import { Spring } from 'react-spring/renderprops';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { statuses, actionTypes } from 'config/constants';
+import TradeForm from '../Form/ Trade';
 import { roundNumber, gweiOrEther, roundBasedOnUnit } from 'utils';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -125,6 +126,9 @@ const LoanModal = ({
 }) => {
   const [adjustPosition, adjustPositionToggle] = useState(false);
   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
+  const [sellAssetToggle, setSellAssetToggle] = useState(false);
+  const [sellProtocol, setSellProtocol] = useState(false);
+  const [offerMarket, setOfferMarket] = useState(false);
   const loanStatusPending = status === statuses['Pending'].status;
 
   const confirm = (type) => {
@@ -202,8 +206,15 @@ const LoanModal = ({
     closeModal();
     adjustPositionToggle(false);
     setIsAdjustSelected(false);
+    setSellAssetToggle(false);
+    setSellProtocol(false); 
+    setOfferMarket(false);
     setNewCollateralRatio(0);
   };
+
+  const sellAsset = () =>{
+    setSellAssetToggle(true);
+  }
 
   const borrowModal = () => {
     return (
@@ -395,6 +406,7 @@ const LoanModal = ({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
+            
             <AdjustLoan
               // State Values
               isAdjustSelected={isAdjustSelected}
@@ -442,7 +454,7 @@ const LoanModal = ({
       >
         <ModalHeader>
           <h2>
-            {status === statuses['Pending'].status ? 'Review Loan Request' : 'Manage Earning Asset'}
+            {status === statuses['Pending'].status ? 'Review Loan Request' : (status === statuses['Active'].status && sellAssetToggle) ? "SELL ASSET" : 'Manage Earning Asset'}
           </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
@@ -515,6 +527,12 @@ const LoanModal = ({
               )}
             </ModalActionDetailsContent>
           </ModalActionDetails>
+          
+          { status === statuses['Active'].status && sellAssetToggle  && (sellProtocol || offerMarket) ? 
+            <ModalUserActions form>
+              <TradeForm sellProtocol={sellProtocol} offerMarket={offerMarket} />
+            </ModalUserActions> :
+
           <ModalUserActions>
             <ModalContent>
               <BtnGrpLoanModal>
@@ -569,8 +587,8 @@ const LoanModal = ({
                         </h2> : ""
                     }
                   </BtnGrpLoanModalWrapper>
-                ) : status === statuses['Active'].status ? (
-                  <BtnGrpLoanModalWrapper>
+                ) : status === statuses['Active'].status && !sellAssetToggle ? (
+                  <BtnGrpLoanModalWrapper >
                     <h2>
                       Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
                       {gweiOrEther(accruedInterest, collateralTypeName)}
@@ -583,8 +601,54 @@ const LoanModal = ({
                       Withdraw Interest
                       <span></span>
                     </ModalButton>
+
+                    <ModalButton
+                      onClick={() => sellAsset()}
+                      btnColor='#FFFFFF'
+                      backgroundColor='#2ECC71'
+                    >
+                      Sell Asset
+                      <span></span>
+                    </ModalButton>
+
                   </BtnGrpLoanModalWrapper>
-                ) : status === statuses['Under_Collateralized'].status ? (
+                ) : 
+
+                status === statuses['Active'].status && sellAssetToggle  && (!sellProtocol && !offerMarket) ? (
+                  <BtnGrpLoanModalWrapper trade>
+                    <BtnGrpLoanModalWrapper>
+                      <h2>
+                        You can sell this asset to the protocol at a 5% discount
+                      </h2>
+                      <ModalButton
+                        onClick={() => setSellProtocol(true)}
+                        btnColor='#FFFFFF'
+                        backgroundColor='#845AD9'
+                      >
+                        SELL TO PROTOCOL
+                        <span></span>
+                      </ModalButton>
+                      <h2>Instant Sale</h2>
+                    </BtnGrpLoanModalWrapper>
+
+
+                    <BtnGrpLoanModalWrapper>
+                      <h2>You can offer this asset to buyers on the open market</h2>
+                      <ModalButton
+                        onClick={() => setOfferMarket(true)}
+                        btnColor='#FFFFFF'
+                        backgroundColor='#2ECC71'
+                      >
+                        OFFER TO MARKET
+                        <span></span>
+                      </ModalButton>
+                      <h2>Requires a purchaser</h2>
+                    </BtnGrpLoanModalWrapper>
+
+                  </BtnGrpLoanModalWrapper>
+                ) :
+
+                status === statuses['Under_Collateralized'].status ? (
                   <BtnGrpLoanModal>
                     {isShareholder && (
                       <BtnGrpLoanModalWrapper>
@@ -746,6 +810,7 @@ const LoanModal = ({
               </LoanDetailsMobile>
             </ModalContent>
           </ModalUserActions>
+        }
         </ModalActionsContent>
       </Modal>
     );
