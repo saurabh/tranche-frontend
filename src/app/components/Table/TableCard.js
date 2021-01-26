@@ -404,6 +404,25 @@ const TableCard = ({
     }
   };
 
+  const sellToProtocol = async (e) => {
+    try {
+      e.preventDefault();
+      let { numberOfShares } = form.sell.values;
+      await JLoan.methods.sellToProtocol(loanId, numberOfShares)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
@@ -596,6 +615,7 @@ const TableCard = ({
             approveLoan={approveLoan}
             withdrawInterest={withdrawInterest}
             forecloseLoan={forecloseLoan}
+            sellToProtocol={sellToProtocol}
             // API Values
             loanId={loanId}
             status={status}

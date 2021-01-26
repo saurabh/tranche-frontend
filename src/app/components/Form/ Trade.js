@@ -31,7 +31,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 );
 
-let TradeForm = ({ sellProtocol, offerMarket }) => {
+let TradeForm = ({ sellProtocol, offerMarket, sellToProtocol }) => {
 
   return (
       <ModalAdjustForm>
@@ -41,12 +41,12 @@ let TradeForm = ({ sellProtocol, offerMarket }) => {
                 <FormInputsWrapper trade={true}>
                   <ModalFormGrpNewLoan trade={true}>
                     <NewLoanFormInput>
-                      <NewLoanInputWrapper name='priceInput'>
-                        <ModalFormLabel htmlFor='priceInput'>PRICE</ModalFormLabel>
+                      <NewLoanInputWrapper name='price'>
+                        <ModalFormLabel htmlFor='price'>PRICE</ModalFormLabel>
                         <Field
                           component={InputField}
                           className='ModalFormInputNewLoan tradeFormInput'
-                          name='priceInput'
+                          name='price'
                           type='number'
                           step='0.0001'
                         />
@@ -58,11 +58,11 @@ let TradeForm = ({ sellProtocol, offerMarket }) => {
                   </ModalFormGrpNewLoan>
 
                   <ModalFormGrp cursor='pointer' trade={true}>
-                    <ModalFormLabel htmlFor='sharesInput'>SHARES</ModalFormLabel>
+                    <ModalFormLabel htmlFor='numberOfShares'>SHARES</ModalFormLabel>
                     <Field
                       component={InputField}
                       className='ModalFormInput tradeFormInput'
-                      name='sharesInput'
+                      name='numberOfShares'
                       type='number'
                       step='0.0001'
                     />
@@ -88,12 +88,12 @@ let TradeForm = ({ sellProtocol, offerMarket }) => {
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true}>
               <NewLoanFormInput>
-                <NewLoanInputWrapper name='priceInput'>
-                  <ModalFormLabel htmlFor='priceInput'>PRICE</ModalFormLabel>
+                <NewLoanInputWrapper name='numberOfShares'>
+                  <ModalFormLabel htmlFor='numberOfShares'>SHARES</ModalFormLabel>
                   <Field
                     component={InputField}
                     className='ModalFormInputNewLoan tradeFormInput'
-                    name='priceInput'
+                    name='numberOfShares'
                     type='number'
                     step='0.0001'
                   />
@@ -108,9 +108,7 @@ let TradeForm = ({ sellProtocol, offerMarket }) => {
 
           <ModalFormSubmit>
             <BtnLoanModal>
-              <ModalFormButton
-                type='submit'
-              >
+              <ModalFormButton onClick={(e) => sellToProtocol(e)}>
                 <h2>SELL</h2>
               </ModalFormButton>
             </BtnLoanModal>
