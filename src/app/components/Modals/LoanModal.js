@@ -110,6 +110,7 @@ const LoanModal = ({
   approveLoan,
   withdrawInterest,
   forecloseLoan,
+  sellToProtocol,
   // API Values
   loanId,
   status,
@@ -530,7 +531,7 @@ const LoanModal = ({
           
           { status === statuses['Active'].status && sellAssetToggle  && (sellProtocol || offerMarket) ? 
             <ModalUserActions form>
-              <TradeForm sellProtocol={sellProtocol} offerMarket={offerMarket} />
+              <TradeForm sellProtocol={sellProtocol} offerMarket={offerMarket} sellToProtocol={sellToProtocol} />
             </ModalUserActions> :
 
           <ModalUserActions>
