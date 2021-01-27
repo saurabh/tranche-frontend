@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { setTokenBalances } from 'redux/actions/ethereum';
@@ -9,7 +9,7 @@ import {
   BtnLoanModal
 } from '../Modals/styles/ModalsComponents';
 import {
-  ModalFormGrp,
+  // ModalFormGrp,
   ModalFormLabel,
   ModalFormWrapper,
   ModalAdjustForm,
@@ -36,7 +36,9 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let TradeForm = ({ sellProtocol, offerMarket, sellToggle, buyToggle, sellToProtocol }) => {
-  const [pair, setPair] = useState(pairData[0].value);
+  // const [pair, setPair] = useState();
+
+  const pair = pairData[0].value;
   
 
   return (
@@ -62,23 +64,6 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToggle, buyToggle, sellToProto
                       
                     </h2>
                   </ModalFormGrpNewLoan>
-
-                  <ModalFormGrp cursor='pointer' trade={true}>
-                    <ModalFormLabel htmlFor='numberOfShares'>SHARES</ModalFormLabel>
-                    <Field
-                      component={InputField}
-                      className='ModalFormInput tradeFormInput'
-                      name='numberOfShares'
-                      type='number'
-                      step='0.0001'
-                    />
-                    <h2>
-                      
-                      <span>
-                        
-                      </span>
-                    </h2>
-                  </ModalFormGrp>
                 </FormInputsWrapper>
 
                 <ModalFormSubmit>
