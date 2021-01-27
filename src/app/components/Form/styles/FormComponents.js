@@ -72,6 +72,10 @@ const ModalFormLabel = styled.label`
   letter-spacing: 0.15em;
   color: #4F4F4F;
   text-transform: uppercase;
+  ${({ tranche }) => tranche && `
+    margin: 7px auto;
+  `}
+
 `
 
 const ModalFormSubmit = styled.div`
@@ -144,7 +148,7 @@ const FormInputsWrapper = styled.div`
 const ModalFormButton = styled.button`
   width: 164px;
   height: 38px;  
-  background: #936CE6;
+  background: ${props => props.backgroundColor ? props.backgroundColor  : "#936CE6"};
   border-radius: 27px;
   font-style: normal;
   font-weight: normal;
@@ -349,7 +353,7 @@ const SelectCurrencyView = styled.div`
       color: rgba(57, 41, 90, 0.2);
     }
     & > img{
-      margin: 0 6px -1px 0;
+      margin: 0 6px 0 0;
       height: 14px;
     }
   }
@@ -519,6 +523,19 @@ const ModalFormGrpNewLoan = styled.div`
       margin: 2px 0 0 0;
     }
   }
+  ${({ tranche }) => tranche && `
+    & > h2:last-child{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      margin: 100px auto 0 auto;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: #838186;
+    }
+  `}
+
+
   
 
   ${({ placeholder }) => placeholder === '%' && `
