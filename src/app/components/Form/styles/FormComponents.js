@@ -34,7 +34,7 @@ ${({ currency }) => currency === 'SLICE' && `
     position: absolute;
     right: 39px;
     top: 27px;
-  }  
+  }
 `}
 & > h2{
   font-style: normal;
@@ -46,6 +46,7 @@ ${({ currency }) => currency === 'SLICE' && `
   @media (max-width: 633px){
     font-size: 7px;
     margin: 2px 0 0 0;
+    text-align: right;
   }
 }
 ${({ cursor }) => cursor && `
@@ -72,6 +73,9 @@ const ModalFormLabel = styled.label`
   letter-spacing: 0.15em;
   color: #4F4F4F;
   text-transform: uppercase;
+  @media (max-width: 633px){
+    text-align: left;
+  }
 `
 
 const ModalFormSubmit = styled.div`
@@ -102,7 +106,6 @@ const ModalFormSubmit = styled.div`
   @media (max-width: 633px){
     flex-direction: column;
   }
-
 `
 
 
@@ -140,6 +143,12 @@ const FormInputsWrapper = styled.div`
       margin: 0 0 24px 0;
     }
   }
+  & > div{
+    @media (max-width: 633px){
+      margin: 15px 0;
+      text-align: left;
+    }
+  }
 `
 const ModalFormButton = styled.button`
   width: 164px;
@@ -163,6 +172,7 @@ const ModalFormButton = styled.button`
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
   @media (max-width: 633px){
     margin: 12px auto;
+    width: 100%;
   }
   :disabled{
     opacity: 0.5;
@@ -265,7 +275,8 @@ const ModalNewLoanContent = styled.div`
   display: flex;
   flex-direction: row;
   @media (max-width: 633px){
-    flex-direction: column-reverse;
+    flex-direction: column;
+    // flex-direction: column-reverse;
     margin: 50px auto;
     justify-content: flex-end;
     min-height: auto;
@@ -512,6 +523,7 @@ const ModalFormGrpNewLoan = styled.div`
     @media (max-width: 633px){
       font-size: 7px;
       margin: 2px 0 0 0;
+      text-align: right;
     }
   }
   
@@ -544,27 +556,27 @@ const ApproveBtnWrapper = styled.div`
 
 
 export {
-    ModalFormGrp,
-    ModalFormLabel,
-    ModalAdjustForm,
-    ModalFormSubmit,
-    AdjustBtnsWrapper,
-    FormInputsWrapper,
-    SelectCurrencyOption,
-    SelectCurrencyView,
-    SelectCurrencyOptions,
-    LoanCustomSelect,
-    SelectChevron,
-    ModalFormButton,
-    NewLoanInputWrapper,
-    ModalFormGrpNewLoan,
-    NewLoanFormInput,
-    ModalNewLoanContent,
-    ModalFormWrapper, 
-    ModalNewLoanDetails,
-    ModalFormInput,
-    ModalFormInputAPY,
-    ModalFormInputNewLoan,
-    ModalNewLoanDetailsContent,
-    ApproveBtnWrapper
+  ModalFormGrp,
+  ModalFormLabel,
+  ModalAdjustForm,
+  ModalFormSubmit,
+  AdjustBtnsWrapper,
+  FormInputsWrapper,
+  SelectCurrencyOption,
+  SelectCurrencyView,
+  SelectCurrencyOptions,
+  LoanCustomSelect,
+  SelectChevron,
+  ModalFormButton,
+  NewLoanInputWrapper,
+  ModalFormGrpNewLoan,
+  NewLoanFormInput,
+  ModalNewLoanContent,
+  ModalFormWrapper, 
+  ModalNewLoanDetails,
+  ModalFormInput,
+  ModalFormInputAPY,
+  ModalFormInputNewLoan,
+  ModalNewLoanDetailsContent,
+  ApproveBtnWrapper
 };

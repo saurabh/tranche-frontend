@@ -1178,6 +1178,9 @@ table, th, td {
   .FormDetails{
     display: block !important;
   }
+  .ModalFormInput,  .ModalFormInputAPY, .ModalFormInputNewLoan{
+    border-radius: 7px;
+  }
 }
 @media (max-width: 767px){
   

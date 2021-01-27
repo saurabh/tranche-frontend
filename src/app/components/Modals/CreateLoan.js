@@ -5,7 +5,8 @@ import Modal from 'react-modal';
 import NewLoan from 'app/components/Form/NewLoan';
 import { JLoanSetup } from 'utils/contractConstructor';
 import { pairData, LoanContractAddress, txMessage } from 'config';
-import { ModalHeader } from './styles/ModalsComponents';
+import { ModalHeader, 
+  LoanDetailsMobile } from './styles/ModalsComponents';
 import { CloseModal } from 'assets';
 import { toWei } from 'services/contractMethods';
 
