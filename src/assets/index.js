@@ -24,8 +24,9 @@ import SLICELogo from './images/svg/SLICELogo.svg';
 import FilterChevron from './images/svg/FilterChevron.svg';
 import TrancheIcon from './images/svg/TrancheIcon.svg';
 import BackArrow from './images/svg/BackArrow.svg';
+import CreateLoan from './images/svg/CreateLoan.svg';
 
 
 export {
-    Adjust, DAI, RequestLoan, FilterChevron, BackArrow, TrancheIcon, ChevronDown, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
+    Adjust, DAI, RequestLoan, CreateLoan, FilterChevron, BackArrow, TrancheIcon, ChevronDown, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
 };

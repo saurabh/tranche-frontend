@@ -429,7 +429,7 @@ const TableMobilCardBtn = styled.div`
   }
 `
 const TableMobileFiltersWrapper = styled.div`
-  width: 80%;  
+  width: ${({width}) => width};
   background: #FFFFFF;
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
   margin: 15px 0;
@@ -467,6 +467,26 @@ const TableMobileFiltersText = styled.h2`
   color: rgba(56, 56, 56, 0.5);
 `
 
+const TableMobileFilterRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+const TableMobileRowCreateLoan = styled.div`
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  button{
+    border: none;
+    outline: none;
+    background: transparent;
+  }
+`
+
+
 export {
   TableWrapper,
   TableContentCardWrapper,
@@ -499,5 +519,7 @@ export {
   TableMobileFiltersWrapper,
   TableMobileFilter,
   TableMobileFiltersMenu,
-  TableMobileFiltersText
+  TableMobileFiltersText,
+  TableMobileFilterRow,
+  TableMobileRowCreateLoan
 };

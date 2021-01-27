@@ -23,9 +23,11 @@ import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFiltersWrapper,
   TableMobileFilter,
   TableMobileFiltersMenu,
-  TableMobileFiltersText
+  TableMobileFiltersText,
+  TableMobileFilterRow,
+  TableMobileRowCreateLoan
 } from './styles/TableComponents';
-import { RequestLoan, EarningAsset, FilterChevron } from 'assets';
+import { RequestLoan, EarningAsset, FilterChevron, CreateLoan } from 'assets';
 
 const style = {
   pageItem: {
@@ -140,22 +142,29 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
+          <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
+            
+            <TableMobileFilterRow>
+              <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
+                <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
+                <img alt="filter" src={FilterChevron} />
+              </TableMobileFilter>
+              { path === "borrow" ?
+                <TableMobileRowCreateLoan>
+                  <button onClick={HandleNewLoan}><img src={CreateLoan} alt="" /></button>
+                </TableMobileRowCreateLoan> : ""
+              }
+            </TableMobileFilterRow>
 
-        <TableMobileFiltersWrapper>
-          <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
-            <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
-            <img alt="filter" src={FilterChevron} />
-          </TableMobileFilter>
-          <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
-            <TableMobileFilter menu onClick={() => changeLoansFilter('all')}>
-              <TableMobileFiltersText>All loans</TableMobileFiltersText>
-            </TableMobileFilter>
-            <TableMobileFilter menu onClick={() => changeLoansFilter('own')}>
-              <TableMobileFiltersText>My loans</TableMobileFiltersText>
-            </TableMobileFilter>
-          </TableMobileFiltersMenu>
-        </TableMobileFiltersWrapper>
-
+            <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
+              <TableMobileFilter menu onClick={() => changeLoansFilter('all')}>
+                <TableMobileFiltersText>All loans</TableMobileFiltersText>
+              </TableMobileFilter>
+              <TableMobileFilter menu onClick={() => changeLoansFilter('own')}>
+                <TableMobileFiltersText>My loans</TableMobileFiltersText>
+              </TableMobileFilter>
+            </TableMobileFiltersMenu>
+          </TableMobileFiltersWrapper>
         <TableWrapper mobile>
           <TableHeadMobile />
           <div className='table-content'>
