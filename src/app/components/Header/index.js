@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
 import {
   HeaderWrapper,
   HeaderContent,
@@ -10,7 +9,6 @@ import {
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
 import { PagesData } from 'config/constants';
-
 
 export function Header({updateDate}) {
   const { pathname } = useLocation();
