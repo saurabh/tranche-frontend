@@ -28,6 +28,7 @@ function Navbar({ path }) {
   const [ratesToggle, setRatesToggle] = useState(false);
 
 
+
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
     setRatesVisability(!ratesVisability);
@@ -45,7 +46,8 @@ function Navbar({ path }) {
   };
   useEffect(()=>{
     getPriceFeed();
-  }, [])
+    //eslint to be fixed
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const ratesToggleBtn = (e) =>{
     e.preventDefault();
@@ -71,10 +73,10 @@ function Navbar({ path }) {
             <div>
               <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
               <a href="/">DASHBOARD</a>
-              <a href="/">DOCUMENTATION</a>
-              <a href="/">PRIVACY</a>
-              <a href="/">TERMS</a>
-              <a href="/">SUPPORT</a>
+              <a href="https://docs.tranche.finance/">DOCUMENTATION</a>
+              <a href="/privacy">PRIVACY</a>
+              <a href="/terms">TERMS</a>
+              <a href="https://discord.gg/DTZrm4j4Yc">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>

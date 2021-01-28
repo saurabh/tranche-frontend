@@ -431,11 +431,12 @@ const TableMobilCardBtn = styled.div`
 const TableMobileFiltersWrapper = styled.div`
   width: ${({width}) => width};
   background: #FFFFFF;
+  position: relative;
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
   margin: 15px 0;
   border-radius: 10px;
   display: none;
-  @media (max-width: 1200px){
+  @media (max-width: 992px){
     display: block;
   }
 `
@@ -478,7 +479,7 @@ const TableMobileRowCreateLoan = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 10px;
+  right: -25%;
   button{
     border: none;
     outline: none;

@@ -114,6 +114,12 @@ width: 100%;
   max-width: 200px;
   margin: auto;
 }
+${({ interest }) => interest && `
+  & > h2{
+    text-transform: uppercase;
+  }
+`}
+
 `
 const BtnLoanModal = styled.div`
 display: flex;
