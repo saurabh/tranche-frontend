@@ -64,7 +64,7 @@ const ErrorModal = ({
               <div>
                 <img src={ServerError} alt="error"/>
               </div>
-              <ModalTextConfirm>
+              <ModalTextConfirm error>
                 <h2>
                   {serverDown}
                 </h2>

@@ -443,6 +443,11 @@ const ModalTextConfirm = styled.div`
     color: #3F3F3F;
     margin: 10px auto 29px auto;
   }
+  ${({ error }) => error && `
+    h2{
+      width: 100%;
+    }
+  `}
 `
 
 const ModalTextConfirmBtnWrapper = styled.div`
