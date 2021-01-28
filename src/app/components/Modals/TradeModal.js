@@ -122,8 +122,9 @@ const TradeModal = ({
 //   APY,
 //   rpbRate
 }) => {
-const [sellProtocol, setSellProtocol] = useState(false);
-const [offerMarket, setOfferMarket] = useState(false);
+const [buyToggle, setBuyToggle] = useState(0);
+const [sellToggle, setSellToggle] = useState(0);
+
 //   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
 //   const loanStatusPending = status === statuses['Pending'].status;
 
@@ -203,9 +204,16 @@ const [offerMarket, setOfferMarket] = useState(false);
     // adjustPositionToggle(false);
     // setIsAdjustSelected(false);
     setNewCollateralRatio(0);
-    setSellProtocol(false);
-    setOfferMarket(false);
+    setSellToggle(false);
+    setBuyToggle(false);
   };
+
+  const sellTranche = (i) =>{
+    setSellToggle(true);
+  }
+  const buyTranche = (i) =>{
+    setBuyToggle(true);
+  }
 
   const tradeModal = () => {
     return (
@@ -219,7 +227,7 @@ const [offerMarket, setOfferMarket] = useState(false);
       >
         <ModalHeader>
           <h2>
-            SELL ASSET
+            {buyToggle ? "Buy Eth" : sellToggle ? "Sell ETH" : ""} TRANCHE A
           </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
@@ -273,9 +281,9 @@ const [offerMarket, setOfferMarket] = useState(false);
               )} */}
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          {    sellProtocol || offerMarket ? 
-
-                <TradeForm  sellProtocol={sellProtocol} offerMarket={offerMarket} />
+          {    sellToggle || buyToggle ? 
+          
+                <TradeForm  sellToggle={sellToggle} buyToggle={buyToggle} />
 
             :
               <ModalUserActions>
@@ -285,30 +293,31 @@ const [offerMarket, setOfferMarket] = useState(false);
                     <BtnGrpLoanModal>
                       <BtnGrpLoanModalWrapper>
                         <h2>
-                            You can sell this asset to the protocol at a 5% discount
+                        There are 1,501 Tranche A tokens available for purchase
                         </h2>
                         <ModalButton
-                          onClick={() => setSellProtocol(true)}
+                          trade={true}
+                          onClick={() => buyTranche(0)}
                           btnColor='#FFFFFF'
-                          backgroundColor='#845AD9'
+                          backgroundColor='#2ECC71'
                         >
-                            SELL TO PROTOCOL
+                            BUY TRANCHE A
                             <span></span>
                         </ModalButton>
-                        <h2>Instant Sale</h2>
                       </BtnGrpLoanModalWrapper>
 
                       <BtnGrpLoanModalWrapper>
-                          <h2>You can offer this asset to buyers on the open market</h2>
+                          <h2>You have 14,015 Tranche A tokens available to sell</h2>
                           <ModalButton
-                          onClick={() => setOfferMarket(true)}
-                          btnColor='#FFFFFF'
-                          backgroundColor='#2ECC71'
+                            trade={true}
+                            // disabled={true}
+                            onClick={() => sellTranche(0)}
+                            btnColor='#FFFFFF'
+                            backgroundColor='#845AD9'
                           >
-                          OFFER TO MARKET
+                          SELL TRANCHE A
                           <span></span>
                           </ModalButton>
-                          <h2>Requires a purchaser</h2>
                       </BtnGrpLoanModalWrapper>
                     </BtnGrpLoanModal> : ""
                   }

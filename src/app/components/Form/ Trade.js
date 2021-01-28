@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { setTokenBalances } from 'redux/actions/ethereum';
 import { validate, asyncValidateCreate } from 'utils/validations';
+import { pairData } from 'config/constants';
+import { selectUp, selectDown } from 'assets';
 import {
   BtnLoanModal
 } from '../Modals/styles/ModalsComponents';
-
 import {
-  ModalFormGrp,
+  // ModalFormGrp,
   ModalFormLabel,
   ModalFormWrapper,
   ModalAdjustForm,
@@ -18,6 +19,9 @@ import {
   ModalFormButton,
   NewLoanInputWrapper,
   NewLoanFormInput,
+  SelectChevron,
+  LoanCustomSelect,
+  SelectCurrencyView
 } from './styles/FormComponents';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -31,7 +35,11 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 );
 
-let TradeForm = ({ sellProtocol, offerMarket, sellToProtocol }) => {
+let TradeForm = ({ sellProtocol, offerMarket, sellToggle, buyToggle, sellToProtocol }) => {
+  // const [pair, setPair] = useState();
+
+  const pair = pairData[0].value;
+  
 
   return (
       <ModalAdjustForm>
@@ -56,23 +64,6 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToProtocol }) => {
                       
                     </h2>
                   </ModalFormGrpNewLoan>
-
-                  <ModalFormGrp cursor='pointer' trade={true}>
-                    <ModalFormLabel htmlFor='numberOfShares'>SHARES</ModalFormLabel>
-                    <Field
-                      component={InputField}
-                      className='ModalFormInput tradeFormInput'
-                      name='numberOfShares'
-                      type='number'
-                      step='0.0001'
-                    />
-                    <h2>
-                      
-                      <span>
-                        
-                      </span>
-                    </h2>
-                  </ModalFormGrp>
                 </FormInputsWrapper>
 
                 <ModalFormSubmit>
@@ -83,6 +74,7 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToProtocol }) => {
                   </BtnLoanModal>
                 </ModalFormSubmit>
               </Form> : 
+              sellProtocol ?
 
         <Form component={ModalFormWrapper}>
           <FormInputsWrapper trade={true}>
@@ -103,7 +95,7 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToProtocol }) => {
               </NewLoanFormInput>
               <h2>
               </h2>
-            </ModalFormGrpNewLoan>           
+            </ModalFormGrpNewLoan>
           </FormInputsWrapper>
 
           <ModalFormSubmit>
@@ -113,7 +105,75 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToProtocol }) => {
               </ModalFormButton>
             </BtnLoanModal>
           </ModalFormSubmit>
-        </Form>
+        </Form> :
+
+        <Form component={ModalFormWrapper}>
+          <FormInputsWrapper trade={true}>
+            <ModalFormGrpNewLoan trade={true} tranche={true}>
+            <NewLoanFormInput>
+                <NewLoanInputWrapper name='amount'>
+                  <ModalFormLabel htmlFor='amount' tranche={true}>Amount of Tranche A to { buyToggle ? "purchase" : "sell"}:</ModalFormLabel>
+                  <Field
+                    component={InputField}
+                    className='ModalFormInputNewLoan'
+                    name='amount'
+                    type='number'
+                    step='0.0001'
+                    id='amount'
+                  />
+                </NewLoanInputWrapper>
+
+                <LoanCustomSelect>
+                  <Field
+                    name='pairId'
+                    component='input'
+                    id='selectPair'
+                    className='fieldStylingDisplay'
+                  />
+                  <SelectCurrencyView>
+                    <div>
+                      <img src={pairData[pair].img} alt='' />
+                      <h2>{pairData[pair].text}</h2>
+                    </div>
+                    <SelectChevron>
+                      <img src={selectUp} alt='' />
+                      <img src={selectDown} alt='' />
+                    </SelectChevron>
+                  </SelectCurrencyView>
+                  {/* {currencySelect ? (
+                    <SelectCurrencyOptions>
+                      {pairData.map((i) => {
+                        return (
+                          <SelectCurrencyOption key={i.key}>
+                            <button onClick={(e) => handleCurrencySelect(e, i.value)} value={i.key}>
+                              <img src={i.img} alt='' /> {i.text}
+                            </button>
+                          </SelectCurrencyOption>
+                        );
+                      })}
+                    </SelectCurrencyOptions>
+                  ) : (
+                    ''
+                  )} */}
+                </LoanCustomSelect>
+              </NewLoanFormInput>
+              <h2>
+              {buyToggle ?  "You are buying an Ethereum Perpetual Bond paying a 6% APY" : "You are selling an Ethereum Perpetual Bond incurring a 0.5% fee"}
+              </h2>
+            </ModalFormGrpNewLoan>
+          </FormInputsWrapper>
+
+          <ModalFormSubmit>
+            <BtnLoanModal>
+              <ModalFormButton
+                type='submit'
+                backgroundColor={sellToggle ? '#845AD9' : buyToggle ? '#2ECC71' : "#845AD9"}
+              >
+                <h2>{sellToggle ? 'SELL' : buyToggle ? 'BUY' : ""}</h2>
+              </ModalFormButton>
+            </BtnLoanModal>
+          </ModalFormSubmit>
+        </Form> 
 
         }
 

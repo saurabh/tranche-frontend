@@ -160,8 +160,9 @@ color: ${props => props.btnColor ? props.btnColor : "#000000"};
   background: ${props => props.btnColor ? props.btnColor  : "#E42013"};*/
 }
 :disabled{
-  color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
-  opacity: 0.5;
+  color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : props.trade ? "#FFFFFF" : "#000000" };
+  background: ${props => props.trade ? "#E7E7E7" : "" };
+  opacity: ${props => props.trade ? "1" : "0.5" };;
   cursor: default;
   :hover{
     filter: brightness(1);
@@ -390,6 +391,14 @@ const LoanDetailsRow = styled.div`
   
   ${({ newValue }) => newValue && `
     bottom: -50px;
+  `}
+  ${({ trade }) => trade && `
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    h2{
+      margin: 0 12px;
+    }
   `}
 `
 const LoanDetailsRowTitle = styled.h2`
