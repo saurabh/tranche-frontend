@@ -7,11 +7,17 @@ const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 767px){
+    min-height: 100px;
+  }
 `;
 const HeaderContent = styled.div`
   margin: 39px 0px;
   @media (max-width: 992px) {
     margin: 39px 0px;
+  }
+  @media (max-width: 767px){
+    display: none;
   }
   ${({ path }) =>
     (path === "privacy" || path === "terms") &&
@@ -114,12 +120,49 @@ const HeaderTabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  @media (max-width: 992px) {
+  @media (max-width: 992px){
     flex-direction: row;
-    width: unset;
+    // width: auto;
     text-align: center;
     margin: 0;
   }
+
+  ${({ mobile }) => mobile && `
+    display: none;
+    a{
+      font-family: "Roboto", sans-serif;
+      background-color: transparent;
+      border: none;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      padding: 0;
+      transition: 300ms;
+      text-transform: uppercase;
+      color: #ffffff;
+      cursor: pointer;
+      opacity: 0.5;
+      border-bottom: 4px solid transparent;
+      margin-right: 12px;
+      &:focus {
+        outline: none;
+      }
+      :hover{
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
+    }
+    @media (max-width: 992px){
+      display: flex;
+    }
+  `}
+  ${({ desktop }) => desktop && `
+    display: none;
+    @media (min-width: 992px){
+      display: flex;
+    }
+  `}
 `;
 
 const MarketsTabsContainer = styled.div`
@@ -148,6 +191,14 @@ const MarketsTabsContainer = styled.div`
     page === "earn" &&
     `
         width: 100px !important;
+    `}
+  ${({ links }) =>
+    links &&
+    `
+      a:nth-child(3){
+        pointer-events: none;
+        opacity: 0.09 !important;
+      }
     `}
 `;
 const HeaderTabBtn = styled.button`
@@ -251,9 +302,17 @@ const RatesBoxWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   @media (max-width: 992px) {
-    left: -217px;
-    transform: scale(0.9);
+    left: -29px;
+    transform: translateX(-50%);
   }
+  ${({ mobile }) =>mobile && ` 
+    left: 50% !important;
+    top: 0;
+    div{
+
+    }
+  `}
+  
 `;
 const RatesRowWrapper = styled.div`
   display: flex;
@@ -333,6 +392,70 @@ const TabIndicator = styled.div`
   }
 `;
 
+const NavBarMobile = styled.div`
+  width: 100%;
+  background: #282828;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition-property: height, opacity, padding;
+  transition-duration: 300ms, 100ms, 300ms;
+  transition-timing-function: ease;
+  ${({ rates }) => rates && `
+    left: -100px;
+    transition: 300ms;
+    background: #F1F1F1;
+    z-index: 2000;
+  `}
+`
+const NavBarMobileContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+  h2:nth-child(2){
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #686565;
+    margin: 12px auto;
+  }
+  ${({ first }) => first && `
+    div{
+      margin: 25px auto;
+      display: flex;
+      flex-direction: column;
+      a{
+        font-style: normal;
+        font-weight: normal;
+        margin: 14px auto;
+        font-size: 28px;
+        text-align: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
+    }
+  `}
+  
+  
+  button{
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+  }
+`
+
 export {
   HeaderWrapper,
   HeaderContent,
@@ -355,5 +478,7 @@ export {
   RatesValueImg,
   RatesValueText,
   RatesRowDash,
-  TabIndicator
+  TabIndicator,
+  NavBarMobile,
+  NavBarMobileContent
 };

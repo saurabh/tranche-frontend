@@ -29,7 +29,8 @@ import {
   LoanDetailsRow,
   LoanDetailsRowTitle,
   LoanDetailsRowValue,
-  BtnLoadingIcon
+  BtnLoadingIcon,
+  LoanDetailsMobile
 } from '../Modals/styles/ModalsComponents';
 
 import {
@@ -314,10 +315,10 @@ let NewLoan = ({
       <ModalAdjustForm>
         <Form component={ModalFormWrapper} onSubmit={(e) => createNewLoan(e)}>
           <FormInputsWrapper>
-            <h2 className="FormDetails">
+            {/* <h2 className="FormDetails">
               COLLATERAL BALANCE: {' '}
               {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
-            </h2>
+            </h2> */}
             <ModalFormGrpNewLoan>
               <NewLoanFormInput>
                 <NewLoanInputWrapper name='borrowedAskAmount'>
@@ -405,12 +406,6 @@ let NewLoan = ({
                   {pairData[pair].collateral}
                 </span>
               </h2>
-              <h2 className="FormDetails" onClick={() => setCollateralAmount(formValues.borrowedAskAmount)}>
-                COLLATERALIZATION RATIO:{' '}
-                <span>
-                  {collateralRatio ? roundNumber(collateralRatio, 1) : 0}%
-                </span>
-              </h2>
             </ModalFormGrp>
 
             <ModalFormGrpNewLoan placeholder='%'>
@@ -431,12 +426,6 @@ let NewLoan = ({
                 <span>
                   {roundBasedOnUnit(rpb, pairData[pair].collateral)}{' '}
                   {gweiOrEther(rpb, pairData[pair].collateral)}
-                </span>
-              </h2>
-              <h2 className="FormDetails">
-                PLATFORM FEE:{' '}
-                <span>
-                {platformFee + ' ' + pairData[pair].collateral}
                 </span>
               </h2>
               
@@ -491,6 +480,10 @@ let NewLoan = ({
           </ModalFormSubmit>
         </Form>
       </ModalAdjustForm>
+      <LoanDetailsMobile>
+        <h2>Available Collateral: <span>{collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}</span></h2>
+        <h2>Platform Fee : <span>{platformFee + ' ' + pairData[pair].collateral}</span></h2>
+      </LoanDetailsMobile>
     </ModalNewLoanContent>
   );
 };

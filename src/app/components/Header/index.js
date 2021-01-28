@@ -45,6 +45,7 @@ export function Header({updateDate}) {
           (path === "borrow" || path === "lend" || path === "earn") ?
           <HeaderTabs /> : ""
         }
+        
     </HeaderWrapper>
   );
 }

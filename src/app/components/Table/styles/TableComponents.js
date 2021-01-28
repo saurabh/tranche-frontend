@@ -51,6 +51,7 @@ const TableWrapper = styled.div`
   border-radius: 12px;
   ${({ mobile }) => mobile && `
     display: none;
+    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
     @media (max-width: 1200px){
       display: block;
     }
@@ -464,13 +465,14 @@ const TableMobilCardBtn = styled.div`
   }
 `
 const TableMobileFiltersWrapper = styled.div`
-  width: 100%;  
+  width: ${({width}) => width};
   background: #FFFFFF;
+  position: relative;
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
-  margin: 15px auto;
+  margin: 15px 0;
   border-radius: 10px;
   display: none;
-  @media (max-width: 1200px){
+  @media (max-width: 992px){
     display: block;
   }
 `
@@ -488,7 +490,7 @@ const TableMobileFilter = styled.div`
   `}
 `
 const TableMobileFiltersMenu = styled.div`
-  height: 126px;
+  height: 84px;
   transition: 300ms;
   overflow: hidden;
 `
@@ -501,6 +503,26 @@ const TableMobileFiltersText = styled.h2`
   letter-spacing: 0.05em;
   color: rgba(56, 56, 56, 0.5);
 `
+
+const TableMobileFilterRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+const TableMobileRowCreateLoan = styled.div`
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: -25%;
+  button{
+    border: none;
+    outline: none;
+    background: transparent;
+  }
+`
+
 
 export {
   TableWrapper,
@@ -538,5 +560,7 @@ export {
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
-  CallToActionTradetext
+  CallToActionTradetext,
+  TableMobileFilterRow,
+  TableMobileRowCreateLoan
 };

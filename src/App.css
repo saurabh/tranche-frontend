@@ -8,13 +8,26 @@ html{
   margin-left: auto;
   display: none;
   margin-top: -5px;
+  z-index: 2000;
 }
 #navbar-icon span{
   height: 2px;
   margin: 4px 0;
   display: block;
   background: #ffffff;
+  transition: all 0.3s ease-in-out;
   width: 23px;
+}
+.NavIconActive span:nth-child(1){ 
+  transform: translateY(6px) rotate(45deg);
+}
+
+.NavIconActive span:nth-child(2){
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.NavIconActive span:nth-child(3){
+  transform: translateY(-6px) rotate(-45deg);
 }
 #logo-wrapper img{
   height: 25px;
@@ -1092,6 +1105,9 @@ table, th, td {
   display: none;
 }
 
+.ratesToggle{
+  left: 0 !important;
+}
 
 
 @media (max-width: 1200px){
@@ -1162,14 +1178,19 @@ table, th, td {
   .FormDetails{
     display: block !important;
   }
+  .ModalFormInput,  .ModalFormInputAPY, .ModalFormInputNewLoan{
+    border-radius: 7px;
+  }
 }
 @media (max-width: 767px){
+  
   #other-tabs-container{
     position: absolute;
     bottom: 0;
     right: 0;
+    width: auto;
     padding-right: 15px; 
-    padding-left: 15px; 
+    padding-left: 15px;
     margin-right: auto; 
     margin-left: auto; 
   }
@@ -1180,6 +1201,12 @@ table, th, td {
     width: auto;
     text-align: center;
     margin: 0 0 0 20px;
+  }
+  .desktopViewTabs{
+    display: none !important;
+  }
+  #other-tabs-container a:last-child{
+    margin-right: 0;
   }
   .navbar-right{
     width: 100% !important;
@@ -1202,7 +1229,10 @@ table, th, td {
     transition-duration: 300ms, 100ms, 300ms;;
     transition-timing-function: ease-in;
   }
-
+  .NavbarMobileToggle{
+    height: 100vh !important;
+    opacity: 1 !important;
+  }
   #navbar-icon{
     display: block;
   }

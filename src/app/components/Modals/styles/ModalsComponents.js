@@ -117,6 +117,12 @@ width: 100%;
     color: red;
   }
 }
+${({ interest }) => interest && `
+  & > h2{
+    text-transform: uppercase;
+  }
+`}
+
 `
 const BtnLoanModal = styled.div`
 display: flex;
