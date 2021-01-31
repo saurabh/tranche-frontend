@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { setTokenBalances } from 'redux/actions/ethereum';
-import { validate, asyncValidateCreate } from 'utils/validations';
+import { Form, Field, reduxForm, change } from 'redux-form';
+import { required, number, asyncValidateSell } from 'utils/validations';
+import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData } from 'config/constants';
 import { selectUp, selectDown } from 'assets';
-import {
-  BtnLoanModal
-} from '../Modals/styles/ModalsComponents';
+import { BtnLoanModal } from '../Modals/styles/ModalsComponents';
 import {
   // ModalFormGrp,
   ModalFormLabel,
@@ -35,84 +33,112 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 );
 
-let TradeForm = ({ sellProtocol, offerMarket, sellToggle, buyToggle, sellToProtocol }) => {
-  // const [pair, setPair] = useState();
-
+let TradeForm = ({
+  // Redux-form
+  pristine,
+  submitting,
+  change,
+  // State Values
+  loanId,
+  address,
+  sellProtocol,
+  offerMarket,
+  sellToggle,
+  buyToggle,
+  shareholdersShares,
+  // Functions
+  sellToProtocol
+}) => {
+  const [shares, setShares] = useState('');
   const pair = pairData[0].value;
-  
+
+  const setLoanIdandAddress = useCallback(() => {
+    change('loanId', loanId);
+    change('address', address);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loanId, address]);
+
+  useEffect(() => {
+    setLoanIdandAddress();
+  }, [setLoanIdandAddress]);
 
   return (
-      <ModalAdjustForm>
-        {
-          offerMarket ?
-              <Form component={ModalFormWrapper}>
-                <FormInputsWrapper trade={true}>
-                  <ModalFormGrpNewLoan trade={true}>
-                    <NewLoanFormInput>
-                      <NewLoanInputWrapper name='price'>
-                        <ModalFormLabel htmlFor='price'>PRICE</ModalFormLabel>
-                        <Field
-                          component={InputField}
-                          className='ModalFormInputNewLoan tradeFormInput'
-                          name='price'
-                          type='number'
-                          step='0.0001'
-                        />
-                      </NewLoanInputWrapper>                      
-                    </NewLoanFormInput>
-                    <h2>
-                      
-                    </h2>
-                  </ModalFormGrpNewLoan>
-                </FormInputsWrapper>
-
-                <ModalFormSubmit>
-                  <BtnLoanModal>
-                    <ModalFormButton type='submit'>
-                      <h2>SELL</h2>
-                    </ModalFormButton>
-                  </BtnLoanModal>
-                </ModalFormSubmit>
-              </Form> : 
-              sellProtocol ?
-
+    <ModalAdjustForm>
+      {offerMarket ? (
         <Form component={ModalFormWrapper}>
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true}>
               <NewLoanFormInput>
-                <NewLoanInputWrapper name='numberOfShares'>
-                  <ModalFormLabel htmlFor='numberOfShares'>SHARES</ModalFormLabel>
+                <NewLoanInputWrapper name='price'>
+                  <ModalFormLabel htmlFor='price'>PRICE</ModalFormLabel>
                   <Field
                     component={InputField}
                     className='ModalFormInputNewLoan tradeFormInput'
-                    name='numberOfShares'
+                    name='price'
                     type='number'
                     step='0.0001'
                   />
                 </NewLoanInputWrapper>
-
-                
               </NewLoanFormInput>
-              <h2>
-              </h2>
+              <h2></h2>
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
 
           <ModalFormSubmit>
             <BtnLoanModal>
-              <ModalFormButton onClick={(e) => sellToProtocol(e)}>
+              <ModalFormButton type='submit'>
                 <h2>SELL</h2>
               </ModalFormButton>
             </BtnLoanModal>
           </ModalFormSubmit>
-        </Form> :
+        </Form>
+      ) : sellProtocol ? (
+        <Form component={ModalFormWrapper}>
+          <FormInputsWrapper trade={true}>
+            <ModalFormGrpNewLoan trade={true}>
+              <NewLoanFormInput>
+                <NewLoanInputWrapper name='shares'>
+                  <ModalFormLabel htmlFor='shares'>SHARES</ModalFormLabel>
+                  <Field
+                    component={InputField}
+                    onChange={(e, newValue) => setShares(newValue)}
+                    validate={[required, number]}
+                    className='ModalFormInputNewLoan tradeFormInput'
+                    name='shares'
+                    type='number'
+                    step='0.0001'
+                  />
+                </NewLoanInputWrapper>
+              </NewLoanFormInput>
+              <h2></h2>
+            </ModalFormGrpNewLoan>
+          </FormInputsWrapper>
 
+          <ModalFormSubmit>
+            <BtnLoanModal>
+              <ModalFormButton
+                onClick={(e) => sellToProtocol(e)}
+                disabled={
+                  pristine ||
+                  submitting ||
+                  shares === '' ||
+                  isGreaterThan(shares, shareholdersShares)
+                }
+              >
+                <h2>SELL</h2>
+              </ModalFormButton>
+            </BtnLoanModal>
+          </ModalFormSubmit>
+        </Form>
+      ) : (
         <Form component={ModalFormWrapper}>
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true} tranche={true}>
-            <NewLoanFormInput>
+              <NewLoanFormInput>
                 <NewLoanInputWrapper name='amount'>
-                  <ModalFormLabel htmlFor='amount' tranche={true}>Amount of Tranche A to { buyToggle ? "purchase" : "sell"}:</ModalFormLabel>
+                  <ModalFormLabel htmlFor='amount' tranche={true}>
+                    Amount of Tranche A to {buyToggle ? 'purchase' : 'sell'}:
+                  </ModalFormLabel>
                   <Field
                     component={InputField}
                     className='ModalFormInputNewLoan'
@@ -158,7 +184,9 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToggle, buyToggle, sellToProto
                 </LoanCustomSelect>
               </NewLoanFormInput>
               <h2>
-              {buyToggle ?  "You are buying an Ethereum Perpetual Bond paying a 6% APY" : "You are selling an Ethereum Perpetual Bond incurring a 0.5% fee"}
+                {buyToggle
+                  ? 'You are buying an Ethereum Perpetual Bond paying a 6% APY'
+                  : 'You are selling an Ethereum Perpetual Bond incurring a 0.5% fee'}
               </h2>
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
@@ -167,30 +195,30 @@ let TradeForm = ({ sellProtocol, offerMarket, sellToggle, buyToggle, sellToProto
             <BtnLoanModal>
               <ModalFormButton
                 type='submit'
-                backgroundColor={sellToggle ? '#845AD9' : buyToggle ? '#2ECC71' : "#845AD9"}
+                backgroundColor={sellToggle ? '#845AD9' : buyToggle ? '#2ECC71' : '#845AD9'}
               >
-                <h2>{sellToggle ? 'SELL' : buyToggle ? 'BUY' : ""}</h2>
+                <h2>{sellToggle ? 'SELL' : buyToggle ? 'BUY' : ''}</h2>
               </ModalFormButton>
             </BtnLoanModal>
           </ModalFormSubmit>
-        </Form> 
-
-        }
-
-      </ModalAdjustForm>
+        </Form>
+      )}
+    </ModalAdjustForm>
   );
 };
 
 TradeForm = reduxForm({
   form: 'sell',
-  validate,
-  asyncValidate: asyncValidateCreate,
+  asyncValidate: asyncValidateSell,
   enableReinitialize: true
 })(TradeForm);
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  formValues: getFormValues('sell')(state)
+  initialValues: {
+    loanId: '',
+    address: ''
+  }
 });
 
-export default TradeForm = connect(mapStateToProps, { change, setTokenBalances })(TradeForm);
+export default TradeForm = connect(mapStateToProps, { change })(TradeForm);

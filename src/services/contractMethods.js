@@ -138,3 +138,13 @@ export const getAccruedInterests = async (loanId, web3 = alchemyWeb3) => {
     console.error(error);
   }
 };
+
+export const getShareholderShares = async (loanId, address, web3 = alchemyWeb3) => {
+  try {
+    const JLoan = JLoanSetup(web3);
+    const result = await JLoan.methods.getShareholderShares(loanId, address).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}

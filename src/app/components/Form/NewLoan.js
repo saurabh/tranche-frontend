@@ -14,7 +14,7 @@ import {
   fromWei,
   toBN
 } from 'services/contractMethods';
-import { validate, asyncValidateCreate } from 'utils';
+import { validateCreate, asyncValidateCreate } from 'utils';
 import {
   isLessThan,
   safeSubtract,
@@ -493,7 +493,7 @@ let NewLoan = ({
 
 NewLoan = reduxForm({
   form: 'newLoan',
-  validate,
+  validate: validateCreate,
   asyncValidate: asyncValidateCreate,
   asyncChangeFields: ['borrowedAskAmount', 'collateralAmount'],
   enableReinitialize: true

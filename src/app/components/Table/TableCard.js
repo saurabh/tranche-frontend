@@ -11,7 +11,8 @@ import {
   calcAdjustCollateralRatio,
   getLoanForeclosingBlock,
   getAccruedInterests,
-  allowanceCheck
+  allowanceCheck,
+  getShareholderShares
 } from 'services/contractMethods';
 import {
   setAddress,
@@ -88,6 +89,7 @@ const TableCard = ({
   const [hasBalance, setHasBalance] = useState(false);
   const [hasAllowance, setHasAllowance] = useState(false);
   const [isShareholder, setIsShareholder] = useState(false);
+  const [shareholdersShares, setShareholderShares] = useState(0);
   const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
   const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
@@ -407,8 +409,8 @@ const TableCard = ({
   const sellToProtocol = async (e) => {
     try {
       e.preventDefault();
-      let { numberOfShares } = form.sell.values;
-      await JLoan.methods.sellToProtocol(loanId, numberOfShares)
+      let { shares } = form.sell.values;
+      await JLoan.methods.sellToProtocol(loanId, shares)
         .send({ from: address })
         .on('transactionHash', (hash) => {
         const { emitter } = notify.hash(hash);
@@ -434,12 +436,8 @@ const TableCard = ({
     setAccruedInterest(availableInterest);
     const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
     setLoanForeclosingBlock(loanClosingBlock);
-    // if (loanId === 20) {
-    //   console.log(currentBlock >= result + Number(foreclosureWindow))
-    //   console.log(result + Number(foreclosureWindow) - currentBlock)
-    // }
-    // if (currentBlock >= loanClosingBlock + Number(foreclosureWindow)) setCanBeForeclosed(true);
-    // setBlocksUntilForeclosure(loanClosingBlock + Number(foreclosureWindow) - currentBlock);
+    const shares = await getShareholderShares(loanId, address, web3);
+    setShareholderShares(shares);
     setIsOpen(true);
   };
 
@@ -596,9 +594,11 @@ const TableCard = ({
             path={path}
             modalIsOpen={modalIsOpen}
             approveLoading={approveLoading}
+            address={address}
             hasBalance={hasBalance}
             hasAllowance={hasAllowance}
             isShareholder={isShareholder}
+            shareholdersShares={shareholdersShares}
             canBeForeclosed={canBeForeclosed}
             blocksUntilForeclosure={blocksUntilForeclosure}
             accruedInterest={accruedInterest}

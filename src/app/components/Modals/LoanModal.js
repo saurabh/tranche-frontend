@@ -91,9 +91,11 @@ const LoanModal = ({
   path,
   modalIsOpen,
   approveLoading,
+  address,
   hasBalance,
   hasAllowance,
   isShareholder,
+  shareholdersShares,
   canBeForeclosed,
   blocksUntilForeclosure,
   accruedInterest,
@@ -208,14 +210,14 @@ const LoanModal = ({
     adjustPositionToggle(false);
     setIsAdjustSelected(false);
     setSellAssetToggle(false);
-    setSellProtocol(false); 
+    setSellProtocol(false);
     setOfferMarket(false);
     setNewCollateralRatio(0);
   };
 
-  const sellAsset = () =>{
+  const sellAsset = () => {
     setSellAssetToggle(true);
-  }
+  };
 
   const borrowModal = () => {
     return (
@@ -295,7 +297,6 @@ const LoanModal = ({
 
               <ModalUserActions>
                 <ModalContent>
-                 
                   <BtnGrpLoanModal>
                     <BtnGrpLoanModalWrapper>
                       {status === statuses['Under_Collateralized'].status ? (
@@ -381,12 +382,38 @@ const LoanModal = ({
                     </BtnGrpLoanModalWrapper>
                   </BtnGrpLoanModal>
                   <LoanDetailsMobile>
-                    <h2>Loan amount — <span>{remainingLoan} {cryptoFromLenderName}</span></h2>
-                    <h2>Collateral amount — <span>{roundNumber(collateralAmount)} {collateralTypeName}</span></h2>
-                    <h2>Collateral ratio — <span>{collateralRatio}%</span></h2>
-                    <h2>Rpb — <span>{roundBasedOnUnit(rpbRate, collateralTypeName)} {gweiOrEther(rpbRate, collateralTypeName)}</span></h2>
-                    <h2>APY — <span>{APY}%</span></h2>
-                    <h2>Interest accrued — <span>{roundBasedOnUnit(interestPaid, collateralTypeName)} {gweiOrEther(interestPaid, collateralTypeName)}</span></h2>
+                    <h2>
+                      Loan amount —{' '}
+                      <span>
+                        {remainingLoan} {cryptoFromLenderName}
+                      </span>
+                    </h2>
+                    <h2>
+                      Collateral amount —{' '}
+                      <span>
+                        {roundNumber(collateralAmount)} {collateralTypeName}
+                      </span>
+                    </h2>
+                    <h2>
+                      Collateral ratio — <span>{collateralRatio}%</span>
+                    </h2>
+                    <h2>
+                      Rpb —{' '}
+                      <span>
+                        {roundBasedOnUnit(rpbRate, collateralTypeName)}{' '}
+                        {gweiOrEther(rpbRate, collateralTypeName)}
+                      </span>
+                    </h2>
+                    <h2>
+                      APY — <span>{APY}%</span>
+                    </h2>
+                    <h2>
+                      Interest accrued —{' '}
+                      <span>
+                        {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName)}
+                      </span>
+                    </h2>
                   </LoanDetailsMobile>
                 </ModalContent>
               </ModalUserActions>
@@ -407,7 +434,7 @@ const LoanModal = ({
                 <img src={CloseModal} alt='' />
               </button>
             </ModalHeader>
-            
+
             <AdjustLoan
               // State Values
               isAdjustSelected={isAdjustSelected}
@@ -432,10 +459,24 @@ const LoanModal = ({
               collateralRatio={collateralRatio}
             />
             <LoanDetailsMobile>
-              <h2>Loan amount — <span>{remainingLoan} {cryptoFromLenderName}</span></h2>
-              <h2>Collateral amount — <span>{roundNumber(collateralAmount)} {collateralTypeName}</span></h2>
-              <h2>Collateral ratio — <span>{collateralRatio}%</span></h2>
-              <h2>NEW COLLATERALIZATION RATIO — <span>{newCollateralRatio}%</span></h2>
+              <h2>
+                Loan amount —{' '}
+                <span>
+                  {remainingLoan} {cryptoFromLenderName}
+                </span>
+              </h2>
+              <h2>
+                Collateral amount —{' '}
+                <span>
+                  {roundNumber(collateralAmount)} {collateralTypeName}
+                </span>
+              </h2>
+              <h2>
+                Collateral ratio — <span>{collateralRatio}%</span>
+              </h2>
+              <h2>
+                NEW COLLATERALIZATION RATIO — <span>{newCollateralRatio}%</span>
+              </h2>
             </LoanDetailsMobile>
           </Modal>
         )}
@@ -455,7 +496,11 @@ const LoanModal = ({
       >
         <ModalHeader>
           <h2>
-            {status === statuses['Pending'].status ? 'Review Loan Request' : (status === statuses['Active'].status && sellAssetToggle) ? "SELL ASSET" : 'Manage Earning Asset'}
+            {status === statuses['Pending'].status
+              ? 'Review Loan Request'
+              : status === statuses['Active'].status && sellAssetToggle
+              ? 'SELL ASSET'
+              : 'Manage Earning Asset'}
           </h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
@@ -494,6 +539,12 @@ const LoanModal = ({
               </LoanDetailsRow>
 
               <LoanDetailsRow>
+                <LoanDetailsRowTitle>Shares owned</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue>{shareholdersShares}</LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow>
                 <LoanDetailsRowTitle row4={status !== statuses['Pending'].status}>
                   Rpb
                 </LoanDetailsRowTitle>
@@ -528,290 +579,341 @@ const LoanModal = ({
               )}
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          
-          { status === statuses['Active'].status && sellAssetToggle  && (sellProtocol || offerMarket) ? 
+
+          {status === statuses['Active'].status &&
+          sellAssetToggle &&
+          (sellProtocol || offerMarket) ? (
             <ModalUserActions form>
-              <TradeForm sellProtocol={sellProtocol} offerMarket={offerMarket} sellToProtocol={sellToProtocol} />
-            </ModalUserActions> :
-
-          <ModalUserActions>
-            <ModalContent>
-              <BtnGrpLoanModal>
-                {status === statuses['Pending'].status ? (
-                  <BtnGrpLoanModalWrapper>
-                    <h2>
-                      {!hasBalance
-                        ? `You don't have enough ${cryptoFromLenderName} for this action.`
-                        : `You are lending ${remainingLoan + ' ' + cryptoFromLenderName} backed by a
-                      collateral ratio of ${collateralRatio}%.`}
-                    </h2>
-                    <ModalButton
-                      onClick={
-                        hasAllowance
-                          ? () => confirm('Approve')
-                          : () => approveContract(pairId, remainingLoan.toString())
-                      }
-                      btnColor='#ffffff'
-                      backgroundColor='#2ECC71'
-                      loading={!hasAllowance && approveLoading ? 'true' : ''}
-                      disabled={!hasBalance}
-                    >
-                      {!hasAllowance && !approveLoading
-                        ? 'Approve'
-                        : hasAllowance && !approveLoading
-                        ? 'Accept loan Request'
-                        : ''}
-                      {(!hasAllowance && !approveLoading) || (hasAllowance && !approveLoading) ? (
-                        <span></span>
-                      ) : (
-                        ''
-                      )}
-                      {approveLoading ? (
-                        <div className='btnLoadingIconWrapper'>
-                          <div className='btnLoadingIconCut'>
-                            <BtnLoadingIcon loadingColor='#2ECC71'></BtnLoadingIcon>
-                          </div>
-                        </div>
-                      ) : (
-                        ''
-                      )}
-                    </ModalButton>
-                    <h2 style={{ marginTop: '12px' }}>
-                      {!hasAllowance && !approveLoading
-                        ? 'This is 1 of 2 transactions required to accept a loan request.'
-                        : ''}
-                    </h2>
-                    {
-                      hasAllowance && !approveLoading ?
-                        <h2>
-                          <span>Caution! </span>This is an illiquid transaction. You will not be able to withdraw your DAI until the borrower repays his loan or defaults.
-                        </h2> : ""
-                    }
-                  </BtnGrpLoanModalWrapper>
-                ) : status === statuses['Active'].status && !sellAssetToggle ? (
-                  <BtnGrpLoanModalWrapper interest>
-                    <h2>
-                      Available Interest: <span>{roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                      {gweiOrEther(accruedInterest, collateralTypeName)}</span> 
-                    </h2>
-                    <ModalButton
-                      onClick={() => confirm('WithdrawInterest')}
-                      btnColor='#234566'
-                      backgroundColor='#EAEAEA'
-                    >
-                      Withdraw Interest
-                      <span></span>
-                    </ModalButton>
-
-                    <ModalButton
-                      onClick={() => sellAsset()}
-                      btnColor='#FFFFFF'
-                      backgroundColor='#2ECC71'
-                    >
-                      Sell Asset
-                      <span></span>
-                    </ModalButton>
-
-                  </BtnGrpLoanModalWrapper>
-                ) : 
-
-                status === statuses['Active'].status && sellAssetToggle  && (!sellProtocol && !offerMarket) ? (
-                  <BtnGrpLoanModalWrapper trade>
+              <TradeForm
+                loanId={loanId}
+                address={address}
+                sellProtocol={sellProtocol}
+                offerMarket={offerMarket}
+                sellToProtocol={sellToProtocol}
+                shareholdersShares={shareholdersShares}
+              />
+            </ModalUserActions>
+          ) : (
+            <ModalUserActions>
+              <ModalContent>
+                <BtnGrpLoanModal>
+                  {status === statuses['Pending'].status ? (
                     <BtnGrpLoanModalWrapper>
                       <h2>
-                        You can sell this asset to the protocol at a 5% discount
+                        {!hasBalance
+                          ? `You don't have enough ${cryptoFromLenderName} for this action.`
+                          : `You are lending ${
+                              remainingLoan + ' ' + cryptoFromLenderName
+                            } backed by a
+                      collateral ratio of ${collateralRatio}%.`}
                       </h2>
                       <ModalButton
-                        onClick={() => setSellProtocol(true)}
-                        btnColor='#FFFFFF'
-                        backgroundColor='#845AD9'
+                        onClick={
+                          hasAllowance
+                            ? () => confirm('Approve')
+                            : () => approveContract(pairId, remainingLoan.toString())
+                        }
+                        btnColor='#ffffff'
+                        backgroundColor='#2ECC71'
+                        loading={!hasAllowance && approveLoading ? 'true' : ''}
+                        disabled={!hasBalance}
                       >
-                        SELL TO PROTOCOL
+                        {!hasAllowance && !approveLoading
+                          ? 'Approve'
+                          : hasAllowance && !approveLoading
+                          ? 'Accept loan Request'
+                          : ''}
+                        {(!hasAllowance && !approveLoading) || (hasAllowance && !approveLoading) ? (
+                          <span></span>
+                        ) : (
+                          ''
+                        )}
+                        {approveLoading ? (
+                          <div className='btnLoadingIconWrapper'>
+                            <div className='btnLoadingIconCut'>
+                              <BtnLoadingIcon loadingColor='#2ECC71'></BtnLoadingIcon>
+                            </div>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                      </ModalButton>
+                      <h2 style={{ marginTop: '12px' }}>
+                        {!hasAllowance && !approveLoading
+                          ? 'This is 1 of 2 transactions required to accept a loan request.'
+                          : ''}
+                      </h2>
+                      {hasAllowance && !approveLoading ? (
+                        <h2>
+                          <span>Caution! </span>This is an illiquid transaction. You will not be
+                          able to withdraw your DAI until the borrower repays his loan or defaults.
+                        </h2>
+                      ) : (
+                        ''
+                      )}
+                    </BtnGrpLoanModalWrapper>
+                  ) : status === statuses['Active'].status && !sellAssetToggle ? (
+                    <BtnGrpLoanModalWrapper interest>
+                      <h2>
+                        Available Interest:{' '}
+                        <span>
+                          {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
+                        </span>
+                      </h2>
+                      <ModalButton
+                        onClick={() => confirm('WithdrawInterest')}
+                        btnColor='#234566'
+                        backgroundColor='#EAEAEA'
+                      >
+                        Withdraw Interest
                         <span></span>
                       </ModalButton>
-                      <h2>Instant Sale</h2>
-                    </BtnGrpLoanModalWrapper>
 
-
-                    <BtnGrpLoanModalWrapper>
-                      <h2>You can offer this asset to buyers on the open market</h2>
                       <ModalButton
-                        onClick={() => setOfferMarket(true)}
+                        onClick={() => sellAsset()}
                         btnColor='#FFFFFF'
                         backgroundColor='#2ECC71'
                       >
-                        OFFER TO MARKET
-                        <span></span>
-                      </ModalButton>
-                      <h2>Requires a purchaser</h2>
-                    </BtnGrpLoanModalWrapper>
-
-                  </BtnGrpLoanModalWrapper>
-                ) :
-
-                status === statuses['Under_Collateralized'].status ? (
-                  <BtnGrpLoanModal>
-                    {isShareholder && (
-                      <BtnGrpLoanModalWrapper interest>
-                        <h2>
-                          Available Interest: {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                          {gweiOrEther(accruedInterest, collateralTypeName)}
-                        </h2>
-                        <ModalButton
-                          onClick={() => confirm('WithdrawInterest')}
-                          btnColor='#234566'
-                          backgroundColor='#EAEAEA'
-                        >
-                          Withdraw Interest
-                          <span></span>
-                        </ModalButton>
-                      </BtnGrpLoanModalWrapper>
-                    )}
-
-                    <BtnGrpLoanModalWrapper>
-                      <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
-                      <ModalButton
-                        onClick={() => confirm('Foreclose')}
-                        btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                      >
-                        Initiate Foreclosure
+                        Sell Asset
                         <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
-                  </BtnGrpLoanModal>
-                ) : status === statuses['At_Risk'].status ? (
-                  <BtnGrpLoanModal>
-                    {isShareholder && (
-                      <BtnGrpLoanModalWrapper interest>
-                        <h2>
-                          Available Interest: <span>{roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                          {gweiOrEther(accruedInterest, collateralTypeName)}</span> 
-                        </h2>
+                  ) : status === statuses['Active'].status &&
+                    sellAssetToggle &&
+                    !sellProtocol &&
+                    !offerMarket ? (
+                    <BtnGrpLoanModalWrapper trade>
+                      <BtnGrpLoanModalWrapper>
+                        <h2>You can sell this asset to the protocol at a 5% discount</h2>
                         <ModalButton
-                          onClick={() => confirm('WithdrawInterest')}
-                          btnColor='#234566'
-                          backgroundColor='#EAEAEA'
+                          onClick={() => setSellProtocol(true)}
+                          btnColor='#FFFFFF'
+                          backgroundColor='#845AD9'
                         >
-                          Withdraw Interest
+                          SELL TO PROTOCOL
                           <span></span>
                         </ModalButton>
+                        <h2>Instant Sale</h2>
                       </BtnGrpLoanModalWrapper>
-                    )}
 
-                    <BtnGrpLoanModalWrapper>
-                      <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
-                      <ModalButton
-                        onClick={() => confirm('Foreclose')}
-                        btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                      >
-                        Instantly Foreclose
-                        <span></span>
-                      </ModalButton>
+                      <BtnGrpLoanModalWrapper>
+                        <h2>You can offer this asset to buyers on the open market</h2>
+                        <ModalButton
+                          onClick={() => setOfferMarket(true)}
+                          btnColor='#FFFFFF'
+                          backgroundColor='#2ECC71'
+                        >
+                          OFFER TO MARKET
+                          <span></span>
+                        </ModalButton>
+                        <h2>Requires a purchaser</h2>
+                      </BtnGrpLoanModalWrapper>
                     </BtnGrpLoanModalWrapper>
-                  </BtnGrpLoanModal>
-                ) : status === statuses['Foreclosing'].status ? (
-                  <BtnGrpLoanModal>
-                    {isShareholder && (
-                      <BtnGrpLoanModalWrapper interest>
-                        <h2>
-                          Available Interest: <span>{roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                          {gweiOrEther(accruedInterest, collateralTypeName)}</span> 
-                        </h2>
+                  ) : status === statuses['Under_Collateralized'].status ? (
+                    <BtnGrpLoanModal>
+                      {isShareholder && (
+                        <BtnGrpLoanModalWrapper interest>
+                          <h2>
+                            Available Interest:{' '}
+                            {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                            {gweiOrEther(accruedInterest, collateralTypeName)}
+                          </h2>
+                          <ModalButton
+                            onClick={() => confirm('WithdrawInterest')}
+                            btnColor='#234566'
+                            backgroundColor='#EAEAEA'
+                          >
+                            Withdraw Interest
+                            <span></span>
+                          </ModalButton>
+                        </BtnGrpLoanModalWrapper>
+                      )}
+
+                      <BtnGrpLoanModalWrapper>
+                        <h2>Initiate foreclosure for a chance to collect penalty fees.</h2>
                         <ModalButton
-                          onClick={() => confirm('WithdrawInterest')}
+                          onClick={() => confirm('Foreclose')}
                           btnColor='#234566'
                           backgroundColor='#EAEAEA'
                         >
-                          Withdraw Interest
+                          Initiate Foreclosure
                           <span></span>
                         </ModalButton>
                       </BtnGrpLoanModalWrapper>
-                    )}
+                    </BtnGrpLoanModal>
+                  ) : status === statuses['At_Risk'].status ? (
+                    <BtnGrpLoanModal>
+                      {isShareholder && (
+                        <BtnGrpLoanModalWrapper interest>
+                          <h2>
+                            Available Interest:{' '}
+                            <span>
+                              {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                              {gweiOrEther(accruedInterest, collateralTypeName)}
+                            </span>
+                          </h2>
+                          <ModalButton
+                            onClick={() => confirm('WithdrawInterest')}
+                            btnColor='#234566'
+                            backgroundColor='#EAEAEA'
+                          >
+                            Withdraw Interest
+                            <span></span>
+                          </ModalButton>
+                        </BtnGrpLoanModalWrapper>
+                      )}
 
-                    <BtnGrpLoanModalWrapper>
+                      <BtnGrpLoanModalWrapper>
+                        <h2>You can instantly foreclose this loan and collect penalty fees.</h2>
+                        <ModalButton
+                          onClick={() => confirm('Foreclose')}
+                          btnColor='#234566'
+                          backgroundColor='#EAEAEA'
+                        >
+                          Instantly Foreclose
+                          <span></span>
+                        </ModalButton>
+                      </BtnGrpLoanModalWrapper>
+                    </BtnGrpLoanModal>
+                  ) : status === statuses['Foreclosing'].status ? (
+                    <BtnGrpLoanModal>
+                      {isShareholder && (
+                        <BtnGrpLoanModalWrapper interest>
+                          <h2>
+                            Available Interest:{' '}
+                            <span>
+                              {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                              {gweiOrEther(accruedInterest, collateralTypeName)}
+                            </span>
+                          </h2>
+                          <ModalButton
+                            onClick={() => confirm('WithdrawInterest')}
+                            btnColor='#234566'
+                            backgroundColor='#EAEAEA'
+                          >
+                            Withdraw Interest
+                            <span></span>
+                          </ModalButton>
+                        </BtnGrpLoanModalWrapper>
+                      )}
+
+                      <BtnGrpLoanModalWrapper>
+                        <h2>
+                          Blocks left to foreclose:{' '}
+                          {!canBeForeclosed ? `${blocksUntilForeclosure}` : '0'}
+                        </h2>
+                        <ModalButton
+                          onClick={() => confirm('Foreclose')}
+                          btnColor='#234566'
+                          backgroundColor='#EAEAEA'
+                          disabled={!canBeForeclosed}
+                        >
+                          {/* {loanId === 20 ? console.log(!canBeForeclosed, blocksUntilForeclosure) : ''} */}
+                          Instantly Foreclose
+                          <span></span>
+                        </ModalButton>
+                      </BtnGrpLoanModalWrapper>
+                    </BtnGrpLoanModal>
+                  ) : status === statuses['Foreclosed'].status ? (
+                    <BtnGrpLoanModalWrapper interest>
                       <h2>
-                        Blocks left to foreclose:{' '}
-                        {!canBeForeclosed ? `${blocksUntilForeclosure}` : '0'}
+                        Available Interest:{' '}
+                        <span>
+                          {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
+                        </span>
                       </h2>
                       <ModalButton
-                        onClick={() => confirm('Foreclose')}
+                        onClick={() => confirm('WithdrawInterest')}
                         btnColor='#234566'
                         backgroundColor='#EAEAEA'
-                        disabled={!canBeForeclosed}
                       >
-                        {/* {loanId === 20 ? console.log(!canBeForeclosed, blocksUntilForeclosure) : ''} */}
-                        Instantly Foreclose
+                        Withdraw Interest
                         <span></span>
                       </ModalButton>
                     </BtnGrpLoanModalWrapper>
-                  </BtnGrpLoanModal>
-                ) : status === statuses['Foreclosed'].status ? (
-                  <BtnGrpLoanModalWrapper interest>
+                  ) : status === statuses['Early_closing'].status ? (
+                    <BtnGrpLoanModalWrapper interest>
+                      <h2>
+                        Available Interest:{' '}
+                        <span>
+                          {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
+                        </span>
+                      </h2>
+                      <ModalButton
+                        onClick={() => confirm('WithdrawInterest')}
+                        btnColor='#234566'
+                        backgroundColor='#EAEAEA'
+                      >
+                        Withdraw Interest
+                        <span></span>
+                      </ModalButton>
+                    </BtnGrpLoanModalWrapper>
+                  ) : status === statuses['Closing'].status ? (
+                    <BtnGrpLoanModalWrapper interest>
+                      <h2>
+                        Available Interest:{' '}
+                        <span>
+                          {roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
+                          {gweiOrEther(accruedInterest, collateralTypeName)}
+                        </span>
+                      </h2>
+                      <ModalButton
+                        onClick={() => confirm('WithdrawInterest')}
+                        btnColor='#234566'
+                        backgroundColor='#EAEAEA'
+                      >
+                        Withdraw Interest
+                        <span></span>
+                      </ModalButton>
+                    </BtnGrpLoanModalWrapper>
+                  ) : (
+                    ''
+                  )}
+                </BtnGrpLoanModal>
+                <LoanDetailsMobile>
+                  <h2>
+                    Loan amount —{' '}
+                    <span>
+                      {remainingLoan} {cryptoFromLenderName}
+                    </span>
+                  </h2>
+                  <h2>
+                    Collateral amount —{' '}
+                    <span>
+                      {roundNumber(collateralAmount)} {collateralTypeName}
+                    </span>
+                  </h2>
+                  <h2>
+                    Collateral ratio — <span>{collateralRatio}%</span>
+                  </h2>
+                  <h2>
+                    Rpb —{' '}
+                    <span>
+                      {roundBasedOnUnit(rpbRate, collateralTypeName)}{' '}
+                      {gweiOrEther(rpbRate, collateralTypeName)}
+                    </span>
+                  </h2>
+                  <h2>
+                    APY — <span>{APY}%</span>
+                  </h2>
+                  {status !== statuses['Pending'].status ? (
                     <h2>
-                      Available Interest: <span>{roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                      {gweiOrEther(accruedInterest, collateralTypeName)}</span> 
+                      Interest accrued —{' '}
+                      <span>
+                        {roundBasedOnUnit(interestPaid, collateralTypeName)}{' '}
+                        {gweiOrEther(interestPaid, collateralTypeName)}
+                      </span>
                     </h2>
-                    <ModalButton
-                      onClick={() => confirm('WithdrawInterest')}
-                      btnColor='#234566'
-                      backgroundColor='#EAEAEA'
-                    >
-                      Withdraw Interest
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
-                ) : status === statuses['Early_closing'].status ? (
-                  <BtnGrpLoanModalWrapper interest>
-                    <h2>
-                      Available Interest: <span>{roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                      {gweiOrEther(accruedInterest, collateralTypeName)}</span> 
-                    </h2>
-                    <ModalButton
-                      onClick={() => confirm('WithdrawInterest')}
-                      btnColor='#234566'
-                      backgroundColor='#EAEAEA'
-                    >
-                      Withdraw Interest
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
-                ) : status === statuses['Closing'].status ? (
-                  <BtnGrpLoanModalWrapper interest>
-                    <h2>
-                      Available Interest: <span>{roundBasedOnUnit(accruedInterest, collateralTypeName)}{' '}
-                      {gweiOrEther(accruedInterest, collateralTypeName)}</span> 
-                    </h2>
-                    <ModalButton
-                      onClick={() => confirm('WithdrawInterest')}
-                      btnColor='#234566'
-                      backgroundColor='#EAEAEA'
-                    >
-                      Withdraw Interest
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
-                ) : (
-                  ''
-                )}
-              </BtnGrpLoanModal>
-              <LoanDetailsMobile>
-                <h2>Loan amount — <span>{remainingLoan} {cryptoFromLenderName}</span></h2>
-                <h2>Collateral amount — <span>{roundNumber(collateralAmount)} {collateralTypeName}</span></h2>
-                <h2>Collateral ratio — <span>{collateralRatio}%</span></h2>
-                <h2>Rpb — <span>{roundBasedOnUnit(rpbRate, collateralTypeName)} {gweiOrEther(rpbRate, collateralTypeName)}</span></h2>
-                <h2>APY — <span>{APY}%</span></h2>
-                {
-                  status !== statuses['Pending'].status ? 
-                    <h2>Interest accrued — <span>{roundBasedOnUnit(interestPaid, collateralTypeName)} {gweiOrEther(interestPaid, collateralTypeName)}</span></h2>
-                  
-                  : ""
-                }
-              </LoanDetailsMobile>
-            </ModalContent>
-          </ModalUserActions>
-        }
+                  ) : (
+                    ''
+                  )}
+                </LoanDetailsMobile>
+              </ModalContent>
+            </ModalUserActions>
+          )}
         </ModalActionsContent>
       </Modal>
     );
