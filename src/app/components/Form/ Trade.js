@@ -80,7 +80,7 @@ let TradeForm = ({
                   />
                 </NewLoanInputWrapper>
               </NewLoanFormInput>
-              <h2></h2>
+              {/* <h2></h2> */}
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
 
@@ -110,7 +110,7 @@ let TradeForm = ({
                   />
                 </NewLoanInputWrapper>
               </NewLoanFormInput>
-              <h2></h2>
+              {/* <h2></h2> */}
             </ModalFormGrpNewLoan>
           </FormInputsWrapper>
 

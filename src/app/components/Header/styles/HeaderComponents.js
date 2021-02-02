@@ -190,7 +190,7 @@ const MarketsTabsContainer = styled.div`
   ${({ page }) =>
     page === "earn" &&
     `
-        width: 100px !important;
+        width: 231px !important;
     `}
   ${({ links }) =>
     links &&
@@ -370,7 +370,7 @@ const RatesRowDash = styled.div`
 `;
 const TabIndicator = styled.div`
   height: 4px;
-  width: ${(props) => (props.path === "lend" ? "92px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "36px" : "0")};
+  width: ${(props) => (props.path === "lend" ? "92px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "115px" : "0")};
   background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "earn" ? "#ffffff" : "")};
   transition: 300ms;
   bottom: 0;
@@ -385,7 +385,7 @@ const TabIndicator = styled.div`
       : props.tab === "buy" && props.path === "earn"
       ? "-4px"
       : props.tab === "sell" && props.path === "earn"
-      ? "calc(100% - 36px)"
+      ? "calc(100% - 110px)"
       : ""};
   @media (max-width: 992px) {
     display: none;

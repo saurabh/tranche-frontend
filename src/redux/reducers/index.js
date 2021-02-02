@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import alert from './alert';
 import ethereum from './ethereum';
 import loans from './loans';
+import tranches from './tranches';
 import path from './TogglePath';
 import trade from './trade';
 import checkServerStatus from './checkServer';
@@ -13,6 +14,7 @@ export default combineReducers({
   alert,
   ethereum,
   loans,
+  tranches,
   trade,
   checkServerStatus,
   form

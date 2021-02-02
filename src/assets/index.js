@@ -27,7 +27,8 @@ import DaiLogo from './images/svg/daiLogo.svg';
 import TrancheIcon from './images/svg/TrancheIcon.svg';
 import BackArrow from './images/svg/BackArrow.svg';
 import CreateLoan from './images/svg/CreateLoan.svg';
+import UserImg from './images/svg/userImg.svg';
 
 export {
-    Adjust, DAI, RequestLoan, CreateLoan, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
+    Adjust, DAI, RequestLoan, CreateLoan, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
 };

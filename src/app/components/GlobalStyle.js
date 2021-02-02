@@ -93,6 +93,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .status-wrapper{
     text-align: center;
+    .apy-content div{
+      right: 20px !important;
+    }
     .status-title-content div{
       right: 27px !important;
     }
@@ -106,8 +109,11 @@ const GlobalStyle = createGlobalStyle`
   // }
   .remaining-wrapper{
     width: 12%;
+    .tranche-size-content div{
+      right: 10px !important;
+    }
     .remaining-title-content div{
-      right: 23px !important;
+      right: 25px !important;
     }
 
     .value-title-content div{
@@ -119,6 +125,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .ratio-wrapper{
     width: 7%;
+    .return-content div{
+      right: -25px !important;
+    }
     .ratio-title-content div{
       right: 9px !important;
     }

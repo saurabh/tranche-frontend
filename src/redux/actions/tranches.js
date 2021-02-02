@@ -1,36 +1,35 @@
 import { apiUri } from 'config/constants';
 import { postRequest } from 'services/axios';
 import { checkServer } from './checkServer';
-
 import {
-  LOANS_IS_LOADING,
-  LOANS_SUCCESS,
-  LOANS_COUNT,
+  TRANCHES_IS_LOADING,
+  TRANCHES_SUCCESS,
+  TRANCHES_COUNT,
   CHANGE_FILTER,
   PAGINATION_SKIP,
   PAGINATION_CURRENT,
   CHANGE_OWN_ALL_FILTER,
   CHANGE_SORTING
 } from './constants';
-const { loanList: loanListUrl } = apiUri;
+const { tranchesList: tranchesistUrl } = apiUri;
 
-export const loansIsLoading = (bool) => (dispatch) => {
+export const tranchesIsLoading = (bool) => (dispatch) => {
   dispatch({
-    type: LOANS_IS_LOADING,
+    type: TRANCHES_IS_LOADING,
     payload: bool
   });
 };
 
-export const loansFetchSuccess = (list) => (dispatch) => {
+export const tranchesFetchSuccess = (list) => (dispatch) => {
   dispatch({
-    type: LOANS_SUCCESS,
+    type: TRANCHES_SUCCESS,
     payload: list
   });
 };
 
-export const loansSetCount = (count) => (dispatch) => {
+export const tranchesSetCount = (count) => (dispatch) => {
   dispatch({
-    type: LOANS_COUNT,
+    type: TRANCHES_COUNT,
     payload: count
   });
 };
@@ -71,16 +70,16 @@ export const paginationCurrent = (current) => (dispatch) => {
   });
 };
 
-export const loansFetchData = (data) => async (dispatch) => {
+export const tranchesFetchData = (data) => async (dispatch) => { //To be optimized and merged with loansFetchData 
   try {
-    dispatch(loansIsLoading(true));
-    const { data: result } = await postRequest(loanListUrl, { data }, null, true);
-    console.log(loanListUrl)
+    dispatch(tranchesIsLoading(true));
+    const { data: result } = await postRequest(tranchesistUrl, { data }, null, true);
     if(result.status){
       dispatch(checkServer(true));
-      dispatch(loansIsLoading(false));
-      dispatch(loansFetchSuccess(result.result.list));
-      dispatch(loansSetCount(result.result.count));
+      dispatch(tranchesIsLoading(false));
+      dispatch(tranchesFetchSuccess(result.result.list));
+      dispatch(tranchesSetCount(result.result.count));
+      console.log(result.result.list)
     }
     else{
       dispatch(checkServer(false));

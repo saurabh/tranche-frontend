@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
 import {
-  loansFetchData,
+  tranchesFetchData,
   changeFilter,
   paginationOffset,
   paginationCurrent,
   changeSorting,
   changeOwnAllFilter
-} from 'redux/actions/loans';
+} from 'redux/actions/tranches';
 import {
   sellBuyToggle
 } from 'redux/actions/trade';
@@ -50,9 +50,9 @@ const style = {
 
 const Table = ({
   HandleNewLoan,
-  loansFetchData,
+  tranchesFetchData,
   changeOwnAllFilter,
-  loans,
+  tranches,
   path,
   trade: { tradeType },
   changePath,
@@ -63,11 +63,11 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   const pageCount = 5;
-  const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
+  const { filter, skip, limit, current, filterType, sort, isLoading } = tranches;
   
   const loanListing = useCallback(async () => {
     if (sort) {
-      await loansFetchData({
+      await tranchesFetchData({
         sort,
         skip,
         limit,
@@ -78,7 +78,7 @@ const Table = ({
         }
       });
     } else {
-      await loansFetchData({
+      await tranchesFetchData({
         skip,
         limit,
         filter: {
@@ -88,7 +88,7 @@ const Table = ({
         }
       });
     }
-  }, [loansFetchData, filter, skip, limit, filterType, sort, address, path, tradeType]);
+  }, [tranchesFetchData, filter, skip, limit, filterType, sort, address, path, tradeType]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -146,7 +146,7 @@ const Table = ({
                       }
                       
                   
-                      </div> : (!isLoading && tradeType === 'sell' && loans.list.length === 0) ?
+                      </div> : (!isLoading && tradeType === 'sell' && tranches.list.length === 0) ?
                   // </div> : (!isLoading && loans.list.length === 0 && tradeType === 'sell') ?
 
                           <TableContentCard pointer={false}>
@@ -170,16 +170,16 @@ const Table = ({
 
                           </TableContentCard>
                   
-                  : loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                  : tranches && tranches.list.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
                   }
             </div>
           </div>
         </TableWrapper>
 
-        {loans && loans.count > limit ? (
+        {tranches && tranches.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
-              total={loans && loans.count}
+              total={tranches && tranches.count}
               limit={limit}
               pageCount={pageCount}
               currentPage={parseInt(current, 10)}
@@ -277,14 +277,14 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
-    loans: state.loans,
+    tranches: state.tranches,
     trade: state.trade,
     path: state.path
   };
 };
 
 export default connect(mapStateToProps, {
-  loansFetchData,
+  tranchesFetchData,
   changePath,
   changeFilter,
   paginationOffset,

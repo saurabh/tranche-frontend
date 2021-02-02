@@ -106,6 +106,7 @@ export const pairData = [
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
+  tranchesList: 'earn',
   transaction: 'loans/transaction',
   summaryRatio: 'summary/ratio',
   summaryCollateral: 'summary/collateral',
@@ -165,7 +166,8 @@ export const events = {
   EARLY_CLOSING_FEES: 'early_closing_fees',
   LOAN_CANCEL_FEES: 'loan_cancel_fees',
   INITIATE_FORECLOSE_REWARD: 'initiate_foreclose_reward',
-  FORECLOSED_REWARD: 'foreclosed_reward'
+  FORECLOSED_REWARD: 'foreclosed_reward',
+  TRANCHE_ADDED: 'trancheaddedtoprotocol'
 };
 
 export const statuses = {

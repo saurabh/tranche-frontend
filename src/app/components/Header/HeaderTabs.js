@@ -123,7 +123,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
             onClick={() => sellBuyToggle('buy')}
             color={PagesData[path].secondaryColor}
           >
-            Buy
+            All tranches
           </HeaderTabBtn>
           {
             address ? 
@@ -133,7 +133,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
                 onClick={() => sellBuyToggle('sell')}
                 color={PagesData[path].secondaryColor}
               >
-                Sell
+                My tranches
               </HeaderTabBtn>
             : ""
           }

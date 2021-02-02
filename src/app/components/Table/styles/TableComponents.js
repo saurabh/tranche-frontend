@@ -112,7 +112,7 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    background: ${props => props.path === "borrow" ? "#FAF8FF" : props.path === "earn" ? " #FBFFF8" : "#F8F8F8"};
+    background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? " rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
     border-top: 1px solid #EFEFEF;
     border-bottom: 1px solid #EFEFEF;
     padding: 0 47px;
@@ -238,10 +238,10 @@ const TableHeaderTitles = styled.div`
 const TableMarketsSortingDropdown = styled.div`
   position: absolute;
   width: 150px;
-  height: 90px;
+  height: 55px;
   margin-top: 7px;
   overflow: hidden;
-  right: ${({path}) => path === "trade" ? "26px" : " -26px"};
+  right: ${({path}) => path === "earn" ? "20px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
@@ -257,7 +257,7 @@ const TableMarketsSortingDropdownContent = styled.div`
   height: 100%;
 `;
 const TableMarketSortingBtn = styled.button`
-  height: 33%;  
+  height: 50%;  
   cursor: pointer;
   background: transparent;
   border: none;

@@ -47,7 +47,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                 </TableSubTitle>
                 {   menu ?
-                    <TableMarketsSortingDropdown>
+                    <TableMarketsSortingDropdown path={path}>
                         <TableMarketsSortingDropdownContent>
                             <TableMarketSortingBtn onClick={() => loanListing(null)}>
                                 All Markets

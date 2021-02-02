@@ -43,6 +43,8 @@ const TableMoreRow = ({
             {roundBasedOnUnit(amount, collateralTypeName)}{' '}
             {eventName === events['APPROVE_LOAN'].toLowerCase()
               ? gweiOrEther(amount, cryptoFromLenderName)
+              : eventName === events['TRANCHE_ADDED'].toLowerCase() 
+              ? amount + "%"
               : gweiOrEther(amount, collateralTypeName)}
           </h2>
         </div>
@@ -93,6 +95,8 @@ const TableMoreRow = ({
               ? 'Closing Initiation Reward'
               : eventName === events['FORECLOSED_REWARD'].toLowerCase()
               ? 'Foreclosure Reward'
+              : eventName === events['TRANCHE_ADDED'].toLowerCase() 
+              ? 'Sold to Protocol'
               : 'N/A'}
           </h2>
         </div>

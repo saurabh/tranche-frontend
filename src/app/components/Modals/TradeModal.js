@@ -97,7 +97,7 @@ const TradeModal = ({
 //   totalInterest,
 //   newCollateralRatio,
 //   setHasAllowance,
-  setNewCollateralRatio,
+  // setNewCollateralRatio,
   // Functions
   closeModal,
 //   approveContract,
@@ -125,8 +125,8 @@ const TradeModal = ({
 const [buyToggle, setBuyToggle] = useState(0);
 const [sellToggle, setSellToggle] = useState(0);
 
-//   const [isAdjustSelected, setIsAdjustSelected] = useState(false);
-//   const loanStatusPending = status === statuses['Pending'].status;
+  // const [isAdjustSelected, setIsAdjustSelected] = useState(false);
+  // const loanStatusPending = status === statuses['Pending'].status;
 
 //   const confirm = (type) => {
 //     confirmAlert({
@@ -203,7 +203,7 @@ const [sellToggle, setSellToggle] = useState(0);
     closeModal();
     // adjustPositionToggle(false);
     // setIsAdjustSelected(false);
-    setNewCollateralRatio(0);
+    // setNewCollateralRatio(0);
     setSellToggle(false);
     setBuyToggle(false);
   };
@@ -288,8 +288,6 @@ const [sellToggle, setSellToggle] = useState(0);
             :
               <ModalUserActions>
                 <ModalContent>
-                  {
-                    isShareholder && tradeType === "sell" ?
                     <BtnGrpLoanModal>
                       <BtnGrpLoanModalWrapper>
                         <h2>
@@ -319,8 +317,7 @@ const [sellToggle, setSellToggle] = useState(0);
                           <span></span>
                           </ModalButton>
                       </BtnGrpLoanModalWrapper>
-                    </BtnGrpLoanModal> : ""
-                  }
+                    </BtnGrpLoanModal>
                     
                 </ModalContent>
             </ModalUserActions>
