@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter } from 'redux/actions/loans';
-import { sellBuyToggle } from 'redux/actions/trade';
+import { ownAllToggle } from 'redux/actions/trade';
 
 import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
@@ -25,7 +25,7 @@ import {
   TabIndicator
 } from './styles/HeaderComponents';
 
-const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
+const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   // const [pair1Value, setPair1Value] = useState(0);
@@ -67,18 +67,18 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
                 opacity: '1'
               }}
             >Borrow</NavLink>
+            <NavLink to="/lend"
+              activeStyle={{
+                borderColor: PagesData[path].secondaryColor,
+                opacity: '1'
+              }}
+            >Lend</NavLink>
             <NavLink to="/earn"
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >Earn</NavLink>
-            <NavLink to="/trade"
-              activeStyle={{
-                borderColor: PagesData[path].secondaryColor,
-                opacity: '1'
-              }}
-            >Trade</NavLink>
           </MarketsTabsContainer>
               
 
@@ -118,9 +118,9 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
         :
         <MarketsTabsContainer page="earn">
           <HeaderTabBtn
-            id='buy'
-            active={tradeType === 'buy'}
-            onClick={() => sellBuyToggle('buy')}
+            id='allTranches'
+            active={tradeType === 'allTranches'}
+            onClick={() => ownAllToggle('allTranches')}
             color={PagesData[path].secondaryColor}
           >
             All tranches
@@ -128,9 +128,9 @@ const HeaderTabs = ({ path, changeOwnAllFilter, sellBuyToggle, ethereum: { addre
           {
             address ? 
               <HeaderTabBtn
-                id='sell'
-                active={tradeType === 'sell'}
-                onClick={() => sellBuyToggle('sell')}
+                id='myTranches'
+                active={tradeType === 'myTranches'}
+                onClick={() => ownAllToggle('myTranches')}
                 color={PagesData[path].secondaryColor}
               >
                 My tranches
@@ -219,4 +219,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { changeOwnAllFilter, sellBuyToggle })(HeaderTabs);
+export default connect(mapStateToProps, { changeOwnAllFilter, ownAllToggle })(HeaderTabs);

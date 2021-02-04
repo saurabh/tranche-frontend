@@ -68,7 +68,7 @@ const Table = ({
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("All loans");
+  const [currentFilter, setCurrentFilter] = useState(`${pathname === "/borrow" ? "All loans" : pathname === "/lend" ? "All assets" : ""}`);
 
   const loanListing = useCallback(_.debounce(async () => {
     if (sort) {
@@ -96,15 +96,20 @@ const Table = ({
     //page.current = currentPage;
   }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
 
-  const changeLoansFilter = useCallback(
+  const changeLoansAssetsFilter = useCallback(
     (filter) => {
       changeOwnAllFilter(filter);
-      let val = filter === "own" ? "My loans" : filter === "all" ? "All loans" : "";
+      let val = (filter === "own" && pathname === "/borrow") ? "My loans" : (filter === "all" && pathname === "/borrow")  ? "All loans" : (filter === "own" && pathname === "/lend") ? "My assets" : (filter === "all" && pathname === "/lend") ?  "All assets" :  "";
       setCurrentFilter(val);
       setOpenFilterMenu(false);
     },
-    [changeOwnAllFilter]
+    [changeOwnAllFilter, pathname]
   );
+
+  const changeOwnAllFilterHandler = (val) => {
+    changeOwnAllFilter(val);
+    changeLoansAssetsFilter(val);
+  }
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -157,11 +162,11 @@ const Table = ({
             </TableMobileFilterRow>
 
             <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
-              <TableMobileFilter menu onClick={() => changeLoansFilter('all')}>
-                <TableMobileFiltersText>All loans</TableMobileFiltersText>
+              <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('all')}>
+                <TableMobileFiltersText>{path === "borrow"  ? "All loans" : path === "lend" ? "All assets" : ""}</TableMobileFiltersText>
               </TableMobileFilter>
-              <TableMobileFilter menu onClick={() => changeLoansFilter('own')}>
-                <TableMobileFiltersText>My loans</TableMobileFiltersText>
+              <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('own')}>
+                <TableMobileFiltersText>{path === "borrow" ? "My loans": path === "lend" ? "My assets" :  ""}</TableMobileFiltersText>
               </TableMobileFilter>
             </TableMobileFiltersMenu>
           </TableMobileFiltersWrapper>
@@ -189,18 +194,18 @@ const Table = ({
                       onClick={() =>
                         path === 'borrow'
                           ? HandleNewLoan()
-                          : path === 'earn'
-                          ? changeOwnAllFilter('all')
+                          : path === 'lend'
+                          ? changeOwnAllFilterHandler('all')
                           : false
                       }
                     >
                       <img
-                        src={path === 'borrow' ? RequestLoan : path === 'earn' ? EarningAsset : ''}
+                        src={path === 'borrow' ? RequestLoan : path === 'lend' ? EarningAsset : ''}
                         alt='img'
                       />{' '}
                       {path === 'borrow'
                         ? 'Request New Loan'
-                        : path === 'earn'
+                        : path === 'lend'
                         ? 'Start Earning  Assets'
                         : ''}
                     </button>
@@ -225,7 +230,7 @@ const Table = ({
                       />{' '}
                       {path === 'borrow'
                         ? 'Request New Loan'
-                        : path === 'earn'
+                        : path === 'lend'
                         ? 'Navigate to Borrow'
                         : ''}
                     </button>

@@ -18,7 +18,7 @@ import {
 } from './styles/TableComponents';
 
 
-const TableHead = ({changeSorting, loans: {sort}, path}) => {
+const TableHead = ({changeSorting, path}) => {
 
     const [order, setOrder] = useState("asc")
     const [menu, toggleMenu] = useState(false);
@@ -117,7 +117,6 @@ const TableHead = ({changeSorting, loans: {sort}, path}) => {
 }
 const mapStateToProps = (state) => {
     return {
-      loans: state.loans,
       path: state.path
     };
   };

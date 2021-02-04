@@ -484,8 +484,8 @@ let NewLoan = ({
         </Form>
       </ModalAdjustForm>
       <LoanDetailsMobile>
-        <h2>Available Collateral: <span>{collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}</span></h2>
-        <h2>Platform Fee : <span>{platformFee + ' ' + pairData[pair].collateral}</span></h2>
+        <h2>Available Collateral — <span>{collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}</span></h2>
+        <h2>Platform Fee — <span>{platformFee + ' ' + pairData[pair].collateral}</span></h2>
       </LoanDetailsMobile>
     </ModalNewLoanContent>
   );

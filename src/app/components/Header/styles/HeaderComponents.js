@@ -192,14 +192,6 @@ const MarketsTabsContainer = styled.div`
     `
         width: 231px !important;
     `}
-  ${({ links }) =>
-    links &&
-    `
-      a:nth-child(3){
-        pointer-events: none;
-        opacity: 0.09 !important;
-      }
-    `}
 `;
 const HeaderTabBtn = styled.button`
   font-family: "Roboto", sans-serif;
@@ -382,9 +374,9 @@ const TabIndicator = styled.div`
       ? "calc(100% - 88px)"
       : props.tab === "own" && props.path === "borrow"
       ? "calc(100% - 78px)"
-      : props.tab === "buy" && props.path === "earn"
+      : props.tab === "allTranches" && props.path === "earn"
       ? "-4px"
-      : props.tab === "sell" && props.path === "earn"
+      : props.tab === "myTranches" && props.path === "earn"
       ? "calc(100% - 110px)"
       : ""};
   @media (max-width: 992px) {

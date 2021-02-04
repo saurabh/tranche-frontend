@@ -1,10 +1,10 @@
 import {
-  SELL_BUY_TOGGLE
+  OWN_ALL_TOGGLE
 } from './constants';
 
-export const sellBuyToggle = (type) => (dispatch) => {
+export const ownAllToggle = (type) => (dispatch) => {
     dispatch({
-      type: SELL_BUY_TOGGLE,
+      type: OWN_ALL_TOGGLE,
       payload: type
     });
 };

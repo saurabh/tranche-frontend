@@ -23,7 +23,8 @@ import {
   ModalActionDetailsContent,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue
+  LoanDetailsRowValue,
+  // LoanDetailsMobile
 } from './styles/ModalsComponents';
 
 const FirstCustomStyles = {
@@ -320,6 +321,10 @@ const [sellToggle, setSellToggle] = useState(0);
                     </BtnGrpLoanModal>
                     
                 </ModalContent>
+                {/* <LoanDetailsMobile trade>
+                  <h2> — <span></span></h2>
+                  <h2> — <span></span></h2>
+                </LoanDetailsMobile> */}
             </ModalUserActions>
           }
           

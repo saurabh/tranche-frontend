@@ -69,7 +69,7 @@ function Navbar({ path }) {
         <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} >
           <NavBarMobileContent first>
             <img src={TrancheIcon} alt="icon" />
-            <h2>0xB51F1234DA3124124468</h2>
+            {/* <h2>0xB51F1234DA3124124468</h2> */}
             <div>
               <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
               <a href="/">DASHBOARD</a>

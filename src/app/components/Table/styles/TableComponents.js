@@ -112,7 +112,7 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? " rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
+    background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? "rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
     border-top: 1px solid #EFEFEF;
     border-bottom: 1px solid #EFEFEF;
     padding: 0 47px;
@@ -362,7 +362,7 @@ const CallToActionTradeBtn = styled.button`
 
 const TableHeadWrapperMobile = styled.div`
   min-height: 22px;
-  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "earn" ? "rgba(30, 187, 27, 0.7)" : "#F8F8F8"};
+  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : "rgba(0, 0, 0, 0.5)"};
   border-top: 1px solid #EFEFEF;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;

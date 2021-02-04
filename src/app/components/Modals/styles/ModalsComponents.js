@@ -516,6 +516,9 @@ const LoanDetailsMobile = styled.div`
       font-weight: 600;
     }
   }
+  ${({ trade }) => trade && `
+    margin-top: -100px;
+  `}
   @media (max-width: 633px){
     display: block !important;
   }

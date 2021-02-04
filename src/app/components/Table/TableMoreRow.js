@@ -40,12 +40,15 @@ const TableMoreRow = ({
         <div className='table-more-row-second-content'>
           {/*<h2>12.85 <span>DAI</span></h2>*/}
           <h2>
-            {roundBasedOnUnit(amount, collateralTypeName)}{' '}
+           
+
+
+            {roundBasedOnUnit(amount, collateralTypeName)}
             {eventName === events['APPROVE_LOAN'].toLowerCase()
-              ? gweiOrEther(amount, cryptoFromLenderName)
+              ? " " + gweiOrEther(amount, cryptoFromLenderName)
               : eventName === events['TRANCHE_ADDED'].toLowerCase() 
-              ? amount + "%"
-              : gweiOrEther(amount, collateralTypeName)}
+              ? "%"
+              : " " + gweiOrEther(amount, collateralTypeName)}
           </h2>
         </div>
       </div>
