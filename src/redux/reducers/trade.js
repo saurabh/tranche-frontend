@@ -1,16 +1,16 @@
 import {
-    SELL_BUY_TOGGLE
+  OWN_ALL_TOGGLE
 } from '../actions/constants';
   
   const initialState = {
-    tradeType: 'buy'
+    tradeType: 'allTranches'
   };
   
   export default function (state = initialState, action) {
     const { type, payload } = action;
   
     switch (type) {
-      case SELL_BUY_TOGGLE:
+      case OWN_ALL_TOGGLE:
         return { ...state, tradeType: payload };
       default:
         return state;

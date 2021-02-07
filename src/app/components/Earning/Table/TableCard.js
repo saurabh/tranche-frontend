@@ -31,15 +31,16 @@ import {
   PagesData,
   txMessage,
   tokenConstructors,
+  etherScanUrl,
   DAI
-  // pairData, etherScanUrl, apiUri
+  // apiUri
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
 import {
   Adjust,
   AdjustEarn,
   AdjustTrade,
-  //  LinkArrow,
+   LinkArrow,
   UserImg
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -58,10 +59,11 @@ const TableCard = ({
     name,
     contractAddress,
     trancheId,
-    // subscriber,
     type,
+    subscriber,
     rpbRate,
-    cryptoType
+    cryptoType,
+    amount
     // collateralType,
   },
   // trade: { tradeType },
@@ -270,13 +272,13 @@ const TableCard = ({
               </div>
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
-                {/* <a
-                  href={etherScanUrl + 'address/' + borrowerAddress}
+                <a
+                  href={etherScanUrl + 'address/' + contractAddress}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
                   <img src={LinkArrow} alt='' />
-                </a> */}
+                </a>
               </div>
             </div>
           </div>
@@ -285,7 +287,7 @@ const TableCard = ({
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
             <h2>
-              {} <span>{cryptoType}</span>
+              {amount.toString().length > 5 ? amount.toString().substring(0,5) +"..." : amount.toString()} <span>{cryptoType}</span>
             </h2>
           </div>
         </div>
@@ -296,7 +298,7 @@ const TableCard = ({
         >
           <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
-              {}
+              {rpbRate && fromWei(rpbRate.toString())}
               <span>%</span>
             </h2>
           </div>
@@ -308,7 +310,7 @@ const TableCard = ({
         >
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {rpbRate}
+              {subscriber}
               {/* <span>%{' '}
                 ({roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
                 {gweiOrEther(totalInterest, collateralTypeName)})

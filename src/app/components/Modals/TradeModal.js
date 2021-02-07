@@ -21,7 +21,8 @@ import {
   ModalActionDetailsContent,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue
+  LoanDetailsRowValue,
+  // LoanDetailsMobile
 } from './styles/ModalsComponents';
 
 const FirstCustomStyles = {

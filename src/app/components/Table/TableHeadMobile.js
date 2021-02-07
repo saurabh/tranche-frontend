@@ -24,22 +24,22 @@ const TableHeadMobile = ({changeSorting, loans: {sort}, path}) => {
         <TableHeadWrapperMobile path={path}>
             <TableColMobile address>
                 <TableHeadTitleMobile defaultCursor={true} address>
-                    <h2>Address</h2>
+                    <h2>{path !== "earn" ? "Address" : "INSTRUMENT"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile>
                 <TableHeadTitleMobile>
-                    <h2 onClick={() => sortLoans("remainingLoan")}>Amount</h2>
+                    <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>{path !== "earn" ? "Amount" : "SIZE"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile>
                 <TableHeadTitleMobile>
-                    <h2 onClick={() => sortLoans("remainingLoan")}>Ratio</h2>
+                    <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{path !== "earn" ? "Ratio" : "RETURN"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile>
                 <TableHeadTitleMobile>
-                    <h2 onClick={() => sortLoans("interestPaid")}>Return</h2>
+                    <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>{path !== "earn" ? "Rate/Payout" : "SUBSCRIPTION"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile btn>

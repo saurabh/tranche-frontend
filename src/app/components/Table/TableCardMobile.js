@@ -454,15 +454,15 @@ const TableCardMobile = ({
             <TableColMobile btn>
                 <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
                     <button
-                        disabled={path === 'trade' || disableBtn}
-                        onClick={path === 'trade' || disableBtn ? undefined : () => openModal()}
+                        disabled={path === 'earn' || disableBtn}
+                        onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
                     ><img alt="adjust" 
                     src= {
                         path === 'borrow'
                           ? Adjust
-                          : path === 'earn'
+                          : path === 'lend'
                           ? AdjustEarn
-                          : path === 'trade'
+                          : path === 'earn'
                           ? AdjustTrade
                           : Adjust
                       } /></button>

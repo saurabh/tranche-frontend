@@ -174,7 +174,7 @@ export const events = {
   LOAN_CANCEL_FEES: 'loan_cancel_fees',
   INITIATE_FORECLOSE_REWARD: 'initiate_foreclose_reward',
   FORECLOSED_REWARD: 'foreclosed_reward',
-  TRANCHE_ADDED: 'trancheaddedtoprotocol'
+  TRANCHE_ADDED: 'soldtoprotocol'
 };
 
 export const statuses = {
