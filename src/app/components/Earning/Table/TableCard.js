@@ -32,7 +32,6 @@ import {
   txMessage,
   tokenConstructors,
   etherScanUrl,
-  DAI
   // apiUri
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';

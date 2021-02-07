@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Logo from 'assets/images/svg/Logo.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent  } from './styles/HeaderComponents';
 import { PagesData, apiUri, pairData  } from 'config/constants';
-import { ETH, USDC, SLICE, DAI, BackArrow } from 'assets';
+import { ETH, DAI, BackArrow } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
@@ -23,7 +23,7 @@ import { TrancheIcon } from 'assets';
 function Navbar({ path }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
-  const [pair1Value, setPair1Value] = useState(0);
+  // const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
 
@@ -113,7 +113,7 @@ function Navbar({ path }) {
                   </RatesRowContent>
                 </RatesRowWrapper>
 
-                <RatesRowWrapper>
+                {/* <RatesRowWrapper>
                   <RatesRowContent>
                     <RatesValue>
                       <RatesValueImg>
@@ -135,7 +135,7 @@ function Navbar({ path }) {
                       </RatesValueText>
                     </RatesValue>
                   </RatesRowContent>
-                </RatesRowWrapper>
+                </RatesRowWrapper> */}
               </RatesBoxWrapper>
             </RatesWrapper>
           </NavBarMobileContent>

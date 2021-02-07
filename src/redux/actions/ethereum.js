@@ -3,9 +3,9 @@ import store from '../store';
 import { pairData } from 'config/constants';
 import {
   DAISetup,
-  SLICESetup,
-  USDCSetup,
-  JProtocolSetup,
+  // SLICESetup,
+  // USDCSetup,
+  // JProtocolSetup,
   ERC20Setup
 } from 'utils/contractConstructor';
 import {
@@ -61,8 +61,8 @@ export const setTokenBalance = (web3, tokenName, address) => async (dispatch) =>
 export const setTokenBalances = (web3, address) => async (dispatch) => {
   try {
     const DAI = DAISetup(web3);
-    const SLICE = SLICESetup(web3);
-    const USDC = USDCSetup(web3);
+    // const SLICE = SLICESetup(web3);
+    // const USDC = USDCSetup(web3);
     const daiBalance = await DAI.methods.balanceOf(address).call();
     // const sliceBalance = await SLICE.methods.balanceOf(address).call();
     // const usdcBalance = await USDC.methods.balanceOf(address).call();

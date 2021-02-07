@@ -73,7 +73,7 @@ let TradeForm = ({
   }, [setLoanIdandAddress]);
 
   const debounceAllowanceCheck = useCallback(_.debounce(async (amount) => {
-    const allowanceResult = await allowanceCheck(amount);
+    await allowanceCheck(amount);
   }, 500, {leading: true}), []);
 
   return (
