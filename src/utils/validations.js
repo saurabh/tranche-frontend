@@ -79,13 +79,15 @@ let asyncValidateAdjust = (values) => {
 let asyncValidateSell = (values) => {
   return sleep(0).then(async () => {
     let { loanId, address, shares } = values;
-    const shareholderShares = await getShareholderShares(loanId, address);
-    if (isLessThan(parseFloat(shareholderShares), parseFloat(shares))) {
-      // eslint-disable-next-line
-      throw {
-        shares: "You don't own enough shares of this loan",
-        error: 'Not enough shares'
-      };
+    if (loanId) {
+      const shareholderShares = await getShareholderShares(loanId, address);
+      if (isLessThan(parseFloat(shareholderShares), parseFloat(shares))) {
+        // eslint-disable-next-line
+        throw {
+          shares: "You don't own enough shares of this loan",
+          error: 'Not enough shares'
+        };
+      }
     }
   });
 };

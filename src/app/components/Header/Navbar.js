@@ -38,7 +38,7 @@ function Navbar({ path }) {
         let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
         price = roundNumber(price);
         if (pair.pairId === pairData[0].value) setPair0Value(price)
-        if (pair.pairId === pairData[1].value) setPair1Value(price)
+        // if (pair.pairId === pairData[1].value) setPair1Value(price)
       })
     } catch (error) {
       console.error(error);

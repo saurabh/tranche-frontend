@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm, change } from 'redux-form';
+import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, asyncValidateSell } from 'utils/validations';
 import { isGreaterThan } from 'utils/helperFunctions';
 import { pairData } from 'config/constants';
 import { selectUp, selectDown } from 'assets';
-import { BtnLoanModal } from '../Modals/styles/ModalsComponents';
+import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
   // ModalFormGrp,
   ModalFormLabel,
@@ -19,7 +20,8 @@ import {
   NewLoanFormInput,
   SelectChevron,
   LoanCustomSelect,
-  SelectCurrencyView
+  SelectCurrencyView,
+  ApproveBtnWrapper
 } from './styles/FormComponents';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -38,6 +40,7 @@ let TradeForm = ({
   pristine,
   submitting,
   change,
+  formValues,
   // State Values
   loanId,
   address,
@@ -46,8 +49,13 @@ let TradeForm = ({
   sellToggle,
   buyToggle,
   shareholdersShares,
+  hasAllowance,
+  approveLoading,
   // Functions
-  sellToProtocol
+  allowanceCheck,
+  approveContract,
+  sellToProtocol,
+  buyTrancheTokens
 }) => {
   const [shares, setShares] = useState('');
   const pair = pairData[0].value;
@@ -61,6 +69,10 @@ let TradeForm = ({
   useEffect(() => {
     setLoanIdandAddress();
   }, [setLoanIdandAddress]);
+
+  const debounceAllowanceCheck = useCallback(_.debounce(async (amount) => {
+    const allowanceResult = await allowanceCheck(amount);
+  }, 500, {leading: true}), []);
 
   return (
     <ModalAdjustForm>
@@ -93,7 +105,7 @@ let TradeForm = ({
           </ModalFormSubmit>
         </Form>
       ) : sellProtocol ? (
-        <Form component={ModalFormWrapper}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => sellToProtocol(e)}>
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true}>
               <NewLoanFormInput>
@@ -117,7 +129,6 @@ let TradeForm = ({
           <ModalFormSubmit>
             <BtnLoanModal>
               <ModalFormButton
-                onClick={(e) => sellToProtocol(e)}
                 disabled={
                   pristine ||
                   submitting ||
@@ -131,7 +142,7 @@ let TradeForm = ({
           </ModalFormSubmit>
         </Form>
       ) : (
-        <Form component={ModalFormWrapper}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => buyTrancheTokens(e)}>
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true} tranche={true}>
               <NewLoanFormInput>
@@ -141,6 +152,7 @@ let TradeForm = ({
                   </ModalFormLabel>
                   <Field
                     component={InputField}
+                    onChange={(e, newValue) => debounceAllowanceCheck(newValue)}
                     className='ModalFormInputNewLoan'
                     name='amount'
                     type='number'
@@ -193,9 +205,34 @@ let TradeForm = ({
 
           <ModalFormSubmit>
             <BtnLoanModal>
+              <ApproveBtnWrapper>
+                  <ModalFormButton
+                    type='button'
+                    loading={approveLoading ? 'true' : ''}
+                    approved={hasAllowance}
+                    onClick={() => approveContract(formValues.amount)}
+                  >
+                    {!hasAllowance && !approveLoading ? (
+                      <h2>Approve</h2>
+                    ) : !hasAllowance && approveLoading ? (
+                      <div className='btnLoadingIconWrapper'>
+                        <div className='btnLoadingIconCut'>
+                          <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
+                        </div>
+                      </div>
+                    ) : hasAllowance && !approveLoading ? (
+                      <h2>
+                        <span></span> Approved
+                      </h2>
+                    ) : (
+                      ''
+                    )}
+                  </ModalFormButton>
+                </ApproveBtnWrapper>
               <ModalFormButton
                 type='submit'
                 backgroundColor={sellToggle ? '#845AD9' : buyToggle ? '#2ECC71' : '#845AD9'}
+                disabled={!hasAllowance}
               >
                 <h2>{sellToggle ? 'SELL' : buyToggle ? 'BUY' : ''}</h2>
               </ModalFormButton>
@@ -218,7 +255,8 @@ const mapStateToProps = (state) => ({
   initialValues: {
     loanId: '',
     address: ''
-  }
+  },
+  formValues: getFormValues('sell')(state)
 });
 
 export default TradeForm = connect(mapStateToProps, { change })(TradeForm);

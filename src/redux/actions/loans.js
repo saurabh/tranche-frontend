@@ -75,7 +75,6 @@ export const loansFetchData = (data) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(loanListUrl, { data }, null, true);
-    console.log(loanListUrl)
     if(result.status){
       dispatch(checkServer(true));
       dispatch(loansIsLoading(false));
