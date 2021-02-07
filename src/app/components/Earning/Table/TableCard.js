@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 // import { JLoanSetup } from 'utils/contractConstructor';
-// import {
+import {
 //   toWei,
-//   fromWei,
+  fromWei
 //   getLoanStatus,
 //   calcAdjustCollateralRatio,
 //   getLoanForeclosingBlock,
 //   getAccruedInterests,
 //   allowanceCheck
-// } from 'services/contractMethods';
+} from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -33,12 +33,14 @@ import {
 import { 
   // statuses, 
   PagesData, 
-  // pairData, etherScanUrl, apiUri, DAI, txMessage 
+  // pairData, 
+  etherScanUrl,
+  //  apiUri, DAI, txMessage 
 
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
 import { Adjust, AdjustEarn, AdjustTrade,
-  //  LinkArrow,
+   LinkArrow,
   UserImg} from 'assets';
 import TableMoreRow from './TableMoreRow';
 // import ETH from 'assets/images/svg/EthForm.svg';
@@ -58,8 +60,10 @@ const TableCard = ({
     // trancheId,
     // subscriber,
     // type,
+    subscriber,
     rpbRate,
     cryptoType,
+    amount
     // collateralType,
   },
   // trade: { tradeType },
@@ -502,13 +506,13 @@ const TableCard = ({
               </div>
               <div className='first-col-subtitle'>
                 <h2>{addrShortener(contractAddress)}</h2>
-                {/* <a
-                  href={etherScanUrl + 'address/' + borrowerAddress}
+                <a
+                  href={etherScanUrl + 'address/' + contractAddress}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
                   <img src={LinkArrow} alt='' />
-                </a> */}
+                </a>
               </div>
             </div>
           </div>
@@ -517,14 +521,14 @@ const TableCard = ({
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
             <h2>
-              {} <span>{cryptoType}</span>
+              {amount.toString().length > 5 ? amount.toString().substring(0,5) +"..." : amount.toString()} <span>{cryptoType}</span>
             </h2>
           </div>
         </div>
         <div className={'table-col ' + (path === "earn" ? "table-fourth-col-return " : "table-fourth-col")}>
           <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
-              {}
+              {rpbRate && fromWei(rpbRate.toString())}
               <span>%</span>
             </h2>
           </div>
@@ -532,7 +536,7 @@ const TableCard = ({
         <div className={'table-col ' + (path === "earn" ? "table-fifth-col-subscription " : "table-fifth-col")}>
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {rpbRate}
+              {subscriber}
               {/* <span>%{' '}
                 ({roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
                 {gweiOrEther(totalInterest, collateralTypeName)})

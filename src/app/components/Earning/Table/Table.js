@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
+import _ from 'lodash';
 import {
   tranchesFetchData,
   changeFilter,
@@ -76,7 +77,7 @@ const Table = ({
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("All tranches");
   
-  const loanListing = useCallback(async () => {
+  const trancheListing = useCallback(_.debounce(async () => {
     if (sort) {
       await tranchesFetchData({
         sort,
@@ -98,7 +99,7 @@ const Table = ({
       });
     }
     
-  }, [tranchesFetchData, filter, skip, limit, sort, address, path, tradeType]);
+  }, 3000, {leading: true}), [tranchesFetchData, filter, skip, limit, sort, address, tradeType]);
 
   useEffect(() => {
     let currentPath = pathname.split('/')[1];
@@ -108,8 +109,8 @@ const Table = ({
   }, [changePath, pathname, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
-    loanListing();
-  }, [loanListing, filter, skip, limit, filterType, sort]);
+    trancheListing();
+  }, [trancheListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
     paginationOffset((p - 1) * limit);
@@ -132,7 +133,7 @@ const Table = ({
 
 
   const handleSorting = () => {
-    loanListing();
+    trancheListing();
   };
 
   return (

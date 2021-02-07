@@ -20,7 +20,6 @@ const TableHeadMobile = ({changeSorting, loans: {sort}, path}) => {
     changeSorting(sortObj);
         setOrder(order === "asc" ? "desc" : "asc")
     }
-    console.log(path)
     return (
         <TableHeadWrapperMobile path={path}>
             <TableColMobile address>
@@ -30,17 +29,17 @@ const TableHeadMobile = ({changeSorting, loans: {sort}, path}) => {
             </TableColMobile>
             <TableColMobile>
                 <TableHeadTitleMobile>
-                    <h2 onClick={() => sortLoans("remainingLoan")}>{path !== "earn" ? "Amount" : "SIZE"}</h2>
+                    <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>{path !== "earn" ? "Amount" : "SIZE"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile>
                 <TableHeadTitleMobile>
-                    <h2 onClick={() => sortLoans("remainingLoan")}>{path !== "earn" ? "Ratio" : "RETURN"}</h2>
+                    <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{path !== "earn" ? "Ratio" : "RETURN"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile>
                 <TableHeadTitleMobile>
-                    <h2 onClick={() => sortLoans("interestPaid")}>{path !== "earn" ? "Rate/Payout" : "SUBSCRIPTION"}</h2>
+                    <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>{path !== "earn" ? "Rate/Payout" : "SUBSCRIPTION"}</h2>
                 </TableHeadTitleMobile>
             </TableColMobile>
             <TableColMobile btn>

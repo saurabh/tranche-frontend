@@ -46,7 +46,7 @@ const TableHead = ({changeSorting, path}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="remaining-wrapper">
-                <div className={path !== "earn" ? "remaining-title-content" : "tranche-size-content"} onClick={() => sortLoans("remainingLoan")}>
+                <div className={path !== "earn" ? "remaining-title-content" : "tranche-size-content"} onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>
                     <h2>{path !== "earn" ? "Amount" : "TRANCHE SIZE"}</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
@@ -55,7 +55,7 @@ const TableHead = ({changeSorting, path}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="ratio-wrapper">
-                <div className={path !== "earn" ? "ratio-title-content" : "return-content"} onClick={() => sortLoans("collateralRatio")}>
+                <div className={path !== "earn" ? "ratio-title-content" : "return-content"} onClick={() => sortLoans(path !== "earn" ? "collateralRatio" : "rpbRate")}>
                     <h2>{path !== "earn" ? "Ratio" : "RETURN/BLOCK"}</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>
@@ -64,7 +64,7 @@ const TableHead = ({changeSorting, path}) => {
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className={path !== "earn" ? "interest-paid-wrapper" : "subscription-wrapper"}>
-                <div className={path !== "earn" ? "interest-paid-title-content" : "subscription-title-content"} onClick={() => sortLoans("interestPaid")}>
+                <div className={path !== "earn" ? "interest-paid-title-content" : "subscription-title-content"} onClick={() => sortLoans(path !== "earn" ? "interestPaid" : "subscriber")}>
                     <h2>{path !== "earn" ? "Rate/Payout" : "SUBSCRIPTION"}</h2>
                     <SortChevronWrapper>
                         <img src={upChevron} alt="upChevron"/>

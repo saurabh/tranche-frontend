@@ -59,7 +59,9 @@ const TableCardMobile = ({
     // subscriber,
     // type,
     rpbRate,
+    subscriber,
     cryptoType,
+    amount
     // collateralType,
   },
   // trade: { tradeType },
@@ -488,19 +490,20 @@ const TableCardMobile = ({
 
             <TableColMobile>
                 <TableMobilColContent col>
+                    <h2>{amount.toString().length > 5 ? amount.toString().substring(0,5) + "... " : amount.toString() + " "}</h2> 
                     <h2>{cryptoType}</h2>
                 </TableMobilColContent>
             </TableColMobile>
 
             <TableColMobile>
                 <TableMobilColContent col>
-                <h2>%</h2>
+                <h2>{rpbRate}</h2> <h2>%</h2>
                 </TableMobilColContent>
             </TableColMobile>
 
             <TableColMobile>
                 <TableMobilColContent col>
-                  <h2>{rpbRate}</h2>
+                  <h2>{subscriber}</h2>
                 </TableMobilColContent>
             </TableColMobile>
 
