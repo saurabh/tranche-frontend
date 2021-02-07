@@ -42,7 +42,6 @@ let TradeForm = ({
   change,
   formValues,
   // State Values
-  loanId,
   address,
   sellProtocol,
   offerMarket,
@@ -55,7 +54,10 @@ let TradeForm = ({
   allowanceCheck,
   approveContract,
   sellToProtocol,
-  buyTrancheTokens
+  buyTrancheTokens,
+  // API Values
+  loanId,
+  trancheType,
 }) => {
   const [shares, setShares] = useState('');
   const pair = pairData[0].value;
@@ -148,7 +150,7 @@ let TradeForm = ({
               <NewLoanFormInput>
                 <NewLoanInputWrapper name='amount'>
                   <ModalFormLabel htmlFor='amount' tranche={true}>
-                    Amount of Tranche A to {buyToggle ? 'purchase' : 'sell'}:
+                    Amount of {trancheType === 'TRANCHE_A' ? 'TRANCHE A' : 'TRANCHE B'} to {buyToggle ? 'purchase' : 'sell'}:
                   </ModalFormLabel>
                   <Field
                     component={InputField}

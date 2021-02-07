@@ -288,8 +288,6 @@ const TableCard = ({
           <div className='third-col-content content-3-col second-4-col-content'>
             <h2>
               {fromWei(amount.toString())} <span>{cryptoType}</span>
-
-              {/* {amount.toString().length > 5 ? amount.toString().substring(0,5) +"..." : amount.toString()} <span>{cryptoType}</span> */}
             </h2>
           </div>
         </div>
@@ -311,11 +309,7 @@ const TableCard = ({
         >
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {fromWei(subscriber.toString())}
-              {/* <span>%{' '}
-                ({roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
-                {gweiOrEther(totalInterest, collateralTypeName)})
-              </span> */}
+              {(subscriber.toString())}
             </h2>
           </div>
         </div>

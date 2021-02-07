@@ -227,6 +227,7 @@ const TradeModal = ({
             <TradeForm
               sellToggle={sellToggle}
               buyToggle={buyToggle}
+              trancheType={trancheType}
               hasAllowance={hasAllowance}
               allowanceCheck={allowanceCheck}
               approveLoading={approveLoading}
