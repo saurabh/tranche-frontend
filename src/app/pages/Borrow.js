@@ -29,6 +29,16 @@ const Borrow = ({
 }) => {
   const { pathname } = useLocation();
   const [showModal, setShowModal] = useState(false);
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
 
   useEffect(() => {
     changeFilter(null);
@@ -53,7 +63,10 @@ const Borrow = ({
 
   return (
     <Layout>
-      <SummaryCards />
+      {
+        isDesktop &&
+        <SummaryCards />
+      }
       <Table
         HandleNewLoan={handleNewLoanClick}
         openModal={showModal}

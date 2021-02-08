@@ -47,7 +47,7 @@ const TableWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   margin: 24px auto;
-  overflow: hidden;
+  // overflow: hidden;
   border-radius: 12px;
   ${({ mobile }) => mobile && `
     display: none;
@@ -71,6 +71,7 @@ const TableWrapper = styled.div`
 const StatusTextWrapper = styled.h2`
   color: ${props => props.color ? props.color : ""};
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  position: relative;
 `
 const MoreRowSpan = styled.span`
   color: ${props => props.color ? props.color : ""};
@@ -522,6 +523,86 @@ const TableMobileRowCreateLoan = styled.div`
     background: transparent;
   }
 `
+const InfoBoxWrapper = styled.div`
+  position: absolute;
+  right: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+`
+
+
+const InfoBox = styled.div`
+  width: 292px;
+  height: 326px;
+  background: #FFFFFF;
+  border: 1px solid #EFEFEF;
+  position: absolute;
+  bottom: 27px;
+  z-index: 2000;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: default;
+
+  & > div:first-child > div:nth-child(1){
+    padding: 17px;
+    & > button{
+      background: transparent;
+      border: none;
+      outline: none;
+      float: right;
+      cursor: pointer;
+    }
+  }
+
+  & > div:first-child > div:nth-child(2){
+    padding: 0 25px 25px;
+    text-align: left;
+    h2:first-child{
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      color: #3F3F3F;
+    }
+    
+    h2:last-child{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: rgba(63, 63, 63, 0.5);
+    }
+  }
+  & > div:first-child >div:nth-child(3){
+    text-align: left;
+    padding: 0 25px 25px;
+    p{
+      font-weight: normal;
+      font-size: 10px;
+      color: #3F3F3F;
+    }
+  }
+  & > div:last-child > div:nth-child(1){
+    background: #F7F7F7;
+    border-radius: 0px 0px 16px 16px;
+    padding: 27px 0;
+    button{
+      background: rgb(46, 204, 113, 0.75);
+      box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
+      border-radius: 4px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 9px;
+      text-align: center;
+      color: #FFFFFF;
+      min-height: 32px;
+      border: none;
+      padding: 0 37px;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+`
 
 
 export {
@@ -562,5 +643,7 @@ export {
   CallToActionTradeBtn,
   CallToActionTradetext,
   TableMobileFilterRow,
-  TableMobileRowCreateLoan
+  TableMobileRowCreateLoan,
+  InfoBoxWrapper,
+  InfoBox
 };

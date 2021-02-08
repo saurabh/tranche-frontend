@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
+// import { useOuterClick } from 'services/useOuterClick';
+
 // import { JLoanSetup } from 'utils/contractConstructor';
 import {
 //   toWei,
@@ -40,6 +42,8 @@ import {
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
 import { Adjust, AdjustEarn, AdjustTrade,
+  // CloseModal,
+  // Info,
    LinkArrow,
   UserImg} from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -48,9 +52,11 @@ import TableMoreRow from './TableMoreRow';
 import {
   TableContentCard,
   TableContentCardWrapper,
-  StatusTextWrapper,
+  // StatusTextWrapper,
   AdjustLoanBtn,
-  TableCardTag
+  TableCardTag,
+  // InfoBoxWrapper,
+  // InfoBox
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
@@ -83,6 +89,7 @@ const TableCard = ({
 }) => {
   // const JLoan = JLoanSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
+  // const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   // const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
@@ -94,6 +101,8 @@ const TableCard = ({
   let isLoading = false;
   let moreCardToggle = false;
   let moreList = false;
+  
+
   // const [hasBalance, setHasBalance] = useState(false);
   // const [hasAllowance, setHasAllowance] = useState(false);
   // const [isShareholder, setIsShareholder] = useState(false);
@@ -118,7 +127,9 @@ const TableCard = ({
   // const searchArr = (key) => pairData.find((i) => i.key === key);
 
   // let totalInterest = parseFloat(accruedInterest) + parseFloat(interestPaid);
-
+  // const innerRef = useOuterClick((e) => {
+  //   setInfoBoxToggle(false);
+  // });
   // useEffect(() => {
   //   const balanceCheck = () => {
   //     try {
@@ -546,15 +557,49 @@ const TableCard = ({
         </div>
         <div className='table-second-col table-col'>
           <div className='second-col-content'>
-            <StatusTextWrapper
-              className='status-text-wrapper'
+            {/* <StatusTextWrapper
+              // className='status-text-wrapper'
               // color={Object.values(searchObj(status))[0].color}
               // backgroundColor={Object.values(searchObj(status))[0].background}
-            >
+            > */}
               {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
                 ? 'Under'
                 : valShortner(Object.values(searchObj(status))[0].key)} */}
-            </StatusTextWrapper>
+            {/* </StatusTextWrapper> 
+            
+            
+            <InfoBoxWrapper ref={innerRef}>
+                <img src={Info} alt="info" onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
+                {
+                 InfoBoxToggle && <InfoBox>
+                    <div>
+                      <div>
+                        <button>
+                          <img src={CloseModal} alt="close" onClick={() => setInfoBoxToggle(false)}  />
+                        </button>
+                      </div>
+                      <div>
+                        <h2>ETH Investment Grade</h2>
+                        <h2>Fixed Rate Instrument</h2>
+                      </div>
+                      <div>
+                        <p>The ETH investment grade bond is purchased with DAI and pays out a <strong>fixed interest 5% APY</strong> in <strong>ETH</strong>. Returns are generated through ETH:DAI loans borrowed through the Tranche Platform.</p>
+                        <p>This instrument has the <strong>highest payment seniority</strong>and is <strong>suitable for low-risk investors</strong> who wish to earn ETH on a block by block pay-out schedule.</p>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <button>LEARN MORE BY VISITING OUR DOCS</button>
+                      </div>
+                    </div>
+                  </InfoBox>
+                }
+                
+              </InfoBoxWrapper>
+            
+            */}
+            
+
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>

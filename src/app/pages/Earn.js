@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout } from 'app/components';
 import { PagesData } from 'config/constants';
 import Table from '../components/Table/Table';
@@ -9,6 +9,16 @@ import SummaryCards from 'app/components/Summary/SummaryCards';
 
 function Earn({ changeFilter }) {
   const { pathname } = useLocation();
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
 
   useEffect(() => {
     changeFilter(null);
@@ -16,7 +26,11 @@ function Earn({ changeFilter }) {
 
   return (
     <Layout>
-      <SummaryCards />
+      {
+        isDesktop &&
+        <SummaryCards />
+      }
+      
       <Table pageType={PagesData.borrow.pageType} />
     </Layout>
   );
