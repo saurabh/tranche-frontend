@@ -205,19 +205,25 @@ const TradeModal = ({
           <ModalActionDetails>
             <ModalActionDetailsContent trade={true}>
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>Loan amount</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle>Asset Value</LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue></LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>Collateral amount</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle>Return per Block</LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue></LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>Collateral ratio</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle>Liquidity</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue></LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle>APY</LoanDetailsRowTitle>
 
                 <LoanDetailsRowValue></LoanDetailsRowValue>
               </LoanDetailsRow>

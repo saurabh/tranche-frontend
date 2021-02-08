@@ -71,7 +71,7 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { tokenBalance, address, wallet, web3, notify },
+  ethereum: { tokenBalance, trancheTokenBalance, address, wallet, web3, notify },
   form,
   setTokenBalances,
   setTrancheTokenBalances,
