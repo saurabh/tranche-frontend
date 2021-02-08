@@ -86,6 +86,7 @@ let NewLoan = ({
   const [collateralRatio, setCollateralRatio] = useState(0);
   const [borrowAsk, setBorrowAskValue] = useState(0);
   const [collateralValue, setCollateralValue] = useState(0);
+  const [apy, setApy] = useState(0);
   const [rpb, setRpb] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
   let collBalance =
@@ -192,6 +193,7 @@ let NewLoan = ({
   const handleBorrowingChange = (pair, newValue, collateralAmount) => {
     setBorrowAskValue(newValue);
     debounceCalcMinCollateralAmount(pair, newValue);
+    calculateRPB(pair, newValue, apy);
     if (collateralAmount)  {
       if (newValue === '') debounceCalcCollateralRatio('0', collateralAmount, pair);
       else debounceCalcCollateralRatio(newValue, collateralAmount, pair);
@@ -208,7 +210,12 @@ let NewLoan = ({
     calcCollateralRatio(borrowedAskAmount, formattedAmount);
     setCollateralValue(formattedAmount);
     let fee = await calculateFees(toWei(formattedAmount), web3);
-    if (fee > 0) setPlatformFee(fee);
+    if (fee > 0) {
+      setPlatformFee(fee)
+    }
+    else{
+      setPlatformFee(0)
+    }
   };
 
   const handleCollateralizingChange = async (borrowingValue, newValue) => {
@@ -223,7 +230,15 @@ let NewLoan = ({
     let formattedAmount = formatString(newValue.toString());
     if (newValue) {
       let fee = await calculateFees(toWei(formattedAmount), web3);
-      if (fee > 0) setPlatformFee(fee);
+      if (fee > 0) {
+        setPlatformFee(fee)
+      }
+      else{
+        setPlatformFee(0)
+      }
+    }
+    else{
+      setPlatformFee(0)
     }
     debounceCalcCollateralRatio(borrowingValue, formattedAmount, pair);
   };
@@ -255,6 +270,7 @@ let NewLoan = ({
   };
 
   const calculateRPB = async (pair, amount, APY) => {
+    setApy(APY);
     if (amount && APY > 0) {
       const result = await getPairDetails(pair, web3);
       let { pairValue, pairDecimals } = result;

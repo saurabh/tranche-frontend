@@ -6,11 +6,11 @@ const BannerWrapper = styled.div`
 `
 const BannerContent = styled.div` 
   width: 100%;
-  min-height: 70px;
-  background: #F2F2F@;
+  min-height: 35px;
+  background: #3192FF;
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.17);
   display: flex;
-  padding: 15px;
+  padding: 15px 61px;
   align-items: center;
   position: relative;
   justify-content: center;
@@ -18,7 +18,7 @@ const BannerContent = styled.div`
 const BannerText = styled.h2` 
   text-align: center;
   font-size: 14px;
-  color: #292929;
+  color: #ffffff;
   font-weight: 300;
 `
 const Close = styled.img` 
