@@ -1,12 +1,20 @@
 import Web3 from 'web3';
+import store from '../store';
 import { pairData } from 'config/constants';
-import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
+import {
+  DAISetup,
+  // SLICESetup,
+  // USDCSetup,
+  // JProtocolSetup,
+  ERC20Setup
+} from 'utils/contractConstructor';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
   SET_TOKEN_BALANCES,
+  SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK
@@ -53,16 +61,37 @@ export const setTokenBalance = (web3, tokenName, address) => async (dispatch) =>
 export const setTokenBalances = (web3, address) => async (dispatch) => {
   try {
     const DAI = DAISetup(web3);
-    const SLICE = SLICESetup(web3);
-    const USDC = USDCSetup(web3);
+    // const SLICE = SLICESetup(web3);
+    // const USDC = USDCSetup(web3);
     const daiBalance = await DAI.methods.balanceOf(address).call();
-    const sliceBalance = await SLICE.methods.balanceOf(address).call();
-    const usdcBalance = await USDC.methods.balanceOf(address).call();
+    // const sliceBalance = await SLICE.methods.balanceOf(address).call();
+    // const usdcBalance = await USDC.methods.balanceOf(address).call();
 
-    const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance, USDC: usdcBalance };
+    const tokenBalances = { DAI: daiBalance };
+    // const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance, USDC: usdcBalance };
     dispatch({
       type: SET_TOKEN_BALANCES,
       payload: tokenBalances
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const setTrancheTokenBalances = () => async (dispatch) => {
+  try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
+    const { list } = state.tranches;
+    let trancheTokenBalances = {};
+    list.forEach(async (item) => {
+      const TrancheAddress = ERC20Setup(web3, item.trancheTokenAddress);
+      const trancheTokenBalance = await TrancheAddress.methods.balanceOf(address).call();
+      trancheTokenBalances[item.name] = trancheTokenBalance;
+    });
+    dispatch({
+      type: SET_TRANCHE_TOKEN_BALANCES,
+      payload: trancheTokenBalances
     });
   } catch (error) {
     console.error(error);

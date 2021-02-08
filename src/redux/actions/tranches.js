@@ -79,7 +79,6 @@ export const tranchesFetchData = (data) => async (dispatch) => { //To be optimiz
       dispatch(tranchesIsLoading(false));
       dispatch(tranchesFetchSuccess(result.result.list));
       dispatch(tranchesSetCount(result.result.count));
-      console.log(result.result.list)
     }
     else{
       dispatch(checkServer(false));

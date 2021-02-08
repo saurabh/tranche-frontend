@@ -390,7 +390,7 @@ const TableCardMobile = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(web3, address);
+    setTokenBalances();
     const allowanceResult = await allowanceCheck(pairId, remainingLoan.toString(), address, web3);
     setHasAllowance(allowanceResult);
     const availableInterest = await getAccruedInterests(loanId, web3);

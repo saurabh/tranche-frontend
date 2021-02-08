@@ -4,6 +4,7 @@ import {
   SET_BALANCE,
   SET_TOKEN_BALANCE,
   SET_TOKEN_BALANCES,
+  SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK
@@ -33,6 +34,8 @@ export default function (state = initialState, action) {
       return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenName]: payload.tokenBalance } };
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
+    case SET_TRANCHE_TOKEN_BALANCES:
+      return { ...state, trancheTokenBalance: payload };
     case SET_WALLET:
       return { ...state, wallet: payload };
     case SET_WEB3:

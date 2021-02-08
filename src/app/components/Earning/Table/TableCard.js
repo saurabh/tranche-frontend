@@ -6,46 +6,45 @@ import ReactLoading from 'react-loading';
 // import { useOuterClick } from 'services/useOuterClick';
 
 // import { JLoanSetup } from 'utils/contractConstructor';
+import { JProtocolSetup } from 'utils/contractConstructor';
+
 import {
-//   toWei,
-  fromWei
-//   getLoanStatus,
-//   calcAdjustCollateralRatio,
-//   getLoanForeclosingBlock,
-//   getAccruedInterests,
-//   allowanceCheck
+  toWei,
+  fromWei,
 } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
+  setTokenBalances,
+  setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-// import { initOnboard } from 'services/blocknative';
+import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
   // valShortner,
-  // readyToTransact,
-  // isGreaterThan,
+  readyToTransact,
+  isGreaterThan,
+  isEqualTo,
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { 
-  // statuses, 
-  PagesData, 
-  // pairData, 
+import {
+  PagesData,
+  txMessage,
+  tokenConstructors,
   etherScanUrl,
-  //  apiUri, DAI, txMessage 
-
+  // apiUri
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
 import { Adjust, AdjustEarn, AdjustTrade,
   // CloseModal,
   // Info,
    LinkArrow,
-  UserImg} from 'assets';
+  UserImg
+} from 'assets';
 import TableMoreRow from './TableMoreRow';
 // import ETH from 'assets/images/svg/EthForm.svg';
 
@@ -63,9 +62,8 @@ const TableCard = ({
   tranche: {
     name,
     contractAddress,
-    // trancheId,
-    // subscriber,
-    // type,
+    trancheId,
+    type,
     subscriber,
     rpbRate,
     cryptoType,
@@ -74,373 +72,139 @@ const TableCard = ({
   },
   // trade: { tradeType },
   path,
-  // setAddress,
-  // setNetwork,
-  // setBalance,
-  // setWalletAndWeb3,
-  ethereum: { 
-    // tokenBalance, address, wallet, 
-    web3, 
-    // currentBlock, notify 
-  },
-  // form,
-  // setTokenBalances,
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
+  ethereum: { tokenBalance, address, wallet, web3, notify },
+  form,
+  setTokenBalances,
+  setTrancheTokenBalances,
   // checkServer
 }) => {
-  // const JLoan = JLoanSetup(web3);
+  const JProtocol = JProtocolSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
   // const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   // const [newCollateralRatio, setNewCollateralRatio] = useState(0);
+  const [hasAllowance, setHasAllowance] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  // const [hasBalance, setHasBalance] = useState(false);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
 
   // const [isLoading, setIsLoading] = useState(false);
-  // const [approveLoading, setApproveLoading] = useState(false);
   // const [disableBtn, setDisableBtn] = useState(false);
   let disableBtn = false;
   let isLoading = false;
   let moreCardToggle = false;
   let moreList = false;
-  
-
-  // const [hasBalance, setHasBalance] = useState(false);
-  // const [hasAllowance, setHasAllowance] = useState(false);
-  // const [isShareholder, setIsShareholder] = useState(false);
-  // const [blocksUntilForeclosure, setBlocksUntilForeclosure] = useState(0);
-  // const [loanForeclosingBlock, setLoanForeclosingBlock] = useState(0);
-  // const [canBeForeclosed, setCanBeForeclosed] = useState(false);
-  // const [accruedInterest, setAccruedInterest] = useState(0);
-  // const checkLoan =
-  //   path === 'borrow' && address === borrowerAddress
-  //     ? PagesData[path].userTag
-  //     : path === 'lend' && isShareholder
-  //     ? PagesData[path].userTag
-  //     : false;
-
-  // const onboard = initOnboard({
-  //   address: setAddress,
-  //   network: setNetwork,
-  //   balance: setBalance,
-  //   wallet: setWalletAndWeb3
-  // });
-
-  // const searchArr = (key) => pairData.find((i) => i.key === key);
-
-  // let totalInterest = parseFloat(accruedInterest) + parseFloat(interestPaid);
   // const innerRef = useOuterClick((e) => {
   //   setInfoBoxToggle(false);
   // });
-  // useEffect(() => {
-  //   const balanceCheck = () => {
-  //     try {
-  //       if (
-  //         cryptoFromLenderName !== 'N/A' &&
-  //         remainingLoan !== 'N/A' &&
-  //         isGreaterThan(
-  //           Number(tokenBalance[cryptoFromLenderName]),
-  //           Number(toWei(remainingLoan.toString()))
-  //         )
-  //       )
-  //         setHasBalance(true);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
 
-  //   balanceCheck();
-  // }, [status, address, tokenBalance, cryptoFromLenderName, remainingLoan]);
+  const searchArr = (key) => tokenConstructors.find((i) => i.key === key);
 
-  // useEffect(() => {
-  //   if (
-  //     (path === 'borrow' && borrowerAddress !== address) ||
-  //     (path === 'borrow' &&
-  //       (status === statuses['Foreclosed'].status ||
-  //         status === statuses['Early_closing'].status ||
-  //         status === statuses['Closing'].status)) ||
-  //     (path === 'lend' &&
-  //       !isShareholder &&
-  //       (status === statuses['Active'].status ||
-  //         status === statuses['Foreclosed'].status ||
-  //         status === statuses['Early_closing'].status ||
-  //         status === statuses['Closing'].status)) ||
-  //     status === statuses['Closed'].status ||
-  //     status === statuses['Cancelled'].status
-  //   ) {
-  //     setDisableBtn(true);
-  //   } else setDisableBtn(false);
-  // }, [status, path, address, isShareholder, borrowerAddress]);
+  const onboard = initOnboard({
+    address: setAddress,
+    network: setNetwork,
+    balance: setBalance,
+    wallet: setWalletAndWeb3
+  });
 
-  // useEffect(() => {
-  //   const isShareholderCheck = async () => {
-  //     try {
-  //       if (address) {
-  //         const result = lenderAddress.indexOf(address.toLowerCase());
-  //         if (result !== -1) setIsShareholder(true);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  
+  const allowanceCheck = async (amount) => {
+  try {
+    amount = toWei(amount);
+    const tokenSetup = searchArr(cryptoType).tokenSetup
+    const token = tokenSetup(web3);
+    let userAllowance = await token.methods.allowance(address, contractAddress).call();
+    if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+      setHasAllowance(true);
+    } else {
+      setHasAllowance(false);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+  
+  const approveContract = async (amount) => {
+    try {
+      amount = toWei(amount);
+      const tokenSetup = searchArr(cryptoType).tokenSetup
+      const token = tokenSetup(web3);
+      await token.methods
+        .approve(contractAddress, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          setApproveLoading(true);
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //   isShareholderCheck();
-  // }, [status, address, lenderAddress]);
-
-  // useEffect(() => {
-  //   const forecloseWindowCheck = async () => {
-  //     try {
-  //       if (
-  //         loanForeclosingBlock !== 0 &&
-  //         currentBlock >= loanForeclosingBlock + Number(foreclosureWindow)
-  //       ) {
-  //         setCanBeForeclosed(true);
-  //       }
-  //       setBlocksUntilForeclosure(loanForeclosingBlock + Number(foreclosureWindow) - currentBlock);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   forecloseWindowCheck();
-  // }, [status, currentBlock, foreclosureWindow, loanForeclosingBlock]);
-
-  // const approveContract = async (pairId, amount, adjust = false) => {
-  //   try {
-  //     amount = toWei(amount);
-  //     const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
-  //     const token = adjust ? collateralTokenSetup(web3) : lendTokenSetup(web3);
-  //     await token.methods
-  //       .approve(contractAddress, toWei(amount))
-  //       .send({ from: address })
-  //       .on('transactionHash', (hash) => {
-  //         setApproveLoading(true);
-  //         const { emitter } = notify.hash(hash);
-  //         emitter.on('txPool', (transaction) => {
-  //           return {
-  //             message: txMessage(transaction.hash)
-  //           };
-  //         });
-  //         emitter.on('txConfirmed', () => {
-  //           setHasAllowance(true);
-  //           setApproveLoading(false);
-  //         });
-  //         emitter.on('txCancel', () => setApproveLoading(false));
-  //         emitter.on('txFailed', () => setApproveLoading(false));
-  //       });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const calcNewCollateralRatio = async (amount, actionType) => {
-  //   try {
-  //     const result = await calcAdjustCollateralRatio(loanId, amount, actionType, web3);
-  //     setNewCollateralRatio(result);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const approveLoan = async () => {
-  //   try {
-  //     await JLoan.methods
-  //       .lenderSendStableCoins(loanId, cryptoFromLender)
-  //       .send({ from: address })
-  //       .on('transactionHash', (hash) => {
-  //         const { emitter } = notify.hash(hash);
-  //         emitter.on('txPool', (transaction) => {
-  //           return {
-  //             message: txMessage(transaction.hash)
-  //           };
-  //         });
-  //       });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const closeLoan = async () => {
-  //   try {
-  //     if (status === 0) {
-  //       JLoan.methods
-  //         .setLoanCancelled(loanId)
-  //         .send({ from: address })
-  //         .on('transactionHash', (hash) => {
-  //           const { emitter } = notify.hash(hash);
-  //           emitter.on('txPool', (transaction) => {
-  //             return {
-  //               message: txMessage(transaction.hash)
-  //             };
-  //           });
-  //         });
-  //     } else {
-  //       await JLoan.methods
-  //         .loanClosingByBorrower(loanId)
-  //         .send({ from: address })
-  //         .on('transactionHash', (hash) => {
-  //           const { emitter } = notify.hash(hash);
-  //           emitter.on('txPool', (transaction) => {
-  //             return {
-  //               message: txMessage(transaction.hash)
-  //             };
-  //           });
-  //         });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const withdrawInterest = async () => {
-  //   try {
-  //     await JLoan.methods
-  //       .withdrawInterests(loanId)
-  //       .send({ from: address })
-  //       .on('transactionHash', (hash) => {
-  //         const { emitter } = notify.hash(hash);
-  //         emitter.on('txPool', (transaction) => {
-  //           return {
-  //             message: txMessage(transaction.hash)
-  //           };
-  //         });
-  //       });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const forecloseLoan = async () => {
-  //   try {
-  //     const onChainStatus = await getLoanStatus(loanId, web3);
-  //     console.log('backend status: ' + status);
-  //     console.log('onChain status: ' + onChainStatus);
-  //     if (
-  //       status === statuses['Under_Collateralized'].status ||
-  //       (status === statuses['At_Risk'].status && onChainStatus === statuses['Active'].status)
-  //     ) {
-  //       console.log('initiateLoanForeclose');
-  //       await JLoan.methods
-  //         .initiateLoanForeclose(loanId)
-  //         .send({ from: address })
-  //         .on('transactionHash', (hash) => {
-  //           const { emitter } = notify.hash(hash);
-  //           emitter.on('txPool', (transaction) => {
-  //             return {
-  //               message: txMessage(transaction.hash)
-  //             };
-  //           });
-  //         });
-  //     } else if (
-  //       (onChainStatus === statuses['Foreclosing'].status &&
-  //         status === statuses['At_Risk'].status) ||
-  //       onChainStatus === statuses['At_Risk'].status ||
-  //       (currentBlock >= loanForeclosingBlock + Number(foreclosureWindow) &&
-  //         status === statuses['Foreclosing'].status)
-  //     ) {
-  //       console.log('setLoanToForeclosed');
-  //       await JLoan.methods
-  //         .setLoanToForeclosed(loanId)
-  //         .send({ from: address })
-  //         .on('transactionHash', (hash) => {
-  //           const { emitter } = notify.hash(hash);
-  //           emitter.on('txPool', (transaction) => {
-  //             return {
-  //               message: txMessage(transaction.hash)
-  //             };
-  //           });
-  //         });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const withdrawCollateral = async () => {
-  //   try {
-  //     let { collateralAmount } = form.adjustLoan.values;
-  //     collateralAmount = toWei(collateralAmount);
-  //     await JLoan.methods
-  //       .withdrawCollateral(loanId, collateralAmount)
-  //       .send({ from: address })
-  //       .on('transactionHash', (hash) => {
-  //         const { emitter } = notify.hash(hash);
-  //         emitter.on('txPool', (transaction) => {
-  //           return {
-  //             message: txMessage(transaction.hash)
-  //           };
-  //         });
-  //       });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const addCollateral = async () => {
-  //   try {
-  //     let { collateralAmount } = form.adjustLoan.values;
-  //     collateralAmount = toWei(collateralAmount);
-  //     if (cryptoFromLenderName === searchArr(DAI).key) {
-  //       await JLoan.methods
-  //         .depositEthCollateral(loanId)
-  //         .send({ value: collateralAmount, from: address })
-  //         .on('transactionHash', (hash) => {
-  //           const { emitter } = notify.hash(hash);
-  //           emitter.on('txPool', (transaction) => {
-  //             return {
-  //               message: txMessage(transaction.hash)
-  //             };
-  //           });
-  //         });
-  //     } else {
-  //       await JLoan.methods
-  //         .depositTokenCollateral(loanId, collateralType, collateralAmount)
-  //         .send({ from: address })
-  //         .on('transactionHash', (hash) => {
-  //           const { emitter } = notify.hash(hash);
-  //           emitter.on('txPool', (transaction) => {
-  //             return {
-  //               message: txMessage(transaction.hash)
-  //             };
-  //           });
-  //         });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const adjustLoan = (e, type) => {
-  //   e.preventDefault();
-  //   if (type) {
-  //     addCollateral();
-  //     closeModal();
-  //   } else {
-  //     withdrawCollateral();
-  //     closeModal();
-  //   }
-  // };
+  const buyTrancheTokens = async (e) => {
+    try {
+      e.preventDefault();
+      let { amount } = form.sell.values;
+      amount = toWei(amount);
+      if (type === 'TRANCHE_A') {
+        await JProtocol.methods
+          .buyTrancheAToken(trancheId, amount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            closeModal(); 
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+          });
+      } else {
+        await JProtocol.methods
+          .buyTrancheBToken(trancheId, amount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            closeModal(); 
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const openModal = async () => {
-    // const ready = await readyToTransact(wallet, onboard);
-    // if (!ready) return;
-    // address = !address ? onboard.getState().address : address;
-    // setTokenBalances(web3, address);
-    // const allowanceResult = await allowanceCheck(pairId, remainingLoan.toString(), address, web3);
-    // setHasAllowance(allowanceResult);
-    // const availableInterest = await getAccruedInterests(loanId, web3);
-    // setAccruedInterest(availableInterest);
-    // const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
-    // setLoanForeclosingBlock(loanClosingBlock);
-    // if (loanId === 20) {
-    //   console.log(currentBlock >= result + Number(foreclosureWindow))
-    //   console.log(result + Number(foreclosureWindow) - currentBlock)
-    // }
-    // if (currentBlock >= loanClosingBlock + Number(foreclosureWindow)) setCanBeForeclosed(true);
-    // setBlocksUntilForeclosure(loanClosingBlock + Number(foreclosureWindow) - currentBlock);
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    address = !address ? onboard.getState().address : address;
+    setTokenBalances(web3, address);
+    setTrancheTokenBalances()
     setIsOpen(true);
   };
 
   const closeModal = () => {
     setIsOpen(false);
+    setHasAllowance(false);
   };
 
   // const searchObj = (val) => {
@@ -532,26 +296,29 @@ const TableCard = ({
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
             <h2>
-              {amount.toString().length > 5 ? amount.toString().substring(0,5) +"..." : amount.toString()} <span>{cryptoType}</span>
+              {fromWei(amount.toString())} <span>{cryptoType}</span>
             </h2>
           </div>
         </div>
-        <div className={'table-col ' + (path === "earn" ? "table-fourth-col-return " : "table-fourth-col")}>
+        <div
+          className={
+            'table-col ' + (path === 'earn' ? 'table-fourth-col-return ' : 'table-fourth-col')
+          }
+        >
           <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
-              {rpbRate && fromWei(rpbRate.toString())}
-              <span>%</span>
+              {rpbRate}
             </h2>
           </div>
         </div>
-        <div className={'table-col ' + (path === "earn" ? "table-fifth-col-subscription " : "table-fifth-col")}>
+        <div
+          className={
+            'table-col ' + (path === 'earn' ? 'table-fifth-col-subscription ' : 'table-fifth-col')
+          }
+        >
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {subscriber}
-              {/* <span>%{' '}
-                ({roundBasedOnUnit(totalInterest, collateralTypeName)}{' '}
-                {gweiOrEther(totalInterest, collateralTypeName)})
-              </span> */}
+              {(subscriber.toString())}
             </h2>
           </div>
         </div>
@@ -615,7 +382,7 @@ const TableCard = ({
                     ? Adjust
                     : path === 'lend'
                     ? AdjustEarn
-                    : (path === 'earn' && !disableBtn)
+                    : path === 'earn' && !disableBtn
                     ? AdjustTrade
                     : Adjust
                 }
@@ -623,84 +390,20 @@ const TableCard = ({
               />
             </AdjustLoanBtn>
           </div>
-          {/* <TradeModal
-            // State Values
-            path={path}
-            modalIsOpen={modalIsOpen}
-            approveLoading={approveLoading}
-            hasBalance={hasBalance}
-            hasAllowance={hasAllowance}
-            isShareholder={isShareholder}
-            canBeForeclosed={canBeForeclosed}
-            blocksUntilForeclosure={blocksUntilForeclosure}
-            accruedInterest={accruedInterest}
-            totalInterest={totalInterest}
-            newCollateralRatio={newCollateralRatio}
-            setHasAllowance={setHasAllowance}
-            setNewCollateralRatio={setNewCollateralRatio}
-            // Functions
-            closeModal={() => closeModal()}
-            approveContract={approveContract}
-            adjustLoan={adjustLoan}
-            calcNewCollateralRatio={calcNewCollateralRatio}
-            closeLoan={closeLoan}
-            approveLoan={approveLoan}
-            withdrawInterest={withdrawInterest}
-            forecloseLoan={forecloseLoan}
-            tradeType={tradeType}
-            // API Values
-            loanId={loanId}
-            status={status}
-            pairId={pairId}
-            contractAddress={contractAddress}
-            remainingLoan={remainingLoan}
-            cryptoFromLenderName={cryptoFromLenderName}
-            collateralAmount={collateralAmount}
-            collateralTypeName={collateralTypeName}
-            collateralRatio={collateralRatio}
-            interestPaid={interestPaid}
-            APY={apy}
-            rpbRate={rpbRate && fromWei(rpbRate.toString())}
-          /> */}
-
           <TradeModal
             // State Values
             path={path}
             modalIsOpen={modalIsOpen}
-            // approveLoading={approveLoading}
-            // hasBalance={hasBalance}
-            // hasAllowance={hasAllowance}
-            // isShareholder={isShareholder}
-            // canBeForeclosed={canBeForeclosed}
-            // blocksUntilForeclosure={blocksUntilForeclosure}
-            // accruedInterest={accruedInterest}
-            // totalInterest={totalInterest}
-            // newCollateralRatio={newCollateralRatio}
-            // setHasAllowance={setHasAllowance}
-            // setNewCollateralRatio={setNewCollateralRatio}
+            hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
             // Functions
             closeModal={() => closeModal()}
-            // approveContract={approveContract}
-            // adjustLoan={adjustLoan}
-            // calcNewCollateralRatio={calcNewCollateralRatio}
-            // closeLoan={closeLoan}
-            // approveLoan={approveLoan}
-            // withdrawInterest={withdrawInterest}
-            // forecloseLoan={forecloseLoan}
-            // tradeType={tradeType}
-            // // API Values
-            // loanId={loanId}
-            // status={status}
-            // pairId={pairId}
-            // contractAddress={contractAddress}
-            // remainingLoan={remainingLoan}
-            // cryptoFromLenderName={cryptoFromLenderName}
-            // collateralAmount={collateralAmount}
-            // collateralTypeName={collateralTypeName}
-            // collateralRatio={collateralRatio}
-            // interestPaid={interestPaid}
-            // APY={apy}
-            // rpbRate={rpbRate && fromWei(rpbRate.toString())}
+            allowanceCheck={allowanceCheck}
+            approveContract={approveContract}
+            buyTrancheTokens={buyTrancheTokens}
+            // API Values
+            trancheName={name}
+            trancheType={type}
           />
         </div>
       </TableContentCard>
@@ -717,17 +420,17 @@ const TableCard = ({
             moreList.map((i) => {
               return (
                 <TableMoreRow
-                  // key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
-                  // ethImg={ETH}
-                  // arrow='downArrow'
-                  // status={i.loanStatus}
-                  // ratio={i.collateralRatio}
-                  // createdAt={i.createdAt}
-                  // hash={i.transactionHash}
-                  // collateralTypeName={collateralTypeName}
-                  // cryptoFromLenderName={cryptoFromLenderName}
-                  // amount={i.amount}
-                  // eventName={i.eventName}
+                // key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
+                // ethImg={ETH}
+                // arrow='downArrow'
+                // status={i.loanStatus}
+                // ratio={i.collateralRatio}
+                // createdAt={i.createdAt}
+                // hash={i.transactionHash}
+                // collateralTypeName={collateralTypeName}
+                // cryptoFromLenderName={cryptoFromLenderName}
+                // amount={i.amount}
+                // eventName={i.eventName}
                 />
               );
             })
@@ -766,5 +469,6 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
+  setTrancheTokenBalances,
   checkServer
 })(TableCard);

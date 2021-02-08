@@ -103,6 +103,13 @@ export const pairData = [
   // }
 ];
 
+export const tokenConstructors = [
+  {
+    key: 'DAI',
+    tokenSetup: DAISetup
+  }
+]
+
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
