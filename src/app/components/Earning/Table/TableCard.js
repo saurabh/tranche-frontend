@@ -296,7 +296,7 @@ const TableCard = ({
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
             <h2>
-              {fromWei(amount.toString())} <span>{cryptoType}</span>
+              {amount} <span>{cryptoType}</span>
             </h2>
           </div>
         </div>
@@ -318,7 +318,7 @@ const TableCard = ({
         >
           <div className='fifth-col-content content-3-col second-4-col-content'>
             <h2>
-              {(subscriber.toString())}
+              {(subscriber)}
             </h2>
           </div>
         </div>
