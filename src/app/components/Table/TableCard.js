@@ -655,6 +655,7 @@ const TableCard = ({
                   collateralTypeName={collateralTypeName}
                   cryptoFromLenderName={cryptoFromLenderName}
                   amount={i.amount}
+                  amountMetaData={i.metaData && i.metaData.amount}
                   eventName={i.eventName}
                 />
               );
