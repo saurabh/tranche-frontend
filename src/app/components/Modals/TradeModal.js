@@ -6,7 +6,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TradeForm from '../Form/ Trade';
-
+import { gweiOrEther, roundBasedOnUnit } from 'utils';
+import { fromWei } from 'services/contractMethods';
 import {
   ModalHeader,
   ModalContent,
@@ -21,7 +22,7 @@ import {
   ModalActionDetailsContent,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue,
+  LoanDetailsRowValue
   // LoanDetailsMobile
 } from './styles/ModalsComponents';
 
@@ -95,7 +96,9 @@ const TradeModal = ({
   buyTrancheTokens,
   // API Values
   trancheName,
-  trancheType
+  trancheType,
+  cryptoType,
+  rpbRate
 }) => {
   const [buyToggle, setBuyToggle] = useState(0);
   const [sellToggle, setSellToggle] = useState(0);
@@ -213,7 +216,9 @@ const TradeModal = ({
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle>Return per Block</LoanDetailsRowTitle>
 
-                <LoanDetailsRowValue></LoanDetailsRowValue>
+                <LoanDetailsRowValue>
+                  {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
+                </LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>

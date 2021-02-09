@@ -103,6 +103,8 @@ export const pairData = [
   // }
 ];
 
+export const gweiVariants = ['Gwei' ,'nSLICE' , 'nDAI' ,'nUSDC'];
+
 export const tokenConstructors = [
   {
     key: 'DAI',
