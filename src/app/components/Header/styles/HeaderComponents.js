@@ -95,6 +95,7 @@ const NavbarLinks = styled.div`
       position: absolute;
       display: inline-block;
       color: #ffffff;
+      white-space: nowrap;
       :before {
         position: absolute;
         top: 0;
@@ -362,7 +363,7 @@ const RatesRowDash = styled.div`
 `;
 const TabIndicator = styled.div`
   height: 4px;
-  width: ${(props) => (props.path === "lend" ? "92px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "115px" : "0")};
+  width: ${(props) => ((props.path === "lend" && props.language === "en") ? "92px" : (props.path === "lend" && props.language === "zh") ? "64px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "115px" : "0")};
   background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "earn" ? "#ffffff" : "")};
   transition: 300ms;
   bottom: 0;
@@ -370,11 +371,13 @@ const TabIndicator = styled.div`
   left: ${(props) =>
     props.tab === "all"
       ? "-2px"
-      : props.tab === "own" && props.path === "lend"
+      : props.tab === "own" && props.path === "lend" && props.language === "en" //to be optimized
       ? "calc(100% - 88px)"
+      : props.tab === "own" && props.path === "lend" && props.language === "zh" //to be optimized
+      ? "calc(100% - 62px)"
       : props.tab === "own" && props.path === "borrow"
       ? "calc(100% - 78px)"
-      : props.tab === "allTranches" && props.path === "earn"
+      : props.tab === "allTranches" && props.path === "earn"  
       ? "-4px"
       : props.tab === "myTranches" && props.path === "earn"
       ? "calc(100% - 110px)"
@@ -447,7 +450,36 @@ const NavBarMobileContent = styled.div`
     top: 20px;
   }
 `
-
+const LocaleWrapper = styled.div`
+  position: relative;
+  margin-right: 15px;
+  h2, a{
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: normal;
+    cursor: pointer;
+    color: ${(props) => (props.color)}
+  }
+  div{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 992px) {
+      position: relative;  
+    }
+  }
+  @media (max-width: 992px) {
+    margin-right: 0;
+  }
+  
+`
+const NavBarRightWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+`
 export {
   HeaderWrapper,
   HeaderContent,
@@ -472,5 +504,7 @@ export {
   RatesRowDash,
   TabIndicator,
   NavBarMobile,
-  NavBarMobileContent
+  NavBarMobileContent,
+  NavBarRightWrapper,
+  LocaleWrapper
 };

@@ -273,7 +273,7 @@ const TableCard = ({
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
             <div className='first-col-img'>
-              <img src={UserImg} alt='User' />
+              <img src={UserImg} alt='Tranche' />
             </div>
             <div className='first-col-content'>
               <div className='first-col-title'>

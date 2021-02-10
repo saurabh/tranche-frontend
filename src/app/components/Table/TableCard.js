@@ -25,7 +25,7 @@ import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
-  valShortner,
+  // valShortner,
   readyToTransact,
   isGreaterThan,
   gweiOrEther,
@@ -44,6 +44,7 @@ import {
   AdjustLoanBtn,
   TableCardTag
 } from './styles/TableComponents';
+import i18n from 'i18next';
 
 const TableCard = ({
   loan: {
@@ -562,9 +563,10 @@ const TableCard = ({
               color={Object.values(searchObj(status))[0].color}
               backgroundColor={Object.values(searchObj(status))[0].background}
             >
-              {Object.values(searchObj(status))[0].key === 'Under Collateralized'
+              {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
                 ? 'Under'
-                : valShortner(Object.values(searchObj(status))[0].key)}
+                : valShortner(Object.values(searchObj(status))[0].key)} */}
+                {i18n.t(`${"statuses." + status.toString() + ".key"}`)}
             </StatusTextWrapper>
           </div>
         </div>

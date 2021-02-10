@@ -9,6 +9,8 @@ import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { ETH, DaiLogo } from 'assets';
 import { NavLink } from 'react-router-dom';
+import i18n from 'i18next';
+
 
 import {
   HeaderTabsWrapper,
@@ -40,7 +42,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
     },
     [changeOwnAllFilter]
   );
-  
+    
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
     setRatesVisability(!ratesVisability);
@@ -99,7 +101,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
             active={filterType === 'all'}
             color={PagesData[path].secondaryColor}
           >
-            {path === 'borrow' ? 'All Loans' : path === 'lend' ? 'All Assets' : ''}
+            {path === 'borrow' ? 'All Loans' : path === 'lend' ? i18n.t("earn.tabs.all") : ''}
           </HeaderTabBtn>
           {
             address ? 
@@ -109,11 +111,11 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 active={filterType === 'own'}
                 color={PagesData[path].secondaryColor}
               >
-                {path === "borrow" ? "My Loans" : path === "lend" ? "My Assets" : ""}
+                {path === "borrow" ? "My Loans" : path === "lend" ? i18n.t("earn.tabs.own") : ""}
               </HeaderTabBtn>
             : ""
           }
-          <TabIndicator tab={filterType} path={path}></TabIndicator>
+          <TabIndicator tab={filterType} path={path} language={i18n.language}></TabIndicator>
         </MarketsTabsContainer>
         :
         <MarketsTabsContainer page="earn">
@@ -137,7 +139,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
               </HeaderTabBtn>
             : ""
           }
-          <TabIndicator tab={tradeType} path={path}></TabIndicator>
+          <TabIndicator tab={tradeType} path={path} language={i18n.language}></TabIndicator>
         </MarketsTabsContainer>
         }
         
@@ -196,12 +198,12 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
               </RatesRowWrapper> */}
             </RatesBoxWrapper>
             <HeaderTabBtn onClick={() => getPriceFeed()} id=''>
-              Rates
+            {i18n.t("rates")}
             </HeaderTabBtn>
           </RatesWrapper>
           <div>
             <HeaderTabBtn link as='a' href={"https://docs.tranche.finance/tranchefinance/guides/for-users/" + (path === "borrow" ? "borrowing" : path === "lend" ? "lending" : "")} target='_blank' id='how-to-tab'>
-              How-to
+              {i18n.t("HowTo")}
             </HeaderTabBtn>
           </div>
         </div>

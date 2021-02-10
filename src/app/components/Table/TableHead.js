@@ -54,7 +54,7 @@ const TableHead = ({changeSorting, path}) => {
                     </SortChevronWrapper>
                 </div>
             </TableHeadTitle>
-            <TableHeadTitle className="ratio-wrapper">
+            <TableHeadTitle className={path !== "earn" ? "ratio-wrapper" : "return-wrapper"}>
                 <div className={path !== "earn" ? "ratio-title-content" : "return-content"} onClick={() => sortLoans(path !== "earn" ? "collateralRatio" : "rpbRate")}>
                     <h2>{path !== "earn" ? "Ratio" : "RETURN/BLOCK"}</h2>
                     <SortChevronWrapper>

@@ -10,6 +10,8 @@ import downChevron from './images/svg/downChevron.svg';
 import upChevron from './images/svg/upChevron.svg';
 import CloseModal from './images/svg/closeModal.svg';
 import selectDown from './images/svg/selectDown.svg';
+import ChevronDownBorrow from './images/svg/chevronDownBorrow.svg';
+import ChevronDownEarn from './images/svg/chevronDownEarn.svg';
 import selectUp from './images/svg/selectUp.svg';
 import Agree from './images/svg/Agree.svg';
 import ServerError from './images/svg/ServerError.svg';
@@ -29,7 +31,9 @@ import BackArrow from './images/svg/BackArrow.svg';
 import CreateLoan from './images/svg/CreateLoan.svg';
 import UserImg from './images/svg/userImg.svg';
 import Info from './images/svg/info.svg';
+import TrancheImg from './images/svg/trancheImg.svg';
+import YearnImg from './images/svg/yearnImg.svg';
 
 export {
-    Adjust, DAI, RequestLoan, Info, CreateLoan, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
+    Adjust, DAI, RequestLoan, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
 };

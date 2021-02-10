@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   HeaderWrapper,
@@ -9,21 +9,24 @@ import {
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
 import { PagesData } from 'config/constants';
+import i18n from "../locale/i18n";
 
 export function Header({updateDate}) {
   const { pathname } = useLocation();
-  const [path, setPath] = useState(pathname.split('/')[1] || "borrow");
-  useEffect(() => {
-    const parsePath = () => {
-      setPath(pathname.split('/')[1]);
-    };
+  let parsedPath = pathname.split('/');
 
+  const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || "borrow");
+  const parsePath = useCallback(() =>{
+    setPath(parsedPath[parsedPath.length - 1]);
+  }, [parsedPath]);
+  useEffect(() => {
     parsePath();
-  }, [pathname]);
+  }, [pathname, parsePath]);
+  console.log(path)
 
   return (
     <HeaderWrapper color={PagesData[path].color}>
-      <Navbar path={pathname.split('/')[1]}/>
+      <Navbar path={parsedPath[parsedPath.length - 1]}/>
         <div className='content-container container'>
           <HeaderContent path={path}>
             {  (path === "privacy" || path === "terms") ? 
@@ -32,10 +35,10 @@ export function Header({updateDate}) {
               </HeaderSubtitle> : ""
             }
             <HeaderTitle className='header-text'>
-              <h2>{PagesData[path].title}</h2>
+              <h2>{i18n.t(`${path + ".title"}`)}</h2>
             </HeaderTitle>
             <HeaderSubtitle className='header-text'>
-              <h2>{PagesData[path].description}</h2>
+              <h2>{i18n.t(`${path + ".text"}`)}</h2>
             </HeaderSubtitle>
           </HeaderContent>
         </div>

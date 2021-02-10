@@ -123,6 +123,21 @@ const GlobalStyle = createGlobalStyle`
       text-align: center;
     }
   }
+  .return-wrapper{
+    width: 9%;
+    .return-content div{
+      right: -9px !important;
+    }
+    .ratio-title-content div{
+      right: 9px !important;
+    }
+    .return-title-content div{
+      right: -27px !important;
+    }
+    h2{
+      text-align: center;
+    }
+  }
   .ratio-wrapper{
     width: 7%;
     .return-content div{
