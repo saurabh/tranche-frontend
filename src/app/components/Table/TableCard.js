@@ -542,12 +542,17 @@ const TableCard = ({
           <div className='second-col-content'>
             <StatusTextWrapper
               className='status-text-wrapper'
-              color={Object.values(searchObj(status))[0].color}
-              backgroundColor={Object.values(searchObj(status))[0].background}
+              color={typeof status === "number" ? Object.values(searchObj(status))[0].color : "#FFFFFF"}
+              backgroundColor={typeof status === "number" ? Object.values(searchObj(status))[0].background : "#FFFFFF"}
             >
-              {Object.values(searchObj(status))[0].key === 'Under Collateralized'
+              {typeof status === "number" ? (
+              
+                Object.values(searchObj(status))[0].key === 'Under Collateralized'
                 ? 'Under'
-                : valShortner(Object.values(searchObj(status))[0].key)}
+                : valShortner(Object.values(searchObj(status))[0].key)
+              ) : "NaN"
+              
+              }
             </StatusTextWrapper>
           </div>
         </div>

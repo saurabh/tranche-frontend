@@ -22,7 +22,7 @@ import SLICE from './images/svg/SLICE.svg';
 import ChevronDown from './images/svg/chevronDown.svg';
 import SLICELogo from './images/svg/SLICELogo.svg';
 import FilterChevron from './images/svg/FilterChevron.svg';
-import DaiLogo from './images/svg/daiLogo.svg';
+import DaiLogo from './images/svg/dai.svg';
 
 export {
     Adjust, DAI, DaiLogo, RequestLoan, FilterChevron, ChevronDown, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp
