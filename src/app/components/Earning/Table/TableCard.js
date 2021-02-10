@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 // import { useOuterClick } from 'services/useOuterClick';
 import { JProtocolSetup } from 'utils/contractConstructor';
-import {
-  fromWei,
-  toWei
-} from 'services/contractMethods';
+import { fromWei, toWei } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -85,10 +82,9 @@ const TableCard = ({
   const JProtocol = JProtocolSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
   // const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
-  // const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
-  // const [hasBalance, setHasBalance] = useState(false);
+  const [hasBalance, setHasBalance] = useState(false);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +100,29 @@ const TableCard = ({
   // });
 
   const searchArr = (key) => tokenConstructors.find((i) => i.key === key);
+
+  useEffect(() => {
+    const balanceCheck = () => {
+      try {
+        if (type === 'TRANCHE_A') {
+          const availableAmount = amount - subscriber;
+          if (
+            cryptoType !== 'N/A' &&
+            amount !== 'N/A' &&
+            isGreaterThan(
+              Number(tokenBalance[cryptoType]),
+              Number(toWei(availableAmount.toString()))
+            )
+          )
+            setHasBalance(true);
+        } else setHasBalance(true);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    balanceCheck();
+  }, [amount, type, cryptoType, subscriber, tokenBalance]);
 
   const onboard = initOnboard({
     address: setAddress,
@@ -307,8 +326,7 @@ const TableCard = ({
         >
           <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
-              {roundBasedOnUnit((rpbRate), cryptoType)}{' '}
-              {gweiOrEther((rpbRate), cryptoType)}
+              {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
             </h2>
           </div>
         </div>
@@ -393,6 +411,8 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             hasAllowance={hasAllowance}
             approveLoading={approveLoading}
+            hasBalance={hasBalance}
+            trancheTokenBalance={trancheTokenBalance}
             // Functions
             closeModal={() => closeModal()}
             allowanceCheck={allowanceCheck}
@@ -400,8 +420,10 @@ const TableCard = ({
             buyTrancheTokens={buyTrancheTokens}
             // API Values
             trancheName={name}
-            cryptoType={cryptoType}
             trancheType={type}
+            amount={amount}
+            subscriber={subscriber}
+            cryptoType={cryptoType}
             rpbRate={rpbRate}
           />
         </div>

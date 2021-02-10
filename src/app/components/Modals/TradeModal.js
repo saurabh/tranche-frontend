@@ -6,7 +6,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TradeForm from '../Form/ Trade';
-import { gweiOrEther, roundBasedOnUnit } from 'utils';
+import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
 import { fromWei } from 'services/contractMethods';
 import {
   ModalHeader,
@@ -89,6 +89,8 @@ const TradeModal = ({
   modalIsOpen,
   hasAllowance,
   approveLoading,
+  hasBalance,
+  trancheTokenBalance,
   // Functions
   closeModal,
   allowanceCheck,
@@ -97,11 +99,17 @@ const TradeModal = ({
   // API Values
   trancheName,
   trancheType,
+  amount,
+  subscriber,
   cryptoType,
   rpbRate
 }) => {
   const [buyToggle, setBuyToggle] = useState(0);
   const [sellToggle, setSellToggle] = useState(0);
+  let trancheTokens =
+    trancheTokenBalance && trancheTokenBalance[trancheName]
+      ? roundNumber(fromWei(trancheTokenBalance[trancheName]))
+      : 0;
 
   //   const confirm = (type) => {
   //     confirmAlert({
@@ -250,12 +258,19 @@ const TradeModal = ({
               <ModalContent>
                 <BtnGrpLoanModal>
                   <BtnGrpLoanModalWrapper>
-                    <h2>There are 1,501 Tranche A tokens available for purchase</h2>
+                    <h2>
+                      {trancheType === 'TRANCHE_A' && amount === subscriber
+                        ? 'Tranche A is oversubscribed and there are no availble allocations'
+                        : !hasBalance
+                        ? `You don't have enough ${cryptoType} for this action.`
+                        : `There are ${amount - subscriber} Tranche A tokens available for purchase`}
+                    </h2>
                     <ModalButton
                       trade={true}
                       onClick={() => buyTranche(0)}
                       btnColor='#FFFFFF'
                       backgroundColor='#2ECC71'
+                      disabled={!hasBalance || amount === subscriber}
                     >
                       BUY {trancheType === 'TRANCHE_A' ? 'TRANCHE A' : 'TRANCHE B'}
                       <span></span>
@@ -263,7 +278,11 @@ const TradeModal = ({
                   </BtnGrpLoanModalWrapper>
 
                   <BtnGrpLoanModalWrapper>
-                    <h2>You have 14,015 Tranche A tokens available to sell</h2>
+                    <h2>
+                      You have {trancheTokens}{' '}
+                      {trancheType === 'TRANCHE_A' ? 'TRANCHE A' : 'TRANCHE B'} tokens available to
+                      sell
+                    </h2>
                     <ModalButton
                       trade={true}
                       // disabled={true}
