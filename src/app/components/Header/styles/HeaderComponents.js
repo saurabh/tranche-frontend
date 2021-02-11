@@ -460,6 +460,9 @@ const LocaleWrapper = styled.div`
     cursor: pointer;
     color: ${(props) => (props.color)}
   }
+  img{
+    opacity: 0.7;
+  }
   div{
     position: absolute;
     display: flex;

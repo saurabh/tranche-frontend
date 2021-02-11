@@ -201,6 +201,9 @@ html{
 .table-fifth-col-subscription{
   width: 15%;
 }
+.table-fifth-col-subscription div h2{
+  padding: 0;
+}
 
 .fifth-col-content{
   position: relative;

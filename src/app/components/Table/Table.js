@@ -18,7 +18,6 @@ import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableHeadMobile from './TableHeadMobile';
 import TableCard from './TableCard';
-import TableCardMobile from './TableCardMobile';
 import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFiltersWrapper,
   TableMobileFilter,
@@ -240,7 +239,7 @@ const Table = ({
               ) :
               
               (
-                loans && loans.list.map((loan, i) => <TableCardMobile key={i} loan={loan} path={path} />)
+                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
         </TableWrapper>

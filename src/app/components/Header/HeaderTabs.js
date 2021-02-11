@@ -9,7 +9,7 @@ import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { ETH, DaiLogo } from 'assets';
 import { NavLink } from 'react-router-dom';
-import i18n from 'i18next';
+import i18n from "../locale/i18n";
 
 
 import {
@@ -26,6 +26,7 @@ import {
   RatesRowDash,
   TabIndicator
 } from './styles/HeaderComponents';
+export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
@@ -63,24 +64,24 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
     <div className='content-container container'>
       <HeaderTabsWrapper mobile>
           <MarketsTabsContainer links>
-            <NavLink to="/borrow"
+            <NavLink to={baseUrl + '/borrow'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >Borrow</NavLink>
-            <NavLink to="/lend"
+            >{i18n.t('navbar.borrow')}</NavLink>
+            <NavLink to={baseUrl + '/lend'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >Lend</NavLink>
-            <NavLink to="/earn"
+            >{i18n.t('navbar.lend')}</NavLink>
+            <NavLink to={baseUrl + '/earn'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >Earn</NavLink>
+            >{i18n.t('navbar.earn')}</NavLink>
           </MarketsTabsContainer>
               
 

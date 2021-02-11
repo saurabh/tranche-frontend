@@ -3,6 +3,8 @@
 <g filter="url(#filter0_d)">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M21.5663 29.7042C22.2113 29.7042 23.9426 29.4664 23.9426 29.1606V24.5402C23.671 24.6761 22.4829 24.7101 21.804 24.7101C20.0727 24.7101 18.7488 23.487 18.7488 21.4826V15.0955H23.06L23.3994 10.6789H18.7488V6.39825L13.3174 6.73799V22.5018C13.3174 27.36 17.3909 29.7042 21.5663 29.7042Z" fill="white"/>
 </g>
+<rect x="4.45898" y="21.5399" width="28.9515" height="1.36072" fill="black"/>
+<rect x="4.45898" y="14.7653" width="28.9515" height="1.36072" fill="black"/>
 <defs>
 <filter id="filter0_d" x="12.3174" y="6.39825" width="12.6252" height="25.3059" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>

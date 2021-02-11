@@ -603,6 +603,51 @@ const InfoBox = styled.div`
     }
   }
 `
+const TableCardImg = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  img{
+    border-radius: 50%;
+    height: 37px;
+  }
+  
+  ${({ tranche, color, type }) => tranche && type === "A" && `
+    ::after{
+      content: "A";
+      position: absolute;
+      right: -5px;
+      bottom: 0;
+      color: #FFFFFF;
+      font-size: 8px;
+      width: 15px;
+      height: 15px;
+      background: ${color};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    border-radius: 4px;
+    }
+  `}
+  ${({ tranche, color, type }) => tranche  && type === "B" && `
+    ::after{
+      content: "B";
+      position: absolute;
+      right: -5px;
+      bottom: 0;
+      color: #FFFFFF;
+      font-size: 8px;
+      width: 15px;
+      height: 15px;
+      background: ${color};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    border-radius: 4px;
+    }
+  `}
+`
+
 
 
 export {
@@ -614,6 +659,7 @@ export {
   SortChevronWrapper,
   TableContentCard,
   StatusTextWrapper,
+  TableCardImg,
   MoreRowSpan,
   TableContainerHeader,
   TableTitle,
