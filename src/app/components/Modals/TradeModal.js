@@ -261,6 +261,8 @@ const TradeModal = ({
                     <h2>
                       {trancheType === 'TRANCHE_A' && amount === subscriber
                         ? 'Tranche A is oversubscribed and there are no availble allocations'
+                        : trancheType === 'TRANCHE_B'
+                        ? 'The interest that flows into Tranche B is split between all Tranche B holders'
                         : !hasBalance
                         ? `You don't have enough ${cryptoType} for this action.`
                         : `There are ${amount - subscriber} Tranche A tokens available for purchase`}
