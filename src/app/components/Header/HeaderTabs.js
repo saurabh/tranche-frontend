@@ -9,6 +9,8 @@ import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { ETH, DaiLogo } from 'assets';
 import { NavLink } from 'react-router-dom';
+import i18n from "../locale/i18n";
+
 
 import {
   HeaderTabsWrapper,
@@ -24,6 +26,7 @@ import {
   RatesRowDash,
   TabIndicator
 } from './styles/HeaderComponents';
+export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
@@ -40,7 +43,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
     },
     [changeOwnAllFilter]
   );
-  
+    
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
     setRatesVisability(!ratesVisability);
@@ -61,24 +64,24 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
     <div className='content-container container'>
       <HeaderTabsWrapper mobile>
           <MarketsTabsContainer links>
-            <NavLink to="/borrow"
+            <NavLink to={baseUrl + '/borrow'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >Borrow</NavLink>
-            <NavLink to="/lend"
+            >{i18n.t('navbar.borrow')}</NavLink>
+            <NavLink to={baseUrl + '/lend'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >Lend</NavLink>
-            <NavLink to="/earn"
+            >{i18n.t('navbar.lend')}</NavLink>
+            <NavLink to={baseUrl + '/earn'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >Earn</NavLink>
+            >{i18n.t('navbar.earn')}</NavLink>
           </MarketsTabsContainer>
               
 
@@ -99,7 +102,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
             active={filterType === 'all'}
             color={PagesData[path].secondaryColor}
           >
-            {path === 'borrow' ? 'All Loans' : path === 'lend' ? 'All Assets' : ''}
+            {path === 'borrow' ? 'All Loans' : path === 'lend' ? i18n.t("earn.tabs.all") : ''}
           </HeaderTabBtn>
           {
             address ? 
@@ -109,11 +112,11 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 active={filterType === 'own'}
                 color={PagesData[path].secondaryColor}
               >
-                {path === "borrow" ? "My Loans" : path === "lend" ? "My Assets" : ""}
+                {path === "borrow" ? "My Loans" : path === "lend" ? i18n.t("earn.tabs.own") : ""}
               </HeaderTabBtn>
             : ""
           }
-          <TabIndicator tab={filterType} path={path}></TabIndicator>
+          <TabIndicator tab={filterType} path={path} language={i18n.language}></TabIndicator>
         </MarketsTabsContainer>
         :
         <MarketsTabsContainer page="earn">
@@ -137,7 +140,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
               </HeaderTabBtn>
             : ""
           }
-          <TabIndicator tab={tradeType} path={path}></TabIndicator>
+          <TabIndicator tab={tradeType} path={path} language={i18n.language}></TabIndicator>
         </MarketsTabsContainer>
         }
         
@@ -196,12 +199,12 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
               </RatesRowWrapper> */}
             </RatesBoxWrapper>
             <HeaderTabBtn onClick={() => getPriceFeed()} id=''>
-              Rates
+            {i18n.t("rates")}
             </HeaderTabBtn>
           </RatesWrapper>
           <div>
             <HeaderTabBtn link as='a' href={"https://docs.tranche.finance/tranchefinance/guides/for-users/" + (path === "borrow" ? "borrowing" : path === "lend" ? "lending" : "")} target='_blank' id='how-to-tab'>
-              How-to
+              {i18n.t("HowTo")}
             </HeaderTabBtn>
           </div>
         </div>

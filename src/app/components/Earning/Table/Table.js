@@ -76,7 +76,9 @@ const Table = ({
   const { filter, skip, limit, current, filterType, sort, isLoading } = tranches;
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("All tranches");
-  
+  let parsedPath = pathname.split('/');
+  let currentPath = parsedPath[parsedPath.length - 1];
+
   const trancheListing = useCallback(_.debounce(async () => {
     if (sort) {
       await tranchesFetchData({
@@ -102,11 +104,10 @@ const Table = ({
   }, 3000, {leading: true}), [tranchesFetchData, filter, skip, limit, sort, address, tradeType]);
 
   useEffect(() => {
-    let currentPath = pathname.split('/')[1];
     changePath(currentPath);
     changeOwnAllFilter('all');
     ownAllToggle("allTranches");
-  }, [changePath, pathname, changeOwnAllFilter, ownAllToggle]);
+  }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
     trancheListing();

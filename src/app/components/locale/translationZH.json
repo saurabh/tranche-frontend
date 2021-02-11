@@ -1,0 +1,67 @@
+{
+  "caution": "警告！Tranche目前还是测试版本。请自己斟酌风险后使用。",
+  "navbar":{
+    "borrow": "借入",
+    "lend": "借出",
+    "earn": "赚取"
+  },
+  "borrow": {
+    "title": "Borrower Markets",
+    "text": "APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
+    }
+  },
+  "lend": {
+    "title": "借贷市场",
+    "text": "借出稳定的货币，获得加密货币作为回报",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
+    }
+  },
+  "earn": {
+    "title": "Earning Markets",
+    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
+    }
+  },
+  "rates": "兑换率",
+  "HowTo": "步骤",
+  "statuses": {
+    "0": {
+      "key": "处理中"
+    },
+    "1": {
+      "key": "活跃"
+    },
+    "2": {
+      "key": "低抵押"
+    },
+    "3": {
+      "key": "At Risk"
+    },
+    "4": {
+      "key": "Foreclosing"
+    },
+    "5": {
+      "key": "已止赎"
+    },
+    "6": {
+      "key": "Early closing"
+    },
+    "7": {
+      "key": "结束中"
+    },
+    "8": {
+      "key": "已结束"
+    },
+    "9": {
+      "key": "已取消"
+    }
+  }
+  
+}

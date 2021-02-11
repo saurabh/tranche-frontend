@@ -39,8 +39,8 @@ import {
   AdjustTrade,
   // CloseModal,
   // Info,
-  LinkArrow,
-  UserImg
+   LinkArrow,
+  TrancheImg
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
 // import ETH from 'assets/images/svg/EthForm.svg';
@@ -50,9 +50,10 @@ import {
   TableContentCardWrapper,
   // StatusTextWrapper,
   AdjustLoanBtn,
-  TableCardTag
+  TableCardTag,
+  TableCardImg
   // InfoBoxWrapper,
-  // InfoBox
+  // InfoBox  
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
@@ -274,7 +275,7 @@ const TableCard = ({
   // };
 
   const checkLoan = false;
-
+  let tranche = name === "ETHDAI Tranche A" || name === "ETHDAI Tranche B"
   return (
     <TableContentCardWrapper>
       <TableContentCard
@@ -291,9 +292,9 @@ const TableCard = ({
         )}
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
-            <div className='first-col-img'>
-              <img src={UserImg} alt='User' />
-            </div>
+            <TableCardImg tranche={true} type={type === "TRANCHE_A" ? "A" : type === "TRANCHE_B" ? "B" : ""} color={type === "TRANCHE_A" ? "#12BB7E" : type === "TRANCHE_B" ? "#FD8383" : ""}>
+              <img src={tranche ? TrancheImg : ""} alt='Tranche' />
+            </TableCardImg>
             <div className='first-col-content'>
               <div className='first-col-title'>
                 <h2>{name && name}</h2>

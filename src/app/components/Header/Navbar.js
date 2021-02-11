@@ -7,6 +7,8 @@ import { ETH, DAI, BackArrow } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
+import i18n from "../locale/i18n";
+
 import {
   RatesWrapper,
   RatesBoxWrapper,
@@ -19,6 +21,7 @@ import {
 } from './styles/HeaderComponents';
 import ConnectWallet from './ConnectWallet';
 import { TrancheIcon } from 'assets';
+export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 function Navbar({ path }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,6 +29,7 @@ function Navbar({ path }) {
   // const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
+  
 
 
 
@@ -144,37 +148,37 @@ function Navbar({ path }) {
         <div className='navbar-right'>
           <NavbarLinks>
             <NavLink
-              to='/borrow'
+              to={baseUrl + '/borrow'}
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-              <span data-content="borrow"></span>
-              Borrow
+              <span data-content={i18n.t("navbar.borrow")}></span>
+              {i18n.t("navbar.borrow")}
             </NavLink>
             <NavLink
-              to='/lend'
+              to={baseUrl + '/lend'}
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-            <span data-content="lend"></span>
-              Lend
+            <span data-content={i18n.t("navbar.lend")}></span>
+            {i18n.t("navbar.lend")}
             </NavLink>
             <NavLink
-              to='/earn'
+              to={baseUrl + '/earn'}
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-              <span data-content="earn"></span>
-              Earn
+              <span data-content={i18n.t("navbar.earn")}></span>
+              {i18n.t("navbar.earn")}
             </NavLink>
           </NavbarLinks>
           <ConnectWallet path={path} />

@@ -18,7 +18,6 @@ import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableHeadMobile from './TableHeadMobile';
 import TableCard from './TableCard';
-import TableCardMobile from './TableCardMobile';
 import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFiltersWrapper,
   TableMobileFilter,
@@ -69,6 +68,8 @@ const Table = ({
   const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [currentFilter, setCurrentFilter] = useState(`${pathname === "/borrow" ? "All loans" : pathname === "/lend" ? "All assets" : ""}`);
+  let parsedPath = pathname.split('/');
+  let currentPath = parsedPath[parsedPath.length - 1];
 
   const loanListing = useCallback(_.debounce(async () => {
     if (sort) {
@@ -112,10 +113,9 @@ const Table = ({
   }
 
   useEffect(() => {
-    let currentPath = pathname.split('/')[1];
     changePath(currentPath);
     changeOwnAllFilter('all');
-  }, [changePath, pathname, changeOwnAllFilter]);
+  }, [changePath, pathname, changeOwnAllFilter, currentPath]);
 
   useEffect(() => {
     loanListing();
@@ -239,7 +239,7 @@ const Table = ({
               ) :
               
               (
-                loans && loans.list.map((loan, i) => <TableCardMobile key={i} loan={loan} path={path} />)
+                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
         </TableWrapper>
