@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 // import { useOuterClick } from 'services/useOuterClick';
-
-// import { JLoanSetup } from 'utils/contractConstructor';
 import { JProtocolSetup } from 'utils/contractConstructor';
-
-import {
-  toWei,
-  // fromWei,
-} from 'services/contractMethods';
+import { fromWei, toWei } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -28,18 +22,21 @@ import {
   readyToTransact,
   isGreaterThan,
   isEqualTo,
-  // gweiOrEther,
-  // roundBasedOnUnit
+  gweiOrEther,
+  roundBasedOnUnit
 } from 'utils';
 import {
   PagesData,
   txMessage,
   tokenConstructors,
-  etherScanUrl,
+  etherScanUrl
   // apiUri
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
-import { Adjust, AdjustEarn, AdjustTrade,
+import {
+  Adjust,
+  AdjustEarn,
+  AdjustTrade,
   // CloseModal,
   // Info,
    LinkArrow,
@@ -56,7 +53,7 @@ import {
   TableCardTag,
   TableCardImg
   // InfoBoxWrapper,
-  // InfoBox
+  // InfoBox  
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
@@ -80,21 +77,21 @@ const TableCard = ({
   ethereum: { tokenBalance, trancheTokenBalance, address, wallet, web3, notify },
   form,
   setTokenBalances,
-  setTrancheTokenBalances,
+  setTrancheTokenBalances
   // checkServer
 }) => {
   const JProtocol = JProtocolSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
   // const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
-  // const [newCollateralRatio, setNewCollateralRatio] = useState(0);
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
-  // const [hasBalance, setHasBalance] = useState(false);
+  const [hasBalance, setHasBalance] = useState(false);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
-
   // const [isLoading, setIsLoading] = useState(false);
   // const [disableBtn, setDisableBtn] = useState(false);
+  rpbRate = rpbRate.toString().split('.')[0];
+  rpbRate = fromWei(rpbRate);
   let disableBtn = false;
   let isLoading = false;
   let moreCardToggle = false;
@@ -105,6 +102,29 @@ const TableCard = ({
 
   const searchArr = (key) => tokenConstructors.find((i) => i.key === key);
 
+  useEffect(() => {
+    const balanceCheck = () => {
+      try {
+        if (type === 'TRANCHE_A') {
+          const availableAmount = amount - subscriber;
+          if (
+            cryptoType !== 'N/A' &&
+            amount !== 'N/A' &&
+            isGreaterThan(
+              Number(tokenBalance[cryptoType]),
+              Number(toWei(availableAmount.toString()))
+            )
+          )
+            setHasBalance(true);
+        } else setHasBalance(true);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    balanceCheck();
+  }, [amount, type, cryptoType, subscriber, tokenBalance]);
+
   const onboard = initOnboard({
     address: setAddress,
     network: setNetwork,
@@ -112,27 +132,26 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  
   const allowanceCheck = async (amount) => {
-  try {
-    amount = toWei(amount);
-    const tokenSetup = searchArr(cryptoType).tokenSetup
-    const token = tokenSetup(web3);
-    let userAllowance = await token.methods.allowance(address, contractAddress).call();
-    if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-      setHasAllowance(true);
-    } else {
-      setHasAllowance(false);
+    try {
+      amount = toWei(amount);
+      const tokenSetup = searchArr(cryptoType).tokenSetup;
+      const token = tokenSetup(web3);
+      let userAllowance = await token.methods.allowance(address, contractAddress).call();
+      if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+        setHasAllowance(true);
+      } else {
+        setHasAllowance(false);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-  
+  };
+
   const approveContract = async (amount) => {
     try {
       amount = toWei(amount);
-      const tokenSetup = searchArr(cryptoType).tokenSetup
+      const tokenSetup = searchArr(cryptoType).tokenSetup;
       const token = tokenSetup(web3);
       await token.methods
         .approve(contractAddress, amount)
@@ -167,7 +186,7 @@ const TableCard = ({
           .buyTrancheAToken(trancheId, amount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            closeModal(); 
+            closeModal();
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
@@ -180,7 +199,7 @@ const TableCard = ({
           .buyTrancheBToken(trancheId, amount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            closeModal(); 
+            closeModal();
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
@@ -192,14 +211,14 @@ const TableCard = ({
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
     setTokenBalances(web3, address);
-    setTrancheTokenBalances()
+    setTrancheTokenBalances();
     setIsOpen(true);
   };
 
@@ -297,7 +316,7 @@ const TableCard = ({
         <div className='table-third-col table-col'>
           <div className='third-col-content content-3-col second-4-col-content'>
             <h2>
-              {amount} <span>{cryptoType}</span>
+              {type === 'TRANCHE_A' ? amount : subscriber} <span>{cryptoType}</span>
             </h2>
           </div>
         </div>
@@ -308,7 +327,7 @@ const TableCard = ({
         >
           <div className='fourth-col-content content-3-col second-4-col-content'>
             <h2>
-              {rpbRate}
+              {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
             </h2>
           </div>
         </div>
@@ -318,9 +337,7 @@ const TableCard = ({
           }
         >
           <div className='fifth-col-content content-3-col second-4-col-content'>
-            <h2>
-              {(subscriber)}
-            </h2>
+            <h2>{subscriber}</h2>
           </div>
         </div>
         <div className='table-second-col table-col'>
@@ -330,7 +347,7 @@ const TableCard = ({
               // color={Object.values(searchObj(status))[0].color}
               // backgroundColor={Object.values(searchObj(status))[0].background}
             > */}
-              {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
+            {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
                 ? 'Under'
                 : valShortner(Object.values(searchObj(status))[0].key)} */}
             {/* </StatusTextWrapper> 
@@ -366,8 +383,6 @@ const TableCard = ({
               </InfoBoxWrapper>
             
             */}
-            
-
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
@@ -397,6 +412,8 @@ const TableCard = ({
             modalIsOpen={modalIsOpen}
             hasAllowance={hasAllowance}
             approveLoading={approveLoading}
+            hasBalance={hasBalance}
+            trancheTokenBalance={trancheTokenBalance}
             // Functions
             closeModal={() => closeModal()}
             allowanceCheck={allowanceCheck}
@@ -405,6 +422,10 @@ const TableCard = ({
             // API Values
             trancheName={name}
             trancheType={type}
+            amount={amount}
+            subscriber={subscriber}
+            cryptoType={cryptoType}
+            rpbRate={rpbRate}
           />
         </div>
       </TableContentCard>

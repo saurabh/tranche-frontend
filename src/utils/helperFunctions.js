@@ -1,5 +1,6 @@
 import ReactHtmlParser from 'react-html-parser';
 import BigNumber from 'bignumber.js';
+import { gweiVariants } from 'config/constants';
 
 export const readyToTransact = async (wallet, onboard) => {
   if (!wallet) {
@@ -82,9 +83,13 @@ export const gweiOrEther = (input, cryptoName) => {
         return 'nSLICE';
       } else return 'SLICE';
     } else if (cryptoName === 'DAI') {
-      return 'DAI';
+      if (input <= 0.00099) {
+        return 'nDAI';
+      } else return 'DAI';
     } else if (cryptoName === 'USDC') {
-      return 'USDC';
+      if (input <= 0.00099) {
+        return 'nUSDC';
+      } else return 'USDC';
     }
   } catch (error) {
     console.error(error);
@@ -93,7 +98,7 @@ export const gweiOrEther = (input, cryptoName) => {
 
 export const roundBasedOnUnit = (input, cryptoName) => {
   try {
-    if (gweiOrEther(input, cryptoName) === ('Gwei' || 'nSLICE')) {
+    if (gweiVariants.indexOf(gweiOrEther(input, cryptoName)) !== -1) {
       input *= 10 ** 9;
     }
     const result = roundNumber(input);
