@@ -13,6 +13,7 @@ export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
+export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
