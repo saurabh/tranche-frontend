@@ -14,7 +14,7 @@ import { web3 } from 'utils/getWeb3';
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: '0', SLICE: '0', USDC: '0' },
+  tokenBalance: { DAI: '0' },
   address: undefined,
   web3,
   notify: initNotify()
@@ -35,7 +35,7 @@ export default function (state = initialState, action) {
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
     case SET_TRANCHE_TOKEN_BALANCES:
-      return { ...state, trancheTokenBalance: payload };
+      return { ...state, trancheTokenBalance: { ...state.trancheTokenBalance, [payload.trancheName]: payload.trancheTokenBalance } };
     case SET_WALLET:
       return { ...state, wallet: payload };
     case SET_WEB3:

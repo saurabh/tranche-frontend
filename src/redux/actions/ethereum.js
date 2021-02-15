@@ -78,20 +78,15 @@ export const setTokenBalances = (web3, address) => async (dispatch) => {
   }
 };
 
-export const setTrancheTokenBalances = () => async (dispatch) => {
+export const setTrancheTokenBalances = (trancheName, tokenAddress) => async (dispatch) => {
   try {
     const state = store.getState();
     const { web3, address } = state.ethereum;
-    const { list } = state.tranches;
-    let trancheTokenBalances = {};
-    list.forEach(async (item) => {
-      const TrancheAddress = ERC20Setup(web3, item.trancheTokenAddress);
-      const trancheTokenBalance = await TrancheAddress.methods.balanceOf(address).call();
-      trancheTokenBalances[item.name] = trancheTokenBalance;
-    });
+    const Tranche = ERC20Setup(web3, tokenAddress);
+    const trancheTokenBalance = await Tranche.methods.balanceOf(address).call();
     dispatch({
       type: SET_TRANCHE_TOKEN_BALANCES,
-      payload: trancheTokenBalances
+      payload: { trancheName, trancheTokenBalance }
     });
   } catch (error) {
     console.error(error);

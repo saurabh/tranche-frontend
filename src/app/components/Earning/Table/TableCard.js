@@ -263,7 +263,7 @@ const TableCard = ({
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
     setTokenBalances(web3, address);
-    setTrancheTokenBalances();
+    setTrancheTokenBalances(name, trancheTokenAddress);
     setIsOpen(true);
   };
 
