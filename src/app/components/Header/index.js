@@ -22,7 +22,7 @@ export function Header({updateDate}) {
   useEffect(() => {
     parsePath();
   }, [pathname, parsePath]);
-  console.log(path)
+  // console.log(path)
 
   return (
     <HeaderWrapper color={PagesData[path].color}>

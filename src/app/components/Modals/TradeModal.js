@@ -90,12 +90,13 @@ const TradeModal = ({
   hasAllowance,
   approveLoading,
   hasBalance,
+  availableAmount,
   trancheTokenBalance,
   // Functions
   closeModal,
   allowanceCheck,
   approveContract,
-  buyTrancheTokens,
+  buySellTrancheTokens,
   // API Values
   trancheName,
   trancheType,
@@ -251,7 +252,7 @@ const TradeModal = ({
               allowanceCheck={allowanceCheck}
               approveLoading={approveLoading}
               approveContract={approveContract}
-              buyTrancheTokens={buyTrancheTokens}
+              buySellTrancheTokens={buySellTrancheTokens}
             />
           ) : (
             <ModalUserActions>
@@ -265,7 +266,7 @@ const TradeModal = ({
                         ? 'The interest that flows into Tranche B is split between all Tranche B holders'
                         : !hasBalance
                         ? `You don't have enough ${cryptoType} for this action.`
-                        : `There are ${amount - subscriber} Tranche A tokens available for purchase`}
+                        : `There are ${availableAmount} Tranche A tokens available for purchase`}
                     </h2>
                     <ModalButton
                       trade={true}

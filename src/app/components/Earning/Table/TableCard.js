@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 // import { useOuterClick } from 'services/useOuterClick';
-import { JProtocolSetup } from 'utils/contractConstructor';
+import { JProtocolSetup, ERC20Setup } from 'utils/contractConstructor';
 import { fromWei, toWei } from 'services/contractMethods';
 import {
   setAddress,
@@ -28,7 +28,6 @@ import {
 import {
   PagesData,
   txMessage,
-  tokenConstructors,
   etherScanUrl
   // apiUri
 } from 'config';
@@ -39,7 +38,7 @@ import {
   AdjustTrade,
   // CloseModal,
   // Info,
-   LinkArrow,
+  LinkArrow,
   TrancheImg
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -53,7 +52,7 @@ import {
   TableCardTag,
   TableCardImg
   // InfoBoxWrapper,
-  // InfoBox  
+  // InfoBox
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
@@ -61,12 +60,13 @@ const TableCard = ({
     name,
     contractAddress,
     trancheId,
+    buyerCoinAddress,
+    trancheTokenAddress,
     type,
     subscriber,
     rpbRate,
     cryptoType,
     amount
-    // collateralType,
   },
   // trade: { tradeType },
   path,
@@ -99,14 +99,17 @@ const TableCard = ({
   // const innerRef = useOuterClick((e) => {
   //   setInfoBoxToggle(false);
   // });
-
-  const searchArr = (key) => tokenConstructors.find((i) => i.key === key);
+  const availableAmount =
+    subscriber === 'N/A' && amount === 'N/A'
+      ? 0
+      : subscriber === 'N/A'
+      ? amount
+      : amount - subscriber;
 
   useEffect(() => {
     const balanceCheck = () => {
       try {
         if (type === 'TRANCHE_A') {
-          const availableAmount = amount - subscriber;
           if (
             cryptoType !== 'N/A' &&
             amount !== 'N/A' &&
@@ -123,7 +126,7 @@ const TableCard = ({
     };
 
     balanceCheck();
-  }, [amount, type, cryptoType, subscriber, tokenBalance]);
+  }, [amount, type, cryptoType, subscriber, tokenBalance, availableAmount]);
 
   const onboard = initOnboard({
     address: setAddress,
@@ -132,11 +135,10 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const allowanceCheck = async (amount) => {
+  const allowanceCheck = async (amount, sellToggle) => {
     try {
       amount = toWei(amount);
-      const tokenSetup = searchArr(cryptoType).tokenSetup;
-      const token = tokenSetup(web3);
+      const token = sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
       let userAllowance = await token.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
         setHasAllowance(true);
@@ -148,11 +150,10 @@ const TableCard = ({
     }
   };
 
-  const approveContract = async (amount) => {
+  const approveContract = async (amount, sellToggle) => {
     try {
       amount = toWei(amount);
-      const tokenSetup = searchArr(cryptoType).tokenSetup;
-      const token = tokenSetup(web3);
+      const token =  sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
       await token.methods
         .approve(contractAddress, amount)
         .send({ from: address })
@@ -176,9 +177,8 @@ const TableCard = ({
     }
   };
 
-  const buyTrancheTokens = async (e) => {
+  const buyTrancheTokens = async () => {
     try {
-      e.preventDefault();
       let { amount } = form.sell.values;
       amount = toWei(amount);
       if (type === 'TRANCHE_A') {
@@ -212,6 +212,51 @@ const TableCard = ({
       console.error(error);
     }
   };
+
+  const sellTrancheTokens = async () => {
+    try {
+      let { amount } = form.sell.values;
+      amount = toWei(amount);
+      if (type === 'TRANCHE_A') {
+        await JProtocol.methods
+          .redeemTrancheAToken(trancheId, amount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            closeModal();
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+          });
+      } else {
+        await JProtocol.methods
+          .redeemTrancheBToken(trancheId, amount)
+          .send({ from: address })
+          .on('transactionHash', (hash) => {
+            closeModal();
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const buySellTrancheTokens = (e, buyToggle) => {
+    try {
+      e.preventDefault();
+      buyToggle ? buyTrancheTokens() : sellTrancheTokens();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
@@ -275,7 +320,7 @@ const TableCard = ({
   // };
 
   const checkLoan = false;
-  let tranche = name === "ETHDAI Tranche A" || name === "ETHDAI Tranche B"
+  let tranche = name === 'ETHDAI Tranche A' || name === 'ETHDAI Tranche B';
   return (
     <TableContentCardWrapper>
       <TableContentCard
@@ -292,8 +337,12 @@ const TableCard = ({
         )}
         <div className='table-first-col table-col'>
           <div className='table-first-col-wrapper'>
-            <TableCardImg tranche={true} type={type === "TRANCHE_A" ? "A" : type === "TRANCHE_B" ? "B" : ""} color={type === "TRANCHE_A" ? "#12BB7E" : type === "TRANCHE_B" ? "#FD8383" : ""}>
-              <img src={tranche ? TrancheImg : ""} alt='Tranche' />
+            <TableCardImg
+              tranche={true}
+              type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+              color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+            >
+              <img src={tranche ? TrancheImg : ''} alt='Tranche' />
             </TableCardImg>
             <div className='first-col-content'>
               <div className='first-col-title'>
@@ -413,12 +462,13 @@ const TableCard = ({
             hasAllowance={hasAllowance}
             approveLoading={approveLoading}
             hasBalance={hasBalance}
+            availableAmount={availableAmount}
             trancheTokenBalance={trancheTokenBalance}
             // Functions
             closeModal={() => closeModal()}
             allowanceCheck={allowanceCheck}
             approveContract={approveContract}
-            buyTrancheTokens={buyTrancheTokens}
+            buySellTrancheTokens={buySellTrancheTokens}
             // API Values
             trancheName={name}
             trancheType={type}
