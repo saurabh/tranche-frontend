@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
-import { loansFetchData } from 'redux/actions/loans';
-import { tranchesFetchData } from 'redux/actions/tranches';
+import { apiUri } from 'config/constants';
+import { fetchTableData } from 'redux/actions/loans';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -23,11 +23,11 @@ import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-
-const baseRouteUrl = '/:locale(zh|en)?';
+const { loanList: loanListUrl, tranchesList: tranchesistUrl } = apiUri;
+const baseRouteUrl = "/:locale(zh|en)?";
 
 const App = ({
-  loansFetchData,
+  fetchTableData,
   setCurrentBlock,
   path,
   ethereum: { address },
@@ -57,7 +57,7 @@ const App = ({
       })
       .on('data', async () => {
         await timeout(4000);
-        await loansFetchData({
+        await fetchTableData({
           skip,
           limit,
           filter: {
@@ -65,7 +65,7 @@ const App = ({
             lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
             type: filter
           }
-        });
+        }, loanListUrl);
       });
 
     const priceOracle = web3.eth
@@ -74,7 +74,7 @@ const App = ({
       })
       .on('data', async () => {
         await timeout(4000);
-        await loansFetchData({
+        await fetchTableData({
           skip,
           limit,
           filter: {
@@ -82,8 +82,8 @@ const App = ({
             lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
             type: filter
           }
-        });
-      });
+        }, loanListUrl);
+      }, );
 
     const Protocol = web3.eth
       .subscribe('logs', {
@@ -91,14 +91,14 @@ const App = ({
       })
       .on('data', async () => {
         await timeout(4000);
-        await tranchesFetchData({
+        await fetchTableData({
           tSkip,
           tLimit,
           filter: {
             address: path === 'earn' && tradeType === 'myTranches' ? address : undefined,
             type: tFilter //ETH/JNT keep these in constant file
           }
-        });
+        }, tranchesistUrl);
       });
 
     return () => {
@@ -115,7 +115,7 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock, tradeType, tSkip, tLimit, tFilter]);
+  }, [address, filterType, path, fetchTableData, skip, limit, filter, setCurrentBlock, tradeType, tSkip, tLimit, tFilter]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
@@ -143,7 +143,7 @@ const App = ({
 };
 
 App.propTypes = {
-  loansFetchData: PropTypes.func.isRequired
+  fetchTableData: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -156,6 +156,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData,
+  fetchTableData,
   setCurrentBlock
 })(NetworkDetector(App));

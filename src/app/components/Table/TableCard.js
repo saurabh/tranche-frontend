@@ -47,7 +47,25 @@ import {
   TableContentCardMobile,
   TableColMobile,
   TableMobilColContent,
-  TableMobilCardBtn
+  TableMobilCardBtn,
+  TableFirstCol,
+  TableFirstColWrapper,
+  FirstColImg,
+  FirstColContent,
+  FirstColTitle,
+  FirstColSubtitle,
+  TableSecondCol,
+  SecondColContent,
+  TableThirdCol,
+  ThirdColContent,
+  TableFourthCol,
+  FourthColContent,
+  TableFifthCol,
+  FifthColContent,
+  TableSixthCol,
+  AdustBtnWrapper,
+  TableCardMore,
+  TableCardMoreContent
 } from './styles/TableComponents';
 import i18n from 'i18next';
 
@@ -617,16 +635,16 @@ const TableCard = ({
           ) : (
             ''
           )}
-          <div className='table-first-col table-col'>
-            <div className='table-first-col-wrapper'>
-              <div className='first-col-img'>
+          <TableFirstCol className='table-col'>
+            <TableFirstColWrapper>
+              <FirstColImg>
                 <img src={image} alt='User' />
-              </div>
-              <div className='first-col-content'>
-                <div className='first-col-title'>
+              </FirstColImg>
+              <FirstColContent>
+                <FirstColTitle>
                   <h2>{name && name}</h2>
-                </div>
-                <div className='first-col-subtitle'>
+                </FirstColTitle>
+                <FirstColSubtitle>
                   <h2>{addrShortener(borrowerAddress)}</h2>
                   <a
                     href={etherScanUrl + 'address/' + borrowerAddress}
@@ -635,28 +653,28 @@ const TableCard = ({
                   >
                     <img src={LinkArrow} alt='' />
                   </a>
-                </div>
-              </div>
-            </div>
-          </div>
+                </FirstColSubtitle>
+              </FirstColContent>
+            </TableFirstColWrapper>
+          </TableFirstCol>
 
-          <div className='table-third-col table-col'>
-            <div className='third-col-content content-3-col second-4-col-content'>
+          <TableSecondCol className='table-col'>
+            <SecondColContent className='content-3-col second-4-col-content'>
               <h2>
                 {remainingLoan} <span>{cryptoFromLenderName}</span>
               </h2>
-            </div>
-          </div>
-          <div className='table-fourth-col table-col'>
-            <div className='fourth-col-content content-3-col second-4-col-content'>
+            </SecondColContent>
+          </TableSecondCol>
+          <TableThirdCol className='table-col'>
+            <ThirdColContent className='content-3-col second-4-col-content'>
               <h2>
                 {collateralRatio}
                 <span>%</span>
               </h2>
-            </div>
-          </div>
-          <div className='table-fifth-col table-col'>
-            <div className='fifth-col-content content-3-col second-4-col-content'>
+            </ThirdColContent>
+          </TableThirdCol>
+          <TableFourthCol className='table-col'>
+            <FourthColContent className='content-3-col second-4-col-content'>
               <h2>
                 {apy}%{' '}
                 <span>
@@ -664,10 +682,10 @@ const TableCard = ({
                   {gweiOrEther(interestPaid, collateralTypeName)})
                 </span>
               </h2>
-            </div>
-          </div>
-          <div className='table-second-col table-col'>
-            <div className='second-col-content'>
+            </FourthColContent>
+          </TableFourthCol>
+          <TableFifthCol className='table-col'>
+            <FifthColContent>
               <StatusTextWrapper
                 className='status-text-wrapper'
                 color={Object.values(searchObj(status))[0].color}
@@ -678,10 +696,10 @@ const TableCard = ({
                   : valShortner(Object.values(searchObj(status))[0].key)} */}
                   {i18n.t(`${"statuses." + status.toString() + ".key"}`)}
               </StatusTextWrapper>
-            </div>
-          </div>
-          <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
-            <div className='adjust-btn-wrapper'>
+            </FifthColContent>
+          </TableFifthCol>
+          <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-col'>
+            <AdustBtnWrapper className='adjust-btn-wrapper'>
               <AdjustLoanBtn
                 color={PagesData[path].btnColor}
                 disabled={path === 'earn' || disableBtn}
@@ -700,7 +718,7 @@ const TableCard = ({
                   alt='adjust'
                 />
               </AdjustLoanBtn>
-            </div>
+            </AdustBtnWrapper>
             <LoanModal
               // State Values
               path={path}
@@ -742,10 +760,10 @@ const TableCard = ({
               APY={apy}
               rpbRate={rpbRate && fromWei(rpbRate.toString())}
             />
-          </div>
+          </TableSixthCol>
         </TableContentCard>
-        <div className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
-          <div className='table-card-more-content'>
+        <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
+          <TableCardMoreContent>
             {isLoading ? (
               <ReactLoading
                 className='TableMoreLoading'
@@ -780,8 +798,8 @@ const TableCard = ({
                 <a href="/">show more transactions</a>
               </h2>
             </div>*/}
-          </div>
-        </div>
+          </TableCardMoreContent>
+        </TableCardMore>
       </TableContentCardWrapper>
     );
   }

@@ -2,20 +2,20 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
+import { apiUri } from 'config/constants';
 import _ from 'lodash';
 import {
-  tranchesFetchData,
+  fetchTableData,
   changeFilter,
   paginationOffset,
   paginationCurrent,
   changeSorting,
   changeOwnAllFilter
-} from 'redux/actions/tranches';
+} from 'redux/actions/loans';
 import {
   ownAllToggle
 } from 'redux/actions/trade';
 import ReactLoading from 'react-loading';
-
 
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from '../../Table/TableHeader';
@@ -36,6 +36,8 @@ import { TableWrapper, TableContentCard,
   TableMobileRowCreateLoan
 } from '../../Table/styles/TableComponents';
 import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
+const { tranchesList: tranchesistUrl } = apiUri;
+
 const style = {
   pageItem: {
     fontFamily: 'Roboto, sans-serif',
@@ -60,7 +62,7 @@ const style = {
 
 const Table = ({
   HandleNewLoan,
-  tranchesFetchData,
+  fetchTableData,
   changeOwnAllFilter,
   tranches,
   path,
@@ -81,7 +83,7 @@ const Table = ({
 
   const trancheListing = useCallback(_.debounce(async () => {
     if (sort) {
-      await tranchesFetchData({
+      await fetchTableData({
         sort,
         skip,
         limit,
@@ -89,19 +91,19 @@ const Table = ({
           address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
-      });
+      }, tranchesistUrl);
     } else {
-      await tranchesFetchData({
+      await fetchTableData({
         skip,
         limit,
         filter: {
           address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
-      });
+      }, tranchesistUrl);
     }
     
-  }, 3000, {leading: true}), [tranchesFetchData, filter, skip, limit, sort, address, tradeType]);
+  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, address, tradeType]);
 
   useEffect(() => {
     changePath(currentPath);
@@ -355,7 +357,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  tranchesFetchData,
+  fetchTableData,
   changePath,
   changeFilter,
   paginationOffset,

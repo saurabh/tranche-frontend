@@ -2,11 +2,12 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+import { apiUri } from 'config/constants';
 import ReactLoading from 'react-loading';
 import Pagination from 'react-paginating';
 import { useHistory } from "react-router-dom";
 import {
-  loansFetchData,
+  fetchTableData,
   changeFilter,
   paginationOffset,
   paginationCurrent,
@@ -27,6 +28,7 @@ import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileRowCreateLoan
 } from './styles/TableComponents';
 import { RequestLoan, EarningAsset, FilterChevron, CreateLoan } from 'assets';
+
 
 const style = {
   pageItem: {
@@ -49,10 +51,11 @@ const style = {
     borderRadius: '7px'
   }
 };
+const { loanList: loanListUrl } = apiUri;
 
 const Table = ({
   HandleNewLoan,
-  loansFetchData,
+  fetchTableData,
   changeOwnAllFilter,
   loans,
   path,
@@ -73,7 +76,7 @@ const Table = ({
 
   const loanListing = useCallback(_.debounce(async () => {
     if (sort) {
-      await loansFetchData({
+      await fetchTableData({
         sort,
         skip,
         limit,
@@ -82,9 +85,9 @@ const Table = ({
           lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
           type: filter
         }
-      });
+      }, loanListUrl);
     } else {
-      await loansFetchData({
+      await fetchTableData({
         skip,
         limit,
         filter: {
@@ -92,10 +95,10 @@ const Table = ({
           lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
           type: filter
         }
-      });
+      }, loanListUrl);
     }
     //page.current = currentPage;
-  }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, filterType, sort, address, path]);
 
   const changeLoansAssetsFilter = useCallback(
     (filter) => {
@@ -441,7 +444,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  loansFetchData,
+  fetchTableData,
   changePath,
   changeFilter,
   paginationOffset,
