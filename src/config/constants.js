@@ -1,7 +1,6 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon} from 'assets';
+import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon } from 'assets';
 // import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
-// import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -14,6 +13,7 @@ export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
+export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS;
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
@@ -90,7 +90,7 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
-  },
+  }
   // {
   //   key: 'USDC',
   //   text: 'USDC',
@@ -103,14 +103,7 @@ export const pairData = [
   // }
 ];
 
-export const gweiVariants = ['Gwei' ,'nSLICE' , 'nDAI' ,'nUSDC'];
-
-export const tokenConstructors = [
-  {
-    key: 'DAI',
-    tokenSetup: DAISetup
-  }
-]
+export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 export const apiUri = {
   priceFeed: 'pairs',
@@ -132,7 +125,7 @@ export const blocksPerYear = 2372500;
 export const factoryFees = 5;
 
 export const generalParams = {
-  limitCollRatioForWithdraw: 160,
+  limitCollRatioForWithdraw: 160
 };
 
 export const actionTypes = {

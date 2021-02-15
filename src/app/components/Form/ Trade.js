@@ -54,7 +54,7 @@ let TradeForm = ({
   allowanceCheck,
   approveContract,
   sellToProtocol,
-  buyTrancheTokens,
+  buySellTrancheTokens,
   // API Values
   loanId,
   trancheType,
@@ -73,8 +73,17 @@ let TradeForm = ({
   }, [setLoanIdandAddress]);
 
   const debounceAllowanceCheck = useCallback(_.debounce(async (amount) => {
-    await allowanceCheck(amount);
+    await allowanceCheck(amount, sellToggle);
   }, 500, {leading: true}), []);
+
+  // const buySellTrancheTokens = (e) => {
+  //   try {
+  //     e.preventDefault();
+  //     buyToggle ? buyTrancheTokens() : sellTrancheTokens();
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <ModalAdjustForm>
@@ -144,7 +153,7 @@ let TradeForm = ({
           </ModalFormSubmit>
         </Form>
       ) : (
-        <Form component={ModalFormWrapper} onSubmit={(e) => buyTrancheTokens(e)}>
+        <Form component={ModalFormWrapper} onSubmit={(e) => buySellTrancheTokens(e, buyToggle)}>
           <FormInputsWrapper trade={true}>
             <ModalFormGrpNewLoan trade={true} tranche={true}>
               <NewLoanFormInput>
@@ -212,7 +221,7 @@ let TradeForm = ({
                     type='button'
                     loading={approveLoading ? 'true' : ''}
                     approved={hasAllowance}
-                    onClick={() => approveContract(formValues.amount)}
+                    onClick={() => approveContract(formValues.amount, sellToggle)}
                   >
                     {!hasAllowance && !approveLoading ? (
                       <h2>Approve</h2>

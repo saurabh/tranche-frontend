@@ -88,7 +88,7 @@ const Table = ({
         skip,
         limit,
         filter: {
-          address: path === 'earn' && tradeType === "own" ? address : undefined,
+          address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       }, tranchesistUrl);
@@ -97,7 +97,7 @@ const Table = ({
         skip,
         limit,
         filter: {
-          address: path === 'earn' && tradeType === "own" ? address : undefined,
+          address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       }, tranchesistUrl);
@@ -119,6 +119,7 @@ const Table = ({
     paginationOffset((p - 1) * limit);
     paginationCurrent(p);
   };
+
   const changeLoansFilter = useCallback(
     (filter) => {
       changeOwnAllFilter(filter);
@@ -133,7 +134,6 @@ const Table = ({
     ownAllToggle(val);
     changeLoansFilter(val);
   }
-
 
   const handleSorting = () => {
     trancheListing();
