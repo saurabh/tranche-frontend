@@ -650,6 +650,170 @@ const TableCardImg = styled.div`
 
 
 
+
+
+
+
+
+const TableFirstCol = styled.div`
+  display: flex;
+  align-items: center;
+  width: 28%;
+`
+const TableFirstColWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+const FirstColImg = styled.div`
+  position: relative;
+  img{
+    border-radius: 50%;
+    height: 37px;
+  }
+`
+const FirstColContent = styled.div`
+  position: relative;
+  margin-left: 18px;
+`
+const FirstColTitle = styled.div`
+  h2{
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }   
+`
+const FirstColSubtitle = styled.div`
+  display: flex;
+  align-items: center;
+  h2{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #838186;  
+  }
+  a{
+    img{
+      height: 12px;
+      margin-left: 2px;
+    }
+  }
+`
+
+const TableSecondCol = styled.div`
+  width: 12%;
+  position: relative;
+`
+const SecondColContent = styled.div`
+  h2{
+    text-align: center !important;
+  }
+`
+const TableThirdCol = styled.div`
+  width: 7%;
+  position: relative;
+`
+const ThirdColContent = styled.div`
+  h2{
+    text-align: center !important;
+  }
+`
+const TableFourthCol = styled.div`
+  width: 17%;
+`
+const FourthColContent = styled.div`
+  position: relative;
+  h2{
+    text-align: center !important;
+    display: flex;
+    flex-direction: column;
+    padding-top: 13px;
+    span{
+      position: relative;
+      font-size: 10px;
+      font-weight: bold !important;
+      color: rgba(56,56,56,0.3);
+    }
+  }
+`
+const TableFifthCol = styled.div`
+  width: 12%;
+  position: relative;
+`
+const FifthColContent = styled.div`
+  position: relative;   
+`
+const TableSixthCol = styled.div`
+  width: 18%;  
+  display: flex;
+  justify-content: center;
+  button{
+    cursor: pointer;
+  }
+  button:focus{
+    outline: none;
+  }  
+  @media (max-width: 1200px){
+    justify-content: center !important;
+  }
+  @media (max-width: 992px){
+    justify-content: center !important;
+  }
+`
+const AdustBtnWrapper = styled.div`
+  button{
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: none;
+    width: 50px;
+    height: 27px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    overflow: hidden;
+    transition: 1s;
+    :hover{
+      filter: brightness(97%);
+    }
+    img{
+      pointer-events: none;
+    }
+    :disabled{
+      background-color: #F1F1F1;
+      color: #666666;
+      cursor: default
+      img{
+        filter: grayscale(1);
+        opacity: 0.3;
+      }
+    }
+  }
+`
+const TableCardMore = styled.div`
+  @media (max-width: 1200px){
+    padding: 0 39px 0 47px;
+  }
+  @media (max-width: 992px){
+    padding: 30px 12px 30px 12px;
+  }
+
+`
+const TableCardMoreContent = styled.div`
+  position: relative;   
+`
+
+
+
+
+
 export {
   TableWrapper,
   TableContentCardWrapper,
@@ -691,5 +855,23 @@ export {
   TableMobileFilterRow,
   TableMobileRowCreateLoan,
   InfoBoxWrapper,
-  InfoBox
+  InfoBox,
+  TableFirstCol,
+  TableFirstColWrapper,
+  FirstColImg,
+  FirstColContent,
+  FirstColTitle,
+  FirstColSubtitle,
+  TableSecondCol,
+  SecondColContent,
+  TableThirdCol,
+  ThirdColContent,
+  TableFourthCol,
+  FourthColContent,
+  TableFifthCol,
+  FifthColContent,
+  TableSixthCol,
+  AdustBtnWrapper,
+  TableCardMore,
+  TableCardMoreContent
 };

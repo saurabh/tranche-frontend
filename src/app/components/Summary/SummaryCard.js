@@ -12,7 +12,7 @@ import {
 const SummaryCard = ({ title, value, type, details, path }) => {
   return (
     <SummaryCardWrapper color={PagesData[path].cardColor}>
-      {value && (
+      {value ? (
         <SummaryCardContainer>
           <SummaryCardTitle>{title}</SummaryCardTitle>
 
@@ -34,7 +34,16 @@ const SummaryCard = ({ title, value, type, details, path }) => {
               : details}
           </SummaryCardDetails>
         </SummaryCardContainer>
-      )}
+      ): 
+      <SummaryCardContainer loading>
+        <div>
+        </div>
+        <div>
+        </div>
+        <div>
+        </div>
+      </SummaryCardContainer>
+    }
     </SummaryCardWrapper>
   );
 };

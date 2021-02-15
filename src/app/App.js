@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
-import { loansFetchData } from 'redux/actions/loans';
+import { apiUri } from 'config/constants';
+import { fetchTableData } from 'redux/actions/loans';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
@@ -18,11 +19,11 @@ import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-
+const { loanList: loanListUrl } = apiUri;
 const baseRouteUrl = "/:locale(zh|en)?";
 
 const App = ({
-  loansFetchData,
+  fetchTableData,
   setCurrentBlock,
   path,
   ethereum: { address },
@@ -50,7 +51,7 @@ const App = ({
       })
       .on('data', async () => {
         await timeout(4000);
-        await loansFetchData({
+        await fetchTableData({
           skip,
           limit,
           filter: {
@@ -58,7 +59,7 @@ const App = ({
             lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
             type: filter
           }
-        });
+        }, loanListUrl);
       });
 
     const priceOracle = web3.eth
@@ -67,7 +68,7 @@ const App = ({
       })
       .on('data', async () => {
         await timeout(4000);
-        await loansFetchData({
+        await fetchTableData({
           skip,
           limit,
           filter: {
@@ -76,7 +77,7 @@ const App = ({
             type: filter
           }
         });
-      });
+      }, );
 
     return () => {
       currentBlock.unsubscribe((error) => {
@@ -89,7 +90,7 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
+  }, [address, filterType, path, fetchTableData, skip, limit, filter, setCurrentBlock]);
 
 
 
@@ -121,7 +122,7 @@ const App = ({
 };
 
 App.propTypes = {
-  loansFetchData: PropTypes.func.isRequired
+  fetchTableData: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -132,6 +133,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData,
+  fetchTableData,
   setCurrentBlock
 })(NetworkDetector(App));
