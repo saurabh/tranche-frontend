@@ -1,4 +1,4 @@
-import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup } from 'utils/contractConstructor';
+import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JTrancheTokenSetup } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { web3 as alchemyWeb3 } from 'utils/getWeb3';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
@@ -147,3 +147,27 @@ export const getShareholderShares = async (loanId, address) => {
     console.error(error);
   }
 };
+
+export const getWithdrawableFunds = async (trancheAddress, address) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const TrancheToken = JTrancheTokenSetup(web3, trancheAddress);
+    const result = await TrancheToken.methods.withdrawableFundsOf(address).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// export const withdrawFundsFromTranche = async (trancheAddress) => {
+//   try {
+//     const state = store.getState();
+//     const { web3, address } = state.ethereum;
+//     const TrancheToken = JTrancheTokenSetup(web3, trancheAddress);
+//     const result = await TrancheToken.methods.withdrawFunds().send({ from: address });
+//     return result;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }

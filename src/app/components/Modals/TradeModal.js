@@ -93,11 +93,13 @@ const TradeModal = ({
   hasBalance,
   availableAmount,
   trancheTokenBalance,
+  withdrawableFunds,
   // Functions
   closeModal,
   earnAllowanceCheck,
   earnApproveContract,
   buySellTrancheTokens,
+  withdrawFundsFromTranche,
   // API Values
   trancheName,
   trancheType,
@@ -304,10 +306,10 @@ const TradeModal = ({
 
                   {searchArr(trancheTokenAddress) && (
                     <BtnGrpLoanModalWrapper>
-                      <h2>Withdraw Tranche Dividends</h2>
+                      <h2>Available Tranche Dividends: {roundNumber(withdrawableFunds)}</h2>
                       <ModalButton
                         trade={true}
-                        // onClick={() => sellTranche(0)}
+                        onClick={() => withdrawFundsFromTranche()}
                         btnColor='#FFFFFF'
                         backgroundColor='#845AD9'
                       >

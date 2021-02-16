@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 // import { useOuterClick } from 'services/useOuterClick';
-import { JProtocolSetup, ERC20Setup } from 'utils/contractConstructor';
-import { fromWei, toWei } from 'services/contractMethods';
+import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
+import { fromWei, toWei, getWithdrawableFunds } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -86,6 +86,7 @@ const TableCard = ({
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
+  const [withdrawableFunds, setWithdrawableFunds] = useState(0);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -262,12 +263,34 @@ const TableCard = ({
     }
   };
 
+  const withdrawFundsFromTranche = async () => {
+    try {
+      const TrancheToken = JTrancheTokenSetup(web3, trancheTokenAddress);
+      await TrancheToken.methods
+        .withdrawFunds()
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          closeModal();
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
     setTokenBalances(address);
     setTrancheTokenBalances(name, trancheTokenAddress, address);
+    const result = await getWithdrawableFunds(trancheTokenAddress, address);
+    setWithdrawableFunds(fromWei(result));
     setIsOpen(true);
   };
 
@@ -468,11 +491,13 @@ const TableCard = ({
             hasBalance={hasBalance}
             availableAmount={availableAmount}
             trancheTokenBalance={trancheTokenBalance}
+            withdrawableFunds={withdrawableFunds}
             // Functions
             closeModal={() => closeModal()}
             earnAllowanceCheck={earnAllowanceCheck}
             earnApproveContract={earnApproveContract}
             buySellTrancheTokens={buySellTrancheTokens}
+            withdrawFundsFromTranche={withdrawFundsFromTranche}
             // API Values
             trancheName={name}
             trancheType={type}

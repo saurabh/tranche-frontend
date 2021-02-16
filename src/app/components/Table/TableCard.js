@@ -448,6 +448,7 @@ const TableCard = ({
         .sellToProtocol(loanId, shares)
         .send({ from: address })
         .on('transactionHash', (hash) => {
+          closeModal();
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
