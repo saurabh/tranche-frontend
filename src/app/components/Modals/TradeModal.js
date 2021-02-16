@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 // import { Spring } from 'react-spring/renderprops';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
+import { trancheAddresses } from 'config/constants';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TradeForm from '../Form/ Trade';
 import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
@@ -100,6 +101,7 @@ const TradeModal = ({
   // API Values
   trancheName,
   trancheType,
+  trancheTokenAddress,
   amount,
   subscriber,
   cryptoType,
@@ -297,6 +299,21 @@ const TradeModal = ({
                       <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
+
+                  {trancheAddresses.indexOf(trancheTokenAddress) !== -1 && (
+                    <BtnGrpLoanModalWrapper>
+                      <h2>Withdraw Interest from Tranches</h2>
+                      <ModalButton
+                        trade={true}
+                        // onClick={() => sellTranche(0)}
+                        btnColor='#FFFFFF'
+                        backgroundColor='#845AD9'
+                      >
+                        WIthdraw
+                        <span></span>
+                      </ModalButton>
+                    </BtnGrpLoanModalWrapper>
+                  )}
                 </BtnGrpLoanModal>
               </ModalContent>
             </ModalUserActions>

@@ -472,6 +472,7 @@ const TableCard = ({
             // API Values
             trancheName={name}
             trancheType={type}
+            trancheTokenAddress={trancheTokenAddress}
             amount={amount}
             subscriber={subscriber}
             cryptoType={cryptoType}

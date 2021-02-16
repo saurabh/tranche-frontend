@@ -107,7 +107,7 @@ export const pairData = [
 
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
-export const trancheAddresses = [ETHDAITrancheAAddress, ETHDAITrancheBAddress];
+export const trancheAddresses = [ETHDAITrancheAAddress.toLowerCase(), ETHDAITrancheBAddress.toLowerCase()];
 
 export const apiUri = {
   priceFeed: 'pairs',
