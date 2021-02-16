@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 // import { Spring } from 'react-spring/renderprops';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
-import { trancheAddresses } from 'config/constants';
+import { trancheData } from 'config/constants';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TradeForm from '../Form/ Trade';
 import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
@@ -113,6 +113,8 @@ const TradeModal = ({
     trancheTokenBalance && trancheTokenBalance[trancheName]
       ? roundNumber(fromWei(trancheTokenBalance[trancheName]))
       : 0;
+
+  const searchArr = (address) => trancheData.find((i) => i.address === address);
 
   //   const confirm = (type) => {
   //     confirmAlert({
@@ -300,9 +302,9 @@ const TradeModal = ({
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
 
-                  {trancheAddresses.indexOf(trancheTokenAddress) !== -1 && (
+                  {searchArr(trancheTokenAddress) && (
                     <BtnGrpLoanModalWrapper>
-                      <h2>Withdraw Interest from Tranches</h2>
+                      <h2>Withdraw Tranche Dividends</h2>
                       <ModalButton
                         trade={true}
                         // onClick={() => sellTranche(0)}
