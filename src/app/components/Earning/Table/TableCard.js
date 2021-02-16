@@ -135,10 +135,12 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const allowanceCheck = async (amount, sellToggle) => {
+  const earnAllowanceCheck = async (amount, sellToggle) => {
     try {
       amount = toWei(amount);
-      const token = sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
+      const token = sellToggle
+        ? ERC20Setup(web3, trancheTokenAddress)
+        : ERC20Setup(web3, buyerCoinAddress);
       let userAllowance = await token.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
         setHasAllowance(true);
@@ -150,10 +152,12 @@ const TableCard = ({
     }
   };
 
-  const approveContract = async (amount, sellToggle) => {
+  const earnApproveContract = async (amount, sellToggle) => {
     try {
       amount = toWei(amount);
-      const token =  sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
+      const token = sellToggle
+        ? ERC20Setup(web3, trancheTokenAddress)
+        : ERC20Setup(web3, buyerCoinAddress);
       await token.methods
         .approve(contractAddress, amount)
         .send({ from: address })
@@ -256,14 +260,14 @@ const TableCard = ({
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(web3, address);
-    setTrancheTokenBalances(name, trancheTokenAddress);
+    setTokenBalances(address);
+    setTrancheTokenBalances(name, trancheTokenAddress, address);
     setIsOpen(true);
   };
 
@@ -466,8 +470,8 @@ const TableCard = ({
             trancheTokenBalance={trancheTokenBalance}
             // Functions
             closeModal={() => closeModal()}
-            allowanceCheck={allowanceCheck}
-            approveContract={approveContract}
+            earnAllowanceCheck={earnAllowanceCheck}
+            earnApproveContract={earnApproveContract}
             buySellTrancheTokens={buySellTrancheTokens}
             // API Values
             trancheName={name}

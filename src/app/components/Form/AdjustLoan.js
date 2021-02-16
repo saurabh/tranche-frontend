@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import _ from 'lodash';
-import { allowanceCheck } from 'services/contractMethods';
+import { loanAllowanceCheck } from 'services/contractMethods';
 import { roundNumber } from 'utils';
 import { required, number, asyncValidateAdjust } from 'utils/validations';
 import { pairData } from 'config/constants';
@@ -63,7 +63,7 @@ let AdjustLoan = ({
   setNewCollateralRatio,
   setHasAllowance,
   // Functions
-  approveContract,
+  loanApproveContract,
   adjustLoan,
   calcNewCollateralRatio,
   // API Values
@@ -96,16 +96,22 @@ let AdjustLoan = ({
     setLoanId();
   }, [setLoanId]);
 
-  const debounceCalcNewRatio = useCallback(_.debounce((collateralAmount, actionType) => {
-    calcNewCollateralRatio(collateralAmount, actionType);
-  }, 500), []);
+  const debounceCalcNewRatio = useCallback(
+    _.debounce((collateralAmount, actionType) => {
+      calcNewCollateralRatio(collateralAmount, actionType);
+    }, 500),
+    []
+  );
 
-  const debounceAllowanceCheck = useCallback(_.debounce(async (collateralAmount) => {
-    if (pairId === 1) {
-      const allowanceResult = await allowanceCheck(pairId, collateralAmount, address, web3, true);
-      setHasAllowance(allowanceResult);
-    }
-  }, 500), []);
+  const debounceAllowanceCheck = useCallback(
+    _.debounce(async (collateralAmount) => {
+      if (pairId === 1) {
+        const allowanceResult = await loanAllowanceCheck(pairId, collateralAmount, true);
+        setHasAllowance(allowanceResult);
+      }
+    }, 500),
+    []
+  );
 
   const handleCollateralizingChange = async (collateralAmount, actionType) => {
     try {
@@ -225,7 +231,7 @@ let AdjustLoan = ({
                 {actionType && cryptoFromLenderName === 'USDC' ? (
                   <ModalFormButton
                     type='button'
-                    onClick={() => approveContract(pairId, formValues.collateralAmount, true)}
+                    onClick={() => loanApproveContract(pairId, formValues.collateralAmount, true)}
                     approveBtn={true}
                     loading={approveLoading ? 'true' : ''}
                     approved={hasAllowance}

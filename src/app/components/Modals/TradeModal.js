@@ -95,8 +95,8 @@ const TradeModal = ({
   trancheTokenBalance,
   // Functions
   closeModal,
-  allowanceCheck,
-  approveContract,
+  earnAllowanceCheck,
+  earnApproveContract,
   buySellTrancheTokens,
   // API Values
   trancheName,
@@ -253,9 +253,9 @@ const TradeModal = ({
               buyToggle={buyToggle}
               trancheType={trancheType}
               hasAllowance={hasAllowance}
-              allowanceCheck={allowanceCheck}
+              earnAllowanceCheck={earnAllowanceCheck}
               approveLoading={approveLoading}
-              approveContract={approveContract}
+              earnApproveContract={earnApproveContract}
               buySellTrancheTokens={buySellTrancheTokens}
             />
           ) : (
