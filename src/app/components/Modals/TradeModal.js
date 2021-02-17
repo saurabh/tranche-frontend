@@ -203,7 +203,7 @@ const TradeModal = ({
     setBuyToggle(true);
   };
 
-  const withdrawModal = () => {
+  const tradeModal = () => {
     return (
       <Modal
         isOpen={modalIsOpen}
@@ -328,7 +328,7 @@ const TradeModal = ({
     );
   };
 
-  const tradeModal = () => {
+  const withdrawModal = () => {
     return (
       <Modal
         isOpen={modalIsOpen}
