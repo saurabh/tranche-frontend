@@ -1,16 +1,17 @@
-import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup } from 'utils/contractConstructor';
+import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JTrancheTokenSetup } from 'utils/contractConstructor';
+import store from '../redux/store';
 import { web3 as alchemyWeb3 } from 'utils/getWeb3';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
-import { pairData, LoanContractAddress, factoryFees, txMessage } from 'config';
-import { initNotify } from 'services/blocknative';
+import { pairData, LoanContractAddress, factoryFees } from 'config';
 
 export const toWei = alchemyWeb3.utils.toWei;
 export const fromWei = alchemyWeb3.utils.fromWei;
 export const toBN = alchemyWeb3.utils.toBN;
-const notify = initNotify();
 
-export const allowanceCheck = async (pairId, amount, address, web3, collateral = false) => {
+export const loanAllowanceCheck = async (pairId, amount, collateral = false) => {
   try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
     amount = toWei(amount);
     const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
     const token = collateral ? collateralTokenSetup(web3) : lendTokenSetup(web3);
@@ -25,28 +26,10 @@ export const allowanceCheck = async (pairId, amount, address, web3, collateral =
   }
 };
 
-export const approveContract = async (pairId, collateralAmount, address, web3) => {
+export const calculateFees = async (collateralAmount) => {
   try {
-    const { collateralTokenSetup } = pairData[pairId];
-    const collateralToken = collateralTokenSetup(web3);
-    await collateralToken.methods
-      .approve(LoanContractAddress, collateralAmount)
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        const { emitter } = notify.hash(hash);
-        emitter.on('txPool', (transaction) => {
-          return {
-            message: txMessage(transaction.hash)
-          };
-        });
-      });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const calculateFees = async (collateralAmount, web3) => {
-  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoanHelper = JLoanHelperSetup(web3);
     if (collateralAmount) {
       const result = await JLoanHelper.methods
@@ -59,8 +42,10 @@ export const calculateFees = async (collateralAmount, web3) => {
   }
 };
 
-export const calcMinCollateralAmount = async (pairId, askAmount, web3 = alchemyWeb3) => {
+export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (askAmount !== '' && askAmount !== 0) {
       const result = await JLoan.methods
@@ -73,8 +58,10 @@ export const calcMinCollateralAmount = async (pairId, askAmount, web3 = alchemyW
   }
 };
 
-export const calcMaxBorrowAmount = async (pairId, collAmount, web3 = alchemyWeb3) => {
+export const calcMaxBorrowAmount = async (pairId, collAmount) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (collAmount > 0) {
       const result = await JLoan.methods.getMaxStableCoinWithFeesAmount(pairId, collAmount).call();
@@ -85,8 +72,10 @@ export const calcMaxBorrowAmount = async (pairId, collAmount, web3 = alchemyWeb3
   }
 };
 
-export const calcAdjustCollateralRatio = async (loanId, amount, actionType, web3 = alchemyWeb3) => {
+export const calcAdjustCollateralRatio = async (loanId, amount, actionType) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (amount !== '' && amount !== 0) {
       const result = await JLoan.methods
@@ -99,8 +88,10 @@ export const calcAdjustCollateralRatio = async (loanId, amount, actionType, web3
   }
 };
 
-export const getPairDetails = async (pairId, web3) => {
+export const getPairDetails = async (pairId) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JPriceOracle = JPriceOracleSetup(web3);
     const result = await JPriceOracle.methods.getPairDetails(pairId).call();
     return result;
@@ -109,8 +100,10 @@ export const getPairDetails = async (pairId, web3) => {
   }
 };
 
-export const getLoanStatus = async (loanId, web3) => {
+export const getLoanStatus = async (loanId) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     let onChainStatus = await JLoan.methods.loanStatus(loanId).call();
     return parseInt(onChainStatus);
@@ -119,8 +112,10 @@ export const getLoanStatus = async (loanId, web3) => {
   }
 };
 
-export const getLoanForeclosingBlock = async (loanId, web3 = alchemyWeb3) => {
+export const getLoanForeclosingBlock = async (loanId) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     const result = await JLoan.methods.loanBlocks(loanId).call();
     return Number(result.loanForeclosingBlock);
@@ -129,8 +124,10 @@ export const getLoanForeclosingBlock = async (loanId, web3 = alchemyWeb3) => {
   }
 };
 
-export const getAccruedInterests = async (loanId, web3 = alchemyWeb3) => {
+export const getAccruedInterests = async (loanId) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     const result = await JLoan.methods.getAccruedInterests(loanId).call();
     return web3.utils.fromWei(result);
@@ -139,12 +136,38 @@ export const getAccruedInterests = async (loanId, web3 = alchemyWeb3) => {
   }
 };
 
-export const getShareholderShares = async (loanId, address, web3 = alchemyWeb3) => {
+export const getShareholderShares = async (loanId, address) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     const result = await JLoan.methods.getShareholderShares(loanId, address).call();
     return result;
   } catch (error) {
     console.error(error);
   }
+};
+
+export const getWithdrawableFunds = async (trancheAddress, address) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const TrancheToken = JTrancheTokenSetup(web3, trancheAddress);
+    const result = await TrancheToken.methods.withdrawableFundsOf(address).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
 }
+
+// export const withdrawFundsFromTranche = async (trancheAddress) => {
+//   try {
+//     const state = store.getState();
+//     const { web3, address } = state.ethereum;
+//     const TrancheToken = JTrancheTokenSetup(web3, trancheAddress);
+//     const result = await TrancheToken.methods.withdrawFunds().send({ from: address });
+//     return result;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }

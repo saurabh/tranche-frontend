@@ -57,8 +57,8 @@ const Borrow = ({
     setShowModal(true);
     if (!address) {
       const { address } = onboard.getState();
-      setTokenBalances(web3, address);
-    } else setTokenBalances(web3, address);
+      setTokenBalances(address);
+    } else setTokenBalances(address);
   };
 
   return (

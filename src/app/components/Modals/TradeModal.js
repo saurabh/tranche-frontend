@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 // import { Spring } from 'react-spring/renderprops';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
+import { trancheData } from 'config/constants';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TradeForm from '../Form/ Trade';
 import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
@@ -93,14 +94,17 @@ const TradeModal = ({
   hasBalance,
   availableAmount,
   trancheTokenBalance,
+  withdrawableFunds,
   // Functions
   closeModal,
-  allowanceCheck,
-  approveContract,
+  earnAllowanceCheck,
+  earnApproveContract,
   buySellTrancheTokens,
+  withdrawFundsFromTranche,
   // API Values
   trancheName,
   trancheType,
+  trancheTokenAddress,
   amount,
   subscriber,
   cryptoType,
@@ -112,6 +116,8 @@ const TradeModal = ({
     trancheTokenBalance && trancheTokenBalance[trancheName]
       ? roundNumber(fromWei(trancheTokenBalance[trancheName]))
       : 0;
+
+  const searchArr = (address) => trancheData.find((i) => i.address === address);
 
   //   const confirm = (type) => {
   //     confirmAlert({
@@ -250,9 +256,9 @@ const TradeModal = ({
               buyToggle={buyToggle}
               trancheType={trancheType}
               hasAllowance={hasAllowance}
-              allowanceCheck={allowanceCheck}
+              earnAllowanceCheck={earnAllowanceCheck}
               approveLoading={approveLoading}
-              approveContract={approveContract}
+              earnApproveContract={earnApproveContract}
               buySellTrancheTokens={buySellTrancheTokens}
             />
           ) : (
@@ -298,6 +304,21 @@ const TradeModal = ({
                       <span></span>
                     </ModalButton>
                   </BtnGrpLoanModalWrapper>
+
+                  {searchArr(trancheTokenAddress) && (
+                    <BtnGrpLoanModalWrapper>
+                      <h2>Available Tranche Dividends: {roundNumber(withdrawableFunds)}</h2>
+                      <ModalButton
+                        trade={true}
+                        onClick={() => withdrawFundsFromTranche()}
+                        btnColor='#FFFFFF'
+                        backgroundColor='#845AD9'
+                      >
+                        WIthdraw
+                        <span></span>
+                      </ModalButton>
+                    </BtnGrpLoanModalWrapper>
+                  )}
                 </BtnGrpLoanModal>
               </ModalContent>
             </ModalUserActions>

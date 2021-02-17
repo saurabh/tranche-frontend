@@ -11,7 +11,7 @@ import {
   calcAdjustCollateralRatio,
   getLoanForeclosingBlock,
   getAccruedInterests,
-  allowanceCheck,
+  loanAllowanceCheck,
   getShareholderShares
 } from 'services/contractMethods';
 import {
@@ -142,8 +142,8 @@ const TableCard = ({
   };
 
   useEffect(() => {
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
   });
 
   useEffect(() => {
@@ -206,7 +206,7 @@ const TableCard = ({
     const forecloseWindowCheck = async () => {
       try {
         if (status === statuses['Foreclosing'].status) {
-          const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
+          const loanClosingBlock = await getLoanForeclosingBlock(loanId);
           setLoanForeclosingBlock(loanClosingBlock);
         }
         if (
@@ -224,7 +224,7 @@ const TableCard = ({
     forecloseWindowCheck();
   }, [status, loanId, currentBlock, foreclosureWindow, loanForeclosingBlock, web3]);
 
-  const approveContract = async (pairId, amount, adjust = false) => {
+  const loanApproveContract = async (pairId, amount, adjust = false) => {
     try {
       amount = toWei(amount);
       const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
@@ -254,7 +254,7 @@ const TableCard = ({
 
   const calcNewCollateralRatio = async (amount, actionType) => {
     try {
-      const result = await calcAdjustCollateralRatio(loanId, amount, actionType, web3);
+      const result = await calcAdjustCollateralRatio(loanId, amount, actionType);
       setNewCollateralRatio(result);
     } catch (error) {
       console.error(error);
@@ -331,7 +331,7 @@ const TableCard = ({
 
   const forecloseLoan = async () => {
     try {
-      const onChainStatus = await getLoanStatus(loanId, web3);
+      const onChainStatus = await getLoanStatus(loanId);
       console.log('backend status: ' + status);
       console.log('onChain status: ' + onChainStatus);
       if (
@@ -444,33 +444,35 @@ const TableCard = ({
     try {
       e.preventDefault();
       let { shares } = form.sell.values;
-      await JLoan.methods.sellToProtocol(loanId, shares)
+      await JLoan.methods
+        .sellToProtocol(loanId, shares)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-        const { emitter } = notify.hash(hash);
-        emitter.on('txPool', (transaction) => {
-          return {
-            message: txMessage(transaction.hash)
-          };
+          closeModal();
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
         });
-      });
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(web3, address);
-    const allowanceResult = await allowanceCheck(pairId, remainingLoan.toString(), address, web3);
+    setTokenBalances(address);
+    const allowanceResult = await loanAllowanceCheck(pairId, remainingLoan.toString());
     setHasAllowance(allowanceResult);
-    const availableInterest = await getAccruedInterests(loanId, web3);
+    const availableInterest = await getAccruedInterests(loanId);
     setAccruedInterest(availableInterest);
-    const loanClosingBlock = await getLoanForeclosingBlock(loanId, web3);
+    const loanClosingBlock = await getLoanForeclosingBlock(loanId);
     setLoanForeclosingBlock(loanClosingBlock);
-    const shares = await getShareholderShares(loanId, address, web3);
+    const shares = await getShareholderShares(loanId, address);
     setShareholderShares(shares);
     setIsOpen(true);
   };
@@ -528,98 +530,103 @@ const TableCard = ({
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile>
-          <TableContentCardMobile color={Object.values(searchObj(status))[0].background}>
-              <span></span>
-              <TableColMobile address>
-                  <TableMobilColContent>
-                      <h2>{name && name}</h2>
-                      <h2>{addrShortener(borrowerAddress)}</h2>
-                  </TableMobilColContent>
-              </TableColMobile>
-  
-              <TableColMobile>
-                  <TableMobilColContent col>
-                      <h2>{remainingLoan}</h2>
-                      <h2>{cryptoFromLenderName}</h2>
-                  </TableMobilColContent>
-              </TableColMobile>
-  
-              <TableColMobile>
-                  <TableMobilColContent col>
-                      <h2>{collateralRatio}%</h2>
-                      <h2>{Object.values(searchObj(status))[0].key === 'Under Collateralized'
+        <TableContentCardMobile color={Object.values(searchObj(status))[0].background}>
+          <span></span>
+          <TableColMobile address>
+            <TableMobilColContent>
+              <h2>{name && name}</h2>
+              <h2>{addrShortener(borrowerAddress)}</h2>
+            </TableMobilColContent>
+          </TableColMobile>
+
+          <TableColMobile>
+            <TableMobilColContent col>
+              <h2>{remainingLoan}</h2>
+              <h2>{cryptoFromLenderName}</h2>
+            </TableMobilColContent>
+          </TableColMobile>
+
+          <TableColMobile>
+            <TableMobilColContent col>
+              <h2>{collateralRatio}%</h2>
+              <h2>
+                {Object.values(searchObj(status))[0].key === 'Under Collateralized'
                   ? 'Under'
-                  : valShortner(Object.values(searchObj(status))[0].key)}</h2>
-                  </TableMobilColContent>
-              </TableColMobile>
-  
-              <TableColMobile>
-                  <TableMobilColContent col>
-                      <h2>{apy}%</h2>
-                      <h2>apy</h2>
-                  </TableMobilColContent>
-              </TableColMobile>
-  
-              <TableColMobile btn>
-                  <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
-                      <button
-                          disabled={path === 'earn' || disableBtn}
-                          onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
-                      ><img alt="adjust" 
-                      src= {
-                          path === 'borrow'
-                            ? Adjust
-                            : path === 'lend'
-                            ? AdjustEarn
-                            : path === 'earn'
-                            ? AdjustTrade
-                            : Adjust
-                        } /></button>
-                  </TableMobilCardBtn>
-              </TableColMobile>
-  
-          </TableContentCardMobile>
-          <LoanModal
-              // State Values
-              path={path}
-              modalIsOpen={modalIsOpen}
-              approveLoading={approveLoading}
-              hasBalance={hasBalance}
-              hasAllowance={hasAllowance}
-              isShareholder={isShareholder}
-              canBeForeclosed={canBeForeclosed}
-              blocksUntilForeclosure={blocksUntilForeclosure}
-              accruedInterest={accruedInterest}
-              totalInterest={totalInterest}
-              newCollateralRatio={newCollateralRatio}
-              setHasAllowance={setHasAllowance}
-              setNewCollateralRatio={setNewCollateralRatio}
-              // Functions
-              closeModal={() => closeModal()}
-              approveContract={approveContract}
-              adjustLoan={adjustLoan}
-              calcNewCollateralRatio={calcNewCollateralRatio}
-              closeLoan={closeLoan}
-              approveLoan={approveLoan}
-              withdrawInterest={withdrawInterest}
-              forecloseLoan={forecloseLoan}
-              // API Values
-              loanId={loanId}
-              status={status}
-              pairId={pairId}
-              contractAddress={contractAddress}
-              remainingLoan={remainingLoan}
-              cryptoFromLenderName={cryptoFromLenderName}
-              collateralAmount={collateralAmount}
-              collateralTypeName={collateralTypeName}
-              collateralRatio={collateralRatio}
-              interestPaid={interestPaid}
-              APY={apy}
-              rpbRate={rpbRate && fromWei(rpbRate.toString())}
-            />
+                  : valShortner(Object.values(searchObj(status))[0].key)}
+              </h2>
+            </TableMobilColContent>
+          </TableColMobile>
+
+          <TableColMobile>
+            <TableMobilColContent col>
+              <h2>{apy}%</h2>
+              <h2>apy</h2>
+            </TableMobilColContent>
+          </TableColMobile>
+
+          <TableColMobile btn>
+            <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
+              <button
+                disabled={path === 'earn' || disableBtn}
+                onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
+              >
+                <img
+                  alt='adjust'
+                  src={
+                    path === 'borrow'
+                      ? Adjust
+                      : path === 'lend'
+                      ? AdjustEarn
+                      : path === 'earn'
+                      ? AdjustTrade
+                      : Adjust
+                  }
+                />
+              </button>
+            </TableMobilCardBtn>
+          </TableColMobile>
+        </TableContentCardMobile>
+        <LoanModal
+          // State Values
+          path={path}
+          modalIsOpen={modalIsOpen}
+          approveLoading={approveLoading}
+          hasBalance={hasBalance}
+          hasAllowance={hasAllowance}
+          isShareholder={isShareholder}
+          canBeForeclosed={canBeForeclosed}
+          blocksUntilForeclosure={blocksUntilForeclosure}
+          accruedInterest={accruedInterest}
+          totalInterest={totalInterest}
+          newCollateralRatio={newCollateralRatio}
+          setHasAllowance={setHasAllowance}
+          setNewCollateralRatio={setNewCollateralRatio}
+          // Functions
+          closeModal={() => closeModal()}
+          loanApproveContract={loanApproveContract}
+          adjustLoan={adjustLoan}
+          calcNewCollateralRatio={calcNewCollateralRatio}
+          closeLoan={closeLoan}
+          approveLoan={approveLoan}
+          withdrawInterest={withdrawInterest}
+          forecloseLoan={forecloseLoan}
+          // API Values
+          loanId={loanId}
+          status={status}
+          pairId={pairId}
+          contractAddress={contractAddress}
+          remainingLoan={remainingLoan}
+          cryptoFromLenderName={cryptoFromLenderName}
+          collateralAmount={collateralAmount}
+          collateralTypeName={collateralTypeName}
+          collateralRatio={collateralRatio}
+          interestPaid={interestPaid}
+          APY={apy}
+          rpbRate={rpbRate && fromWei(rpbRate.toString())}
+        />
       </TableContentCardWrapperMobile>
     );
-  }
+  };
   const TableCardDesktop = () => {
     return (
       <TableContentCardWrapper>
@@ -694,7 +701,7 @@ const TableCard = ({
                 {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
                   ? 'Under'
                   : valShortner(Object.values(searchObj(status))[0].key)} */}
-                  {i18n.t(`${"statuses." + status.toString() + ".key"}`)}
+                {i18n.t(`${'statuses.' + status.toString() + '.key'}`)}
               </StatusTextWrapper>
             </FifthColContent>
           </TableFifthCol>
@@ -738,7 +745,7 @@ const TableCard = ({
               setNewCollateralRatio={setNewCollateralRatio}
               // Functions
               closeModal={() => closeModal()}
-              approveContract={approveContract}
+              loanApproveContract={loanApproveContract}
               adjustLoan={adjustLoan}
               calcNewCollateralRatio={calcNewCollateralRatio}
               closeLoan={closeLoan}
@@ -762,7 +769,9 @@ const TableCard = ({
             />
           </TableSixthCol>
         </TableContentCard>
-        <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
+        <TableCardMore
+          className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
+        >
           <TableCardMoreContent>
             {isLoading ? (
               <ReactLoading
@@ -802,7 +811,7 @@ const TableCard = ({
         </TableCardMore>
       </TableContentCardWrapper>
     );
-  }
+  };
   return isDesktop ? TableCardDesktop() : TableCardMobile();
 };
 

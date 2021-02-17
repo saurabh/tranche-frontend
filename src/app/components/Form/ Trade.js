@@ -51,13 +51,13 @@ let TradeForm = ({
   hasAllowance,
   approveLoading,
   // Functions
-  allowanceCheck,
-  approveContract,
+  earnAllowanceCheck,
+  earnApproveContract,
   sellToProtocol,
   buySellTrancheTokens,
   // API Values
   loanId,
-  trancheType,
+  trancheType
 }) => {
   const [shares, setShares] = useState('');
   const pair = pairData[0].value;
@@ -72,9 +72,16 @@ let TradeForm = ({
     setLoanIdandAddress();
   }, [setLoanIdandAddress]);
 
-  const debounceAllowanceCheck = useCallback(_.debounce(async (amount) => {
-    await allowanceCheck(amount, sellToggle);
-  }, 500, {leading: true}), []);
+  const debounceAllowanceCheck = useCallback(
+    _.debounce(
+      async (amount) => {
+        await earnAllowanceCheck(amount, sellToggle);
+      },
+      500,
+      { leading: true }
+    ),
+    []
+  );
 
   // const buySellTrancheTokens = (e) => {
   //   try {
@@ -159,7 +166,8 @@ let TradeForm = ({
               <NewLoanFormInput>
                 <NewLoanInputWrapper name='amount'>
                   <ModalFormLabel htmlFor='amount' tranche={true}>
-                    Amount of {trancheType === 'TRANCHE_A' ? 'TRANCHE A' : 'TRANCHE B'} to {buyToggle ? 'purchase' : 'sell'}:
+                    Amount of {trancheType === 'TRANCHE_A' ? 'TRANCHE A' : 'TRANCHE B'} to{' '}
+                    {buyToggle ? 'purchase' : 'sell'}:
                   </ModalFormLabel>
                   <Field
                     component={InputField}
@@ -217,29 +225,29 @@ let TradeForm = ({
           <ModalFormSubmit>
             <BtnLoanModal>
               <ApproveBtnWrapper>
-                  <ModalFormButton
-                    type='button'
-                    loading={approveLoading ? 'true' : ''}
-                    approved={hasAllowance}
-                    onClick={() => approveContract(formValues.amount, sellToggle)}
-                  >
-                    {!hasAllowance && !approveLoading ? (
-                      <h2>Approve</h2>
-                    ) : !hasAllowance && approveLoading ? (
-                      <div className='btnLoadingIconWrapper'>
-                        <div className='btnLoadingIconCut'>
-                          <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
-                        </div>
+                <ModalFormButton
+                  type='button'
+                  loading={approveLoading ? 'true' : ''}
+                  approved={hasAllowance}
+                  onClick={() => earnApproveContract(formValues.amount, sellToggle)}
+                >
+                  {!hasAllowance && !approveLoading ? (
+                    <h2>Approve</h2>
+                  ) : !hasAllowance && approveLoading ? (
+                    <div className='btnLoadingIconWrapper'>
+                      <div className='btnLoadingIconCut'>
+                        <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
                       </div>
-                    ) : hasAllowance && !approveLoading ? (
-                      <h2>
-                        <span></span> Approved
-                      </h2>
-                    ) : (
-                      ''
-                    )}
-                  </ModalFormButton>
-                </ApproveBtnWrapper>
+                    </div>
+                  ) : hasAllowance && !approveLoading ? (
+                    <h2>
+                      <span></span> Approved
+                    </h2>
+                  ) : (
+                    ''
+                  )}
+                </ModalFormButton>
+              </ApproveBtnWrapper>
               <ModalFormButton
                 type='submit'
                 backgroundColor={sellToggle ? '#845AD9' : buyToggle ? '#2ECC71' : '#845AD9'}

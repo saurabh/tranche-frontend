@@ -105,7 +105,7 @@ const LoanModal = ({
   setNewCollateralRatio,
   // Functions
   closeModal,
-  approveContract,
+  loanApproveContract,
   adjustLoan,
   calcNewCollateralRatio,
   closeLoan,
@@ -344,7 +344,7 @@ const LoanModal = ({
                             onClick={
                               hasAllowance
                                 ? () => confirm('Close')
-                                : () => approveContract(pairId, remainingLoan.toString())
+                                : () => loanApproveContract(pairId, remainingLoan.toString())
                             }
                             backgroundColor='#0A66E1'
                             btnColor='#FFFFFF'
@@ -446,7 +446,7 @@ const LoanModal = ({
               setNewCollateralRatio={setNewCollateralRatio}
               setHasAllowance={setHasAllowance}
               // Functions
-              approveContract={approveContract}
+              loanApproveContract={loanApproveContract}
               adjustLoan={adjustLoan}
               calcNewCollateralRatio={calcNewCollateralRatio}
               // API Values
@@ -611,7 +611,7 @@ const LoanModal = ({
                         onClick={
                           hasAllowance
                             ? () => confirm('Approve')
-                            : () => approveContract(pairId, remainingLoan.toString())
+                            : () => loanApproveContract(pairId, remainingLoan.toString())
                         }
                         btnColor='#ffffff'
                         backgroundColor='#2ECC71'

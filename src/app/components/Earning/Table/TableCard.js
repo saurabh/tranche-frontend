@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 import { useOuterClick } from 'services/useOuterClick';
-import { JProtocolSetup, ERC20Setup } from 'utils/contractConstructor';
-import { fromWei, toWei } from 'services/contractMethods';
+import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
+import { fromWei, toWei, getWithdrawableFunds } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -90,6 +90,7 @@ const TableCard = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
+  const [withdrawableFunds, setWithdrawableFunds] = useState(0);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -139,10 +140,12 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const allowanceCheck = async (amount, sellToggle) => {
+  const earnAllowanceCheck = async (amount, sellToggle) => {
     try {
       amount = toWei(amount);
-      const token = sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
+      const token = sellToggle
+        ? ERC20Setup(web3, trancheTokenAddress)
+        : ERC20Setup(web3, buyerCoinAddress);
       let userAllowance = await token.methods.allowance(address, contractAddress).call();
       if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
         setHasAllowance(true);
@@ -154,10 +157,12 @@ const TableCard = ({
     }
   };
 
-  const approveContract = async (amount, sellToggle) => {
+  const earnApproveContract = async (amount, sellToggle) => {
     try {
       amount = toWei(amount);
-      const token =  sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
+      const token = sellToggle
+        ? ERC20Setup(web3, trancheTokenAddress)
+        : ERC20Setup(web3, buyerCoinAddress);
       await token.methods
         .approve(contractAddress, amount)
         .send({ from: address })
@@ -260,14 +265,36 @@ const TableCard = ({
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
+  const withdrawFundsFromTranche = async () => {
+    try {
+      const TrancheToken = JTrancheTokenSetup(web3, trancheTokenAddress);
+      await TrancheToken.methods
+        .withdrawFunds()
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          closeModal();
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const openModal = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(web3, address);
-    setTrancheTokenBalances();
+    setTokenBalances(address);
+    setTrancheTokenBalances(name, trancheTokenAddress, address);
+    const result = await getWithdrawableFunds(trancheTokenAddress, address);
+    setWithdrawableFunds(fromWei(result));
     setIsOpen(true);
   };
 
@@ -480,14 +507,17 @@ const TableCard = ({
             hasBalance={hasBalance}
             availableAmount={availableAmount}
             trancheTokenBalance={trancheTokenBalance}
+            withdrawableFunds={withdrawableFunds}
             // Functions
             closeModal={() => closeModal()}
-            allowanceCheck={allowanceCheck}
-            approveContract={approveContract}
+            earnAllowanceCheck={earnAllowanceCheck}
+            earnApproveContract={earnApproveContract}
             buySellTrancheTokens={buySellTrancheTokens}
+            withdrawFundsFromTranche={withdrawFundsFromTranche}
             // API Values
             trancheName={name}
             trancheType={type}
+            trancheTokenAddress={trancheTokenAddress}
             amount={amount}
             subscriber={subscriber}
             cryptoType={cryptoType}

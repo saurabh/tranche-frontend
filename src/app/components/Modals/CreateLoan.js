@@ -45,7 +45,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
     closeModal();
   }
 
-  const approveContract = async (pairId, collateralAmount) => {
+  const loanApproveContract = async (pairId, collateralAmount) => {
     try {
       const { collateralTokenSetup } = pairData[pairId];
       const collateralToken = collateralTokenSetup(web3);
@@ -84,7 +84,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
         .openNewLoan(pairId, borrowedAskAmount, rpbRate)
         .send({ value: collateralAmount, from: address })
         .on('transactionHash', (hash) => {
-          handleCloseModal(); 
+          handleCloseModal();
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
@@ -116,7 +116,7 @@ const CreateLoan = ({ ethereum: { address, web3, notify }, form, openModal, clos
         hasAllowance={hasAllowance}
         approveLoading={approveLoading}
         setHasAllowance={setHasAllowance}
-        approveContract={approveContract}
+        loanApproveContract={loanApproveContract}
         createNewLoan={createNewLoan}
       />
     </Modal>
