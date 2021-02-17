@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
-// import { useOuterClick } from 'services/useOuterClick';
+import { useOuterClick } from 'services/useOuterClick';
 import { JProtocolSetup, ERC20Setup } from 'utils/contractConstructor';
 import { fromWei, toWei } from 'services/contractMethods';
 import {
@@ -18,7 +18,6 @@ import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
-  // valShortner,
   readyToTransact,
   isGreaterThan,
   isEqualTo,
@@ -28,18 +27,20 @@ import {
 import {
   PagesData,
   txMessage,
-  etherScanUrl
-  // apiUri
+  etherScanUrl,
+  // apiUri,
+  statuses
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
 import {
   Adjust,
   AdjustEarn,
   AdjustTrade,
-  // CloseModal,
-  // Info,
+  CloseModal,
+  Info,
   LinkArrow,
-  TrancheImg
+  TrancheImg,
+  Withdraw
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
 // import ETH from 'assets/images/svg/EthForm.svg';
@@ -47,12 +48,14 @@ import TableMoreRow from './TableMoreRow';
 import {
   TableContentCard,
   TableContentCardWrapper,
-  // StatusTextWrapper,
+  FifthColContent,
+  StatusTextWrapper,
   AdjustLoanBtn,
   TableCardTag,
-  TableCardImg
-  // InfoBoxWrapper,
-  // InfoBox
+  TableCardImg,
+  InfoBoxWrapper,
+  InfoBox,
+  WithdrawBtnWrapper
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
@@ -82,9 +85,10 @@ const TableCard = ({
 }) => {
   const JProtocol = JProtocolSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
-  // const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
+  const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
+  const [withdrawModal, setWithdrawModal] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
@@ -96,9 +100,9 @@ const TableCard = ({
   let isLoading = false;
   let moreCardToggle = false;
   let moreList = false;
-  // const innerRef = useOuterClick((e) => {
-  //   setInfoBoxToggle(false);
-  // });
+  const innerRef = useOuterClick((e) => {
+    setInfoBoxToggle(false);
+  });
   const availableAmount =
     subscriber === 'N/A' && amount === 'N/A'
       ? 0
@@ -267,16 +271,22 @@ const TableCard = ({
     setIsOpen(true);
   };
 
+  const widthdrawToggle = () => {
+    openModal();
+    setWithdrawModal(true);
+  }
+
   const closeModal = () => {
     setIsOpen(false);
     setHasAllowance(false);
+    setWithdrawModal(false);
   };
 
-  // const searchObj = (val) => {
-  //   return Object.fromEntries(
-  //     Object.entries(statuses).filter(([key, value]) => value.status === val)
-  //   );
-  // };
+  const searchObj = (val) => {
+    return Object.fromEntries(
+      Object.entries(statuses).filter(([key, value]) => value.status === val)
+    );
+  };
 
   // const cardToggle = (hash) => {
   //   console.log('Loan ID: ' + loanId);
@@ -390,16 +400,21 @@ const TableCard = ({
           </div>
         </div>
         <div className='table-second-col table-col'>
-          <div className='second-col-content'>
-            {/* <StatusTextWrapper
-              // className='status-text-wrapper'
-              // color={Object.values(searchObj(status))[0].color}
-              // backgroundColor={Object.values(searchObj(status))[0].background}
-            > */}
-            {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
-                ? 'Under'
-                : valShortner(Object.values(searchObj(status))[0].key)} */}
-            {/* </StatusTextWrapper> 
+          <FifthColContent>
+            <StatusTextWrapper
+              className='status-text-wrapper'
+              color={Object.values(searchObj(1))[0].color}
+              backgroundColor={Object.values(searchObj(1))[0].background}
+              table="tranche"
+            >
+              12%
+            </StatusTextWrapper> 
+
+            <WithdrawBtnWrapper>
+              <button 
+                onClick={disableBtn ? undefined : () => widthdrawToggle()}
+              ><img src={Withdraw} alt="action" /></button>
+            </WithdrawBtnWrapper>
             
             
             <InfoBoxWrapper ref={innerRef}>
@@ -430,9 +445,9 @@ const TableCard = ({
                 }
                 
               </InfoBoxWrapper>
-            
-            */}
-          </div>
+              
+             
+          </FifthColContent>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
           <div className='adjust-btn-wrapper'>
@@ -460,6 +475,7 @@ const TableCard = ({
             path={path}
             modalIsOpen={modalIsOpen}
             hasAllowance={hasAllowance}
+            withdraw={withdrawModal}
             approveLoading={approveLoading}
             hasBalance={hasBalance}
             availableAmount={availableAmount}

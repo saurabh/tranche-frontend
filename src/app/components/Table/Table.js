@@ -100,6 +100,16 @@ const Table = ({
     //page.current = currentPage;
   }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, filterType, sort, address, path]);
 
+
+  useEffect(() => {
+    window.ethereum.on('accountsChanged', function () {
+      window.location.reload();
+    })
+  }, []);
+  
+  
+  
+
   const changeLoansAssetsFilter = useCallback(
     (filter) => {
       changeOwnAllFilter(filter);

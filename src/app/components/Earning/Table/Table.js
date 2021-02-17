@@ -105,6 +105,13 @@ const Table = ({
     
   }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, address, tradeType]);
 
+
+  useEffect(() => {
+    window.ethereum.on('accountsChanged', function () {
+      window.location.reload();
+    })
+  }, []);
+
   useEffect(() => {
     changePath(currentPath);
     changeOwnAllFilter('all');

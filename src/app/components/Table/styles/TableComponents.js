@@ -72,6 +72,10 @@ const StatusTextWrapper = styled.h2`
   color: ${props => props.color ? props.color : ""};
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
   position: relative;
+  ${({ table }) => table === 'tranche' && `
+    background: transparent;
+    border: 1px solid #2ECC71;
+  `}
 `
 const MoreRowSpan = styled.span`
   color: ${props => props.color ? props.color : ""};
@@ -525,9 +529,31 @@ const TableMobileRowCreateLoan = styled.div`
 `
 const InfoBoxWrapper = styled.div`
   position: absolute;
-  right: -24px;
+  right: -44px;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+
+`
+const WithdrawBtnWrapper = styled.div`
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  button{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: 1px solid #2ECC71;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+  }
 `
 
 
@@ -537,7 +563,7 @@ const InfoBox = styled.div`
   background: #FFFFFF;
   border: 1px solid #EFEFEF;
   position: absolute;
-  bottom: 27px;
+  bottom: 36px;
   z-index: 2000;
   border-radius: 16px;
   display: flex;
@@ -586,6 +612,7 @@ const InfoBox = styled.div`
     background: #F7F7F7;
     border-radius: 0px 0px 16px 16px;
     padding: 27px 0;
+    text-align: center;
     button{
       background: rgb(46, 204, 113, 0.75);
       box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
@@ -873,5 +900,6 @@ export {
   TableSixthCol,
   AdustBtnWrapper,
   TableCardMore,
-  TableCardMoreContent
+  TableCardMoreContent,
+  WithdrawBtnWrapper
 };

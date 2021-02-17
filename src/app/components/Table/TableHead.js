@@ -74,15 +74,12 @@ const TableHead = ({changeSorting, path}) => {
             </TableHeadTitle>
             <TableHeadTitle className="status-wrapper">
                 <div className={path !== "earn" ? "status-title-content" : "apy-content"}  onClick={() => sortLoans("displayPriority")}>
-                    <h2>{path !== "earn" ? "Status" : ""}</h2>
-                    {/* <h2>{path !== "earn" ? "Status" : "BOND APY"}</h2> */}
-                    {path !== "earn" ?
-                        <SortChevronWrapper>
-                            <img src={upChevron} alt="upChevron"/>
-                            <img src={downChevron} alt="downChevron"/>
-                        </SortChevronWrapper> : ""
-                    }
-                    
+                    <h2>{path !== "earn" ? "Status" : "BOND APY"}</h2>
+                    <SortChevronWrapper>
+                        <img src={upChevron} alt="upChevron"/>
+                        <img src={downChevron} alt="downChevron"/>
+                    </SortChevronWrapper>
+                
                 </div>
             </TableHeadTitle>
             <TableHeadTitle className="head-btns-wrapper">

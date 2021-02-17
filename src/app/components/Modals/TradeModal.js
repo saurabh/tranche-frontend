@@ -89,6 +89,7 @@ const TradeModal = ({
   modalIsOpen,
   hasAllowance,
   approveLoading,
+  withdraw,
   hasBalance,
   availableAmount,
   trancheTokenBalance,
@@ -196,7 +197,7 @@ const TradeModal = ({
     setBuyToggle(true);
   };
 
-  const tradeModal = () => {
+  const withdrawModal = () => {
     return (
       <Modal
         isOpen={modalIsOpen}
@@ -306,7 +307,94 @@ const TradeModal = ({
     );
   };
 
-  return path === 'earn' ? tradeModal() : '';
+  const tradeModal = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={FirstCustomStyles}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+      >
+        <ModalHeader>
+          <h2>{buyToggle ? 'Buy Eth' : sellToggle ? 'Sell ETH' : ''} TRANCHE A</h2>
+          <button onClick={() => modalClose()}>
+            <img src={CloseModal} alt='' />
+          </button>
+        </ModalHeader>
+
+        <ModalActionsContent>
+          <ModalActionDetails>
+            <ModalActionDetailsContent trade={true}>
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle>Asset Value</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue></LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle>Return per Block</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue>
+                  {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
+                </LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle>Liquidity</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue></LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle>APY</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue></LoanDetailsRowValue>
+              </LoanDetailsRow>
+            </ModalActionDetailsContent>
+          </ModalActionDetails>
+            <ModalUserActions>
+              <ModalContent>
+                <BtnGrpLoanModal>
+                  <BtnGrpLoanModalWrapper>
+                    <h2>
+        
+                    </h2>
+                    <ModalButton
+                      trade={true}
+                      btnColor='#234566'
+                        backgroundColor='#EAEAEA'
+                      disabled={!hasBalance || amount === subscriber}
+                    >
+                      Withdraw Interest
+                      <span></span>
+                    </ModalButton>
+                  </BtnGrpLoanModalWrapper>
+
+                  <BtnGrpLoanModalWrapper>
+                    <h2>
+                      
+                    </h2>
+                    <ModalButton
+                      trade={true}
+                      // disabled={true}
+                      backgroundColor='#0A66E1'
+                            btnColor='#FFFFFF'
+                    >
+                      Distribute protocol
+                      <span></span>
+                    </ModalButton>
+                  </BtnGrpLoanModalWrapper>
+                </BtnGrpLoanModal>
+              </ModalContent>
+            </ModalUserActions>
+        </ModalActionsContent>
+      </Modal>
+    );
+  };
+
+  return (path === 'earn' && !withdraw) ? tradeModal() : (path === 'earn' && withdraw) ? withdrawModal() : '';
 };
 
 export default TradeModal;
