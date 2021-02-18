@@ -5,7 +5,12 @@ import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 import { useOuterClick } from 'services/useOuterClick';
 import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
-import { fromWei, toWei, getWithdrawableFunds } from 'services/contractMethods';
+import {
+  fromWei,
+  toWei,
+  getWithdrawableFunds,
+  getLoansAccruedInterest
+} from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -91,10 +96,12 @@ const TableCard = ({
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [withdrawableFunds, setWithdrawableFunds] = useState(0);
+  const [loansAccruedInterest, setLoansAccruedInterest] = useState(0);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [disableBtn, setDisableBtn] = useState(false);
+  const limit = 2;
   rpbRate = rpbRate && rpbRate.toString().split('.')[0];
   rpbRate = rpbRate && fromWei(rpbRate);
   let disableBtn = false;
@@ -298,10 +305,14 @@ const TableCard = ({
     setIsOpen(true);
   };
 
-  const widthdrawToggle = () => {
+  const widthdrawToggle = async () => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    const result = await getLoansAccruedInterest(trancheId, 0, limit - 1);
+    setLoansAccruedInterest(fromWei(result));
     openModal();
     setWithdrawModal(true);
-  }
+  };
 
   const closeModal = () => {
     setIsOpen(false);
@@ -432,48 +443,52 @@ const TableCard = ({
               className='status-text-wrapper'
               color={Object.values(searchObj(1))[0].color}
               backgroundColor={Object.values(searchObj(1))[0].background}
-              table="tranche"
+              table='tranche'
             >
               12%
-            </StatusTextWrapper> 
+            </StatusTextWrapper>
 
             <WithdrawBtnWrapper>
-              <button 
-                onClick={disableBtn ? undefined : () => widthdrawToggle()}
-              ><img src={Withdraw} alt="action" /></button>
+              <button onClick={disableBtn ? undefined : () => widthdrawToggle()}>
+                <img src={Withdraw} alt='action' />
+              </button>
             </WithdrawBtnWrapper>
-            
-            
+
             <InfoBoxWrapper ref={innerRef}>
-                <img src={Info} alt="info" onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
-                {
-                 InfoBoxToggle && <InfoBox>
+              <img src={Info} alt='info' onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
+              {InfoBoxToggle && (
+                <InfoBox>
+                  <div>
                     <div>
-                      <div>
-                        <button>
-                          <img src={CloseModal} alt="close" onClick={() => setInfoBoxToggle(false)}  />
-                        </button>
-                      </div>
-                      <div>
-                        <h2>ETH Investment Grade</h2>
-                        <h2>Fixed Rate Instrument</h2>
-                      </div>
-                      <div>
-                        <p>The ETH investment grade bond is purchased with DAI and pays out a <strong>fixed interest 5% APY</strong> in <strong>ETH</strong>. Returns are generated through ETH:DAI loans borrowed through the Tranche Platform.</p>
-                        <p>This instrument has the <strong>highest payment seniority</strong>and is <strong>suitable for low-risk investors</strong> who wish to earn ETH on a block by block pay-out schedule.</p>
-                      </div>
+                      <button>
+                        <img src={CloseModal} alt='close' onClick={() => setInfoBoxToggle(false)} />
+                      </button>
                     </div>
                     <div>
-                      <div>
-                        <button>LEARN MORE BY VISITING OUR DOCS</button>
-                      </div>
+                      <h2>ETH Investment Grade</h2>
+                      <h2>Fixed Rate Instrument</h2>
                     </div>
-                  </InfoBox>
-                }
-                
-              </InfoBoxWrapper>
-              
-             
+                    <div>
+                      <p>
+                        The ETH investment grade bond is purchased with DAI and pays out a{' '}
+                        <strong>fixed interest 5% APY</strong> in <strong>ETH</strong>. Returns are
+                        generated through ETH:DAI loans borrowed through the Tranche Platform.
+                      </p>
+                      <p>
+                        This instrument has the <strong>highest payment seniority</strong>and is{' '}
+                        <strong>suitable for low-risk investors</strong> who wish to earn ETH on a
+                        block by block pay-out schedule.
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <button>LEARN MORE BY VISITING OUR DOCS</button>
+                    </div>
+                  </div>
+                </InfoBox>
+              )}
+            </InfoBoxWrapper>
           </FifthColContent>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
@@ -508,13 +523,16 @@ const TableCard = ({
             availableAmount={availableAmount}
             trancheTokenBalance={trancheTokenBalance}
             withdrawableFunds={withdrawableFunds}
+            loansAccruedInterest={loansAccruedInterest}
             // Functions
             closeModal={() => closeModal()}
             earnAllowanceCheck={earnAllowanceCheck}
             earnApproveContract={earnApproveContract}
+            setLoansAccruedInterest={setLoansAccruedInterest}
             buySellTrancheTokens={buySellTrancheTokens}
             withdrawFundsFromTranche={withdrawFundsFromTranche}
             // API Values
+            trancheId={trancheId}
             trancheName={name}
             trancheType={type}
             trancheTokenAddress={trancheTokenAddress}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 // import { confirmAlert } from 'react-confirm-alert';
 // import { Spring } from 'react-spring/renderprops';
@@ -8,7 +8,13 @@ import { trancheData } from 'config/constants';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TradeForm from '../Form/ Trade';
 import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
-import { fromWei } from 'services/contractMethods';
+import {
+  fromWei,
+  getTrancheParameters,
+  getLoansAccruedInterest,
+  collectLoansAccruedInterest,
+  sendValueToTranche
+} from 'services/contractMethods';
 import {
   ModalHeader,
   ModalContent,
@@ -95,13 +101,16 @@ const TradeModal = ({
   availableAmount,
   trancheTokenBalance,
   withdrawableFunds,
+  loansAccruedInterest,
   // Functions
   closeModal,
   earnAllowanceCheck,
   earnApproveContract,
+  setLoansAccruedInterest,
   buySellTrancheTokens,
   withdrawFundsFromTranche,
   // API Values
+  trancheId,
   trancheName,
   trancheType,
   trancheTokenAddress,
@@ -112,6 +121,11 @@ const TradeModal = ({
 }) => {
   const [buyToggle, setBuyToggle] = useState(0);
   const [sellToggle, setSellToggle] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [maxPages, setMaxPages] = useState(1);
+  const limit = 2;
+  const [startIndex, setStartIndex] = useState(0);
+  const [stopIndex, setStopIndex] = useState(limit - 1);
   let trancheTokens =
     trancheTokenBalance && trancheTokenBalance[trancheName]
       ? roundNumber(fromWei(trancheTokenBalance[trancheName]))
@@ -119,76 +133,23 @@ const TradeModal = ({
 
   const searchArr = (address) => trancheData.find((i) => i.address === address);
 
-  //   const confirm = (type) => {
-  //     confirmAlert({
-  //       customUI: ({ onClose }) => {
-  //         return (
-  //           <Spring
-  //             from={{
-  //               transform: 'translate3d(0,-400px,0) scale(2)'
-  //             }}
-  //             to={{
-  //               transform: 'translate3d(0,0px,0) scale(1)'
-  //             }}
-  //           >
-  //             {(props) => (
-  //               <ConfirmAlertWrapper style={props}>
-  //                 {type === 'Close' ? (
-  //                   <h2>
-  //                     Are you sure you want to return {remainingLoan + ' ' + cryptoFromLenderName}?
-  //                   </h2>
-  //                 ) : (
-  //                   <h2>{actionTypes[type].confirmationText}</h2>
-  //                 )}
-  //                 {/*{type === 'WithdrawInterest' && (
-  //               <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
-  //             )}*/}
-  //                 <ConfirmAlertBtnWrapper>
-  //                   <ModalButton
-  //                     onClick={onClose}
-  //                     btnColor='rgba(35,69,102,0.7)'
-  //                     backgroundColor='#EAEAEA'
-  //                   >
-  //                     No
-  //                   </ModalButton>
-  //                   <ModalButton
-  //                     btnColor='rgba(35,69,102,0.7)'
-  //                     backgroundColor='#EAEAEA'
-  //                     confirmBtn={true}
-  //                     onClick={() => {
-  //                       controlAction(type, onClose);
-  //                     }}
-  //                   >
-  //                     Yes
-  //                   </ModalButton>
-  //                 </ConfirmAlertBtnWrapper>
-  //               </ConfirmAlertWrapper>
-  //             )}
-  //           </Spring>
-  //         );
-  //       }
-  //     });
-  //   };
+  useEffect(() => {
+    const getTrancheLoans = async () => {
+      try {
+        if (trancheId !== undefined) {
+          const trancheParams = await getTrancheParameters(trancheId);
+          let totalLoansInTranche = parseInt(trancheParams.totalLoansInTranche);
+          // console.log(trancheParams)
+          // console.log((Math.ceil(totalLoansInTranche / limit)))
+          setMaxPages(Math.ceil(totalLoansInTranche / limit));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //   const controlAction = (type, onClose) => {
-  //     if (type === actionTypes['Cancel'].name || type === actionTypes['Close'].name) {
-  //       closeLoan();
-  //       closeModal();
-  //       onClose();
-  //     } else if (type === actionTypes['Approve'].name) {
-  //       approveLoan();
-  //       closeModal();
-  //       onClose();
-  //     } else if (type === actionTypes['WithdrawInterest'].name) {
-  //       withdrawInterest();
-  //       closeModal();
-  //       onClose();
-  //     } else if (type === actionTypes['Foreclose'].name) {
-  //       forecloseLoan();
-  //       closeModal();
-  //       onClose();
-  //     }
-  //   };
+    getTrancheLoans();
+  }, [trancheId]);
 
   const modalClose = () => {
     closeModal();
@@ -199,8 +160,29 @@ const TradeModal = ({
   const sellTranche = (i) => {
     setSellToggle(true);
   };
+
   const buyTranche = (i) => {
     setBuyToggle(true);
+  };
+
+  const handlePageChange = async (page) => {
+    setCurrentPage(page);
+    const newStartIndex = page * limit - limit;
+    const newStopIndex = page * limit - 1;
+    setStartIndex(newStartIndex);
+    setStopIndex(newStopIndex);
+    const result = await getLoansAccruedInterest(trancheId, newStartIndex, newStopIndex);
+    setLoansAccruedInterest(fromWei(result));
+  };
+
+  const handleInterestWithdraw = async () => {
+    try {
+      await collectLoansAccruedInterest(trancheId, startIndex, stopIndex);
+      const result = await getLoansAccruedInterest(trancheId, startIndex, stopIndex);
+      setLoansAccruedInterest(fromWei(result));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const tradeModal = () => {
@@ -375,47 +357,65 @@ const TradeModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-            <ModalUserActions>
-              <ModalContent>
-                <BtnGrpLoanModal>
-                  <BtnGrpLoanModalWrapper>
-                    <h2>
-        
-                    </h2>
-                    <ModalButton
-                      trade={true}
-                      btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                      disabled={!hasBalance || amount === subscriber}
-                    >
-                      Withdraw Interest
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
+          <ModalUserActions>
+            <ModalContent>
+              <BtnGrpLoanModal>
+                <BtnGrpLoanModalWrapper>
+                  <h2>
+                    Total Interest accrued inside Tranche Loans: {roundNumber(loansAccruedInterest)}
+                  </h2>
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    &lt;
+                  </button>
+                  <ModalButton
+                    trade={true}
+                    onClick={() => handleInterestWithdraw()}
+                    btnColor='#234566'
+                    backgroundColor='#EAEAEA'
+                    disabled={!hasBalance || amount === subscriber}
+                  >
+                    Withdraw Interest
+                    <span></span>
+                  </ModalButton>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === maxPages}
+                  >
+                    &gt;
+                  </button>
+                  <h2>
+                    {currentPage} / {maxPages}
+                  </h2>
+                </BtnGrpLoanModalWrapper>
 
-                  <BtnGrpLoanModalWrapper>
-                    <h2>
-                      
-                    </h2>
-                    <ModalButton
-                      trade={true}
-                      // disabled={true}
-                      backgroundColor='#0A66E1'
-                            btnColor='#FFFFFF'
-                    >
-                      Distribute protocol
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
-                </BtnGrpLoanModal>
-              </ModalContent>
-            </ModalUserActions>
+                <BtnGrpLoanModalWrapper>
+                  <h2>Distribute Loan Interests to Tranches</h2>
+                  <ModalButton
+                    trade={true}
+                    onClick={() => sendValueToTranche(trancheId)}
+                    backgroundColor='#0A66E1'
+                    btnColor='#FFFFFF'
+                  >
+                    Distribute protocol
+                    <span></span>
+                  </ModalButton>
+                </BtnGrpLoanModalWrapper>
+              </BtnGrpLoanModal>
+            </ModalContent>
+          </ModalUserActions>
         </ModalActionsContent>
       </Modal>
     );
   };
 
-  return (path === 'earn' && !withdraw) ? tradeModal() : (path === 'earn' && withdraw) ? withdrawModal() : '';
+  return path === 'earn' && !withdraw
+    ? tradeModal()
+    : path === 'earn' && withdraw
+    ? withdrawModal()
+    : '';
 };
 
 export default TradeModal;
