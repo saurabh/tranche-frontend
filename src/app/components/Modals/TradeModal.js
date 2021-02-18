@@ -139,8 +139,6 @@ const TradeModal = ({
         if (trancheId !== undefined) {
           const trancheParams = await getTrancheParameters(trancheId);
           let totalLoansInTranche = parseInt(trancheParams.totalLoansInTranche);
-          // console.log(trancheParams)
-          // console.log((Math.ceil(totalLoansInTranche / limit)))
           setMaxPages(Math.ceil(totalLoansInTranche / limit));
         }
       } catch (error) {

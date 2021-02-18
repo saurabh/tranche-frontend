@@ -149,15 +149,17 @@ const TableCard = ({
 
   const earnAllowanceCheck = async (amount, sellToggle) => {
     try {
-      amount = toWei(amount);
-      const token = sellToggle
-        ? ERC20Setup(web3, trancheTokenAddress)
-        : ERC20Setup(web3, buyerCoinAddress);
-      let userAllowance = await token.methods.allowance(address, contractAddress).call();
-      if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-        setHasAllowance(true);
-      } else {
-        setHasAllowance(false);
+      if (amount !== '') {
+        amount = toWei(amount);
+        const token = sellToggle
+          ? ERC20Setup(web3, trancheTokenAddress)
+          : ERC20Setup(web3, buyerCoinAddress);
+        let userAllowance = await token.methods.allowance(address, contractAddress).call();
+        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+          setHasAllowance(true);
+        } else {
+          setHasAllowance(false);
+        }
       }
     } catch (error) {
       console.error(error);
