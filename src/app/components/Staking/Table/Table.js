@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
@@ -13,6 +13,7 @@ import {
   changeOwnAllFilter,
   ownAllToggle
 } from 'redux/actions/LoansTranchesData';
+
 import ReactLoading from 'react-loading';
 
 import { changePath } from 'redux/actions/TogglePath';
@@ -23,15 +24,9 @@ import { TableWrapper, TableContentCard,
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
-  CallToActionTradetext,
-  TableMobileFiltersWrapper,
-  TableMobileFilterRow,
-  TableMobileFiltersMenu,
-  TableMobileFilter,
-  TableMobileFiltersText,
-  TableMobileRowCreateLoan
+  CallToActionTradetext
 } from '../../Table/styles/TableComponents';
-import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
+import { EmptyBox } from 'assets';
 const { tranchesList: tranchesistUrl } = apiUri;
 
 const style = {
@@ -60,6 +55,7 @@ const Table = ({
   HandleNewLoan,
   fetchTableData,
   changeOwnAllFilter,
+  tranches,
   path,
   loans,
   changePath,
@@ -71,8 +67,6 @@ const Table = ({
   const { pathname } = useLocation();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = loans;
-  const [openFilterMenu, setOpenFilterMenu] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("All tranches");
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
 
@@ -122,20 +116,6 @@ const Table = ({
     paginationCurrent(p);
   };
 
-  const changeLoansFilter = useCallback(
-    (filter) => {
-      changeOwnAllFilter(filter);
-      let val = filter === "own" ? "My tranches" : filter === "all" ? "All tranches" : "";
-      setCurrentFilter(val);
-      setOpenFilterMenu(false);
-    },
-    [changeOwnAllFilter]
-  );
-
-  const changeOwnAllFilterHandler = (val) => {
-    ownAllToggle(val);
-    changeLoansFilter(val);
-  }
 
   const handleSorting = () => {
     trancheListing();
@@ -144,30 +124,6 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-      { path !== "staking" &&
-      <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
-        <TableMobileFilterRow>
-          <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
-            <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
-            <img alt="filter" src={FilterChevron} />
-          </TableMobileFilter>
-          { path === "borrow" ?
-            <TableMobileRowCreateLoan>
-              <button onClick={HandleNewLoan}><img src={CreateLoan} alt="" /></button>
-            </TableMobileRowCreateLoan> : ""
-          }
-        </TableMobileFilterRow>
-
-        <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
-          <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('all')}>
-            <TableMobileFiltersText>All tranches</TableMobileFiltersText>
-          </TableMobileFilter>
-          <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('own')}>
-            <TableMobileFiltersText>My tranches</TableMobileFiltersText>
-          </TableMobileFilter>
-        </TableMobileFiltersMenu>
-      </TableMobileFiltersWrapper>
-      }
       <TableWrapper mobile>
           <TableHead />
           <div className='table-content'>
@@ -223,7 +179,7 @@ const Table = ({
                       }
                       
                   
-                      </div> : (!isLoading && tradeType === 'myTranches' && loans.tranchesList.length === 0) ?
+                      </div> : (!isLoading && tradeType === 'sell' && loans.tranchesList.length === 0) ?
                   // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
 
                           <TableContentCard pointer={false}>
@@ -253,10 +209,10 @@ const Table = ({
           </div>
         </TableWrapper>
 
-        {loans && loans.count > limit ? (
+        {tranches && tranches.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
-              total={loans && loans.count}
+              total={tranches && tranches.count}
               limit={limit}
               pageCount={pageCount}
               currentPage={parseInt(current, 10)}

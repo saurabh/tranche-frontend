@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { changeOwnAllFilter } from 'redux/actions/loans';
-import { ownAllToggle } from 'redux/actions/trade';
+import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/LoansTranchesData';
 
 import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
@@ -24,11 +23,13 @@ import {
   RatesValueImg,
   RatesValueText,
   RatesRowDash,
-  TabIndicator
+  TabIndicator,
+  OtherTabsContainer,
+  NavbarLinks
 } from './styles/HeaderComponents';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, loans: { filterType }, trade: { tradeType } }) => {
+const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, loans: { filterType, tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   // const [pair1Value, setPair1Value] = useState(0);
@@ -62,7 +63,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
   
   return (
     <div className='content-container container'>
-      <HeaderTabsWrapper mobile>
+      <HeaderTabsWrapper path={path} mobile>
           <MarketsTabsContainer links>
             <NavLink to={baseUrl + '/borrow'}
               activeStyle={{
@@ -82,18 +83,24 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 opacity: '1'
               }}
             >{i18n.t('navbar.earn')}</NavLink>
+            <NavLink to={baseUrl + '/staking'}
+              activeStyle={{
+                borderColor: PagesData[path].secondaryColor,
+                opacity: '1'
+              }}
+            >{i18n.t('navbar.staking')}</NavLink>
           </MarketsTabsContainer>
               
 
-        <div id='other-tabs-container'>
+        <OtherTabsContainer id="other-tabs-container">
             <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
               DOCS
             </HeaderTabBtn>
-        </div>
+        </OtherTabsContainer>
       </HeaderTabsWrapper>
 
 
-      <HeaderTabsWrapper desktop className="desktopViewTabs">
+      <HeaderTabsWrapper path={path} desktop className="desktopViewTabs">
         { (path === "borrow" || path === "lend") ?
           <MarketsTabsContainer>
           <HeaderTabBtn
@@ -119,6 +126,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
           <TabIndicator tab={filterType} path={path} language={i18n.language}></TabIndicator>
         </MarketsTabsContainer>
         :
+        (path === "earn") ?
         <MarketsTabsContainer page="earn">
           <HeaderTabBtn
             id='allTranches'
@@ -141,11 +149,20 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
             : ""
           }
           <TabIndicator tab={tradeType} path={path} language={i18n.language}></TabIndicator>
-        </MarketsTabsContainer>
+        </MarketsTabsContainer> : ""
         }
         
 
-        <div id='other-tabs-container'>
+        <OtherTabsContainer id="other-tabs-container">
+          <NavbarLinks tabs={true}>
+            <NavLink
+              to={baseUrl + '/staking'}
+              activeStyle={{
+                borderBottom: "4px solid #FFFFFF",
+                opacity: '1'
+              }}
+            >Staking</NavLink>
+          </NavbarLinks>
           <RatesWrapper ref={innerRef}>
             <RatesBoxWrapper
               className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}
@@ -207,7 +224,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
               {i18n.t("HowTo")}
             </HeaderTabBtn>
           </div>
-        </div>
+        </OtherTabsContainer>
       </HeaderTabsWrapper>
     </div>
   );

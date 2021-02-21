@@ -74,6 +74,11 @@ const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
   width: 336px;
+  ${({ tabs }) =>
+  tabs &&
+  `
+    width: auto;
+  `}
   & > a {
     position: relative;
     display: inline-block;
@@ -127,6 +132,13 @@ const HeaderTabsWrapper = styled.div`
     text-align: center;
     margin: 0;
   }
+
+  ${({ path }) => path === "staking" && `
+    justify-content: flex-end;
+  `}
+  
+
+
 
   ${({ mobile }) => mobile && `
     display: none;
@@ -483,6 +495,17 @@ const NavBarRightWrapper = styled.div`
     flex-direction: column;
   }
 `
+const OtherTabsContainer = styled.div`
+  position: relative;
+  width: 190px;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  @media (max-width: 767px){
+    width: auto;
+  }
+`
+
 export {
   HeaderWrapper,
   HeaderContent,
@@ -509,5 +532,6 @@ export {
   NavBarMobile,
   NavBarMobileContent,
   NavBarRightWrapper,
-  LocaleWrapper
+  LocaleWrapper,
+  OtherTabsContainer
 };

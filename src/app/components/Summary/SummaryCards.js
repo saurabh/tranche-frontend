@@ -45,28 +45,28 @@ const SummaryCards = ({ path }) => {
   return (
     <SummaryCardsWrapper className='container content-container'>
       <SummaryCard
-        title='Decentralized Loans'
+        title={path !== "staking" ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
         isLoading={loanIsLoading}
         value={loan}
         path={path}
         type='loan'
-        details=''
+        details={path !== "staking" ? '' : '$0.00 / 0.00 ETH'}
       />
       <SummaryCard
-        title='Protocol Collateral'
+        title={path !== "staking" ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
         value={collateral}
         isLoading={collateralIsLoading}
         path={path}
         type='collateral'
-        details=''
+        details={path !== "staking" ? '' : '$0.00 / 0.00 ETH'}
       />
       <SummaryCard
-        title='Collateralization Ratio'
+        title={path !== "staking" ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
         value={ratio}
         isLoading={ratioIsLoading}
         path={path}
         type='ratio'
-        details='Total Borrowed vs. Total Held'
+        details={path !== "staking" ? 'Total Borrowed vs. Total Held' : '$0.00 / 0.00 ETH'}
       />
     </SummaryCardsWrapper>
   );

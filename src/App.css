@@ -35,7 +35,7 @@ html{
 }
 #other-tabs-container{
   position: relative;
-  width: 150px;
+  width: 190px;
   display: flex;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -61,13 +61,13 @@ html{
 .remaining-title-content{
   text-align: center;
 }
-.ratio-title-content{
-}
+/* .ratio-title-content{
+} */
 .interest-paid-title-content{
   text-align: center;
 }
-.status-title-content{
-}
+/* .status-title-content{
+} */
 .table-first-col{
   display: flex;
   align-items: center;
@@ -124,8 +124,8 @@ html{
   position: relative;
 }
 
-.third-col-content{
-}
+/* .third-col-content{
+} */
 .third-col-content h2{
   text-align: center !important;
 }
@@ -189,8 +189,8 @@ html{
 .table-fourth-col-return{
   width: 9% !important;
 }
-.fourth-col-content{
-}
+/* .fourth-col-content{
+} */
 .fourth-col-content h2{
   text-align: center !important;
 }
@@ -402,8 +402,8 @@ button[disabled] img{
   width: 7%;
 }
 
-.table-more-row-third-content{
-}
+/* .table-more-row-third-content{
+} */
 .table-more-row-third-content h2{
   text-align: center;
 }

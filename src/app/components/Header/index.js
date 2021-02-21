@@ -42,7 +42,8 @@ export function Header({updateDate}) {
           </HeaderContent>
         </div>
         {
-          (path === "borrow" || path === "lend" || path === "earn") ?
+          (path === "borrow" || path === "lend" || path === "earn" || path === 
+          "staking") ?
           <HeaderTabs /> : ""
         }
         

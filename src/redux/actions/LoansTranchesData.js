@@ -12,7 +12,8 @@ import {
   CHANGE_SORTING,
   TRANCHES_IS_LOADING,
   TRANCHES_SUCCESS,
-  TRANCHES_COUNT
+  TRANCHES_COUNT,
+  OWN_ALL_TOGGLE
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesistUrl } = apiUri;
 
@@ -72,6 +73,12 @@ export const changeSorting = (sort) => {
   }
 };
 
+export const ownAllToggle = (type) => (dispatch) => {
+    dispatch({
+      type: OWN_ALL_TOGGLE,
+      payload: type
+    });
+};
 
 export const changeOwnAllFilter = (filterType) => (dispatch) => {
   dispatch({

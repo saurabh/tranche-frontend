@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon } from 'assets';
+import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 // import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
@@ -62,6 +62,15 @@ export const PagesData = {
     title: 'Earning Markets',
     description: 'DEPOSIT STABLE COINS FOR DIFFERENT RETURNS'
   },
+  staking: {
+    pageType: 'staking',
+    color: '#0071F5',
+    secondaryColor: '#6EAEFA',
+    btnColor: '#BCD9FB',
+    cardColor: '#6EAEFA',
+    title: 'Staking Pools',
+    description: 'stake cryptocurrency for slice rewards'
+  },
   privacy: {
     pageType: 'privacy',
     color: '#006173',
@@ -92,8 +101,18 @@ export const pairData = [
     img: DAIicon,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
+  },
+  {
+    key: 'SLICE',
+    text: 'SLICE',
+    value: 1,
+    collateral: 'SLICE',
+    img: SLICEicon,
+    colIcon: SLICEicon,
+    // collateralTokenSetup: SLICESetup,
+    // lendTokenSetup: SLICESetup
   }
-  // {
+    // {
   //   key: 'USDC',
   //   text: 'USDC',
   //   value: 1,

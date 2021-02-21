@@ -3,7 +3,8 @@
   "navbar": {
     "borrow": "borrow",
     "lend": "lend",
-    "earn": "earn"
+    "earn": "earn",
+    "staking": "staking"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -27,6 +28,14 @@
     "tabs": {
       "own": "MY ASSETS",
       "all": "ALL ASSETS"
+    }
+  },
+  "staking": {
+    "title": "Staking Pools",
+    "text": "stake cryptocurrency for slice rewards",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
     }
   },
   "rates": "Rates",

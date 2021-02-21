@@ -13,11 +13,10 @@ import {
   paginationCurrent,
   changeSorting,
   changeOwnAllFilter
-} from 'redux/actions/loans';
+} from 'redux/actions/LoansTranchesData';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
-import TableHeadMobile from './TableHeadMobile';
 import TableCard from './TableCard';
 import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFiltersWrapper,
@@ -160,31 +159,32 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-          <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
-            
-            <TableMobileFilterRow>
-              <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
-                <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
-                <img alt="filter" src={FilterChevron} />
-              </TableMobileFilter>
-              { path === "borrow" ?
-                <TableMobileRowCreateLoan>
-                  <button onClick={HandleNewLoan}><img src={CreateLoan} alt="" /></button>
-                </TableMobileRowCreateLoan> : ""
-              }
-            </TableMobileFilterRow>
+          { path !== "staking" &&
+              <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
+                <TableMobileFilterRow>
+                  <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
+                    <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
+                    <img alt="filter" src={FilterChevron} />
+                  </TableMobileFilter>
+                  { path === "borrow" ?
+                    <TableMobileRowCreateLoan>
+                      <button onClick={HandleNewLoan}><img src={CreateLoan} alt="" /></button>
+                    </TableMobileRowCreateLoan> : ""
+                  }
+                </TableMobileFilterRow>
 
-            <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
-              <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('all')}>
-                <TableMobileFiltersText>{path === "borrow"  ? "All loans" : path === "lend" ? "All assets" : ""}</TableMobileFiltersText>
-              </TableMobileFilter>
-              <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('own')}>
-                <TableMobileFiltersText>{path === "borrow" ? "My loans": path === "lend" ? "My assets" :  ""}</TableMobileFiltersText>
-              </TableMobileFilter>
-            </TableMobileFiltersMenu>
-          </TableMobileFiltersWrapper>
+                <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
+                  <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('all')}>
+                    <TableMobileFiltersText>{path === "borrow"  ? "All loans" : path === "lend" ? "All assets" : ""}</TableMobileFiltersText>
+                  </TableMobileFilter>
+                  <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('own')}>
+                    <TableMobileFiltersText>{path === "borrow" ? "My loans": path === "lend" ? "My assets" :  ""}</TableMobileFiltersText>
+                  </TableMobileFilter>
+                </TableMobileFiltersMenu>
+              </TableMobileFiltersWrapper>
+          }
         <TableWrapper mobile>
-          <TableHeadMobile />
+          <TableHead />
           <div className='table-content'>
               {isLoading ? (
                 <div>
@@ -196,7 +196,7 @@ const Table = ({
                     />
                   </TableContentCard>
                 </div>
-              ) : !isLoading && loans.list.length === 0 && filterType === 'own' ? (
+              ) : !isLoading && loans.loansList.length === 0 && filterType === 'own' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <h2>
@@ -225,7 +225,7 @@ const Table = ({
                   </CallToActionWrapper>
                 </TableContentCard>
               ) :
-              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
+              !isLoading && loans.loansList.length === 0 && filterType === 'all' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <button
@@ -252,7 +252,7 @@ const Table = ({
               ) :
               
               (
-                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                loans && loans.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
         </TableWrapper>
@@ -285,7 +285,7 @@ const Table = ({
                     </TableContentCard>
                   ))}
                 </div>
-              ) : !isLoading && loans.list.length === 0 && filterType === 'own' ? (
+              ) : !isLoading && loans.loansList.length === 0 && filterType === 'own' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <h2>
@@ -314,7 +314,7 @@ const Table = ({
                   </CallToActionWrapper>
                 </TableContentCard>
               ) :
-              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
+              !isLoading && loans.loansList.length === 0 && filterType === 'all' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <button
@@ -341,7 +341,7 @@ const Table = ({
               ) :
               
               (
-                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                loans && loans.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
           </div>

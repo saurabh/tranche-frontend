@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
-import { useOuterClick } from 'services/useOuterClick';
 import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
-import { fromWei, toWei, getWithdrawableFunds } from 'services/contractMethods';
+import { fromWei, toWei } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -15,17 +14,17 @@ import {
   setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import { initOnboard } from 'services/blocknative';
+// import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
-  readyToTransact,
+  // readyToTransact,
   isGreaterThan,
   isEqualTo,
   gweiOrEther,
   roundBasedOnUnit
 } from 'utils';
 import {
-  PagesData,
+  // PagesData,
   txMessage,
   etherScanUrl,
   // apiUri,
@@ -33,14 +32,8 @@ import {
 } from 'config';
 import TradeModal from '../../Modals/TradeModal';
 import {
-  Adjust,
-  AdjustEarn,
-  AdjustTrade,
-  CloseModal,
-  Info,
   LinkArrow,
   TrancheImg,
-  Withdraw
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
 // import ETH from 'assets/images/svg/EthForm.svg';
@@ -50,12 +43,9 @@ import {
   TableContentCardWrapper,
   FifthColContent,
   StatusTextWrapper,
-  AdjustLoanBtn,
+  // AdjustLoanBtn,
   TableCardTag,
   TableCardImg,
-  InfoBoxWrapper,
-  InfoBox,
-  WithdrawBtnWrapper,
   TableFirstCol,
   TableFirstColWrapper,
   FirstColContent,
@@ -69,14 +59,14 @@ import {
   FourthColContent,
   TableFifthCol,
   TableSixthCol,
-  AdustBtnWrapper,
+  // AdustBtnWrapper,
   TableCardMore,
   TableCardMoreContent,
   TableContentCardWrapperMobile,
   TableContentCardMobile,
   TableColMobile,
   TableMobilColContent,
-  TableMobilCardBtn
+  // TableMobilCardBtn
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
@@ -106,12 +96,10 @@ const TableCard = ({
 }) => {
   const JProtocol = JProtocolSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
-  const [withdrawableFunds, setWithdrawableFunds] = useState(0);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
@@ -119,13 +107,10 @@ const TableCard = ({
   // const [disableBtn, setDisableBtn] = useState(false);
   rpbRate = rpbRate && rpbRate.toString().split('.')[0];
   rpbRate = rpbRate && fromWei(rpbRate);
-  let disableBtn = false;
+  // let disableBtn = false;
   let isLoading = false;
   let moreCardToggle = false;
   let moreList = false;
-  const innerRef = useOuterClick((e) => {
-    setInfoBoxToggle(false);
-  });
   const availableAmount =
     subscriber === 'N/A' && amount === 'N/A'
       ? 0
@@ -164,12 +149,12 @@ const TableCard = ({
     return () => window.removeEventListener('resize', updateMedia);
   });
 
-  const onboard = initOnboard({
-    address: setAddress,
-    network: setNetwork,
-    balance: setBalance,
-    wallet: setWalletAndWeb3
-  });
+  // const onboard = initOnboard({
+  //   address: setAddress,
+  //   network: setNetwork,
+  //   balance: setBalance,
+  //   wallet: setWalletAndWeb3
+  // });
 
   const earnAllowanceCheck = async (amount, sellToggle) => {
     try {
@@ -318,21 +303,15 @@ const TableCard = ({
     }
   };
 
-  const openModal = async () => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    address = !address ? onboard.getState().address : address;
-    setTokenBalances(address);
-    setTrancheTokenBalances(name, trancheTokenAddress, address);
-    const result = await getWithdrawableFunds(trancheTokenAddress, address);
-    setWithdrawableFunds(fromWei(result));
-    setIsOpen(true);
-  };
+  // const openModal = async () => {
+  //   const ready = await readyToTransact(wallet, onboard);
+  //   if (!ready) return;
+  //   address = !address ? onboard.getState().address : address;
+  //   setTokenBalances(address);
+  //   setTrancheTokenBalances(name, trancheTokenAddress, address);
+  //   setIsOpen(true);
+  // };
 
-  const widthdrawToggle = () => {
-    openModal();
-    setWithdrawModal(true);
-  }
 
   const closeModal = () => {
     setIsOpen(false);
@@ -471,66 +450,11 @@ const TableCard = ({
                 12%
               </StatusTextWrapper> 
 
-              <WithdrawBtnWrapper>
-                <button 
-                  onClick={disableBtn ? undefined : () => widthdrawToggle()}
-                ><img src={Withdraw} alt="action" /></button>
-              </WithdrawBtnWrapper>
-              
-              
-              <InfoBoxWrapper ref={innerRef}>
-                  <img src={Info} alt="info" onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
-                  {
-                  InfoBoxToggle && <InfoBox>
-                      <div>
-                        <div>
-                          <button>
-                            <img src={CloseModal} alt="close" onClick={() => setInfoBoxToggle(false)}  />
-                          </button>
-                        </div>
-                        <div>
-                          <h2>ETH Investment Grade</h2>
-                          <h2>Fixed Rate Instrument</h2>
-                        </div>
-                        <div>
-                          <p>The ETH investment grade bond is purchased with DAI and pays out a <strong>fixed interest 5% APY</strong> in <strong>ETH</strong>. Returns are generated through ETH:DAI loans borrowed through the Tranche Platform.</p>
-                          <p>This instrument has the <strong>highest payment seniority</strong>and is <strong>suitable for low-risk investors</strong> who wish to earn ETH on a block by block pay-out schedule.</p>
-                        </div>
-                      </div>
-                      <div>
-                        <div>
-                          <button>LEARN MORE BY VISITING OUR DOCS</button>
-                        </div>
-                      </div>
-                    </InfoBox>
-                  }
-                  
-                </InfoBoxWrapper>
-                
+             
               
             </FifthColContent>
           </TableFifthCol>
           <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
-            <AdustBtnWrapper className='adjust-btn-wrapper'>
-              <AdjustLoanBtn
-                color={PagesData[path].btnColor}
-                // disabled={disableBtn}
-                onClick={disableBtn ? undefined : () => openModal()}
-              >
-                <img
-                  src={
-                    path === 'borrow'
-                      ? Adjust
-                      : path === 'lend'
-                      ? AdjustEarn
-                      : path === 'earn' && !disableBtn
-                      ? AdjustTrade
-                      : Adjust
-                  }
-                  alt='adjust'
-                />
-              </AdjustLoanBtn>
-            </AdustBtnWrapper>
             <TradeModal
               // State Values
               path={path}
@@ -541,7 +465,6 @@ const TableCard = ({
               hasBalance={hasBalance}
               availableAmount={availableAmount}
               trancheTokenBalance={trancheTokenBalance}
-              withdrawableFunds={withdrawableFunds}
               // Functions
               closeModal={() => closeModal()}
               earnAllowanceCheck={earnAllowanceCheck}
@@ -631,21 +554,7 @@ const TableCard = ({
               </TableColMobile>
 
               <TableColMobile btn>
-                  <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
-                      <button
-                          // disabled={path === 'earn' || disableBtn}
-                          onClick={() => openModal()}
-                      ><img alt="adjust" 
-                      src= {
-                          path === 'borrow'
-                            ? Adjust
-                            : path === 'lend'
-                            ? AdjustEarn
-                            : path === 'earn'
-                            ? AdjustTrade
-                            : Adjust
-                        } /></button>
-                  </TableMobilCardBtn>
+                  
               </TableColMobile>
 
           </TableContentCardMobile>

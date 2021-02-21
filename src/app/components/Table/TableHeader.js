@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Create from "assets/images/svg/create.svg";
 import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
-import { changeFilter } from 'redux/actions/loans';
+import { changeFilter } from 'redux/actions/LoansTranchesData';
 import { useOuterClick } from 'services/useOuterClick'
 import { ETH } from 'config/constants';
 import {

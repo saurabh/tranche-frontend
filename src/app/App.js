@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
 import { apiUri } from 'config/constants';
-import { fetchTableData } from 'redux/actions/loans';
+import { fetchTableData } from 'redux/actions/LoansTranchesData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -18,6 +18,7 @@ import ErrorModal from 'app/components/Modals/Error';
 import Earn from 'app/pages/Earn';
 import Borrow from 'app/pages/Borrow';
 import Trade from 'app/pages/Trade';
+import Staking from 'app/pages/Staking';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
@@ -31,9 +32,7 @@ const App = ({
   setCurrentBlock,
   path,
   ethereum: { address },
-  loans: { skip, limit, filter, filterType },
-  tranches: { skip: tSkip, limit: tLimit, filter: tFilter },
-  trade: { tradeType },
+  loans: { skip, limit, filter, filterType, tradeType },
   checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
@@ -92,11 +91,11 @@ const App = ({
       .on('data', async () => {
         await timeout(4000);
         await fetchTableData({
-          tSkip,
-          tLimit,
+          skip,
+          limit,
           filter: {
             address: path === 'earn' && tradeType === 'myTranches' ? address : undefined,
-            type: tFilter //ETH/JNT keep these in constant file
+            type: filter //ETH/JNT keep these in constant file
           }
         }, tranchesistUrl);
       });
@@ -115,7 +114,7 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, fetchTableData, skip, limit, filter, setCurrentBlock, tradeType, tSkip, tLimit, tFilter]);
+  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, tradeType, skip]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
@@ -131,6 +130,7 @@ const App = ({
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/earn'} component={Trade} />
+            <Route exact path={baseRouteUrl + '/staking'} component={Staking} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />
             <Route component={NotFound} />

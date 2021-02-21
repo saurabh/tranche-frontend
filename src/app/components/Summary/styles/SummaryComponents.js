@@ -21,6 +21,7 @@ const SummaryCardContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    position: relative;
     ${({ loading }) => loading && `
         div{
             width: 100%;
@@ -39,6 +40,7 @@ const SummaryCardContainer = styled.div`
             width: 80%;
         }
   `}
+    
 `;
 const SummaryCardTitle = styled.h2`
     font-family: 'Roboto', sans-serif;
@@ -73,6 +75,40 @@ const SummaryCardsWrapper = styled.div`
   }
 `;
 
+const SummaryCardCounter = styled.div`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+}
+`;
+
+const SummaryCardBtn = styled.button`
+    background: #6EAEFA;
+    color: #FFFFFF;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    font-family: 'Roboto';
+    font-weight: 100;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 5px 0;
+    cursor: pointer;
+    ${({ disabled }) => disabled && `
+        background: #E4E4E4;
+        pointer-events: none;
+    `}
+`;
+
+
+  
+
 
 export {
     SummaryCardWrapper,
@@ -80,5 +116,7 @@ export {
     SummaryCardTitle,
     SummaryCardValue,
     SummaryCardDetails,
-    SummaryCardsWrapper
+    SummaryCardsWrapper,
+    SummaryCardCounter,
+    SummaryCardBtn
 };

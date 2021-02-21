@@ -3,7 +3,8 @@
   "navbar":{
     "borrow": "借入",
     "lend": "借出",
-    "earn": "赚取"
+    "earn": "赚取",
+    "staking": "staking"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -24,6 +25,14 @@
   "earn": {
     "title": "Earning Markets",
     "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
+    }
+  },
+  "staking": {
+    "title": "Staking Pools",
+    "text": "stake cryptocurrency for slice rewards",
     "tabs": {
       "own": "我的资产",
       "all": "所有资产"
