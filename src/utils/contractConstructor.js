@@ -2,6 +2,7 @@ import { abi as JLoanHelperABI, networks as JLoanHelperNetworks } from 'build/co
 import { abi as JPriceOracleABI, networks as JPONetworks } from 'build/contracts/JPriceOracle.json';
 import { abi as JLoanABI } from 'build/contracts/JLoan.json';
 import { abi as JProtocolABI, networks as JPNetworks } from 'build/contracts/JProtocol.json';
+import { abi as StakingABI, networks as StakingNetworks } from 'build/contracts/Staking.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
 import { abi as TrancheTokenABI } from 'build/contracts/JETHTrancheA.json';
 import {
@@ -26,6 +27,10 @@ export function JLoanHelperSetup(web3) {
 
 export function JPriceOracleSetup(web3) {
   return new web3.eth.Contract(JPriceOracleABI, JPONetworks[networkId].address);
+}
+
+export function StakingSetup(web3) {
+  return new web3.eth.Contract(StakingABI, StakingNetworks[networkId].address);
 }
 
 export function DAISetup(web3) {
