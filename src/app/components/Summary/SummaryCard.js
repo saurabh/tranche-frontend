@@ -53,7 +53,7 @@ const SummaryCard = ({ title, value, type, details, path }) => {
               : details}
           </SummaryCardDetails>
           
-        { path === "staking" &&
+        { path === "staking" && title !== "SLICE Rewards Collected" &&
           <SummaryCardCounter>
             <SummaryCardBtn
                 onClick={() => openModal(true)}

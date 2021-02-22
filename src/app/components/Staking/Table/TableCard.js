@@ -388,7 +388,6 @@ const TableCard = ({
             <TableFirstColWrapper>
               <TableCardImg
                 tranche={true}
-                type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
                 <img src={tranche ? TrancheImg : ''} alt='Tranche' />
@@ -447,7 +446,7 @@ const TableCard = ({
                 backgroundColor={Object.values(searchObj(1))[0].background}
                 table="tranche"
               >
-                12%
+                ACTIVE
               </StatusTextWrapper> 
 
              
@@ -525,7 +524,7 @@ const TableCard = ({
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile>
-          <TableContentCardMobile>
+          <TableContentCardMobile color={Object.values(searchObj(1))[0].background}>
               <span></span>
               <TableColMobile address>
                   <TableMobilColContent>
