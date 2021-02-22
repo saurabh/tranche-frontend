@@ -524,7 +524,7 @@ const TableCard = ({
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile>
-          <TableContentCardMobile>
+          <TableContentCardMobile color={Object.values(searchObj(1))[0].background}>
               <span></span>
               <TableColMobile address>
                   <TableMobilColContent>
