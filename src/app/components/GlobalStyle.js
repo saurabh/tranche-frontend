@@ -88,6 +88,15 @@ const GlobalStyle = createGlobalStyle`
       text-align: center;
     }
   }
+  .accrued-wrapper{
+    width: 15%;
+    .accrued-title-content div{
+      right: 40px !important;
+    }
+    h2{
+      text-align: center;
+    }
+  }
   .address-wrapper{
     width: 28%;
   }
@@ -98,6 +107,9 @@ const GlobalStyle = createGlobalStyle`
     }
     .status-title-content div{
       right: 27px !important;
+    }
+    .staking-title-content div{
+      right: 29px !important;
     }
     .bondApy-title-content div{
       right: 20px !important;
@@ -115,6 +127,9 @@ const GlobalStyle = createGlobalStyle`
     .remaining-title-content div{
       right: 25px !important;
     }
+    .staked-title-content div{
+      right: 29px !important;
+    }
 
     .value-title-content div{
       right: 7px !important;
@@ -130,6 +145,21 @@ const GlobalStyle = createGlobalStyle`
     }
     .ratio-title-content div{
       right: 9px !important;
+    }
+    .return-title-content div{
+      right: -27px !important;
+    }
+    h2{
+      text-align: center;
+    }
+  }
+  .reward-wrapper{
+    width: 9%;
+    .return-content div{
+      right: -25px !important;
+    }
+    .reward-title-content div{
+      right: -10px !important;
     }
     .return-title-content div{
       right: -27px !important;

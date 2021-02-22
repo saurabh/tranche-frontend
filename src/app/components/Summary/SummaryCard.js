@@ -191,13 +191,18 @@ const SummaryCard = ({
               ? `${roundNumber(value.coin1)} ETH`
               : details}
           </SummaryCardDetails>
-
-          {path === 'staking' && (
-            <SummaryCardCounter>
-              <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
-              <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
-            </SummaryCardCounter>
-          )}
+          
+        { path === "staking" && title !== "SLICE Rewards Collected" &&
+          <SummaryCardCounter>
+            <SummaryCardBtn
+                onClick={() => openModal(true)}
+            >+</SummaryCardBtn>
+            <SummaryCardBtn
+                onClick={() => openModal(false)}
+            >-</SummaryCardBtn>
+          </SummaryCardCounter>
+        }
+          
         </SummaryCardContainer>
       ) : (
         <SummaryCardContainer loading>

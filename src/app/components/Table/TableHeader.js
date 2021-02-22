@@ -40,12 +40,23 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                 {   path === "lend" ?
                     <h2>Earning Assets</h2> :
                     path === "borrow" ?
-                    <h2>Open Loans</h2> : <h2>Available Instruments</h2>
+                    <h2>Open Loans</h2> : 
+                    path === "staking" ?
+                    <h2>CURRENT POOLS</h2> :
+                    <h2>Available Instruments</h2>
                 }
                 </TableTitle>
-                <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
-                    <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
-                </TableSubTitle>
+                
+                {
+                    path !== "staking" ?
+                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
+                        <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
+                    </TableSubTitle> : 
+                    <TableSubTitle>
+                        <h2>STAKING REWARDS</h2>
+                    </TableSubTitle> 
+                }
+
                 {   menu ?
                     <TableMarketsSortingDropdown path={path}>
                         <TableMarketsSortingDropdownContent>
@@ -58,6 +69,8 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                         </TableMarketsSortingDropdownContent>
                     </TableMarketsSortingDropdown> : ""
                 }
+
+
             </TableHeaderTitles>
 
             <div className="create-loan-wrapper">

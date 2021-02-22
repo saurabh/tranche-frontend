@@ -44,6 +44,7 @@ const SummaryCards = ({ path }) => {
 
   return (
     <SummaryCardsWrapper className='container content-container'>
+      
       <SummaryCard
         title={path !== "staking" ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
         isLoading={loanIsLoading}
@@ -52,6 +53,7 @@ const SummaryCards = ({ path }) => {
         type='loan'
         details={path !== "staking" ? '' : '$0.00 / 0.00 ETH'}
       />
+
       <SummaryCard
         title={path !== "staking" ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
         value={collateral}
@@ -60,6 +62,7 @@ const SummaryCards = ({ path }) => {
         type='collateral'
         details={path !== "staking" ? '' : '$0.00 / 0.00 ETH'}
       />
+
       <SummaryCard
         title={path !== "staking" ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
         value={ratio}
@@ -68,6 +71,7 @@ const SummaryCards = ({ path }) => {
         type='ratio'
         details={path !== "staking" ? 'Total Borrowed vs. Total Held' : '$0.00 / 0.00 ETH'}
       />
+
     </SummaryCardsWrapper>
   );
 };
