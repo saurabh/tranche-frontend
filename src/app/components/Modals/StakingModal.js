@@ -6,8 +6,10 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import StakingForm from '../Form/Staking';
-import { gweiOrEther, roundBasedOnUnit, 
-  // roundNumber 
+import {
+  gweiOrEther,
+  roundBasedOnUnit
+  // roundNumber
 } from 'utils';
 import {
   ModalHeader,
@@ -54,17 +56,21 @@ const StakingModal = ({
   // path,
   modalIsOpen,
   modalType,
+  isLPToken,
+  hasAllowance,
+  approveLoading,
   // Functions
   closeModal,
+  stakingAllowanceCheck,
+  stakingApproveContract,
+  adjustStake,
   // API Values
   cryptoType,
   rpbRate
 }) => {
-
   const modalClose = () => {
     closeModal();
   };
-
 
   const stakingModal = () => {
     return (
@@ -77,7 +83,7 @@ const StakingModal = ({
         contentLabel='Adjust'
       >
         <ModalHeader>
-          <h2>{modalType ? "STAKE SLICE TOKENS" : !modalType ? "WITHDRAW SLICE TOKENS" : ""}</h2>
+          <h2>{modalType ? 'STAKE SLICE TOKENS' : !modalType ? 'WITHDRAW SLICE TOKENS' : ''}</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
@@ -113,9 +119,15 @@ const StakingModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-            <StakingForm
-              modalType={modalType}
-            />
+          <StakingForm
+            modalType={modalType}
+            hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
+            isLPToken={isLPToken}
+            stakingAllowanceCheck={stakingAllowanceCheck}
+            stakingApproveContract={stakingApproveContract}
+            adjustStake={adjustStake}
+          />
         </ModalActionsContent>
       </Modal>
     );

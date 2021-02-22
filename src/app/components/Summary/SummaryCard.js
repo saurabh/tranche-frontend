@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { PagesData } from 'config/constants';
+import { PagesData, txMessage, StakingAddress, LPTokenAddress, SLICEAddress } from 'config';
 import {
   setAddress,
   setNetwork,
@@ -9,7 +9,15 @@ import {
   setWalletAndWeb3,
   setTokenBalances
 } from 'redux/actions/ethereum';
-import { roundNumber, readyToTransact } from 'utils/helperFunctions';
+import {
+  StakingSetup,
+  SLICESetup,
+  ERC20Setup,
+  roundNumber,
+  readyToTransact,
+  isGreaterThan,
+  isEqualTo
+} from 'utils';
 import { initOnboard } from 'services/blocknative';
 import {
   SummaryCardWrapper,
@@ -28,10 +36,15 @@ const SummaryCard = ({
   type,
   details,
   path,
-  ethereum: { tokenBalance, wallet }
+  ethereum: { tokenBalance, wallet, web3, address, notify },
+  form
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLPToken, setIsLPToken] = useState(false);
   const [modalType, setModalType] = useState(true);
+  const [hasAllowance, setHasAllowance] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  const toWei = web3.utils.toWei;
 
   const onboard = initOnboard({
     address: setAddress,
@@ -40,10 +53,112 @@ const SummaryCard = ({
     wallet: setWalletAndWeb3
   });
 
+  const stakingAllowanceCheck = async (amount, isLPToken) => {
+    try {
+      amount = toWei(amount);
+      const token = isLPToken ? ERC20Setup(web3, StakingAddress) : SLICESetup(web3);
+      let userAllowance = await token.methods.allowance(address, StakingAddress).call();
+      if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+        setHasAllowance(true);
+      } else {
+        setHasAllowance(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const stakingApproveContract = async (amount, isLPToken) => {
+    try {
+      amount = toWei(amount);
+      const token = isLPToken ? ERC20Setup(web3, LPTokenAddress) : SLICESetup(web3);
+      await token.methods
+        .approve(StakingAddress, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          setApproveLoading(true);
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addStake = async (isLPToken) => {
+    try {
+      const StakingContract = StakingSetup(web3);
+      let { amount } = form.stake.values;
+      amount = toWei(amount);
+      let tokenAddress = isLPToken ? LPTokenAddress : SLICEAddress;
+      await StakingContract.methods
+        .deposit(tokenAddress, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const withdrawStake = async (isLPToken) => {
+    try {
+      const StakingContract = StakingSetup(web3);
+      let { amount } = form.stake.values;
+      amount = toWei(amount);
+      let tokenAddress = isLPToken ? LPTokenAddress : SLICEAddress;
+      await StakingContract.methods
+        .withdraw(tokenAddress, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const adjustStake = (e, isLPToken) => {
+    try {
+      e.preventDefault();
+      modalType ? addStake(isLPToken) : withdrawStake(isLPToken);
+      closeModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const openModal = async (type) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     setIsOpen(true);
+    let isLP = title.split(' ').includes('LP');
+    isLP ? setIsLPToken(true) : setIsLPToken(false);
     setModalType(type);
   };
 
@@ -96,8 +211,14 @@ const SummaryCard = ({
         path={path}
         modalIsOpen={modalIsOpen}
         modalType={modalType}
+        isLPToken={isLPToken}
+        hasAllowance={hasAllowance}
+        approveLoading={approveLoading}
         // Functions
         closeModal={() => closeModal()}
+        stakingAllowanceCheck={stakingAllowanceCheck}
+        stakingApproveContract={stakingApproveContract}
+        adjustStake={adjustStake}
       />
     </SummaryCardWrapper>
   );
@@ -105,6 +226,7 @@ const SummaryCard = ({
 
 SummaryCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
@@ -112,7 +234,8 @@ SummaryCard.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  form: state.form
 });
 
 export default connect(mapStateToProps, {

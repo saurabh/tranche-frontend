@@ -262,7 +262,6 @@ const TableCard = ({
           .redeemTrancheAToken(trancheId, amount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            closeModal();
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
@@ -275,7 +274,6 @@ const TableCard = ({
           .redeemTrancheBToken(trancheId, amount)
           .send({ from: address })
           .on('transactionHash', (hash) => {
-            closeModal();
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               return {
@@ -293,6 +291,7 @@ const TableCard = ({
     try {
       e.preventDefault();
       buyToggle ? buyTrancheTokens() : sellTrancheTokens();
+      closeModal();
     } catch (error) {
       console.error(error);
     }

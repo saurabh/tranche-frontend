@@ -83,15 +83,6 @@ let TradeForm = ({
     []
   );
 
-  // const buySellTrancheTokens = (e) => {
-  //   try {
-  //     e.preventDefault();
-  //     buyToggle ? buyTrancheTokens() : sellTrancheTokens();
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   return (
     <ModalAdjustForm>
       {offerMarket ? (
@@ -103,6 +94,7 @@ let TradeForm = ({
                   <ModalFormLabel htmlFor='price'>PRICE</ModalFormLabel>
                   <Field
                     component={InputField}
+                    validate={[required, number]}
                     className='ModalFormInputNewLoan tradeFormInput'
                     name='price'
                     type='number'
@@ -172,6 +164,7 @@ let TradeForm = ({
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => debounceAllowanceCheck(newValue)}
+                    validate={[required, number]}
                     className='ModalFormInputNewLoan'
                     name='amount'
                     type='number'
