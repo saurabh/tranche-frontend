@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
@@ -46,18 +46,18 @@ let StakingForm = ({
   formValues,
   // State Values
   address,
-  sellToggle,
-  buyToggle,
   modalType,
   hasAllowance,
   approveLoading,
   isLPToken,
+  tokenBalance,
   // Functions
   stakingAllowanceCheck,
   stakingApproveContract,
   adjustStake,
   // API Values
 }) => {
+  const [amount, setAmount] = useState(0)
   const pair = pairData[1].value;
   const setLoanIdandAddress = useCallback(() => {
     change('address', address);
@@ -68,10 +68,15 @@ let StakingForm = ({
     setLoanIdandAddress();
   }, [setLoanIdandAddress]);
 
+  const handleAmountChange = (amount, isLPToken) => {
+    debounceAllowanceCheck(amount, isLPToken);
+    setAmount(amount);
+  } 
+
   const debounceAllowanceCheck = useCallback(
     _.debounce(
       async (amount) => {
-        await stakingAllowanceCheck(amount, sellToggle);
+        await stakingAllowanceCheck(amount, isLPToken);
       },
       500,
       { leading: true }
@@ -91,7 +96,7 @@ let StakingForm = ({
                 </ModalFormLabel>
                 <Field
                   component={InputField}
-                  onChange={(e, newValue) => debounceAllowanceCheck(newValue, isLPToken)}
+                  onChange={(e, newValue) => handleAmountChange(newValue, isLPToken)}
                   validate={[required, number]}
                   className='ModalFormInputNewLoan'
                   name='amount'
@@ -146,7 +151,7 @@ let StakingForm = ({
         <ModalFormSubmit>
           <BtnLoanModal>
             <ApproveBtnWrapper>
-              <ModalFormButton
+              {modalType && <ModalFormButton
                 type='button'
                 loading={approveLoading ? 'true' : ''}
                 approved={hasAllowance}
@@ -167,12 +172,12 @@ let StakingForm = ({
                 ) : (
                   ''
                 )}
-              </ModalFormButton>
+              </ModalFormButton>}
             </ApproveBtnWrapper>
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#0071F5' : !modalType ? '#FD8383' : '#845AD9'}
-              disabled={!hasAllowance}
+              disabled={!hasAllowance || amount === 0}
             >
               <h2>{modalType ? 'STAKE' : !modalType ? 'WITHDRAW' : ''}</h2>
             </ModalFormButton>
@@ -192,7 +197,8 @@ StakingForm = reduxForm({
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   initialValues: {
-    address: ''
+    address: '',
+    amount: ''
   },
   formValues: getFormValues('stake')(state)
 });

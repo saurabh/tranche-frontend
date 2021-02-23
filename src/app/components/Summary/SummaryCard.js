@@ -7,7 +7,8 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
+  setTokenBalances,
+  setTokenBalance
 } from 'redux/actions/ethereum';
 import {
   StakingSetup,
@@ -37,7 +38,8 @@ const SummaryCard = ({
   details,
   path,
   ethereum: { tokenBalance, wallet, web3, address, notify },
-  form
+  form,
+  setTokenBalance
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isLPToken, setIsLPToken] = useState(false);
@@ -156,10 +158,14 @@ const SummaryCard = ({
   const openModal = async (type) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
+    address = !address ? onboard.getState().address : address;
     setIsOpen(true);
     let isLP = title.split(' ').includes('LP');
     isLP ? setIsLPToken(true) : setIsLPToken(false);
+    setTokenBalance(SLICEAddress, address)
+    setTokenBalance(LPTokenAddress, address)
     setModalType(type);
+    type ? setHasAllowance(false) : setHasAllowance(true);
   };
 
   const closeModal = () => {
@@ -216,9 +222,10 @@ const SummaryCard = ({
         path={path}
         modalIsOpen={modalIsOpen}
         modalType={modalType}
-        isLPToken={isLPToken}
         hasAllowance={hasAllowance}
         approveLoading={approveLoading}
+        isLPToken={isLPToken}
+        tokenBalance={tokenBalance}
         // Functions
         closeModal={() => closeModal()}
         stakingAllowanceCheck={stakingAllowanceCheck}
@@ -248,5 +255,5 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
+  setTokenBalance
 })(SummaryCard);

@@ -59,6 +59,7 @@ const StakingModal = ({
   isLPToken,
   hasAllowance,
   approveLoading,
+  tokenBalance,
   // Functions
   closeModal,
   stakingAllowanceCheck,
@@ -105,18 +106,6 @@ const StakingModal = ({
                   {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
-
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>CURRENT RETURN PER SLICE</LoanDetailsRowTitle>
-
-                <LoanDetailsRowValue></LoanDetailsRowValue>
-              </LoanDetailsRow>
-
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>EST APY</LoanDetailsRowTitle>
-
-                <LoanDetailsRowValue></LoanDetailsRowValue>
-              </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
           <StakingForm
@@ -124,6 +113,8 @@ const StakingModal = ({
             hasAllowance={hasAllowance}
             approveLoading={approveLoading}
             isLPToken={isLPToken}
+            tokenBalance={tokenBalance}
+            // Functions
             stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
