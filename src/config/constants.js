@@ -140,7 +140,9 @@ export const apiUri = {
   transaction: 'loans/transaction',
   summaryRatio: 'summary/ratio',
   summaryCollateral: 'summary/collateral',
-  summaryLoan: 'summary/loan'
+  summaryLoan: 'summary/loan',
+  stakingSummaryDetail: 'staking/detail/',
+  stakingSummary: 'staking/summary/'
 };
 
 // Filters

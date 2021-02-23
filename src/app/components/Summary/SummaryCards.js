@@ -6,13 +6,14 @@ import axios from 'axios';
 import { apiUri } from 'config/constants';
 import { serverUrl } from 'config/constants'
 
-const { summaryRatio, summaryCollateral, summaryLoan} = apiUri;
+const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary} = apiUri;
 const BASE_URL = serverUrl;
 
-const SummaryCards = ({ path }) => {
+const SummaryCards = ({ path, ethereum: {address} }) => {
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
+  const [stakingData, setStakingData] = useState(null);
   const [ratioIsLoading, setRatioIsLoading] = useState(false);
   const [collateralIsLoading, setCollateralIsLoading] = useState(false);
   const [loanIsLoading, setLoanIsLoading] = useState(false);
@@ -35,12 +36,21 @@ const SummaryCards = ({ path }) => {
     setLoan(result);
     setLoanIsLoading(false);
   };
-
+  const getStakingData = async () => {
+    const res = await axios(`${BASE_URL+stakingSummary + address}`);
+    const { result } = res.data;
+    setStakingData(result);
+  }
+  
   useEffect(() => {
-    getRatio();
-    getCollateral();
-    getLoan();
-  }, []);
+    if (path !== 'staking') {
+      getRatio();
+      getCollateral();
+      getLoan();
+    } else {
+      address && getStakingData();
+    }
+  }, [path, address]);
 
   return (
     <SummaryCardsWrapper className='container content-container'>
@@ -51,7 +61,7 @@ const SummaryCards = ({ path }) => {
         value={loan}
         path={path}
         type='loan'
-        details={path !== "staking" ? '' : '$0.00 / 0.00 ETH'}
+        details={path !== "staking" ? '' : stakingData && `${stakingData.slice.balance} SLICE`}
       />
 
       <SummaryCard
@@ -60,7 +70,7 @@ const SummaryCards = ({ path }) => {
         isLoading={collateralIsLoading}
         path={path}
         type='collateral'
-        details={path !== "staking" ? '' : '$0.00 / 0.00 ETH'}
+        details={path !== "staking" ? '' : stakingData && `${stakingData.lp.balance} LP Tokens`}
       />
 
       <SummaryCard
@@ -77,7 +87,8 @@ const SummaryCards = ({ path }) => {
 };
 const mapStateToProps = (state) => {
   return {
-    path: state.path
+    path: state.path,
+    ethereum: state.ethereum
   };
 };
 

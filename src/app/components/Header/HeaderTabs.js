@@ -10,7 +10,6 @@ import { ETH, DaiLogo } from 'assets';
 import { NavLink } from 'react-router-dom';
 import i18n from "../locale/i18n";
 
-
 import {
   HeaderTabsWrapper,
   MarketsTabsContainer,
