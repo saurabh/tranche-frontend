@@ -7,6 +7,7 @@ import { apiUri } from 'config/constants';
 import { serverUrl } from 'config/constants'
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
+import { PagesData, txMessage, StakingAddress, LPTokenAddress, SLICEAddress } from 'config';
 import PropTypes from 'prop-types';
 
 import {
@@ -14,16 +15,18 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
+  setTokenBalances,
+  setTokenBalance
 } from 'redux/actions/ethereum';
 
-const { summaryRatio, summaryCollateral, summaryLoan } = apiUri;
+const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
 
-const SummaryCards = ({ path, ethereum: { wallet }}) => {
+  const SummaryCards = ({ path, ethereum: { wallet, address }, setTokenBalance}) => {
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
+  const [stakingData, setStakingData] = useState(null);
   const [ratioIsLoading, setRatioIsLoading] = useState(false);
   const [collateralIsLoading, setCollateralIsLoading] = useState(false);
   const [loanIsLoading, setLoanIsLoading] = useState(false);
@@ -31,7 +34,10 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
   const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
   const [modalType, setModalType] = useState(true);
   const [summaryModal, setSummaryModal] = useState(false);
+  const [isLPToken, setIsLPToken] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const [hasAllowance, setHasAllowance] = useState(false);
+
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
@@ -49,6 +55,13 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
   const openModal = async (type, num = 0) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
+    address = !address ? onboard.getState().address : address;
+    let isLP = title.split(' ').includes('LP');
+    isLP ? setIsLPToken(true) : setIsLPToken(false);
+    setTokenBalance(SLICEAddress, address)
+    setTokenBalance(LPTokenAddress, address)
+    setModalType(type);
+    type ? setHasAllowance(false) : setHasAllowance(true);
     if(num === 0) {
       setSummaryModal(true)
       setFirstIsOpen(false);
@@ -62,7 +75,6 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
       setSummaryModal(false)
       setSecondIsOpen(true);
     }
-    setModalType(type);
   };
 
   const closeModal = () => {
@@ -91,14 +103,22 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
     setLoan(result);
     setLoanIsLoading(false);
   };
-
+  const getStakingData = async () => {
+    const res = await axios(`${BASE_URL+stakingSummary + address}`);
+    const { result } = res.data;
+    setStakingData(result);
+  }
+  
   useEffect(() => {
-    if(isDesktop){
+    if(isDesktop && path !== 'stake'){
       getRatio();
       getCollateral();
       getLoan();
     }
-  }, [isDesktop]);
+    else if(isDesktop && path === 'stake'){
+      address && getStakingData();
+    }
+  }, [isDesktop, path, address]);
   
   return (
     <div>
@@ -123,6 +143,8 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
           modalIsOpen={(!modalFirstIsOpen && !modalSecondIsOpen) ? summaryModal : modalFirstIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
+          isLPToken={isLPToken}
+          hasAllowance={hasAllowance}
         />
         <SummaryCard
           title={path !== "stake" ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
@@ -136,6 +158,8 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
           modalIsOpen={(!modalFirstIsOpen && !modalSecondIsOpen) ? summaryModal : modalSecondIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
+          isLPToken={isLPToken}
+          hasAllowance={hasAllowance}
         />
         <SummaryCard
           title={path !== "stake" ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
@@ -149,6 +173,9 @@ const SummaryCards = ({ path, ethereum: { wallet }}) => {
           modalIsOpen={false}
           modalType={modalType}
           summaryModal={false}
+          isLPToken={isLPToken}
+          hasAllowance={hasAllowance}
+          setHasAllowance={setHasAllowance}
         />
     </SummaryCardsWrapper>
     </div>
@@ -174,5 +201,6 @@ export default connect(mapStateToProps,{
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
+  setTokenBalances,
+  setTokenBalance
 })(SummaryCards);

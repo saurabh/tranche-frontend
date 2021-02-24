@@ -224,9 +224,15 @@ const TradeModal = ({
           <ModalActionDetails>
             <ModalActionDetailsContent trade={true}>
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>Asset Value</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle>Tranche Size</LoanDetailsRowTitle>
 
-                <LoanDetailsRowValue></LoanDetailsRowValue>
+                <LoanDetailsRowValue>{amount}{' '}{cryptoType}</LoanDetailsRowValue>
+              </LoanDetailsRow>
+
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle>Tranche Subscribers</LoanDetailsRowTitle>
+
+                <LoanDetailsRowValue>{subscriber}{' '}{cryptoType}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
@@ -236,13 +242,6 @@ const TradeModal = ({
                   {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
                 </LoanDetailsRowValue>
               </LoanDetailsRow>
-
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>Liquidity</LoanDetailsRowTitle>
-
-                <LoanDetailsRowValue></LoanDetailsRowValue>
-              </LoanDetailsRow>
-
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle>APY</LoanDetailsRowTitle>
 
@@ -375,47 +374,47 @@ const TradeModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-            <ModalUserActions>
-              <ModalContent>
-                <BtnGrpLoanModal>
-                  <BtnGrpLoanModalWrapper>
-                    <h2>
-        
-                    </h2>
-                    <ModalButton
-                      trade={true}
-                      btnColor='#234566'
-                        backgroundColor='#EAEAEA'
-                      disabled={!hasBalance || amount === subscriber}
-                    >
-                      Withdraw Interest
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
+          <ModalUserActions>
+            <ModalContent>
+              <BtnGrpLoanModal>
+                <BtnGrpLoanModalWrapper>
+                  <h2></h2>
+                  <ModalButton
+                    trade={true}
+                    btnColor='#234566'
+                    backgroundColor='#EAEAEA'
+                    disabled={!hasBalance || amount === subscriber}
+                  >
+                    Withdraw Interest
+                    <span></span>
+                  </ModalButton>
+                </BtnGrpLoanModalWrapper>
 
-                  <BtnGrpLoanModalWrapper>
-                    <h2>
-                      
-                    </h2>
-                    <ModalButton
-                      trade={true}
-                      // disabled={true}
-                      backgroundColor='#0A66E1'
-                            btnColor='#FFFFFF'
-                    >
-                      Distribute protocol
-                      <span></span>
-                    </ModalButton>
-                  </BtnGrpLoanModalWrapper>
-                </BtnGrpLoanModal>
-              </ModalContent>
-            </ModalUserActions>
+                <BtnGrpLoanModalWrapper>
+                  <h2></h2>
+                  <ModalButton
+                    trade={true}
+                    // disabled={true}
+                    backgroundColor='#0A66E1'
+                    btnColor='#FFFFFF'
+                  >
+                    Distribute protocol
+                    <span></span>
+                  </ModalButton>
+                </BtnGrpLoanModalWrapper>
+              </BtnGrpLoanModal>
+            </ModalContent>
+          </ModalUserActions>
         </ModalActionsContent>
       </Modal>
     );
   };
 
-  return (path === 'earn' && !withdraw) ? tradeModal() : (path === 'earn' && withdraw) ? withdrawModal() : '';
+  return path === 'earn' && !withdraw
+    ? tradeModal()
+    : path === 'earn' && withdraw
+    ? withdrawModal()
+    : '';
 };
 
 export default TradeModal;
