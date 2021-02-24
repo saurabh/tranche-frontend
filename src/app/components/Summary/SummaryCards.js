@@ -56,8 +56,8 @@ const BASE_URL = serverUrl;
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    let isLP = title.split(' ').includes('LP');
-    isLP ? setIsLPToken(true) : setIsLPToken(false);
+    // let isLP = title.split(' ').includes('LP');
+    // isLP ? setIsLPToken(true) : setIsLPToken(false);
     setTokenBalance(SLICEAddress, address)
     setTokenBalance(LPTokenAddress, address)
     setModalType(type);
@@ -107,6 +107,7 @@ const BASE_URL = serverUrl;
     const res = await axios(`${BASE_URL+stakingSummary + address}`);
     const { result } = res.data;
     setStakingData(result);
+    console.log(result)
   }
   
   useEffect(() => {

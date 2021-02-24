@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { PagesData } from 'config/constants';
-import { roundNumber } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
 import { PagesData, txMessage, StakingAddress, LPTokenAddress, SLICEAddress } from 'config';
 import {
@@ -60,7 +58,7 @@ const SummaryCard = ({
     window.addEventListener("resize", updateMedia);
     return () => window.removeEventListener("resize", updateMedia);
   });
-  const [modalIsOpen, setIsOpen] = useState(false);
+  // const [modalIsOpen, setIsOpen] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
 
