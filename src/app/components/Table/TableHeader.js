@@ -46,7 +46,6 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>Available Instruments</h2>
                 }
                 </TableTitle>
-                
                 {
                     path !== "stake" ?
                     <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
