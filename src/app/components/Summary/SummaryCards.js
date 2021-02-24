@@ -124,8 +124,8 @@ const BASE_URL = serverUrl;
     <div>
       { !isDesktop && path === "stake" &&
         <SummaryCardsWrapper className='container content-container'>
-          <button onClick={() => openModal(true, 0)}>Stake and withdraw
-          <span>+ -</span>
+          <button onClick={() => openModal(null, 0)}>Stake and withdraw
+            <span>+ -</span>
           </button>
         </SummaryCardsWrapper>
       }

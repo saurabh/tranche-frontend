@@ -170,6 +170,7 @@ const SummaryCard = ({
       console.error(error);
     }
   };
+
   return (
     <div>
     { isDesktop ?
