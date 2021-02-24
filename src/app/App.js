@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
 import { apiUri } from 'config/constants';
-import { fetchTableData } from 'redux/actions/LoansTranchesData';
+import { fetchTableData } from 'redux/actions/tableData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -32,7 +32,7 @@ const App = ({
   setCurrentBlock,
   path,
   ethereum: { address },
-  loans: { skip, limit, filter, filterType, tradeType },
+  data: { skip, limit, filter, filterType, tradeType },
   checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
@@ -130,7 +130,7 @@ const App = ({
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/earn'} component={Trade} />
-            <Route exact path={baseRouteUrl + '/staking'} component={Staking} />
+            <Route exact path={baseRouteUrl + '/stake'} component={Staking} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />
             <Route component={NotFound} />
@@ -148,7 +148,7 @@ App.propTypes = {
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  loans: state.loans,
+  data: state.data,
   tranches: state.tranches,
   trade: state.trade,
   path: state.path,

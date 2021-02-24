@@ -12,7 +12,7 @@ import {
   changeSorting,
   changeOwnAllFilter,
   ownAllToggle
-} from 'redux/actions/LoansTranchesData';
+} from 'redux/actions/tableData';
 
 import ReactLoading from 'react-loading';
 
@@ -27,7 +27,7 @@ import { TableWrapper, TableContentCard,
   CallToActionTradetext
 } from '../../Table/styles/TableComponents';
 import { EmptyBox } from 'assets';
-const { tranchesList: tranchesistUrl } = apiUri;
+const { stakingList: stakingListUrl } = apiUri;
 
 const style = {
   pageItem: {
@@ -55,9 +55,8 @@ const Table = ({
   HandleNewLoan,
   fetchTableData,
   changeOwnAllFilter,
-  tranches,
   path,
-  loans,
+  data,
   changePath,
   paginationOffset,
   paginationCurrent,
@@ -66,33 +65,31 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   const pageCount = 5;
-  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = loans;
+  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
 
-  const trancheListing = useCallback(_.debounce(async () => {
+  const stakingListing = useCallback(_.debounce(async () => {
     if (sort) {
       await fetchTableData({
         sort,
         skip,
         limit,
         filter: {
-          address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
-      }, tranchesistUrl);
+      }, stakingListUrl);
     } else {
       await fetchTableData({
         skip,
         limit,
         filter: {
-          address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
-      }, tranchesistUrl);
+      }, stakingListUrl);
     }
     
-  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, address, tradeType]);
+  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, tradeType]);
 
 
   useEffect(() => {
@@ -108,8 +105,8 @@ const Table = ({
   }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
-    trancheListing();
-  }, [trancheListing, filter, skip, limit, filterType, sort]);
+    stakingListing();
+  }, [stakingListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
     paginationOffset((p - 1) * limit);
@@ -118,7 +115,7 @@ const Table = ({
 
 
   const handleSorting = () => {
-    trancheListing();
+    stakingListing();
   };
 
   return (
@@ -142,7 +139,7 @@ const Table = ({
               :
               
               (
-                loans && loans.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
+                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
               )}
             </div>
         </TableWrapper>
@@ -179,7 +176,7 @@ const Table = ({
                       }
                       
                   
-                      </div> : (!isLoading && tradeType === 'sell' && loans.tranchesList.length === 0) ?
+                      </div> : (!isLoading && tradeType === 'sell' && data.stakingList.length === 0) ?
                   // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
 
                           <TableContentCard pointer={false}>
@@ -203,16 +200,16 @@ const Table = ({
 
                           </TableContentCard>
                   
-                  : loans && loans.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
+                  : data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
                   }
             </div>
           </div>
         </TableWrapper>
 
-        {tranches && tranches.count > limit ? (
+        {data && data.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
-              total={tranches && tranches.count}
+              total={data && data.count}
               limit={limit}
               pageCount={pageCount}
               currentPage={parseInt(current, 10)}
@@ -310,7 +307,7 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
-    loans: state.loans,
+    data: state.data,
     path: state.path
   };
 };

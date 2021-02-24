@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Create from "assets/images/svg/create.svg";
 import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
-import { changeFilter } from 'redux/actions/LoansTranchesData';
+import { changeFilter } from 'redux/actions/tableData';
 import { useOuterClick } from 'services/useOuterClick'
 import { ETH } from 'config/constants';
 import {
@@ -41,14 +41,14 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>Earning Assets</h2> :
                     path === "borrow" ?
                     <h2>Open Loans</h2> : 
-                    path === "staking" ?
+                    path === "stake" ?
                     <h2>CURRENT POOLS</h2> :
                     <h2>Available Instruments</h2>
                 }
                 </TableTitle>
                 
                 {
-                    path !== "staking" ?
+                    path !== "stake" ?
                     <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
                         <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                     </TableSubTitle> : 

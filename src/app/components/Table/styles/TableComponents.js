@@ -72,9 +72,9 @@ const StatusTextWrapper = styled.h2`
   color: ${props => props.color ? props.color : ""};
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
   position: relative;
-  ${({ table }) => table === 'tranche' && `
+  ${({ table, color }) => table === 'tranche' && `
     background: transparent;
-    border: 1px solid #2ECC71;
+    border: ${color ? "1px solid " + color : ""};
   `}
 `
 const MoreRowSpan = styled.span`
@@ -367,7 +367,7 @@ const CallToActionTradeBtn = styled.button`
 
 const TableHeadWrapperMobile = styled.div`
   min-height: 22px;
-  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : props.path === "staking" ? "rgba(0, 113, 245, 0.7)" : "rgba(0, 0, 0, 0.5)"};
+  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : props.path === "stake" ? "rgba(0, 113, 245, 0.7)" : "rgba(0, 0, 0, 0.5)"};
   border-top: 1px solid #EFEFEF;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;

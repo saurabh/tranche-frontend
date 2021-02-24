@@ -350,6 +350,12 @@ const ModalActionsContent = styled.div`
   @media (max-width: 633px){
     flex-direction: column-reverse;
   }
+  ${({ stakingMobile }) => stakingMobile && `
+    @media (max-width: 633px){
+      flex-direction: column;
+    }
+  `}
+
 `
 const ModalActionDetails = styled.div`
   position: relative;
@@ -524,6 +530,38 @@ const LoanDetailsMobile = styled.div`
   }
 `
 
+const StakingModalRow = styled.div`
+  margin: 25px 0;
+  h2:nth-child(1){
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    // line-height: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.45);
+  }
+  h2:nth-child(2){
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    // line-height: 37px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  h2:nth-child(3){
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    // line-height: 14px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.25);
+  }
+`;
+const StakingModalWrapper = styled.div`
+  margin: 100px 0;
+`;
 
 
 
@@ -552,5 +590,7 @@ export {
     ModalTextConfirmBtn,
     ModalTextConfirmBtnWrapper,
     BtnLoadingIcon,
-    LoanDetailsMobile
+    LoanDetailsMobile,
+    StakingModalRow,
+    StakingModalWrapper
 };

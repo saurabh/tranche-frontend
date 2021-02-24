@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 // import { confirmAlert } from 'react-confirm-alert';
 // import { Spring } from 'react-spring/renderprops';
@@ -16,8 +16,16 @@ import {
   ModalActionDetailsContent,
   LoanDetailsRow,
   LoanDetailsRowTitle,
-  LoanDetailsRowValue
+  LoanDetailsRowValue,
+  LoanDetailsMobile,
+  StakingModalRow,
+  StakingModalWrapper
 } from './styles/ModalsComponents';
+
+import {
+  SummaryCardCounter,
+  SummaryCardBtn
+} from '../Summary/styles/SummaryComponents';
 
 const FirstCustomStyles = {
   overlay: {
@@ -51,16 +59,25 @@ Modal.setAppElement('#root');
 
 const StakingModal = ({
   // State Values
+  summaryModal,
   // path,
   modalIsOpen,
   modalType,
   // Functions
   closeModal,
+  openModal,
   // API Values
   cryptoType,
   rpbRate
 }) => {
-
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
   const modalClose = () => {
     closeModal();
   };
@@ -82,41 +99,119 @@ const StakingModal = ({
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
+        {
+        !isDesktop && summaryModal ?
+        <ModalActionsContent stakingMobile>
+          <StakingModalWrapper>
+            <StakingModalRow>
+              <h2>Staked SLICE Tokens</h2>
+              <h2>00.00</h2>
+              <h2>$0.00 / 0.00 ETH</h2>
+              <SummaryCardCounter stakingMobile>
+                <SummaryCardBtn
+                  stakingMobile
+                    onClick={() => openModal(true, 1)}
+                >+</SummaryCardBtn>
+                <SummaryCardBtn
+                  stakingMobile
+                    onClick={() => openModal(false, 1)}
+                >-</SummaryCardBtn>
+              </SummaryCardCounter>
+            </StakingModalRow>
 
-        <ModalActionsContent>
-          <ModalActionDetails>
-            <ModalActionDetailsContent trade={true}>
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>SLICE LOCKED</LoanDetailsRowTitle>
+            <StakingModalRow>
+              <h2>Staked SLICE Tokens</h2>
+              <h2>00.00</h2>
+              <h2>$0.00 / 0.00 ETH</h2>
+              <SummaryCardCounter stakingMobile>
+                <SummaryCardBtn
+                  stakingMobile
+                    onClick={() => openModal(true, 2)}
+                >+</SummaryCardBtn>
+                <SummaryCardBtn
+                  stakingMobile
+                    onClick={() => openModal(false, 2)}
+                >-</SummaryCardBtn>
+              </SummaryCardCounter>
+            </StakingModalRow>
+          </StakingModalWrapper>
+          <LoanDetailsMobile>
+            <h2>
+              SLICE LOCKED —{' '}
+              <span>
+              </span>
+            </h2>
+            <h2>
+              REWARDS PER BLOCK —{' '}
+              <span>
+              </span>
+            </h2>
+            <h2>
+            CURRENT RETURN PER SLICE — <span></span>
+            </h2>
+            <h2>
+              EST APY —{' '}
+              <span>
+              </span>
+            </h2>
+          </LoanDetailsMobile>
+        </ModalActionsContent> : 
 
-                <LoanDetailsRowValue></LoanDetailsRowValue>
-              </LoanDetailsRow>
+          <ModalActionsContent stakingMobile>
+            <ModalActionDetails>
+              <ModalActionDetailsContent trade={true}>
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle>SLICE LOCKED</LoanDetailsRowTitle>
 
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>REWARDS PER BLOCK</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue></LoanDetailsRowValue>
+                </LoanDetailsRow>
 
-                <LoanDetailsRowValue>
-                  {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
-                </LoanDetailsRowValue>
-              </LoanDetailsRow>
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle>REWARDS PER BLOCK</LoanDetailsRowTitle>
 
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>CURRENT RETURN PER SLICE</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue>
+                    {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
+                  </LoanDetailsRowValue>
+                </LoanDetailsRow>
 
-                <LoanDetailsRowValue></LoanDetailsRowValue>
-              </LoanDetailsRow>
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle>CURRENT RETURN PER SLICE</LoanDetailsRowTitle>
 
-              <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle>EST APY</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue></LoanDetailsRowValue>
+                </LoanDetailsRow>
 
-                <LoanDetailsRowValue></LoanDetailsRowValue>
-              </LoanDetailsRow>
-            </ModalActionDetailsContent>
-          </ModalActionDetails>
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle>EST APY</LoanDetailsRowTitle>
+
+                  <LoanDetailsRowValue></LoanDetailsRowValue>
+                </LoanDetailsRow>
+              </ModalActionDetailsContent>
+            </ModalActionDetails>
             <StakingForm
               modalType={modalType}
             />
-        </ModalActionsContent>
+            <LoanDetailsMobile>
+            <h2>
+              SLICE LOCKED —{' '}
+              <span>
+              </span>
+            </h2>
+            <h2>
+              REWARDS PER BLOCK —{' '}
+              <span>
+              </span>
+            </h2>
+            <h2>
+            CURRENT RETURN PER SLICE — <span></span>
+            </h2>
+            <h2>
+              EST APY —{' '}
+              <span>
+              </span>
+            </h2>
+          </LoanDetailsMobile>
+          </ModalActionsContent>
+        }
       </Modal>
     );
   };

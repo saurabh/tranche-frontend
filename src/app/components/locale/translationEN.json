@@ -4,7 +4,7 @@
     "borrow": "borrow",
     "lend": "lend",
     "earn": "earn",
-    "staking": "staking"
+    "stake": "stake"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -30,7 +30,7 @@
       "all": "ALL ASSETS"
     }
   },
-  "staking": {
+  "stake": {
     "title": "Staking Pools",
     "text": "stake cryptocurrency for slice rewards",
     "tabs": {

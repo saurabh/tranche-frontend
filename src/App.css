@@ -35,7 +35,7 @@ html{
 }
 #other-tabs-container{
   position: relative;
-  width: 190px;
+  width: 150px;
   display: flex;
   -webkit-justify-content: space-between;
   justify-content: space-between;

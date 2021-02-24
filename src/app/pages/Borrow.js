@@ -16,7 +16,7 @@ import { Layout } from 'app/components';
 import CreateLoan from 'app/components/Modals/CreateLoan';
 import { PagesData } from 'config/constants';
 import Table from '../components/Table/Table';
-import { changeFilter } from 'redux/actions/LoansTranchesData';
+import { changeFilter } from 'redux/actions/tableData';
 import SummaryCards from 'app/components/Summary/SummaryCards';
 
 const Borrow = ({
@@ -29,16 +29,7 @@ const Borrow = ({
 }) => {
   const { pathname } = useLocation();
   const [showModal, setShowModal] = useState(false);
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
-  });
 
   useEffect(() => {
     changeFilter(null);
@@ -63,10 +54,7 @@ const Borrow = ({
 
   return (
     <Layout>
-      {
-        isDesktop &&
-        <SummaryCards />
-      }
+      <SummaryCards />
       <Table
         HandleNewLoan={handleNewLoanClick}
         openModal={showModal}

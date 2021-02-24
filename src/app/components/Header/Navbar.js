@@ -180,6 +180,17 @@ function Navbar({ path }) {
               <span data-content={i18n.t("navbar.earn")}></span>
               {i18n.t("navbar.earn")}
             </NavLink>
+            <NavLink
+              to={baseUrl + '/stake'}
+              activeStyle={{
+                borderBottom: '2px solid',
+                borderColor: PagesData[path].secondaryColor,
+                opacity: '1'
+              }}
+            >
+              <span data-content={i18n.t("navbar.stake")}></span>
+              {i18n.t("navbar.stake")}
+            </NavLink>
           </NavbarLinks>
           <ConnectWallet path={path} />
         </div>

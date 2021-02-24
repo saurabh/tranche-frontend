@@ -12,9 +12,8 @@ const SummaryCardWrapper = styled.div`
     @media (max-width: 992px){
         margin-bottom: 15px;
         width: 100%;
-        display: none;
+        // display: none !important;
     }
-      
 `;
 const SummaryCardContainer = styled.div`
     display: flex;
@@ -40,7 +39,6 @@ const SummaryCardContainer = styled.div`
             width: 80%;
         }
   `}
-    
 `;
 const SummaryCardTitle = styled.h2`
     font-family: 'Roboto', sans-serif;
@@ -66,12 +64,33 @@ const SummaryCardDetails = styled.h2`
 `;
 
 const SummaryCardsWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: ${props => props.path==="stake" ? "" : "30px"};
   display: flex;
   justify-content: space-between;
   @media (max-width: 992px) {
     justify-content: center;
     flex-direction: column;
+  }
+  & > button{
+    height: 42px;
+    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 10px;
+    background: #FFFFFF;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(56, 56, 56, 0.5);
+    padding: 15px;
+    margin: 15px 0 0 0;
+    cursor: pointer;
+    outline: none;
   }
 `;
 
@@ -80,6 +99,15 @@ const SummaryCardCounter = styled.div`
     top: 50%;
     transform: translateY(-50%);
     right: 0;
+    ${({ stakingMobile }) => stakingMobile && `
+        @media (max-width: 633px){
+            position: relative;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin: 7px 0;
+        }
+    `}
 }
 `;
 
@@ -104,10 +132,15 @@ const SummaryCardBtn = styled.button`
         background: #E4E4E4;
         pointer-events: none;
     `}
+    ${({ stakingMobile }) => stakingMobile && `
+        @media (max-width: 633px){
+            margin: 3px;
+        }
+    `}
 `;
 
 
-  
+
 
 
 export {

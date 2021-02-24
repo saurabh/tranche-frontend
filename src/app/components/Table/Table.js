@@ -13,7 +13,7 @@ import {
   paginationCurrent,
   changeSorting,
   changeOwnAllFilter
-} from 'redux/actions/LoansTranchesData';
+} from 'redux/actions/tableData';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
@@ -56,7 +56,7 @@ const Table = ({
   HandleNewLoan,
   fetchTableData,
   changeOwnAllFilter,
-  loans,
+  data,
   path,
   changePath,
   changeFilter,
@@ -67,7 +67,7 @@ const Table = ({
   const { pathname } = useLocation();
   const history = useHistory();
   const pageCount = 5;
-  const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
+  const { filter, skip, limit, current, filterType, sort, isLoading } = data;
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [currentFilter, setCurrentFilter] = useState(`${pathname === "/borrow" ? "All loans" : pathname === "/lend" ? "All assets" : ""}`);
   let parsedPath = pathname.split('/');
@@ -196,7 +196,7 @@ const Table = ({
                     />
                   </TableContentCard>
                 </div>
-              ) : !isLoading && loans.loansList.length === 0 && filterType === 'own' ? (
+              ) : !isLoading && data.loansList.length === 0 && filterType === 'own' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <h2>
@@ -225,7 +225,7 @@ const Table = ({
                   </CallToActionWrapper>
                 </TableContentCard>
               ) :
-              !isLoading && loans.loansList.length === 0 && filterType === 'all' ? (
+              !isLoading && data.loansList.length === 0 && filterType === 'all' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <button
@@ -252,7 +252,7 @@ const Table = ({
               ) :
               
               (
-                loans && loans.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                data && data.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
         </TableWrapper>
@@ -285,7 +285,7 @@ const Table = ({
                     </TableContentCard>
                   ))}
                 </div>
-              ) : !isLoading && loans.loansList.length === 0 && filterType === 'own' ? (
+              ) : !isLoading && data.loansList.length === 0 && filterType === 'own' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <h2>
@@ -314,7 +314,7 @@ const Table = ({
                   </CallToActionWrapper>
                 </TableContentCard>
               ) :
-              !isLoading && loans.loansList.length === 0 && filterType === 'all' ? (
+              !isLoading && data.loansList.length === 0 && filterType === 'all' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <button
@@ -341,16 +341,16 @@ const Table = ({
               ) :
               
               (
-                loans && loans.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                data && data.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
           </div>
         </TableWrapper>
 
-        {loans && loans.count > limit ? (
+        {data && data.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
-              total={loans && loans.count}
+              total={data && data.count}
               limit={limit}
               pageCount={pageCount}
               currentPage={parseInt(current, 10)}
@@ -448,7 +448,7 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
-    loans: state.loans,
+    data: state.data,
     path: state.path
   };
 };

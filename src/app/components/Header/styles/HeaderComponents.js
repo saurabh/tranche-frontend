@@ -133,7 +133,7 @@ const HeaderTabsWrapper = styled.div`
     margin: 0;
   }
 
-  ${({ path }) => path === "staking" && `
+  ${({ path }) => path === "stake" && `
     justify-content: flex-end;
   `}
   
@@ -497,7 +497,7 @@ const NavBarRightWrapper = styled.div`
 `
 const OtherTabsContainer = styled.div`
   position: relative;
-  width: 190px;
+  width: 150px;
   display: flex;
   -webkit-justify-content: space-between;
   justify-content: space-between;

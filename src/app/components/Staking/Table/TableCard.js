@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
-import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
-import { fromWei, toWei } from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -18,19 +16,17 @@ import { checkServer } from 'redux/actions/checkServer';
 import {
   addrShortener,
   // readyToTransact,
-  isGreaterThan,
-  isEqualTo,
-  gweiOrEther,
-  roundBasedOnUnit
+  // isGreaterThan,
+  // isEqualTo,
+  // gweiOrEther,
+  // roundBasedOnUnit
 } from 'utils';
 import {
   // PagesData,
-  txMessage,
   etherScanUrl,
   // apiUri,
   statuses
 } from 'config';
-import TradeModal from '../../Modals/TradeModal';
 import {
   LinkArrow,
   TrancheImg,
@@ -70,75 +66,59 @@ import {
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
-  tranche: {
-    name,
+  staking: {
     contractAddress,
-    trancheId,
-    buyerCoinAddress,
-    trancheTokenAddress,
-    type,
-    subscriber,
-    rpbRate,
-    cryptoType,
-    amount
+    isActive,
+    reward,
+    staked,
+    type
   },
   // trade: { tradeType },
   path,
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  ethereum: { tokenBalance, trancheTokenBalance, address, wallet, web3, notify },
-  form,
-  setTokenBalances,
-  setTrancheTokenBalances
+  ethereum: {  web3 },
   // checkServer
 }) => {
-  const JProtocol = JProtocolSetup(web3);
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [hasAllowance, setHasAllowance] = useState(false);
-  const [approveLoading, setApproveLoading] = useState(false);
-  const [withdrawModal, setWithdrawModal] = useState(false);
-  const [hasBalance, setHasBalance] = useState(false);
+  // const [modalIsOpen, setIsOpen] = useState(false);
+  // const [hasAllowance, setHasAllowance] = useState(false);
+  // const [withdrawModal, setWithdrawModal] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [disableBtn, setDisableBtn] = useState(false);
-  rpbRate = rpbRate && rpbRate.toString().split('.')[0];
-  rpbRate = rpbRate && fromWei(rpbRate);
+
   // let disableBtn = false;
   let isLoading = false;
   let moreCardToggle = false;
   let moreList = false;
-  const availableAmount =
-    subscriber === 'N/A' && amount === 'N/A'
-      ? 0
-      : subscriber === 'N/A'
-      ? amount
-      : amount - subscriber;
+  // const availableAmount =
+  //   subscriber === 'N/A' && amount === 'N/A'
+  //     ? 0
+  //     : subscriber === 'N/A'
+  //     ? amount
+  //     : amount - subscriber;
 
-  useEffect(() => {
-    const balanceCheck = () => {
-      try {
-        if (type === 'TRANCHE_A') {
-          if (
-            cryptoType !== 'N/A' &&
-            amount !== 'N/A' &&
-            isGreaterThan(
-              Number(tokenBalance[cryptoType]),
-              Number(toWei(availableAmount.toString()))
-            )
-          )
-            setHasBalance(true);
-        } else setHasBalance(true);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  // useEffect(() => {
+  //   const balanceCheck = () => {
+  //     try {
+  //       if (type === 'TRANCHE_A') {
+  //         if (
+  //           cryptoType !== 'N/A' &&
+  //           amount !== 'N/A' &&
+  //           isGreaterThan(
+  //             Number(tokenBalance[cryptoType]),
+  //             Number(toWei(availableAmount.toString()))
+  //           )
+  //         )
+  //           setHasBalance(true);
+  //       } else setHasBalance(true);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    balanceCheck();
-  }, [amount, type, cryptoType, subscriber, tokenBalance, availableAmount]);
+  //   balanceCheck();
+  // }, [amount, type, cryptoType, subscriber, tokenBalance, availableAmount]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -156,152 +136,8 @@ const TableCard = ({
   //   wallet: setWalletAndWeb3
   // });
 
-  const earnAllowanceCheck = async (amount, sellToggle) => {
-    try {
-      amount = toWei(amount);
-      const token = sellToggle
-        ? ERC20Setup(web3, trancheTokenAddress)
-        : ERC20Setup(web3, buyerCoinAddress);
-      let userAllowance = await token.methods.allowance(address, contractAddress).call();
-      if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-        setHasAllowance(true);
-      } else {
-        setHasAllowance(false);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  const earnApproveContract = async (amount, sellToggle) => {
-    try {
-      amount = toWei(amount);
-      const token = sellToggle
-        ? ERC20Setup(web3, trancheTokenAddress)
-        : ERC20Setup(web3, buyerCoinAddress);
-      await token.methods
-        .approve(contractAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          setApproveLoading(true);
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  const buyTrancheTokens = async () => {
-    try {
-      let { amount } = form.sell.values;
-      amount = toWei(amount);
-      if (type === 'TRANCHE_A') {
-        await JProtocol.methods
-          .buyTrancheAToken(trancheId, amount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            closeModal();
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      } else {
-        await JProtocol.methods
-          .buyTrancheBToken(trancheId, amount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            closeModal();
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const sellTrancheTokens = async () => {
-    try {
-      let { amount } = form.sell.values;
-      amount = toWei(amount);
-      if (type === 'TRANCHE_A') {
-        await JProtocol.methods
-          .redeemTrancheAToken(trancheId, amount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            closeModal();
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      } else {
-        await JProtocol.methods
-          .redeemTrancheBToken(trancheId, amount)
-          .send({ from: address })
-          .on('transactionHash', (hash) => {
-            closeModal();
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const buySellTrancheTokens = (e, buyToggle) => {
-    try {
-      e.preventDefault();
-      buyToggle ? buyTrancheTokens() : sellTrancheTokens();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const withdrawFundsFromTranche = async () => {
-    try {
-      const TrancheToken = JTrancheTokenSetup(web3, trancheTokenAddress);
-      await TrancheToken.methods
-        .withdrawFunds()
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          closeModal();
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   // const openModal = async () => {
   //   const ready = await readyToTransact(wallet, onboard);
@@ -313,11 +149,6 @@ const TableCard = ({
   // };
 
 
-  const closeModal = () => {
-    setIsOpen(false);
-    setHasAllowance(false);
-    setWithdrawModal(false);
-  };
 
   const searchObj = (val) => {
     return Object.fromEntries(
@@ -367,7 +198,6 @@ const TableCard = ({
   // };
 
   const checkLoan = false;
-  let tranche = name === 'ETHDAI Tranche A' || name === 'ETHDAI Tranche B';
 
   const TableCardDesktop = () => {
     return (
@@ -388,13 +218,12 @@ const TableCard = ({
             <TableFirstColWrapper>
               <TableCardImg
                 tranche={true}
-                color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
-                <img src={tranche ? TrancheImg : ''} alt='Tranche' />
+                <img src={TrancheImg} alt='Tranche' />
               </TableCardImg>
               <FirstColContent>
                 <FirstColTitle>
-                  <h2>{name && name}</h2>
+                  <h2>{type && type}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
@@ -413,7 +242,7 @@ const TableCard = ({
           <TableSecondCol className='table-col'>
             <SecondColContent className='content-3-col second-4-col-content'>
               <h2>
-                {type === 'TRANCHE_A' ? amount : subscriber} <span>{cryptoType}</span>
+                {staked}
               </h2>
             </SecondColContent>
           </TableSecondCol>
@@ -424,7 +253,7 @@ const TableCard = ({
           >
             <ThirdColContent className='content-3-col second-4-col-content'>
               <h2>
-                {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
+                {reward}
               </h2>
             </ThirdColContent>
           </TableThirdCol>
@@ -435,18 +264,18 @@ const TableCard = ({
             }
           >
             <FourthColContent className='content-3-col second-4-col-content'>
-              <h2>{subscriber}</h2>
+              {/* <h2></h2> */}
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col'>
             <FifthColContent>
               <StatusTextWrapper
                 className='status-text-wrapper'
-                color={Object.values(searchObj(1))[0].color}
+                color={Object.values(searchObj(isActive ? 1 : 0))[0].color}
                 backgroundColor={Object.values(searchObj(1))[0].background}
                 table="tranche"
               >
-                ACTIVE
+                {isActive ? "ACTIVE" : ""}
               </StatusTextWrapper> 
 
              
@@ -454,31 +283,7 @@ const TableCard = ({
             </FifthColContent>
           </TableFifthCol>
           <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
-            <TradeModal
-              // State Values
-              path={path}
-              modalIsOpen={modalIsOpen}
-              hasAllowance={hasAllowance}
-              withdraw={withdrawModal}
-              approveLoading={approveLoading}
-              hasBalance={hasBalance}
-              availableAmount={availableAmount}
-              trancheTokenBalance={trancheTokenBalance}
-              // Functions
-              closeModal={() => closeModal()}
-              earnAllowanceCheck={earnAllowanceCheck}
-              earnApproveContract={earnApproveContract}
-              buySellTrancheTokens={buySellTrancheTokens}
-              withdrawFundsFromTranche={withdrawFundsFromTranche}
-              // API Values
-              trancheName={name}
-              trancheType={type}
-              trancheTokenAddress={trancheTokenAddress}
-              amount={amount}
-              subscriber={subscriber}
-              cryptoType={cryptoType}
-              rpbRate={rpbRate}
-            />
+            
           </TableSixthCol>
         </TableContentCard>
         <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
@@ -520,7 +325,7 @@ const TableCard = ({
         </TableCardMore>
       </TableContentCardWrapper>
     );
-  }
+  };
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile>
@@ -528,27 +333,28 @@ const TableCard = ({
               <span></span>
               <TableColMobile address>
                   <TableMobilColContent>
-                      <h2>{name && name}</h2>
+                      <h2>{type && type}</h2>
                       <h2>{addrShortener(contractAddress)}</h2>
                   </TableMobilColContent>
               </TableColMobile>
 
               <TableColMobile>
                   <TableMobilColContent col>
-                      <h2>{amount.toString().length > 5 ? amount.toString().substring(0,5) + "... " : amount.toString() + " "}</h2> 
-                      <h2>{cryptoType}</h2>
+                      <h2>{staked}</h2> 
+                      {/* <h2></h2> */}
                   </TableMobilColContent>
               </TableColMobile>
 
               <TableColMobile>
                   <TableMobilColContent col>
-                  <h2>{rpbRate}</h2> <h2>%</h2>
+                  <h2>{reward}</h2>
+                  {/* <h2></h2> */}
                   </TableMobilColContent>
               </TableColMobile>
 
               <TableColMobile>
                   <TableMobilColContent col>
-                    <h2>{subscriber}</h2>
+                    {/* <h2></h2> */}
                   </TableMobilColContent>
               </TableColMobile>
 
@@ -557,45 +363,7 @@ const TableCard = ({
               </TableColMobile>
 
           </TableContentCardMobile>
-          <TradeModal
-              // State Values
-              path={path}
-              modalIsOpen={modalIsOpen}
-              // approveLoading={approveLoading}
-              // hasBalance={hasBalance}
-              // hasAllowance={hasAllowance}
-              // isShareholder={isShareholder}
-              // canBeForeclosed={canBeForeclosed}
-              // blocksUntilForeclosure={blocksUntilForeclosure}
-              // accruedInterest={accruedInterest}
-              // totalInterest={totalInterest}
-              // newCollateralRatio={newCollateralRatio}
-              // setHasAllowance={setHasAllowance}
-              // setNewCollateralRatio={setNewCollateralRatio}
-              // Functions
-              closeModal={() => closeModal()}
-              // approveContract={approveContract}
-              // adjustLoan={adjustLoan}
-              // calcNewCollateralRatio={calcNewCollateralRatio}
-              // closeLoan={closeLoan}
-              // approveLoan={approveLoan}
-              // withdrawInterest={withdrawInterest}
-              // forecloseLoan={forecloseLoan}
-              // tradeType={tradeType}
-              // // API Values
-              // loanId={loanId}
-              // status={status}
-              // pairId={pairId}
-              // contractAddress={contractAddress}
-              // remainingLoan={remainingLoan}
-              // cryptoFromLenderName={cryptoFromLenderName}
-              // collateralAmount={collateralAmount}
-              // collateralTypeName={collateralTypeName}
-              // collateralRatio={collateralRatio}
-              // interestPaid={interestPaid}
-              // APY={apy}
-              // rpbRate={rpbRate && fromWei(rpbRate.toString())}
-            />
+         
       </TableContentCardWrapperMobile>
     );
   }

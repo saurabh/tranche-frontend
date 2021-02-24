@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/LoansTranchesData';
+import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
 
 import { PagesData, apiUri, pairData } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
@@ -24,12 +24,11 @@ import {
   RatesValueText,
   RatesRowDash,
   TabIndicator,
-  OtherTabsContainer,
-  NavbarLinks
+  OtherTabsContainer
 } from './styles/HeaderComponents';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, loans: { filterType, tradeType } }) => {
+const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { address }, data: { filterType, tradeType } }) => {
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   // const [pair1Value, setPair1Value] = useState(0);
@@ -83,12 +82,12 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 opacity: '1'
               }}
             >{i18n.t('navbar.earn')}</NavLink>
-            <NavLink to={baseUrl + '/staking'}
+            <NavLink to={baseUrl + '/stake'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >{i18n.t('navbar.staking')}</NavLink>
+            >{i18n.t('navbar.stake')}</NavLink>
           </MarketsTabsContainer>
               
 
@@ -154,7 +153,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
         
 
         <OtherTabsContainer id="other-tabs-container">
-          <NavbarLinks tabs={true}>
+          {/* <NavbarLinks tabs={true}>
             <NavLink
               to={baseUrl + '/staking'}
               activeStyle={{
@@ -162,7 +161,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 opacity: '1'
               }}
             >Staking</NavLink>
-          </NavbarLinks>
+          </NavbarLinks> */}
           <RatesWrapper ref={innerRef}>
             <RatesBoxWrapper
               className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}
@@ -233,7 +232,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
-    loans: state.loans,
+    data: state.data,
     path: state.path,
     trade: state.trade
   };

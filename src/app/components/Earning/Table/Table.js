@@ -12,7 +12,7 @@ import {
   changeSorting,
   changeOwnAllFilter,
   ownAllToggle
-} from 'redux/actions/LoansTranchesData';
+} from 'redux/actions/tableData';
 import ReactLoading from 'react-loading';
 
 import { changePath } from 'redux/actions/TogglePath';
@@ -32,7 +32,7 @@ import { TableWrapper, TableContentCard,
   TableMobileRowCreateLoan
 } from '../../Table/styles/TableComponents';
 import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
-const { tranchesList: tranchesistUrl } = apiUri;
+const { tranchesList: tranchesListUrl } = apiUri;
 
 const style = {
   pageItem: {
@@ -61,7 +61,7 @@ const Table = ({
   fetchTableData,
   changeOwnAllFilter,
   path,
-  loans,
+  data,
   changePath,
   paginationOffset,
   paginationCurrent,
@@ -70,7 +70,7 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   const pageCount = 5;
-  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = loans;
+  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("All tranches");
   let parsedPath = pathname.split('/');
@@ -86,7 +86,7 @@ const Table = ({
           address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
-      }, tranchesistUrl);
+      }, tranchesListUrl);
     } else {
       await fetchTableData({
         skip,
@@ -95,7 +95,7 @@ const Table = ({
           address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
-      }, tranchesistUrl);
+      }, tranchesListUrl);
     }
     
   }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, address, tradeType]);
@@ -186,7 +186,7 @@ const Table = ({
               :
               
               (
-                loans && loans.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
+                data && data.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
               )}
             </div>
         </TableWrapper>
@@ -223,7 +223,7 @@ const Table = ({
                       }
                       
                   
-                      </div> : (!isLoading && tradeType === 'myTranches' && loans.tranchesList.length === 0) ?
+                      </div> : (!isLoading && tradeType === 'myTranches' && data.tranchesList.length === 0) ?
                   // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
 
                           <TableContentCard pointer={false}>
@@ -247,16 +247,16 @@ const Table = ({
 
                           </TableContentCard>
                   
-                  : loans && loans.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
+                  : data && data.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
                   }
             </div>
           </div>
         </TableWrapper>
 
-        {loans && loans.count > limit ? (
+        {data && data.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
-              total={loans && loans.count}
+              total={data && data.count}
               limit={limit}
               pageCount={pageCount}
               currentPage={parseInt(current, 10)}
@@ -354,7 +354,7 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
-    loans: state.loans,
+    data: state.data,
     path: state.path
   };
 };

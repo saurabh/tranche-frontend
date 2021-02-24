@@ -13,9 +13,12 @@ import {
   TRANCHES_IS_LOADING,
   TRANCHES_SUCCESS,
   TRANCHES_COUNT,
+  STAKING_IS_LOADING,
+  STAKING_SUCCESS,
+  STAKING_COUNT,
   OWN_ALL_TOGGLE
 } from './constants';
-const { loanList: loanListUrl, tranchesList: tranchesistUrl } = apiUri;
+const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
 export const loansIsLoading = (bool) => (dispatch) => {
   dispatch({
@@ -55,6 +58,27 @@ export const tranchesFetchSuccess = (list) => (dispatch) => {
 export const tranchesSetCount = (count) => (dispatch) => {
   dispatch({
     type: TRANCHES_COUNT,
+    payload: count
+  });
+};
+
+export const stakingIsLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: STAKING_IS_LOADING,
+    payload: bool
+  });
+};
+
+export const stakingFetchSuccess = (list) => (dispatch) => {
+  dispatch({
+    type: STAKING_SUCCESS,
+    payload: list
+  });
+};
+
+export const stakingSetCount = (count) => (dispatch) => {
+  dispatch({
+    type: STAKING_COUNT,
     payload: count
   });
 };
@@ -112,10 +136,15 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
         dispatch(loansFetchSuccess(result.result.list));
         dispatch(loansSetCount(result.result.count));
       }
-      else if(endpoint === tranchesistUrl){
+      else if(endpoint === tranchesListUrl){
         dispatch(tranchesIsLoading(false));
         dispatch(tranchesFetchSuccess(result.result.list));
         dispatch(tranchesSetCount(result.result.count));
+      }
+      else if(endpoint === stakingListUrl){
+        dispatch(stakingIsLoading(false));
+        dispatch(stakingFetchSuccess(result.result.list));
+        dispatch(stakingSetCount(result.result.count));
       }
     }
     else{

@@ -5,6 +5,9 @@ import {
   TRANCHES_IS_LOADING,
   TRANCHES_SUCCESS,
   TRANCHES_COUNT,
+  STAKING_IS_LOADING,
+  STAKING_SUCCESS,
+  STAKING_COUNT,
   CHANGE_FILTER,
   PAGINATION_SKIP,
   PAGINATION_CURRENT,
@@ -16,6 +19,7 @@ import {
 const initialState = {
   loansList: [],
   tranchesList: [],
+  stakingList: [],
   count: 0,
   isLoading: false,
   skip: 0,
@@ -43,6 +47,12 @@ export default function (state = initialState, action) {
       return { ...state, tranchesList: payload };
     case TRANCHES_COUNT:
       return { ...state, count: payload };
+    case STAKING_IS_LOADING:
+      return { ...state, isLoading: payload };
+    case STAKING_SUCCESS:
+      return { ...state, stakingList: payload };
+    case STAKING_COUNT:
+      return { ...state, count: payload };
     case PAGINATION_SKIP:
       return { ...state, skip: payload };
     case PAGINATION_CURRENT:
@@ -55,7 +65,6 @@ export default function (state = initialState, action) {
       return { ...state, filterType: payload };
     case OWN_ALL_TOGGLE:
       return { ...state, tradeType: payload };
-   
     default:
       return state;
   }

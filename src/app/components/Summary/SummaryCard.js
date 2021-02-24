@@ -1,16 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { PagesData } from 'config/constants';
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  setTokenBalances
-} from 'redux/actions/ethereum';
-import { roundNumber, readyToTransact } from 'utils/helperFunctions';
-import { initOnboard } from 'services/blocknative';
+import { roundNumber } from 'utils/helperFunctions';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -28,36 +19,28 @@ const SummaryCard = ({
   type,
   details,
   path,
-  ethereum: { tokenBalance, wallet }
+  openModal,
+  closeModal,
+  modalIsOpen,
+  modalType,
+  summaryModal
 }) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [modalType, setModalType] = useState(true);
-
-  const onboard = initOnboard({
-    address: setAddress,
-    network: setNetwork,
-    balance: setBalance,
-    wallet: setWalletAndWeb3
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
   });
-
-  const openModal = async (type) => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    setIsOpen(true);
-    setModalType(type);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    setModalType(true);
-  };
-
   return (
+    <div>
+    { isDesktop ?
     <SummaryCardWrapper color={PagesData[path].cardColor}>
       {value ? (
         <SummaryCardContainer>
           <SummaryCardTitle>{title}</SummaryCardTitle>
-
+          
           <SummaryCardValue>
             {type === 'loan'
               ? `$${roundNumber(value.amount)}`
@@ -70,14 +53,13 @@ const SummaryCard = ({
           </SummaryCardValue>
 
           <SummaryCardDetails>
-            {type === 'loan' && path !== 'staking'
+            {type === 'loan' && path !== 'stake'
               ? value.total + ' Loan Positions'
-              : type === 'collateral' && path !== 'staking'
+              : type === 'collateral' && path !== 'stake'
               ? `${roundNumber(value.coin1)} ETH`
               : details}
           </SummaryCardDetails>
-          
-        { path === "staking" && title !== "SLICE Rewards Collected" &&
+        { path === "stake" && title !== "SLICE Rewards Collected" &&
           <SummaryCardCounter>
             <SummaryCardBtn
                 onClick={() => openModal(true)}
@@ -89,6 +71,7 @@ const SummaryCard = ({
         }
           
         </SummaryCardContainer>
+
       ) : (
         <SummaryCardContainer loading>
           <div></div>
@@ -96,34 +79,28 @@ const SummaryCard = ({
           <div></div>
         </SummaryCardContainer>
       )}
+
+    </SummaryCardWrapper> :
       <StakingModal
         // State Values
         path={path}
         modalIsOpen={modalIsOpen}
         modalType={modalType}
+        summaryModal={summaryModal}
         // Functions
         closeModal={() => closeModal()}
+        openModal={(bool) => openModal(bool)}
       />
-    </SummaryCardWrapper>
+    }
+    </div>
+      
   );
+    
 };
 
-SummaryCard.propTypes = {
-  ethereum: PropTypes.object.isRequired,
-  setAddress: PropTypes.func.isRequired,
-  setNetwork: PropTypes.func.isRequired,
-  setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired
-};
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum
 });
 
-export default connect(mapStateToProps, {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  setTokenBalances
-})(SummaryCard);
+export default connect(mapStateToProps)(SummaryCard);

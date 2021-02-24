@@ -62,10 +62,10 @@ export const PagesData = {
     title: 'Earning Markets',
     description: 'DEPOSIT STABLE COINS FOR DIFFERENT RETURNS'
   },
-  staking: {
-    pageType: 'staking',
+  stake: {
+    pageType: 'stake',
     color: '#0071F5',
-    secondaryColor: '#6EAEFA',
+    secondaryColor: '#ffffff',
     btnColor: '#BCD9FB',
     cardColor: '#6EAEFA',
     title: 'Staking Pools',
@@ -135,6 +135,7 @@ export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
   tranchesList: 'earn',
+  stakingList: 'staking',
   transaction: 'loans/transaction',
   summaryRatio: 'summary/ratio',
   summaryCollateral: 'summary/collateral',

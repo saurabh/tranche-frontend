@@ -4,7 +4,7 @@
     "borrow": "借入",
     "lend": "借出",
     "earn": "赚取",
-    "staking": "staking"
+    "stake": "stake"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -30,7 +30,7 @@
       "all": "所有资产"
     }
   },
-  "staking": {
+  "stake": {
     "title": "Staking Pools",
     "text": "stake cryptocurrency for slice rewards",
     "tabs": {
