@@ -197,7 +197,6 @@ const StakingModal = ({
             </ModalActionDetails>
             <StakingForm
               modalType={modalType}
-              modalType={modalType}
               hasAllowance={hasAllowance}
               approveLoading={approveLoading}
               isLPToken={isLPToken}
