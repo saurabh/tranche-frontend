@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
 import { apiUri } from 'config/constants';
+import { changePath } from 'redux/actions/TogglePath';
 import { fetchTableData } from 'redux/actions/tableData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { web3 } from 'utils/getWeb3';
@@ -31,11 +32,19 @@ const App = ({
   fetchTableData,
   setCurrentBlock,
   path,
+  changePath,
   ethereum: { address },
   data: { skip, limit, filter, filterType, tradeType },
   checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
+  const { pathname } = window.location;
+  let parsedPath = pathname.split('/');
+  let currentPath = parsedPath[parsedPath.length - 1];
+
+  useEffect(() => {
+    changePath(currentPath);
+  }, [pathname])
 
   useEffect(() => {
     const timeout = (ms) => {
@@ -157,5 +166,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   fetchTableData,
-  setCurrentBlock
+  setCurrentBlock,
+  changePath
 })(NetworkDetector(App));

@@ -48,15 +48,14 @@ const SummaryCard = ({
   isLPToken,
   hasAllowance,
   setHasAllowance
-
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
   useEffect(() => {
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
   });
   // const [modalIsOpen, setIsOpen] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
@@ -171,76 +170,71 @@ const SummaryCard = ({
 
   return (
     <div>
-    { isDesktop ?
-    <SummaryCardWrapper color={PagesData[path].cardColor}>
-      {value ? (
-        <SummaryCardContainer>
-          <SummaryCardTitle>{title}</SummaryCardTitle>
-          
-          <SummaryCardValue>
-            {type === 'loan'
-              ? `$${roundNumber(value.amount)}`
-              : type === 'collateral'
-              ? `$${Math.round(value.amount)}`
-              : type === 'ratio'
-              ? `${roundNumber(value.total, 1)}%`
-              : ''}
-            <div></div>
-          </SummaryCardValue>
+      {isDesktop ? (
+        <SummaryCardWrapper color={PagesData[path].cardColor}>
+          {value || value === 0 ? (
+            <SummaryCardContainer>
+              <SummaryCardTitle>{title}</SummaryCardTitle>
 
-          <SummaryCardDetails>
-            {type === 'loan' && path !== 'stake'
-              ? value.total + ' Loan Positions'
-              : type === 'collateral' && path !== 'stake'
-              ? `${roundNumber(value.coin1)} ETH`
-              : details}
-          </SummaryCardDetails>
-        { path === "stake" && title !== "SLICE Rewards Collected" &&
-          <SummaryCardCounter>
-            <SummaryCardBtn
-                onClick={() => openModal(true)}
-            >+</SummaryCardBtn>
-            <SummaryCardBtn
-                onClick={() => openModal(false)}
-            >-</SummaryCardBtn>
-          </SummaryCardCounter>
-        }
-          
-        </SummaryCardContainer>
+              <SummaryCardValue>
+                {type === 'loan'
+                  ? `$${roundNumber(value.amount)}`
+                  : type === 'collateral'
+                  ? `$${Math.round(value.amount)}`
+                  : type === 'ratio'
+                  ? `${roundNumber(value.total, 1)}%`
+                  : type === 'stake'
+                  ? `${roundNumber(value)}`
+                  : ''}
 
+                <div></div>
+              </SummaryCardValue>
+
+              <SummaryCardDetails>
+                {type === 'loan' && path !== 'stake'
+                  ? value.total + ' Loan Positions'
+                  : type === 'collateral' && path !== 'stake'
+                  ? `${roundNumber(value.coin1)} ETH`
+                  : details}
+              </SummaryCardDetails>
+              {path === 'stake' && title !== 'SLICE Rewards Collected' && (
+                <SummaryCardCounter>
+                  <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
+                  <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
+                </SummaryCardCounter>
+              )}
+            </SummaryCardContainer>
+          ) : (
+            <SummaryCardContainer loading>
+              <div></div>
+              <div></div>
+              <div></div>
+            </SummaryCardContainer>
+          )}
+        </SummaryCardWrapper>
       ) : (
-        <SummaryCardContainer loading>
-          <div></div>
-          <div></div>
-          <div></div>
-        </SummaryCardContainer>
+        <StakingModal
+          // State Values
+          path={path}
+          modalIsOpen={modalIsOpen}
+          modalType={modalType}
+          summaryModal={summaryModal}
+          // Functions
+          closeModal={() => closeModal()}
+          openModal={(bool) => openModal(bool)}
+          hasAllowance={hasAllowance}
+          approveLoading={approveLoading}
+          isLPToken={isLPToken}
+          tokenBalance={tokenBalance}
+          // Functions
+          closeModal={() => closeModal()}
+          stakingAllowanceCheck={stakingAllowanceCheck}
+          stakingApproveContract={stakingApproveContract}
+          adjustStake={adjustStake}
+        />
       )}
-
-    </SummaryCardWrapper> :
-      <StakingModal
-        // State Values
-        path={path}
-        modalIsOpen={modalIsOpen}
-        modalType={modalType}
-        summaryModal={summaryModal}
-        // Functions
-        closeModal={() => closeModal()}
-        openModal={(bool) => openModal(bool)}
-        hasAllowance={hasAllowance}
-        approveLoading={approveLoading}
-        isLPToken={isLPToken}
-        tokenBalance={tokenBalance}
-        // Functions
-        closeModal={() => closeModal()}
-        stakingAllowanceCheck={stakingAllowanceCheck}
-        stakingApproveContract={stakingApproveContract}
-        adjustStake={adjustStake}
-      />
-    }
     </div>
-      
   );
-    
 };
 SummaryCard.propTypes = {
   ethereum: PropTypes.object.isRequired,

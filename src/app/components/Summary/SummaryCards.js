@@ -23,10 +23,14 @@ const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
 
   const SummaryCards = ({ path, ethereum: { wallet, address }, setTokenBalance}) => {
+  const { pathname } = window.location;
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
   const [stakingData, setStakingData] = useState(null);
+  const [stakedSlice, setStakedSlice] = useState(0);
+  const [stakedLPTokens, setStakedLPTokens] = useState(0);
+  const [withdrawn, setWithdrawn] = useState(0);
   const [ratioIsLoading, setRatioIsLoading] = useState(false);
   const [collateralIsLoading, setCollateralIsLoading] = useState(false);
   const [loanIsLoading, setLoanIsLoading] = useState(false);
@@ -53,6 +57,7 @@ const BASE_URL = serverUrl;
   });
 
   const openModal = async (type, num = 0) => {
+    console.log(type, num)
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
@@ -84,7 +89,6 @@ const BASE_URL = serverUrl;
     setSummaryModal(false);
   };
 
-
   const getRatio = async () => {
     const res = await axios(`${BASE_URL+summaryRatio}`); 
     const { result } = res.data;
@@ -107,19 +111,21 @@ const BASE_URL = serverUrl;
     const res = await axios(`${BASE_URL+stakingSummary + address}`);
     const { result } = res.data;
     setStakingData(result);
-    console.log(result)
+    setStakedSlice(result.slice.balance)
+    setStakedLPTokens(result.lp.balance)
+    setWithdrawn(result.withdrawn.balance)
   }
   
   useEffect(() => {
-    if(isDesktop && path !== 'stake'){
+    if(isDesktop && pathname !== '/stake'){
       getRatio();
       getCollateral();
       getLoan();
     }
-    else if(isDesktop && path === 'stake'){
+    else if(isDesktop && pathname === '/stake'){
       address && getStakingData();
     }
-  }, [isDesktop, path, address]);
+  }, [isDesktop, pathname, address]);
   
   return (
     <div>
@@ -135,9 +141,9 @@ const BASE_URL = serverUrl;
         <SummaryCard
           title={path !== "stake" ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
           isLoading={loanIsLoading}
-          value={loan}
+          value={path !== "stake" ? loan : stakedSlice}
           path={path}
-          type='loan'
+          type={path !== "stake" ? 'loan' : 'stake'}
           details={path !== "stake" ? '' : '$0.00 / 0.00 ETH'}
           openModal={(bool, num=1) => openModal(bool, num)}
           closeModal={closeModal}
@@ -149,10 +155,10 @@ const BASE_URL = serverUrl;
         />
         <SummaryCard
           title={path !== "stake" ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
-          value={collateral}
+          value={path !== "stake" ? collateral : stakedLPTokens}
           isLoading={collateralIsLoading}
           path={path}
-          type='collateral'
+          type={path !== "stake" ? 'collateral' : 'stake'}
           details={path !== "stake" ? '' : '$0.00 / 0.00 ETH'}
           openModal={(bool, num=2) => openModal(bool, num)}
           closeModal={closeModal}
@@ -164,10 +170,10 @@ const BASE_URL = serverUrl;
         />
         <SummaryCard
           title={path !== "stake" ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
-          value={ratio}
-          isLoading={ratioIsLoading}
+          value={path !== "stake" ? ratio : withdrawn}
+          isLoading={false}
           path={path}
-          type='ratio'
+          type={path !== "stake" ? 'ratio' : 'stake'}
           details={path !== "stake" ? 'Total Borrowed vs. Total Held' : '$0.00 / 0.00 ETH'}
           openModal={(bool, num) => openModal(bool, num)}
           closeModal={closeModal}
