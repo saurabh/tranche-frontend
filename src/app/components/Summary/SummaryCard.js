@@ -3,23 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { PagesData, txMessage, StakingAddress, LPTokenAddress, SLICEAddress } from 'config';
 import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  // setTokenBalances,
-  setTokenBalance
-} from 'redux/actions/ethereum';
-import {
   StakingSetup,
   SLICESetup,
   ERC20Setup,
   roundNumber,
-  // readyToTransact,
+  roundBasedOnUnit,
+  gweiOrEther,
   isGreaterThan,
   isEqualTo
 } from 'utils';
-// import { initOnboard } from 'services/blocknative';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -44,12 +36,14 @@ const SummaryCard = ({
   summaryModal,
   ethereum: { tokenBalance, wallet, web3, address, notify },
   form,
-  setTokenBalance,
-  isLPToken,
   hasAllowance,
   setHasAllowance
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const [isLPToken, setLPToken] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  const toWei = web3.utils.toWei;
+
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
@@ -57,33 +51,29 @@ const SummaryCard = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
-  // const [modalIsOpen, setIsOpen] = useState(false);
-  const [approveLoading, setApproveLoading] = useState(false);
-  const toWei = web3.utils.toWei;
 
-  // const onboard = initOnboard({
-  //   address: setAddress,
-  //   network: setNetwork,
-  //   balance: setBalance,
-  //   wallet: setWalletAndWeb3
-  // });
+  useEffect(() => {
+    type === 'lp' ? setLPToken(true) : setLPToken(false);
+  }, [type])
 
-  const stakingAllowanceCheck = async (amount, isLPToken) => {
+  const stakingAllowanceCheck = async (amount) => {
     try {
-      amount = toWei(amount);
-      const token = isLPToken ? ERC20Setup(web3, StakingAddress) : SLICESetup(web3);
-      let userAllowance = await token.methods.allowance(address, StakingAddress).call();
-      if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-        setHasAllowance(true);
-      } else {
-        setHasAllowance(false);
+      if (modalType && amount !== '') {
+        amount = toWei(amount);
+        const token = isLPToken ? ERC20Setup(web3, StakingAddress) : SLICESetup(web3);
+        let userAllowance = await token.methods.allowance(address, StakingAddress).call();
+        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+          setHasAllowance(true);
+        } else {
+          setHasAllowance(false);
+        }
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const stakingApproveContract = async (amount, isLPToken) => {
+  const stakingApproveContract = async (amount) => {
     try {
       amount = toWei(amount);
       const token = isLPToken ? ERC20Setup(web3, LPTokenAddress) : SLICESetup(web3);
@@ -110,7 +100,7 @@ const SummaryCard = ({
     }
   };
 
-  const addStake = async (isLPToken) => {
+  const addStake = async () => {
     try {
       const StakingContract = StakingSetup(web3);
       let { amount } = form.stake.values;
@@ -134,7 +124,7 @@ const SummaryCard = ({
     }
   };
 
-  const withdrawStake = async (isLPToken) => {
+  const withdrawStake = async () => {
     try {
       const StakingContract = StakingSetup(web3);
       let { amount } = form.stake.values;
@@ -158,10 +148,10 @@ const SummaryCard = ({
     }
   };
 
-  const adjustStake = (e, isLPToken) => {
+  const adjustStake = (e) => {
     try {
       e.preventDefault();
-      modalType ? addStake(isLPToken) : withdrawStake(isLPToken);
+      modalType ? addStake() : withdrawStake();
       closeModal();
     } catch (error) {
       console.error(error);
@@ -183,8 +173,10 @@ const SummaryCard = ({
                   ? `$${Math.round(value.amount)}`
                   : type === 'ratio'
                   ? `${roundNumber(value.total, 1)}%`
-                  : type === 'stake'
+                  : type === 'slice' || type === 'lp'
                   ? `${roundNumber(value)}`
+                  : type === 'reward'
+                  ? `${roundBasedOnUnit(value, 'SLICE') + ' ' + gweiOrEther(value, 'SLICE')}`
                   : ''}
 
                 <div></div>
@@ -212,24 +204,24 @@ const SummaryCard = ({
             </SummaryCardContainer>
           )}
 
-        <StakingModal
-          // State Values
-          path={path}
-          modalIsOpen={modalIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          // Functions
-          closeModal={() => closeModal()}
-          openModal={(bool) => openModal(bool)}
-          hasAllowance={hasAllowance}
-          approveLoading={approveLoading}
-          isLPToken={isLPToken}
-          tokenBalance={tokenBalance}
-          // Functions
-          stakingAllowanceCheck={stakingAllowanceCheck}
-          stakingApproveContract={stakingApproveContract}
-          adjustStake={adjustStake}
-        />    
+          <StakingModal
+            // State Values
+            path={path}
+            modalIsOpen={modalIsOpen}
+            modalType={modalType}
+            summaryModal={summaryModal}
+            // Functions
+            closeModal={() => closeModal()}
+            openModal={(bool) => openModal(bool)}
+            hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
+            isLPToken={isLPToken}
+            tokenBalance={tokenBalance}
+            // Functions
+            stakingAllowanceCheck={stakingAllowanceCheck}
+            stakingApproveContract={stakingApproveContract}
+            adjustStake={adjustStake}
+          />
         </SummaryCardWrapper>
       ) : (
         <StakingModal
@@ -256,11 +248,7 @@ const SummaryCard = ({
 };
 SummaryCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired,
-  setAddress: PropTypes.func.isRequired,
-  setNetwork: PropTypes.func.isRequired,
-  setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired
+  form: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -269,9 +257,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  setTokenBalance
+
 })(SummaryCard);

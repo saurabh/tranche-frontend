@@ -14,7 +14,7 @@ import { web3 } from 'utils/getWeb3';
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: '0' },
+  tokenBalance: { DAI: '0', SLICE: '0', LPT: '0' },
   address: undefined,
   web3,
   notify: initNotify()
@@ -31,7 +31,7 @@ export default function (state = initialState, action) {
     case SET_BALANCE:
       return { ...state, balance: payload };
     case SET_TOKEN_BALANCE:
-      return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenName]: payload.tokenBalance } };
+      return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenSymbol]: payload.tokenBalance } };
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
     case SET_TRANCHE_TOKEN_BALANCES:

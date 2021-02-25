@@ -2,11 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import {
-  required, number,
-  asyncValidateSell
-} from 'utils/validations';
-// import { isGreaterThan } from 'utils/helperFunctions';
+import { required, number, roundNumber } from 'utils';
+import { fromWei } from 'services/contractMethods';
 import { pairData } from 'config/constants';
 import { selectUp, selectDown } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
@@ -54,11 +51,14 @@ let StakingForm = ({
   // Functions
   stakingAllowanceCheck,
   stakingApproveContract,
-  adjustStake,
+  adjustStake
   // API Values
 }) => {
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState(0);
   const pair = pairData[1].value;
+  let tokenAmount = isLPToken ? tokenBalance.LPT : tokenBalance.SLICE;
+  tokenAmount = (fromWei(tokenAmount.toString()));
+  const tokenName = isLPToken ? 'LPT' : 'SLICE';
   const setLoanIdandAddress = useCallback(() => {
     change('address', address);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,15 +68,15 @@ let StakingForm = ({
     setLoanIdandAddress();
   }, [setLoanIdandAddress]);
 
-  const handleAmountChange = (amount, isLPToken) => {
-    debounceAllowanceCheck(amount, isLPToken);
+  const handleAmountChange = (amount) => {
+    debounceAllowanceCheck(amount);
     setAmount(amount);
-  } 
+  };
 
   const debounceAllowanceCheck = useCallback(
     _.debounce(
       async (amount) => {
-        await stakingAllowanceCheck(amount, isLPToken);
+        await stakingAllowanceCheck(amount);
       },
       500,
       { leading: true }
@@ -86,7 +86,7 @@ let StakingForm = ({
 
   return (
     <ModalAdjustForm>
-      <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, isLPToken)}>
+      <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e)}>
         <FormInputsWrapper trade={true}>
           <ModalFormGrpNewLoan trade={true} tranche={true}>
             <NewLoanFormInput>
@@ -96,7 +96,7 @@ let StakingForm = ({
                 </ModalFormLabel>
                 <Field
                   component={InputField}
-                  onChange={(e, newValue) => handleAmountChange(newValue, isLPToken)}
+                  onChange={(e, newValue) => handleAmountChange(newValue)}
                   validate={[required, number]}
                   className='ModalFormInputNewLoan'
                   name='amount'
@@ -142,8 +142,8 @@ let StakingForm = ({
             </NewLoanFormInput>
             <h2>
               {modalType
-                ? 'You have 1,012,151 SLICE available to stake'
-                : 'You have 1,012,151 SLICE available to withdraw'}
+                ? `You have ${roundNumber(tokenAmount)} ${tokenName} available to stake`
+                : `You have ${roundNumber(tokenAmount)} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
@@ -151,30 +151,32 @@ let StakingForm = ({
         <ModalFormSubmit>
           <BtnLoanModal>
             <ApproveBtnWrapper>
-              {modalType && <ModalFormButton
-                type='button'
-                loading={approveLoading ? 'true' : ''}
-                approved={hasAllowance}
-                onClick={() => stakingApproveContract(formValues.amount, isLPToken)}
-              >
-                {!hasAllowance && !approveLoading ? (
-                  <h2>Approve</h2>
-                ) : !hasAllowance && approveLoading ? (
-                  <div className='btnLoadingIconWrapper'>
-                    <div className='btnLoadingIconCut'>
-                      <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
+              {modalType && (
+                <ModalFormButton
+                  type='button'
+                  loading={approveLoading ? 'true' : ''}
+                  approved={hasAllowance}
+                  onClick={() => stakingApproveContract(formValues.amount)}
+                >
+                  {!hasAllowance && !approveLoading ? (
+                    <h2>Approve</h2>
+                  ) : !hasAllowance && approveLoading ? (
+                    <div className='btnLoadingIconWrapper'>
+                      <div className='btnLoadingIconCut'>
+                        <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
+                      </div>
                     </div>
-                  </div>
-                ) : hasAllowance && !approveLoading ? (
-                  <h2>
-                    <span></span> Approved
-                  </h2>
-                ) : (
-                  ''
-                )}
-              </ModalFormButton>}
+                  ) : hasAllowance && !approveLoading ? (
+                    <h2>
+                      <span></span> Approved
+                    </h2>
+                  ) : (
+                    ''
+                  )}
+                </ModalFormButton>
+              )}
             </ApproveBtnWrapper>
-            {console.log(!hasAllowance)}
+
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#0071F5' : !modalType ? '#FD8383' : '#845AD9'}
@@ -191,7 +193,7 @@ let StakingForm = ({
 
 StakingForm = reduxForm({
   form: 'stake',
-  asyncValidate: asyncValidateSell,
+  // asyncValidate: asyncValidateSell,
   enableReinitialize: true
 })(StakingForm);
 

@@ -4,7 +4,7 @@ import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import axios from 'axios';
 import { apiUri } from 'config/constants';
-import { serverUrl } from 'config/constants'
+import { serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import { LPTokenAddress, SLICEAddress } from 'config';
@@ -22,8 +22,9 @@ import {
 const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
 
-  const SummaryCards = ({ path, ethereum: { wallet, address }, setTokenBalance}) => {
+const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalance }) => {
   const { pathname } = window.location;
+  const fromWei = web3.utils.fromWei;
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
@@ -38,8 +39,6 @@ const BASE_URL = serverUrl;
   const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
   const [modalType, setModalType] = useState(true);
   const [summaryModal, setSummaryModal] = useState(false);
-  // const [isLPToken, setIsLPToken] = useState(false);
-  let isLPToken=false;
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [hasAllowance, setHasAllowance] = useState(false);
 
@@ -47,8 +46,8 @@ const BASE_URL = serverUrl;
     setDesktop(window.innerWidth > 992);
   };
   useEffect(() => {
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
   });
   const onboard = initOnboard({
     address: setAddress,
@@ -61,25 +60,20 @@ const BASE_URL = serverUrl;
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    // let isLP = title.split(' ').includes('LP');
-    // isLP ? setIsLPToken(true) : setIsLPToken(false);
-    setTokenBalance(SLICEAddress, address)
-    setTokenBalance(LPTokenAddress, address)
-    console.log('type: ' + type)
+    setTokenBalance(SLICEAddress, address);
+    setTokenBalance(LPTokenAddress, address);
     setModalType(type);
-    // type ? setHasAllowance(false) : setHasAllowance(true);
-    if(num === 0) {
-      setSummaryModal(true)
+    type ? setHasAllowance(false) : setHasAllowance(true);
+    if (num === 0) {
+      setSummaryModal(true);
       setFirstIsOpen(false);
       setSecondIsOpen(false);
-    }
-    else if(num === 1){
-      setSummaryModal(false)
+    } else if (num === 1) {
+      setSummaryModal(false);
       setFirstIsOpen(true);
       setSecondIsOpen(false);
-    }
-    else if(num === 2){
-      setSummaryModal(false)
+    } else if (num === 2) {
+      setSummaryModal(false);
       setSecondIsOpen(true);
       setFirstIsOpen(false);
     }
@@ -93,101 +87,102 @@ const BASE_URL = serverUrl;
   };
 
   const getRatio = async () => {
-    const res = await axios(`${BASE_URL+summaryRatio}`); 
+    const res = await axios(`${BASE_URL + summaryRatio}`);
     const { result } = res.data;
     setRatio(result);
     // setRatioIsLoading(false);
   };
   const getCollateral = async () => {
-    const res = await axios(`${BASE_URL+summaryCollateral}`); 
+    const res = await axios(`${BASE_URL + summaryCollateral}`);
     const { result } = res.data;
     setCollateral(result);
     setCollateralIsLoading(false);
   };
   const getLoan = async () => {
-    const res = await axios(`${BASE_URL+summaryLoan}`); 
+    const res = await axios(`${BASE_URL + summaryLoan}`);
     const { result } = res.data;
     setLoan(result);
     setLoanIsLoading(false);
-  }
-  
+  };
+
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${BASE_URL+stakingSummary + address}`);
+      const res = await axios(`${BASE_URL + stakingSummary + address}`);
       const { result } = res.data;
       // setStakingData(result);
-      setStakedSlice(result.slice.balance)
-      setStakedLPTokens(result.lp.balance)
-      setWithdrawn(result.withdrawn.balance)
-    }
-    if(isDesktop && pathname !== '/stake'){
+      // console.log(result)
+      setStakedSlice(result.slice.balance);
+      setStakedLPTokens(result.lp.balance);
+      let withdrawn = result.withdrawn.balance.toString().split('.')[0];
+      setWithdrawn(withdrawn);
+    };
+    if (isDesktop && pathname !== '/stake') {
       getRatio();
       getCollateral();
       getLoan();
-    }
-    else if(isDesktop && pathname === '/stake' && address){
+    } else if (isDesktop && pathname === '/stake' && address) {
       getStakingData();
     }
   }, [isDesktop, pathname, address]);
-  
+
   return (
     <div>
-      { !isDesktop && path === "stake" &&
+      {!isDesktop && path === 'stake' && (
         <SummaryCardsWrapper className='container content-container'>
-          <button onClick={() => openModal(null, 0)}>Stake and withdraw
+          <button onClick={() => openModal(null, 0)}>
+            Stake and withdraw
             <span>+ -</span>
           </button>
         </SummaryCardsWrapper>
-      }
-      
+      )}
+
       <SummaryCardsWrapper className='container content-container' path={path}>
         <SummaryCard
-          title={path !== "stake" ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
+          title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
+          // tokenAddress={path !== 'stake' ? '' : stakingData && stakingData.slice}
           isLoading={loanIsLoading}
-          value={path !== "stake" ? loan : stakedSlice}
+          value={path !== 'stake' ? loan : stakedSlice}
           path={path}
-          type={path !== "stake" ? 'loan' : 'stake'}
-          details={path !== "stake" ? '' : '$0.00 / 0.00 ETH'}
-          openModal={(bool, num=1) => openModal(bool, num)}
+          type={path !== 'stake' ? 'loan' : 'slice'}
+          details={path !== 'stake' ? '' : ''}
+          openModal={(bool, num = 1) => openModal(bool, num)}
           closeModal={closeModal}
-          modalIsOpen={(!modalFirstIsOpen && !modalSecondIsOpen) ? summaryModal : modalFirstIsOpen}
+          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen ? summaryModal : modalFirstIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
-          isLPToken={isLPToken}
           hasAllowance={hasAllowance}
           setHasAllowance={setHasAllowance}
         />
         <SummaryCard
-          title={path !== "stake" ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
-          value={path !== "stake" ? collateral : stakedLPTokens}
+          title={path !== 'stake' ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
+          isLP={true}
+          value={path !== 'stake' ? collateral : stakedLPTokens}
           isLoading={collateralIsLoading}
           path={path}
-          type={path !== "stake" ? 'collateral' : 'stake'}
-          details={path !== "stake" ? '' : '$0.00 / 0.00 ETH'}
-          openModal={(bool, num=2) => openModal(bool, num)}
+          type={path !== 'stake' ? 'collateral' : 'lp'}
+          details={path !== 'stake' ? '' : ''}
+          openModal={(bool, num = 2) => openModal(bool, num)}
           closeModal={closeModal}
-          modalIsOpen={(!modalFirstIsOpen && !modalSecondIsOpen) ? summaryModal : modalSecondIsOpen}
+          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen ? summaryModal : modalSecondIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
-          isLPToken={isLPToken}
           hasAllowance={hasAllowance}
           setHasAllowance={setHasAllowance}
         />
         <SummaryCard
-          title={path !== "stake" ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
-          value={path !== "stake" ? ratio : withdrawn}
+          title={path !== 'stake' ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
+          value={path !== 'stake' ? ratio : fromWei(withdrawn.toString())}
           isLoading={false}
           path={path}
-          type={path !== "stake" ? 'ratio' : 'stake'}
-          details={path !== "stake" ? 'Total Borrowed vs. Total Held' : '$0.00 / 0.00 ETH'}
+          type={path !== 'stake' ? 'ratio' : 'reward'}
+          details={path !== 'stake' ? 'Total Borrowed vs. Total Held' : '$0.00 / 0.00 ETH'}
           openModal={(bool, num) => openModal(bool, num)}
           closeModal={closeModal}
           modalIsOpen={false}
           modalType={modalType}
           summaryModal={false}
-          isLPToken={isLPToken}
         />
-    </SummaryCardsWrapper>
+      </SummaryCardsWrapper>
     </div>
   );
 };
@@ -206,7 +201,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps,{
+export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,

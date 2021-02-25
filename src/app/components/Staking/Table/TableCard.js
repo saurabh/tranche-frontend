@@ -12,27 +12,17 @@ import {
   setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-// import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
-  // readyToTransact,
-  // isGreaterThan,
-  // isEqualTo,
-  // gweiOrEther,
-  // roundBasedOnUnit
+  gweiOrEther,
+  roundBasedOnUnit
 } from 'utils';
 import {
-  // PagesData,
   etherScanUrl,
-  // apiUri,
   statuses
 } from 'config';
-import {
-  LinkArrow,
-  TrancheImg,
-} from 'assets';
+import { LinkArrow, TrancheImg } from 'assets';
 import TableMoreRow from './TableMoreRow';
-// import ETH from 'assets/images/svg/EthForm.svg';
 
 import {
   TableContentCard,
@@ -61,64 +51,21 @@ import {
   TableContentCardWrapperMobile,
   TableContentCardMobile,
   TableColMobile,
-  TableMobilColContent,
+  TableMobilColContent
   // TableMobilCardBtn
 } from '../../Table/styles/TableComponents';
 
 const TableCard = ({
-  staking: {
-    contractAddress,
-    isActive,
-    reward,
-    staked,
-    type
-  },
+  staking: { contractAddress, isActive, reward, staked, type },
   // trade: { tradeType },
   path,
-  ethereum: {  web3 },
+  ethereum: { web3 }
   // checkServer
 }) => {
-  // const [modalIsOpen, setIsOpen] = useState(false);
-  // const [hasAllowance, setHasAllowance] = useState(false);
-  // const [withdrawModal, setWithdrawModal] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  // const [moreCardToggle, setMoreCardToggle] = useState(false);
-  // const [moreList, setMoreList] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [disableBtn, setDisableBtn] = useState(false);
-
-  // let disableBtn = false;
   let isLoading = false;
   let moreCardToggle = false;
   let moreList = false;
-  // const availableAmount =
-  //   subscriber === 'N/A' && amount === 'N/A'
-  //     ? 0
-  //     : subscriber === 'N/A'
-  //     ? amount
-  //     : amount - subscriber;
-
-  // useEffect(() => {
-  //   const balanceCheck = () => {
-  //     try {
-  //       if (type === 'TRANCHE_A') {
-  //         if (
-  //           cryptoType !== 'N/A' &&
-  //           amount !== 'N/A' &&
-  //           isGreaterThan(
-  //             Number(tokenBalance[cryptoType]),
-  //             Number(toWei(availableAmount.toString()))
-  //           )
-  //         )
-  //           setHasBalance(true);
-  //       } else setHasBalance(true);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   balanceCheck();
-  // }, [amount, type, cryptoType, subscriber, tokenBalance, availableAmount]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -129,73 +76,11 @@ const TableCard = ({
     return () => window.removeEventListener('resize', updateMedia);
   });
 
-  // const onboard = initOnboard({
-  //   address: setAddress,
-  //   network: setNetwork,
-  //   balance: setBalance,
-  //   wallet: setWalletAndWeb3
-  // });
-
-
-
-
-  // const openModal = async () => {
-  //   const ready = await readyToTransact(wallet, onboard);
-  //   if (!ready) return;
-  //   address = !address ? onboard.getState().address : address;
-  //   setTokenBalances(address);
-  //   setTrancheTokenBalances(name, trancheTokenAddress, address);
-  //   setIsOpen(true);
-  // };
-
-
-
   const searchObj = (val) => {
     return Object.fromEntries(
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
   };
-
-  // const cardToggle = (hash) => {
-  //   console.log('Loan ID: ' + loanId);
-  //   // console.log(loan);
-  //   setMoreCardToggle(!moreCardToggle);
-  //   if (!moreCardToggle) {
-  //     getTransaction(hash);
-  //   }
-  // };
-
-  // const getTransaction = async (hash) => {
-  //   const { transaction: transactionUrl } = apiUri;
-  //   setIsLoading(true);
-  //   try {
-  //     const { data: result } = await postRequest(
-  //       transactionUrl,
-  //       {
-  //         data: {
-  //           skip: 0,
-  //           limit: 100,
-  //           filter: {
-  //             loanId,
-  //             contractAddress: hash
-  //           }
-  //         }
-  //       },
-  //       null,
-  //       true
-  //     );
-  //     if (result.status) {
-  //       checkServer(true);
-  //       setIsLoading(false);
-  //       setMoreList(result.result.list);
-  //     } else {
-  //       checkServer(false);
-  //     }
-  //   } catch (error) {
-  //     checkServer(false);
-  //     console.log(error);
-  //   }
-  // };
 
   const checkLoan = false;
 
@@ -216,9 +101,7 @@ const TableCard = ({
           )}
           <TableFirstCol className='table-col'>
             <TableFirstColWrapper>
-              <TableCardImg
-                tranche={true}
-              >
+              <TableCardImg tranche={true}>
                 <img src={TrancheImg} alt='Tranche' />
               </TableCardImg>
               <FirstColContent>
@@ -241,28 +124,17 @@ const TableCard = ({
 
           <TableSecondCol className='table-col'>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <h2>
-                {staked}
-              </h2>
+              <h2>{staked}</h2>
             </SecondColContent>
           </TableSecondCol>
-          <TableThirdCol
-            className={
-              'table-col table-fourth-col-return '
-            }
-          >
+          <TableThirdCol className={'table-col table-fourth-col-return '}>
             <ThirdColContent className='content-3-col second-4-col-content'>
               <h2>
-                {reward}
+                {roundBasedOnUnit(reward, 'SLICE')} {gweiOrEther(reward, 'SLICE')}
               </h2>
             </ThirdColContent>
           </TableThirdCol>
-          <TableFourthCol
-            tranche={true}
-            className={
-              'table-col table-fifth-col-subscription'
-            }
-          >
+          <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'}>
             <FourthColContent className='content-3-col second-4-col-content'>
               {/* <h2></h2> */}
             </FourthColContent>
@@ -273,20 +145,20 @@ const TableCard = ({
                 className='status-text-wrapper'
                 color={Object.values(searchObj(isActive ? 1 : 0))[0].color}
                 backgroundColor={Object.values(searchObj(1))[0].background}
-                table="tranche"
+                table='tranche'
               >
-                {isActive ? "ACTIVE" : ""}
-              </StatusTextWrapper> 
-
-             
-              
+                {isActive ? 'ACTIVE' : ''}
+              </StatusTextWrapper>
             </FifthColContent>
           </TableFifthCol>
-          <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
-            
-          </TableSixthCol>
+          <TableSixthCol
+            onClick={(e) => e.stopPropagation()}
+            className='table-sixth-col table-col'
+          ></TableSixthCol>
         </TableContentCard>
-        <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
+        <TableCardMore
+          className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
+        >
           <TableCardMoreContent>
             {isLoading ? (
               <ReactLoading
@@ -329,44 +201,38 @@ const TableCard = ({
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile>
-          <TableContentCardMobile color={Object.values(searchObj(1))[0].background}>
-              <span></span>
-              <TableColMobile address>
-                  <TableMobilColContent>
-                      <h2>{type && type}</h2>
-                      <h2>{addrShortener(contractAddress)}</h2>
-                  </TableMobilColContent>
-              </TableColMobile>
+        <TableContentCardMobile color={Object.values(searchObj(1))[0].background}>
+          <span></span>
+          <TableColMobile address>
+            <TableMobilColContent>
+              <h2>{type && type}</h2>
+              <h2>{addrShortener(contractAddress)}</h2>
+            </TableMobilColContent>
+          </TableColMobile>
 
-              <TableColMobile>
-                  <TableMobilColContent col>
-                      <h2>{staked}</h2> 
-                      {/* <h2></h2> */}
-                  </TableMobilColContent>
-              </TableColMobile>
+          <TableColMobile>
+            <TableMobilColContent col>
+              <h2>{staked}</h2>
+              {/* <h2></h2> */}
+            </TableMobilColContent>
+          </TableColMobile>
 
-              <TableColMobile>
-                  <TableMobilColContent col>
-                  <h2>{reward}</h2>
-                  {/* <h2></h2> */}
-                  </TableMobilColContent>
-              </TableColMobile>
+          <TableColMobile>
+            <TableMobilColContent col>
+              <h2>{reward}</h2>
+              {/* <h2></h2> */}
+            </TableMobilColContent>
+          </TableColMobile>
 
-              <TableColMobile>
-                  <TableMobilColContent col>
-                    {/* <h2></h2> */}
-                  </TableMobilColContent>
-              </TableColMobile>
+          <TableColMobile>
+            <TableMobilColContent col>{/* <h2></h2> */}</TableMobilColContent>
+          </TableColMobile>
 
-              <TableColMobile btn>
-                  
-              </TableColMobile>
-
-          </TableContentCardMobile>
-         
+          <TableColMobile btn></TableColMobile>
+        </TableContentCardMobile>
       </TableContentCardWrapperMobile>
     );
-  }
+  };
   return isDesktop ? TableCardDesktop() : TableCardMobile();
 };
 

@@ -114,7 +114,6 @@ const StakingModal = ({
             <StakingModalRow>
               <h2>Staked SLICE Tokens</h2>
               <h2>00.00</h2>
-              <h2>$0.00 / 0.00 ETH</h2>
               <SummaryCardCounter stakingMobile>
                 <SummaryCardBtn
                   stakingMobile
@@ -130,7 +129,6 @@ const StakingModal = ({
             <StakingModalRow>
               <h2>Staked SLICE Tokens</h2>
               <h2>00.00</h2>
-              <h2>$0.00 / 0.00 ETH</h2>
               <SummaryCardCounter stakingMobile>
                 <SummaryCardBtn
                   stakingMobile
@@ -146,19 +144,12 @@ const StakingModal = ({
           <LoanDetailsMobile>
             <h2>
               SLICE LOCKED —{' '}
+              {/* SLICE LOCKED — {roundBasedOnUnit(reward, 'SLICE')} {gweiOrEther(reward, 'SLICE')} */}
               <span>
               </span>
             </h2>
             <h2>
               REWARDS PER BLOCK —{' '}
-              <span>
-              </span>
-            </h2>
-            <h2>
-            CURRENT RETURN PER SLICE — <span></span>
-            </h2>
-            <h2>
-              EST APY —{' '}
               <span>
               </span>
             </h2>
@@ -181,18 +172,6 @@ const StakingModal = ({
                     {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
-
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle>CURRENT RETURN PER SLICE</LoanDetailsRowTitle>
-
-                  <LoanDetailsRowValue></LoanDetailsRowValue>
-                </LoanDetailsRow>
-
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle>EST APY</LoanDetailsRowTitle>
-
-                  <LoanDetailsRowValue></LoanDetailsRowValue>
-                </LoanDetailsRow>
               </ModalActionDetailsContent>
             </ModalActionDetails>
             <StakingForm
@@ -214,14 +193,6 @@ const StakingModal = ({
             </h2>
             <h2>
               REWARDS PER BLOCK —{' '}
-              <span>
-              </span>
-            </h2>
-            <h2>
-            CURRENT RETURN PER SLICE — <span></span>
-            </h2>
-            <h2>
-              EST APY —{' '}
               <span>
               </span>
             </h2>
