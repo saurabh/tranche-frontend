@@ -136,7 +136,7 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
         </SummaryCardsWrapper>
       )}
 
-      <SummaryCardsWrapper className='container content-container' path={path}>
+      <SummaryCardsWrapper className='container content-container' path={path} isDesktop={isDesktop}>
         <SummaryCard
           title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
           // tokenAddress={path !== 'stake' ? '' : stakingData && stakingData.slice}
