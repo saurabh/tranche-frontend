@@ -174,6 +174,7 @@ let StakingForm = ({
                 )}
               </ModalFormButton>}
             </ApproveBtnWrapper>
+            {console.log(!hasAllowance)}
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#0071F5' : !modalType ? '#FD8383' : '#845AD9'}

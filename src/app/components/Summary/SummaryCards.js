@@ -65,8 +65,9 @@ const BASE_URL = serverUrl;
     // isLP ? setIsLPToken(true) : setIsLPToken(false);
     setTokenBalance(SLICEAddress, address)
     setTokenBalance(LPTokenAddress, address)
+    console.log('type: ' + type)
     setModalType(type);
-    type ? setHasAllowance(false) : setHasAllowance(true);
+    // type ? setHasAllowance(false) : setHasAllowance(true);
     if(num === 0) {
       setSummaryModal(true)
       setFirstIsOpen(false);
@@ -154,6 +155,7 @@ const BASE_URL = serverUrl;
           summaryModal={summaryModal}
           isLPToken={isLPToken}
           hasAllowance={hasAllowance}
+          setHasAllowance={setHasAllowance}
         />
         <SummaryCard
           title={path !== "stake" ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
@@ -169,6 +171,7 @@ const BASE_URL = serverUrl;
           summaryModal={summaryModal}
           isLPToken={isLPToken}
           hasAllowance={hasAllowance}
+          setHasAllowance={setHasAllowance}
         />
         <SummaryCard
           title={path !== "stake" ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
@@ -183,8 +186,6 @@ const BASE_URL = serverUrl;
           modalType={modalType}
           summaryModal={false}
           isLPToken={isLPToken}
-          hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
         />
     </SummaryCardsWrapper>
     </div>
