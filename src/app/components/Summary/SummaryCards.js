@@ -139,7 +139,7 @@ const BASE_URL = serverUrl;
         </SummaryCardsWrapper>
       }
       
-      <SummaryCardsWrapper className='container content-container' path={path}>
+      <SummaryCardsWrapper className='container content-container' path={path} isDesktop={isDesktop}>
         <SummaryCard
           title={path !== "stake" ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
           isLoading={loanIsLoading}
