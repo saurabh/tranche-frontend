@@ -7,7 +7,7 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
+  // setTokenBalances,
   setTokenBalance
 } from 'redux/actions/ethereum';
 import {
@@ -15,11 +15,11 @@ import {
   SLICESetup,
   ERC20Setup,
   roundNumber,
-  readyToTransact,
+  // readyToTransact,
   isGreaterThan,
   isEqualTo
 } from 'utils';
-import { initOnboard } from 'services/blocknative';
+// import { initOnboard } from 'services/blocknative';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -61,12 +61,12 @@ const SummaryCard = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
 
-  const onboard = initOnboard({
-    address: setAddress,
-    network: setNetwork,
-    balance: setBalance,
-    wallet: setWalletAndWeb3
-  });
+  // const onboard = initOnboard({
+  //   address: setAddress,
+  //   network: setNetwork,
+  //   balance: setBalance,
+  //   wallet: setWalletAndWeb3
+  // });
 
   const stakingAllowanceCheck = async (amount, isLPToken) => {
     try {
@@ -211,6 +211,25 @@ const SummaryCard = ({
               <div></div>
             </SummaryCardContainer>
           )}
+
+        <StakingModal
+          // State Values
+          path={path}
+          modalIsOpen={modalIsOpen}
+          modalType={modalType}
+          summaryModal={summaryModal}
+          // Functions
+          closeModal={() => closeModal()}
+          openModal={(bool) => openModal(bool)}
+          hasAllowance={hasAllowance}
+          approveLoading={approveLoading}
+          isLPToken={isLPToken}
+          tokenBalance={tokenBalance}
+          // Functions
+          stakingAllowanceCheck={stakingAllowanceCheck}
+          stakingApproveContract={stakingApproveContract}
+          adjustStake={adjustStake}
+        />    
         </SummaryCardWrapper>
       ) : (
         <StakingModal
@@ -227,7 +246,6 @@ const SummaryCard = ({
           isLPToken={isLPToken}
           tokenBalance={tokenBalance}
           // Functions
-          closeModal={() => closeModal()}
           stakingAllowanceCheck={stakingAllowanceCheck}
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}

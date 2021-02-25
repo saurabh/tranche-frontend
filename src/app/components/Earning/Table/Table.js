@@ -108,7 +108,7 @@ const Table = ({
   }, []);
 
   useEffect(() => {
-    // changePath(currentPath);
+    changePath(currentPath);
     changeOwnAllFilter('all');
     ownAllToggle("allTranches");
   }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);

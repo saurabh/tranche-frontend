@@ -7,7 +7,7 @@ import { apiUri } from 'config/constants';
 import { serverUrl } from 'config/constants'
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
-import { PagesData, txMessage, StakingAddress, LPTokenAddress, SLICEAddress } from 'config';
+import { LPTokenAddress, SLICEAddress } from 'config';
 import PropTypes from 'prop-types';
 
 import {
@@ -27,18 +27,19 @@ const BASE_URL = serverUrl;
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
-  const [stakingData, setStakingData] = useState(null);
+  // const [stakingData, setStakingData] = useState(null);
   const [stakedSlice, setStakedSlice] = useState(0);
   const [stakedLPTokens, setStakedLPTokens] = useState(0);
   const [withdrawn, setWithdrawn] = useState(0);
-  const [ratioIsLoading, setRatioIsLoading] = useState(false);
+  // const [ratioIsLoading, setRatioIsLoading] = useState(false);
   const [collateralIsLoading, setCollateralIsLoading] = useState(false);
   const [loanIsLoading, setLoanIsLoading] = useState(false);
   const [modalFirstIsOpen, setFirstIsOpen] = useState(false);
   const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
   const [modalType, setModalType] = useState(true);
   const [summaryModal, setSummaryModal] = useState(false);
-  const [isLPToken, setIsLPToken] = useState(false);
+  // const [isLPToken, setIsLPToken] = useState(false);
+  let isLPToken=false;
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [hasAllowance, setHasAllowance] = useState(false);
 
@@ -56,8 +57,7 @@ const BASE_URL = serverUrl;
     wallet: setWalletAndWeb3
   });
 
-  const openModal = async (type, num = 0) => {
-    console.log(type, num)
+  const openModal = async (type, num) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
@@ -75,10 +75,12 @@ const BASE_URL = serverUrl;
     else if(num === 1){
       setSummaryModal(false)
       setFirstIsOpen(true);
+      setSecondIsOpen(false);
     }
-    else{
+    else if(num === 2){
       setSummaryModal(false)
       setSecondIsOpen(true);
+      setFirstIsOpen(false);
     }
   };
 
@@ -93,7 +95,7 @@ const BASE_URL = serverUrl;
     const res = await axios(`${BASE_URL+summaryRatio}`); 
     const { result } = res.data;
     setRatio(result);
-    setRatioIsLoading(false);
+    // setRatioIsLoading(false);
   };
   const getCollateral = async () => {
     const res = await axios(`${BASE_URL+summaryCollateral}`); 
@@ -106,24 +108,24 @@ const BASE_URL = serverUrl;
     const { result } = res.data;
     setLoan(result);
     setLoanIsLoading(false);
-  };
-  const getStakingData = async () => {
-    const res = await axios(`${BASE_URL+stakingSummary + address}`);
-    const { result } = res.data;
-    setStakingData(result);
-    setStakedSlice(result.slice.balance)
-    setStakedLPTokens(result.lp.balance)
-    setWithdrawn(result.withdrawn.balance)
   }
   
   useEffect(() => {
+    const getStakingData = async () => {
+      const res = await axios(`${BASE_URL+stakingSummary + address}`);
+      const { result } = res.data;
+      // setStakingData(result);
+      setStakedSlice(result.slice.balance)
+      setStakedLPTokens(result.lp.balance)
+      setWithdrawn(result.withdrawn.balance)
+    }
     if(isDesktop && pathname !== '/stake'){
       getRatio();
       getCollateral();
       getLoan();
     }
-    else if(isDesktop && pathname === '/stake'){
-      address && getStakingData();
+    else if(isDesktop && pathname === '/stake' && address){
+      getStakingData();
     }
   }, [isDesktop, pathname, address]);
   

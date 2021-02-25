@@ -378,7 +378,7 @@ const TradeModal = ({
             <ModalContent>
               <BtnGrpLoanModal>
                 <BtnGrpLoanModalWrapper>
-                  <h2></h2>
+                  {/* <h2></h2> */}
                   <ModalButton
                     trade={true}
                     btnColor='#234566'
@@ -391,7 +391,7 @@ const TradeModal = ({
                 </BtnGrpLoanModalWrapper>
 
                 <BtnGrpLoanModalWrapper>
-                  <h2></h2>
+                  {/* <h2></h2> */}
                   <ModalButton
                     trade={true}
                     // disabled={true}

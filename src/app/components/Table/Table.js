@@ -125,7 +125,7 @@ const Table = ({
   }
 
   useEffect(() => {
-    // changePath(currentPath);
+    changePath(currentPath);
     changeOwnAllFilter('all');
   }, [changePath, pathname, changeOwnAllFilter, currentPath]);
 

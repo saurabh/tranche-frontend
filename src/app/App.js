@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
@@ -44,7 +44,7 @@ const App = ({
 
   useEffect(() => {
     changePath(currentPath);
-  }, [pathname])
+  }, [pathname, changePath, currentPath])
 
   useEffect(() => {
     const timeout = (ms) => {
