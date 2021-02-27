@@ -110,11 +110,10 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
       const res = await axios(`${BASE_URL + stakingSummary + address}`);
       const { result } = res.data;
       // setStakingData(result);
-      // console.log(result)
+      console.log(result)
       setStakedSlice(result.slice.balance);
       setStakedLPTokens(result.lp.balance);
-      let withdrawn = result.withdrawn.balance.toString().split('.')[0];
-      setWithdrawn(withdrawn);
+      setWithdrawn(result.withdrawn.balance);
     };
     if (isDesktop && pathname !== '/stake') {
       getRatio();
@@ -171,11 +170,11 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
         />
         <SummaryCard
           title={path !== 'stake' ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
-          value={path !== 'stake' ? ratio : fromWei(withdrawn.toString())}
+          value={path !== 'stake' ? ratio : withdrawn}
           isLoading={false}
           path={path}
           type={path !== 'stake' ? 'ratio' : 'reward'}
-          details={path !== 'stake' ? 'Total Borrowed vs. Total Held' : '$0.00 / 0.00 ETH'}
+          details={path !== 'stake' ? 'Total Borrowed vs. Total Held' : ''}
           openModal={(bool, num) => openModal(bool, num)}
           closeModal={closeModal}
           modalIsOpen={false}

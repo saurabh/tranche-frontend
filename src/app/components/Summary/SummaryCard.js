@@ -34,7 +34,7 @@ const SummaryCard = ({
   modalIsOpen,
   modalType,
   summaryModal,
-  ethereum: { tokenBalance, wallet, web3, address, notify },
+  ethereum: { tokenBalance, web3, address, notify },
   form,
   hasAllowance,
   setHasAllowance
@@ -176,7 +176,7 @@ const SummaryCard = ({
                   : type === 'slice' || type === 'lp'
                   ? `${roundNumber(value)}`
                   : type === 'reward'
-                  ? `${roundBasedOnUnit(value, 'SLICE') + ' ' + gweiOrEther(value, 'SLICE')}`
+                  ? `${roundNumber(value, 2)}`
                   : ''}
 
                 <div></div>
