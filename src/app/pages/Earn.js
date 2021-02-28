@@ -1,18 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout } from 'app/components';
 import { PagesData } from 'config/constants';
 import Table from '../components/Table/Table';
-import { changeFilter } from 'redux/actions/tableData';
-import { useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
 import SummaryCards from 'app/components/Summary/SummaryCards';
 
-function Earn({ changeFilter }) {
-  const { pathname } = useLocation();
+function Earn() {
 
-  useEffect(() => {
-    changeFilter(null);
-  }, [pathname, changeFilter]);
 
   return (
     <Layout>
@@ -22,6 +15,4 @@ function Earn({ changeFilter }) {
   );
 }
 
-export default connect(null, {
-  changeFilter
-})(Earn);
+export default Earn;
