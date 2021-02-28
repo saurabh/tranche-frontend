@@ -7,8 +7,6 @@ import {
   SLICESetup,
   ERC20Setup,
   roundNumber,
-  roundBasedOnUnit,
-  gweiOrEther,
   isGreaterThan,
   isEqualTo
 } from 'utils';

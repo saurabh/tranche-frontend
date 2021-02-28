@@ -14,6 +14,9 @@ export const SET_WALLET = 'SET_WALLET';
 export const SET_WEB3 = 'SET_WEB3';
 export const SET_CURRENT_BLOCK = 'SET_CURRENT_BLOCK';
 
+// Summary
+export const SUMMARY_SUCCESS = 'SUMMARY_SUCCESS';
+
 //Loans
 export const LOANS_IS_LOADING = 'LOANS_IS_LOADING';
 export const LOANS_SUCCESS = 'LOANS_SUCCESS';
@@ -24,18 +27,18 @@ export const CHANGE_SORTING = 'CHANGE_SORTING';
 export const PAGINATION_SKIP = 'PAGINATION_SKIP';
 export const PAGINATION_CURRENT = 'PAGINATION_CURRENT';
 
-//Tranches
+// Tranches
 export const TRANCHES_IS_LOADING = 'TRANCHES_IS_LOADING';
 export const TRANCHES_SUCCESS = 'TRANCHES_SUCCESS';
 export const TRANCHES_COUNT = 'TRANCHES_COUNT';
 
-//Staking
+// Staking
 export const STAKING_IS_LOADING = 'STAKING_IS_LOADING';
 export const STAKING_SUCCESS = 'STAKING_SUCCESS';
 export const STAKING_COUNT = 'STAKING_COUNT';
 
-//TRADE
+// Earn
 export const OWN_ALL_TOGGLE = 'OWN_ALL_TOGGLE';
 
-//Path
+// Path
 export const CHANGE_PATH = 'CHANGE_PATH';
