@@ -46,12 +46,12 @@ let StakingForm = ({
   isLPToken,
   hasAllowance,
   approveLoading,
-  tokenBalance,
   // Functions
   stakingAllowanceCheck,
   stakingApproveContract,
   adjustStake,
   // API Values
+  ethereum: {tokenBalance},
   userSummary: { lpList }
 }) => {
   const [selectedLP, setSelectedLP] = useState(0);

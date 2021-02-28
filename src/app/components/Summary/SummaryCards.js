@@ -7,7 +7,6 @@ import { apiUri } from 'config/constants';
 import { serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
-import { LPTokenAddress, SLICEAddress } from 'config';
 import PropTypes from 'prop-types';
 
 import {
@@ -57,36 +56,21 @@ const SummaryCards = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
-  const openModal = async (type, num) => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    address = !address ? onboard.getState().address : address;
-    setTokenBalance(SLICEAddress, address);
-    setTokenBalance(LPTokenAddress, address);
-    setModalType(type);
-    type ? setHasAllowance(false) : setHasAllowance(true);
-    if (num === 0) {
-      setSummaryModal(true);
-      setFirstIsOpen(false);
-      setSecondIsOpen(false);
-    } else if (num === 1) {
-      setSummaryModal(false);
-      setFirstIsOpen(true);
-      setSecondIsOpen(false);
-    } else if (num === 2) {
-      setSummaryModal(false);
-      setSecondIsOpen(true);
-      setFirstIsOpen(false);
+  
+  useEffect(() => {
+    const getStakingData = async () => {
+      const res = await axios(`${BASE_URL + stakingSummary + address}`);
+      const { result } = res.data;
+      summaryFetchSuccess(result);
+    };
+    if (isDesktop && pathname !== '/stake') {
+      getRatio();
+      getCollateral();
+      getLoan();
+    } else if (isDesktop && pathname === '/stake' && address) {
+      getStakingData();
     }
-  };
-
-  const closeModal = () => {
-    setFirstIsOpen(false);
-    setSecondIsOpen(false);
-    setModalType(true);
-    setSummaryModal(false);
-  };
+  }, [isDesktop, pathname, address, summaryFetchSuccess]);
 
   const getRatio = async () => {
     const res = await axios(`${BASE_URL + summaryRatio}`);
@@ -106,22 +90,36 @@ const SummaryCards = ({
     setLoan(result);
     setLoanIsLoading(false);
   };
+  
+  const openModal = async (type, num) => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    address = !address ? onboard.getState().address : address;
+    setTokenBalance(slice.address, address);
+    setTokenBalance(lp.address, address);
+    setModalType(type);
+    type ? setHasAllowance(false) : setHasAllowance(true);
+    if (num === 0) {
+      setSummaryModal(true);
+      setFirstIsOpen(false);
+      setSecondIsOpen(false);
+    } else if (num === 1) {
+      setSummaryModal(false);
+      setFirstIsOpen(true);
+      setSecondIsOpen(false);
+    } else if (num === 2) {
+      setSummaryModal(false);
+      setSecondIsOpen(true);
+      setFirstIsOpen(false);
+    }    
+  };    
 
-  useEffect(() => {
-    const getStakingData = async () => {
-      const res = await axios(`${BASE_URL + stakingSummary + address}`);
-      const { result } = res.data;
-      summaryFetchSuccess(result);
-      console.log(result);
-    };
-    if (isDesktop && pathname !== '/stake') {
-      getRatio();
-      getCollateral();
-      getLoan();
-    } else if (isDesktop && pathname === '/stake' && address) {
-      getStakingData();
-    }
-  }, [isDesktop, pathname, address, summaryFetchSuccess]);
+  const closeModal = () => {
+    setFirstIsOpen(false);
+    setSecondIsOpen(false);
+    setModalType(true);
+    setSummaryModal(false);
+  };    
 
   return (
     <div>
@@ -141,7 +139,7 @@ const SummaryCards = ({
       >
         <SummaryCard
           title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
-          address={slice.address}
+          tokenAddress={slice.address}
           isLoading={loanIsLoading}
           value={path !== 'stake' ? loan : slice.balance}
           path={path}
@@ -157,7 +155,7 @@ const SummaryCards = ({
         />
         <SummaryCard
           title={path !== 'stake' ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
-          isLP={true}
+          tokenAddress={lp.address}
           lpList={lpList}
           value={path !== 'stake' ? collateral : lp.balance}
           isLoading={collateralIsLoading}
