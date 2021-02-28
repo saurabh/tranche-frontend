@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -16,24 +15,19 @@ import { Layout } from 'app/components';
 import CreateLoan from 'app/components/Modals/CreateLoan';
 import { PagesData } from 'config/constants';
 import Table from '../components/Table/Table';
-import { changeFilter } from 'redux/actions/tableData';
 import SummaryCards from 'app/components/Summary/SummaryCards';
 
 const Borrow = ({
   setAddress,
   setNetwork,
   setBalance,
+  path,
   setWalletAndWeb3,
-  ethereum: { address, wallet, web3 },
-  changeFilter
+  ethereum: { address, wallet, web3 }
 }) => {
-  const { pathname } = useLocation();
   const [showModal, setShowModal] = useState(false);
 
 
-  useEffect(() => {
-    changeFilter(null);
-  }, [pathname, changeFilter]);
 
   const onboard = initOnboard({
     address: setAddress,
@@ -75,12 +69,12 @@ Borrow.propTypes = {
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
+  path: state.path
 });
 
 export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3,
-  changeFilter
+  setWalletAndWeb3
 })(Borrow);

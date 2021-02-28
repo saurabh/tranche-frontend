@@ -1,19 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout } from 'app/components';
 import { PagesData } from 'config/constants';
 import Table from '../components/Staking/Table/Table';
-import { changeFilter } from 'redux/actions/tableData';
-import { useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
 import SummaryCards from 'app/components/Summary/SummaryCards';
 
-function Staking({ changeFilter }) {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    changeFilter(null);
-  }, [pathname, changeFilter]);
-
+function Staking() {
   return (
     <Layout>
       <SummaryCards />
@@ -22,6 +13,4 @@ function Staking({ changeFilter }) {
   );
 }
 
-export default connect(null, {
-  changeFilter
-})(Staking);
+export default Staking;
