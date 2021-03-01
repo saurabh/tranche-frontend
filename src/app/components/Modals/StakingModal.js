@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
 import Modal from 'react-modal';
-// import { confirmAlert } from 'react-confirm-alert';
-// import { Spring } from 'react-spring/renderprops';
+import { serverUrl, apiUri } from 'config'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import StakingForm from '../Form/Staking';
 import {
-  gweiOrEther,
-  roundBasedOnUnit
+  // gweiOrEther,
+  // roundBasedOnUnit
   // roundNumber
 } from 'utils';
 import {
@@ -23,11 +24,12 @@ import {
   StakingModalRow,
   StakingModalWrapper
 } from './styles/ModalsComponents';
-
 import {
   SummaryCardCounter,
   SummaryCardBtn
 } from '../Summary/styles/SummaryComponents';
+const { stakingSummaryDetail } = apiUri;
+const BASE_URL = serverUrl;
 
 const FirstCustomStyles = {
   overlay: {
@@ -69,17 +71,18 @@ const StakingModal = ({
   hasAllowance,
   approveLoading,
   tokenBalance,
+  tokenAddress,
   // Functions
   closeModal,
   openModal,
   stakingAllowanceCheck,
   stakingApproveContract,
   adjustStake,
-  // API Values
-  cryptoType,
-  rpbRate
+  // API Values,
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const [totalStaked, setTotalStaked] = useState(0);
+  const [rewardsPerBlock, setRewardsPerBlock] = useState(0);
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
@@ -87,6 +90,19 @@ const StakingModal = ({
     window.addEventListener("resize", updateMedia);
     return () => window.removeEventListener("resize", updateMedia);
   });
+
+  useEffect(() => {
+    const getStakingDetails = async () => {
+      const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress}`);
+      const { result } = res.data;
+      setTotalStaked(result.staked)
+      setRewardsPerBlock(result.reward)
+      // console.log(result)
+    }
+
+    modalIsOpen && getStakingDetails()
+  }, [modalIsOpen, tokenAddress])
+
   const modalClose = () => {
     closeModal();
   };
@@ -143,13 +159,13 @@ const StakingModal = ({
           </StakingModalWrapper>
           <LoanDetailsMobile>
             <h2>
-              SLICE LOCKED —{' '}
+              SLICE LOCKED — {totalStaked}
               {/* SLICE LOCKED — {roundBasedOnUnit(reward, 'SLICE')} {gweiOrEther(reward, 'SLICE')} */}
               <span>
               </span>
             </h2>
             <h2>
-              REWARDS PER BLOCK —{' '}
+              REWARDS PER BLOCK — {rewardsPerBlock}
               <span>
               </span>
             </h2>
@@ -161,7 +177,7 @@ const StakingModal = ({
               <ModalActionDetailsContent trade={true}>
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle>SLICE LOCKED</LoanDetailsRowTitle>
-
+                  {totalStaked}
                   <LoanDetailsRowValue></LoanDetailsRowValue>
                 </LoanDetailsRow>
 
@@ -169,7 +185,7 @@ const StakingModal = ({
                   <LoanDetailsRowTitle>REWARDS PER BLOCK</LoanDetailsRowTitle>
 
                   <LoanDetailsRowValue>
-                    {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
+                  {rewardsPerBlock}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
               </ModalActionDetailsContent>
@@ -179,7 +195,6 @@ const StakingModal = ({
               hasAllowance={hasAllowance}
               approveLoading={approveLoading}
               isLPToken={isLPToken}
-              tokenBalance={tokenBalance}
               // Functions
               stakingAllowanceCheck={stakingAllowanceCheck}
               stakingApproveContract={stakingApproveContract}
@@ -187,12 +202,12 @@ const StakingModal = ({
             />
             <LoanDetailsMobile>
             <h2>
-              SLICE LOCKED —{' '}
+              SLICE LOCKED — {totalStaked}
               <span>
               </span>
             </h2>
             <h2>
-              REWARDS PER BLOCK —{' '}
+              REWARDS PER BLOCK — {rewardsPerBlock}
               <span>
               </span>
             </h2>
@@ -205,4 +220,15 @@ const StakingModal = ({
   return stakingModal();
 };
 
-export default StakingModal;
+StakingModal.propTypes = {
+  // ethereum: PropTypes.object.isRequired,
+  // form: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+  stakingData: state.data.stakingList
+});
+
+export default connect(mapStateToProps, {
+
+})(StakingModal);

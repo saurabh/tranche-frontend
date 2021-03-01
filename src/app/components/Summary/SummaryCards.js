@@ -7,7 +7,6 @@ import { apiUri } from 'config/constants';
 import { serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
-import { LPTokenAddress, SLICEAddress } from 'config';
 import PropTypes from 'prop-types';
 
 import {
@@ -18,20 +17,22 @@ import {
   setTokenBalances,
   setTokenBalance
 } from 'redux/actions/ethereum';
+import { summaryFetchSuccess } from 'redux/actions/summaryData';
 
 const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
 
-const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalance }) => {
+const SummaryCards = ({
+  path,
+  ethereum: { wallet, address },
+  setTokenBalance,
+  userSummary: {slice, lp, withdrawn, lpList},
+  summaryFetchSuccess
+}) => {
   const { pathname } = window.location;
-  const fromWei = web3.utils.fromWei;
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
-  // const [stakingData, setStakingData] = useState(null);
-  const [stakedSlice, setStakedSlice] = useState(0);
-  const [stakedLPTokens, setStakedLPTokens] = useState(0);
-  const [withdrawn, setWithdrawn] = useState(0);
   // const [ratioIsLoading, setRatioIsLoading] = useState(false);
   const [collateralIsLoading, setCollateralIsLoading] = useState(false);
   const [loanIsLoading, setLoanIsLoading] = useState(false);
@@ -55,36 +56,21 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
-  const openModal = async (type, num) => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    address = !address ? onboard.getState().address : address;
-    setTokenBalance(SLICEAddress, address);
-    setTokenBalance(LPTokenAddress, address);
-    setModalType(type);
-    type ? setHasAllowance(false) : setHasAllowance(true);
-    if (num === 0) {
-      setSummaryModal(true);
-      setFirstIsOpen(false);
-      setSecondIsOpen(false);
-    } else if (num === 1) {
-      setSummaryModal(false);
-      setFirstIsOpen(true);
-      setSecondIsOpen(false);
-    } else if (num === 2) {
-      setSummaryModal(false);
-      setSecondIsOpen(true);
-      setFirstIsOpen(false);
+  
+  useEffect(() => {
+    const getStakingData = async () => {
+      const res = await axios(`${BASE_URL + stakingSummary + address}`);
+      const { result } = res.data;
+      summaryFetchSuccess(result);
+    };
+    if (isDesktop && pathname !== '/stake') {
+      getRatio();
+      getCollateral();
+      getLoan();
+    } else if (isDesktop && pathname === '/stake' && address) {
+      getStakingData();
     }
-  };
-
-  const closeModal = () => {
-    setFirstIsOpen(false);
-    setSecondIsOpen(false);
-    setModalType(true);
-    setSummaryModal(false);
-  };
+  }, [isDesktop, pathname, address, summaryFetchSuccess]);
 
   const getRatio = async () => {
     const res = await axios(`${BASE_URL + summaryRatio}`);
@@ -104,25 +90,36 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
     setLoan(result);
     setLoanIsLoading(false);
   };
+  
+  const openModal = async (type, num) => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    address = !address ? onboard.getState().address : address;
+    setTokenBalance(slice.address, address);
+    setTokenBalance(lp.address, address);
+    setModalType(type);
+    type ? setHasAllowance(false) : setHasAllowance(true);
+    if (num === 0) {
+      setSummaryModal(true);
+      setFirstIsOpen(false);
+      setSecondIsOpen(false);
+    } else if (num === 1) {
+      setSummaryModal(false);
+      setFirstIsOpen(true);
+      setSecondIsOpen(false);
+    } else if (num === 2) {
+      setSummaryModal(false);
+      setSecondIsOpen(true);
+      setFirstIsOpen(false);
+    }    
+  };    
 
-  useEffect(() => {
-    const getStakingData = async () => {
-      const res = await axios(`${BASE_URL + stakingSummary + address}`);
-      const { result } = res.data;
-      // setStakingData(result);
-      console.log(result)
-      setStakedSlice(result.slice.balance);
-      setStakedLPTokens(result.lp.balance);
-      setWithdrawn(result.withdrawn.balance);
-    };
-    if (isDesktop && pathname !== '/stake') {
-      getRatio();
-      getCollateral();
-      getLoan();
-    } else if (isDesktop && pathname === '/stake' && address) {
-      getStakingData();
-    }
-  }, [isDesktop, pathname, address]);
+  const closeModal = () => {
+    setFirstIsOpen(false);
+    setSecondIsOpen(false);
+    setModalType(true);
+    setSummaryModal(false);
+  };    
 
   return (
     <div>
@@ -135,12 +132,16 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
         </SummaryCardsWrapper>
       )}
 
-      <SummaryCardsWrapper className='container content-container' path={path} isDesktop={isDesktop}>
+      <SummaryCardsWrapper
+        className='container content-container'
+        path={path}
+        isDesktop={isDesktop}
+      >
         <SummaryCard
           title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
-          // tokenAddress={path !== 'stake' ? '' : stakingData && stakingData.slice}
+          tokenAddress={slice.address}
           isLoading={loanIsLoading}
-          value={path !== 'stake' ? loan : stakedSlice}
+          value={path !== 'stake' ? loan : slice.balance}
           path={path}
           type={path !== 'stake' ? 'loan' : 'slice'}
           details={path !== 'stake' ? '' : ''}
@@ -154,8 +155,9 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
         />
         <SummaryCard
           title={path !== 'stake' ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
-          isLP={true}
-          value={path !== 'stake' ? collateral : stakedLPTokens}
+          tokenAddress={lp.address}
+          lpList={lpList}
+          value={path !== 'stake' ? collateral : lp.balance}
           isLoading={collateralIsLoading}
           path={path}
           type={path !== 'stake' ? 'collateral' : 'lp'}
@@ -170,7 +172,7 @@ const SummaryCards = ({ path, ethereum: { wallet, address, web3 }, setTokenBalan
         />
         <SummaryCard
           title={path !== 'stake' ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
-          value={path !== 'stake' ? ratio : withdrawn}
+          value={path !== 'stake' ? ratio : withdrawn.balance}
           isLoading={false}
           path={path}
           type={path !== 'stake' ? 'ratio' : 'reward'}
@@ -190,13 +192,15 @@ SummaryCards.propTypes = {
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired
+  setWalletAndWeb3: PropTypes.func.isRequired,
+  summaryFetchSuccess: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
     path: state.path,
-    ethereum: state.ethereum
+    ethereum: state.ethereum,
+    userSummary: state.userSummary
   };
 };
 
@@ -206,5 +210,6 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
-  setTokenBalance
+  setTokenBalance,
+  summaryFetchSuccess
 })(SummaryCards);

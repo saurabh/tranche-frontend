@@ -7,8 +7,6 @@ import {
   SLICESetup,
   ERC20Setup,
   roundNumber,
-  roundBasedOnUnit,
-  gweiOrEther,
   isGreaterThan,
   isEqualTo
 } from 'utils';
@@ -25,6 +23,8 @@ import StakingModal from '../Modals/StakingModal';
 
 const SummaryCard = ({
   title,
+  tokenAddress,
+  isLP,
   value,
   type,
   details,
@@ -34,7 +34,7 @@ const SummaryCard = ({
   modalIsOpen,
   modalType,
   summaryModal,
-  ethereum: { tokenBalance, web3, address, notify },
+  ethereum: { web3, address, notify },
   form,
   hasAllowance,
   setHasAllowance
@@ -210,13 +210,13 @@ const SummaryCard = ({
             modalIsOpen={modalIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
+            tokenAddress={tokenAddress}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
             hasAllowance={hasAllowance}
             approveLoading={approveLoading}
             isLPToken={isLPToken}
-            tokenBalance={tokenBalance}
             // Functions
             stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
@@ -230,13 +230,13 @@ const SummaryCard = ({
           modalIsOpen={modalIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
+          tokenAddress={tokenAddress}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
           hasAllowance={hasAllowance}
           approveLoading={approveLoading}
           isLPToken={isLPToken}
-          tokenBalance={tokenBalance}
           // Functions
           stakingAllowanceCheck={stakingAllowanceCheck}
           stakingApproveContract={stakingApproveContract}
@@ -246,6 +246,7 @@ const SummaryCard = ({
     </div>
   );
 };
+
 SummaryCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired
@@ -256,6 +257,4 @@ const mapStateToProps = (state) => ({
   form: state.form
 });
 
-export default connect(mapStateToProps, {
-
-})(SummaryCard);
+export default connect(mapStateToProps, {})(SummaryCard);

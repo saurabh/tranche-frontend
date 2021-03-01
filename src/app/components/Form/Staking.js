@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber } from 'utils';
 import { fromWei } from 'services/contractMethods';
-import { pairData } from 'config/constants';
 import { selectUp, selectDown } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
@@ -45,21 +44,22 @@ let StakingForm = ({
   // State Values
   address,
   modalType,
+  isLPToken,
   hasAllowance,
   approveLoading,
-  isLPToken,
-  tokenBalance,
   // Functions
   stakingAllowanceCheck,
   stakingApproveContract,
-  adjustStake
+  adjustStake,
   // API Values
+  ethereum: {tokenBalance},
+  userSummary: { lpList }
 }) => {
+  const [selectedLP, setSelectedLP] = useState(0);
   const [amount, setAmount] = useState(0);
-  const pair = pairData[1].value;
-  let tokenAmount = isLPToken ? tokenBalance.LPT : tokenBalance.SLICE;
-  tokenAmount = (fromWei(tokenAmount.toString()));
   const tokenName = isLPToken ? 'LPT' : 'SLICE';
+  let balance = tokenBalance[tokenName];
+  balance = fromWei(balance.toString());
   const setLoanIdandAddress = useCallback(() => {
     change('address', address);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +68,13 @@ let StakingForm = ({
   useEffect(() => {
     setLoanIdandAddress();
   }, [setLoanIdandAddress]);
+
+  useEffect(() => {
+    if (lpList) {
+      let listKeys = Object.keys(lpList)
+      setSelectedLP(listKeys[0]);
+    }
+  }, [lpList]);
 
   const handleAmountChange = (amount) => {
     debounceAllowanceCheck(amount);
@@ -113,16 +120,16 @@ let StakingForm = ({
               </NewLoanInputWrapper>
               <LoanCustomSelect>
                 <Field
-                  name='pairId'
+                  name='selectLP'
                   component='input'
-                  id='selectPair'
+                  id='selectLP'
                   className='fieldStylingDisplay'
                 />
                 
                 <SelectCurrencyView>
                   <div>
-                    <img src={pairData[pair].img} alt='' />
-                    <h2>{pairData[pair].text}</h2>
+                    {/* <img src={pairData[pair].img} alt='' /> */}
+                    <h2>{selectedLP}</h2>
                   </div>
                   <SelectChevron>
                     <img src={selectUp} alt='' />
@@ -148,8 +155,8 @@ let StakingForm = ({
             </NewLoanFormInput>
             <h2>
               {modalType
-                ? `You have ${roundNumber(tokenAmount)} ${tokenName} available to stake`
-                : `You have ${roundNumber(tokenAmount)} ${tokenName} available to withdraw`}
+                ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
+                : `You have ${roundNumber(balance)} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
@@ -205,6 +212,7 @@ StakingForm = reduxForm({
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
+  userSummary: state.userSummary,
   initialValues: {
     address: '',
     amount: ''
