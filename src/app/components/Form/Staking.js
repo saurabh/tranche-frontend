@@ -65,6 +65,16 @@ let StakingForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
+  const setMaxSliceAmount = useCallback((e) => {
+    e.preventDefault();
+    let num = balance.replace(/,/g,'');
+    num = Number(num);
+    change('amount', num);
+    debounceAllowanceCheck(num);
+    setAmount(num);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [balance]);
+
   useEffect(() => {
     setLoanIdandAddress();
   }, [setLoanIdandAddress]);
@@ -102,7 +112,7 @@ let StakingForm = ({
                 <ModalFormLabel htmlFor='amount' tranche={true}>
                   Amount of SLICE to {modalType ? 'stake' : 'withdraw'}:
                 </ModalFormLabel>
-                <FieldWrapper modalType={modalType}>
+                <FieldWrapper modalType={modalType} staking={true}>
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleAmountChange(newValue)}
@@ -114,7 +124,7 @@ let StakingForm = ({
                     id='amount'
                   />
                   {modalType &&
-                    <button>MAX</button>
+                    <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>
                   }
                 </FieldWrapper>
               </NewLoanInputWrapper>
@@ -126,7 +136,7 @@ let StakingForm = ({
                   className='fieldStylingDisplay'
                 />
                 
-                <SelectCurrencyView>
+                <SelectCurrencyView staking={true}>
                   <div>
                     {/* <img src={pairData[pair].img} alt='' /> */}
                     <h2>{selectedLP}</h2>

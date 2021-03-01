@@ -349,6 +349,9 @@ const SelectCurrencyView = styled.div`
   position: relative;
   & > div{
     width: 100px;
+    ${({ staking }) => staking && `
+      width: 126px;
+    `}
     height: 19px;
     border-left: 2px solid #F1F1F1;
     display: flex;
@@ -577,9 +580,14 @@ const ApproveBtnWrapper = styled.div`
 `
 const FieldWrapper = styled.div`
   position: relative;
+  ${({ staking, modalType }) => staking && !modalType && `
+    input{
+      padding: 4px 134px 4px 10px;
+    }
+  `}
   ${({ modalType }) => modalType && `
     input{
-      padding: 4px 105px 4px 44px;
+      padding: 4px 134px 4px 44px;
     }
   `}
   button{
