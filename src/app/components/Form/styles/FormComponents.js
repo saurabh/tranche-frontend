@@ -379,8 +379,6 @@ const LoanCustomSelect = styled.div`
   right: 5px;
   bottom: 6px;
   align-self: flex-end;
-  
-
 `
 const SelectCurrencyOptions = styled.div`
   border-radius: 4px;
@@ -577,6 +575,35 @@ const ApproveBtnWrapper = styled.div`
     width: 133px !important;
   }
 `
+const FieldWrapper = styled.div`
+  position: relative;
+  ${({ modalType }) => modalType && `
+    input{
+      padding: 4px 105px 4px 44px;
+    }
+  `}
+  button{
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 0px;
+    background: transparent;
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 4px;
+    border-radius: 6px 0px 0px 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 6px 8px;
+    // color: rgb(57,41,90, 0.3);
+    color: #B3B3B3;
+    background: #F1F1F1;
+  }
+`
 
 
 
@@ -603,5 +630,6 @@ export {
   ModalFormInputAPY,
   ModalFormInputNewLoan,
   ModalNewLoanDetailsContent,
-  ApproveBtnWrapper
+  ApproveBtnWrapper,
+  FieldWrapper
 };

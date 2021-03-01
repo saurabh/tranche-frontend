@@ -21,7 +21,8 @@ import {
   SelectChevron,
   LoanCustomSelect,
   SelectCurrencyView,
-  ApproveBtnWrapper
+  ApproveBtnWrapper,
+  FieldWrapper
 } from './styles/FormComponents';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -94,18 +95,22 @@ let StakingForm = ({
                 <ModalFormLabel htmlFor='amount' tranche={true}>
                   Amount of SLICE to {modalType ? 'stake' : 'withdraw'}:
                 </ModalFormLabel>
-                <Field
-                  component={InputField}
-                  onChange={(e, newValue) => handleAmountChange(newValue)}
-                  validate={[required, number]}
-                  className='ModalFormInputNewLoan'
-                  name='amount'
-                  type='number'
-                  step='0.0001'
-                  id='amount'
-                />
+                <FieldWrapper modalType={modalType}>
+                  <Field
+                    component={InputField}
+                    onChange={(e, newValue) => handleAmountChange(newValue)}
+                    validate={[required, number]}
+                    className='ModalFormInputNewLoan'
+                    name='amount'
+                    type='number'
+                    step='0.0001'
+                    id='amount'
+                  />
+                  {modalType &&
+                    <button>MAX</button>
+                  }
+                </FieldWrapper>
               </NewLoanInputWrapper>
-
               <LoanCustomSelect>
                 <Field
                   name='pairId'
@@ -113,6 +118,7 @@ let StakingForm = ({
                   id='selectPair'
                   className='fieldStylingDisplay'
                 />
+                
                 <SelectCurrencyView>
                   <div>
                     <img src={pairData[pair].img} alt='' />
