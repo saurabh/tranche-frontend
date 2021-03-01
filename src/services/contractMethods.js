@@ -1,12 +1,13 @@
-import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JTrancheTokenSetup } from 'utils/contractConstructor';
+import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JTrancheTokenSetup, StakingSetup } from 'utils/contractConstructor';
 import store from '../redux/store';
-import { web3 as alchemyWeb3 } from 'utils/getWeb3';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees } from 'config';
 
-export const toWei = alchemyWeb3.utils.toWei;
-export const fromWei = alchemyWeb3.utils.fromWei;
-export const toBN = alchemyWeb3.utils.toBN;
+const state = store.getState();
+const { web3 } = state.ethereum;
+export const toWei = web3.utils.toWei;
+export const fromWei = web3.utils.fromWei;
+export const toBN = web3.utils.toBN;
 
 export const loanAllowanceCheck = async (pairId, amount, collateral = false) => {
   try {
@@ -148,6 +149,8 @@ export const getShareholderShares = async (loanId, address) => {
   }
 };
 
+// Tranche Calls
+
 export const getWithdrawableFunds = async (trancheAddress, address) => {
   try {
     const state = store.getState();
@@ -160,14 +163,16 @@ export const getWithdrawableFunds = async (trancheAddress, address) => {
   }
 }
 
-// export const withdrawFundsFromTranche = async (trancheAddress) => {
-//   try {
-//     const state = store.getState();
-//     const { web3, address } = state.ethereum;
-//     const TrancheToken = JTrancheTokenSetup(web3, trancheAddress);
-//     const result = await TrancheToken.methods.withdrawFunds().send({ from: address });
-//     return result;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
+// Staking Calls
+
+export const getAccruedStakingRewards = async (tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const Staking = StakingSetup(web3);
+    const result = await Staking.methods.getTotalReward(tokenAddress).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
