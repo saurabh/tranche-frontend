@@ -174,11 +174,10 @@ const StakingModal = ({
 
           <ModalActionsContent stakingMobile>
             <ModalActionDetails>
-              <ModalActionDetailsContent trade={true}>
+              <ModalActionDetailsContent stake={true} trade={true}>
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle>SLICE LOCKED</LoanDetailsRowTitle>
-                  {totalStaked}
-                  <LoanDetailsRowValue></LoanDetailsRowValue>
+                  <LoanDetailsRowValue>{totalStaked}</LoanDetailsRowValue>
                 </LoanDetailsRow>
 
                 <LoanDetailsRow trade={true}>
