@@ -21,7 +21,9 @@ import {
   LoanCustomSelect,
   SelectCurrencyView,
   ApproveBtnWrapper,
-  FieldWrapper
+  FieldWrapper,
+  SelectCurrencyOptions,
+  SelectCurrencyOption
 } from './styles/FormComponents';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -42,8 +44,9 @@ let StakingForm = ({
   change,
   formValues,
   // State Values
-  address,
   modalType,
+  tokenAddress,
+  setTokenAddress,
   isLPToken,
   hasAllowance,
   approveLoading,
@@ -51,40 +54,65 @@ let StakingForm = ({
   stakingAllowanceCheck,
   stakingApproveContract,
   adjustStake,
-  // API Values
-  ethereum: {tokenBalance},
-  userSummary: { lpList }
+  // Redux
+  ethereum: { tokenBalance, address },
+  userSummary: { slice, lpList }
 }) => {
-  const [selectedLP, setSelectedLP] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [LPSelect, toggleLP] = useState(false);
+  const [selectedLPName, setSelectedLPName] = useState(0);
+  const [dropdownName, setDropdownName] = useState([]);
   const [amount, setAmount] = useState(0);
-  const tokenName = isLPToken ? 'LPT' : 'SLICE';
-  let balance = tokenBalance[tokenName];
-  balance = fromWei(balance.toString());
-  const setLoanIdandAddress = useCallback(() => {
+  const tokenName = isLPToken ? selectedLPName : 'SLICE';
+
+  const setAddress = useCallback(() => {
     change('address', address);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  const setMaxSliceAmount = useCallback((e) => {
-    e.preventDefault();
-    let num = balance.replace(/,/g,'');
-    num = Number(num);
-    change('amount', num);
-    debounceAllowanceCheck(num);
-    setAmount(num);
+  const setMaxSliceAmount = useCallback(
+    (e) => {
+      e.preventDefault();
+      let num = balance.replace(/,/g, '');
+      num = Number(num);
+      change('amount', num);
+      debounceAllowanceCheck(num);
+      setAmount(num);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balance]);
+    [balance]
+  );
 
   useEffect(() => {
-    setLoanIdandAddress();
-  }, [setLoanIdandAddress]);
+    setAddress();
+  }, [setAddress]);
 
   useEffect(() => {
-    if (lpList) {
-      let listKeys = Object.keys(lpList)
-      setSelectedLP(listKeys[0]);
+    if (isLPToken && lpList) {
+      setDropdownName(lpList[0].name.split(' ')[0]);
+      setSelectedLPName(lpList[0].name);
+      setTokenAddress(lpList[0].address);
+      let balance = tokenBalance[lpList[0].address];
+      balance && setBalance(fromWei(balance.toString()));
+    } else {
+      setTokenAddress(slice.address)
+      let balance = tokenBalance[slice.address];
+      balance && setBalance(fromWei(balance.toString()));
     }
-  }, [lpList]);
+  }, [tokenBalance, tokenName, setTokenAddress, isLPToken, slice, lpList]);
+
+  const toggleLPSelect = () => {
+    toggleLP(!LPSelect);
+  };
+
+  const handleLPSelect = (e, index, tokenAddress) => {
+    e.preventDefault();
+    setDropdownName(lpList[index].name.split(' ')[0]);
+    setTokenAddress(tokenAddress)
+    let balance = tokenBalance[tokenAddress];
+    setBalance(fromWei(balance.toString()));
+    toggleLP(false)
+  };
 
   const handleAmountChange = (amount) => {
     debounceAllowanceCheck(amount);
@@ -94,7 +122,7 @@ let StakingForm = ({
   const debounceAllowanceCheck = useCallback(
     _.debounce(
       async (amount) => {
-        await stakingAllowanceCheck(amount);
+        await stakingAllowanceCheck(tokenAddress, amount);
       },
       500,
       { leading: true }
@@ -104,13 +132,13 @@ let StakingForm = ({
 
   return (
     <ModalAdjustForm>
-      <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e)}>
+      <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, tokenAddress)}>
         <FormInputsWrapper trade={true}>
           <ModalFormGrpNewLoan trade={true} tranche={true}>
             <NewLoanFormInput>
               <NewLoanInputWrapper name='amount'>
                 <ModalFormLabel htmlFor='amount' tranche={true}>
-                  Amount of SLICE to {modalType ? 'stake' : 'withdraw'}:
+                  Amount of {tokenName} to {modalType ? 'stake' : 'withdraw'}:
                 </ModalFormLabel>
                 <FieldWrapper modalType={modalType} staking={true}>
                   <Field
@@ -123,9 +151,7 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  {modalType &&
-                    <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>
-                  }
+                  {modalType && <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>}
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
@@ -135,32 +161,32 @@ let StakingForm = ({
                   id='selectLP'
                   className='fieldStylingDisplay'
                 />
-                
-                <SelectCurrencyView staking={true}>
+
+                <SelectCurrencyView staking={true} onClick={() => toggleLPSelect()}>
                   <div>
                     {/* <img src={pairData[pair].img} alt='' /> */}
-                    <h2>{selectedLP}</h2>
+                    <h2>{isLPToken ? dropdownName : 'SLICE'}</h2>
                   </div>
                   <SelectChevron>
                     <img src={selectUp} alt='' />
                     <img src={selectDown} alt='' />
                   </SelectChevron>
                 </SelectCurrencyView>
-                {/* {currencySelect ? (
-                    <SelectCurrencyOptions>
-                      {pairData.map((i) => {
-                        return (
-                          <SelectCurrencyOption key={i.key}>
-                            <button onClick={(e) => handleCurrencySelect(e, i.value)} value={i.key}>
-                              <img src={i.img} alt='' /> {i.text}
-                            </button>
-                          </SelectCurrencyOption>
-                        );
-                      })}
-                    </SelectCurrencyOptions>
-                  ) : (
-                    ''
-                  )} */}
+                {isLPToken && LPSelect ? (
+                  <SelectCurrencyOptions>
+                    {lpList.map((lp, index) => {
+                      return (
+                        <SelectCurrencyOption key={index}>
+                          <button onClick={(e) => handleLPSelect(e, index, lp.address)}>
+                            <img src={lp.img} alt='' /> {lp.name.split(' ')[0]}
+                          </button>
+                        </SelectCurrencyOption>
+                      );
+                    })}
+                  </SelectCurrencyOptions>
+                ) : (
+                  ''
+                )}
               </LoanCustomSelect>
             </NewLoanFormInput>
             <h2>
@@ -179,7 +205,7 @@ let StakingForm = ({
                   type='button'
                   loading={approveLoading ? 'true' : ''}
                   approved={hasAllowance}
-                  onClick={() => stakingApproveContract(formValues.amount)}
+                  onClick={() => stakingApproveContract(tokenAddress, formValues.amount)}
                 >
                   {!hasAllowance && !approveLoading ? (
                     <h2>Approve</h2>

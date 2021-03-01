@@ -96,12 +96,12 @@ export const gweiOrEther = (input, cryptoName) => {
   }
 };
 
-export const roundBasedOnUnit = (input, cryptoName) => {
+export const roundBasedOnUnit = (input, cryptoName, roundTo) => {
   try {
     if (gweiVariants.indexOf(gweiOrEther(input, cryptoName)) !== -1) {
       input *= 10 ** 9;
     }
-    const result = roundNumber(input);
+    const result = roundNumber(input, roundTo);
     return result;
   } catch (error) {
     console.error(error);

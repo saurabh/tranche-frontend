@@ -17,10 +17,11 @@ export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const StakingAddress = process.env.REACT_APP_STAKING_ADDRESS;
 export const ETHDAITrancheAAddress = process.env.REACT_APP_TRANCHE_A_ADDRESS;
 export const ETHDAITrancheBAddress = process.env.REACT_APP_TRANCHE_B_ADDRESS;
-export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
-export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS;
-export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
-export const LPTokenAddress = process.env.REACT_APP_SLICE_LPToken_ADDRESS;
+export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
+export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
+export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
+export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
+export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {

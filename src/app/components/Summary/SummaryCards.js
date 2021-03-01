@@ -26,14 +26,13 @@ const SummaryCards = ({
   path,
   ethereum: { wallet, address },
   setTokenBalance,
-  userSummary: {slice, lp, withdrawn, lpList},
+  userSummary: { slice, lp, withdrawn, lpList },
   summaryFetchSuccess
 }) => {
   const { pathname } = window.location;
   const [ratio, setRatio] = useState(null);
   const [collateral, setCollateral] = useState(null);
   const [loan, setLoan] = useState(null);
-  // const [ratioIsLoading, setRatioIsLoading] = useState(false);
   const [collateralIsLoading, setCollateralIsLoading] = useState(false);
   const [loanIsLoading, setLoanIsLoading] = useState(false);
   const [modalFirstIsOpen, setFirstIsOpen] = useState(false);
@@ -56,7 +55,7 @@ const SummaryCards = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-  
+
   useEffect(() => {
     const getStakingData = async () => {
       const res = await axios(`${BASE_URL + stakingSummary + address}`);
@@ -90,13 +89,21 @@ const SummaryCards = ({
     setLoan(result);
     setLoanIsLoading(false);
   };
-  
+
   const openModal = async (type, num) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalance(slice.address, address);
-    setTokenBalance(lp.address, address);
+    if (num === 1) {
+      setTokenBalance(slice.address, address);
+      // const result = getAccruedStakingRewards(slice.address);
+      // setAccruedStakingRewards(result);
+    }
+    if (num === 2) {
+      lpList.forEach((lp) => setTokenBalance(lp.address, address));
+      // const result = getAccruedStakingRewards(lp.address);
+      // setAccruedStakingRewards(result);
+    }
     setModalType(type);
     type ? setHasAllowance(false) : setHasAllowance(true);
     if (num === 0) {
@@ -111,15 +118,15 @@ const SummaryCards = ({
       setSummaryModal(false);
       setSecondIsOpen(true);
       setFirstIsOpen(false);
-    }    
-  };    
+    }
+  };
 
   const closeModal = () => {
     setFirstIsOpen(false);
     setSecondIsOpen(false);
     setModalType(true);
     setSummaryModal(false);
-  };    
+  };
 
   return (
     <div>
@@ -139,7 +146,6 @@ const SummaryCards = ({
       >
         <SummaryCard
           title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
-          tokenAddress={slice.address}
           isLoading={loanIsLoading}
           value={path !== 'stake' ? loan : slice.balance}
           path={path}
@@ -155,7 +161,6 @@ const SummaryCards = ({
         />
         <SummaryCard
           title={path !== 'stake' ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
-          tokenAddress={lp.address}
           lpList={lpList}
           value={path !== 'stake' ? collateral : lp.balance}
           isLoading={collateralIsLoading}

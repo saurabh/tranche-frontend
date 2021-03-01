@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { PagesData, txMessage, StakingAddress, LPTokenAddress, SLICEAddress } from 'config';
+import { PagesData, txMessage, StakingAddress } from 'config';
 import {
   StakingSetup,
-  SLICESetup,
   ERC20Setup,
   roundNumber,
   isGreaterThan,
@@ -23,7 +22,6 @@ import StakingModal from '../Modals/StakingModal';
 
 const SummaryCard = ({
   title,
-  tokenAddress,
   isLP,
   value,
   type,
@@ -56,11 +54,11 @@ const SummaryCard = ({
     type === 'lp' ? setLPToken(true) : setLPToken(false);
   }, [type])
 
-  const stakingAllowanceCheck = async (amount) => {
+  const stakingAllowanceCheck = async (tokenAddress, amount) => {
     try {
       if (modalType && amount !== '') {
         amount = toWei(amount);
-        const token = isLPToken ? ERC20Setup(web3, StakingAddress) : SLICESetup(web3);
+        const token = ERC20Setup(web3, tokenAddress);
         let userAllowance = await token.methods.allowance(address, StakingAddress).call();
         if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
           setHasAllowance(true);
@@ -73,10 +71,10 @@ const SummaryCard = ({
     }
   };
 
-  const stakingApproveContract = async (amount) => {
+  const stakingApproveContract = async (tokenAddress, amount) => {
     try {
       amount = toWei(amount);
-      const token = isLPToken ? ERC20Setup(web3, LPTokenAddress) : SLICESetup(web3);
+      const token = ERC20Setup(web3, tokenAddress);
       await token.methods
         .approve(StakingAddress, amount)
         .send({ from: address })
@@ -100,12 +98,11 @@ const SummaryCard = ({
     }
   };
 
-  const addStake = async () => {
+  const addStake = async (tokenAddress) => {
     try {
       const StakingContract = StakingSetup(web3);
       let { amount } = form.stake.values;
       amount = toWei(amount);
-      let tokenAddress = isLPToken ? LPTokenAddress : SLICEAddress;
       await StakingContract.methods
         .deposit(tokenAddress, amount)
         .send({ from: address })
@@ -124,12 +121,11 @@ const SummaryCard = ({
     }
   };
 
-  const withdrawStake = async () => {
+  const withdrawStake = async (tokenAddress) => {
     try {
       const StakingContract = StakingSetup(web3);
       let { amount } = form.stake.values;
       amount = toWei(amount);
-      let tokenAddress = isLPToken ? LPTokenAddress : SLICEAddress;
       await StakingContract.methods
         .withdraw(tokenAddress, amount)
         .send({ from: address })
@@ -148,10 +144,10 @@ const SummaryCard = ({
     }
   };
 
-  const adjustStake = (e) => {
+  const adjustStake = (e, tokenAddress) => {
     try {
       e.preventDefault();
-      modalType ? addStake() : withdrawStake();
+      modalType ? addStake(tokenAddress) : withdrawStake(tokenAddress);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -210,7 +206,6 @@ const SummaryCard = ({
             modalIsOpen={modalIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
-            tokenAddress={tokenAddress}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
@@ -230,7 +225,6 @@ const SummaryCard = ({
           modalIsOpen={modalIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
-          tokenAddress={tokenAddress}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
