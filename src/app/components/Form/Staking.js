@@ -107,6 +107,7 @@ let StakingForm = ({
 
   const handleLPSelect = (e, index, tokenAddress) => {
     e.preventDefault();
+    setSelectedLPName(lpList[index].name);
     setDropdownName(lpList[index].name.split(' ')[0]);
     setTokenAddress(tokenAddress)
     let balance = tokenBalance[tokenAddress];
