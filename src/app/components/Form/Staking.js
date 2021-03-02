@@ -70,23 +70,11 @@ let StakingForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  const setMaxSliceAmount = useCallback(
-    (e) => {
-      e.preventDefault();
-      let num = balance.replace(/,/g, '');
-      num = Number(num);
-      change('amount', num);
-      debounceAllowanceCheck(num);
-      setAmount(num);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance]
-  );
-
+  
   useEffect(() => {
     setAddress();
   }, [setAddress]);
-
+  
   useEffect(() => {
     if (isLPToken && lpList) {
       setDropdownName(lpList[0].name.split(' ')[0]);
@@ -99,12 +87,12 @@ let StakingForm = ({
       let balance = tokenBalance[slice.address];
       balance && setBalance(fromWei(balance.toString()));
     }
-  }, [tokenBalance, tokenName, setTokenAddress, isLPToken, slice, lpList]);
-
+  }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
+  
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);
   };
-
+  
   const handleLPSelect = (e, index, tokenAddress) => {
     e.preventDefault();
     setSelectedLPName(lpList[index].name);
@@ -119,16 +107,29 @@ let StakingForm = ({
     debounceAllowanceCheck(amount);
     setAmount(amount);
   };
+  
+  const setMaxSliceAmount = useCallback(
+    (e) => {
+      e.preventDefault();
+      let num = balance.replace(/,/g, '');
+      num = Number(num);
+      change('amount', num);
+      debounceAllowanceCheck(num.toString());
+      setAmount(num);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [balance]
+  );
 
   const debounceAllowanceCheck = useCallback(
     _.debounce(
       async (amount) => {
-        await stakingAllowanceCheck(tokenAddress, amount);
+        parseFloat(amount) > 0 && await stakingAllowanceCheck(tokenAddress, amount);
       },
       500,
       { leading: true }
     ),
-    []
+    [tokenAddress]
   );
 
   return (
@@ -152,7 +153,7 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  {modalType && <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>}
+                  <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
