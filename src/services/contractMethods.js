@@ -190,6 +190,7 @@ export const getLoansAccruedInterest = async (trancheId, startIndex, stopIndex) 
     const result = await JProtocol.methods
       .getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex)
       .call();
+    return result;
   } catch (error) {
     console.error(error);
   }
