@@ -223,6 +223,7 @@ let TradeForm = ({
                   loading={approveLoading ? 'true' : ''}
                   approved={hasAllowance}
                   onClick={() => earnApproveContract(formValues.amount, sellToggle)}
+                  validate={[required, number]}
                 >
                   {!hasAllowance && !approveLoading ? (
                     <h2>Approve</h2>
