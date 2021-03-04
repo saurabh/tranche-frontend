@@ -278,6 +278,7 @@ const WalletBtnIcon = styled.div`
   align-items: center;
 `;
 
+
 const WalletBtnText = styled.div`
   & > h2 {
     font-family: "Inter", sans-serif;;
