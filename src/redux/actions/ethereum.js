@@ -45,12 +45,11 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
     const state = store.getState();
     const { web3 } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
-    const tokenSymbol = await token.methods.symbol().call();
     const tokenBalance = await token.methods.balanceOf(address).call();
 
     dispatch({
       type: SET_TOKEN_BALANCE,
-      payload: { tokenSymbol, tokenBalance }
+      payload: { tokenAddress, tokenBalance }
     });
   } catch (error) {
     console.error(error);

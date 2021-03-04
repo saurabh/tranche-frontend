@@ -5,7 +5,12 @@ import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 import { useOuterClick } from 'services/useOuterClick';
 import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
-import { fromWei, toWei, getWithdrawableFunds } from 'services/contractMethods';
+import {
+  fromWei,
+  toWei,
+  getWithdrawableFunds,
+  getLoansAccruedInterest
+} from 'services/contractMethods';
 import {
   setAddress,
   setNetwork,
@@ -113,10 +118,12 @@ const TableCard = ({
   const [hasBalance, setHasBalance] = useState(false);
   const [withdrawableFunds, setWithdrawableFunds] = useState(0);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  const [loansAccruedInterest, setLoansAccruedInterest] = useState(0);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [disableBtn, setDisableBtn] = useState(false);
+  const limit = 2;
   rpbRate = rpbRate && rpbRate.toString().split('.')[0];
   rpbRate = rpbRate && fromWei(rpbRate);
   let disableBtn = false;
@@ -173,15 +180,17 @@ const TableCard = ({
 
   const earnAllowanceCheck = async (amount, sellToggle) => {
     try {
-      amount = toWei(amount);
-      const token = sellToggle
-        ? ERC20Setup(web3, trancheTokenAddress)
-        : ERC20Setup(web3, buyerCoinAddress);
-      let userAllowance = await token.methods.allowance(address, contractAddress).call();
-      if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-        setHasAllowance(true);
-      } else {
-        setHasAllowance(false);
+      if (amount !== '') {
+        amount = toWei(amount);
+        const token = sellToggle
+          ? ERC20Setup(web3, trancheTokenAddress)
+          : ERC20Setup(web3, buyerCoinAddress);
+        let userAllowance = await token.methods.allowance(address, contractAddress).call();
+        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
+          setHasAllowance(true);
+        } else {
+          setHasAllowance(false);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -323,15 +332,21 @@ const TableCard = ({
     address = !address ? onboard.getState().address : address;
     setTokenBalances(address);
     setTrancheTokenBalances(name, trancheTokenAddress, address);
-    const result = await getWithdrawableFunds(trancheTokenAddress, address);
-    setWithdrawableFunds(fromWei(result));
+    // console.log(trancheTokenAddress, address)
+    // const result = await getWithdrawableFunds(trancheTokenAddress, address);
+    // console.log(result)
+    // setWithdrawableFunds(fromWei(result));
     setIsOpen(true);
   };
 
-  const widthdrawToggle = () => {
+  const widthdrawToggle = async () => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    const result = await getLoansAccruedInterest(trancheId, 0, limit - 1);
+    setLoansAccruedInterest(fromWei(result));
     openModal();
     setWithdrawModal(true);
-  }
+  };
 
   const closeModal = () => {
     setIsOpen(false);
@@ -649,44 +664,34 @@ const TableCard = ({
 
           </TableContentCardMobile>
           <TradeModal
-              // State Values
-              path={path}
-              modalIsOpen={modalIsOpen}
-              // approveLoading={approveLoading}
-              // hasBalance={hasBalance}
-              // hasAllowance={hasAllowance}
-              // isShareholder={isShareholder}
-              // canBeForeclosed={canBeForeclosed}
-              // blocksUntilForeclosure={blocksUntilForeclosure}
-              // accruedInterest={accruedInterest}
-              // totalInterest={totalInterest}
-              // newCollateralRatio={newCollateralRatio}
-              // setHasAllowance={setHasAllowance}
-              // setNewCollateralRatio={setNewCollateralRatio}
-              // Functions
-              closeModal={() => closeModal()}
-              // approveContract={approveContract}
-              // adjustLoan={adjustLoan}
-              // calcNewCollateralRatio={calcNewCollateralRatio}
-              // closeLoan={closeLoan}
-              // approveLoan={approveLoan}
-              // withdrawInterest={withdrawInterest}
-              // forecloseLoan={forecloseLoan}
-              // tradeType={tradeType}
-              // // API Values
-              // loanId={loanId}
-              // status={status}
-              // pairId={pairId}
-              // contractAddress={contractAddress}
-              // remainingLoan={remainingLoan}
-              // cryptoFromLenderName={cryptoFromLenderName}
-              // collateralAmount={collateralAmount}
-              // collateralTypeName={collateralTypeName}
-              // collateralRatio={collateralRatio}
-              // interestPaid={interestPaid}
-              // APY={apy}
-              // rpbRate={rpbRate && fromWei(rpbRate.toString())}
-            />
+            // State Values
+            path={path}
+            modalIsOpen={modalIsOpen}
+            hasAllowance={hasAllowance}
+            withdraw={withdrawModal}
+            approveLoading={approveLoading}
+            hasBalance={hasBalance}
+            availableAmount={availableAmount}
+            trancheTokenBalance={trancheTokenBalance}
+            withdrawableFunds={withdrawableFunds}
+            loansAccruedInterest={loansAccruedInterest}
+            // Functions
+            closeModal={() => closeModal()}
+            earnAllowanceCheck={earnAllowanceCheck}
+            earnApproveContract={earnApproveContract}
+            setLoansAccruedInterest={setLoansAccruedInterest}
+            buySellTrancheTokens={buySellTrancheTokens}
+            withdrawFundsFromTranche={withdrawFundsFromTranche}
+            // API Values
+            trancheId={trancheId}
+            trancheName={name}
+            trancheType={type}
+            trancheTokenAddress={trancheTokenAddress}
+            amount={amount}
+            subscriber={subscriber}
+            cryptoType={cryptoType}
+            rpbRate={rpbRate}
+          />
       </TableContentCardWrapperMobile>
     );
   }

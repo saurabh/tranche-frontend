@@ -401,6 +401,9 @@ const ModalUserActions = styled.div`
 `
 const ModalActionDetailsContent = styled.div`
   min-height: 290px;
+  ${({ stake }) => stake && `
+    min-height: 100px;
+  `}
   height: 100%;
   display: flex;
   flex-direction: column;
