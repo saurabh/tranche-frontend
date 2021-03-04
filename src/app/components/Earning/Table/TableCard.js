@@ -8,7 +8,7 @@ import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractCo
 import {
   fromWei,
   toWei,
-  getWithdrawableFunds,
+  // getWithdrawableFunds,
   getLoansAccruedInterest
 } from 'services/contractMethods';
 import {
@@ -116,7 +116,7 @@ const TableCard = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
-  const [withdrawableFunds, setWithdrawableFunds] = useState(0);
+  // const [withdrawableFunds, setWithdrawableFunds] = useState(0);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [loansAccruedInterest, setLoansAccruedInterest] = useState(0);
   // const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -555,7 +555,7 @@ const TableCard = ({
               hasBalance={hasBalance}
               availableAmount={availableAmount}
               trancheTokenBalance={trancheTokenBalance}
-              withdrawableFunds={withdrawableFunds}
+              // withdrawableFunds={withdrawableFunds}
               // Functions
               closeModal={() => closeModal()}
               earnAllowanceCheck={earnAllowanceCheck}
@@ -673,7 +673,7 @@ const TableCard = ({
             hasBalance={hasBalance}
             availableAmount={availableAmount}
             trancheTokenBalance={trancheTokenBalance}
-            withdrawableFunds={withdrawableFunds}
+            // withdrawableFunds={withdrawableFunds}
             loansAccruedInterest={loansAccruedInterest}
             // Functions
             closeModal={() => closeModal()}

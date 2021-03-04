@@ -253,11 +253,11 @@ const WalletBtn = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 182px;
-  height: 46px;
+  width: 155px;
+  height: 40px;
   background: ${(props) => props.background} !important;
   border-radius: 30px;
-  padding: 0 13px;
+  padding: 0 14px;
   border: none;
   cursor: pointer;
   ${({ icon }) =>
@@ -283,7 +283,7 @@ const WalletBtnText = styled.div`
     font-family: "Inter", sans-serif;;
     font-style: normal;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 12px;    
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: uppercase;

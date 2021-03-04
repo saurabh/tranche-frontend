@@ -96,7 +96,7 @@ const StakingModal = ({
   approveLoading,
   tokenBalance,
   type,
-  tokenAddress,
+  // tokenAddress,
   // Functions
   closeModal,
   openModal,
@@ -206,8 +206,8 @@ const StakingModal = ({
                   <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
                 </LoanDetailsRow>
                 <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle>ACCRUED REWARDS</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue>{accruedStakingRewards}</LoanDetailsRowValue>
+                  <LoanDetailsRowTitle stake>ACCRUED REWARDS</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{accruedStakingRewards}</LoanDetailsRowValue>
                 </LoanDetailsRow>
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle stake>REWARDS PER BLOCK</LoanDetailsRowTitle>
