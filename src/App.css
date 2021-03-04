@@ -17,6 +17,7 @@ html{
   background: #ffffff;
   transition: all 0.3s ease-in-out;
   width: 23px;
+
 }
 .NavIconActive span:nth-child(1){ 
   transform: translateY(6px) rotate(45deg);

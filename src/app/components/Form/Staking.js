@@ -47,6 +47,7 @@ let StakingForm = ({
   isLPToken,
   hasAllowance,
   approveLoading,
+  path,
   // Functions
   stakingAllowanceCheck,
   stakingApproveContract,
@@ -180,13 +181,14 @@ let StakingForm = ({
                   loading={approveLoading ? 'true' : ''}
                   approved={hasAllowance}
                   onClick={() => stakingApproveContract(formValues.amount)}
+                  backgroundColor={path === "stake" ? "#4441CF" : ""}
                 >
                   {!hasAllowance && !approveLoading ? (
                     <h2>Approve</h2>
                   ) : !hasAllowance && approveLoading ? (
                     <div className='btnLoadingIconWrapper'>
                       <div className='btnLoadingIconCut'>
-                        <BtnLoadingIcon loadingColor='#936CE6'></BtnLoadingIcon>
+                        <BtnLoadingIcon loadingColor={path === "stake" ? "#4441CF" : "#936CE6"}></BtnLoadingIcon>
                       </div>
                     </div>
                   ) : hasAllowance && !approveLoading ? (
@@ -202,8 +204,9 @@ let StakingForm = ({
 
             <ModalFormButton
               type='submit'
-              backgroundColor={modalType ? '#0071F5' : !modalType ? '#FD8383' : '#845AD9'}
+              backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}
               disabled={!hasAllowance || amount === 0}
+              stake
             >
               <h2>{modalType ? 'STAKE' : !modalType ? 'WITHDRAW' : ''}</h2>
             </ModalFormButton>

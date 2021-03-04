@@ -19,7 +19,7 @@ import ErrorModal from 'app/components/Modals/Error';
 import Earn from 'app/pages/Earn';
 import Borrow from 'app/pages/Borrow';
 import Trade from 'app/pages/Trade';
-import Staking from 'app/pages/Staking';
+import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
@@ -139,7 +139,7 @@ const App = ({
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/earn'} component={Trade} />
-            <Route exact path={baseRouteUrl + '/stake'} component={Staking} />
+            <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />
             <Route component={NotFound} />

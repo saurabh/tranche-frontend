@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body{
-    background-color: #F2F2F2;
+    background-color: #F9F9FE;
     font-family: 'Roboto', sans-serif;
     overflow-x: hidden;
   }
@@ -89,7 +89,7 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   .accrued-wrapper{
-    width: 15%;
+    width: 10%;
     .accrued-title-content div{
       right: 40px !important;
     }
@@ -116,9 +116,44 @@ const GlobalStyle = createGlobalStyle`
     }
     width: 12%;
   }
+  .stake-status{
+    text-align: center;
+    .apy-content div{
+      right: 20px !important;
+    }
+    .status-title-content div{
+      right: 27px !important;
+    }
+    .staking-title-content div{
+      right: 29px !important;
+    }
+    .bondApy-title-content div{
+      right: 20px !important;
+    }
+    width: 30%;
+  }
   // .status-wrapper h2{
   //   margin-left: 15px;
   // }
+  .staked-wrapper{
+    width: 14%;
+    .tranche-size-content div{
+      right: 10px !important;
+    }
+    .remaining-title-content div{
+      right: 25px !important;
+    }
+    .staked-title-content div{
+      right: 29px !important;
+    }
+
+    .value-title-content div{
+      right: 7px !important;
+    }
+    h2{
+      text-align: center;
+    }
+  }
   .remaining-wrapper{
     width: 12%;
     .tranche-size-content div{
@@ -154,7 +189,7 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   .reward-wrapper{
-    width: 9%;
+    width: 12%;
     .return-content div{
       right: -25px !important;
     }
@@ -198,6 +233,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .head-btns-wrapper{
     width: 18%;
+  }
+  .status-btns{
+    width: 0%;
   }
   // @media (min-width: 992px){
   //   container{

@@ -22,7 +22,9 @@ import {
   LoanDetailsRowValue,
   LoanDetailsMobile,
   StakingModalRow,
-  StakingModalWrapper
+  StakingModalWrapper,
+  SliceNotFound,
+  SliceNotFoundBtn
 } from './styles/ModalsComponents';
 import {
   SummaryCardCounter,
@@ -58,19 +60,48 @@ const FirstCustomStyles = {
     bottom: '0'
   }
 };
+const NotFoundStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '292px',
+    width: '100%',
+    minHeight: '245px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
 
 Modal.setAppElement('#root');
 
 const StakingModal = ({
   // State Values
   summaryModal,
-  // path,
+  path,
   modalIsOpen,
   modalType,
   isLPToken,
   hasAllowance,
   approveLoading,
   tokenBalance,
+  type,
   tokenAddress,
   // Functions
   closeModal,
@@ -117,7 +148,7 @@ const StakingModal = ({
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
       >
-        <ModalHeader>
+        <ModalHeader stake>
           <h2>{modalType ? 'STAKE SLICE TOKENS' : !modalType ? 'WITHDRAW SLICE TOKENS' : ''}</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
@@ -173,18 +204,17 @@ const StakingModal = ({
         </ModalActionsContent> : 
 
           <ModalActionsContent stakingMobile>
-            <ModalActionDetails>
-              <ModalActionDetailsContent trade={true}>
+            <ModalActionDetails color={modalType ? "#4441CF" : "#6E41CF"} stake>
+              <ModalActionDetailsContent trade={true} stake>
                 <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle>SLICE LOCKED</LoanDetailsRowTitle>
-                  {totalStaked}
-                  <LoanDetailsRowValue></LoanDetailsRowValue>
+                  <LoanDetailsRowTitle stake>SLICE LOCKED</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
                 </LoanDetailsRow>
 
                 <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle>REWARDS PER BLOCK</LoanDetailsRowTitle>
+                  <LoanDetailsRowTitle stake>REWARDS PER BLOCK</LoanDetailsRowTitle>
 
-                  <LoanDetailsRowValue>
+                  <LoanDetailsRowValue stake>
                   {rewardsPerBlock}
                   </LoanDetailsRowValue>
                 </LoanDetailsRow>
@@ -199,6 +229,7 @@ const StakingModal = ({
               stakingAllowanceCheck={stakingAllowanceCheck}
               stakingApproveContract={stakingApproveContract}
               adjustStake={adjustStake}
+              path={path}
             />
             <LoanDetailsMobile>
             <h2>
@@ -217,7 +248,40 @@ const StakingModal = ({
       </Modal>
     );
   };
-  return stakingModal();
+  const notFound = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={NotFoundStyles}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+      >
+        <ModalHeader notFound>
+          <button onClick={() => modalClose()}>
+            <img src={CloseModal} alt='' />
+          </button>
+        </ModalHeader>
+        {
+          type === 'lp' ?
+          <SliceNotFound>
+            <p>You don’t have any <strong>SLICE-LP</strong> available to stake. Click the button below to go to UniSwap and get <strong>SLICE-LP</strong> Tokens</p>
+            <SliceNotFoundBtn color="#1E80DA">
+              <a href="https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1" target="_blank" rel="noopener noreferrer">GET SLICE LP TOKENS</a>
+            </SliceNotFoundBtn>
+          </SliceNotFound>  : 
+          <SliceNotFound>
+            <p>You don’t have any <strong>SLICE</strong> available to stake. Click the button below to purchase<strong>SLICE</strong> Tokens</p>
+            <SliceNotFoundBtn color="#4441CF">
+              <a href="https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1" target="_blank" rel="noopener noreferrer">GET SLICE TOKENS</a>
+            </SliceNotFoundBtn>
+          </SliceNotFound>
+        }
+      </Modal>
+    );
+  };
+  return true ? stakingModal() : notFound();
 };
 
 StakingModal.propTypes = {
@@ -226,7 +290,8 @@ StakingModal.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  stakingData: state.data.stakingList
+  stakingData: state.data.stakingList,
+  path: state.path
 });
 
 export default connect(mapStateToProps, {

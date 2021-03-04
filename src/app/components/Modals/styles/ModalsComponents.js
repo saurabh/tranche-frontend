@@ -34,9 +34,22 @@ padding: 0 35px;
     font-size: 12px;
   }
 }
+${({ stake }) => stake && `
+  h2{
+    color: #FFFFFF;
+  }
+`}
 ${({ error }) => error && `
   position: relative;
 `}
+${({ notFound }) => notFound && `
+  height: 46px;
+  justify-content: flex-end;
+  position: relative;
+  padding: 0 10px;
+`}
+
+
 
 `
 const ModalContent = styled.div`
@@ -373,6 +386,10 @@ const ModalActionDetails = styled.div`
     max-width: initial;
     display: none;
   }
+  ${({ stake, color}) => stake && color && `
+    background: ${color};
+  `}
+  
 `
 
 const ModalUserActions = styled.div`
@@ -393,6 +410,10 @@ const ModalActionDetailsContent = styled.div`
   }
   ${({ row4 }) => row4 && `
     min-height: 350px;
+  `}
+
+  ${({ stake }) => stake && `
+    min-height: 100px;
   `}
 
 `
@@ -423,6 +444,9 @@ const LoanDetailsRowTitle = styled.h2`
   ${({ row4 }) => row4 && `
     font-size: 12px;
   `}
+  ${({ stake }) => stake && `
+    color: #FFFFFF;
+  `}
 `
 const LoanDetailsRowValue = styled.h2`
   font-style: normal;
@@ -434,6 +458,9 @@ const LoanDetailsRowValue = styled.h2`
   margin: 5px 0 0 0;
   ${({ cursor }) => cursor && `
     cursor: ${cursor}
+  `}
+  ${({ stake }) => stake && `
+    color: #FFFFFF;
   `}
 `
 const ModalTextConfirm = styled.div`
@@ -563,7 +590,56 @@ const StakingModalWrapper = styled.div`
   margin: 100px 0;
 `;
 
+const SliceNotFound = styled.div`
+  min-height: 199px; 
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    margin: 12px 0 0 0;
+    text-align: center;
+    color: #3F3F3F;
+    padding: 0 23px;
+    width: 100%;
+  }
+`;
 
+const SliceNotFoundBtn = styled.div`
+  background: #F7F7FF;
+  min-height: 67px;
+  height: 100%;
+  padding: 0 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  a{
+    min-height: 33px;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    color: #FFFFFF;
+    background: ${props => props.color};
+    box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
+    border-radius: 4px;
+    width: 100%;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  ]
+  }
+`;
 
 export {
     ModalHeader, 
@@ -592,5 +668,7 @@ export {
     BtnLoadingIcon,
     LoanDetailsMobile,
     StakingModalRow,
-    StakingModalWrapper
+    StakingModalWrapper,
+    SliceNotFound,
+  SliceNotFoundBtn
 };

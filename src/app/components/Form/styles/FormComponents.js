@@ -208,10 +208,11 @@ const ModalFormButton = styled.button`
   
 
   
-  ${({ loading }) => loading === 'true' && `
+  ${({ loading,  backgroundColor}) => loading === 'true' && `
     background: transparent !important;
     cursor: unset !important;
-    border: 1px solid #936CE6 !important;
+    // border: 1px solid #936CE6 !important;
+    border: 1px solid ${backgroundColor ? backgroundColor : "#936CE6"} !important;
     pointer-events: none !important;
     box-shadow: none !important;
   `}
@@ -258,6 +259,10 @@ const ModalFormButton = styled.button`
     background: #EAEAEA;
     color: rgba(35, 69, 102, 0.7);
   `}
+  ${({ stake }) => stake && `
+    width: 133px;
+  `}
+  
 
 `
 const NewLoanInputWrapper = styled.div`
