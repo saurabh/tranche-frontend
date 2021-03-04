@@ -332,8 +332,10 @@ const TableCard = ({
     address = !address ? onboard.getState().address : address;
     setTokenBalances(address);
     setTrancheTokenBalances(name, trancheTokenAddress, address);
-    const result = await getWithdrawableFunds(trancheTokenAddress, address);
-    setWithdrawableFunds(fromWei(result));
+    // console.log(trancheTokenAddress, address)
+    // const result = await getWithdrawableFunds(trancheTokenAddress, address);
+    // console.log(result)
+    // setWithdrawableFunds(fromWei(result));
     setIsOpen(true);
   };
 

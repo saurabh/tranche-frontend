@@ -245,7 +245,7 @@ const TradeModal = ({
               <ModalContent>
                 <BtnGrpLoanModal>
                   <BtnGrpLoanModalWrapper>
-                    <h2>
+                    {/* <h2>
                       {trancheType === 'TRANCHE_A' && amount === subscriber
                         ? 'Tranche A is oversubscribed and there are no availble allocations'
                         : trancheType === 'TRANCHE_B'
@@ -253,13 +253,17 @@ const TradeModal = ({
                         : !hasBalance
                         ? `You don't have enough ${cryptoType} for this action.`
                         : `There are ${availableAmount} Tranche A tokens available for purchase`}
-                    </h2>
+                    </h2> */}
+                    {/* <h2>
+                      {!hasBalance
+                        ? `You don't have enough ${cryptoType} for this action.` : ''}
+                    </h2> */}
                     <ModalButton
                       trade={true}
                       onClick={() => buyTranche(0)}
                       btnColor='#FFFFFF'
                       backgroundColor='#2ECC71'
-                      disabled={!hasBalance || amount === subscriber}
+                      // disabled={!hasBalance}
                     >
                       BUY {trancheType === 'TRANCHE_A' ? 'TRANCHE A' : 'TRANCHE B'}
                       <span></span>
