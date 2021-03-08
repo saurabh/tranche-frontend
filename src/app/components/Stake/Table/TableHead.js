@@ -67,7 +67,7 @@ const TableHead = ({changeSorting, path}) => {
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "ratio-wrapper" : path === "stake" ? "reward-wrapper" : "return-wrapper"}>
                     <div className={(path === "lend" || path === "borrow") ? "ratio-title-content" : path === "stake" ? "reward-title-content" : "return-content"} onClick={() => sortLoans(path === "earn" ? "rpbRate" : path === "stake" ? "reward" : "collateralRatio")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD/BLOCK" : "RETURN/BLOCK"}</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Ratio" : ''}</h2>
          
                     </div>
                 </TableHeadTitle>
@@ -127,7 +127,7 @@ const TableHead = ({changeSorting, path}) => {
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD"  : "RETURN"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : ''}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>

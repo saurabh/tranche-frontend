@@ -52,7 +52,7 @@ import {
 } from './styles/TableComponents';
 
 const TableCard = ({
-  staking: { contractAddress, isActive, reward, staked, type },
+  staking: { contractAddress, isActive, staked, type },
   // trade: { tradeType },
   path,
   ethereum: { web3 }
@@ -60,6 +60,12 @@ const TableCard = ({
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   let moreCardToggle = false;
+  console.log(staked)
+  staked = staked.toString().split('.')[0];
+  console.log(staked)
+  staked = web3.utils.fromWei(staked);
+  console.log(staked)
+  console.log('---------')
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -118,16 +124,9 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' stake>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <h2>{staked}</h2>
+              {roundBasedOnUnit(staked, 'SLICE')} {gweiOrEther(staked, 'SLICE')}
             </SecondColContent>
           </TableSecondCol>
-          <TableThirdCol className={'table-col table-fourth-col-return '} stake>
-            <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>
-                {roundBasedOnUnit(reward, 'SLICE')} {gweiOrEther(reward, 'SLICE')}
-              </h2>
-            </ThirdColContent>
-          </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content'>
               {/* <h2></h2> */}
@@ -168,15 +167,7 @@ const TableCard = ({
 
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{staked}</h2>
-              {/* <h2></h2> */}
-            </TableMobilColContent>
-          </TableColMobile>
-
-          <TableColMobile stake>
-            <TableMobilColContent col>
-              <h2>{reward}</h2>
-              {/* <h2></h2> */}
+              {roundBasedOnUnit(staked, 'SLICE')} {gweiOrEther(staked, 'SLICE')}
             </TableMobilColContent>
           </TableColMobile>
 
