@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import detector from "i18next-browser-languagedetector";
 import translationEN from './translationEN.json';
 import translationZH from './translationZH.json';
+import translationKR from './translationKR.json';
 
 i18n.on('languageChanged', function (lng) {
   if (lng === i18n.options.fallbackLng[0]) {
@@ -23,9 +24,12 @@ i18n
       },
       zh: {
         translation: translationZH
+      },
+      kr: {
+        translation: translationKR
       }
     },
-    whitelist: ['en', 'zh'],
+    whitelist: ['en', 'zh', "kr"],
     fallbackLng: ['en'],
     detection: {
       order: ['path'],

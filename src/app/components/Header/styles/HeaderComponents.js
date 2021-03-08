@@ -1,23 +1,23 @@
 import styled from "styled-components";
 
 const HeaderWrapper = styled.div`
-  min-height: 330px;
-  background-color: ${(props) => props.color};
-  position: relative;
+  min-height: 169px;
+  border-radius: 13px;
+  padding: 0 46px;
   display: flex;
+  justify-content: center;
+  background: linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);
+  position: relative;
   flex-direction: column;
-  justify-content: space-between;
   @media (max-width: 767px){
     min-height: 100px;
+    padding: 0 20px;
   }
 `;
 const HeaderContent = styled.div`
   margin: 39px 0px;
   @media (max-width: 992px) {
     margin: 39px 0px;
-  }
-  @media (max-width: 767px){
-    display: none;
   }
   ${({ path }) =>
     (path === "privacy" || path === "terms") &&
@@ -29,21 +29,42 @@ const HeaderContent = styled.div`
             transform: translate(-50%, 50%);
         }
     `}
+    ${({ path }) =>
+    (path !== "stake") &&
+    `
+      @media (max-width: 767px){
+        display: none;
+      }
+    `}
 `;
 const HeaderTitle = styled.div`
   & > h2 {
-    font-weight: 500;
-    font-size: 36px;
-    line-height: 42px;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 36px;
+    align-items: center;
+    color: #FFFFFF;
+    @media (max-width: 767px){
+      font-size: 20px;
+    }
   }
 `;
 const HeaderSubtitle = styled.div`
   & > h2 {
-    font-weight: 400;
-    font-size: 12px;
-    letter-spacing: 0.05em;
     margin-top: 9px;
-    text-transform: uppercase;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 21px;
+    color: rgba(255, 255, 255, 0.8);
+    @media (max-width: 767px){
+      font-size: 12px;
+      margin-top: 0;
+    }
+
     ${({ fontSize }) =>
       fontSize &&
       `
@@ -53,11 +74,13 @@ const HeaderSubtitle = styled.div`
 `;
 
 const NavbarWrapper = styled.div`
-  height: 85px;
+  height: 112px;
   position: relative;
+  border-bottom: 2px solid #E9E9FC;
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
+    border: none;
   }
 `;
 const NavbarContainer = styled.div`
@@ -80,41 +103,17 @@ const NavbarLinks = styled.div`
     width: auto;
   `}
   & > a {
-    position: relative;
-    display: inline-block;
-    font-family: "Roboto", sans-serif;
+    // display: inline-block;
+    font-family: 'Inter';
     font-style: normal;
-    font-weight: 700;
-    font-size: 15px;
-    transition: clip-path 275ms ease;
-    line-height: 18px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
     letter-spacing: 0.05em;
-    text-decoration: none;
     text-transform: uppercase;
-    color: #ffffff;
-    opacity: 0.5;
-    @media (max-width: 992px) {
-      margin: 5px 0;
-    }
-    span {
-      position: absolute;
-      display: inline-block;
-      color: #ffffff;
-      white-space: nowrap;
-      :before {
-        position: absolute;
-        top: 0;
-        content: attr(data-content);
-        color: #ffffff;
-        border-bottom: 2px solid #ffffff;
-        clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
-        transition: clip-path 275ms ease;
-      }
-    }
-    :hover {
-      span:before {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-      }
+    color: rgba(68, 65, 207, 0.5);
+    :hover{
+      color: rgba(68, 65, 207, 0.6);
     }
   }
   @media (max-width: 992px) {
@@ -125,7 +124,9 @@ const NavbarLinks = styled.div`
 const HeaderTabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100px;
   @media (max-width: 992px){
     flex-direction: row;
     // width: auto;
@@ -133,9 +134,9 @@ const HeaderTabsWrapper = styled.div`
     margin: 0;
   }
 
-  ${({ path }) => path === "stake" && `
-    justify-content: flex-end;
-  `}
+  // ${({ path }) => path === "stake" && `
+  //   justify-content: flex-end;
+  // `}
   
 
 
@@ -253,11 +254,11 @@ const WalletBtn = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 119px;
-  height: 30px;
+  width: 155px;
+  height: 40px;
   background: ${(props) => props.background} !important;
-  border-radius: 9px;
-  padding: 0 13px;
+  border-radius: 30px;
+  padding: 0 14px;
   border: none;
   cursor: pointer;
   ${({ icon }) =>
@@ -280,17 +281,15 @@ const WalletBtnIcon = styled.div`
 
 const WalletBtnText = styled.div`
   & > h2 {
-    font-family: "Roboto", sans-serif;
+    font-family: "Inter", sans-serif;;
     font-style: normal;
-    font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
-    display: flex;
-    align-items: center;
+    font-weight: bold;
+    font-size: 12px;    
+    text-align: center;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: ${(props) => props.color} !important;
-    margin: 0;
+    color: #FFFFFF;
+    margin-left: 12px;
   }
 `;
 const RatesWrapper = styled.div`
@@ -299,11 +298,11 @@ const RatesWrapper = styled.div`
 
 const RatesBoxWrapper = styled.div`
   position: absolute;
-  top: -55px;
-  left: -220px;
+  top: -88px;
+  right: -220px;
   width: 298px;
   height: auto;
-  background: #ffffff;
+  background: #F9F9FE;
   border: 1px solid #efefef;
   box-sizing: border-box;
   @media (max-width: 992px) {
@@ -474,6 +473,7 @@ const LocaleWrapper = styled.div`
   }
   img{
     opacity: 0.7;
+    margin-left: 2px;
   }
   div{
     position: absolute;
@@ -505,6 +505,30 @@ const OtherTabsContainer = styled.div`
     width: auto;
   }
 `
+const HeaderTabsBtnsLinks = styled.div`
+  width: 481px;
+  display: flex;
+  justify-content: space-between;
+  a, div > button{
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    // color: #4441CF;
+    color: rgba(68, 65, 207, 0.5);
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+`
+const NavbarSpan = styled.span`
+  background: #778899 !important;
+`
+
 
 export {
   HeaderWrapper,
@@ -533,5 +557,7 @@ export {
   NavBarMobileContent,
   NavBarRightWrapper,
   LocaleWrapper,
-  OtherTabsContainer
+  OtherTabsContainer,
+  HeaderTabsBtnsLinks,
+  NavbarSpan
 };

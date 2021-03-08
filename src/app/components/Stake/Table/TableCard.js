@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import ReactLoading from 'react-loading';
 // import { postRequest } from 'services/axios';
 import {
   setAddress,
@@ -22,7 +21,6 @@ import {
   statuses
 } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
-import TableMoreRow from './TableMoreRow';
 
 import {
   TableContentCard,
@@ -46,8 +44,6 @@ import {
   TableFifthCol,
   TableSixthCol,
   // AdustBtnWrapper,
-  TableCardMore,
-  TableCardMoreContent,
   TableContentCardWrapperMobile,
   TableContentCardMobile,
   TableColMobile,
@@ -63,9 +59,7 @@ const TableCard = ({
   // checkServer
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  let isLoading = false;
   let moreCardToggle = false;
-  let moreList = false;
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -157,45 +151,6 @@ const TableCard = ({
             stake
           ></TableSixthCol>
         </TableContentCard>
-        <TableCardMore
-          className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}
-        >
-          <TableCardMoreContent>
-            {isLoading ? (
-              <ReactLoading
-                className='TableMoreLoading'
-                type={'bubbles'}
-                color='rgba(56,56,56,0.3)'
-              />
-            ) : (
-              moreList &&
-              moreList.map((i) => {
-                return (
-                  <TableMoreRow
-                  // key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
-                  // ethImg={ETH}
-                  // arrow='downArrow'
-                  // status={i.loanStatus}
-                  // ratio={i.collateralRatio}
-                  // createdAt={i.createdAt}
-                  // hash={i.transactionHash}
-                  // collateralTypeName={collateralTypeName}
-                  // cryptoFromLenderName={cryptoFromLenderName}
-                  // amount={i.amount}
-                  // eventName={i.eventName}
-                  />
-                );
-              })
-            )}
-
-            {/* <div className="more-transactions">
-              <h2>
-                this loan has 11 more transactions in its history.
-                <a href="/">show more transactions</a>
-              </h2>
-            </div>*/}
-          </TableCardMoreContent>
-        </TableCardMore>
       </TableContentCardWrapper>
     );
   };

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import Logo from 'assets/images/svg/Logo.svg';
+import LogoColored from 'assets/images/svg/LogoColored.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent  } from './styles/HeaderComponents';
-import { PagesData, apiUri, pairData  } from 'config/constants';
+import { apiUri, pairData  } from 'config/constants';
 import { ETH, DAI, BackArrow } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
@@ -17,7 +17,8 @@ import {
   RatesValue,
   RatesValueImg,
   RatesValueText,
-  RatesRowDash
+  RatesRowDash,
+  NavbarSpan
 } from './styles/HeaderComponents';
 import ConnectWallet from './ConnectWallet';
 import { TrancheIcon } from 'assets';
@@ -60,14 +61,14 @@ function Navbar({ path }) {
   
   return (
     <NavbarWrapper>
-      <NavbarContainer className='container navbar-container'>
+      <NavbarContainer>
         <div id='logo-wrapper'>
-            <img src={Logo} alt='Logo' />
+            <img src={LogoColored} alt='Logo' />
         </div>
         <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
-          <span></span>
-          <span></span>
-          <span></span>
+          <NavbarSpan></NavbarSpan>
+          <NavbarSpan></NavbarSpan>
+          <NavbarSpan></NavbarSpan>
         </div>
         
         <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} >
@@ -148,48 +149,31 @@ function Navbar({ path }) {
         <div className='navbar-right'>
           <NavbarLinks>
             <NavLink
-              to={baseUrl + '/borrow'}
-              activeStyle={{
-                borderBottom: '2px solid',
-                borderColor: PagesData[path].secondaryColor,
-                opacity: '1'
-              }}
-            >
-              <span data-content={i18n.t("navbar.borrow")}></span>
-              {i18n.t("navbar.borrow")}
-            </NavLink>
-            <NavLink
-              to={baseUrl + '/lend'}
-              activeStyle={{
-                borderBottom: '2px solid',
-                borderColor: PagesData[path].secondaryColor,
-                opacity: '1'
-              }}
-            >
-            <span data-content={i18n.t("navbar.lend")}></span>
-            {i18n.t("navbar.lend")}
-            </NavLink>
-            <NavLink
-              to={baseUrl + '/earn'}
-              activeStyle={{
-                borderBottom: '2px solid',
-                borderColor: PagesData[path].secondaryColor,
-                opacity: '1'
-              }}
-            >
-              <span data-content={i18n.t("navbar.earn")}></span>
-              {i18n.t("navbar.earn")}
-            </NavLink>
-            <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
-                borderBottom: '2px solid',
-                borderColor: PagesData[path].secondaryColor,
-                opacity: '1'
+                color: 'rgba(68, 65, 207, 1)'
               }}
+              exact
             >
-              <span data-content={i18n.t("navbar.stake")}></span>
-              {i18n.t("navbar.stake")}
+              Stake            
+            </NavLink>
+            <NavLink
+              to={baseUrl + '/'}
+              activeStyle={{
+                color: 'rgba(68, 65, 207, 1)'
+              }}
+              exact
+            >
+              Tranche
+            </NavLink>
+            <NavLink
+              to={baseUrl + '/'}
+              activeStyle={{
+                color: 'rgba(68, 65, 207, 1)'
+              }}
+              exact
+            >
+              Vote
             </NavLink>
           </NavbarLinks>
           <ConnectWallet path={path} />

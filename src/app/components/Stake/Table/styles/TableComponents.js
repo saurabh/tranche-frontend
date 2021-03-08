@@ -374,7 +374,7 @@ const CallToActionTradeBtn = styled.button`
 
 const TableHeadWrapperMobile = styled.div`
   min-height: 22px;
-  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : props.path === "stake" ? "rgba(0, 113, 245, 0.7)" : "rgba(0, 0, 0, 0.5)"};
+  background: linear-gradient(180deg, #433FFB 0%,#0C08D6 100%);  
   border-top: 1px solid #EFEFEF;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;

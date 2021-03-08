@@ -143,7 +143,7 @@ let StakingForm = ({
                 <ModalFormLabel htmlFor='amount' tranche={true}>
                   Amount of {tokenName} to {modalType ? 'stake' : 'withdraw'}:
                 </ModalFormLabel>
-                <FieldWrapper modalType={modalType} staking={true}>
+                <FieldWrapper modalType={true} staking={true}>
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleAmountChange(newValue)}

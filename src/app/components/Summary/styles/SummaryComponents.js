@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 const SummaryCardWrapper = styled.div`
-    width: 300px;
+    width: 325px;
     height: 121px;
-    background: #FFFFFF;
+    background: ${props => props.color};;
     border: 1px solid #EFEFEF;
-    border-top: 6px solid ${props => props.color};
+    // border-top: 6px solid ${props => props.color};
     box-sizing: border-box;
     padding: 17px;
     border-radius: 12px;
@@ -45,14 +45,14 @@ const SummaryCardTitle = styled.h2`
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.45);
+    color: #FFFFFF;
 `;
 const SummaryCardValue = styled.h2`
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
-    color: rgba(0, 0, 0, 0.8);
+    color: #FFFFFF;
 `;
 const SummaryCardDetails = styled.h2`
     font-family: 'Roboto', sans-serif;
@@ -60,7 +60,7 @@ const SummaryCardDetails = styled.h2`
     font-weight: 400;
     font-size: 12px;
     line-height: 14px;
-    color: rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
 `;
 
 const SummaryCardsWrapper = styled.div`
@@ -112,7 +112,7 @@ const SummaryCardCounter = styled.div`
 `;
 
 const SummaryCardBtn = styled.button`
-    background: #6EAEFA;
+    background: rgba(255, 255, 255, 0.3);
     color: #FFFFFF;
     border-radius: 50%;
     border: none;

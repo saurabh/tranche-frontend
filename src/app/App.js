@@ -13,9 +13,6 @@ import { web3 } from 'utils/getWeb3';
 import { serverUrl, apiUri, LoanContractAddress, PriceOracleAddress, ProtocolAddress, StakingAddress } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
-import Earn from 'app/pages/Earn';
-import Borrow from 'app/pages/Borrow';
-import Trade from 'app/pages/Trade';
 import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
@@ -23,7 +20,7 @@ import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 const { loanList: loanListUrl, tranchesList: tranchesistUrl } = apiUri;
-const baseRouteUrl = '/:locale(zh|en)?';
+const baseRouteUrl = '/:locale(zh|kr|en)?';
 const { stakingSummary } = apiUri;
 
 const App = ({
@@ -156,10 +153,7 @@ const App = ({
         <Banner />
         <Router>
           <Switch location={window.location}>
-            <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
-            <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
-            <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
-            <Route exact path={baseRouteUrl + '/earn'} component={Trade} />
+            <Redirect exact from={baseRouteUrl + '/'} to='/stake' />
             <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />

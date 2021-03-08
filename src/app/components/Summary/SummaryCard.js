@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { PagesData, txMessage, StakingAddress } from 'config';
+import { txMessage, StakingAddress } from 'config';
 import {
   StakingSetup,
   ERC20Setup,
@@ -22,6 +22,7 @@ import StakingModal from '../Modals/StakingModal';
 
 const SummaryCard = ({
   title,
+  tokenAddress,
   isLP,
   value,
   type,
@@ -35,7 +36,8 @@ const SummaryCard = ({
   ethereum: { web3, address, notify },
   form,
   hasAllowance,
-  setHasAllowance
+  setHasAllowance,
+  color
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
@@ -154,10 +156,11 @@ const SummaryCard = ({
     }
   };
 
+
   return (
     <div>
       {isDesktop ? (
-        <SummaryCardWrapper color={PagesData[path].cardColor}>
+        <SummaryCardWrapper color={color}>
           {value || value === 0 ? (
             <SummaryCardContainer>
               <SummaryCardTitle>{title}</SummaryCardTitle>
@@ -206,6 +209,7 @@ const SummaryCard = ({
             modalIsOpen={modalIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
+            tokenAddress={tokenAddress}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
@@ -216,6 +220,7 @@ const SummaryCard = ({
             stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
+            type={type}
           />
         </SummaryCardWrapper>
       ) : (
@@ -225,6 +230,7 @@ const SummaryCard = ({
           modalIsOpen={modalIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
+          tokenAddress={tokenAddress}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
@@ -235,6 +241,7 @@ const SummaryCard = ({
           stakingAllowanceCheck={stakingAllowanceCheck}
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}
+          type={type}
         />
       )}
     </div>
