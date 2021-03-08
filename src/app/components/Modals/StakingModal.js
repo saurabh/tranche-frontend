@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri } from 'config';
-import { getAccruedStakingRewards, fromWei } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import StakingForm from '../Form/Staking';
-import { gweiOrEther, roundBasedOnUnit } from 'utils';
 import {
   ModalHeader,
   ModalActionsContent,
