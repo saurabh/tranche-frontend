@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { massHarvest } from 'services/contractMethods';
 import { txMessage, StakingAddress } from 'config';
-import {
-  StakingSetup,
-  ERC20Setup,
-  roundNumber,
-  isGreaterThan,
-  isEqualTo
-} from 'utils';
+import { StakingSetup, ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -54,7 +49,7 @@ const SummaryCard = ({
 
   useEffect(() => {
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-  }, [type])
+  }, [type]);
 
   const stakingAllowanceCheck = async (tokenAddress, amount) => {
     try {
@@ -156,7 +151,6 @@ const SummaryCard = ({
     }
   };
 
-
   return (
     <div>
       {isDesktop ? (
@@ -192,6 +186,11 @@ const SummaryCard = ({
                 <SummaryCardCounter>
                   <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
                   <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
+                </SummaryCardCounter>
+              )}
+              {path === 'stake' && title === 'SLICE Rewards Collected' && (
+                <SummaryCardCounter>
+                  <button onClick={() => massHarvest()}>Claim</button>
                 </SummaryCardCounter>
               )}
             </SummaryCardContainer>

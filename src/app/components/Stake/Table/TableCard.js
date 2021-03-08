@@ -11,7 +11,7 @@ import {
   setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import { addrShortener, gweiOrEther, roundBasedOnUnit } from 'utils';
+import { addrShortener } from 'utils';
 import { etherScanUrl, statuses } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 
@@ -116,12 +116,12 @@ const TableCard = ({
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2></h2>
+              {/* <h2></h2> */}
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content'>
-              <h2></h2>
+              {/* <h2></h2> */}
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' stake>

@@ -119,7 +119,6 @@ const StakingModal = ({
       const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
-      console.log(result)
     };
 
     modalIsOpen && tokenAddress && getStakingDetails();
@@ -193,6 +192,7 @@ const StakingModal = ({
             </ModalActionDetails>
             <StakingForm
               modalType={modalType}
+              totalStaked={totalStaked}
               tokenAddress={tokenAddress}
               setTokenAddress={setTokenAddress}
               hasAllowance={hasAllowance}

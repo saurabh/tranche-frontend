@@ -45,6 +45,7 @@ let StakingForm = ({
   formValues,
   // State Values
   modalType,
+  totalStaked,
   tokenAddress,
   setTokenAddress,
   isLPToken,
@@ -71,11 +72,10 @@ let StakingForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  
   useEffect(() => {
     setAddress();
   }, [setAddress]);
-  
+
   useEffect(() => {
     if (isLPToken && lpList) {
       setDropdownName(lpList[0].name.split(' ')[0]);
@@ -84,31 +84,32 @@ let StakingForm = ({
       let balance = tokenBalance[lpList[0].address];
       balance && setBalance(fromWei(balance.toString()));
     } else {
-      setTokenAddress(slice.address)
+      setTokenAddress(slice.address);
       let balance = tokenBalance[slice.address];
       balance && setBalance(fromWei(balance.toString()));
     }
   }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
-  
+
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);
   };
-  
+
   const handleLPSelect = (e, index, tokenAddress) => {
     e.preventDefault();
+    amount !== '' && debounceAllowanceCheck(amount);
     setSelectedLPName(lpList[index].name);
     setDropdownName(lpList[index].name.split(' ')[0]);
-    setTokenAddress(tokenAddress)
+    setTokenAddress(tokenAddress);
     let balance = tokenBalance[tokenAddress];
     setBalance(fromWei(balance.toString()));
-    toggleLP(false)
+    toggleLP(false);
   };
 
   const handleAmountChange = (amount) => {
     debounceAllowanceCheck(amount);
     setAmount(amount);
   };
-  
+
   const setMaxSliceAmount = useCallback(
     (e) => {
       e.preventDefault();
@@ -195,7 +196,7 @@ let StakingForm = ({
             <h2>
               {modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
-                : `You have ${roundNumber(balance)} ${tokenName} available to withdraw`}
+                : `You have ${totalStaked} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
@@ -208,15 +209,17 @@ let StakingForm = ({
                   type='button'
                   loading={approveLoading ? 'true' : ''}
                   approved={hasAllowance}
-                onClick={() => stakingApproveContract(tokenAddress, formValues.amount)}
-                backgroundColor={path === "stake" ? "#4441CF" : ""}
+                  onClick={() => stakingApproveContract(tokenAddress, formValues.amount)}
+                  backgroundColor={path === 'stake' ? '#4441CF' : ''}
                 >
                   {!hasAllowance && !approveLoading ? (
                     <h2>Approve</h2>
                   ) : !hasAllowance && approveLoading ? (
                     <div className='btnLoadingIconWrapper'>
                       <div className='btnLoadingIconCut'>
-                        <BtnLoadingIcon loadingColor={path === "stake" ? "#4441CF" : "#936CE6"}></BtnLoadingIcon>
+                        <BtnLoadingIcon
+                          loadingColor={path === 'stake' ? '#4441CF' : '#936CE6'}
+                        ></BtnLoadingIcon>
                       </div>
                     </div>
                   ) : hasAllowance && !approveLoading ? (

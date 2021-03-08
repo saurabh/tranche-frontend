@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import axios from 'axios';
-import { apiUri } from 'config/constants';
-import { serverUrl } from 'config/constants';
+import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
@@ -95,8 +94,12 @@ const SummaryCards = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalance(slice.address, address);
-    setTokenBalance(lp.address, address);
+    if (num === 1) {
+      setTokenBalance(slice.address, address);
+    }
+    if (num === 2) {
+      lpList.forEach((lp) => setTokenBalance(lp.address, address));
+    }
     setModalType(type);
     type ? setHasAllowance(false) : setHasAllowance(true);
     if (num === 0) {
