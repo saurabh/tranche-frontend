@@ -108,8 +108,6 @@ const StakingModal = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
-  const [rewardsPerBlock, setRewardsPerBlock] = useState(0);
-  const [accruedStakingRewards, setAccruedStakingRewards] = useState(0);
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
@@ -123,10 +121,7 @@ const StakingModal = ({
       const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
-      setRewardsPerBlock(result.reward);
-      const rewards = await getAccruedStakingRewards(tokenAddress);
-      setAccruedStakingRewards(fromWei(rewards));
-      // console.log(result)
+      console.log(result)
     };
 
     modalIsOpen && tokenAddress && getStakingDetails();
@@ -186,15 +181,6 @@ const StakingModal = ({
                 SLICE LOCKED — {totalStaked}
                 <span></span>
               </h2>{' '}
-              <h2>
-                Accrued Rewards — {accruedStakingRewards}
-                <span></span>
-              </h2>
-              <h2>
-                REWARDS PER BLOCK — {roundBasedOnUnit(rewardsPerBlock, 'SLICE')}{' '}
-                {gweiOrEther(rewardsPerBlock, 'SLICE')}
-                <span></span>
-              </h2>
             </LoanDetailsMobile>
           </ModalActionsContent>
         ) : (
@@ -204,18 +190,6 @@ const StakingModal = ({
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle stake>SLICE LOCKED</LoanDetailsRowTitle>
                   <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
-                </LoanDetailsRow>
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>ACCRUED REWARDS</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{accruedStakingRewards}</LoanDetailsRowValue>
-                </LoanDetailsRow>
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>REWARDS PER BLOCK</LoanDetailsRowTitle>
-
-                  <LoanDetailsRowValue stake>
-                    {roundBasedOnUnit(rewardsPerBlock, 'SLICE')}{' '}
-                    {gweiOrEther(rewardsPerBlock, 'SLICE')}
-                  </LoanDetailsRowValue>
                 </LoanDetailsRow>
               </ModalActionDetailsContent>
             </ModalActionDetails>
@@ -235,15 +209,6 @@ const StakingModal = ({
             <LoanDetailsMobile>
               <h2>
                 SLICE LOCKED — {totalStaked}
-                <span></span>
-              </h2>
-              <h2>
-                Accrued Rewards — {accruedStakingRewards}
-                <span></span>
-              </h2>
-              <h2>
-                REWARDS PER BLOCK — {roundBasedOnUnit(rewardsPerBlock, 'SLICE')}{' '}
-                {gweiOrEther(rewardsPerBlock, 'SLICE')}
                 <span></span>
               </h2>
             </LoanDetailsMobile>
