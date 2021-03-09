@@ -208,7 +208,7 @@ const StakingModal = ({
             </ModalActionDetails>
             <StakingForm
               modalType={modalType}
-              totalStaked={totalStaked}
+              userStaked={userStaked}
               tokenAddress={tokenAddress}
               setTokenAddress={setTokenAddress}
               hasAllowance={hasAllowance}

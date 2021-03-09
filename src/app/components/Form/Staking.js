@@ -45,7 +45,7 @@ let StakingForm = ({
   formValues,
   // State Values
   modalType,
-  totalStaked,
+  userStaked,
   tokenAddress,
   setTokenAddress,
   isLPToken,
@@ -118,14 +118,14 @@ let StakingForm = ({
         num = balance.replace(/,/g, '');
         num = Number(num);
       } else {
-        num = totalStaked;
+        num = userStaked;
       }
       change('amount', num);
       debounceAllowanceCheck(num.toString());
       setAmount(num);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance, totalStaked]
+    [balance, userStaked]
   );
 
   const debounceAllowanceCheck = useCallback(
@@ -201,7 +201,7 @@ let StakingForm = ({
             <h2>
               {modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
-                : `You have ${totalStaked} ${tokenName} available to withdraw`}
+                : `You have ${userStaked} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>

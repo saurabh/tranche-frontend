@@ -176,7 +176,7 @@ const SummaryCards = ({
           color="#1E80DA"
         />
         <SummaryCard
-          title={path !== 'stake' ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
+          title={path !== 'stake' ? 'Collateralization Ratio' : 'Accrued SLICE Rewards'}
           value={path !== 'stake' ? ratio : withdrawn.balance}
           isLoading={false}
           path={path}

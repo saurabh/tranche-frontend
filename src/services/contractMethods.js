@@ -245,8 +245,8 @@ export const getAccruedStakingRewards = async (tokenAddress) => {
   try {
     const state = store.getState();
     const { web3 } = state.ethereum;
-    const Staking = StakingSetup(web3);
-    const result = await Staking.methods.getTotalReward(tokenAddress).call();
+    const YieldFarm = YieldFarmSetup(web3);
+    const result = await YieldFarm.methods.getTotalAccruedRewards(tokenAddress).call();
     return result;
   } catch (error) {
     console.error(error);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { massHarvest } from 'services/contractMethods';
+import { massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
 import { txMessage, StakingAddress } from 'config';
 import { StakingSetup, ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
@@ -36,6 +36,7 @@ const SummaryCard = ({
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
+  const [accruedRewards, setAccruedRewards] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
 
@@ -48,8 +49,15 @@ const SummaryCard = ({
   });
 
   useEffect(() => {
+    const getRewards = async () => {
+      if (type === 'reward' && address) {
+        const result = await getAccruedStakingRewards(address);
+        setAccruedRewards(fromWei(result))
+      }
+    };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-  }, [type]);
+    getRewards();
+  }, [type, address]);
 
   const stakingAllowanceCheck = async (tokenAddress, amount) => {
     try {
@@ -169,7 +177,7 @@ const SummaryCard = ({
                   : type === 'slice' || type === 'lp'
                   ? `${roundNumber(value)}`
                   : type === 'reward'
-                  ? `${roundNumber(value, 2)}`
+                  ? `${roundNumber(accruedRewards, 2)}`
                   : ''}
 
                 <div></div>
