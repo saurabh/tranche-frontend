@@ -241,6 +241,52 @@ export const sendValueToTranche = async (trancheId) => {
 
 // Staking Functions
 
+export const addStake = async (tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    let { amount } = state.form.stake.values;
+    const StakingContract = StakingSetup(web3);
+    amount = toWei(amount);
+    await StakingContract.methods
+      .deposit(tokenAddress, amount)
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+      });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const withdrawStake = async (tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    let { amount } = state.form.stake.values;
+    const StakingContract = StakingSetup(web3);
+    amount = toWei(amount);
+    await StakingContract.methods
+      .withdraw(tokenAddress, amount)
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+      });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getAccruedStakingRewards = async (tokenAddress) => {
   try {
     const state = store.getState();

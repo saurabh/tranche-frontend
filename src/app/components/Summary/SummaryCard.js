@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
+import { addStake, withdrawStake, massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
 import { txMessage, StakingAddress } from 'config';
-import { StakingSetup, ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
+import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -94,52 +94,6 @@ const SummaryCard = ({
           emitter.on('txConfirmed', () => {
             setHasAllowance(true);
             setApproveLoading(false);
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const addStake = async (tokenAddress) => {
-    try {
-      const StakingContract = StakingSetup(web3);
-      let { amount } = form.stake.values;
-      amount = toWei(amount);
-      await StakingContract.methods
-        .deposit(tokenAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const withdrawStake = async (tokenAddress) => {
-    try {
-      const StakingContract = StakingSetup(web3);
-      let { amount } = form.stake.values;
-      amount = toWei(amount);
-      await StakingContract.methods
-        .withdraw(tokenAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
           });
           emitter.on('txCancel', () => setApproveLoading(false));
           emitter.on('txFailed', () => setApproveLoading(false));
