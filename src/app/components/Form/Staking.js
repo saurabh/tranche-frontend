@@ -113,20 +113,25 @@ let StakingForm = ({
   const setMaxSliceAmount = useCallback(
     (e) => {
       e.preventDefault();
-      let num = balance.replace(/,/g, '');
-      num = Number(num);
+      let num;
+      if (modalType) {
+        num = balance.replace(/,/g, '');
+        num = Number(num);
+      } else {
+        num = totalStaked;
+      }
       change('amount', num);
       debounceAllowanceCheck(num.toString());
       setAmount(num);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance]
+    [balance, totalStaked]
   );
 
   const debounceAllowanceCheck = useCallback(
     _.debounce(
       async (amount) => {
-        parseFloat(amount) > 0 && await stakingAllowanceCheck(tokenAddress, amount);
+        parseFloat(amount) > 0 && (await stakingAllowanceCheck(tokenAddress, amount));
       },
       500,
       { leading: true }
