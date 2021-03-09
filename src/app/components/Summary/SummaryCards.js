@@ -98,7 +98,7 @@ const SummaryCards = ({
       setTokenBalance(slice.address, address);
     }
     if (num === 2) {
-      lpList.forEach((lp) => setTokenBalance(lp.address, address));
+      lpList && lpList.forEach((lp) => setTokenBalance(lp.address, address));
     }
     setModalType(type);
     type ? setHasAllowance(false) : setHasAllowance(true);
