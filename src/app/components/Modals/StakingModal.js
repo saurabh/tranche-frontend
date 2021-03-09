@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri } from 'config';
@@ -22,6 +23,7 @@ import {
   SliceNotFoundBtn
 } from './styles/ModalsComponents';
 import { SummaryCardCounter, SummaryCardBtn } from '../Summary/styles/SummaryComponents';
+import { roundNumber } from 'utils';
 const { stakingSummaryDetail } = apiUri;
 const BASE_URL = serverUrl;
 
@@ -80,13 +82,13 @@ const NotFoundStyles = {
   }
 };
 
-
 Modal.setAppElement('#root');
 
 const StakingModal = ({
+  path,
+  ethereum: {address},
   // State Values
   summaryModal,
-  path,
   modalIsOpen,
   modalType,
   isLPToken,
@@ -106,6 +108,8 @@ const StakingModal = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
+  const [userStaked, setUserStaked] = useState(0);
+  const [stakedShare, setStakedShare] = useState(0);
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
@@ -116,13 +120,15 @@ const StakingModal = ({
 
   useEffect(() => {
     const getStakingDetails = async () => {
-      const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress}`);
+      const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress + '/' + address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
+      setUserStaked(result.userStaked);
+      setStakedShare((result.userStaked / result.staked) * 100)
     };
 
     modalIsOpen && tokenAddress && getStakingDetails();
-  }, [modalIsOpen, tokenAddress]);
+  }, [modalIsOpen, tokenAddress, address]);
 
   const modalClose = () => {
     closeModal();
@@ -182,11 +188,21 @@ const StakingModal = ({
           </ModalActionsContent>
         ) : (
           <ModalActionsContent stakingMobile>
-            <ModalActionDetails color={modalType ? "#4441CF" : "#6E41CF"} stake>
+            <ModalActionDetails color={modalType ? '#4441CF' : '#6E41CF'} stake>
               <ModalActionDetailsContent stake={true} trade={true}>
                 <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>SLICE LOCKED</LoanDetailsRowTitle>
+                  <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
+                </LoanDetailsRow>
+
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
                   <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
+                </LoanDetailsRow>
+
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2)}%</LoanDetailsRowValue>
                 </LoanDetailsRow>
               </ModalActionDetailsContent>
             </ModalActionDetails>
@@ -230,21 +246,39 @@ const StakingModal = ({
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
-        {
-          type === 'lp' ?
+        {type === 'lp' ? (
           <SliceNotFound>
-            <p>You don’t have any <strong>SLICE-LP</strong> available to stake. Click the button below to go to UniSwap and get <strong>SLICE-LP</strong> Tokens</p>
-            <SliceNotFoundBtn color="#1E80DA">
-              <a href="https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1" target="_blank" rel="noopener noreferrer">GET SLICE LP TOKENS</a>
-            </SliceNotFoundBtn>
-          </SliceNotFound>  : 
-          <SliceNotFound>
-            <p>You don’t have any <strong>SLICE</strong> available to stake. Click the button below to purchase<strong>SLICE</strong> Tokens</p>
-            <SliceNotFoundBtn color="#4441CF">
-              <a href="https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1" target="_blank" rel="noopener noreferrer">GET SLICE TOKENS</a>
+            <p>
+              You don’t have any <strong>SLICE-LP</strong> available to stake. Click the button
+              below to go to UniSwap and get <strong>SLICE-LP</strong> Tokens
+            </p>
+            <SliceNotFoundBtn color='#1E80DA'>
+              <a
+                href='https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                GET SLICE LP TOKENS
+              </a>
             </SliceNotFoundBtn>
           </SliceNotFound>
-        }
+        ) : (
+          <SliceNotFound>
+            <p>
+              You don’t have any <strong>SLICE</strong> available to stake. Click the button below
+              to purchase<strong>SLICE</strong> Tokens
+            </p>
+            <SliceNotFoundBtn color='#4441CF'>
+              <a
+                href='https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                GET SLICE TOKENS
+              </a>
+            </SliceNotFoundBtn>
+          </SliceNotFound>
+        )}
       </Modal>
     );
   };
@@ -252,12 +286,12 @@ const StakingModal = ({
 };
 
 StakingModal.propTypes = {
-  // ethereum: PropTypes.object.isRequired,
-  // form: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  stakingData: state.data.stakingList,
+  ethereum: state.ethereum,
   path: state.path
 });
 

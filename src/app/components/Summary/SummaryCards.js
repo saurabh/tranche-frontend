@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { readyToTransact } from 'utils/helperFunctions';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import axios from 'axios';
 import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
-import { readyToTransact } from 'utils/helperFunctions';
-import PropTypes from 'prop-types';
 
 import {
   setAddress,
