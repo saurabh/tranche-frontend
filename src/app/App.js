@@ -19,7 +19,7 @@ import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-const { loanList: loanListUrl, tranchesList: tranchesistUrl } = apiUri;
+const { loanList: loanListUrl, tranchesList: tranchesistUrl, stakingList: stakingListUrl } = apiUri;
 const baseRouteUrl = '/:locale(zh|kr|en)?';
 const { stakingSummary } = apiUri;
 
@@ -119,6 +119,16 @@ const App = ({
       })
       .on('data', async () => {
         await timeout(4000);
+        await fetchTableData(
+          {
+            skip,
+            limit,
+            filter: {
+              type: filter //ETH/JNT keep these in constant file
+            }
+          },
+          stakingListUrl
+        );
         const res = await axios(`${serverUrl + stakingSummary + address}`);
         const { result } = res.data;
         summaryFetchSuccess(result);
