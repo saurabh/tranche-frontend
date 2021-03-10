@@ -5,25 +5,19 @@ import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
   position: relative;
-  background: #FFFFFF;
-  border: 1px solid #F0F0F7;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(189, 189, 189, 0.07);
-  border-radius: 5px;
-  margin: 12px 0;
 `;
 const TableContentCard = styled.div`
   display: flex;
   align-items: center;
   min-height: 66px;
-  padding: 0 20px;
-  // border-bottom: 1px solid #efefef;
+  padding: 0 47px;
+  border-bottom: 1px solid #efefef;
   justify-content: space-between;
   cursor: pointer;
   @media (max-width: 1200px) {
     flex-direction: column;
     align-items: flex-end;
-    // border-bottom: 3px solid #efefef;
+    border-bottom: 3px solid #efefef;
     padding: 0 12px;
   }
   ${({ pointer }) => !pointer && `
@@ -49,13 +43,15 @@ const TableCardTag = styled.div`
 `
 const TableWrapper = styled.div`
   width: 100%;
-  // background: #ffffff;
-  // border: 1px solid #efefef;
+  background: #ffffff;
+  border: 1px solid #efefef;
   box-sizing: border-box;
   margin: 24px auto;
   // overflow: hidden;
+  border-radius: 12px;
   ${({ mobile }) => mobile && `
     display: none;
+    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
     @media (max-width: 1200px){
       display: block;
     }
@@ -75,7 +71,6 @@ const TableWrapper = styled.div`
 const StatusTextWrapper = styled.h2`
   color: ${props => props.color ? props.color : ""};
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
-  text-transform: uppercase;
   position: relative;
   ${({ table, color }) => table === 'tranche' && `
     background: transparent;
@@ -122,11 +117,10 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    padding: 0 20px;
-    // background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? "rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
-    // border-top: 1px solid #EFEFEF;
-    // border-bottom: 1px solid #EFEFEF;
-    // padding: 0 47px;
+    background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? "rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
+    border-top: 1px solid #EFEFEF;
+    border-bottom: 1px solid #EFEFEF;
+    padding: 0 47px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -183,7 +177,7 @@ const SortChevronWrapper = styled.div`
 
 const TableContainerHeader = styled.div`
     min-height: 71px;
-    // padding: 0 31px;
+    padding: 0 31px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -373,9 +367,11 @@ const CallToActionTradeBtn = styled.button`
 
 const TableHeadWrapperMobile = styled.div`
   min-height: 22px;
-  background: transparent;
+  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : props.path === "stake" ? "rgba(0, 113, 245, 0.7)" : "rgba(0, 0, 0, 0.5)"};
+  border-top: 1px solid #EFEFEF;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+  border-bottom: 1px solid #EFEFEF;
   padding-left: 12px;
   display: flex;
   justify-content: space-between;
@@ -400,7 +396,7 @@ const TableHeadTitleMobile = styled.div`
     font-size: 8px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(56,56,56,0.3);
+    color: #FFFFFF;
     ${({ address }) => address && `
       text-align: left;
     `}
@@ -410,12 +406,8 @@ const TableHeadTitleMobile = styled.div`
 const TableContentCardWrapperMobile = styled.div`
   width: 100%;
   height: 60px;
-  background: #FFFFFF;
-  border: 1px solid #F0F0F7;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgb(189 189 189 / 7%);
-  border-radius: 5px;
-  margin: 12px 0;
+  border-bottom: 1px solid #F1F1F1;
+  //border-left: 4px solid ${props => props.color ? props.color  : ""};
 `
 const TableContentCardMobile = styled.div`
   position: relative;
@@ -745,9 +737,6 @@ const FirstColSubtitle = styled.div`
 
 const TableSecondCol = styled.div`
   width: 12%;
-  ${({ stake }) => stake && `
-    width: 14%;
-  `}
   position: relative;
 `
 const SecondColContent = styled.div`
@@ -757,9 +746,6 @@ const SecondColContent = styled.div`
 `
 const TableThirdCol = styled.div`
   width: 7%;
-  ${({ stake }) => stake && `
-    width: 12% !important;
-  `}
   position: relative;
 `
 const ThirdColContent = styled.div`
@@ -771,9 +757,6 @@ const TableFourthCol = styled.div`
   width: 17%;
   ${({ tranche }) => tranche && `
     width: 15%;
-  `}
-  ${({ stake }) => stake && `
-    width: 10% !important;
   `}
 `
 const FourthColContent = styled.div`
@@ -793,9 +776,6 @@ const FourthColContent = styled.div`
 `
 const TableFifthCol = styled.div`
   width: 12%;
-  ${({ stake }) => stake && `
-    width: 30% !important;
-  `}
   position: relative;
 `
 const FifthColContent = styled.div`
@@ -803,9 +783,6 @@ const FifthColContent = styled.div`
 `
 const TableSixthCol = styled.div`
   width: 18%;  
-  ${({ stake }) => stake && `
-    width: 0% !important;
-  `}
   display: flex;
   justify-content: center;
   button{
@@ -852,7 +829,7 @@ const AdustBtnWrapper = styled.div`
 `
 const TableCardMore = styled.div`
   @media (max-width: 1200px){
-    // padding: 0 39px 0 47px;
+    padding: 0 39px 0 47px;
   }
   @media (max-width: 992px){
     padding: 30px 12px 30px 12px;

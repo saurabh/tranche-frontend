@@ -8,6 +8,7 @@ import {
 } from './styles/HeaderComponents';
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
+import { PagesData } from 'config/constants';
 import i18n from "../locale/i18n";
 
 export function Header({updateDate}) {
@@ -23,27 +24,29 @@ export function Header({updateDate}) {
   }, [pathname, parsePath]);
 
   return (
-    <div className='content-container container'>
+    <HeaderWrapper color={PagesData[path].color}>
       <Navbar path={parsedPath[parsedPath.length - 1]}/>
-      {
-        path === "stake" &&
-        <HeaderTabs />
-      }
-      <HeaderWrapper>
-            <HeaderContent path={path}>
-              {  (path === "privacy" || path === "terms") ? 
-                <HeaderSubtitle className='header-text' fontSize="9px">
-                  <h2>Last Updated: {updateDate}</h2>
-                </HeaderSubtitle> : ""
-              }
-              <HeaderTitle path={path}>
-                <h2>{i18n.t(`${path + ".title"}`)}</h2>
-              </HeaderTitle>
-              <HeaderSubtitle path={path}>
-                <h2>Stake Cryptocurrency for SLICE Rewards</h2>
-              </HeaderSubtitle>
-            </HeaderContent>
-      </HeaderWrapper>
-    </div>
+        <div className='content-container container'>
+          <HeaderContent path={path}>
+            {  (path === "privacy" || path === "terms") ? 
+              <HeaderSubtitle className='header-text' fontSize="9px">
+                <h2>Last Updated: {updateDate}</h2>
+              </HeaderSubtitle> : ""
+            }
+            <HeaderTitle className='header-text'>
+              <h2>{i18n.t(`${path + ".title"}`)}</h2>
+            </HeaderTitle>
+            <HeaderSubtitle className='header-text'>
+              <h2>{i18n.t(`${path + ".text"}`)}</h2>
+            </HeaderSubtitle>
+          </HeaderContent>
+        </div>
+        {
+          (path === "borrow" || path === "lend" || path === "earn" || path === 
+          "stake") ?
+          <HeaderTabs /> : ""
+        }
+        
+    </HeaderWrapper>
   );
 }

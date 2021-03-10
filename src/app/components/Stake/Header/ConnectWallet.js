@@ -5,11 +5,12 @@ import { useLocation } from 'react-router-dom';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
-import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper, LocaleWrapper  } from './styles/HeaderComponents';
+import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper, LocaleWrapper } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
-import { ChevronDownBorrow, ChevronDownEarn } from "assets";
+import { ChevronDown } from "assets";
+import Wallet from "assets/images/svg/wallet.svg";
 import { useOuterClick } from 'services/useOuterClick';
-import i18n from 'i18next';
+import i18n from '../../locale/i18n';
 
 const ConnectWallet = ({
   setAddress,
@@ -61,34 +62,38 @@ const ConnectWallet = ({
   }
   return (
     <NavBarRightWrapper>
-      <LocaleWrapper color={PagesData[path].secondaryColor} ref={innerRef}>
-        <h2 onClick={() => setLocaleToggle(!localeToggle)}>{i18n.language} <img src={parsedPath === "borrow" ? ChevronDownBorrow : ChevronDownEarn} alt=""/> </h2>
+      <LocaleWrapper color="rgb(68,65,207)" ref={innerRef}>
+        <h2 onClick={() => setLocaleToggle(!localeToggle)}>{i18n.language}<img src={ChevronDown} alt="chevron"/> </h2>
         { localeToggle ?
           <div>
-            <a href={newPath("en")}>EN</a>
+            <a href={newPath("en")}>en</a>
             <a href={newPath("zh")}>ZH</a>
+            <a href={newPath("kr")}>KR</a>
           </div> : ""
         }
        
       </LocaleWrapper>
       {balance < 0 ? (
         <WalletBtn
-          background={PagesData[path].secondaryColor}
+          background="#4441CF"
           onClick={handleConnect}
           onKeyUp={handleConnect}
         >
+           <WalletBtnIcon>
+            <img src={Wallet} alt='wallet' />
+          </WalletBtnIcon>
           <WalletBtnText icon={false} color={PagesData[path].color}>
-            <h2>Connect</h2>
+            <h2>{i18n.t('connect')}</h2>
           </WalletBtnText>
         </WalletBtn>
       ) : (
         <WalletBtn
-          background={PagesData[path].secondaryColor}
+          background="#4441CF"
           onClick={handleConnect}
           onKeyUp={handleConnect}
         >
           <WalletBtnIcon>
-            <img src='' alt='' />
+            <img src={Wallet} alt='' />
           </WalletBtnIcon>
           <WalletBtnText color={PagesData[path].color}>
             <h2>{addrShortener(address)}</h2>

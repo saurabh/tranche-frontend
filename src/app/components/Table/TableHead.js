@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
-import { ChevronDown } from 'assets';
+import { downChevron, upChevron, ChevronDown } from 'assets';
 import { useOuterClick } from 'services/useOuterClick'
 
 import {
     changeSorting
-} from 'redux/actions/tableData';
+  } from 'redux/actions/tableData';
 import {
     TableHeadWrapper,
     TableHeadTitle,
+    SortChevronWrapper,
     SortingMenu,
     TableMarketsSortingDropdown,
     TableMarketsSortingDropdownContent,
@@ -18,7 +19,6 @@ import {
     TableHeadWrapperMobile,
     TableHeadTitleMobile
 } from './styles/TableComponents';
-import i18n from "app/components/locale/i18n";
 
 
 const TableHead = ({changeSorting, path}) => {
@@ -58,31 +58,50 @@ const TableHead = ({changeSorting, path}) => {
             <TableHeadWrapper path={path}>
                 <TableHeadTitle className="address-wrapper" defaultCursor={true}>
                     <div className="address-title-content">
-                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') :  "INSTRUMENT"}</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? "STAKING POOL" :  "INSTRUMENT"}</h2>
                     </div>
                 </TableHeadTitle>
-                <TableHeadTitle className={true ? "staked-wrapper" :"remaining-wrapper"}>
+                <TableHeadTitle className="remaining-wrapper">
                     <div className={(path === "lend" || path === "borrow") ? "remaining-title-content" : path === "stake" ? "staked-title-content" : "tranche-size-content"} onClick={() => sortLoans(path === "earn" ? "amount" : path === "stake" ? "staked" : "remainingLoan")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "TRANCHE SIZE"}</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "TRANCHE SIZE"}</h2>
+                        <SortChevronWrapper>
+                            <img src={upChevron} alt="upChevron"/>
+                            <img src={downChevron} alt="downChevron"/>
+                        </SortChevronWrapper>
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "ratio-wrapper" : path === "stake" ? "reward-wrapper" : "return-wrapper"}>
                     <div className={(path === "lend" || path === "borrow") ? "ratio-title-content" : path === "stake" ? "reward-title-content" : "return-content"} onClick={() => sortLoans(path === "earn" ? "rpbRate" : path === "stake" ? "reward" : "collateralRatio")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN/BLOCK"}</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD/BLOCK" : "RETURN/BLOCK"}</h2>
+                        <SortChevronWrapper>
+                            <img src={upChevron} alt="upChevron"/>
+                            <img src={downChevron} alt="downChevron"/>
+                        </SortChevronWrapper>
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "interest-paid-wrapper" : path === "stake" ? "accrued-wrapper" : "subscription-wrapper"}>
                     <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "earn" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
                         <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "" : "SUBSCRIPTION"}</h2>
+                        {   path !== "stake" &&
+                            <SortChevronWrapper>
+                                <img src={upChevron} alt="upChevron"/>
+                                <img src={downChevron} alt="downChevron"/>
+                            </SortChevronWrapper>
+                        }
                         
                     </div>
                 </TableHeadTitle>
-                <TableHeadTitle className={true ? "stake-status" :"status-wrapper"}>
+                <TableHeadTitle className="status-wrapper">
                     <div className={(path === "lend" || path === "borrow") ? "status-title-content" : path === "stake" ? "staking-title-content" : "apy-content"}  onClick={() => sortLoans("displayPriority")}>
-                        <h2>{(path === "lend" || path === "borrow" || path === "stake") ? i18n.t('stake.table.tableHead.status') : "BOND APY"}</h2>
+                        <h2>{(path === "lend" || path === "borrow" || path === "stake") ? "Status" : "BOND APY"}</h2>
+                        <SortChevronWrapper>
+                            <img src={upChevron} alt="upChevron"/>
+                            <img src={downChevron} alt="downChevron"/>
+                        </SortChevronWrapper>
+                    
                     </div>
                 </TableHeadTitle>
-                <TableHeadTitle className={true ? "status-btns" : "head-btns-wrapper"}>
+                <TableHeadTitle className="head-btns-wrapper">
 
                 </TableHeadTitle>
                 <SortingMenu>
@@ -117,22 +136,22 @@ const TableHead = ({changeSorting, path}) => {
             <TableHeadWrapperMobile path={path}>
                 <TableColMobile address>
                     <TableHeadTitleMobile defaultCursor={true} address>
-                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') : "INSTRUMENT"}</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? "STAKING POOL"  : "INSTRUMENT"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "SIZE"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "SIZE"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD"  : "RETURN"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? ""  : "SUBSCRIPTION"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "accrued"  : "SUBSCRIPTION"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile btn>

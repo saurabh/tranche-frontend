@@ -11,15 +11,8 @@ import {
   setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import {
-  addrShortener,
-  gweiOrEther,
-  roundBasedOnUnit
-} from 'utils';
-import {
-  etherScanUrl,
-  statuses
-} from 'config';
+import { addrShortener } from 'utils';
+import { etherScanUrl, statuses } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 
 import {
@@ -50,6 +43,7 @@ import {
   TableMobilColContent
   // TableMobilCardBtn
 } from './styles/TableComponents';
+import i18n from 'app/components/locale/i18n';
 
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type },
@@ -123,9 +117,7 @@ const TableCard = ({
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>
-                {roundBasedOnUnit(reward, 'SLICE')} {gweiOrEther(reward, 'SLICE')}
-              </h2>
+              {/* <h2></h2> */}
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
@@ -141,7 +133,7 @@ const TableCard = ({
                 backgroundColor={Object.values(searchObj(isActive ? 1 : 0))[0].background}
                 table='stake'
               >
-                {isActive ? 'ACTIVE' : ''}
+                {isActive ? i18n.t('stake.table.statuses.active') : ''}
               </StatusTextWrapper>
             </FifthColContent>
           </TableFifthCol>
@@ -172,10 +164,8 @@ const TableCard = ({
               {/* <h2></h2> */}
             </TableMobilColContent>
           </TableColMobile>
-
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{reward}</h2>
               {/* <h2></h2> */}
             </TableMobilColContent>
           </TableColMobile>

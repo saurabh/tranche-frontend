@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { PagesData, txMessage, StakingAddress } from 'config';
-import {
-  StakingSetup,
-  ERC20Setup,
-  roundNumber,
-  isGreaterThan,
-  isEqualTo
-} from 'utils';
+import { massHarvest } from 'services/contractMethods';
+import { txMessage, StakingAddress } from 'config';
+import { StakingSetup, ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -16,12 +11,14 @@ import {
   SummaryCardValue,
   SummaryCardDetails,
   SummaryCardCounter,
+  SummaryClaimBtn,
   SummaryCardBtn
 } from './styles/SummaryComponents';
-import StakingModal from '../Modals/StakingModal';
+import StakingModal from '../../Modals/StakingModal';
 
 const SummaryCard = ({
   title,
+  tokenAddress,
   isLP,
   value,
   type,
@@ -35,7 +32,8 @@ const SummaryCard = ({
   ethereum: { web3, address, notify },
   form,
   hasAllowance,
-  setHasAllowance
+  setHasAllowance,
+  color
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
@@ -52,7 +50,7 @@ const SummaryCard = ({
 
   useEffect(() => {
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-  }, [type])
+  }, [type]);
 
   const stakingAllowanceCheck = async (tokenAddress, amount) => {
     try {
@@ -157,7 +155,7 @@ const SummaryCard = ({
   return (
     <div>
       {isDesktop ? (
-        <SummaryCardWrapper color={PagesData[path].cardColor}>
+        <SummaryCardWrapper color={color}>
           {value || value === 0 ? (
             <SummaryCardContainer>
               <SummaryCardTitle>{title}</SummaryCardTitle>
@@ -185,11 +183,16 @@ const SummaryCard = ({
                   ? `${roundNumber(value.coin1)} ETH`
                   : details}
               </SummaryCardDetails>
-              {path === 'stake' && type !== 'SLICE Rewards Collected' && (
+              {path === 'stake' && type !== 'reward' && (
                 <SummaryCardCounter>
                   <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
                   <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
                 </SummaryCardCounter>
+              )}
+              {path === 'stake' && type === 'reward' && (
+                <SummaryClaimBtn claim>
+                  <button onClick={() => massHarvest()}>Claim</button>
+                </SummaryClaimBtn>
               )}
             </SummaryCardContainer>
           ) : (
@@ -206,6 +209,7 @@ const SummaryCard = ({
             modalIsOpen={modalIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
+            tokenAddress={tokenAddress}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
@@ -216,6 +220,7 @@ const SummaryCard = ({
             stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
+            type={type}
           />
         </SummaryCardWrapper>
       ) : (
@@ -225,6 +230,7 @@ const SummaryCard = ({
           modalIsOpen={modalIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
+          tokenAddress={tokenAddress}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
@@ -235,6 +241,7 @@ const SummaryCard = ({
           stakingAllowanceCheck={stakingAllowanceCheck}
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}
+          type={type}
         />
       )}
     </div>

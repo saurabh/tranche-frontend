@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 const SummaryCardWrapper = styled.div`
-    width: 300px;
+    width: 325px;
     height: 121px;
-    background: #FFFFFF;
+    background: ${props => props.color};;
     border: 1px solid #EFEFEF;
-    border-top: 6px solid ${props => props.color};
+    // border-top: 6px solid ${props => props.color};
     box-sizing: border-box;
     padding: 17px;
     border-radius: 12px;
@@ -45,14 +45,14 @@ const SummaryCardTitle = styled.h2`
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.45);
+    color: #FFFFFF;
 `;
 const SummaryCardValue = styled.h2`
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
-    color: rgba(0, 0, 0, 0.8);
+    color: #FFFFFF;
 `;
 const SummaryCardDetails = styled.h2`
     font-family: 'Roboto', sans-serif;
@@ -60,7 +60,7 @@ const SummaryCardDetails = styled.h2`
     font-weight: 400;
     font-size: 12px;
     line-height: 14px;
-    color: rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
 `;
 
 const SummaryCardsWrapper = styled.div`
@@ -108,11 +108,41 @@ const SummaryCardCounter = styled.div`
             margin: 7px 0;
         }
     `}
-}
+`;
+const SummaryClaimBtn = styled.div`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    ${({ claim }) => claim && `
+       button{
+            font-size: 12px;
+            padding: 12px 25px;
+            font-family: "Inter",sans-serif;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            font-weight: 600;
+            color: #369987;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+       }
+    `}
+    // ${({ stakingMobile }) => stakingMobile && `
+    //     @media (max-width: 633px){
+    //         position: relative;
+    //         transform: none;
+    //         display: flex;
+    //         justify-content: center;
+    //         margin: 7px 0;
+    //     }
+    // `}
+
 `;
 
 const SummaryCardBtn = styled.button`
-    background: #6EAEFA;
+    background: rgba(255, 255, 255, 0.3);
     color: #FFFFFF;
     border-radius: 50%;
     border: none;
@@ -151,5 +181,6 @@ export {
     SummaryCardDetails,
     SummaryCardsWrapper,
     SummaryCardCounter,
-    SummaryCardBtn
+    SummaryCardBtn,
+    SummaryClaimBtn
 };

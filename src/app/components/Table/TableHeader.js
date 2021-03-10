@@ -15,7 +15,6 @@ import {
     TableMarketsSortingDropdownContent,
     TableMarketSortingBtn
   } from './styles/TableComponents';
-import i18n from "app/components/locale/i18n";
 
 const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
     const [menu, toggleMenu] = useState(false);
@@ -43,7 +42,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     path === "borrow" ?
                     <h2>Open Loans</h2> : 
                     path === "stake" ?
-                    <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
+                    <h2>CURRENT POOLS</h2> :
                     <h2>Available Instruments</h2>
                 }
                 </TableTitle>
@@ -53,7 +52,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                         <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                     </TableSubTitle> : 
                     <TableSubTitle>
-                        <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>
+                        <h2>STAKING REWARDS</h2>
                     </TableSubTitle> 
                 }
 

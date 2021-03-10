@@ -1,41 +1,67 @@
 {
   "caution": "Caution! Tranche is still in beta. Use at your own risk.",
+  "connect": "연결하다",
   "navbar": {
+    "stake": "저장",
+    "tranche": "트렌치",
+    "vote": "투표",
     "borrow": "borrow",
     "lend": "lend",
-    "earn": "earn",
-    "stake": "stake"
-  },
-  "borrow": {
-    "title": "Borrower Markets",
-    "text": "APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY",
-    "tabs": {
-      "own": "MY ASSETS",
-      "all": "ALL ASSETS"
-    }
-  },
-  "lend": {
-    "title": "Lending Markets",
-    "text": "LEND STABLE COINS TO RECEIVE CRYPTOCURRENCY RETURNS",
-    "tabs": {
-      "own": "MY ASSETS",
-      "all": "ALL ASSETS"
-    }
-  },
-  "earn": {
-    "title": "Earning Markets",
-    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
-    "tabs": {
-      "own": "MY ASSETS",
-      "all": "ALL ASSETS"
-    }
+    "earn": "earn"
   },
   "stake": {
-    "title": "Staking Pools",
-    "text": "stake cryptocurrency for slice rewards",
+    "title": "저장 풀스",
+    "text": "슬라이스 보상을 위한 가상지폐 저장",
     "tabs": {
-      "own": "我的资产",
-      "all": "所有资产"
+      "dashboard": "대쉬보드",
+      "rates": "금리, 요금",
+      "howTo": "어떻게"
+    },
+    "modal": {
+      "sliceLocked": "잠긴 슬라이스",
+      "stakeModalTitle": "슬라이스 토큰 저장",
+      "withdrawModalTitle": "슬라이스 토큰 출금",
+      "stakeFormTitle": "슬라이스 저장 가격",
+      "withdrawFormTitle": "출금할 슬라이스 금액",
+      "youHaveStake": "저장 할 수있는 슬라이스는",
+      "availableStake": "개입니다.",
+      "youHaveWithdraw": "출금 할 수있는 슬라이스가 ",
+      "availableWithdraw": "개 있습니다.",
+      "stake": "저장",
+      "withdraw": "출금",
+      "DontHaveSlice": "저장 할 수있는 슬라이스가 없습니다. 아래 버튼을 클릭하여 유니스웹으로 이동하여 슬라이스 토큰을 받으세요.",
+      "DontHaveSliceLP": "저장 할 수있는 슬라이스-LP가 없습니다. 아래 버튼을 클릭하여 유니스웹으로 이동하여 슬라이스-LP 토큰을 받으세요.",
+      "getSliceLP": "슬라이스 LP 토큰 받기",
+      "getSlice": "슬라이스 토큰 받기"
+    },
+    "summary": {
+      "slice": {
+        "title": "저장된 슬라이스 토큰",
+        "details": ""
+      },
+      "sliceLP": {
+        "title": "저장된 슬라이스 LP 토큰",
+        "details": ""
+      },
+      "sliceRewards": {
+        "title": "수거된 보상",
+        "details": ""
+      }
+    },
+    "table": {
+      "tableHeader": {
+        "title": "현재 풀즈",
+        "subtitle": "보상 저장"
+      },
+      "tableHead": {
+        "stakingPool": "저장 중인 풀",
+        "staked": "저장된",
+        "reward": "보상/블록",
+        "status": "상태"
+      },
+      "statuses": {
+        "active": "유효한"
+      }
     }
   },
   "rates": "Rates",

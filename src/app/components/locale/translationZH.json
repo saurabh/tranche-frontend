@@ -1,10 +1,13 @@
 {
   "caution": "警告！Tranche目前还是测试版本。请自己斟酌风险后使用。",
+  "connect": "连接",
   "navbar":{
+    "stake": "质押",
+    "tranche": "tranche",
+    "vote": "投票",
     "borrow": "借入",
     "lend": "借出",
-    "earn": "赚取",
-    "stake": "stake"
+    "earn": "赚取"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -22,20 +25,59 @@
       "all": "所有资产"
     }
   },
-  "earn": {
-    "title": "Earning Markets",
-    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
-    "tabs": {
-      "own": "我的资产",
-      "all": "所有资产"
-    }
-  },
   "stake": {
-    "title": "Staking Pools",
-    "text": "stake cryptocurrency for slice rewards",
+    "title": "质押池",
+    "text": "质押加密货币获得SLICE奖励",
     "tabs": {
-      "own": "我的资产",
-      "all": "所有资产"
+      "dashboard": "个人面板",
+      "rates": "比率",
+      "howTo": "如何执行"
+    },
+    "modal": {
+      "sliceLocked": "已锁定SLICE",
+      "stakeModalTitle": "质押Slice代币",
+      "withdrawModalTitle": "提取SLICE代币",
+      "stakeFormTitle": "要质押的SLICE数量：",
+      "withdrawFormTitle": "要质押的SLICE数量：",
+      "youHaveStake": "你有",
+      "availableStake": "个SLICE可用于质押",
+      "youHaveWithdraw": "你有",
+      "availableWithdraw": "个SLICE可用于质押",
+      "stake": "质押",
+      "withdraw": "提取",
+      "DontHaveSlice": "你没有任何可供质押的SLICE。点击下面的按钮购买SLICE代币",
+      "DontHaveSliceLP": "您没有任何SLICE-LP可以下注。单击下面的按钮转到UniSwap并获取SLICE-LP代币",
+      "getSliceLP": "获得SLICE LP代币",
+      "getSlice": "获得SLICE代币"
+    },
+    "summary": {
+      "slice": {
+        "title": "已质押SLICE代币",
+        "details": ""
+      },
+      "sliceLP": {
+        "title": "已质押SLICE LP代币",
+        "details": ""
+      },
+      "sliceRewards": {
+        "title": "已收集奖励",
+        "details": ""
+      }
+    },
+    "table": {
+      "tableHeader": {
+        "title": "当前池",
+        "subtitle": "质押奖励"
+      },
+      "tableHead": {
+        "stakingPool": "质押池",
+        "staked": "已质押",
+        "reward": "奖励/区块",
+        "status": "状态"
+      },
+      "statuses": {
+        "active": "活跃"
+      }
     }
   },
   "rates": "兑换率",

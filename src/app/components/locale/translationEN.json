@@ -1,10 +1,13 @@
 {
   "caution": "Caution! Tranche is still in beta. Use at your own risk.",
+  "connect": "connect",
   "navbar": {
+    "stake": "stake",
+    "tranche": "tranche",
+    "vote": "vote",
     "borrow": "borrow",
     "lend": "lend",
-    "earn": "earn",
-    "stake": "stake"
+    "earn": "earn"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -22,20 +25,59 @@
       "all": "ALL ASSETS"
     }
   },
-  "earn": {
-    "title": "Earning Markets",
-    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
-    "tabs": {
-      "own": "MY ASSETS",
-      "all": "ALL ASSETS"
-    }
-  },
   "stake": {
     "title": "Staking Pools",
-    "text": "stake cryptocurrency for slice rewards",
+    "text": "Stake Cryptocurrency for SLICE Rewards",
     "tabs": {
-      "own": "我的资产",
-      "all": "所有资产"
+      "dashboard": "Dashboard",
+      "rates": "Rates",
+      "howTo": "How-To"
+    },
+    "modal": {
+      "sliceLocked": "SLICE LOCKED",
+      "stakeModalTitle": "Stake Slice Tokens",
+      "withdrawModalTitle": "Withdraw Slice Tokens",
+      "stakeFormTitle": "Amount of SLICE to stake:",
+      "withdrawFormTitle": "Amount of SLICE to withdraw:",
+      "youHaveStake": "You have",
+      "availableStake": "SLICE available to stake",
+      "youHaveWithdraw": "You have",
+      "availableWithdraw": "SLICE available to withdraw",
+      "stake": "Stake",
+      "withdraw": "Withdraw",
+      "DontHaveSlice": "You don’t have any SLICE available to stake. Click the button below to purchase SLICE Tokens",
+      "DontHaveSliceLP": "You don’t have any SLICE-LP available to stake. Click the button below to go to UniSwap and get SLICE-LP Tokens",
+      "getSliceLP": "GET SLICE LP TOKENS",
+      "getSlice": "GET SLICE TOKENS"
+    },
+    "summary": {
+      "slice": {
+        "title": "Staked SLICE Tokens",
+        "details": ""
+      },
+      "sliceLP": {
+        "title": "Staked SLICE LP Tokens",
+        "details": ""
+      },
+      "sliceRewards": {
+        "title": "SLICE Rewards Collected",
+        "details": ""
+      }
+    },
+    "table": {
+      "tableHeader": {
+        "title": "Current Pools",
+        "subtitle": "Staking Rewards"
+      },
+      "tableHead": {
+        "stakingPool": "Staking Pool",
+        "staked": "Staked",
+        "reward": "REWARD / BLOCK",
+        "status": "STATUS"
+      },
+      "statuses": {
+        "active": "active"
+      }
     }
   },
   "rates": "Rates",

@@ -4,7 +4,8 @@ import {
   JPriceOracleSetup,
   JTrancheTokenSetup,
   JProtocolSetup,
-  StakingSetup
+  StakingSetup,
+  YieldFarmSetup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
@@ -247,6 +248,27 @@ export const getAccruedStakingRewards = async (tokenAddress) => {
     const Staking = StakingSetup(web3);
     const result = await Staking.methods.getTotalReward(tokenAddress).call();
     return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const massHarvest = async () => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    const YieldFarm = YieldFarmSetup(web3);
+    await YieldFarm.methods
+      .massHarvest()
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+      });
   } catch (error) {
     console.error(error);
   }

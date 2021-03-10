@@ -13,6 +13,8 @@ import { web3 } from 'utils/getWeb3';
 import { serverUrl, apiUri, LoanContractAddress, PriceOracleAddress, ProtocolAddress, StakingAddress } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
+import Earn from 'app/pages/Lend';
+import Borrow from 'app/pages/Borrow';
 import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
@@ -153,7 +155,10 @@ const App = ({
         <Banner />
         <Router>
           <Switch location={window.location}>
-            <Redirect exact from={baseRouteUrl + '/'} to='/stake' />
+            <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
+            <Redirect exact from={baseRouteUrl + '/earn'} to='/borrow' />
+            <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
+            <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />
