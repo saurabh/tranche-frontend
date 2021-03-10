@@ -8,8 +8,6 @@ import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
 import { abi as TrancheTokenABI } from 'build/contracts/JETHTrancheA.json';
 import {
   LoanContractAddress,
-  StakingAddress,
-  YieldFarmAddress,
   DAIAddress,
   SLICEAddress,
   USDCAddress,
@@ -32,11 +30,11 @@ export function JPriceOracleSetup(web3) {
   return new web3.eth.Contract(JPriceOracleABI, JPONetworks[networkId].address);
 }
 
-export function StakingSetup(web3) {
+export function StakingSetup(web3, StakingAddress) {
   return new web3.eth.Contract(StakingABI, StakingAddress);
 }
 
-export function YieldFarmSetup(web3) {
+export function YieldFarmSetup(web3, YieldFarmAddress) {
   return new web3.eth.Contract(YieldFarmABI, YieldFarmAddress);
 }
 

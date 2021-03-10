@@ -56,7 +56,7 @@ let StakingForm = ({
   // Functions
   stakingAllowanceCheck,
   stakingApproveContract,
-  setBalanceModal,
+  // setBalanceModal,
   adjustStake,
   // Redux
   ethereum: { tokenBalance, address },
@@ -65,6 +65,7 @@ let StakingForm = ({
   const [balance, setBalance] = useState(0);
   const [LPSelect, toggleLP] = useState(false);
   const [selectedLPName, setSelectedLPName] = useState(0);
+  const [stakingAddress, setStakingAddress] = useState('');
   const [dropdownName, setDropdownName] = useState([]);
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
@@ -83,14 +84,14 @@ let StakingForm = ({
       setDropdownName(lpList[0].name.split(' ')[0]);
       setSelectedLPName(lpList[0].name);
       setTokenAddress(lpList[0].address);
+      setStakingAddress(lpList[0].stakingAddress);
       let balance = tokenBalance[lpList[0].address];
       balance && setBalance(fromWei(balance.toString()));
-      setBalanceModal(Number(balance));
     } else {
       setTokenAddress(slice.address);
+      setStakingAddress(slice.stakingAddress);
       let balance = tokenBalance[slice.address];
       balance && setBalance(fromWei(balance.toString()));
-      setBalanceModal(Number(balance));
     }
   }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
 
@@ -98,12 +99,13 @@ let StakingForm = ({
     toggleLP(!LPSelect);
   };
 
-  const handleLPSelect = (e, index, tokenAddress) => {
+  const handleLPSelect = (e, index, tokenAddress, stakingAddress) => {
     e.preventDefault();
     amount !== '' && debounceAllowanceCheck(amount);
     setSelectedLPName(lpList[index].name);
     setDropdownName(lpList[index].name.split(' ')[0]);
     setTokenAddress(tokenAddress);
+    setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
     setBalance(fromWei(balance.toString()));
     toggleLP(false);
@@ -135,7 +137,7 @@ let StakingForm = ({
   const debounceAllowanceCheck = useCallback(
     _.debounce(
       async (amount) => {
-        parseFloat(amount) > 0 && (await stakingAllowanceCheck(tokenAddress, amount));
+        parseFloat(amount) > 0 && (await stakingAllowanceCheck(stakingAddress, tokenAddress, amount));
       },
       500,
       { leading: true }
@@ -145,7 +147,7 @@ let StakingForm = ({
 
   return (
     <ModalAdjustForm>
-      <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, tokenAddress)}>
+      <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
         <FormInputsWrapper trade={true}>
           <ModalFormGrpNewLoan trade={true} tranche={true}>
             <NewLoanFormInput>
@@ -190,7 +192,7 @@ let StakingForm = ({
                     {lpList.map((lp, index) => {
                       return (
                         <SelectCurrencyOption key={index}>
-                          <button onClick={(e) => handleLPSelect(e, index, lp.address)}>
+                          <button onClick={(e) => handleLPSelect(e, index, lp.address, lp.stakingAddress)}>
                             <img src={lp.img} alt='' /> {lp.name.split(' ')[0]}
                           </button>
                         </SelectCurrencyOption>
@@ -226,7 +228,7 @@ let StakingForm = ({
                   type='button'
                   loading={approveLoading ? 'true' : ''}
                   approved={hasAllowance}
-                  onClick={() => stakingApproveContract(tokenAddress, formValues.amount)}
+                  onClick={() => stakingApproveContract(stakingAddress, tokenAddress, formValues.amount)}
                   backgroundColor={path === 'stake' ? '#4441CF' : ''}
                 >
                   {!hasAllowance && !approveLoading ? (

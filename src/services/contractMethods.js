@@ -241,12 +241,12 @@ export const sendValueToTranche = async (trancheId) => {
 
 // Staking Functions
 
-export const addStake = async (tokenAddress) => {
+export const addStake = async (stakingAddress, tokenAddress) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
-    const StakingContract = StakingSetup(web3);
+    const StakingContract = StakingSetup(web3, stakingAddress);
     amount = toWei(amount);
     await StakingContract.methods
       .deposit(tokenAddress, amount)
@@ -264,12 +264,12 @@ export const addStake = async (tokenAddress) => {
   }
 };
 
-export const withdrawStake = async (tokenAddress) => {
+export const withdrawStake = async (stakingAddress, tokenAddress) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
-    const StakingContract = StakingSetup(web3);
+    const StakingContract = StakingSetup(web3, stakingAddress);
     amount = toWei(amount);
     await StakingContract.methods
       .withdraw(tokenAddress, amount)
@@ -287,11 +287,11 @@ export const withdrawStake = async (tokenAddress) => {
   }
 };
 
-export const getAccruedStakingRewards = async (tokenAddress) => {
+export const getAccruedStakingRewards = async (yieldfarmAddress, tokenAddress) => {
   try {
     const state = store.getState();
     const { web3 } = state.ethereum;
-    const YieldFarm = YieldFarmSetup(web3);
+    const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
     const result = await YieldFarm.methods.getTotalAccruedRewards(tokenAddress).call();
     return result;
   } catch (error) {
@@ -299,11 +299,11 @@ export const getAccruedStakingRewards = async (tokenAddress) => {
   }
 };
 
-export const massHarvest = async () => {
+export const massHarvest = async (yieldfarmAddress) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    const YieldFarm = YieldFarmSetup(web3);
+    const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
     await YieldFarm.methods
       .massHarvest()
       .send({ from: address })

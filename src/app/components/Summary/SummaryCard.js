@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addStake, withdrawStake, massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
-import { PagesData, txMessage, StakingAddress } from 'config';
+import { PagesData, txMessage } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,
@@ -33,9 +33,7 @@ const SummaryCard = ({
   setHasAllowance
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
-  const [isLPToken, setLPToken] = useState(false);
   const [accruedRewards, setAccruedRewards] = useState(0);
-  const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
 
   const updateMedia = () => {
@@ -45,71 +43,6 @@ const SummaryCard = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
-
-  useEffect(() => {
-    const getRewards = async () => {
-      if (type === 'reward' && address) {
-        const result = await getAccruedStakingRewards(address);
-        setAccruedRewards(fromWei(result))
-      }
-    };
-    type === 'lp' ? setLPToken(true) : setLPToken(false);
-    getRewards();
-  }, [type, address]);
-
-  const stakingAllowanceCheck = async (tokenAddress, amount) => {
-    try {
-      if (modalType && amount !== '') {
-        amount = toWei(amount);
-        const token = ERC20Setup(web3, tokenAddress);
-        let userAllowance = await token.methods.allowance(address, StakingAddress).call();
-        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-          setHasAllowance(true);
-        } else {
-          setHasAllowance(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const stakingApproveContract = async (tokenAddress, amount) => {
-    try {
-      amount = toWei(amount);
-      const token = ERC20Setup(web3, tokenAddress);
-      await token.methods
-        .approve(StakingAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          setApproveLoading(true);
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const adjustStake = (e, tokenAddress) => {
-    try {
-      e.preventDefault();
-      modalType ? addStake(tokenAddress) : withdrawStake(tokenAddress);
-      closeModal();
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div>
@@ -126,10 +59,6 @@ const SummaryCard = ({
                   ? `$${Math.round(value.amount)}`
                   : type === 'ratio'
                   ? `${roundNumber(value.total, 1)}%`
-                  : type === 'slice' || type === 'lp'
-                  ? `${roundNumber(value)}`
-                  : type === 'reward'
-                  ? `${roundNumber(accruedRewards, 2)}`
                   : ''}
 
                 <div></div>
@@ -171,13 +100,6 @@ const SummaryCard = ({
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
-            hasAllowance={hasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isLPToken}
-            // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
           />
         </SummaryCardWrapper>
       ) : (
@@ -190,13 +112,6 @@ const SummaryCard = ({
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
-          hasAllowance={hasAllowance}
-          approveLoading={approveLoading}
-          isLPToken={isLPToken}
-          // Functions
-          stakingAllowanceCheck={stakingAllowanceCheck}
-          stakingApproveContract={stakingApproveContract}
-          adjustStake={adjustStake}
         />
       )}
     </div>

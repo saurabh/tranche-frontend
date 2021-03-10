@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { massHarvest } from 'services/contractMethods';
+import { addStake, withdrawStake, massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
 import { txMessage, StakingAddress } from 'config';
 import { StakingSetup, ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
@@ -37,6 +37,7 @@ const SummaryCard = ({
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
+  const [accruedRewards, setAccruedRewards] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
 
@@ -49,15 +50,23 @@ const SummaryCard = ({
   });
 
   useEffect(() => {
+    const getRewards = async () => {
+      if (type === 'reward' && address) {
+        // const result = await getAccruedStakingRewards(address);
+        // setAccruedRewards(fromWei(result))
+      }
+    };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-  }, [type]);
+    getRewards();
+  }, [type, address]);
 
-  const stakingAllowanceCheck = async (tokenAddress, amount) => {
+  const stakingAllowanceCheck = async (stakingAddress, tokenAddress, amount) => {
+    console.log(stakingAddress)
     try {
       if (modalType && amount !== '') {
         amount = toWei(amount);
         const token = ERC20Setup(web3, tokenAddress);
-        let userAllowance = await token.methods.allowance(address, StakingAddress).call();
+        let userAllowance = await token.methods.allowance(address, stakingAddress).call();
         if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
           setHasAllowance(true);
         } else {
@@ -69,12 +78,12 @@ const SummaryCard = ({
     }
   };
 
-  const stakingApproveContract = async (tokenAddress, amount) => {
+  const stakingApproveContract = async (stakingAddress, tokenAddress, amount) => {
     try {
       amount = toWei(amount);
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
-        .approve(StakingAddress, amount)
+        .approve(stakingAddress, amount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
@@ -96,56 +105,10 @@ const SummaryCard = ({
     }
   };
 
-  const addStake = async (tokenAddress) => {
-    try {
-      const StakingContract = StakingSetup(web3);
-      let { amount } = form.stake.values;
-      amount = toWei(amount);
-      await StakingContract.methods
-        .deposit(tokenAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const withdrawStake = async (tokenAddress) => {
-    try {
-      const StakingContract = StakingSetup(web3);
-      let { amount } = form.stake.values;
-      amount = toWei(amount);
-      await StakingContract.methods
-        .withdraw(tokenAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const adjustStake = (e, tokenAddress) => {
+  const adjustStake = (e, stakingAddress, tokenAddress) => {
     try {
       e.preventDefault();
-      modalType ? addStake(tokenAddress) : withdrawStake(tokenAddress);
+      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -170,7 +133,7 @@ const SummaryCard = ({
                   : type === 'slice' || type === 'lp'
                   ? `${roundNumber(value)}`
                   : type === 'reward'
-                  ? `${roundNumber(value, 2)}`
+                  ? `${roundNumber(accruedRewards, 2)}`
                   : ''}
 
                 <div></div>

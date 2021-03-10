@@ -109,7 +109,7 @@ const StakingModal = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
-  const [balance, setBalance] = useState(false);
+  // const [balance, setBalance] = useState(false);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
   
@@ -194,8 +194,13 @@ const StakingModal = ({
             <ModalActionDetails color={modalType ? '#4441CF' : '#6E41CF'} stake>
               <ModalActionDetailsContent stake={true} trade={true}>
                 <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>{i18n.t('stake.modal.sliceLocked')}</LoanDetailsRowTitle>
+                  <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
                   <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
+                </LoanDetailsRow>
+
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
                 </LoanDetailsRow>
 
                 <LoanDetailsRow trade={true}>
@@ -216,7 +221,7 @@ const StakingModal = ({
               stakingAllowanceCheck={stakingAllowanceCheck}
               stakingApproveContract={stakingApproveContract}
               adjustStake={adjustStake}
-              setBalanceModal={setBalance}
+              // setBalanceModal={setBalance}
               path={path}
             />
             <LoanDetailsMobile>
