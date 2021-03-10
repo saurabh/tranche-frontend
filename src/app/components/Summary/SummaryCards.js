@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { readyToTransact } from 'utils/helperFunctions';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import axios from 'axios';
-import { serverUrl, apiUri } from 'config/constants';
+import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
-import { readyToTransact } from 'utils/helperFunctions';
-import PropTypes from 'prop-types';
 
 import {
   setAddress,
@@ -95,13 +95,9 @@ const SummaryCards = ({
     address = !address ? onboard.getState().address : address;
     if (num === 1) {
       setTokenBalance(slice.address, address);
-      // const result = getAccruedStakingRewards(slice.address);
-      // setAccruedStakingRewards(result);
     }
     if (num === 2) {
-      lpList.forEach((lp) => setTokenBalance(lp.address, address));
-      // const result = getAccruedStakingRewards(lp.address);
-      // setAccruedStakingRewards(result);
+      lpList && lpList.forEach((lp) => setTokenBalance(lp.address, address));
     }
     setModalType(type);
     type ? setHasAllowance(false) : setHasAllowance(true);
@@ -175,7 +171,7 @@ const SummaryCards = ({
           setHasAllowance={setHasAllowance}
         />
         <SummaryCard
-          title={path !== 'stake' ? 'Collateralization Ratio' : 'SLICE Rewards Collected'}
+          title={path !== 'stake' ? 'Collateralization Ratio' : 'Accrued SLICE Rewards'}
           value={path !== 'stake' ? ratio : withdrawn.balance}
           isLoading={false}
           path={path}

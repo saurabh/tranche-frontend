@@ -108,7 +108,6 @@ const SummaryCardCounter = styled.div`
             margin: 7px 0;
         }
     `}
-}
 `;
 
 const SummaryCardBtn = styled.button`

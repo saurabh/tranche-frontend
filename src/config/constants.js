@@ -1,5 +1,6 @@
 import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 // import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
+// import { networks as StakingNetworks } from 'build/contracts/StakingMilestones.json';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -15,6 +16,7 @@ export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const StakingAddress = process.env.REACT_APP_STAKING_ADDRESS;
+export const YieldFarmAddress = process.env.REACT_APP_STAKING_YIELD_ADDRESS;
 export const ETHDAITrancheAAddress = process.env.REACT_APP_TRANCHE_A_ADDRESS;
 export const ETHDAITrancheBAddress = process.env.REACT_APP_TRANCHE_B_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();

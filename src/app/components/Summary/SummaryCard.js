@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { PagesData, txMessage, StakingAddress } from 'config';
-import {
-  StakingSetup,
-  ERC20Setup,
-  roundNumber,
-  isGreaterThan,
-  isEqualTo
-} from 'utils';
+import { addStake, withdrawStake, massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
+import { txMessage, StakingAddress } from 'config';
+import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -39,6 +34,7 @@ const SummaryCard = ({
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
+  const [accruedRewards, setAccruedRewards] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
 
@@ -51,8 +47,15 @@ const SummaryCard = ({
   });
 
   useEffect(() => {
+    const getRewards = async () => {
+      if (type === 'reward' && address) {
+        const result = await getAccruedStakingRewards(address);
+        setAccruedRewards(fromWei(result))
+      }
+    };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-  }, [type])
+    getRewards();
+  }, [type, address]);
 
   const stakingAllowanceCheck = async (tokenAddress, amount) => {
     try {
@@ -98,52 +101,6 @@ const SummaryCard = ({
     }
   };
 
-  const addStake = async (tokenAddress) => {
-    try {
-      const StakingContract = StakingSetup(web3);
-      let { amount } = form.stake.values;
-      amount = toWei(amount);
-      await StakingContract.methods
-        .deposit(tokenAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const withdrawStake = async (tokenAddress) => {
-    try {
-      const StakingContract = StakingSetup(web3);
-      let { amount } = form.stake.values;
-      amount = toWei(amount);
-      await StakingContract.methods
-        .withdraw(tokenAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const adjustStake = (e, tokenAddress) => {
     try {
       e.preventDefault();
@@ -172,7 +129,7 @@ const SummaryCard = ({
                   : type === 'slice' || type === 'lp'
                   ? `${roundNumber(value)}`
                   : type === 'reward'
-                  ? `${roundNumber(value, 2)}`
+                  ? `${roundNumber(accruedRewards, 2)}`
                   : ''}
 
                 <div></div>
@@ -185,10 +142,15 @@ const SummaryCard = ({
                   ? `${roundNumber(value.coin1)} ETH`
                   : details}
               </SummaryCardDetails>
-              {path === 'stake' && type !== 'SLICE Rewards Collected' && (
+              {path === 'stake' && type !== 'reward' && (
                 <SummaryCardCounter>
                   <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
                   <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
+                </SummaryCardCounter>
+              )}
+              {path === 'stake' && type === 'reward' && (
+                <SummaryCardCounter>
+                  <button onClick={() => massHarvest()}>Claim</button>
                 </SummaryCardCounter>
               )}
             </SummaryCardContainer>
