@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addStake, withdrawStake, massHarvest, 
-  // getAccruedStakingRewards, fromWei
- } from 'services/contractMethods';
+import {
+  fromWei,
+  addStake,
+  withdrawStake,
+  massHarvest
+  // getAccruedStakingRewards
+} from 'services/contractMethods';
 import { txMessage } from 'config';
-import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
+import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, 
+  // safeAdd
+ } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -21,7 +27,7 @@ import StakingModal from '../../Modals/StakingModal';
 const SummaryCard = ({
   title,
   tokenAddress,
-  isLP,
+  lpList,
   value,
   type,
   details,
@@ -31,17 +37,21 @@ const SummaryCard = ({
   modalIsOpen,
   modalType,
   summaryModal,
-  ethereum: { web3, address, notify },
-  form,
+  ethereum: { web3, address, tokenBalance, notify },
   hasAllowance,
   setHasAllowance,
   color
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
+  const [balance, setBalance] = useState(0);
+  // const [lpBalance, setLPBalance] = useState(0);
   const [accruedRewards, setAccruedRewards] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
+  const setBalanceCB = useCallback((balance) => {
+    setBalance(roundNumber(fromWei(balance)));
+  }, []);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -51,17 +61,35 @@ const SummaryCard = ({
     return () => window.removeEventListener('resize', updateMedia);
   });
 
+  
   useEffect(() => {
     const getRewards = async () => {
       if (type === 'reward' && address) {
         // const result = await getAccruedStakingRewards(address);
         // setAccruedRewards(fromWei(result))
-        setAccruedRewards(0)
+        setAccruedRewards(0);
       }
     };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
     getRewards();
   }, [type, address]);
+  
+  useEffect(() => {
+    const setBalance = async () => {
+      if (tokenBalance) {
+        if (type === 'slice' && tokenAddress) setBalanceCB(tokenBalance[tokenAddress]);
+        if (type === 'lp' && lpList) {
+          // lpList.forEach(lp => {
+          //   setLPBalance(safeAdd(lpBalance, tokenBalance[lp.address]));
+          // })
+          // console.log(lpBalance);
+          // setBalanceCB(lpBalance);
+        }
+      } 
+    }
+
+    setBalance();
+  }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB])
 
   const stakingAllowanceCheck = async (stakingAddress, tokenAddress, amount) => {
     try {
@@ -110,7 +138,9 @@ const SummaryCard = ({
   const adjustStake = (e, stakingAddress, tokenAddress) => {
     try {
       e.preventDefault();
-      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
+      modalType
+        ? addStake(stakingAddress, tokenAddress)
+        : withdrawStake(stakingAddress, tokenAddress);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -126,27 +156,19 @@ const SummaryCard = ({
               <SummaryCardTitle>{title}</SummaryCardTitle>
 
               <SummaryCardValue>
-                {type === 'loan'
-                  ? `$${roundNumber(value.amount)}`
-                  : type === 'collateral'
-                  ? `$${Math.round(value.amount)}`
-                  : type === 'ratio'
-                  ? `${roundNumber(value.total, 1)}%`
-                  : type === 'slice' || type === 'lp'
+                {type === 'slice' || type === 'lp'
                   ? `${roundNumber(value)}`
                   : type === 'reward'
                   ? `${roundNumber(accruedRewards, 2)}`
                   : ''}
-
                 <div></div>
               </SummaryCardValue>
-
               <SummaryCardDetails>
-                {type === 'loan' && path !== 'stake'
-                  ? value.total + ' Loan Positions'
-                  : type === 'collateral' && path !== 'stake'
-                  ? `${roundNumber(value.coin1)} ETH`
-                  : details}
+                {type === 'slice'
+                  ? balance + ' SLICE Available'
+                  : type === 'lp'
+                  ? balance + ' SLICE-LP Available'
+                  : 'X Days Until Next Distribution'}
               </SummaryCardDetails>
               {path === 'stake' && type !== 'reward' && (
                 <SummaryCardCounter>
@@ -214,13 +236,11 @@ const SummaryCard = ({
 };
 
 SummaryCard.propTypes = {
-  ethereum: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum,
-  form: state.form
+  ethereum: state.ethereum
 });
 
 export default connect(mapStateToProps, {})(SummaryCard);

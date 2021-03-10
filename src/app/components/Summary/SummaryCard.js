@@ -6,21 +6,15 @@ import {
   SummaryCardContainer,
   SummaryCardTitle,
   SummaryCardValue,
-  SummaryCardDetails,
+  SummaryCardDetails
 } from './styles/SummaryComponents';
-import StakingModal from '../Modals/StakingModal';
 
 const SummaryCard = ({
   title,
   value,
   type,
   details,
-  path,
-  openModal,
-  closeModal,
-  modalIsOpen,
-  modalType,
-  summaryModal,
+  path
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
@@ -67,29 +61,9 @@ const SummaryCard = ({
               <div></div>
             </SummaryCardContainer>
           )}
-
-          <StakingModal
-            // State Values
-            path={path}
-            modalIsOpen={modalIsOpen}
-            modalType={modalType}
-            summaryModal={summaryModal}
-            // Functions
-            closeModal={() => closeModal()}
-            openModal={(bool) => openModal(bool)}
-          />
         </SummaryCardWrapper>
       ) : (
-        <StakingModal
-          // State Values
-          path={path}
-          modalIsOpen={modalIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          // Functions
-          closeModal={() => closeModal()}
-          openModal={(bool) => openModal(bool)}
-        />
+        {}
       )}
     </div>
   );
