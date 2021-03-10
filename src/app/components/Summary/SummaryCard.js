@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addStake, withdrawStake, massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
-import { txMessage, StakingAddress } from 'config';
+import { PagesData, txMessage, StakingAddress } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,

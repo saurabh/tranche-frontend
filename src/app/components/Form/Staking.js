@@ -207,7 +207,7 @@ let StakingForm = ({
 
                 (modalType
                 ? i18n.t('stake.modal.youHaveStake') + " " + roundNumber(balance) + " " + i18n.t('stake.modal.availableStake') : 
-                i18n.t('stake.modal.youHaveWithdraw') + " " + totalStaked + " " + i18n.t('stake.modal.availableWithdraw')) : 
+                i18n.t('stake.modal.youHaveWithdraw') + " " + userStaked + " " + i18n.t('stake.modal.availableWithdraw')) : 
                 
                 modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
