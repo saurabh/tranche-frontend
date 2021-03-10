@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addStake, withdrawStake, massHarvest, getAccruedStakingRewards, fromWei } from 'services/contractMethods';
-import { txMessage, StakingAddress } from 'config';
-import { StakingSetup, ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
+import { addStake, withdrawStake, massHarvest, 
+  // getAccruedStakingRewards, fromWei
+ } from 'services/contractMethods';
+import { txMessage } from 'config';
+import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -54,6 +56,7 @@ const SummaryCard = ({
       if (type === 'reward' && address) {
         // const result = await getAccruedStakingRewards(address);
         // setAccruedRewards(fromWei(result))
+        setAccruedRewards(0)
       }
     };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
@@ -61,7 +64,6 @@ const SummaryCard = ({
   }, [type, address]);
 
   const stakingAllowanceCheck = async (stakingAddress, tokenAddress, amount) => {
-    console.log(stakingAddress)
     try {
       if (modalType && amount !== '') {
         amount = toWei(amount);
