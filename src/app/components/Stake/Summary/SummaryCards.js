@@ -70,9 +70,13 @@ const SummaryCards = ({
       getCollateral();
       getLoan();
     } else if (isDesktop && currentPath === 'stake' && address) {
+      if (slice && lpList) {
+        setTokenBalance(slice.address, address);
+        lpList.forEach((lp) => setTokenBalance(lp.address, address));
+      }
       getStakingData();
     }
-  }, [isDesktop, currentPath, address, summaryFetchSuccess]);
+  }, [isDesktop, currentPath, address, summaryFetchSuccess, lpList, slice, setTokenBalance]);
 
   const getRatio = async () => {
     const res = await axios(`${BASE_URL + summaryRatio}`);
