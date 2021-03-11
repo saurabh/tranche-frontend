@@ -72,7 +72,7 @@
       "tableHead": {
         "stakingPool": "Staking Pool",
         "staked": "Staked",
-        "reward": "REWARD / BLOCK",
+        "reward": "EPOCH REWARDS",
         "status": "STATUS"
       },
       "statuses": {

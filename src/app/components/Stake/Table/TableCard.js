@@ -46,7 +46,7 @@ import {
 import i18n from 'app/components/locale/i18n';
 
 const TableCard = ({
-  staking: { contractAddress, isActive, reward, staked, type },
+  staking: { contractAddress, isActive, reward, staked, type, apy },
   // trade: { tradeType },
   path,
   ethereum: { web3 }
@@ -117,12 +117,12 @@ const TableCard = ({
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              {/* <h2></h2> */}
+              <h2>{reward}</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content'>
-              {/* <h2></h2> */}
+              <h2>{apy}</h2>
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' stake>
