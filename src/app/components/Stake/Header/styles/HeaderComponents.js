@@ -12,6 +12,7 @@ const HeaderWrapper = styled.div`
   @media (max-width: 767px){
     min-height: 100px;
     padding: 0 20px;
+    z-index: -1;
   }
 `;
 const HeaderContent = styled.div`
@@ -489,7 +490,7 @@ const LocaleWrapper = styled.div`
   ${({ mobile }) => mobile && `
     position: absolute;
     right: 33px;
-    z-index: 1000;
+    z-index: 0;
     h2, a{
       color: #2B3193;
     }

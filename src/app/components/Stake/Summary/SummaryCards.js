@@ -215,7 +215,7 @@ const SummaryCards = ({
           closeModal={closeModal}
           modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalThirdIsOpen}
           modalType={modalType}
-          summaryModal={false}
+          summaryModal={summaryModal}
           color='#369987'
         />
       </SummaryCardsWrapper>

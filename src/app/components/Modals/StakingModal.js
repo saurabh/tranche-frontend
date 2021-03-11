@@ -142,6 +142,7 @@ const StakingModal = ({
   };
 
   const stakingModal = () => {
+
     return (
       <Modal
         isOpen={modalIsOpen}
@@ -157,51 +158,6 @@ const StakingModal = ({
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
-        {!isDesktop && summaryModal ? (
-          <ModalActionsContent stakingMobile>
-            <StakingModalWrapper>
-              <StakingModalRow>
-                <h2>Staked SLICE Tokens</h2>
-                {/* <h2>00.00</h2> */}
-                <SummaryCardCounter stakingMobile>
-                  <SummaryCardBtn stakingMobile onClick={() => openModal(true, 1)}>
-                    +
-                  </SummaryCardBtn>
-                  <SummaryCardBtn stakingMobile onClick={() => openModal(false, 1)}>
-                    -
-                  </SummaryCardBtn>
-                </SummaryCardCounter>
-              </StakingModalRow>
-
-              <StakingModalRow>
-                <h2>Staked SLICE Tokens</h2>
-                {/* <h2>00.00</h2> */}
-                <SummaryCardCounter stakingMobile>
-                  <SummaryCardBtn stakingMobile onClick={() => openModal(true, 2)}>
-                    +
-                  </SummaryCardBtn>
-                  <SummaryCardBtn stakingMobile onClick={() => openModal(false, 2)}>
-                    -
-                  </SummaryCardBtn>
-                </SummaryCardCounter>
-              </StakingModalRow>
-
-              <StakingModalRow>
-                <h2>SLICE Rewards Collected</h2>
-                {/* <h2>00.00</h2> */}
-                <SummaryClaimBtn stakingMobile>
-                  <button onClick={() => openModal(null, 3)}>Claim</button>
-                </SummaryClaimBtn>
-              </StakingModalRow>
-            </StakingModalWrapper>
-            <LoanDetailsMobile>
-              <h2>
-                {i18n.t('stake.modal.sliceLocked')}— {totalStaked}
-                <span></span>
-              </h2>{' '}
-            </LoanDetailsMobile>
-          </ModalActionsContent>
-        ) : (
           <ModalActionsContent stakingMobile>
             <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
               <ModalActionDetailsContent stake={true} trade={true}>
@@ -275,7 +231,71 @@ const StakingModal = ({
               </h2>
             </LoanDetailsMobile>
           </ModalActionsContent>
-        )}
+      </Modal>
+    );
+  };
+
+  const InitialStakingModal = () => {
+
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={FirstCustomStyles}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+      >
+        <ModalHeader stake>
+          <h2>{modalType === true ? i18n.t('stake.modal.stakeModalTitle') : modalType === false ? i18n.t('stake.modal.withdrawModalTitle') : 'Claim rewards'}</h2>
+          <button onClick={() => modalClose()}>
+            <img src={CloseModal} alt='' />
+          </button>
+        </ModalHeader>
+
+          <ModalActionsContent stakingMobile>
+            <StakingModalWrapper>
+              <StakingModalRow>
+                <h2>Staked SLICE Tokens</h2>
+                {/* <h2>00.00</h2> */}
+                <SummaryCardCounter stakingMobile>
+                  <SummaryCardBtn stakingMobile onClick={() => openModal(true, 1)}>
+                    +
+                  </SummaryCardBtn>
+                  <SummaryCardBtn stakingMobile onClick={() => openModal(false, 1)}>
+                    -
+                  </SummaryCardBtn>
+                </SummaryCardCounter>
+              </StakingModalRow>
+
+              <StakingModalRow>
+                <h2>Staked SLICE Tokens</h2>
+                {/* <h2>00.00</h2> */}
+                <SummaryCardCounter stakingMobile>
+                  <SummaryCardBtn stakingMobile onClick={() => openModal(true, 2)}>
+                    +
+                  </SummaryCardBtn>
+                  <SummaryCardBtn stakingMobile onClick={() => openModal(false, 2)}>
+                    -
+                  </SummaryCardBtn>
+                </SummaryCardCounter>
+              </StakingModalRow>
+
+              <StakingModalRow>
+                <h2>SLICE Rewards Collected</h2>
+                {/* <h2>00.00</h2> */}
+                <SummaryClaimBtn stakingMobile claim>
+                  <button onClick={() => openModal(null, 3)}>Claim</button>
+                </SummaryClaimBtn>
+              </StakingModalRow>
+            </StakingModalWrapper>
+            <LoanDetailsMobile>
+              <h2>
+                {i18n.t('stake.modal.sliceLocked')}— {totalStaked}
+                <span></span>
+              </h2>{' '}
+            </LoanDetailsMobile>
+          </ModalActionsContent>
       </Modal>
     );
   };
@@ -328,7 +348,7 @@ const StakingModal = ({
       </Modal>
     );
   };
-  return 0 === 1 ? notFound() : stakingModal() ;
+  return !isDesktop && summaryModal ? InitialStakingModal() : 0 === 1 ? notFound() : stakingModal() ;
   // return balance === 0 && modalType ? notFound() : stakingModal() ;
 };
 

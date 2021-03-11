@@ -193,6 +193,7 @@ function Navbar({ path }) {
               activeStyle={{
                 color: 'rgba(68, 65, 207, 1)'
               }}
+              className="navLinkDisabled"
               exact
             >
             {i18n.t('navbar.vote')}

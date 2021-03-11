@@ -147,7 +147,6 @@ const FormInputsWrapper = styled.div`
       font-size: 11px;
       text-align: center;
       color: #B9B9B9;
-      margin: 0 0 24px 0;
     }
   }
   & > div{

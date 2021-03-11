@@ -121,7 +121,9 @@ const HeaderTabs = ({ path }) => {
         </RatesWrapper>
           </div>
           <a
-            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://docs.tranche.finance/tranche-docs-1/buying-exiting-a-tranche"
           >
             {i18n.t('stake.tabs.howTo')}
           </a>

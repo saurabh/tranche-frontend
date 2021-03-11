@@ -100,6 +100,9 @@ const SummaryCardCounter = styled.div`
     transform: translateY(-50%);
     right: 0;
     ${({ stakingMobile }) => stakingMobile && `
+        button{
+            background: #4441CF;
+        }
         @media (max-width: 633px){
             position: relative;
             transform: none;
@@ -130,15 +133,19 @@ const SummaryClaimBtn = styled.div`
             outline: none;
        }
     `}
-    // ${({ stakingMobile }) => stakingMobile && `
-    //     @media (max-width: 633px){
-    //         position: relative;
-    //         transform: none;
-    //         display: flex;
-    //         justify-content: center;
-    //         margin: 7px 0;
-    //     }
-    // `}
+    ${({ stakingMobile }) => stakingMobile && `
+        button{
+            background: #4441CF;
+            color: #FFFFFF !important;
+        }
+        @media (max-width: 633px){
+            position: relative;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin: 7px 0;
+        }
+    `}
 
 `;
 
