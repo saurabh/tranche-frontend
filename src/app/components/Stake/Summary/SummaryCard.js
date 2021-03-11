@@ -5,7 +5,7 @@ import {
   fromWei,
   addStake,
   withdrawStake,
-  massHarvest
+  epochTimeRemaining
   // getAccruedStakingRewards
 } from 'services/contractMethods';
 import { txMessage } from 'config';
@@ -58,6 +58,14 @@ const SummaryCard = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
+
+  useEffect(() => {
+    const setEpochTime = async () => {
+      if (type === 'reward') {
+        
+      }
+    }
+  }, [type]);
 
   useEffect(() => {
     const getRewards = async () => {
@@ -167,7 +175,7 @@ const SummaryCard = ({
                   ? balance + ' SLICE Available'
                   : type === 'lp'
                   ? balance + ' SLICE-LP Available'
-                  : 'X Days Until Next Distribution'}
+                  : ' Days Until Next Distribution'}
               </SummaryCardDetails>
               {path === 'stake' && type !== 'reward' && (
                 <SummaryCardCounter>
@@ -177,7 +185,6 @@ const SummaryCard = ({
               )}
               {path === 'stake' && type === 'reward' && (
                 <SummaryClaimBtn claim>
-                  {/* <button onClick={() => massHarvest()}>Claim</button> */}
                   <button onClick={() => openModal()}>Claim</button>
                 </SummaryClaimBtn>
               )}

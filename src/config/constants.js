@@ -23,6 +23,7 @@ export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
+export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
