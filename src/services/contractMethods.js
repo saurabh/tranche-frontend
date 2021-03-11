@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   JLoanSetup,
   JLoanHelperSetup,
@@ -246,13 +247,21 @@ export const epochTimeRemaining = async (stakingAddress) => {
     const state = store.getState();
     const { web3 } = state.ethereum;
     const Staking = StakingSetup(web3, stakingAddress);
-    const result = await Staking.methods.currentEpochMultiplier().call();
-    const timeRemaining = ( result / 10**18) * epochDuration;
+    let result = await Staking.methods.currentEpochMultiplier().call();
+    result = (result / 10 ** 18) * epochDuration;
+    let timeRemaining = moment
+      .duration(result, 'seconds')
+      .humanize()
+      .split(' ')
+      .map((word) => {
+        return word[0].toUpperCase() + word.substring(1);
+      })
+      .join(' ');
     return timeRemaining;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 export const getAccruedStakingRewards = async (yieldfarmAddress, tokenAddress) => {
   try {
