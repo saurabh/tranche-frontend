@@ -126,7 +126,8 @@ const SummaryClaimBtn = styled.div`
             border: none;
             cursor: pointer;
             letter-spacing: 0.05em;
-            text-transform: uppercase;
+            text-transform: uppercase;    
+            outline: none;
        }
     `}
     // ${({ stakingMobile }) => stakingMobile && `

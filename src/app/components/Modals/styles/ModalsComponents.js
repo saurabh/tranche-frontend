@@ -136,6 +136,13 @@ ${({ interest }) => interest && `
   }
 `}
 
+${({ stake }) => stake && `
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`}
+
 `
 const BtnLoanModal = styled.div`
 display: flex;

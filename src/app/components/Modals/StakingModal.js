@@ -20,9 +20,13 @@ import {
   StakingModalRow,
   StakingModalWrapper,
   SliceNotFound,
-  SliceNotFoundBtn
+  SliceNotFoundBtn,
+  ModalUserActions,
+  ModalContent,
+  BtnGrpLoanModalWrapper,
+  ModalButton
 } from './styles/ModalsComponents';
-import { SummaryCardCounter, SummaryCardBtn } from '../Stake/Summary/styles/SummaryComponents';
+import { SummaryCardCounter, SummaryCardBtn, SummaryClaimBtn } from '../Stake/Summary/styles/SummaryComponents';
 import { roundNumber } from 'utils';
 import i18n from '../locale/i18n';
 const { stakingSummaryDetail } = apiUri;
@@ -148,7 +152,7 @@ const StakingModal = ({
         contentLabel='Adjust'
       >
         <ModalHeader stake>
-          <h2>{modalType ? i18n.t('stake.modal.stakeModalTitle') : !modalType ? i18n.t('stake.modal.withdrawModalTitle') : ''}</h2>
+          <h2>{modalType === true ? i18n.t('stake.modal.stakeModalTitle') : modalType === false ? i18n.t('stake.modal.withdrawModalTitle') : 'Claim rewards'}</h2>
           <button onClick={() => modalClose()}>
             <img src={CloseModal} alt='' />
           </button>
@@ -158,7 +162,7 @@ const StakingModal = ({
             <StakingModalWrapper>
               <StakingModalRow>
                 <h2>Staked SLICE Tokens</h2>
-                <h2>00.00</h2>
+                {/* <h2>00.00</h2> */}
                 <SummaryCardCounter stakingMobile>
                   <SummaryCardBtn stakingMobile onClick={() => openModal(true, 1)}>
                     +
@@ -171,7 +175,7 @@ const StakingModal = ({
 
               <StakingModalRow>
                 <h2>Staked SLICE Tokens</h2>
-                <h2>00.00</h2>
+                {/* <h2>00.00</h2> */}
                 <SummaryCardCounter stakingMobile>
                   <SummaryCardBtn stakingMobile onClick={() => openModal(true, 2)}>
                     +
@@ -180,6 +184,14 @@ const StakingModal = ({
                     -
                   </SummaryCardBtn>
                 </SummaryCardCounter>
+              </StakingModalRow>
+
+              <StakingModalRow>
+                <h2>SLICE Rewards Collected</h2>
+                {/* <h2>00.00</h2> */}
+                <SummaryClaimBtn stakingMobile>
+                  <button onClick={() => openModal(null, 3)}>Claim</button>
+                </SummaryClaimBtn>
               </StakingModalRow>
             </StakingModalWrapper>
             <LoanDetailsMobile>
@@ -191,7 +203,7 @@ const StakingModal = ({
           </ModalActionsContent>
         ) : (
           <ModalActionsContent stakingMobile>
-            <ModalActionDetails color={modalType ? '#4441CF' : '#6E41CF'} stake>
+            <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
               <ModalActionDetailsContent stake={true} trade={true}>
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
@@ -209,21 +221,53 @@ const StakingModal = ({
                 </LoanDetailsRow>
               </ModalActionDetailsContent>
             </ModalActionDetails>
-            <StakingForm
-              modalType={modalType}
-              userStaked={userStaked}
-              tokenAddress={tokenAddress}
-              setTokenAddress={setTokenAddress}
-              hasAllowance={hasAllowance}
-              approveLoading={approveLoading}
-              isLPToken={isLPToken}
-              // Functions
-              stakingAllowanceCheck={stakingAllowanceCheck}
-              stakingApproveContract={stakingApproveContract}
-              adjustStake={adjustStake}
-              // setBalanceModal={setBalance}
-              path={path}
-            />
+            {
+              modalType === null ?
+              <ModalUserActions>
+                <ModalContent>
+                  <BtnGrpLoanModalWrapper stake>
+                    <ModalButton
+                      btnColor='#FFFFFF'
+                      backgroundColor='#369987'
+                    >
+                      First Button
+                    </ModalButton>
+                    <ModalButton
+                      btnColor='#FFFFFF'
+                      backgroundColor='#369987'
+                    >
+                      Second Button
+                    </ModalButton>
+                    <ModalButton
+                      btnColor='#FFFFFF'
+                      backgroundColor='#369987'
+                    >
+                      Third Button
+                    </ModalButton>
+                  </BtnGrpLoanModalWrapper>
+                </ModalContent>
+              </ModalUserActions> :
+
+              <StakingForm
+                modalType={modalType}
+                userStaked={userStaked}
+                type={type}
+                tokenAddress={tokenAddress}
+                setTokenAddress={setTokenAddress}
+                hasAllowance={hasAllowance}
+                approveLoading={approveLoading}
+                isLPToken={isLPToken}
+                // Functions
+                stakingAllowanceCheck={stakingAllowanceCheck}
+                stakingApproveContract={stakingApproveContract}
+                adjustStake={adjustStake}
+                // setBalanceModal={setBalance}
+                path={path}
+              /> 
+              
+            }
+
+            
             <LoanDetailsMobile>
               <h2>
                 SLICE LOCKED — {totalStaked}

@@ -178,7 +178,8 @@ const SummaryCard = ({
               )}
               {path === 'stake' && type === 'reward' && (
                 <SummaryClaimBtn claim>
-                  <button onClick={() => massHarvest()}>Claim</button>
+                  {/* <button onClick={() => massHarvest()}>Claim</button> */}
+                  <button onClick={() => openModal()}>Claim</button>
                 </SummaryClaimBtn>
               )}
             </SummaryCardContainer>

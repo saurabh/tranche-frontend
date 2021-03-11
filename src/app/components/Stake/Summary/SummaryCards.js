@@ -40,6 +40,7 @@ const SummaryCards = ({
   const [loanIsLoading, setLoanIsLoading] = useState(false);
   const [modalFirstIsOpen, setFirstIsOpen] = useState(false);
   const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
+  const [modalThirdIsOpen, setThirdIsOpen] = useState(false);
   const [modalType, setModalType] = useState(true);
   const [summaryModal, setSummaryModal] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
@@ -113,20 +114,30 @@ const SummaryCards = ({
       setSummaryModal(true);
       setFirstIsOpen(false);
       setSecondIsOpen(false);
+      setThirdIsOpen(false);
     } else if (num === 1) {
       setSummaryModal(false);
       setFirstIsOpen(true);
       setSecondIsOpen(false);
+      setThirdIsOpen(false);
     } else if (num === 2) {
       setSummaryModal(false);
-      setSecondIsOpen(true);
       setFirstIsOpen(false);
+      setSecondIsOpen(true);
+      setThirdIsOpen(false);
+    }  
+    else if (num === 3) {
+      setSummaryModal(false);
+      setFirstIsOpen(false);
+      setSecondIsOpen(false);
+      setThirdIsOpen(true);
     }    
   };    
 
   const closeModal = () => {
     setFirstIsOpen(false);
     setSecondIsOpen(false);
+    setThirdIsOpen(false);
     setModalType(true);
     setSummaryModal(false);
   };    
@@ -135,7 +146,7 @@ const SummaryCards = ({
     <div>
       {!isDesktop && currentPath === 'stake' && (
         <SummaryCardsWrapper className='container content-container'>
-          <button onClick={() => openModal(null, 0)}>
+          <button onClick={() => openModal(undefined, 0)}>
             Stake and withdraw
             <span>+ -</span>
           </button>
@@ -157,7 +168,7 @@ const SummaryCards = ({
           details={currentPath !== 'stake' ? '' : ''}
           openModal={(bool, num = 1) => openModal(bool, num)}
           closeModal={closeModal}
-          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen ? summaryModal : modalFirstIsOpen}
+          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalFirstIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
           hasAllowance={hasAllowance}
@@ -175,7 +186,7 @@ const SummaryCards = ({
           details={currentPath !== 'stake' ? '' : ''}
           openModal={(bool, num = 2) => openModal(bool, num)}
           closeModal={closeModal}
-          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen ? summaryModal : modalSecondIsOpen}
+          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalSecondIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
           hasAllowance={hasAllowance}
@@ -189,9 +200,9 @@ const SummaryCards = ({
           path={currentPath}
           type={currentPath !== 'stake' ? 'ratio' : 'reward'}
           details={currentPath !== 'stake' ? 'Total Borrowed vs. Total Held' : ''}
-          openModal={(bool, num) => openModal(bool, num)}
+          openModal={(bool = null, num = 3) => openModal(bool, num)}
           closeModal={closeModal}
-          modalIsOpen={false}
+          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalThirdIsOpen}
           modalType={modalType}
           summaryModal={false}
           color="#369987"
