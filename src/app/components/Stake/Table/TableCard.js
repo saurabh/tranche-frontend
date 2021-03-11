@@ -11,7 +11,7 @@ import {
   setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import { addrShortener } from 'utils';
+import { addrShortener, roundNumber } from 'utils';
 import { etherScanUrl, statuses } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 
@@ -122,7 +122,7 @@ const TableCard = ({
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content'>
-              <h2>{apy}%</h2>
+              <h2>{roundNumber(apy, false)}%</h2>
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' stake>
@@ -166,12 +166,16 @@ const TableCard = ({
           </TableColMobile>
           <TableColMobile stake>
             <TableMobilColContent col>
-              {/* <h2></h2> */}
+              <h2>{reward}</h2>
+              <h2>SLICE</h2>
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile stake>
-            <TableMobilColContent col>{/* <h2></h2> */}</TableMobilColContent>
+            <TableMobilColContent col>
+              <h2>{roundNumber(apy, false)}</h2>
+              <h2>%</h2>
+            </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile btn stake></TableColMobile>
