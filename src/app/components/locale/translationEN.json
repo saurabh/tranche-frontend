@@ -71,7 +71,7 @@
       },
       "tableHead": {
         "stakingPool": "Staking Pool",
-        "staked": "Staked",
+        "staked": "total Staked",
         "reward": "EPOCH REWARDS",
         "status": "STATUS"
       },

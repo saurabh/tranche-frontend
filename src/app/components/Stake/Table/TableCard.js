@@ -117,12 +117,12 @@ const TableCard = ({
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>{reward}</h2>
+              <h2>{reward} SLICE</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content'>
-              <h2>{apy}</h2>
+              <h2>{apy}%</h2>
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' stake>
