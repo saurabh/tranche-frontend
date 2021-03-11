@@ -15,6 +15,7 @@ import ErrorModal from 'app/components/Modals/Error';
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
+import Trade from 'app/pages/Trade';
 import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
@@ -166,9 +167,9 @@ const App = ({
         <Router>
           <Switch location={window.location}>
             <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
-            <Redirect exact from={baseRouteUrl + '/earn'} to='/borrow' />
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
+            <Route exact path={baseRouteUrl + '/earn'} component={Trade} />
             <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />

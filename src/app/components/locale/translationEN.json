@@ -17,6 +17,14 @@
       "all": "ALL ASSETS"
     }
   },
+  "earn": {
+    "title": "Earning Markets",
+    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
+    "tabs": {
+      "own": "My Tranches",
+      "all": "All Tranches"
+    }
+  },
   "lend": {
     "title": "Lending Markets",
     "text": "LEND STABLE COINS TO RECEIVE CRYPTOCURRENCY RETURNS",

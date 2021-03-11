@@ -169,8 +169,7 @@ function Navbar({ path }) {
             <span data-content={i18n.t("navbar.lend")}></span>
             {i18n.t("navbar.lend")}
             </NavLink>
-            {/* <NavLink
-              className="navLinkDisabled"
+            <NavLink
               to={baseUrl + '/earn'}
               activeStyle={{
                 borderBottom: '2px solid',
@@ -180,7 +179,7 @@ function Navbar({ path }) {
             >
               <span data-content={i18n.t("navbar.earn")}></span>
               {i18n.t("navbar.earn")}
-            </NavLink> */}
+            </NavLink>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{

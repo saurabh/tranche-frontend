@@ -25,6 +25,14 @@
       "all": "所有资产"
     }
   },
+  "earn": {
+    "title": "Earning Markets",
+    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
+    }
+  },
   "stake": {
     "title": "质押池",
     "text": "质押加密货币获得SLICE奖励",
