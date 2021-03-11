@@ -9,7 +9,7 @@ import {
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
-import { pairData, LoanContractAddress, factoryFees, txMessage } from 'config';
+import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -241,6 +241,31 @@ export const sendValueToTranche = async (trancheId) => {
 
 // Staking Functions
 
+export const epochTimeRemaining = async (stakingAddress) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const Staking = StakingSetup(web3, stakingAddress);
+    const result = await Staking.methods.currentEpochMultiplier().call();
+    const timeRemaining = ( result / 10**18) * epochDuration;
+    return timeRemaining;
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getAccruedStakingRewards = async (yieldfarmAddress, tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
+    const result = await YieldFarm.methods.getTotalAccruedRewards(tokenAddress).call();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const addStake = async (stakingAddress, tokenAddress) => {
   try {
     const state = store.getState();
@@ -282,18 +307,6 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
           };
         });
       });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getAccruedStakingRewards = async (yieldfarmAddress, tokenAddress) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
-    const result = await YieldFarm.methods.getTotalAccruedRewards(tokenAddress).call();
-    return result;
   } catch (error) {
     console.error(error);
   }
