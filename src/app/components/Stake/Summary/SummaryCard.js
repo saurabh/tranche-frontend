@@ -9,9 +9,7 @@ import {
   // getAccruedStakingRewards
 } from 'services/contractMethods';
 import { txMessage } from 'config';
-import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, 
-  // safeAdd
- } from 'utils';
+import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -50,7 +48,7 @@ const SummaryCard = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
-    setBalance(roundNumber(fromWei(balance)));
+    setBalance(roundNumber(balance));
   }, []);
 
   const updateMedia = () => {
@@ -61,7 +59,6 @@ const SummaryCard = ({
     return () => window.removeEventListener('resize', updateMedia);
   });
 
-  
   useEffect(() => {
     const getRewards = async () => {
       if (type === 'reward' && address) {
@@ -73,23 +70,25 @@ const SummaryCard = ({
     type === 'lp' ? setLPToken(true) : setLPToken(false);
     getRewards();
   }, [type, address]);
-  
+
   useEffect(() => {
     const setBalance = async () => {
       if (tokenBalance) {
-        if (type === 'slice' && tokenAddress) setBalanceCB(tokenBalance[tokenAddress]);
+        if (type === 'slice' && tokenAddress) setBalanceCB(fromWei(tokenBalance[tokenAddress]));
         if (type === 'lp' && lpList) {
-          // lpList.forEach(lp => {
-          //   setLPBalance(safeAdd(lpBalance, tokenBalance[lp.address]));
-          // })
-          // console.log(lpBalance);
-          // setBalanceCB(lpBalance);
+          let lpBalance = 0;
+          lpList.forEach((lp) => {
+            if (tokenBalance[lp.address]) {
+              lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
+            }
+          });
+          setBalanceCB(lpBalance);
         }
-      } 
-    }
+      }
+    };
 
     setBalance();
-  }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB])
+  }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
   const stakingAllowanceCheck = async (stakingAddress, tokenAddress, amount) => {
     try {
