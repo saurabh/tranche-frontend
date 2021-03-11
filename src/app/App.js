@@ -10,7 +10,7 @@ import { fetchTableData } from 'redux/actions/tableData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
-import { serverUrl, apiUri, LoanContractAddress, PriceOracleAddress, ProtocolAddress, StakingAddress } from 'config/constants';
+import { serverUrl, apiUri, LoanContractAddress, PriceOracleAddress, ProtocolAddress, StakingAddresses } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
 import Earn from 'app/pages/Lend';
@@ -117,7 +117,7 @@ const App = ({
 
     const Staking = web3.eth
       .subscribe('logs', {
-        address: StakingAddress
+        address: StakingAddresses
       })
       .on('data', async () => {
         await timeout(4000);

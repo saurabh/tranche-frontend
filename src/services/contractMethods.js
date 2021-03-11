@@ -241,12 +241,12 @@ export const sendValueToTranche = async (trancheId) => {
 
 // Staking Functions
 
-export const epochTimeRemaining = async (yieldfarmAddress) => {
+export const epochTimeRemaining = async (stakingAddress) => {
   try {
     const state = store.getState();
     const { web3 } = state.ethereum;
-    const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
-    const result = await YieldFarm.methods.currentEpochMultiplier().call();
+    const Staking = StakingSetup(web3, stakingAddress);
+    const result = await Staking.methods.currentEpochMultiplier().call();
     const timeRemaining = ( result / 10**18) * epochDuration;
     return timeRemaining;
   } catch (error) {

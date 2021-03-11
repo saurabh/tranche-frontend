@@ -8,7 +8,7 @@ import {
   epochTimeRemaining
   // getAccruedStakingRewards
 } from 'services/contractMethods';
-import { txMessage } from 'config';
+import { txMessage, StakingAddresses } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
 import {
   SummaryCardWrapper,
@@ -62,9 +62,12 @@ const SummaryCard = ({
   useEffect(() => {
     const setEpochTime = async () => {
       if (type === 'reward') {
-        
+        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length-1])
+        console.log(result);
       }
     }
+
+    setEpochTime();
   }, [type]);
 
   useEffect(() => {
