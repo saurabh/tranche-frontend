@@ -270,7 +270,6 @@ export const getAccruedStakingRewards = async (yieldfarmAddress, address) => {
     const { web3 } = state.ethereum;
     const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
     const result = await YieldFarm.methods.getTotalAccruedRewards(address).call();
-    console.log(fromWei(result))
     return fromWei(result);
   } catch (error) {
     console.error(error);

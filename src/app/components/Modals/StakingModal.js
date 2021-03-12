@@ -101,7 +101,7 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   path,
   ethereum: { address },
-  userSummary: { slice, lp },
+  userSummary: { slice, lp, lpList },
   // State Values
   summaryModal,
   stakingList,
@@ -152,6 +152,10 @@ const StakingModal = ({
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
   }, [modalIsOpen, type, tokenAddress, address]);
+
+  useEffect(() => {
+    lpList = slice && lpList && lpList.length === 2 && lpList.unshift(slice);
+  }, [lpList, slice]);
 
   useEffect(() => {
     let rewards = {};
@@ -209,44 +213,26 @@ const StakingModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          {modalType === null ? (
-            <ModalUserActions>
-              <ModalContent>
-                <BtnGrpLoanModalWrapper stake>
-                  {stakingList.map((item) => (
-                    <div key={item.type}>
-                      <img alt='pair icons' />
-                      <h2>{accruedRewards[tokenAddress] ? roundNumber(accruedRewards[tokenAddress]) : '0'} SLICE</h2>
-                      <ModalButton onClick={() => massHarvest(item.yieldAddress)} btnColor='#FFFFFF' backgroundColor='#369987'>
-                        Claim
-                      </ModalButton>
-                    </div>
-                  ))}
-                </BtnGrpLoanModalWrapper>
-              </ModalContent>
-            </ModalUserActions>
-          ) : (
-            <StakingForm
-              modalType={modalType}
-              userStaked={userStaked}
-              type={type}
-              tokenAddress={tokenAddress}
-              setTokenAddress={setTokenAddress}
-              hasAllowance={hasAllowance}
-              approveLoading={approveLoading}
-              isLPToken={isLPToken}
-              // Functions
-              stakingAllowanceCheck={stakingAllowanceCheck}
-              stakingApproveContract={stakingApproveContract}
-              adjustStake={adjustStake}
-              // setBalanceModal={setBalance}
-              path={path}
-            />
-          )}
+          <StakingForm
+            modalType={modalType}
+            userStaked={userStaked}
+            type={type}
+            tokenAddress={tokenAddress}
+            setTokenAddress={setTokenAddress}
+            hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
+            isLPToken={isLPToken}
+            // Functions
+            stakingAllowanceCheck={stakingAllowanceCheck}
+            stakingApproveContract={stakingApproveContract}
+            adjustStake={adjustStake}
+            // setBalanceModal={setBalance}
+            path={path}
+          />
 
           <LoanDetailsMobile>
             <h2>
-              SLICE LOCKED — {totalStaked}
+              {/* SLICE LOCKED — {totalStaked} */}
               <span></span>
             </h2>
           </LoanDetailsMobile>
@@ -344,16 +330,16 @@ const StakingModal = ({
                     </ClaimModalCol>
                   </ClaimModalRow>
 
-                  {stakingList.map((item) => (
-                    <ClaimModalRow right>
+                  {lpList && lpList.map((item) => (
+                    <ClaimModalRow key={item.name} right>
                       <ClaimModalCol value right pair>
                         <img src={TrancheClaim} alt='' />
-                        <img src={pairLogos[item.type]} alt='' />
+                        <img src={pairLogos[item.name]} alt='' />
                       </ClaimModalCol>
                       <ClaimModalCol value right rewards>
-                        <h2>{accruedRewards[item.tokenAddress] ? roundNumber(accruedRewards[item.tokenAddress]) : '0'} SLICE</h2>
+                        <h2>{accruedRewards[item.address] ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
                       </ClaimModalCol>
-                      <ClaimModalCol disabled={accruedRewards[item.tokenAddress] && accruedRewards[item.tokenAddress]=== '0'} value right claim btn>
+                      <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn>
                         <button onClick={() => massHarvest(item.yieldAddress)}>
                           <h2>Claim</h2>
                         </button>
@@ -364,13 +350,6 @@ const StakingModal = ({
               </ClaimModalHalfContentWrapper>
             </ClaimModalHalfWrapper>
           </ModalUserActions>
-
-          {/* <LoanDetailsMobile>
-              <h2>
-                SLICE LOCKED — {totalStaked}
-                <span></span>
-              </h2>
-            </LoanDetailsMobile> */}
         </ModalActionsContent>
       </Modal>
     );
@@ -512,5 +491,6 @@ const mapStateToProps = (state) => ({
   stakingList: state.data.stakingList,
   path: state.path
 });
+
 
 export default connect(mapStateToProps, {})(StakingModal);
