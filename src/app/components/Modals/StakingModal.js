@@ -35,7 +35,7 @@ import {
 
 import { SummaryCardCounter, SummaryCardBtn, SummaryClaimBtn } from '../Stake/Summary/styles/SummaryComponents';
 import { roundNumber } from 'utils';
-import { Lock, TrancheClaim, EthClaim, DaiClaim } from 'assets';
+import { Lock, TrancheClaim } from 'assets';
 
 import i18n from '../locale/i18n';
 const { stakingSummaryDetail } = apiUri;
