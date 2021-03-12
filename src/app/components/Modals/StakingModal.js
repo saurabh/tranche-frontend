@@ -104,6 +104,8 @@ const StakingModal = ({
   userSummary: { slice, lp },
   // State Values
   summaryModal,
+  stakingList,
+  noBalance,
   modalIsOpen,
   modalType,
   isLPToken,
@@ -124,13 +126,16 @@ const StakingModal = ({
   const [tokenAddress, setTokenAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
   const [accruedRewards, setAccruedRewards] = useState({});
-  // const [balance, setBalance] = useState(false);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
   
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
@@ -509,7 +514,7 @@ const StakingModal = ({
       </Modal>
     );
   };
-  return !isDesktop && summaryModal ? InitialStakingModal() : 0 === 1 ? notFound() : modalType === null ? claimModal() : stakingModal() ;
+  return !isDesktop && summaryModal ? InitialStakingModal() : noBalance && modalType === true ? notFound() : modalType === null ? claimModal() : stakingModal() ;
   // return balance === 0 && modalType ? notFound() : stakingModal() ;
 };
 

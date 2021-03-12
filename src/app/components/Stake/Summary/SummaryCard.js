@@ -207,6 +207,7 @@ const SummaryCard = ({
             modalType={modalType}
             summaryModal={summaryModal}
             tokenAddress={tokenAddress}
+            noBalance={Number(balance) === 0}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
@@ -228,6 +229,7 @@ const SummaryCard = ({
           modalType={modalType}
           summaryModal={summaryModal}
           tokenAddress={tokenAddress}
+          noBalance={Number(balance) === 0}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
