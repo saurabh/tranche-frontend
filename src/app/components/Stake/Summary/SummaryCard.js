@@ -43,7 +43,7 @@ const SummaryCard = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
-  // const [lpBalance, setLPBalance] = useState(0);
+  const [epochTimeLeft, setEpochTimeLeft] = useState(0);
   const [accruedRewards, setAccruedRewards] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
@@ -62,10 +62,10 @@ const SummaryCard = ({
   useEffect(() => {
     const setEpochTime = async () => {
       if (type === 'reward') {
-        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length-1])
-        console.log(result);
+        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+        setEpochTimeLeft((result));
       }
-    }
+    };
 
     setEpochTime();
   }, [type]);
@@ -178,7 +178,7 @@ const SummaryCard = ({
                   ? balance + ' SLICE Available'
                   : type === 'lp'
                   ? balance + ' SLICE-LP Available'
-                  : ' Days Until Next Distribution'}
+                  : epochTimeLeft + ' Until Next Distribution'}
               </SummaryCardDetails>
               {path === 'stake' && type !== 'reward' && (
                 <SummaryCardCounter>
