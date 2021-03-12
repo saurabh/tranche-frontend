@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -23,9 +23,6 @@ import {
   SliceNotFound,
   SliceNotFoundBtn,
   ModalUserActions,
-  ModalContent,
-  BtnGrpLoanModalWrapper,
-  ModalButton,
   ClaimModalHalfWrapper,
   ClaimModalHalfContentWrapper,
   ClaimModalHalfContent,
@@ -122,6 +119,7 @@ const StakingModal = ({
   adjustStake
   // API Values,
 }) => {
+  const stakableAssets = useRef(0)
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
@@ -154,7 +152,7 @@ const StakingModal = ({
   }, [modalIsOpen, type, tokenAddress, address]);
 
   useEffect(() => {
-    lpList = slice && lpList && lpList.length === 2 && lpList.unshift(slice);
+    stakableAssets.current = slice && lpList && lpList.length === 2 && lpList.unshift(slice);
   }, [lpList, slice]);
 
   useEffect(() => {
@@ -329,7 +327,6 @@ const StakingModal = ({
                       <h2>Claim</h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
-
                   {lpList && lpList.map((item) => (
                     <ClaimModalRow key={item.name} right>
                       <ClaimModalCol value right pair>
