@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
+import { serverUrl, apiUri, pairLogos } from 'config';
 import { massHarvest, getAccruedStakingRewards } from 'services/contractMethods';
-import { serverUrl, apiUri } from 'config';
-import { roundNumber } from 'utils';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import StakingForm from '../Form/Staking';
 import {
   ModalHeader,
@@ -25,9 +25,18 @@ import {
   ModalUserActions,
   ModalContent,
   BtnGrpLoanModalWrapper,
-  ModalButton
+  ModalButton,
+  ClaimModalHalfWrapper,
+  ClaimModalHalfContentWrapper,
+  ClaimModalHalfContent,
+  ClaimModalRow,
+  ClaimModalCol
 } from './styles/ModalsComponents';
+
 import { SummaryCardCounter, SummaryCardBtn, SummaryClaimBtn } from '../Stake/Summary/styles/SummaryComponents';
+import { roundNumber } from 'utils';
+import { Lock, TrancheClaim, EthClaim, DaiClaim } from 'assets';
+
 import i18n from '../locale/i18n';
 const { stakingSummaryDetail } = apiUri;
 const BASE_URL = serverUrl;
@@ -93,14 +102,16 @@ const StakingModal = ({
   path,
   ethereum: { address },
   userSummary: { slice, lp },
-  stakingList,
   // State Values
   summaryModal,
+  stakingList,
+  noBalance,
   modalIsOpen,
   modalType,
   isLPToken,
   hasAllowance,
   approveLoading,
+  tokenBalance,
   type,
   // tokenAddress,
   // Functions
@@ -125,6 +136,10 @@ const StakingModal = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
 
   useEffect(() => {
     const getStakingDetails = async () => {
@@ -140,11 +155,13 @@ const StakingModal = ({
 
   useEffect(() => {
     let rewards = {};
-    type === 'reward' && address && stakingList.forEach(async (item) => {
-      let result = await getAccruedStakingRewards(item.yieldAddress, address);
-      rewards[item.tokenAddress] = result;
-      setAccruedRewards(rewards);
-    });
+    type === 'reward' &&
+      address &&
+      stakingList.forEach(async (item) => {
+        let result = await getAccruedStakingRewards(item.yieldAddress, address);
+        rewards[item.tokenAddress] = result;
+        setAccruedRewards(rewards);
+      });
   }, [type, stakingList, address]);
 
   const modalClose = () => {
@@ -175,57 +192,30 @@ const StakingModal = ({
         </ModalHeader>
         <ModalActionsContent stakingMobile>
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
-            {type === 'reward' ? (
-              <ModalActionDetailsContent stake={true} trade={true}>
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>PAIR</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>TOTAL LOCKED</LoanDetailsRowValue>
-                </LoanDetailsRow>
+            <ModalActionDetailsContent stake={true} trade={true}>
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
+              </LoanDetailsRow>
 
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>SLICE</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{slice.balance || 0}</LoanDetailsRowValue>
-                </LoanDetailsRow>
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
+              </LoanDetailsRow>
 
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>SLICE-ETH LP</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{lp.balance1 || 0}</LoanDetailsRowValue>
-                </LoanDetailsRow>
-
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>SLICE-DAI LP</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{lp.balance2 || 0}</LoanDetailsRowValue>
-                </LoanDetailsRow>
-              </ModalActionDetailsContent>
-            ) : (
-              <ModalActionDetailsContent stake={true} trade={true}>
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
-                </LoanDetailsRow>
-
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
-                </LoanDetailsRow>
-
-                <LoanDetailsRow trade={true}>
-                  <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2)}%</LoanDetailsRowValue>
-                </LoanDetailsRow>
-              </ModalActionDetailsContent>
-            )}
+              <LoanDetailsRow trade={true}>
+                <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
+                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2)}%</LoanDetailsRowValue>
+              </LoanDetailsRow>
+            </ModalActionDetailsContent>
           </ModalActionDetails>
           {modalType === null ? (
             <ModalUserActions>
               <ModalContent>
                 <BtnGrpLoanModalWrapper stake>
-                  <h2>PAIR</h2>
-                  <h2>REWARDS</h2>
-                  <h2>CLAIM</h2>
                   {stakingList.map((item) => (
                     <div key={item.type}>
-                      <img alt='pair icons'/>
+                      <img alt='pair icons' />
                       <h2>{accruedRewards[tokenAddress] ? roundNumber(accruedRewards[tokenAddress]) : '0'} SLICE</h2>
                       <ModalButton onClick={() => massHarvest(item.yieldAddress)} btnColor='#FFFFFF' backgroundColor='#369987'>
                         Claim
@@ -253,11 +243,138 @@ const StakingModal = ({
               path={path}
             />
           )}
+
+          <LoanDetailsMobile>
+            <h2>
+              SLICE LOCKED — {totalStaked}
+              <span></span>
+            </h2>
+          </LoanDetailsMobile>
         </ModalActionsContent>
       </Modal>
     );
   };
+  const claimModal = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={FirstCustomStyles}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+      >
+        <ModalHeader stake claim>
+          <h2>Your Stakes</h2>
+          <button onClick={() => modalClose()}>
+            <img src={CloseModal} alt='' />
+          </button>
+        </ModalHeader>
+        <ModalActionsContent stakingMobile>
+          <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} claimModal stake>
+            <ClaimModalHalfWrapper>
+              <ClaimModalHalfContentWrapper>
+                <ClaimModalHalfContent>
+                  <ClaimModalRow head>
+                    <ClaimModalCol head>
+                      <h2>PAIR</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol head>
+                      <h2>Total Locked</h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
 
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        {slice.balance}
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE-ETH LP</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        {lp.balance1}
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE-DAI LP</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        {lp.balance2}
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+                </ClaimModalHalfContent>
+              </ClaimModalHalfContentWrapper>
+            </ClaimModalHalfWrapper>
+          </ModalActionDetails>
+
+          <ModalUserActions claimModal>
+            <ModalHeader rightStakeModal claim>
+              <h2>Available Rewards</h2>
+            </ModalHeader>
+
+            <ClaimModalHalfWrapper>
+              <ClaimModalHalfContentWrapper>
+                <ClaimModalHalfContent>
+                  <ClaimModalRow head right>
+                    <ClaimModalCol head right pair>
+                      <h2>PAIR</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol head right rewards>
+                      <h2>Rewards</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol head right claim>
+                      <h2>Claim</h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  {stakingList.map((item) => (
+                    <ClaimModalRow right>
+                      <ClaimModalCol value right pair>
+                        <img src={TrancheClaim} alt='' />
+                        <img src={pairLogos[item.type]} alt='' />
+                      </ClaimModalCol>
+                      <ClaimModalCol value right rewards>
+                        <h2>{accruedRewards[item.tokenAddress] ? roundNumber(accruedRewards[item.tokenAddress]) : '0'} SLICE</h2>
+                      </ClaimModalCol>
+                      <ClaimModalCol disabled={accruedRewards[item.tokenAddress] && accruedRewards[item.tokenAddress]=== '0'} value right claim btn>
+                        <button onClick={() => massHarvest(item.yieldAddress)}>
+                          <h2>Claim</h2>
+                        </button>
+                      </ClaimModalCol>
+                    </ClaimModalRow>
+                  ))}
+                </ClaimModalHalfContent>
+              </ClaimModalHalfContentWrapper>
+            </ClaimModalHalfWrapper>
+          </ModalUserActions>
+
+          {/* <LoanDetailsMobile>
+              <h2>
+                SLICE LOCKED — {totalStaked}
+                <span></span>
+              </h2>
+            </LoanDetailsMobile> */}
+        </ModalActionsContent>
+      </Modal>
+    );
+  };
   const InitialStakingModal = () => {
     return (
       <Modal
@@ -372,7 +489,13 @@ const StakingModal = ({
       </Modal>
     );
   };
-  return !isDesktop && summaryModal ? InitialStakingModal() : 0 === 1 ? notFound() : stakingModal();
+  return !isDesktop && summaryModal
+    ? InitialStakingModal()
+    : noBalance && modalType === true
+    ? notFound()
+    : modalType === null
+    ? claimModal()
+    : stakingModal();
   // return balance === 0 && modalType ? notFound() : stakingModal() ;
 };
 
