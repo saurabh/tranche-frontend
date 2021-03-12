@@ -119,7 +119,7 @@ const StakingModal = ({
   adjustStake
   // API Values,
 }) => {
-  const stakableAssets = useRef(0)
+  const stakableAssets = useRef();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
