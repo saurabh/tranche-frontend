@@ -260,18 +260,21 @@ export const epochTimeRemaining = async (stakingAddress) => {
     return timeRemaining;
   } catch (error) {
     console.error(error);
+    return 0;
   }
 };
 
-export const getAccruedStakingRewards = async (yieldfarmAddress, tokenAddress) => {
+export const getAccruedStakingRewards = async (yieldfarmAddress, address) => {
   try {
     const state = store.getState();
     const { web3 } = state.ethereum;
     const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
-    const result = await YieldFarm.methods.getTotalAccruedRewards(tokenAddress).call();
+    const result = await YieldFarm.methods.getTotalAccruedRewards(address).call();
+    console.log(fromWei(result))
     return fromWei(result);
   } catch (error) {
     console.error(error);
+    return 0;
   }
 };
 

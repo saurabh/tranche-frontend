@@ -140,12 +140,12 @@ const StakingModal = ({
 
   useEffect(() => {
     let rewards = {};
-    type === 'reward' && stakingList.forEach(async (item) => {
-      let result = await getAccruedStakingRewards(item.yieldAddress, item.tokenAddress);
+    type === 'reward' && address && stakingList.forEach(async (item) => {
+      let result = await getAccruedStakingRewards(item.yieldAddress, address);
       rewards[item.tokenAddress] = result;
       setAccruedRewards(rewards);
     });
-  }, [type, stakingList]);
+  }, [type, stakingList, address]);
 
   const modalClose = () => {
     closeModal();
@@ -184,17 +184,17 @@ const StakingModal = ({
 
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle stake>SLICE</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{slice.balance}</LoanDetailsRowValue>
+                  <LoanDetailsRowValue stake>{slice.balance || 0}</LoanDetailsRowValue>
                 </LoanDetailsRow>
 
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle stake>SLICE-ETH LP</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{lp.balance}</LoanDetailsRowValue>
+                  <LoanDetailsRowValue stake>{lp.balance1 || 0}</LoanDetailsRowValue>
                 </LoanDetailsRow>
 
                 <LoanDetailsRow trade={true}>
                   <LoanDetailsRowTitle stake>SLICE-DAI LP</LoanDetailsRowTitle>
-                  <LoanDetailsRowValue stake>{lp.balance}</LoanDetailsRowValue>
+                  <LoanDetailsRowValue stake>{lp.balance2 || 0}</LoanDetailsRowValue>
                 </LoanDetailsRow>
               </ModalActionDetailsContent>
             ) : (
