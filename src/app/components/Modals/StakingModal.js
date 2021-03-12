@@ -142,7 +142,6 @@ const StakingModal = ({
   };
 
   const stakingModal = () => {
-
     return (
       <Modal
         isOpen={modalIsOpen}
@@ -234,9 +233,99 @@ const StakingModal = ({
       </Modal>
     );
   };
+  const claimModal = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={FirstCustomStyles}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+      >
+        <ModalHeader stake>
+          <h2>{modalType === true ? i18n.t('stake.modal.stakeModalTitle') : modalType === false ? i18n.t('stake.modal.withdrawModalTitle') : 'Claim rewards'}</h2>
+          <button onClick={() => modalClose()}>
+            <img src={CloseModal} alt='' />
+          </button>
+        </ModalHeader>
+          <ModalActionsContent stakingMobile>
+            <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
+              <ModalActionDetailsContent stake={true} trade={true}>
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
+                </LoanDetailsRow>
 
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
+                </LoanDetailsRow>
+
+                <LoanDetailsRow trade={true}>
+                  <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
+                  <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2)}%</LoanDetailsRowValue>
+                </LoanDetailsRow>
+              </ModalActionDetailsContent>
+            </ModalActionDetails>
+            {
+              modalType === null ?
+              <ModalUserActions>
+                <ModalContent>
+                  <BtnGrpLoanModalWrapper stake>
+                    <ModalButton
+                      btnColor='#FFFFFF'
+                      backgroundColor='#369987'
+                    >
+                      First Button
+                    </ModalButton>
+                    <ModalButton
+                      btnColor='#FFFFFF'
+                      backgroundColor='#369987'
+                    >
+                      Second Button
+                    </ModalButton>
+                    <ModalButton
+                      btnColor='#FFFFFF'
+                      backgroundColor='#369987'
+                    >
+                      Third Button
+                    </ModalButton>
+                  </BtnGrpLoanModalWrapper>
+                </ModalContent>
+              </ModalUserActions> :
+
+              <StakingForm
+                modalType={modalType}
+                userStaked={userStaked}
+                type={type}
+                tokenAddress={tokenAddress}
+                setTokenAddress={setTokenAddress}
+                hasAllowance={hasAllowance}
+                approveLoading={approveLoading}
+                isLPToken={isLPToken}
+                // Functions
+                stakingAllowanceCheck={stakingAllowanceCheck}
+                stakingApproveContract={stakingApproveContract}
+                adjustStake={adjustStake}
+                // setBalanceModal={setBalance}
+                path={path}
+              /> 
+              
+            }
+
+            
+            <LoanDetailsMobile>
+              <h2>
+                SLICE LOCKED — {totalStaked}
+                <span></span>
+              </h2>
+            </LoanDetailsMobile>
+          </ModalActionsContent>
+      </Modal>
+    );
+  };
   const InitialStakingModal = () => {
-
     return (
       <Modal
         isOpen={modalIsOpen}

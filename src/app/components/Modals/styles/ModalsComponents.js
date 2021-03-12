@@ -39,6 +39,21 @@ ${({ stake }) => stake && `
     color: #FFFFFF;
   }
 `}
+${({ claim }) => claim && `
+  h2{
+    text-transform: capitalize;
+    font-weight: 700;
+  }
+`}
+${({ rightStakeModal }) => rightStakeModal && `
+  width: 50%;
+  z-index: -1;
+  h2{
+    color: #4F4F4F;
+  }
+`}
+
+
 ${({ error }) => error && `
   position: relative;
 `}
@@ -651,6 +666,126 @@ const SliceNotFoundBtn = styled.div`
   }
 `;
 
+const ClaimModalHalfWrapper = styled.div`
+  width: 100%;
+  min-height: 554px;
+  height: 100%;
+`;
+const ClaimModalHalfContentWrapper = styled.div`
+  width: 100%;
+  min-height: 554px;
+  height: 100%;
+  padding: 40px;
+`;
+const ClaimModalHalfContent = styled.div`
+  margin: 100px 0;
+`;
+const ClaimModalRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  max-height: 55px;
+  ${({ head }) => head && `
+    padding: 12px 4px;
+  `}
+  ${({ right }) => right && `
+    border-bottom: 1px solid #F0F0F6;
+  `}
+`;
+const ClaimModalCol = styled.div`
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 1);
+    img{
+      margin-right: 4px;
+    }
+  }
+  ${({ head }) => head && `
+    h2{
+      font-weight: 600;
+      font-size: 9.40209px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+  `}
+  ${({ right }) => right && `
+    h2{
+      font-weight: 600;
+      font-size: 9.40209px;
+      color: rgba(36, 39, 50, 0.6);
+    }
+  `}
+  ${({ pair }) => pair && `
+    width: 30%;
+  `}
+  ${({ rewards }) => rewards && `
+    width: 30%;
+  `}
+  ${({ claim }) => claim && `
+    width: 40%;
+    text-align: center;
+  `}
+
+  ${({ value }) => value && `
+    display: flex;
+    align-items: center;
+    img:nth-child(1){
+      position: relative;
+      z-index: 1;
+    }
+    img:nth-child(2){
+      margin: 0 -12px;
+    }
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #4F4F4F;
+      img{
+        margin-right: 4px;
+      }
+    }
+  `}
+  ${({ btn }) => btn && `
+    justify-content: center;
+    button{
+      background: #369987;
+      box-shadow: 0px 1.88042px 3.76084px rgba(0, 0, 0, 0.15);
+      border-radius: 25.3857px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 6px 20px;
+      h2{
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: capitalize;        
+        color: #FFFFFF;
+      }
+    }
+  `}
+  ${({ disabled }) => disabled && `
+    justify-content: center;
+    button{
+      pointer-events: none;
+      background: #E5E5E5;
+      h2{
+        color: #999999;
+      }
+    }
+  `}
+  
+`;
+
 export {
     ModalHeader, 
     ModalContent,
@@ -680,5 +815,10 @@ export {
     StakingModalRow,
     StakingModalWrapper,
     SliceNotFound,
-  SliceNotFoundBtn
+    SliceNotFoundBtn,
+    ClaimModalHalfWrapper,
+    ClaimModalHalfContentWrapper,
+    ClaimModalHalfContent,
+    ClaimModalRow,
+    ClaimModalCol
 };
