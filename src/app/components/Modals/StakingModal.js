@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -119,9 +119,10 @@ const StakingModal = ({
   adjustStake
   // API Values,
 }) => {
-  const stakableAssets = useRef();
+  // const stakableAssets = useRef();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
+  const [stakableAssets, setStakableAssets] = useState([]);
   const [totalStaked, setTotalStaked] = useState(0);
   const [accruedRewards, setAccruedRewards] = useState({});
   const [userStaked, setUserStaked] = useState(0);
@@ -152,19 +153,24 @@ const StakingModal = ({
   }, [modalIsOpen, type, tokenAddress, address]);
 
   useEffect(() => {
-    stakableAssets.current = slice && lpList && lpList.length === 2 && lpList.unshift(slice);
+    if (slice && lpList && lpList.length === 2) {
+      let tempArray = []
+      tempArray = tempArray.concat(lpList)
+      tempArray.unshift(slice);
+      setStakableAssets(tempArray);
+    }
   }, [lpList, slice]);
 
   useEffect(() => {
     let rewards = {};
     type === 'reward' &&
       address &&
-      stakingList.forEach(async (item) => {
+      stakableAssets.forEach(async (item) => {
         let result = await getAccruedStakingRewards(item.yieldAddress, address);
-        rewards[item.tokenAddress] = result;
+        rewards[item.address] = result;
         setAccruedRewards(rewards);
       });
-  }, [type, stakingList, address]);
+  }, [type, stakableAssets, address]);
 
   const modalClose = () => {
     closeModal();
@@ -327,7 +333,7 @@ const StakingModal = ({
                       <h2>Claim</h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
-                  {lpList && lpList.map((item) => (
+                  {stakableAssets && stakableAssets.map((item) => (
                     <ClaimModalRow key={item.name} right>
                       <ClaimModalCol value right pair>
                         <img src={TrancheClaim} alt='' />
