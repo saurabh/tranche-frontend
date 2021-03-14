@@ -34,7 +34,7 @@ ${({ currency }) => currency === 'SLICE' && `
     position: absolute;
     right: 39px;
     top: 27px;
-  }  
+  }
 `}
 & > h2{
   font-style: normal;
@@ -46,6 +46,7 @@ ${({ currency }) => currency === 'SLICE' && `
   @media (max-width: 633px){
     font-size: 7px;
     margin: 2px 0 0 0;
+    text-align: right;
   }
 }
 ${({ cursor }) => cursor && `
@@ -72,6 +73,16 @@ const ModalFormLabel = styled.label`
   letter-spacing: 0.15em;
   color: #4F4F4F;
   text-transform: uppercase;
+<<<<<<< HEAD
+  ${({ tranche }) => tranche && `
+    margin: 7px auto;
+  `}
+
+=======
+  @media (max-width: 633px){
+    text-align: left;
+  }
+>>>>>>> MobileView
 `
 
 const ModalFormSubmit = styled.div`
@@ -102,7 +113,6 @@ const ModalFormSubmit = styled.div`
   @media (max-width: 633px){
     flex-direction: column;
   }
-
 `
 
 
@@ -137,14 +147,19 @@ const FormInputsWrapper = styled.div`
       font-size: 11px;
       text-align: center;
       color: #B9B9B9;
-      margin: 0 0 24px 0;
+    }
+  }
+  & > div{
+    @media (max-width: 633px){
+      margin: 15px 0;
+      text-align: left;
     }
   }
 `
 const ModalFormButton = styled.button`
   width: 164px;
   height: 38px;  
-  background: #936CE6;
+  background: ${props => props.backgroundColor ? props.backgroundColor  : "#936CE6"};
   border-radius: 27px;
   font-style: normal;
   font-weight: normal;
@@ -163,6 +178,7 @@ const ModalFormButton = styled.button`
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
   @media (max-width: 633px){
     margin: 12px auto;
+    width: 100%;
   }
   :disabled{
     opacity: 0.5;
@@ -191,10 +207,11 @@ const ModalFormButton = styled.button`
   
 
   
-  ${({ loading }) => loading === 'true' && `
+  ${({ loading,  backgroundColor}) => loading === 'true' && `
     background: transparent !important;
     cursor: unset !important;
-    border: 1px solid #936CE6 !important;
+    // border: 1px solid #936CE6 !important;
+    border: 1px solid ${backgroundColor ? backgroundColor : "#936CE6"} !important;
     pointer-events: none !important;
     box-shadow: none !important;
   `}
@@ -241,6 +258,10 @@ const ModalFormButton = styled.button`
     background: #EAEAEA;
     color: rgba(35, 69, 102, 0.7);
   `}
+  ${({ stake }) => stake && `
+    width: 133px;
+  `}
+  
 
 `
 const NewLoanInputWrapper = styled.div`
@@ -265,7 +286,8 @@ const ModalNewLoanContent = styled.div`
   display: flex;
   flex-direction: row;
   @media (max-width: 633px){
-    flex-direction: column-reverse;
+    flex-direction: column;
+    // flex-direction: column-reverse;
     margin: 50px auto;
     justify-content: flex-end;
     min-height: auto;
@@ -331,6 +353,9 @@ const SelectCurrencyView = styled.div`
   position: relative;
   & > div{
     width: 100px;
+    ${({ staking }) => staking && `
+      width: 126px;
+    `}
     height: 19px;
     border-left: 2px solid #F1F1F1;
     display: flex;
@@ -349,7 +374,7 @@ const SelectCurrencyView = styled.div`
       color: rgba(57, 41, 90, 0.2);
     }
     & > img{
-      margin: 0 6px -1px 0;
+      margin: 0 6px 0 0;
       height: 14px;
     }
   }
@@ -361,8 +386,6 @@ const LoanCustomSelect = styled.div`
   right: 5px;
   bottom: 6px;
   align-self: flex-end;
-  
-
 `
 const SelectCurrencyOptions = styled.div`
   border-radius: 4px;
@@ -517,8 +540,22 @@ const ModalFormGrpNewLoan = styled.div`
     @media (max-width: 633px){
       font-size: 7px;
       margin: 2px 0 0 0;
+      text-align: right;
     }
   }
+  ${({ tranche }) => tranche && `
+    & > h2:last-child{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      margin: 100px auto 0 auto;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: #838186;
+    }
+  `}
+
+
   
 
   ${({ placeholder }) => placeholder === '%' && `
@@ -545,31 +582,66 @@ const ApproveBtnWrapper = styled.div`
     width: 133px !important;
   }
 `
+const FieldWrapper = styled.div`
+  position: relative;
+  ${({ staking, modalType }) => staking && !modalType && `
+    input{
+      padding: 4px 134px 4px 10px;
+    }
+  `}
+  ${({ modalType }) => modalType && `
+    input{
+      padding: 4px 134px 4px 44px;
+    }
+  `}
+  button{
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 0px;
+    background: transparent;
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 4px;
+    border-radius: 6px 0px 0px 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 6px 8px;
+    // color: rgb(57,41,90, 0.3);
+    color: #B3B3B3;
+    background: #F1F1F1;
+  }
+`
 
 
 
 export {
-    ModalFormGrp,
-    ModalFormLabel,
-    ModalAdjustForm,
-    ModalFormSubmit,
-    AdjustBtnsWrapper,
-    FormInputsWrapper,
-    SelectCurrencyOption,
-    SelectCurrencyView,
-    SelectCurrencyOptions,
-    LoanCustomSelect,
-    SelectChevron,
-    ModalFormButton,
-    NewLoanInputWrapper,
-    ModalFormGrpNewLoan,
-    NewLoanFormInput,
-    ModalNewLoanContent,
-    ModalFormWrapper, 
-    ModalNewLoanDetails,
-    ModalFormInput,
-    ModalFormInputAPY,
-    ModalFormInputNewLoan,
-    ModalNewLoanDetailsContent,
-    ApproveBtnWrapper
+  ModalFormGrp,
+  ModalFormLabel,
+  ModalAdjustForm,
+  ModalFormSubmit,
+  AdjustBtnsWrapper,
+  FormInputsWrapper,
+  SelectCurrencyOption,
+  SelectCurrencyView,
+  SelectCurrencyOptions,
+  LoanCustomSelect,
+  SelectChevron,
+  ModalFormButton,
+  NewLoanInputWrapper,
+  ModalFormGrpNewLoan,
+  NewLoanFormInput,
+  ModalNewLoanContent,
+  ModalFormWrapper, 
+  ModalNewLoanDetails,
+  ModalFormInput,
+  ModalFormInputAPY,
+  ModalFormInputNewLoan,
+  ModalNewLoanDetailsContent,
+  ApproveBtnWrapper,
+  FieldWrapper
 };

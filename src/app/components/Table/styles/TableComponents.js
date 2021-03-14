@@ -40,7 +40,6 @@ const TableCardTag = styled.div`
     left: ${({color}) => color === '#1ebb1b' ? '1px' : '3px'};
     top: ${({color}) => color === '#1ebb1b' ? '-22px' : '-20px'};
   }
-
 `
 const TableWrapper = styled.div`
   width: 100%;
@@ -48,10 +47,11 @@ const TableWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   margin: 24px auto;
-  overflow: hidden;
+  // overflow: hidden;
   border-radius: 12px;
   ${({ mobile }) => mobile && `
     display: none;
+    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
     @media (max-width: 1200px){
       display: block;
     }
@@ -71,6 +71,11 @@ const TableWrapper = styled.div`
 const StatusTextWrapper = styled.h2`
   color: ${props => props.color ? props.color : ""};
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  position: relative;
+  ${({ table, color }) => table === 'tranche' && `
+    background: transparent;
+    border: ${color ? "1px solid " + color : ""};
+  `}
 `
 const MoreRowSpan = styled.span`
   color: ${props => props.color ? props.color : ""};
@@ -90,7 +95,6 @@ const AdjustModalBtn = styled.button`
     background-color: #FFFFFF;
     box-shadow: 0px 2px 2px rgba(237, 237, 237, 0.4);
   }
-
   :disabled{
     background-image: url(${GrayAdjust}) !important;
     background-color: #F1F1F1;
@@ -113,7 +117,7 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    background: ${props => props.path === "borrow" ? "#FAF8FF" : props.path === "lend" ? " #FBFFF8" : "#F8F8F8"};
+    background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? "rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
     border-top: 1px solid #EFEFEF;
     border-bottom: 1px solid #EFEFEF;
     padding: 0 47px;
@@ -239,10 +243,10 @@ const TableHeaderTitles = styled.div`
 const TableMarketsSortingDropdown = styled.div`
   position: absolute;
   width: 150px;
-  height: 60px;
+  height: 55px;
   margin-top: 7px;
   overflow: hidden;
-  right: ${({path}) => path === "earn" ? "26px" : " -26px"};
+  right: ${({path}) => path === "earn" ? "20px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
@@ -321,10 +325,49 @@ const CallToActionWrapper = styled.div`
     }
   }
 `;
+const CallToActionTradeWrapper = styled.div`
+  width: 100%;
+  text-align: center;
+`
+const CallToActionTradeBtns = styled.div`
+  margin-bottom: 41px;
+`
+const CallToActionTradetext = styled.div`
+  margin: -12px auto 29px auto;
+  h2{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #838186;
+  }
+`
+const CallToActionTradeBtn = styled.button`
+  width: 148px;
+  height: 27px;
+  cursor: pointer;
+  margin: 2px 12px;
+  background: ${props => props.type === "loans" ? "#9B6BFF" : "#2ECC71"}; 
+  box-shadow: 0px 1px 1px #E5E5E5;
+  border-radius: 2px;
+  top: 716px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  text-align: center;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  span{
+    font-weight: bold;
+  }
+`
 
 const TableHeadWrapperMobile = styled.div`
   min-height: 22px;
-  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : "#F8F8F8"};
+  background: ${props => props.path === "borrow" ? "rgba(84, 17, 226, 0.7)" : props.path === "lend" ? "rgba(30, 187, 27, 0.7)" : props.path === "stake" ? "rgba(0, 113, 245, 0.7)" : "rgba(0, 0, 0, 0.5)"};
   border-top: 1px solid #EFEFEF;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -393,7 +436,6 @@ const TableMobilColContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #39295A;
-
   }
   h2:last-child{
     font-style: normal;
@@ -428,13 +470,14 @@ const TableMobilCardBtn = styled.div`
   }
 `
 const TableMobileFiltersWrapper = styled.div`
-  width: 100%;  
+  width: ${({width}) => width};
   background: #FFFFFF;
+  position: relative;
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.25);
-  margin: 15px auto;
+  margin: 15px 0;
   border-radius: 10px;
   display: none;
-  @media (max-width: 1200px){
+  @media (max-width: 992px){
     display: block;
   }
 `
@@ -452,7 +495,7 @@ const TableMobileFilter = styled.div`
   `}
 `
 const TableMobileFiltersMenu = styled.div`
-  height: 126px;
+  height: 84px;
   transition: 300ms;
   overflow: hidden;
 `
@@ -466,6 +509,341 @@ const TableMobileFiltersText = styled.h2`
   color: rgba(56, 56, 56, 0.5);
 `
 
+const TableMobileFilterRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+const TableMobileRowCreateLoan = styled.div`
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: -25%;
+  button{
+    border: none;
+    outline: none;
+    background: transparent;
+  }
+`
+const InfoBoxWrapper = styled.div`
+  position: absolute;
+  right: -44px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+
+`
+const WithdrawBtnWrapper = styled.div`
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  button{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: 1px solid #2ECC71;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+  }
+`
+
+
+const InfoBox = styled.div`
+  width: 292px;
+  height: 326px;
+  background: #FFFFFF;
+  border: 1px solid #EFEFEF;
+  position: absolute;
+  bottom: 36px;
+  z-index: 2000;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: default;
+
+  & > div:first-child > div:nth-child(1){
+    padding: 17px;
+    & > button{
+      background: transparent;
+      border: none;
+      outline: none;
+      float: right;
+      cursor: pointer;
+    }
+  }
+
+  & > div:first-child > div:nth-child(2){
+    padding: 0 25px 25px;
+    text-align: left;
+    h2:first-child{
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      color: #3F3F3F;
+    }
+    
+    h2:last-child{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: rgba(63, 63, 63, 0.5);
+    }
+  }
+  & > div:first-child >div:nth-child(3){
+    text-align: left;
+    padding: 0 25px 25px;
+    p{
+      font-weight: normal;
+      font-size: 10px;
+      color: #3F3F3F;
+    }
+  }
+  & > div:last-child > div:nth-child(1){
+    background: #F7F7F7;
+    border-radius: 0px 0px 16px 16px;
+    padding: 27px 0;
+    text-align: center;
+    button{
+      background: rgb(46, 204, 113, 0.75);
+      box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
+      border-radius: 4px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 9px;
+      text-align: center;
+      color: #FFFFFF;
+      min-height: 32px;
+      border: none;
+      padding: 0 37px;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+`
+const TableCardImg = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  img{
+    border-radius: 50%;
+    height: 37px;
+  }
+  
+  ${({ tranche, color, type }) => tranche && type === "A" && `
+    ::after{
+      content: "A";
+      position: absolute;
+      right: -5px;
+      bottom: 0;
+      color: #FFFFFF;
+      font-size: 8px;
+      width: 15px;
+      height: 15px;
+      background: ${color};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    border-radius: 4px;
+    }
+  `}
+  ${({ tranche, color, type }) => tranche  && type === "B" && `
+    ::after{
+      content: "B";
+      position: absolute;
+      right: -5px;
+      bottom: 0;
+      color: #FFFFFF;
+      font-size: 8px;
+      width: 15px;
+      height: 15px;
+      background: ${color};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    border-radius: 4px;
+    }
+  `}
+`
+
+
+
+
+
+
+
+
+const TableFirstCol = styled.div`
+  display: flex;
+  align-items: center;
+  width: 28%;
+`
+const TableFirstColWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+const FirstColImg = styled.div`
+  position: relative;
+  img{
+    border-radius: 50%;
+    height: 37px;
+  }
+`
+const FirstColContent = styled.div`
+  position: relative;
+  margin-left: 18px;
+`
+const FirstColTitle = styled.div`
+  h2{
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }   
+`
+const FirstColSubtitle = styled.div`
+  display: flex;
+  align-items: center;
+  h2{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #838186;  
+  }
+  a{
+    img{
+      height: 12px;
+      margin-left: 2px;
+    }
+  }
+`
+
+const TableSecondCol = styled.div`
+  width: 12%;
+  position: relative;
+`
+const SecondColContent = styled.div`
+  h2{
+    text-align: center !important;
+  }
+`
+const TableThirdCol = styled.div`
+  width: 7%;
+  position: relative;
+`
+const ThirdColContent = styled.div`
+  h2{
+    text-align: center !important;
+  }
+`
+const TableFourthCol = styled.div`
+  width: 17%;
+  ${({ tranche }) => tranche && `
+    width: 15%;
+  `}
+`
+const FourthColContent = styled.div`
+  position: relative;
+  h2{
+    text-align: center !important;
+    display: flex;
+    flex-direction: column;
+    padding-top: 13px;
+    span{
+      position: relative;
+      font-size: 10px;
+      font-weight: bold !important;
+      color: rgba(56,56,56,0.3);
+    }
+  }
+`
+const TableFifthCol = styled.div`
+  width: 12%;
+  position: relative;
+`
+const FifthColContent = styled.div`
+  position: relative;   
+`
+const TableSixthCol = styled.div`
+  width: 18%;  
+  display: flex;
+  justify-content: center;
+  button{
+    cursor: pointer;
+  }
+  button:focus{
+    outline: none;
+  }  
+  @media (max-width: 1200px){
+    justify-content: center !important;
+  }
+  @media (max-width: 992px){
+    justify-content: center !important;
+  }
+`
+const AdustBtnWrapper = styled.div`
+  button{
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: none;
+    width: 50px;
+    height: 27px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    overflow: hidden;
+    transition: 1s;
+    :hover{
+      filter: brightness(97%);
+    }
+    img{
+      pointer-events: none;
+    }
+    :disabled{
+      background-color: #F1F1F1;
+      color: #666666;
+      cursor: default
+      img{
+        filter: grayscale(1);
+        opacity: 0.3;
+      }
+    }
+  }
+`
+const TableCardMore = styled.div`
+  @media (max-width: 1200px){
+    padding: 0 39px 0 47px;
+  }
+  @media (max-width: 992px){
+    padding: 30px 12px 30px 12px;
+  }
+
+`
+const TableCardMoreContent = styled.div`
+  position: relative;   
+`
+
+
+
+
+
 export {
   TableWrapper,
   TableContentCardWrapper,
@@ -475,6 +853,7 @@ export {
   SortChevronWrapper,
   TableContentCard,
   StatusTextWrapper,
+  TableCardImg,
   MoreRowSpan,
   TableContainerHeader,
   TableTitle,
@@ -498,5 +877,32 @@ export {
   TableMobileFiltersWrapper,
   TableMobileFilter,
   TableMobileFiltersMenu,
-  TableMobileFiltersText
+  TableMobileFiltersText,
+  CallToActionTradeWrapper,
+  CallToActionTradeBtns,
+  CallToActionTradeBtn,
+  CallToActionTradetext,
+  TableMobileFilterRow,
+  TableMobileRowCreateLoan,
+  InfoBoxWrapper,
+  InfoBox,
+  TableFirstCol,
+  TableFirstColWrapper,
+  FirstColImg,
+  FirstColContent,
+  FirstColTitle,
+  FirstColSubtitle,
+  TableSecondCol,
+  SecondColContent,
+  TableThirdCol,
+  ThirdColContent,
+  TableFourthCol,
+  FourthColContent,
+  TableFifthCol,
+  FifthColContent,
+  TableSixthCol,
+  AdustBtnWrapper,
+  TableCardMore,
+  TableCardMoreContent,
+  WithdrawBtnWrapper
 };

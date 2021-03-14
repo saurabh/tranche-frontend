@@ -1,8 +1,8 @@
 git branch
-git checkout dev-build
-git pull origin master
+git checkout dev-build-2
+git pull origin staking
 yarn build
 git add .
 git commit -m 'new build'
-git push origin dev-build
-git checkout master
+git push origin dev-build-2
+git checkout staking

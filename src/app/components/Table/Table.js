@@ -1,23 +1,34 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+import { apiUri } from 'config/constants';
+import ReactLoading from 'react-loading';
 import Pagination from 'react-paginating';
 import { useHistory } from "react-router-dom";
 import {
-  loansFetchData,
+  fetchTableData,
   changeFilter,
   paginationOffset,
   paginationCurrent,
   changeSorting,
   changeOwnAllFilter
-} from 'redux/actions/loans';
+} from 'redux/actions/tableData';
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard, CallToActionWrapper } from './styles/TableComponents';
-import { RequestLoan, EarningAsset } from 'assets';
+import { TableWrapper, TableContentCard, CallToActionWrapper,
+  TableMobileFiltersWrapper,
+  TableMobileFilter,
+  TableMobileFiltersMenu,
+  TableMobileFiltersText,
+  TableMobileFilterRow,
+  TableMobileRowCreateLoan
+} from './styles/TableComponents';
+import { RequestLoan, EarningAsset, FilterChevron, CreateLoan } from 'assets';
+
+
 const style = {
   pageItem: {
     fontFamily: 'Roboto, sans-serif',
@@ -39,14 +50,16 @@ const style = {
     borderRadius: '7px'
   }
 };
+const { loanList: loanListUrl } = apiUri;
 
 const Table = ({
   HandleNewLoan,
-  loansFetchData,
+  fetchTableData,
   changeOwnAllFilter,
-  loans,
+  data,
   path,
   changePath,
+  changeFilter,
   paginationOffset,
   paginationCurrent,
   ethereum: { address }
@@ -54,11 +67,15 @@ const Table = ({
   const { pathname } = useLocation();
   const history = useHistory();
   const pageCount = 5;
-  const { filter, skip, limit, current, filterType, sort, isLoading } = loans;
+  const { filter, skip, limit, current, filterType, sort, isLoading } = data;
+  const [openFilterMenu, setOpenFilterMenu] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState(`${pathname === "/borrow" ? "All loans" : pathname === "/lend" ? "All assets" : ""}`);
+  let parsedPath = pathname.split('/');
+  let currentPath = parsedPath[parsedPath.length - 1];
 
   const loanListing = useCallback(_.debounce(async () => {
     if (sort) {
-      await loansFetchData({
+      await fetchTableData({
         sort,
         skip,
         limit,
@@ -67,9 +84,9 @@ const Table = ({
           lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
           type: filter
         }
-      });
+      }, loanListUrl);
     } else {
-      await loansFetchData({
+      await fetchTableData({
         skip,
         limit,
         filter: {
@@ -77,16 +94,40 @@ const Table = ({
           lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
           type: filter
         }
-      });
+      }, loanListUrl);
     }
     //page.current = currentPage;
-  }, 3000, {leading: true}), [loansFetchData, filter, skip, limit, filterType, sort, address, path]);
+  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, filterType, sort, address, path]);
+
 
   useEffect(() => {
-    let currentPath = pathname.split('/')[1];
+    window.ethereum.on('accountsChanged', function () {
+      window.location.reload();
+    })
+  }, []);
+  
+  
+  
+
+  const changeLoansAssetsFilter = useCallback(
+    (filter) => {
+      changeOwnAllFilter(filter);
+      let val = (filter === "own" && pathname === "/borrow") ? "My loans" : (filter === "all" && pathname === "/borrow")  ? "All loans" : (filter === "own" && pathname === "/lend") ? "My assets" : (filter === "all" && pathname === "/lend") ?  "All assets" :  "";
+      setCurrentFilter(val);
+      setOpenFilterMenu(false);
+    },
+    [changeOwnAllFilter, pathname]
+  );
+
+  const changeOwnAllFilterHandler = (val) => {
+    changeOwnAllFilter(val);
+    changeLoansAssetsFilter(val);
+  }
+
+  useEffect(() => {
     changePath(currentPath);
     changeOwnAllFilter('all');
-  }, [changePath, pathname, changeOwnAllFilter]);
+  }, [changePath, pathname, changeOwnAllFilter, currentPath]);
 
   useEffect(() => {
     loanListing();
@@ -95,7 +136,6 @@ const Table = ({
 
   const handlePageChange = (p) => {
     //page.current = p;
-
     // let currentPage = current;
     // if (!currentPage || currentPage === 0) {
     //   currentPage = 1;
@@ -119,7 +159,104 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-        <TableWrapper>
+          { path !== "staking" &&
+              <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
+                <TableMobileFilterRow>
+                  <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
+                    <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
+                    <img alt="filter" src={FilterChevron} />
+                  </TableMobileFilter>
+                  { path === "borrow" ?
+                    <TableMobileRowCreateLoan>
+                      <button onClick={HandleNewLoan}><img src={CreateLoan} alt="" /></button>
+                    </TableMobileRowCreateLoan> : ""
+                  }
+                </TableMobileFilterRow>
+
+                <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
+                  <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('all')}>
+                    <TableMobileFiltersText>{path === "borrow"  ? "All loans" : path === "lend" ? "All assets" : ""}</TableMobileFiltersText>
+                  </TableMobileFilter>
+                  <TableMobileFilter menu onClick={() => changeLoansAssetsFilter('own')}>
+                    <TableMobileFiltersText>{path === "borrow" ? "My loans": path === "lend" ? "My assets" :  ""}</TableMobileFiltersText>
+                  </TableMobileFilter>
+                </TableMobileFiltersMenu>
+              </TableMobileFiltersWrapper>
+          }
+        <TableWrapper mobile>
+          <TableHead />
+          <div className='table-content'>
+              {isLoading ? (
+                <div>
+                  <TableContentCard>
+                    <ReactLoading
+                      className='TableMoreLoading'
+                      type={'bubbles'}
+                      color='rgba(56,56,56,0.3)'
+                    />
+                  </TableContentCard>
+                </div>
+              ) : !isLoading && data.loansList.length === 0 && filterType === 'own' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <h2>
+                      You don’t have any{' '}
+                      {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet
+                    </h2>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'lend'
+                          ? changeOwnAllFilterHandler('all')
+                          : false
+                      }
+                    >
+                      <img
+                        src={path === 'borrow' ? RequestLoan : path === 'lend' ? EarningAsset : ''}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'lend'
+                        ? 'Start Earning  Assets'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              !isLoading && data.loansList.length === 0 && filterType === 'all' ? (
+                <TableContentCard pointer={false}>
+                  <CallToActionWrapper>
+                    <button
+                      onClick={() =>
+                        path === 'borrow'
+                          ? HandleNewLoan()
+                          : path === 'earn'
+                          ? history.push("/borrow")
+                          : false
+                      }
+                    >
+                      <img
+                        src={RequestLoan}
+                        alt='img'
+                      />{' '}
+                      {path === 'borrow'
+                        ? 'Request New Loan'
+                        : path === 'lend'
+                        ? 'Navigate to Borrow'
+                        : ''}
+                    </button>
+                  </CallToActionWrapper>
+                </TableContentCard>
+              ) :
+              
+              (
+                data && data.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+              )}
+            </div>
+        </TableWrapper>
+        <TableWrapper desktop>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
             <TableHead />
@@ -148,7 +285,7 @@ const Table = ({
                     </TableContentCard>
                   ))}
                 </div>
-              ) : !isLoading && loans.list.length === 0 && filterType === 'own' ? (
+              ) : !isLoading && data.loansList.length === 0 && filterType === 'own' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <h2>
@@ -177,7 +314,7 @@ const Table = ({
                   </CallToActionWrapper>
                 </TableContentCard>
               ) :
-              !isLoading && loans.list.length === 0 && filterType === 'all' ? (
+              !isLoading && data.loansList.length === 0 && filterType === 'all' ? (
                 <TableContentCard pointer={false}>
                   <CallToActionWrapper>
                     <button
@@ -204,16 +341,16 @@ const Table = ({
               ) :
               
               (
-                loans && loans.list.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
+                data && data.loansList.map((loan, i) => <TableCard key={i} loan={loan} path={path} />)
               )}
             </div>
           </div>
         </TableWrapper>
 
-        {loans && loans.count > limit ? (
+        {data && data.count > limit ? (
           <div className='paginationWrapper'>
             <Pagination
-              total={loans && loans.count}
+              total={data && data.count}
               limit={limit}
               pageCount={pageCount}
               currentPage={parseInt(current, 10)}
@@ -311,13 +448,13 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
-    loans: state.loans,
+    data: state.data,
     path: state.path
   };
 };
 
 export default connect(mapStateToProps, {
-  loansFetchData,
+  fetchTableData,
   changePath,
   changeFilter,
   paginationOffset,

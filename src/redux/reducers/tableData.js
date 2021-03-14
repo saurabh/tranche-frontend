@@ -2,15 +2,24 @@ import {
   LOANS_IS_LOADING,
   LOANS_SUCCESS,
   LOANS_COUNT,
+  TRANCHES_IS_LOADING,
+  TRANCHES_SUCCESS,
+  TRANCHES_COUNT,
+  STAKING_IS_LOADING,
+  STAKING_SUCCESS,
+  STAKING_COUNT,
   CHANGE_FILTER,
   PAGINATION_SKIP,
   PAGINATION_CURRENT,
   CHANGE_OWN_ALL_FILTER,
-  CHANGE_SORTING
+  CHANGE_SORTING,
+  OWN_ALL_TOGGLE
 } from '../actions/constants';
 
 const initialState = {
-  list: [],
+  loansList: [],
+  tranchesList: [],
+  stakingList: [],
   count: 0,
   isLoading: false,
   skip: 0,
@@ -18,7 +27,8 @@ const initialState = {
   limit: 50,
   filter: null,
   sort: null,
-  filterType: 'all'
+  filterType: 'all',
+  tradeType: 'allTranches'
 };
 
 export default function (state = initialState, action) {
@@ -26,11 +36,23 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case LOANS_SUCCESS:
-      return { ...state, list: payload };
+      return { ...state, loansList: payload };
     case LOANS_COUNT:
       return { ...state, count: payload };
     case LOANS_IS_LOADING:
       return { ...state, isLoading: payload };
+    case TRANCHES_IS_LOADING:
+      return { ...state, isLoading: payload };
+    case TRANCHES_SUCCESS:
+      return { ...state, tranchesList: payload };
+    case TRANCHES_COUNT:
+      return { ...state, count: payload };
+    case STAKING_IS_LOADING:
+      return { ...state, isLoading: payload };
+    case STAKING_SUCCESS:
+      return { ...state, stakingList: payload };
+    case STAKING_COUNT:
+      return { ...state, count: payload };
     case PAGINATION_SKIP:
       return { ...state, skip: payload };
     case PAGINATION_CURRENT:
@@ -41,6 +63,8 @@ export default function (state = initialState, action) {
       return { ...state, sort: payload };
     case CHANGE_OWN_ALL_FILTER:
       return { ...state, filterType: payload };
+    case OWN_ALL_TOGGLE:
+      return { ...state, tradeType: payload };
     default:
       return state;
   }
