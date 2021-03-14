@@ -36,6 +36,7 @@ const SummaryCard = ({
   modalType,
   summaryModal,
   ethereum: { web3, address, tokenBalance, notify },
+  userSummary: {totalAccruedRewards},
   hasAllowance,
   setHasAllowance,
   color
@@ -44,7 +45,6 @@ const SummaryCard = ({
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
-  const [accruedRewardsTotal, setAccruedRewardsTotal] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
@@ -160,9 +160,9 @@ const SummaryCard = ({
               <SummaryCardValue>
                 {type === 'slice' || type === 'lp'
                   ? `${roundNumber(value, 2)}`
-                  : type === 'reward'
-                  ? `${roundNumber(accruedRewardsTotal, 2)}`
-                  : ''}
+                  : type === 'reward' && roundNumber(totalAccruedRewards, 2) !== 'NaN'
+                  ? `${roundNumber(totalAccruedRewards, 2)}`
+                  : '0.00'}
                 <div></div>
               </SummaryCardValue>
               <SummaryCardDetails>
@@ -200,7 +200,6 @@ const SummaryCard = ({
             summaryModal={summaryModal}
             tokenAddress={tokenAddress}
             noBalance={Number(balance) === 0}
-            setAccruedRewardsTotal={setAccruedRewardsTotal}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
@@ -223,7 +222,6 @@ const SummaryCard = ({
           summaryModal={summaryModal}
           tokenAddress={tokenAddress}
           noBalance={Number(balance) === 0}
-          setAccruedRewardsTotal={setAccruedRewardsTotal}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
@@ -242,11 +240,13 @@ const SummaryCard = ({
 };
 
 SummaryCard.propTypes = {
-  ethereum: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired,
+  userSummary: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  userSummary: state.userSummary
 });
 
 export default connect(mapStateToProps, {})(SummaryCard);

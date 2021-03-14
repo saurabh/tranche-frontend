@@ -59,7 +59,7 @@ let StakingForm = ({
   // setBalanceModal,
   adjustStake,
   // Redux
-  ethereum: { tokenBalance, address },
+  ethereum: { tokenBalance },
   userSummary: { slice, lpList }
 }) => {
   const [balance, setBalance] = useState(0);
@@ -69,15 +69,6 @@ let StakingForm = ({
   const [dropdownName, setDropdownName] = useState([]);
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
-
-  const setAddress = useCallback(() => {
-    change('address', address);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address]);
-
-  useEffect(() => {
-    setAddress();
-  }, [setAddress]);
 
   useEffect(() => {
     if (isLPToken && lpList) {
@@ -277,7 +268,6 @@ const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   userSummary: state.userSummary,
   initialValues: {
-    address: '',
     amount: ''
   },
   formValues: getFormValues('stake')(state)
