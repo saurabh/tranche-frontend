@@ -110,6 +110,7 @@ const StakingModal = ({
   approveLoading,
   tokenBalance,
   type,
+  setAccruedRewardsTotal,
   // tokenAddress,
   // Functions
   closeModal,
@@ -154,8 +155,8 @@ const StakingModal = ({
 
   useEffect(() => {
     if (slice && lpList && lpList.length === 2) {
-      let tempArray = []
-      tempArray = tempArray.concat(lpList)
+      let tempArray = [];
+      tempArray = tempArray.concat(lpList);
       tempArray.unshift(slice);
       setStakableAssets(tempArray);
     }
@@ -163,14 +164,17 @@ const StakingModal = ({
 
   useEffect(() => {
     let rewards = {};
+    let total = 0;
     type === 'reward' &&
       address &&
       stakableAssets.forEach(async (item) => {
         let result = await getAccruedStakingRewards(item.yieldAddress, address);
         rewards[item.address] = result;
+        total += Number(result);
+        setAccruedRewardsTotal(total);
         setAccruedRewards(rewards);
       });
-  }, [type, stakableAssets, address]);
+  }, [type, stakableAssets, address, setAccruedRewardsTotal]);
 
   const modalClose = () => {
     closeModal();
@@ -333,22 +337,23 @@ const StakingModal = ({
                       <h2>Claim</h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
-                  {stakableAssets && stakableAssets.map((item) => (
-                    <ClaimModalRow key={item.name} right>
-                      <ClaimModalCol value right pair>
-                        <img src={TrancheClaim} alt='' />
-                        <img src={pairLogos[item.name]} alt='' />
-                      </ClaimModalCol>
-                      <ClaimModalCol value right rewards>
-                        <h2>{accruedRewards[item.address] ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
-                      </ClaimModalCol>
-                      <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn>
-                        <button onClick={() => massHarvest(item.yieldAddress)}>
-                          <h2>Claim</h2>
-                        </button>
-                      </ClaimModalCol>
-                    </ClaimModalRow>
-                  ))}
+                  {stakableAssets &&
+                    stakableAssets.map((item) => (
+                      <ClaimModalRow key={item.name} right>
+                        <ClaimModalCol value right pair>
+                          <img src={TrancheClaim} alt='' />
+                          <img src={pairLogos[item.name]} alt='' />
+                        </ClaimModalCol>
+                        <ClaimModalCol value right rewards>
+                          <h2>{accruedRewards[item.address] ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
+                        </ClaimModalCol>
+                        <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn>
+                          <button onClick={() => massHarvest(item.yieldAddress)}>
+                            <h2>Claim</h2>
+                          </button>
+                        </ClaimModalCol>
+                      </ClaimModalRow>
+                    ))}
                 </ClaimModalHalfContent>
               </ClaimModalHalfContentWrapper>
             </ClaimModalHalfWrapper>
@@ -494,6 +499,5 @@ const mapStateToProps = (state) => ({
   stakingList: state.data.stakingList,
   path: state.path
 });
-
 
 export default connect(mapStateToProps, {})(StakingModal);
