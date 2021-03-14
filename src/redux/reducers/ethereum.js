@@ -4,16 +4,18 @@ import {
   SET_BALANCE,
   SET_TOKEN_BALANCE,
   SET_TOKEN_BALANCES,
+  SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
+import { SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants'
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: '0', SLICE: '0', USDC: '0' },
+  tokenBalance: { DAI: '0', [SLICEAddress]: '0',[LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
   address: undefined,
   web3,
   notify: initNotify()
@@ -30,9 +32,11 @@ export default function (state = initialState, action) {
     case SET_BALANCE:
       return { ...state, balance: payload };
     case SET_TOKEN_BALANCE:
-      return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenName]: payload.tokenBalance } };
+      return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenAddress]: payload.tokenBalance } };
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
+    case SET_TRANCHE_TOKEN_BALANCES:
+      return { ...state, trancheTokenBalance: { ...state.trancheTokenBalance, [payload.trancheName]: payload.trancheTokenBalance } };
     case SET_WALLET:
       return { ...state, wallet: payload };
     case SET_WEB3:

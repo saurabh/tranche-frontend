@@ -1,18 +1,23 @@
 import Web3 from 'web3';
-import { pairData } from 'config/constants';
-import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
+import store from '../store';
+import {
+  DAISetup,
+  SLICESetup,
+  // USDCSetup,
+  // JProtocolSetup,
+  ERC20Setup
+} from 'utils/contractConstructor';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
   SET_TOKEN_BALANCES,
+  SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK
 } from './constants';
-
-const searchArr = (key) => pairData.find((i) => i.key === key);
 
 export const setAddress = (address) => (dispatch) => {
   dispatch({
@@ -35,34 +40,52 @@ export const setBalance = (balance) => (dispatch) => {
   });
 };
 
-export const setTokenBalance = (web3, tokenName, address) => async (dispatch) => {
+export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
   try {
-    const { lendTokenSetup } = searchArr(tokenName);
-    const lendToken = lendTokenSetup(web3);
-    const tokenBalance = await lendToken.methods.balanceOf(address).call();
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    const tokenBalance = await token.methods.balanceOf(address).call();
 
     dispatch({
       type: SET_TOKEN_BALANCE,
-      payload: { tokenName, tokenBalance }
+      payload: { tokenAddress, tokenBalance }
     });
   } catch (error) {
     console.error(error);
   }
 };
 
-export const setTokenBalances = (web3, address) => async (dispatch) => {
+export const setTokenBalances = (address) => async (dispatch) => {
   try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
     const DAI = DAISetup(web3);
     const SLICE = SLICESetup(web3);
-    const USDC = USDCSetup(web3);
+    // const USDC = USDCSetup(web3);
     const daiBalance = await DAI.methods.balanceOf(address).call();
     const sliceBalance = await SLICE.methods.balanceOf(address).call();
-    const usdcBalance = await USDC.methods.balanceOf(address).call();
+    // const usdcBalance = await USDC.methods.balanceOf(address).call();
 
-    const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance, USDC: usdcBalance };
+    const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance };
     dispatch({
       type: SET_TOKEN_BALANCES,
       payload: tokenBalances
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const setTrancheTokenBalances = (trancheName, tokenAddress, address) => async (dispatch) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const Tranche = ERC20Setup(web3, tokenAddress);
+    const trancheTokenBalance = await Tranche.methods.balanceOf(address).call();
+    dispatch({
+      type: SET_TRANCHE_TOKEN_BALANCES,
+      payload: { trancheName, trancheTokenBalance }
     });
   } catch (error) {
     console.error(error);

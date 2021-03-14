@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
-import { WalletBtn, WalletBtnIcon, WalletBtnText } from './styles/HeaderComponents';
+import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper, LocaleWrapper  } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
+import { ChevronDownBorrow, ChevronDownEarn } from "assets";
+import { useOuterClick } from 'services/useOuterClick';
+import i18n from 'i18next';
 
 const ConnectWallet = ({
   setAddress,
@@ -16,7 +19,12 @@ const ConnectWallet = ({
   ethereum: { address, balance }
 }) => {
   const { pathname } = useLocation();
-  const [path, setPath] = useState(pathname.split('/')[1] || 'borrow');
+  let parsedPath = pathname.split('/');
+  const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || 'borrow');
+  const [localeToggle, setLocaleToggle] = useState(false);
+  const innerRef = useOuterClick(e => {
+    setLocaleToggle(false);
+  });
 
   const onboard = initOnboard({
     address: setAddress,
@@ -33,21 +41,36 @@ const ConnectWallet = ({
     }
   }, [onboard]);
 
+  const parsePath = useCallback(() =>{
+    setPath(parsedPath[parsedPath.length - 1]);
+  }, [parsedPath]);
   useEffect(() => {
-    const parsePath = () => {
-      setPath(pathname.split('/')[1]);
-    };
-
     parsePath();
-  }, [pathname]);
+  }, [pathname, parsePath]);
 
   const handleConnect = async () => {
     await onboard.walletSelect();
     await onboard.walletCheck();
   };
-
+  
+  const pathWindow =  window.location.pathname;
+  let parsedPathWindow = pathWindow.split('/');
+  let currentPath = parsedPathWindow[parsedPathWindow.length - 1];
+  const newPath = (lng) =>{
+    return `${"/" + lng + "/" + currentPath}`;
+  }
   return (
-    <>
+    <NavBarRightWrapper>
+      <LocaleWrapper color={PagesData[path].secondaryColor} ref={innerRef}>
+        <h2 onClick={() => setLocaleToggle(!localeToggle)}>{i18n.language} <img src={parsedPath === "borrow" ? ChevronDownBorrow : ChevronDownEarn} alt=""/> </h2>
+        { localeToggle ?
+          <div>
+            <a href={newPath("en")}>EN</a>
+            <a href={newPath("zh")}>ZH</a>
+          </div> : ""
+        }
+       
+      </LocaleWrapper>
       {balance < 0 ? (
         <WalletBtn
           background={PagesData[path].secondaryColor}
@@ -72,7 +95,7 @@ const ConnectWallet = ({
           </WalletBtnText>
         </WalletBtn>
       )}
-    </>
+    </NavBarRightWrapper>
   );
 };
 

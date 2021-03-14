@@ -1,8 +1,12 @@
 import { isLessThan } from './helperFunctions';
-import { calcMinCollateralAmount, calcAdjustCollateralRatio } from 'services/contractMethods';
+import {
+  calcMinCollateralAmount,
+  calcAdjustCollateralRatio,
+  getShareholderShares
+} from 'services/contractMethods';
 import { generalParams } from 'config/constants';
 
-const validate = (values) => {
+const validateCreate = (values) => {
   const { borrowedAskAmount, collateralAmount, apy } = values;
   const errors = {};
   if (!borrowedAskAmount) {
@@ -72,12 +76,29 @@ let asyncValidateAdjust = (values) => {
   });
 };
 
+let asyncValidateSell = (values) => {
+  return sleep(0).then(async () => {
+    let { loanId, address, shares } = values;
+    if (loanId) {
+      const shareholderShares = await getShareholderShares(loanId, address);
+      if (isLessThan(parseFloat(shareholderShares), parseFloat(shares))) {
+        // eslint-disable-next-line
+        throw {
+          shares: "You don't own enough shares of this loan",
+          error: 'Not enough shares'
+        };
+      }
+    }
+  });
+};
+
 export {
   required,
   number,
   minValue0,
   maxValue100,
-  validate,
+  validateCreate,
   asyncValidateCreate,
-  asyncValidateAdjust
+  asyncValidateAdjust,
+  asyncValidateSell
 };

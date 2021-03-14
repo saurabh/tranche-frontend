@@ -11,6 +11,7 @@ const TableMoreRow = ({
   collateralTypeName,
   cryptoFromLenderName,
   amount,
+  amountMetaData,
   status,
   createdAt,
   eventName
@@ -40,10 +41,12 @@ const TableMoreRow = ({
         <div className='table-more-row-second-content'>
           {/*<h2>12.85 <span>DAI</span></h2>*/}
           <h2>
-            {roundBasedOnUnit(amount, collateralTypeName)}{' '}
+            
             {eventName === events['APPROVE_LOAN'].toLowerCase()
-              ? gweiOrEther(amount, cryptoFromLenderName)
-              : gweiOrEther(amount, collateralTypeName)}
+              ? roundBasedOnUnit(amount, collateralTypeName) + " " + gweiOrEther(amount, cryptoFromLenderName)
+              : eventName === events['TRANCHE_ADDED'].toLowerCase() 
+              ? roundBasedOnUnit(amountMetaData, collateralTypeName) + "%"
+              : roundBasedOnUnit(amount, collateralTypeName) + " " + gweiOrEther(amount, collateralTypeName)}
           </h2>
         </div>
       </div>
@@ -93,6 +96,8 @@ const TableMoreRow = ({
               ? 'Closing Initiation Reward'
               : eventName === events['FORECLOSED_REWARD'].toLowerCase()
               ? 'Foreclosure Reward'
+              : eventName === events['TRANCHE_ADDED'].toLowerCase() 
+              ? 'Sold to Protocol'
               : 'N/A'}
           </h2>
         </div>

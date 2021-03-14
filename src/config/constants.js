@@ -1,7 +1,7 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon} from 'assets';
+import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon, TrancheClaim, DaiClaim, EthClaim } from 'assets';
 // import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
+// import { networks as StakingNetworks } from 'build/contracts/StakingMilestones.json';
 import { DAISetup } from 'utils/contractConstructor';
-// import { DAISetup, SLICESetup, USDCSetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -14,9 +14,17 @@ export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
-export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS;
-export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS;
-export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS;
+export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
+export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
+export const YieldAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
+export const ETHDAITrancheAAddress = process.env.REACT_APP_TRANCHE_A_ADDRESS;
+export const ETHDAITrancheBAddress = process.env.REACT_APP_TRANCHE_B_ADDRESS;
+export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
+export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
+export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
+export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
+export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
+export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
@@ -60,6 +68,15 @@ export const PagesData = {
     title: 'Earning Markets',
     description: 'DEPOSIT STABLE COINS FOR DIFFERENT RETURNS'
   },
+  stake: {
+    pageType: 'stake',
+    color: '#0071F5',
+    secondaryColor: '#ffffff',
+    btnColor: '#BCD9FB',
+    cardColor: '#6EAEFA',
+    title: 'Staking Pools',
+    description: 'stake cryptocurrency for slice rewards'
+  },
   privacy: {
     pageType: 'privacy',
     color: '#006173',
@@ -91,7 +108,17 @@ export const pairData = [
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
   },
-  // {
+  {
+    key: 'SLICE',
+    text: 'SLICE',
+    value: 1,
+    collateral: 'SLICE',
+    img: SLICEicon,
+    colIcon: SLICEicon,
+    // collateralTokenSetup: SLICESetup,
+    // lendTokenSetup: SLICESetup
+  }
+    // {
   //   key: 'USDC',
   //   text: 'USDC',
   //   value: 1,
@@ -103,13 +130,24 @@ export const pairData = [
   // }
 ];
 
+export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
+
+export const trancheData = [
+  { address: ETHDAITrancheAAddress.toLowerCase() },
+  { address: ETHDAITrancheBAddress.toLowerCase() }
+];
+
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
+  tranchesList: 'earn',
+  stakingList: 'staking',
   transaction: 'loans/transaction',
   summaryRatio: 'summary/ratio',
   summaryCollateral: 'summary/collateral',
-  summaryLoan: 'summary/loan'
+  summaryLoan: 'summary/loan',
+  stakingSummaryDetail: 'staking/detail/',
+  stakingSummary: 'staking/summary/'
 };
 
 // Filters
@@ -122,8 +160,14 @@ export const blocksPerYear = 2372500;
 export const factoryFees = 5;
 
 export const generalParams = {
-  limitCollRatioForWithdraw: 160,
+  limitCollRatioForWithdraw: 160
 };
+
+export const pairLogos = {
+  SLICE: TrancheClaim,
+  'SLICE/ETH LP': EthClaim,
+  'SLICE/DAI LP': DaiClaim
+}
 
 export const actionTypes = {
   Cancel: {
@@ -165,7 +209,8 @@ export const events = {
   EARLY_CLOSING_FEES: 'early_closing_fees',
   LOAN_CANCEL_FEES: 'loan_cancel_fees',
   INITIATE_FORECLOSE_REWARD: 'initiate_foreclose_reward',
-  FORECLOSED_REWARD: 'foreclosed_reward'
+  FORECLOSED_REWARD: 'foreclosed_reward',
+  TRANCHE_ADDED: 'soldtoprotocol'
 };
 
 export const statuses = {

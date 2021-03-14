@@ -1,35 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
-import { loansFetchData } from 'redux/actions/loans';
+import { fetchTableData } from 'redux/actions/tableData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
+import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
-import { LoanContractAddress, PriceOracleAddress } from 'config/constants';
+import {
+  serverUrl,
+  apiUri,
+  LoanContractAddress,
+  PriceOracleAddress,
+  ProtocolAddress,
+  StakingAddresses,
+  YieldAddresses
+} from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
-import Earn from 'app/pages/Earn';
+import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
-import Trade from 'app/pages/Trade';
+import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-
+const { loanList: loanListUrl, tranchesList: tranchesistUrl, stakingList: stakingListUrl } = apiUri;
+const baseRouteUrl = '/:locale(zh|kr|en)?';
+const { stakingSummary } = apiUri;
 
 const App = ({
-  loansFetchData,
+  fetchTableData,
   setCurrentBlock,
+  summaryFetchSuccess,
   path,
   ethereum: { address },
-  loans: { skip, limit, filter, filterType },
+  data: { skip, limit, filter, filterType, tradeType },
   checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
-  
+
   useEffect(() => {
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -42,39 +55,91 @@ const App = ({
       }
       console.error(error);
     });
-
     const pairContract = web3.eth
       .subscribe('logs', {
         address: LoanContractAddress
       })
       .on('data', async () => {
         await timeout(4000);
-        await loansFetchData({
-          skip,
-          limit,
-          filter: {
-            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-            lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-            type: filter
-          }
-        });
+        await fetchTableData(
+          {
+            skip,
+            limit,
+            filter: {
+              borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+              lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
+              type: filter
+            }
+          },
+          loanListUrl
+        );
       });
-
     const priceOracle = web3.eth
       .subscribe('logs', {
         address: PriceOracleAddress
       })
       .on('data', async () => {
         await timeout(4000);
-        await loansFetchData({
-          skip,
-          limit,
-          filter: {
-            borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-            lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-            type: filter
-          }
-        });
+        await fetchTableData(
+          {
+            skip,
+            limit,
+            filter: {
+              borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+              lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
+              type: filter
+            }
+          },
+          loanListUrl
+        );
+      });
+    const Protocol = web3.eth
+      .subscribe('logs', {
+        address: ProtocolAddress
+      })
+      .on('data', async () => {
+        await timeout(4000);
+        await fetchTableData(
+          {
+            skip,
+            limit,
+            filter: {
+              address: path === 'earn' && tradeType === 'myTranches' ? address : undefined,
+              type: filter //ETH/JNT keep these in constant file
+            }
+          },
+          tranchesistUrl
+        );
+      });
+    const Staking = web3.eth
+      .subscribe('logs', {
+        address: StakingAddresses
+      })
+      .on('data', async () => {
+        await timeout(4000);
+        await fetchTableData(
+          {
+            skip,
+            limit,
+            filter: {
+              type: filter //ETH/JNT keep these in constant file
+            }
+          },
+          stakingListUrl
+        );
+        const res = await axios(`${serverUrl + stakingSummary + address}`);
+        const { result } = res.data;
+        summaryFetchSuccess(result);
+      });
+    const YieldFarm = web3.eth
+      .subscribe('logs', {
+        address: YieldAddresses
+      })
+      .on('data', async () => {
+        await timeout(4000);
+        const res = await axios(`${serverUrl + stakingSummary + address}`);
+        const { result } = res.data;
+        summaryFetchSuccess(result);
       });
 
     return () => {
@@ -87,52 +152,78 @@ const App = ({
       priceOracle.unsubscribe((error) => {
         if (error) console.error(error);
       });
+      Protocol.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
+      Staking.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
+      YieldFarm.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
     };
-  }, [address, filterType, path, loansFetchData, skip, limit, filter, setCurrentBlock]);
-
-
+  }, [
+    address,
+    filterType,
+    path,
+    fetchTableData,
+    limit,
+    filter,
+    setCurrentBlock,
+    summaryFetchSuccess,
+    tradeType,
+    skip
+  ]);
 
   const serverError = () => {
-    return(
-      <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />
-    )
-  }
+    return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
+  };
   const initApp = () => {
     return (
-        <>
-          <GlobalStyle />
-          <Banner />
-          <Router>
-              <Switch location={window.location}>
-                <Redirect exact from='/' to='/borrow' />
-                <Route exact path='/lend' component={Earn} />
-                <Route exact path='/borrow' component={Borrow} />
-                <Route exact path='/earn' component={Trade}>
-                  <Redirect to='/borrow' />
-                </Route>
-                <Route exact path='/privacy' component={Privacy} />
-                <Route exact path='/terms' component={TermsAndConditions} />
-                <Route component={NotFound} />
-              </Switch>
-          </Router>
-        </>
-      );
-  }
-  return checkServerStatus ? initApp() : serverError()
+      <>
+        <GlobalStyle />
+        <Banner />
+        <Router>
+          <Switch location={window.location}>
+            <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
+            <Redirect exact from={baseRouteUrl + '/earn'} to='/borrow' />
+            <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
+            <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
+            <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
+            <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
+            <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />
+            <Route component={NotFound} />
+          </Switch>
+        </Router>
+      </>
+    );
+  };
+  return checkServerStatus ? initApp() : serverError();
 };
 
 App.propTypes = {
-  loansFetchData: PropTypes.func.isRequired
+  ethereum: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  tranches: PropTypes.object.isRequired,
+  trade: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  fetchTableData: PropTypes.func.isRequired,
+  setCurrentBlock: PropTypes.func.isRequired,
+  summaryFetchSuccess: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  loans: state.loans,
+  data: state.data,
+  tranches: state.tranches,
+  trade: state.trade,
   path: state.path,
   checkServerStatus: state.checkServerStatus
 });
 
 export default connect(mapStateToProps, {
-  loansFetchData,
-  setCurrentBlock
+  fetchTableData,
+  setCurrentBlock,
+  summaryFetchSuccess
+  // changePath
 })(NetworkDetector(App));
