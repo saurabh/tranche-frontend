@@ -43,8 +43,8 @@ const SummaryCard = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
-  // const [lpBalance, setLPBalance] = useState(0);
-  const [accruedRewards, setAccruedRewards] = useState(0);
+  const [epochTimeLeft, setEpochTimeLeft] = useState(0);
+  const [accruedRewardsTotal, setAccruedRewardsTotal] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
@@ -62,25 +62,17 @@ const SummaryCard = ({
   useEffect(() => {
     const setEpochTime = async () => {
       if (type === 'reward') {
-        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length-1])
-        console.log(result);
+        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+        setEpochTimeLeft((result));
       }
-    }
+    };
 
     setEpochTime();
   }, [type]);
 
   useEffect(() => {
-    const getRewards = async () => {
-      if (type === 'reward' && address) {
-        // const result = await getAccruedStakingRewards(address);
-        // setAccruedRewards(fromWei(result))
-        setAccruedRewards(0);
-      }
-    };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-    getRewards();
-  }, [type, address]);
+  }, [type]);
 
   useEffect(() => {
     const setBalance = async () => {
@@ -167,9 +159,9 @@ const SummaryCard = ({
 
               <SummaryCardValue>
                 {type === 'slice' || type === 'lp'
-                  ? `${roundNumber(value)}`
+                  ? `${roundNumber(value, 2)}`
                   : type === 'reward'
-                  ? `${roundNumber(accruedRewards, 2)}`
+                  ? `${roundNumber(accruedRewardsTotal, 2)}`
                   : ''}
                 <div></div>
               </SummaryCardValue>
@@ -178,7 +170,7 @@ const SummaryCard = ({
                   ? balance + ' SLICE Available'
                   : type === 'lp'
                   ? balance + ' SLICE-LP Available'
-                  : ' Days Until Next Distribution'}
+                  : epochTimeLeft + ' Until Next Distribution'}
               </SummaryCardDetails>
               {path === 'stake' && type !== 'reward' && (
                 <SummaryCardCounter>
@@ -207,6 +199,8 @@ const SummaryCard = ({
             modalType={modalType}
             summaryModal={summaryModal}
             tokenAddress={tokenAddress}
+            noBalance={Number(balance) === 0}
+            setAccruedRewardsTotal={setAccruedRewardsTotal}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
@@ -228,6 +222,8 @@ const SummaryCard = ({
           modalType={modalType}
           summaryModal={summaryModal}
           tokenAddress={tokenAddress}
+          noBalance={Number(balance) === 0}
+          setAccruedRewardsTotal={setAccruedRewardsTotal}
           // Functions
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}

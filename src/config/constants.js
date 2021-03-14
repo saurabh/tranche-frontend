@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
+import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon, TrancheClaim, DaiClaim, EthClaim } from 'assets';
 // import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
 // import { networks as StakingNetworks } from 'build/contracts/StakingMilestones.json';
 import { DAISetup } from 'utils/contractConstructor';
@@ -162,6 +162,12 @@ export const factoryFees = 5;
 export const generalParams = {
   limitCollRatioForWithdraw: 160
 };
+
+export const pairLogos = {
+  SLICE: TrancheClaim,
+  'SLICE/ETH LP': EthClaim,
+  'SLICE/DAI LP': DaiClaim
+}
 
 export const actionTypes = {
   Cancel: {
