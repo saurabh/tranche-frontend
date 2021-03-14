@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
-import { serverUrl } from 'config/constants'
 import axios from 'axios';
 import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
