@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
-import { massHarvest, getAccruedStakingRewards } from 'services/contractMethods';
+import { massHarvest } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -98,7 +98,7 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   path,
   ethereum: { address },
-  userSummary: { slice, lp, lpList },
+  userSummary: { slice, lp, lpList, stakableAssets, accruedRewards },
   // State Values
   summaryModal,
   stakingList,
@@ -110,7 +110,6 @@ const StakingModal = ({
   approveLoading,
   tokenBalance,
   type,
-  setAccruedRewardsTotal,
   // tokenAddress,
   // Functions
   closeModal,
@@ -123,11 +122,10 @@ const StakingModal = ({
   // const stakableAssets = useRef();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
-  const [stakableAssets, setStakableAssets] = useState([]);
   const [totalStaked, setTotalStaked] = useState(0);
-  const [accruedRewards, setAccruedRewards] = useState({});
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
+  const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -152,29 +150,6 @@ const StakingModal = ({
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
   }, [modalIsOpen, type, tokenAddress, address]);
-
-  useEffect(() => {
-    if (slice && lpList && lpList.length === 2) {
-      let tempArray = [];
-      tempArray = tempArray.concat(lpList);
-      tempArray.unshift(slice);
-      setStakableAssets(tempArray);
-    }
-  }, [lpList, slice]);
-
-  useEffect(() => {
-    let rewards = {};
-    let total = 0;
-    type === 'reward' &&
-      address &&
-      stakableAssets.forEach(async (item) => {
-        let result = await getAccruedStakingRewards(item.yieldAddress, address);
-        rewards[item.address] = result;
-        total += Number(result);
-        setAccruedRewardsTotal(total);
-        setAccruedRewards(rewards);
-      });
-  }, [type, stakableAssets, address, setAccruedRewardsTotal]);
 
   const modalClose = () => {
     closeModal();
@@ -206,18 +181,18 @@ const StakingModal = ({
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
             <ModalActionDetailsContent stake={true} trade={true}>
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>USER {tokenType} LOCKED</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2)}%</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0 }%</LoanDetailsRowValue>
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
@@ -345,9 +320,10 @@ const StakingModal = ({
                           <img src={pairLogos[item.name]} alt='' />
                         </ClaimModalCol>
                         <ClaimModalCol value right rewards>
-                          <h2>{accruedRewards[item.address] ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
+                          <h2>{accruedRewards ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
                         </ClaimModalCol>
-                        <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn>
+                        {/* <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn> */}
+                        <ClaimModalCol value right claim btn>
                           <button onClick={() => massHarvest(item.yieldAddress)}>
                             <h2>Claim</h2>
                           </button>

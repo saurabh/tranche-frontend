@@ -16,7 +16,7 @@ export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
-export const YieldAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
+export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
 export const ETHDAITrancheAAddress = process.env.REACT_APP_TRANCHE_A_ADDRESS;
 export const ETHDAITrancheBAddress = process.env.REACT_APP_TRANCHE_B_ADDRESS;
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
@@ -26,6 +26,7 @@ export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCa
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 
+export const SLICETotalSupply = '20000000';
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {
