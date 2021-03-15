@@ -125,6 +125,7 @@ const StakingModal = ({
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
+  const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -180,18 +181,18 @@ const StakingModal = ({
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
             <ModalActionDetailsContent stake={true} trade={true}>
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>USER SLICE LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>USER {tokenType} LOCKED</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>TOTAL SLICE LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2)}%</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0 }%</LoanDetailsRowValue>
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
