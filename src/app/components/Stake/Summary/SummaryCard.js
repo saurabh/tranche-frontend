@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  fromWei,
-  addStake,
-  withdrawStake,
-  epochTimeRemaining
-} from 'services/contractMethods';
+import { fromWei, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
 import { txMessage, StakingAddresses } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
 import {
@@ -29,7 +24,6 @@ const SummaryCard = ({
   value,
   type,
   details,
-  path,
   openModal,
   closeModal,
   modalIsOpen,
@@ -112,7 +106,6 @@ const SummaryCard = ({
 
   const stakingApproveContract = async (stakingAddress, tokenAddress) => {
     try {
-      // console.log(safeDivide(safeSubtract(2**256, -1), 10**18).toString())
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
         .approve(stakingAddress, toWei(SLICETotalSupply))
@@ -170,13 +163,13 @@ const SummaryCard = ({
                   ? balance + ' SLICE-LP Available'
                   : epochTimeLeft + ' Until Next Distribution'}
               </SummaryCardDetails>
-              {path === 'stake' && type !== 'reward' && (
+              {type !== 'reward' && (
                 <SummaryCardCounter>
                   <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
                   <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
                 </SummaryCardCounter>
               )}
-              {path === 'stake' && type === 'reward' && (
+              {type === 'reward' && (
                 <SummaryClaimBtn claim>
                   <button onClick={() => openModal()}>Claim</button>
                 </SummaryClaimBtn>
@@ -192,7 +185,6 @@ const SummaryCard = ({
 
           <StakingModal
             // State Values
-            path={path}
             modalIsOpen={modalIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
@@ -214,7 +206,6 @@ const SummaryCard = ({
       ) : (
         <StakingModal
           // State Values
-          path={path}
           modalIsOpen={modalIsOpen}
           modalType={modalType}
           summaryModal={summaryModal}
