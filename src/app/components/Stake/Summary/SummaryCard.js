@@ -6,7 +6,6 @@ import {
   addStake,
   withdrawStake,
   epochTimeRemaining
-  // getAccruedStakingRewards
 } from 'services/contractMethods';
 import { txMessage, StakingAddresses } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
@@ -21,6 +20,7 @@ import {
   SummaryCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
+import { SLICETotalSupply } from 'config';
 
 const SummaryCard = ({
   title,
@@ -36,7 +36,7 @@ const SummaryCard = ({
   modalType,
   summaryModal,
   ethereum: { web3, address, tokenBalance, notify },
-  userSummary: {totalAccruedRewards},
+  userSummary: { totalAccruedRewards },
   hasAllowance,
   setHasAllowance,
   color
@@ -63,7 +63,7 @@ const SummaryCard = ({
     const setEpochTime = async () => {
       if (type === 'reward') {
         const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-        setEpochTimeLeft((result));
+        setEpochTimeLeft(result);
       }
     };
 
@@ -110,12 +110,12 @@ const SummaryCard = ({
     }
   };
 
-  const stakingApproveContract = async (stakingAddress, tokenAddress, amount) => {
+  const stakingApproveContract = async (stakingAddress, tokenAddress) => {
     try {
-      amount = toWei(amount);
+      // console.log(safeDivide(safeSubtract(2**256, -1), 10**18).toString())
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
-        .approve(stakingAddress, amount)
+        .approve(stakingAddress, toWei(SLICETotalSupply))
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
@@ -140,9 +140,7 @@ const SummaryCard = ({
   const adjustStake = (e, stakingAddress, tokenAddress) => {
     try {
       e.preventDefault();
-      modalType
-        ? addStake(stakingAddress, tokenAddress)
-        : withdrawStake(stakingAddress, tokenAddress);
+      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
       closeModal();
     } catch (error) {
       console.error(error);
