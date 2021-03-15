@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber } from 'utils';
@@ -26,6 +25,7 @@ import {
   SelectCurrencyOption
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
+import { SLICETotalSupply } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -86,25 +86,28 @@ let StakingForm = ({
     }
   }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
 
+  useEffect(() => {
+    const allowanceCheck = async () => {
+      await stakingAllowanceCheck(stakingAddress, tokenAddress, SLICETotalSupply)
+    }
+
+    stakingAddress && tokenAddress && allowanceCheck();
+  }, [stakingAddress, tokenAddress, stakingAllowanceCheck])
+
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);
   };
 
   const handleLPSelect = (e, index, tokenAddress, stakingAddress) => {
     e.preventDefault();
-    amount !== '' && debounceAllowanceCheck(amount);
     setSelectedLPName(lpList[index].name);
     setDropdownName(lpList[index].name.split(' ')[0]);
     setTokenAddress(tokenAddress);
     setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
     setBalance(fromWei(balance.toString()));
+    // stakingAllowanceCheck(stakingAddress, tokenAddress, SLICETotalSupply)
     toggleLP(false);
-  };
-
-  const handleAmountChange = (amount) => {
-    debounceAllowanceCheck(amount);
-    setAmount(amount);
   };
 
   const setMaxSliceAmount = useCallback(
@@ -118,22 +121,10 @@ let StakingForm = ({
         num = userStaked;
       }
       change('amount', num);
-      debounceAllowanceCheck(num.toString());
       setAmount(num);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [balance, userStaked]
-  );
-
-  const debounceAllowanceCheck = useCallback(
-    _.debounce(
-      async (amount) => {
-        parseFloat(amount) > 0 && (await stakingAllowanceCheck(stakingAddress, tokenAddress, amount));
-      },
-      500,
-      { leading: true }
-    ),
-    [tokenAddress]
   );
 
   return (
@@ -149,7 +140,7 @@ let StakingForm = ({
                 <FieldWrapper modalType={true} staking={true}>
                   <Field
                     component={InputField}
-                    onChange={(e, newValue) => handleAmountChange(newValue)}
+                    onChange={(e, newValue) => setAmount(newValue)}
                     validate={[required, number]}
                     className='ModalFormInputNewLoan'
                     name='amount'
