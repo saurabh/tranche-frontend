@@ -5,12 +5,19 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
-// import { changePath } from 'redux/actions/TogglePath';
 import { fetchTableData } from 'redux/actions/tableData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
-import { serverUrl, apiUri, LoanContractAddress, PriceOracleAddress, ProtocolAddress, StakingAddresses } from 'config/constants';
+import {
+  serverUrl,
+  apiUri,
+  LoanContractAddress,
+  PriceOracleAddress,
+  ProtocolAddress,
+  StakingAddresses,
+  YieldAddresses
+} from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
 import Earn from 'app/pages/Lend';
@@ -31,19 +38,11 @@ const App = ({
   setCurrentBlock,
   summaryFetchSuccess,
   path,
-  // changePath,
   ethereum: { address },
   data: { skip, limit, filter, filterType, tradeType },
   checkServerStatus
 }) => {
   const [showModal, setShowModal] = useState(true);
-  // const { pathname } = window.location;
-  // let parsedPath = pathname.split('/');
-  // let currentPath = parsedPath[parsedPath.length - 1];
-
-  // useEffect(() => {
-  //   changePath(currentPath);
-  // }, [pathname, changePath, currentPath])
 
   useEffect(() => {
     const timeout = (ms) => {
@@ -57,7 +56,6 @@ const App = ({
       }
       console.error(error);
     });
-
     const pairContract = web3.eth
       .subscribe('logs', {
         address: LoanContractAddress
@@ -96,7 +94,6 @@ const App = ({
           loanListUrl
         );
       });
-
     const Protocol = web3.eth
       .subscribe('logs', {
         address: ProtocolAddress
@@ -115,7 +112,6 @@ const App = ({
           tranchesistUrl
         );
       });
-
     const Staking = web3.eth
       .subscribe('logs', {
         address: StakingAddresses
@@ -132,6 +128,16 @@ const App = ({
           },
           stakingListUrl
         );
+        const res = await axios(`${serverUrl + stakingSummary + address}`);
+        const { result } = res.data;
+        summaryFetchSuccess(result);
+      });
+    const YieldFarm = web3.eth
+      .subscribe('logs', {
+        address: YieldAddresses
+      })
+      .on('data', async () => {
+        await timeout(4000);
         const res = await axios(`${serverUrl + stakingSummary + address}`);
         const { result } = res.data;
         summaryFetchSuccess(result);
@@ -153,8 +159,22 @@ const App = ({
       Staking.unsubscribe((error) => {
         if (error) console.error(error);
       });
+      YieldFarm.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
     };
-  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, summaryFetchSuccess, tradeType, skip]);
+  }, [
+    address,
+    filterType,
+    path,
+    fetchTableData,
+    limit,
+    filter,
+    setCurrentBlock,
+    summaryFetchSuccess,
+    tradeType,
+    skip
+  ]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;

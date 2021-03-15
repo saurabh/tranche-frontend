@@ -73,7 +73,7 @@ const TableHead = ({changeSorting, path}) => {
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "interest-paid-wrapper" : path === "stake" ? "accrued-wrapper" : "subscription-wrapper"}>
                     <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "earn" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "APY" : "SUBSCRIPTION"}</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "Variable APY" : "SUBSCRIPTION"}</h2>
                         
                     </div>
                 </TableHeadTitle>
