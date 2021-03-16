@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
-// import { postRequest } from 'services/axios';
 import { useOuterClick } from 'services/useOuterClick';
 import { JProtocolSetup, ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
 import {
@@ -32,7 +31,6 @@ import {
   PagesData,
   txMessage,
   etherScanUrl,
-  // apiUri,
   statuses
 } from 'config';
 import TradeModal from '../../Modals/EarnModal';
@@ -40,16 +38,12 @@ import {
   Adjust,
   AdjustEarn,
   AdjustTrade,
-  // CloseModal,
   Info,
   LinkArrow,
-  // TrancheImg,
-  // Withdraw,
   ArrowGreen,
   CompoundLogo
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
-// import ETH from 'assets/images/svg/EthForm.svg';
 
 import {
   TableContentCard,
@@ -59,9 +53,6 @@ import {
   AdjustLoanBtn,
   TableCardTag,
   TableCardImg,
-  // InfoBoxWrapper,
-  // InfoBox,
-  // WithdrawBtnWrapper,
   TableFirstCol,
   TableFirstColWrapper,
   FirstColContent,
@@ -98,7 +89,6 @@ const TableCard = ({
     cryptoType,
     amount
   },
-  // trade: { tradeType },
   path,
   setAddress,
   setNetwork,
@@ -332,10 +322,6 @@ const TableCard = ({
     address = !address ? onboard.getState().address : address;
     setTokenBalances(address);
     setTrancheTokenBalances(name, trancheTokenAddress, address);
-    // console.log(trancheTokenAddress, address)
-    // const result = await getWithdrawableFunds(trancheTokenAddress, address);
-    // console.log(result)
-    // setWithdrawableFunds(fromWei(result));
     setIsOpen(true);
   };
 
@@ -361,44 +347,8 @@ const TableCard = ({
   };
 
   const cardToggle = () => {
-    // console.log(loan);
     setMoreCardToggle(!moreCardToggle);
-    // if (!moreCardToggle) {
-    //   getTransaction(hash);
-    // }
   };
-
-  // const getTransaction = async (hash) => {
-  //   const { transaction: transactionUrl } = apiUri;
-  //   setIsLoading(true);
-  //   try {
-  //     const { data: result } = await postRequest(
-  //       transactionUrl,
-  //       {
-  //         data: {
-  //           skip: 0,
-  //           limit: 100,
-  //           filter: {
-  //             loanId,
-  //             contractAddress: hash
-  //           }
-  //         }
-  //       },
-  //       null,
-  //       true
-  //     );
-  //     if (result.status) {
-  //       checkServer(true);
-  //       setIsLoading(false);
-  //       setMoreList(result.result.list);
-  //     } else {
-  //       checkServer(false);
-  //     }
-  //   } catch (error) {
-  //     checkServer(false);
-  //     console.log(error);
-  //   }
-  // };
 
   const checkLoan = false;
   // let tranche = name === 'ETHDAI Tranche A' || name === 'ETHDAI Tranche B';
