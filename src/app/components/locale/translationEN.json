@@ -18,8 +18,9 @@
     }
   },
   "earn": {
-    "title": "Earning Markets",
-    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
+   
+    "title": "Tranche Stats",
+    "text": " Latest Information about Tranche Usage",
     "tabs": {
       "own": "My Tranches",
       "all": "All Tranches"

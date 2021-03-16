@@ -48,10 +48,14 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                 }
                 </TableTitle>
                 {
-                    path !== "stake" ?
+                    path !== "stake" && path !== "earn" ?
                     <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
                         <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                     </TableSubTitle> : 
+                    path === "earn" ?
+                    <TableSubTitle>
+                    <h2>Protocol Integrations</h2>
+                    </TableSubTitle> :
                     <TableSubTitle>
                         <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>
                     </TableSubTitle> 

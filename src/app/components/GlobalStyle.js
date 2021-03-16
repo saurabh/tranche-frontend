@@ -38,7 +38,9 @@ const GlobalStyle = createGlobalStyle`
 
   @media (min-width: 1200px){ 
       .container{ 
-          width: 1170px;
+        //change 
+        width: 1270px;
+          // width: 1170px;
       } 
   }
 

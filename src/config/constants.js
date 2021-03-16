@@ -64,7 +64,7 @@ export const PagesData = {
     pageType: 'earn',
     color: 'rgba(0, 0, 0, 0.8)',
     secondaryColor: '#ffffff',
-    btnColor: '#1f1f1f',
+    btnColor: '#4441CF',
     cardColor: 'rgba(0, 0, 0, 0.8)',
     title: 'Earning Markets',
     description: 'DEPOSIT STABLE COINS FOR DIFFERENT RETURNS'
@@ -225,7 +225,7 @@ export const statuses = {
     key: 'Active',
     status: 1,
     color: '#2ECC71',
-    background: 'rgba(46, 204, 113, 0.24)'
+    background: '#DDFFEB'
   },
   Under_Collateralized: {
     key: 'Under Collateralized',

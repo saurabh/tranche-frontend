@@ -141,9 +141,25 @@ const SortingMenu = styled.div`
 `;
 
 const TableHeadTitle = styled.div`
+    position: relative;
+    display: flex;
+    & > h2{
+        cursor: pointer;
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: rgba(56, 56, 56, 0.3);
+    }
+    & > h2:nth-child(2){
+      margin-left: 42px;
+    }
     & > div {
         position: relative;
         cursor: pointer;
+        display: flex;
         & > h2{
             font-family: 'Roboto', sans-serif;
             font-style: normal;
@@ -153,14 +169,51 @@ const TableHeadTitle = styled.div`
             text-transform: uppercase;
             color: rgba(56, 56, 56, 0.3);
         }
+        & > h2:nth-child(2){
+          margin-left: 73px;
+        }
     }
     @media (max-width: 1200px){
       display: none !important;
     }
     ${({ defaultCursor }) => defaultCursor && `
-        & > div {
-            cursor: default;
-        }
+      & > div {
+          cursor: default;
+      }
+    `}
+    ${({ instrument }) => instrument && `
+      width: 20%;
+    `}
+    ${({ apy }) => apy && `
+      width: 18%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ totalValue }) => totalValue && `
+      width: 18%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ subscription }) => subscription && `
+      width: 18%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ status }) => status && `
+      width: 16%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ trancheTableBtns }) => trancheTableBtns && `
+       width: 10%;
     `}
         
     
@@ -399,12 +452,18 @@ const TableHeadTitleMobile = styled.div`
     text-align: center;
     font-size: 8px;
     letter-spacing: 0.05em;
+    text-align: center;
     text-transform: uppercase;
     color: rgba(56,56,56,0.3);
     ${({ address }) => address && `
       text-align: left;
     `}
   }
+  display: flex;
+  h2:nth-child(2){
+    margin-left: 73px;
+  }
+  
 `
 
 const TableContentCardWrapperMobile = styled.div`
@@ -694,6 +753,9 @@ const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
   width: 28%;
+  ${({ instrument }) => instrument && `
+    width: 20% !important;
+  `}
 `
 const TableFirstColWrapper = styled.div`
   display: flex;
@@ -710,7 +772,7 @@ const FirstColImg = styled.div`
 `
 const FirstColContent = styled.div`
   position: relative;
-  margin-left: 18px;
+  margin-left: 63px;
 `
 const FirstColTitle = styled.div`
   h2{
@@ -748,6 +810,13 @@ const TableSecondCol = styled.div`
   ${({ stake }) => stake && `
     width: 14%;
   `}
+  ${({ apy }) => apy && `
+    width: 18% !important;
+    div{
+      display: flex;
+      justify-content: space-around; 
+    }
+  `}
   position: relative;
 `
 const SecondColContent = styled.div`
@@ -760,6 +829,10 @@ const TableThirdCol = styled.div`
   ${({ stake }) => stake && `
     width: 12% !important;
   `}
+  ${({ totalValue }) => totalValue && `
+    width: 18% !important;
+  `}
+
   position: relative;
 `
 const ThirdColContent = styled.div`
@@ -775,6 +848,10 @@ const TableFourthCol = styled.div`
   ${({ stake }) => stake && `
     width: 10% !important;
   `}
+  ${({ subscription }) => subscription && `
+    width: 18% !important;
+  `}
+
 `
 const FourthColContent = styled.div`
   position: relative;
@@ -796,6 +873,10 @@ const TableFifthCol = styled.div`
   ${({ stake }) => stake && `
     width: 30% !important;
   `}
+  ${({ status }) => status && `
+    width: 16% !important;
+  `}
+
   position: relative;
 `
 const FifthColContent = styled.div`
@@ -805,6 +886,9 @@ const TableSixthCol = styled.div`
   width: 18%;  
   ${({ stake }) => stake && `
     width: 0% !important;
+  `}
+  ${({ trancheTableBtns }) => trancheTableBtns && `
+    width: 10% !important;
   `}
   display: flex;
   justify-content: center;
@@ -862,8 +946,133 @@ const TableCardMore = styled.div`
 const TableCardMoreContent = styled.div`
   position: relative;   
 `
+const TableMoreRowWrapper = styled.div`
+  position: relative;   
+`
+const TableMoreRowContent = styled.div` 
+  display: flex;
+  min-height: 220px;  
+  width: 100%;
+`
 
+const TableMoreRowContentLeft = styled.div` 
+  display: flex;  
+  width: 50%;
+  min-height: 220px;
+`
 
+const TableMoreRowContentRight = styled.div` 
+  width: 50%;
+  min-height: 220px;
+`
+
+const TableMoreLeftSection = styled.div` 
+  width: 50%;
+  min-height: 220px;
+  padding: 0 20px;
+  border-right: 2px solid #F9F9FB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+  }
+  h2:nth-child(1){
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }
+  h2:nth-child(2){
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #7C859B;
+    margin: 12px 0;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    div{
+      position: relative;
+      button{
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #39295A;
+      }
+      input{
+        width: 100%;
+        height: 33px;
+        border-radius: 4px;
+        border: 1px solid #CFCFE5;
+        outline: none;
+        padding: 2px 40px 2px 17px;
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #39295A;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button{
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number]{
+        -moz-appearance: textfield;
+      }
+    }
+    
+    & > button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 38px;
+      background: #4441CF;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin: 23px 0 0 0;
+      outline: none;
+      cursor: pointer;
+      img{
+        margin-right: 5px;
+      }
+    }
+  }
+  ${({ withdraw }) => withdraw && `
+    form{
+      button{
+        img{
+          transform: rotate(180deg);
+        }
+      }
+    }
+  `}
+`
 
 
 
@@ -927,5 +1136,10 @@ export {
   AdustBtnWrapper,
   TableCardMore,
   TableCardMoreContent,
-  WithdrawBtnWrapper
+  WithdrawBtnWrapper,
+  TableMoreRowWrapper,
+  TableMoreRowContent,
+  TableMoreRowContentLeft,
+  TableMoreRowContentRight,
+  TableMoreLeftSection
 };

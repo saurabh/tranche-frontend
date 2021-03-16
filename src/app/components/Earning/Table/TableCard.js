@@ -25,8 +25,8 @@ import {
   readyToTransact,
   isGreaterThan,
   isEqualTo,
-  gweiOrEther,
-  roundBasedOnUnit
+  // gweiOrEther,
+  // roundBasedOnUnit
 } from 'utils';
 import {
   PagesData,
@@ -40,11 +40,13 @@ import {
   Adjust,
   AdjustEarn,
   AdjustTrade,
-  CloseModal,
+  // CloseModal,
   Info,
   LinkArrow,
-  TrancheImg,
-  Withdraw
+  // TrancheImg,
+  // Withdraw,
+  ArrowGreen,
+  CompoundLogo
 } from 'assets';
 import TableMoreRow from './TableMoreRow';
 // import ETH from 'assets/images/svg/EthForm.svg';
@@ -57,9 +59,9 @@ import {
   AdjustLoanBtn,
   TableCardTag,
   TableCardImg,
-  InfoBoxWrapper,
-  InfoBox,
-  WithdrawBtnWrapper,
+  // InfoBoxWrapper,
+  // InfoBox,
+  // WithdrawBtnWrapper,
   TableFirstCol,
   TableFirstColWrapper,
   FirstColContent,
@@ -81,7 +83,7 @@ import {
   TableColMobile,
   TableMobilColContent,
   TableMobilCardBtn
-} from '../../Table/styles/TableComponents';
+} from '../../Stake/Table/styles/TableComponents';
 
 const TableCard = ({
   tranche: {
@@ -118,7 +120,7 @@ const TableCard = ({
   // const [withdrawableFunds, setWithdrawableFunds] = useState(0);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [loansAccruedInterest, setLoansAccruedInterest] = useState(0);
-  // const [moreCardToggle, setMoreCardToggle] = useState(false);
+  const [moreCardToggle, setMoreCardToggle] = useState(false);
   // const [moreList, setMoreList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [disableBtn, setDisableBtn] = useState(false);
@@ -127,7 +129,6 @@ const TableCard = ({
   rpbRate = rpbRate && fromWei(rpbRate);
   let disableBtn = false;
   let isLoading = false;
-  let moreCardToggle = false;
   let moreList = false;
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
@@ -359,14 +360,13 @@ const TableCard = ({
     );
   };
 
-  // const cardToggle = (hash) => {
-  //   console.log('Loan ID: ' + loanId);
-  //   // console.log(loan);
-  //   setMoreCardToggle(!moreCardToggle);
-  //   if (!moreCardToggle) {
-  //     getTransaction(hash);
-  //   }
-  // };
+  const cardToggle = () => {
+    // console.log(loan);
+    setMoreCardToggle(!moreCardToggle);
+    // if (!moreCardToggle) {
+    //   getTransaction(hash);
+    // }
+  };
 
   // const getTransaction = async (hash) => {
   //   const { transaction: transactionUrl } = apiUri;
@@ -408,7 +408,7 @@ const TableCard = ({
       <TableContentCardWrapper>
         <TableContentCard
           pointer={true}
-          // onClick={() => cardToggle(contractAddress)}
+          onClick={() => cardToggle()}
           className={moreCardToggle ? 'table-card-toggle' : ''}
         >
           {checkLoan ? (
@@ -418,14 +418,14 @@ const TableCard = ({
           ) : (
             ''
           )}
-          <TableFirstCol className='table-col'>
+          <TableFirstCol className='table-col' instrument>
             <TableFirstColWrapper>
               <TableCardImg
                 tranche={true}
-                type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
-                color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+                // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+                // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
-                <img src={TrancheImg} alt='Tranche' />
+                <img src={CompoundLogo} alt='Tranche' />
               </TableCardImg>
               <FirstColContent>
                 <FirstColTitle>
@@ -445,21 +445,30 @@ const TableCard = ({
             </TableFirstColWrapper>
           </TableFirstCol>
 
-          <TableSecondCol className='table-col'>
+          <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <h2>
+              <img src={ArrowGreen} alt="arrow" />
+              {/* <h2>
                 {type === 'TRANCHE_A' ? amount : subscriber} <span>{cryptoType}</span>
+              </h2> */}
+              <h2>
+                100
               </h2>
+              <img src={Info} alt="info" />
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol
             className={
               'table-col table-fourth-col-return '
             }
+            totalValue
           >
             <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>
+              {/* <h2>
                 {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
+              </h2> */}
+              <h2>
+                100
               </h2>
             </ThirdColContent>
           </TableThirdCol>
@@ -468,23 +477,26 @@ const TableCard = ({
             className={
               'table-col table-fifth-col-subscription'
             }
+            subscription
           >
             <FourthColContent className='content-3-col second-4-col-content'>
-              <h2>{subscriber}</h2>
+              {/* <h2>{subscriber}</h2> */}
+              <h2>
+                100
+              </h2>
             </FourthColContent>
           </TableFourthCol>
-          <TableFifthCol className='table-col'>
+          <TableFifthCol className='table-col' status>
             <FifthColContent>
               <StatusTextWrapper
                 className='status-text-wrapper'
                 color={Object.values(searchObj(1))[0].color}
                 backgroundColor={Object.values(searchObj(1))[0].background}
-                table="tranche"
               >
-                12%
+                Active
               </StatusTextWrapper> 
 
-              <WithdrawBtnWrapper>
+              {/* <WithdrawBtnWrapper>
                 <button 
                   onClick={disableBtn ? undefined : () => widthdrawToggle()}
                 ><img src={Withdraw} alt="action" /></button>
@@ -518,12 +530,12 @@ const TableCard = ({
                     </InfoBox>
                   }
                   
-                </InfoBoxWrapper>
+                </InfoBoxWrapper> */}
                 
               
             </FifthColContent>
           </TableFifthCol>
-          <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col'>
+          <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' trancheTableBtns>
             <AdustBtnWrapper className='adjust-btn-wrapper'>
               <AdjustLoanBtn
                 color={PagesData[path].btnColor}
@@ -581,24 +593,7 @@ const TableCard = ({
                 color='rgba(56,56,56,0.3)'
               />
             ) : (
-              moreList &&
-              moreList.map((i) => {
-                return (
-                  <TableMoreRow
-                  // key={`${i.createdAt} +id: ${Math.random} => ${i.eventName}`}
-                  // ethImg={ETH}
-                  // arrow='downArrow'
-                  // status={i.loanStatus}
-                  // ratio={i.collateralRatio}
-                  // createdAt={i.createdAt}
-                  // hash={i.transactionHash}
-                  // collateralTypeName={collateralTypeName}
-                  // cryptoFromLenderName={cryptoFromLenderName}
-                  // amount={i.amount}
-                  // eventName={i.eventName}
-                  />
-                );
-              })
+              <TableMoreRow />
             )}
 
             {/* <div className="more-transactions">

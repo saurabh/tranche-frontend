@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout } from 'app/components';
-import SummaryCards from '../components/Summary/SummaryCards';
+import { Layout } from 'app/components/Earning/Layout';
+import SummaryCards from '../components/Earning/Summary/SummaryCards';
 import Table from '../components/Earning/Table/Table';
 import { PagesData } from 'config/constants';
 

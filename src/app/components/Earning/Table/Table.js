@@ -16,8 +16,8 @@ import {
 import ReactLoading from 'react-loading';
 
 import { changePath } from 'redux/actions/TogglePath';
-import TableHeader from '../../Table/TableHeader';
-import TableHead from '../../Table/TableHead';
+import TableHeader from '../../Stake/Table/TableHeader';
+import TableHead from './TableHead';
 import TableCard from './TableCard';
 import { TableWrapper, TableContentCard,
   CallToActionTradeWrapper,
@@ -30,7 +30,7 @@ import { TableWrapper, TableContentCard,
   TableMobileFilter,
   TableMobileFiltersText,
   TableMobileRowCreateLoan
-} from '../../Table/styles/TableComponents';
+} from '../../Stake/Table/styles/TableComponents';
 import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
 const { tranchesList: tranchesListUrl } = apiUri;
 
