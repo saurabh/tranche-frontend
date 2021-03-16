@@ -35,7 +35,7 @@ import {
   // apiUri,
   statuses
 } from 'config';
-import TradeModal from '../../Modals/TradeModal';
+import TradeModal from '../../Modals/EarnModal';
 import {
   Adjust,
   AdjustEarn,
@@ -595,13 +595,6 @@ const TableCard = ({
             ) : (
               <TableMoreRow />
             )}
-
-            {/* <div className="more-transactions">
-              <h2>
-                this loan has 11 more transactions in its history.
-                <a href="/">show more transactions</a>
-              </h2>
-            </div>*/}
           </TableCardMoreContent>
         </TableCardMore>
       </TableContentCardWrapper>

@@ -9,8 +9,8 @@ import {
 import {
   BtnArrow
 } from 'assets';
-const TableMoreRow = () => {
 
+const TableMoreRow = () => {
   return (
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>

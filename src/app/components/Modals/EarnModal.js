@@ -6,7 +6,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import { trancheData } from 'config/constants';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import TradeForm from '../Form/ Trade';
+import TradeForm from '../Form/Earn';
 import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
 import {
   fromWei,
