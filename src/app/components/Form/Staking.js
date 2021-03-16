@@ -25,7 +25,7 @@ import {
   SelectCurrencyOption
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
-import { SLICETotalSupply } from 'config';
+import { ApproveBigNumber } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -88,7 +88,7 @@ let StakingForm = ({
 
   useEffect(() => {
     const allowanceCheck = async () => {
-      await stakingAllowanceCheck(stakingAddress, tokenAddress, SLICETotalSupply)
+      await stakingAllowanceCheck(stakingAddress, tokenAddress, ApproveBigNumber)
     }
 
     stakingAddress && tokenAddress && allowanceCheck();
