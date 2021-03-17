@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { useOuterClick } from 'services/useOuterClick';
-import { ERC20Setup, JTrancheTokenSetup } from 'utils/contractConstructor';
+import { ERC20Setup } from 'utils/contractConstructor';
 import { fromWei, toWei, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
@@ -17,7 +17,6 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { PagesData, txMessage, etherScanUrl, statuses } from 'config';
-import EarnModal from '../../Modals/EarnModal';
 import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -60,21 +59,13 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   ethereum: { tokenBalance, address, wallet, web3, notify },
-  form,
-  setTokenBalances,
-  setTrancheTokenBalances
   // checkServer
 }) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
   const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   const [hasAllowance, setHasAllowance] = useState(false);
-  const [approveLoading, setApproveLoading] = useState(false);
-  const [withdrawModal, setWithdrawModal] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  const [loansAccruedInterest, setLoansAccruedInterest] = useState(0);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
-  const limit = 2;
   rpbRate = rpbRate && rpbRate.toString().split('.')[0];
   rpbRate = rpbRate && fromWei(rpbRate);
   let disableBtn = false;
@@ -140,7 +131,6 @@ const TableCard = ({
         .approve(contractAddress, amount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          setApproveLoading(true);
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
@@ -149,10 +139,7 @@ const TableCard = ({
           });
           emitter.on('txConfirmed', () => {
             setHasAllowance(true);
-            setApproveLoading(false);
           });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
         });
     } catch (error) {
       console.error(error);
@@ -168,36 +155,13 @@ const TableCard = ({
     }
   };
 
-  const withdrawFundsFromTranche = async () => {
-    try {
-      const TrancheToken = JTrancheTokenSetup(web3, trancheTokenAddress);
-      await TrancheToken.methods
-        .withdrawFunds()
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          closeModal();
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   // const openModal = async () => {
   //   const ready = await readyToTransact(wallet, onboard);
   //   if (!ready) return;
-  //   setIsOpen(true);
   // };
 
-  const closeModal = () => {
-    setIsOpen(false);
-    setWithdrawModal(false);
-  };
+  // const closeModal = () => {
+  // };
 
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
@@ -332,7 +296,7 @@ const TableCard = ({
                 />
               </AdjustLoanBtn>
             </AdustBtnWrapper>
-            <EarnModal
+            {/* <EarnModal
               // State Values
               path={path}
               modalIsOpen={modalIsOpen}
@@ -356,7 +320,7 @@ const TableCard = ({
               subscriber={subscriber}
               cryptoType={cryptoType}
               rpbRate={rpbRate}
-            />
+            /> */}
           </TableSixthCol>
         </TableContentCard>
         <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
@@ -417,34 +381,6 @@ const TableCard = ({
             </TableMobilCardBtn>
           </TableColMobile>
         </TableContentCardMobile>
-        <EarnModal
-          // State Values
-          path={path}
-          modalIsOpen={modalIsOpen}
-          hasAllowance={hasAllowance}
-          withdraw={withdrawModal}
-          approveLoading={approveLoading}
-          hasBalance={hasBalance}
-          availableAmount={availableAmount}
-          // withdrawableFunds={withdrawableFunds}
-          loansAccruedInterest={loansAccruedInterest}
-          // Functions
-          closeModal={() => closeModal()}
-          earnAllowanceCheck={earnAllowanceCheck}
-          earnApproveContract={earnApproveContract}
-          setLoansAccruedInterest={setLoansAccruedInterest}
-          buySellTrancheTokens={buySellTrancheTokens}
-          withdrawFundsFromTranche={withdrawFundsFromTranche}
-          // API Values
-          trancheId={trancheId}
-          trancheName={name}
-          trancheType={type}
-          trancheTokenAddress={trancheTokenAddress}
-          amount={amount}
-          subscriber={subscriber}
-          cryptoType={cryptoType}
-          rpbRate={rpbRate}
-        />
       </TableContentCardWrapperMobile>
     );
   };
