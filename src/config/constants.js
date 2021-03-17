@@ -26,7 +26,7 @@ export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCa
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 
-export const SLICETotalSupply = '20000000';
+export const ApproveBigNumber = '100000000000000';
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {
@@ -115,11 +115,11 @@ export const pairData = [
     value: 1,
     collateral: 'SLICE',
     img: SLICEicon,
-    colIcon: SLICEicon,
+    colIcon: SLICEicon
     // collateralTokenSetup: SLICESetup,
     // lendTokenSetup: SLICESetup
   }
-    // {
+  // {
   //   key: 'USDC',
   //   text: 'USDC',
   //   value: 1,
@@ -133,10 +133,7 @@ export const pairData = [
 
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
-export const trancheData = [
-  { address: ETHDAITrancheAAddress.toLowerCase() },
-  { address: ETHDAITrancheBAddress.toLowerCase() }
-];
+export const trancheData = [{ address: ETHDAITrancheAAddress.toLowerCase() }, { address: ETHDAITrancheBAddress.toLowerCase() }];
 
 export const apiUri = {
   priceFeed: 'pairs',
@@ -168,7 +165,7 @@ export const pairLogos = {
   SLICE: TrancheClaim,
   'SLICE/ETH LP': EthClaim,
   'SLICE/DAI LP': DaiClaim
-}
+};
 
 export const actionTypes = {
   Cancel: {

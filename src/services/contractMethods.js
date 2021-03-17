@@ -5,6 +5,7 @@ import {
   JPriceOracleSetup,
   JTrancheTokenSetup,
   JProtocolSetup,
+  JCompoundSetup,
   StakingSetup,
   YieldFarmSetup
 } from 'utils/contractConstructor';
@@ -240,6 +241,81 @@ export const sendValueToTranche = async (trancheId) => {
   }
 };
 
+
+export const buyTrancheTokens = async (contractAddress, trancheId, type) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    let { amount } = state.form.earn.values;
+    const JCompound = JCompoundSetup(web3, contractAddress);
+    amount = toWei(amount);
+    if (type === 'TRANCHE_A') {
+      await JCompound.methods
+        .buyTrancheAToken(trancheId, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    } else {
+      await JCompound.methods
+        .buyTrancheBToken(trancheId, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    let { amount } = state.form.earn.values;
+    const JCompound = JCompoundSetup(web3, contractAddress);
+    amount = toWei(amount);
+    if (type === 'TRANCHE_A') {
+      await JCompound.methods
+        .redeemTrancheAToken(trancheId, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    } else {
+      await JCompound.methods
+        .redeemTrancheBToken(trancheId, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // Staking Functions
 
 export const epochTimeRemaining = async (stakingAddress) => {
@@ -283,7 +359,7 @@ export const addStake = async (stakingAddress, tokenAddress) => {
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount);
+    amount = toWei(amount.toString());
     await StakingContract.methods
       .deposit(tokenAddress, amount)
       .send({ from: address })
@@ -306,7 +382,7 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount);
+    amount = toWei(amount.toString());
     await StakingContract.methods
       .withdraw(tokenAddress, amount)
       .send({ from: address })

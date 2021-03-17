@@ -15,7 +15,7 @@ import {
   SummaryCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
-import { SLICETotalSupply } from 'config';
+import { ApproveBigNumber } from 'config';
 
 const SummaryCard = ({
   title,
@@ -108,7 +108,7 @@ const SummaryCard = ({
     try {
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
-        .approve(stakingAddress, toWei(SLICETotalSupply))
+        .approve(stakingAddress, toWei(ApproveBigNumber))
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
