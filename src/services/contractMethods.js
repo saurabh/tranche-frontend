@@ -7,11 +7,13 @@ import {
   JProtocolSetup,
   JCompoundSetup,
   StakingSetup,
-  YieldFarmSetup
+  YieldFarmSetup,
+  ERC20Setup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
+import { ApproveBigNumber } from 'config';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -43,9 +45,7 @@ export const calculateFees = async (collateralAmount) => {
     const { web3 } = state.ethereum;
     const JLoanHelper = JLoanHelperSetup(web3);
     if (collateralAmount) {
-      const result = await JLoanHelper.methods
-        .calculateCollFeesOnActivation(collateralAmount, factoryFees.toString())
-        .call();
+      const result = await JLoanHelper.methods.calculateCollFeesOnActivation(collateralAmount, factoryFees.toString()).call();
       return fromWei(result);
     }
   } catch (error) {
@@ -59,9 +59,7 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
     const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (askAmount !== '' && askAmount !== 0) {
-      const result = await JLoan.methods
-        .getMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount))
-        .call();
+      const result = await JLoan.methods.getMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount)).call();
       return web3.utils.fromWei(result);
     }
   } catch (error) {
@@ -89,9 +87,7 @@ export const calcAdjustCollateralRatio = async (loanId, amount, actionType) => {
     const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (amount !== '' && amount !== 0) {
-      const result = await JLoan.methods
-        .calcRatioAdjustingCollateral(loanId, toWei(amount), actionType)
-        .call();
+      const result = await JLoan.methods.calcRatioAdjustingCollateral(loanId, toWei(amount), actionType).call();
       return result;
     }
   } catch (error) {
@@ -190,9 +186,7 @@ export const getLoansAccruedInterest = async (trancheId, startIndex, stopIndex) 
     const state = store.getState();
     const { web3 } = state.ethereum;
     const JProtocol = JProtocolSetup(web3);
-    const result = await JProtocol.methods
-      .getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex)
-      .call();
+    const result = await JProtocol.methods.getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex).call();
     return result;
   } catch (error) {
     console.error(error);
@@ -241,17 +235,57 @@ export const sendValueToTranche = async (trancheId) => {
   }
 };
 
+export const allowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+  try {
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
+    if (isGreaterThan(userAllowance, toWei(ApproveBigNumber)) || isEqualTo(userAllowance, toWei(ApproveBigNumber))) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const approveContract = async (tokenAddress, contractAddress, checked) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    const amount = checked ? 0 : toWei(ApproveBigNumber);
+    const token = ERC20Setup(web3, tokenAddress);
+    await token.methods
+      .approve(contractAddress, amount)
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+        emitter.on('txConfirmed', () => {
+          return true;
+        });
+      });
+  } catch (error) {
+    return error;
+  }
+};
 
 export const buyTrancheTokens = async (contractAddress, trancheId, type) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    let { amount } = state.form.earn.values;
+    let { depositAmount } = state.form.earn.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    amount = toWei(amount);
+    depositAmount = toWei(depositAmount);
     if (type === 'TRANCHE_A') {
       await JCompound.methods
-        .buyTrancheAToken(trancheId, amount)
+        .buyTrancheAToken(trancheId, depositAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
@@ -263,7 +297,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type) => {
         });
     } else {
       await JCompound.methods
-        .buyTrancheBToken(trancheId, amount)
+        .buyTrancheBToken(trancheId, depositAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
@@ -283,12 +317,12 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    let { amount } = state.form.earn.values;
+    let { withdrawAmount } = state.form.earn.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    amount = toWei(amount);
+    withdrawAmount = toWei(withdrawAmount);
     if (type === 'TRANCHE_A') {
       await JCompound.methods
-        .redeemTrancheAToken(trancheId, amount)
+        .redeemTrancheAToken(trancheId, withdrawAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
@@ -300,7 +334,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
         });
     } else {
       await JCompound.methods
-        .redeemTrancheBToken(trancheId, amount)
+        .redeemTrancheBToken(trancheId, withdrawAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);

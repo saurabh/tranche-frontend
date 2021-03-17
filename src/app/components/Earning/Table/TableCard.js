@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { useOuterClick } from 'services/useOuterClick';
-import { ERC20Setup } from 'utils/contractConstructor';
-import { fromWei, toWei, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
+import { fromWei, toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -12,11 +12,10 @@ import {
   addrShortener,
   readyToTransact,
   isGreaterThan,
-  isEqualTo
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { PagesData, txMessage, etherScanUrl, statuses } from 'config';
+import { PagesData, etherScanUrl, statuses } from 'config';
 import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -53,17 +52,17 @@ import {
 import i18n from "app/components/locale/i18n";
 
 const TableCard = ({
-  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, rpbRate, cryptoType, amount },
+  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, dividendCoinAddress, type, subscriber, rpbRate, cryptoType, amount },
   path,
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { tokenBalance, address, wallet, web3, notify },
+  ethereum: { tokenBalance, address, wallet },
+  change
   // checkServer
 }) => {
   const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
-  const [hasAllowance, setHasAllowance] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [moreCardToggle, setMoreCardToggle] = useState(false);
@@ -107,50 +106,10 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const earnAllowanceCheck = async (amount, sellToggle) => {
-    try {
-      if (amount !== '') {
-        amount = toWei(amount);
-        const token = sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
-        let userAllowance = await token.methods.allowance(address, contractAddress).call();
-        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-          setHasAllowance(true);
-        } else {
-          setHasAllowance(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const earnApproveContract = async (amount, sellToggle) => {
-    try {
-      amount = toWei(amount);
-      const token = sellToggle ? ERC20Setup(web3, trancheTokenAddress) : ERC20Setup(web3, buyerCoinAddress);
-      await token.methods
-        .approve(contractAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-          });
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const buySellTrancheTokens = (e, buyToggle) => {
+  const buySellTrancheTokens = (e, buy) => {
     try {
       e.preventDefault();
-      buyToggle ? buyTrancheTokens(contractAddress, trancheId, type) : sellTrancheTokens(contractAddress, trancheId, type);
+      buy ? buyTrancheTokens(contractAddress, trancheId, type) : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
     }
@@ -175,6 +134,11 @@ const TableCard = ({
       address = !address ? onboard.getState().address : address;
       setTokenBalance(buyerCoinAddress, address);
       setTokenBalance(trancheTokenAddress, address);
+      const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
+      change('earn', 'depositIsApproved', depositTokenHasAllowance);
+      const withdrawTokenHasAllowance = await allowanceCheck(dividendCoinAddress, contractAddress, address);
+      change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+      setMoreCardToggle(!moreCardToggle);
     }
     setMoreCardToggle(!moreCardToggle);
   };
@@ -313,7 +277,6 @@ const TableCard = ({
               // withdrawableFunds={withdrawableFunds}
               // Functions
               closeModal={() => closeModal()}
-              earnAllowanceCheck={earnAllowanceCheck}
               earnApproveContract={earnApproveContract}
               buySellTrancheTokens={buySellTrancheTokens}
               withdrawFundsFromTranche={withdrawFundsFromTranche}
@@ -334,8 +297,9 @@ const TableCard = ({
               <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
             ) : (
               <TableMoreRow
-                earnAllowanceCheck={earnAllowanceCheck}
-                earnApproveContract={earnApproveContract}
+                buyerCoinAddress={buyerCoinAddress}
+                dividendCoinAddress={dividendCoinAddress}
+                contractAddress={contractAddress}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
             )}
@@ -412,5 +376,6 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  checkServer
+  checkServer,
+  change
 })(TableCard);
