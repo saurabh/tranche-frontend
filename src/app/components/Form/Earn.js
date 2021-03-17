@@ -35,7 +35,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 );
 
-let TradeForm = ({
+let EarnForm = ({
   // Redux-form
   pristine,
   submitting,
@@ -257,11 +257,11 @@ let TradeForm = ({
   );
 };
 
-TradeForm = reduxForm({
+EarnForm = reduxForm({
   form: 'sell',
   asyncValidate: asyncValidateSell,
   enableReinitialize: true
-})(TradeForm);
+})(EarnForm);
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
@@ -272,4 +272,4 @@ const mapStateToProps = (state) => ({
   formValues: getFormValues('sell')(state)
 });
 
-export default TradeForm = connect(mapStateToProps, { change })(TradeForm);
+export default EarnForm = connect(mapStateToProps, { change })(EarnForm);

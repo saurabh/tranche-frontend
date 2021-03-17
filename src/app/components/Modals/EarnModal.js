@@ -6,7 +6,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import { trancheData } from 'config/constants';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import TradeForm from '../Form/Earn';
+import EarnForm from '../Form/Earn';
 import { gweiOrEther, roundBasedOnUnit, roundNumber } from 'utils';
 import {
   fromWei,
@@ -90,7 +90,7 @@ const FirstCustomStyles = {
 
 Modal.setAppElement('#root');
 
-const TradeModal = ({
+const EarnModal = ({
   // State Values
   path,
   modalIsOpen,
@@ -99,7 +99,6 @@ const TradeModal = ({
   withdraw,
   hasBalance,
   availableAmount,
-  trancheTokenBalance,
   withdrawableFunds,
   loansAccruedInterest,
   // Functions
@@ -126,10 +125,7 @@ const TradeModal = ({
   const limit = 2;
   const [startIndex, setStartIndex] = useState(0);
   const [stopIndex, setStopIndex] = useState(limit - 1);
-  let trancheTokens =
-    trancheTokenBalance && trancheTokenBalance[trancheName]
-      ? roundNumber(fromWei(trancheTokenBalance[trancheName]))
-      : 0;
+  let trancheTokens = 0;
 
   const searchArr = (address) => trancheData.find((i) => i.address === address);
 
@@ -183,7 +179,7 @@ const TradeModal = ({
     }
   };
 
-  const tradeModal = () => {
+  const EarnModal = () => {
     return (
       <Modal
         isOpen={modalIsOpen}
@@ -230,7 +226,7 @@ const TradeModal = ({
             </ModalActionDetailsContent>
           </ModalActionDetails>
           {sellToggle || buyToggle ? (
-            <TradeForm
+            <EarnForm
               sellToggle={sellToggle}
               buyToggle={buyToggle}
               trancheType={trancheType}
@@ -413,10 +409,10 @@ const TradeModal = ({
   };
 
   return path === 'earn' && !withdraw
-    ? tradeModal()
+    ? EarnModal()
     : path === 'earn' && withdraw
     ? withdrawModal()
     : '';
 };
 
-export default TradeModal;
+export default EarnModal;
