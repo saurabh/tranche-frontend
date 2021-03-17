@@ -283,7 +283,7 @@ export const addStake = async (stakingAddress, tokenAddress) => {
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount);
+    amount = toWei(amount.toString());
     await StakingContract.methods
       .deposit(tokenAddress, amount)
       .send({ from: address })
@@ -306,7 +306,7 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount);
+    amount = toWei(amount.toString());
     await StakingContract.methods
       .withdraw(tokenAddress, amount)
       .send({ from: address })
