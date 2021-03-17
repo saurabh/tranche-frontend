@@ -17,13 +17,51 @@
       "all": "ALL ASSETS"
     }
   },
-  "earn": {
-   
+  "tranche": {
     "title": "Tranche Stats",
     "text": " Latest Information about Tranche Usage",
     "tabs": {
       "own": "My Tranches",
       "all": "All Tranches"
+    },
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "balance": "Balance",
+    "table": {
+      "tableHeader": {
+        "title": "AVAILABLE INSTRUMENTS",
+        "subtitle": "PROTOCOL INTEGRATIONS"
+      },
+      "tableHead": {
+        "platform": "PLATFORM",
+        "instrument": "INSTRUMENT",
+        "apy": "ANNUAL YIELD (APY)",
+        "valueLocked": "TOTAL VALUE LOCKED",
+        "subscription": "MY SUBSCRIPTION",
+        "status": "STATUS"
+      },
+      "statuses": {
+        "active": "active"
+      }
+    },
+    "summary": {
+      "valueLocked" :{
+        "title": "Total Value Locked",
+        "details": ""
+      },
+      "slicePrice" :{
+        "title": "SLICE Price",
+        "details": ""
+      },
+      "sliceVolume" :{
+        "titleFirst": "SLICE",
+        "titleSecond": "Volume",
+        "details": ""
+      },
+      "stakeLive" :{
+        "title": "SLICE staking is live!",
+        "details": "Stake your SLICE or SLICE LP tokens"
+      }
     }
   },
   "lend": {
@@ -89,6 +127,7 @@
       }
     }
   },
+  
   "rates": "Rates",
   "HowTo": "HOW-TO",
   "statuses": {

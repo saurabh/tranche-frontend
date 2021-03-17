@@ -56,10 +56,9 @@ const TableHead = ({changeSorting, path}) => {
     const TableHeadDesktop = () => {
         return (
             <TableHeadWrapper path={path}>
-                <TableHeadTitle className="address-wrapper" defaultCursor={true}>
+                <TableHeadTitle className="address-wrapper" defaultCursor={true} stakingPool>
                     <div className="address-title-content">
-                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') :  "Platform"}</h2>
-                        <h2>Instrument</h2>
+                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') :  "INSTRUMENT"}</h2>
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className={true ? "staked-wrapper" :"remaining-wrapper"}>
@@ -117,7 +116,7 @@ const TableHead = ({changeSorting, path}) => {
         return (
             <TableHeadWrapperMobile path={path}>
                 <TableColMobile address>
-                    <TableHeadTitleMobile defaultCursor={true} address>
+                    <TableHeadTitleMobile defaultCursor={true} address stakingPool>
                         <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') : "INSTRUMENT"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>

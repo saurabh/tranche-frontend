@@ -18,6 +18,7 @@ import {
     TableHeadWrapperMobile,
     TableHeadTitleMobile
 } from '../../Stake/Table/styles/TableComponents';
+import i18n from "app/components/locale/i18n";
 
 
 const TableHead = ({changeSorting, path}) => {
@@ -55,21 +56,23 @@ const TableHead = ({changeSorting, path}) => {
     const TableHeadDesktop = () => {
         return (
             <TableHeadWrapper path={path}>
+                <TableHeadTitle platform defaultCursor={true}>
+                    <h2>{i18n.t('tranche.table.tableHead.platform')}</h2>
+                </TableHeadTitle>
                 <TableHeadTitle instrument defaultCursor={true}>
-                    <h2>Platform</h2>
-                    <h2>Instrument</h2>
+                    <h2>{i18n.t('tranche.table.tableHead.instrument')}</h2>
                 </TableHeadTitle>
                 <TableHeadTitle apy>
-                    <h2>annual yield (apy)</h2>
+                    <h2>{i18n.t('tranche.table.tableHead.apy')}</h2>
                 </TableHeadTitle>
                 <TableHeadTitle totalValue>
-                    <h2>total value locked</h2>
+                    <h2>{i18n.t('tranche.table.tableHead.valueLocked')}</h2>
                 </TableHeadTitle>
                 <TableHeadTitle subscription>
-                    <h2>MY SUBSCRIPTION</h2>
+                    <h2>{i18n.t('tranche.table.tableHead.subscription')}</h2>
                 </TableHeadTitle>
                 <TableHeadTitle status>
-                    <h2>Status</h2>
+                    <h2>{i18n.t('tranche.table.tableHead.status')}</h2>
                 </TableHeadTitle>
                 <TableHeadTitle trancheTableBtns>
 

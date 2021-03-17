@@ -9,6 +9,53 @@
     "lend": "lend",
     "earn": "earn"
   },
+  "tranche": {
+    "title": "트렌치 통계",
+    "text": "트렌치 사용에 대한 최근 정보",
+    "tabs": {
+      "own": "我的资产",
+      "all": "所有资产"
+    },
+    "deposit": "입금",
+    "withdraw": "출금",
+    "balance": "잔고",
+    "table": {
+      "tableHeader": {
+        "title": "사용 가능한 상품",
+        "subtitle": "프로토콜 통합"
+      },
+      "tableHead": {
+        "platform": "플랫폼",
+        "instrument": "상품",
+        "apy": "연수입",
+        "valueLocked": "총 잠김 금액",
+        "subscription": "내 구독보기",
+        "status": "상태"
+      },
+      "statuses": {
+        "active": "유효한"
+      }
+    },
+    "summary": {
+      "valueLocked" :{
+        "title": "총 잠김 금액",
+        "details": ""
+      },
+      "slicePrice" :{
+        "title": "슬라이스 가격",
+        "details": ""
+      },
+      "sliceVolume" :{
+        "titleFirst": "",
+        "titleSecond": "",
+        "details": ""
+      },
+      "stakeLive" :{
+        "title": "슬라이스 저장, 지금 하세요!",
+        "details": "당신의 슬라이스 또는 슬라이스 LP 토큰을 저장하세요"
+      }
+    }
+  },
   "stake": {
     "title": "저장 풀스",
     "text": "슬라이스 보상을 위한 가상지폐 저장",

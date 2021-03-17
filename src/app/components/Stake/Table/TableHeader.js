@@ -44,7 +44,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     <h2>Open Loans</h2> : 
                     path === "stake" ?
                     <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
-                    <h2>Available Instruments</h2>
+                    <h2>{i18n.t('tranche.table.tableHeader.title')}</h2>
                 }
                 </TableTitle>
                 {
@@ -54,7 +54,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                     </TableSubTitle> : 
                     path === "earn" ?
                     <TableSubTitle>
-                    <h2>Protocol Integrations</h2>
+                    <h2>{i18n.t('tranche.table.tableHeader.subtitle')}</h2>
                     </TableSubTitle> :
                     <TableSubTitle>
                         <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>

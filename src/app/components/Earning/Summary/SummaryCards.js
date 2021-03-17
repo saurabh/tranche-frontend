@@ -163,7 +163,7 @@ const SummaryCards = ({
       >
         <SummaryCard
           title={
-            currentPath !== 'stake' && currentPath !== "earn" ? 'Decentralized Loans' : currentPath === "earn" ? "Total Value Locked" : i18n.t('stake.summary.slice.title')
+            currentPath !== 'stake' && currentPath !== "earn" ? 'Decentralized Loans' : currentPath === "earn" ? i18n.t('tranche.summary.valueLocked.title') : i18n.t('stake.summary.slice.title')
           }
           tokenAddress={slice.address}
           isLoading={loanIsLoading}
@@ -182,7 +182,7 @@ const SummaryCards = ({
         />
         <SummaryCard
           title={
-            currentPath !== 'stake' && currentPath !== "earn" ? 'Protocol Collateral' : currentPath === "earn" ? "SLICE Price" : i18n.t('stake.summary.sliceLP.title')
+            currentPath !== 'stake' && currentPath !== "earn" ? 'Protocol Collateral' : currentPath === "earn" ? i18n.t('tranche.summary.slicePrice.title') : i18n.t('stake.summary.sliceLP.title')
           }
           tokenAddress={lp.address}
           lpList={lpList}

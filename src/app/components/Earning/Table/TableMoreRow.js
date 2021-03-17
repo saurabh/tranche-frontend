@@ -9,6 +9,7 @@ import {
 import {
   BtnArrow
 } from 'assets';
+import Chart from '../../Chart/Chart'
 const TableMoreRow = () => {
 
   return (
@@ -39,7 +40,7 @@ const TableMoreRow = () => {
           </TableMoreLeftSection>
         </TableMoreRowContentLeft>
         <TableMoreRowContentRight>
-
+          <Chart />
         </TableMoreRowContentRight>
       </TableMoreRowContent>
     </TableMoreRowWrapper>

@@ -160,7 +160,11 @@ const TableHeadTitle = styled.div`
         position: relative;
         cursor: pointer;
         display: flex;
+        text-align: center;
+        width: 100%;
         & > h2{
+            text-align: center;
+            width: 100%;
             font-family: 'Roboto', sans-serif;
             font-style: normal;
             font-weight: 700;
@@ -176,13 +180,25 @@ const TableHeadTitle = styled.div`
     @media (max-width: 1200px){
       display: none !important;
     }
+    ${({ stakingPool }) => stakingPool && `
+       width: 100%;
+       text-align: left;
+       div{
+        h2{
+          text-align: left !important;
+         }
+       }
+    `}
     ${({ defaultCursor }) => defaultCursor && `
       & > div {
           cursor: default;
       }
     `}
+    ${({ platform }) => platform && `
+      width: 10%;
+    `}
     ${({ instrument }) => instrument && `
-      width: 20%;
+      width: 10%;
     `}
     ${({ apy }) => apy && `
       width: 18%;
@@ -446,6 +462,8 @@ const TableColMobile = styled.div`
 
 const TableHeadTitleMobile = styled.div`
   width: 100%;
+  width: 100%;
+  text-align: center;
   h2{
     font-style: normal;
     font-weight: 500;
@@ -455,6 +473,8 @@ const TableHeadTitleMobile = styled.div`
     text-align: center;
     text-transform: uppercase;
     color: rgba(56,56,56,0.3);
+    width: 100%;
+    text-align: center;
     ${({ address }) => address && `
       text-align: left;
     `}
@@ -753,8 +773,11 @@ const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
   width: 28%;
+  ${({ platform }) => platform && `
+    width: 10% !important;
+  `}
   ${({ instrument }) => instrument && `
-    width: 20% !important;
+    width: 10% !important;
   `}
 `
 const TableFirstColWrapper = styled.div`
@@ -772,7 +795,10 @@ const FirstColImg = styled.div`
 `
 const FirstColContent = styled.div`
   position: relative;
-  margin-left: 63px;
+  ${({ instrument }) => instrument && `
+    margin-left: 0;
+  `}
+  
 `
 const FirstColTitle = styled.div`
   h2{

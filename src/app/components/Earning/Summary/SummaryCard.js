@@ -23,6 +23,7 @@ import {
   StakeCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
+import i18n from '../../locale/i18n';
 
 const SummaryCard = ({
   title,
@@ -253,8 +254,8 @@ const SummaryCard = ({
             {value || value === 0 ? (
               <SummaryCardContainer stakeCard>
                 <StakeCardText>
-                  <h2>SLICE staking is live!</h2>
-                  <h2> Stake your SLICE or SLICE LP tokens</h2>
+                  <h2>{i18n.t('tranche.summary.stakeLive.title')}</h2>
+                  <h2>{i18n.t('tranche.summary.stakeLive.details')}</h2>
                 </StakeCardText>
                 <StakeCardBtn>
                   <button>STAKE</button>

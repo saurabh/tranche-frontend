@@ -84,6 +84,7 @@ import {
   TableMobilColContent,
   TableMobilCardBtn
 } from '../../Stake/Table/styles/TableComponents';
+import i18n from "app/components/locale/i18n";
 
 const TableCard = ({
   tranche: {
@@ -418,7 +419,7 @@ const TableCard = ({
           ) : (
             ''
           )}
-          <TableFirstCol className='table-col' instrument>
+          <TableFirstCol className='table-col' platform>
             <TableFirstColWrapper>
               <TableCardImg
                 tranche={true}
@@ -427,7 +428,11 @@ const TableCard = ({
               >
                 <img src={CompoundLogo} alt='Tranche' />
               </TableCardImg>
-              <FirstColContent>
+            </TableFirstColWrapper>
+          </TableFirstCol>
+          <TableFirstCol className='table-col' instrument>
+            <TableFirstColWrapper>
+              <FirstColContent instrument>
                 <FirstColTitle>
                   <h2>{name && name}</h2>
                 </FirstColTitle>
@@ -493,7 +498,7 @@ const TableCard = ({
                 color={Object.values(searchObj(1))[0].color}
                 backgroundColor={Object.values(searchObj(1))[0].background}
               >
-                Active
+                {i18n.t('tranche.table.statuses.active')}
               </StatusTextWrapper> 
 
               {/* <WithdrawBtnWrapper>

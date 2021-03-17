@@ -25,12 +25,51 @@
       "all": "所有资产"
     }
   },
-  "earn": {
-    "title": "Earning Markets",
-    "text": "DEPOSIT STABLE COINS FOR DIFFERENT RETURNS",
+  "tranche": {
+    "title": "Tranche状态",
+    "text": "关于Tranche使用的最新信息",
     "tabs": {
       "own": "我的资产",
       "all": "所有资产"
+    },
+    "deposit": "存入",
+    "withdraw": "提取",
+    "balance": "余额",
+    "table": {
+      "tableHeader": {
+        "title": "可用工具",
+        "subtitle": "协议集成"
+      },
+      "tableHead": {
+        "platform": "平台",
+        "instrument": "工具",
+        "apy": "年产量（apy）",
+        "valueLocked": "总计价值已锁定",
+        "subscription": "我的订阅",
+        "status": "状态"
+      },
+      "statuses": {
+        "active": "活跃"
+      }
+    },
+    "summary": {
+      "valueLocked" :{
+        "title": "总计价值已锁定",
+        "details": ""
+      },
+      "slicePrice" :{
+        "title": "SLICE价格",
+        "details": ""
+      },
+      "sliceVolume" :{
+        "titleFirst": "",
+        "titleSecond": "",
+        "details": ""
+      },
+      "stakeLive" :{
+        "title": "SLICE质押已上线！",
+        "details": "质押您的SLICE或SLICE LP代币"
+      }
     }
   },
   "stake": {
