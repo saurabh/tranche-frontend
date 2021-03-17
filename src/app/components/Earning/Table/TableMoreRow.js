@@ -33,40 +33,44 @@ let TableMoreRow = ({ earnAllowanceCheck, earnApproveContract, buySellTrancheTok
               <h2>deposit</h2>
               <h2>balance: 103,123 DAI</h2>
               {/* <Field component='input' type='checkbox' name='isApproved' /> */}
-              <div>
-                <Field
-                  component={InputField}
-                  validate={[required, number]}
-                  // className='ModalFormInputNewLoan tradeFormInput'
-                  name='deposit'
-                  type='number'
-                  step='0.001'
-                />
-                <button>max</button>
-              </div>
-              <button type='submit'>
-                <img src={BtnArrow} alt='arrow' />
-                deposit
-              </button>
+              <form onSubmit={e=>e.preventDefault()}>
+                <div>
+                  <Field
+                    component={InputField}
+                    validate={[required, number]}
+                    // className='ModalFormInputNewLoan tradeFormInput'
+                    name='deposit'
+                    type='number'
+                    step='0.001'
+                  />
+                  <button>max</button>
+                </div>
+                <button type='submit'>
+                  <img src={BtnArrow} alt='arrow' />
+                  deposit
+                </button>
+              </form>
             </TableMoreLeftSection>
             <TableMoreLeftSection withdraw>
               <h2>withdraw</h2>
               <h2>balance: 3,528 TACDAI</h2>
-              <div>
-                <Field
-                  component={InputField}
-                  validate={[required, number]}
-                  // className='ModalFormInputNewLoan tradeFormInput'
-                  name='withdraw'
-                  type='number'
-                  step='0.001'
-                />
-                <button>max</button>
-              </div>
-              <button type='submit'>
-                <img src={BtnArrow} alt='arrow' />
-                deposit
-              </button>
+              <form onSubmit={e=>e.preventDefault()}>
+                <div>
+                  <Field
+                    component={InputField}
+                    validate={[required, number]}
+                    // className='ModalFormInputNewLoan tradeFormInput'
+                    name='withdraw'
+                    type='number'
+                    step='0.001'
+                  />
+                  <button>max</button>
+                </div>
+                <button type='submit'>
+                  <img src={BtnArrow} alt='arrow' />
+                  deposit
+                </button>
+              </form>
             </TableMoreLeftSection>
           </TableMoreRowContentLeft>
           <TableMoreRowContentRight>
