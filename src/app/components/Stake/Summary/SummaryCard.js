@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  fromWei,
-  addStake,
-  withdrawStake,
-  epochTimeRemaining
-} from 'services/contractMethods';
+import { fromWei, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
 import { txMessage, StakingAddresses } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
 import {
@@ -20,7 +15,7 @@ import {
   SummaryCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
-import { SLICETotalSupply } from 'config';
+import { ApproveBigNumber } from 'config';
 
 const SummaryCard = ({
   title,
@@ -115,7 +110,7 @@ const SummaryCard = ({
       // console.log(safeDivide(safeSubtract(2**256, -1), 10**18).toString())
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
-        .approve(stakingAddress, toWei(SLICETotalSupply))
+        .approve(stakingAddress, toWei(ApproveBigNumber))
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
