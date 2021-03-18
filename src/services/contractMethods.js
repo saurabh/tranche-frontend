@@ -6,7 +6,8 @@ import {
   JTrancheTokenSetup,
   JProtocolSetup,
   StakingSetup,
-  YieldFarmSetup
+  YieldFarmSetup,
+  ERC20Setup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
@@ -242,6 +243,22 @@ export const sendValueToTranche = async (trancheId) => {
 
 // Staking Functions
 
+export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, tokenBalance } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
+    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const epochTimeRemaining = async (stakingAddress) => {
   try {
     const state = store.getState();
@@ -260,18 +277,20 @@ export const epochTimeRemaining = async (stakingAddress) => {
     return timeRemaining;
   } catch (error) {
     console.error(error);
+    return 0;
   }
 };
 
-export const getAccruedStakingRewards = async (yieldfarmAddress, tokenAddress) => {
+export const getAccruedStakingRewards = async (yieldfarmAddress, address) => {
   try {
     const state = store.getState();
     const { web3 } = state.ethereum;
     const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
-    const result = await YieldFarm.methods.getTotalAccruedRewards(tokenAddress).call();
+    const result = await YieldFarm.methods.getTotalAccruedRewards(address).call();
     return fromWei(result);
   } catch (error) {
     console.error(error);
+    return 0;
   }
 };
 
@@ -281,7 +300,7 @@ export const addStake = async (stakingAddress, tokenAddress) => {
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount);
+    amount = toWei(amount.toString());
     await StakingContract.methods
       .deposit(tokenAddress, amount)
       .send({ from: address })
@@ -304,7 +323,7 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
     const { web3, address, notify } = state.ethereum;
     let { amount } = state.form.stake.values;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount);
+    amount = toWei(amount.toString());
     await StakingContract.methods
       .withdraw(tokenAddress, amount)
       .send({ from: address })
