@@ -8,16 +8,10 @@ import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
 
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  setTokenBalances,
-  setTokenBalance
-} from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
+import { stakingAllowanceCheck } from 'services/contractMethods';
 
 const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
@@ -107,12 +101,19 @@ const SummaryCards = ({
     address = !address ? onboard.getState().address : address;
     if (num === 1) {
       setTokenBalance(slice.address, address);
+      if (type) {
+        let result = slice ? await stakingAllowanceCheck(slice.address, slice.stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
     }
     if (num === 2) {
       lpList && lpList.forEach((lp) => setTokenBalance(lp.address, address));
+      if (type) {
+        let result = lpList ? await stakingAllowanceCheck(lpList[0].address, lpList[0].stakingAddress) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
     }
     setModalType(type);
-    type ? setHasAllowance(false) : setHasAllowance(true);
     if (num === 0) {
       setSummaryModal(true);
       setFirstIsOpen(false);
@@ -128,14 +129,13 @@ const SummaryCards = ({
       setFirstIsOpen(false);
       setSecondIsOpen(true);
       setThirdIsOpen(false);
-    }  
-    else if (num === 3) {
+    } else if (num === 3) {
       setSummaryModal(false);
       setFirstIsOpen(false);
       setSecondIsOpen(false);
       setThirdIsOpen(true);
-    }    
-  };    
+    }
+  };
 
   const closeModal = () => {
     setFirstIsOpen(false);
@@ -156,15 +156,9 @@ const SummaryCards = ({
         </SummaryCardsWrapper>
       )}
 
-      <SummaryCardsWrapper
-        className='container content-container'
-        path={currentPath}
-        isDesktop={isDesktop}
-      >
+      <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
         <SummaryCard
-          title={
-            currentPath !== 'stake' ? 'Decentralized Loans' : i18n.t('stake.summary.slice.title')
-          }
+          title={currentPath !== 'stake' ? 'Decentralized Loans' : i18n.t('stake.summary.slice.title')}
           tokenAddress={slice.address}
           isLoading={loanIsLoading}
           value={currentPath !== 'stake' ? loan : slice.balance}
@@ -181,9 +175,7 @@ const SummaryCards = ({
           color='#4441CF'
         />
         <SummaryCard
-          title={
-            currentPath !== 'stake' ? 'Protocol Collateral' : i18n.t('stake.summary.sliceLP.title')
-          }
+          title={currentPath !== 'stake' ? 'Protocol Collateral' : i18n.t('stake.summary.sliceLP.title')}
           tokenAddress={lp.address}
           lpList={lpList}
           value={currentPath !== 'stake' ? collateral : lp.balance}
@@ -201,11 +193,7 @@ const SummaryCards = ({
           color='#1E80DA'
         />
         <SummaryCard
-          title={
-            currentPath !== 'stake'
-              ? 'Collateralization Ratio'
-              : i18n.t('stake.summary.sliceRewards.title')
-          }
+          title={currentPath !== 'stake' ? 'Collateralization Ratio' : i18n.t('stake.summary.sliceRewards.title')}
           value={currentPath !== 'stake' ? ratio : withdrawn.balance}
           isLoading={false}
           path={currentPath}

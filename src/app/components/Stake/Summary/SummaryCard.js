@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fromWei, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
 import { txMessage, StakingAddresses } from 'config';
-import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
+import { ERC20Setup, roundNumber, safeAdd } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -88,26 +88,8 @@ const SummaryCard = ({
     setBalance();
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
-  const stakingAllowanceCheck = async (stakingAddress, tokenAddress, amount) => {
-    try {
-      if (modalType && amount !== '') {
-        amount = toWei(amount);
-        const token = ERC20Setup(web3, tokenAddress);
-        let userAllowance = await token.methods.allowance(address, stakingAddress).call();
-        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-          setHasAllowance(true);
-        } else {
-          setHasAllowance(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const stakingApproveContract = async (stakingAddress, tokenAddress) => {
     try {
-      // console.log(safeDivide(safeSubtract(2**256, -1), 10**18).toString())
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
         .approve(stakingAddress, toWei(ApproveBigNumber))
@@ -197,10 +179,10 @@ const SummaryCard = ({
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
             hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
             approveLoading={approveLoading}
             isLPToken={isLPToken}
             // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
             type={type}
@@ -219,10 +201,10 @@ const SummaryCard = ({
           closeModal={() => closeModal()}
           openModal={(bool) => openModal(bool)}
           hasAllowance={hasAllowance}
+          setHasAllowance={setHasAllowance}
           approveLoading={approveLoading}
           isLPToken={isLPToken}
           // Functions
-          stakingAllowanceCheck={stakingAllowanceCheck}
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}
           type={type}

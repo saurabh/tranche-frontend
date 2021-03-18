@@ -107,6 +107,7 @@ const StakingModal = ({
   modalType,
   isLPToken,
   hasAllowance,
+  setHasAllowance,
   approveLoading,
   tokenBalance,
   type,
@@ -203,6 +204,7 @@ const StakingModal = ({
             tokenAddress={tokenAddress}
             setTokenAddress={setTokenAddress}
             hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
             approveLoading={approveLoading}
             isLPToken={isLPToken}
             // Functions

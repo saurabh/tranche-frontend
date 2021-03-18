@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber } from 'utils';
-import { fromWei } from 'services/contractMethods';
+import { fromWei, stakingAllowanceCheck } from 'services/contractMethods';
 import { selectUp, selectDown } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
@@ -51,10 +51,10 @@ let StakingForm = ({
   setTokenAddress,
   isLPToken,
   hasAllowance,
+  setHasAllowance,
   approveLoading,
   path,
   // Functions
-  stakingAllowanceCheck,
   stakingApproveContract,
   // setBalanceModal,
   adjustStake,
@@ -86,27 +86,20 @@ let StakingForm = ({
     }
   }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
 
-  useEffect(() => {
-    const allowanceCheck = async () => {
-      await stakingAllowanceCheck(stakingAddress, tokenAddress, ApproveBigNumber);
-    };
-
-    stakingAddress && tokenAddress && allowanceCheck();
-  }, [stakingAddress, tokenAddress, stakingAllowanceCheck]);
-
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);
   };
 
-  const handleLPSelect = (e, index, tokenAddress, stakingAddress) => {
+  const handleLPSelect = async (e, index, tokenAddress, stakingAddress) => {
     e.preventDefault();
     setSelectedLPName(lpList[index].name);
     setDropdownName(lpList[index].name.split(' ')[0]);
     setTokenAddress(tokenAddress);
     setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
+    let result = await stakingAllowanceCheck(lpList[0].address, lpList[0].stakingAddress);
+    setHasAllowance(result)
     setBalance(fromWei(balance.toString()));
-    // stakingAllowanceCheck(stakingAddress, tokenAddress, ApproveBigNumber)
     toggleLP(false);
   };
 
