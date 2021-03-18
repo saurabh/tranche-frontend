@@ -25,7 +25,6 @@ import {
   SelectCurrencyOption
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
-import { ApproveBigNumber } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
