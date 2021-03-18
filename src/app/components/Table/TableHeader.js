@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Create from "assets/images/svg/create.svg";
 import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
-import { changeFilter } from 'redux/actions/loans';
+import { changeFilter } from 'redux/actions/tableData';
 import { useOuterClick } from 'services/useOuterClick'
 import { ETH } from 'config/constants';
 import {
@@ -39,14 +39,25 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                 <TableTitle>
                 {   path === "lend" ?
                     <h2>Earning Assets</h2> :
-                    <h2>Open Loans</h2>
+                    path === "borrow" ?
+                    <h2>Open Loans</h2> : 
+                    path === "stake" ?
+                    <h2>CURRENT POOLS</h2> :
+                    <h2>Available Instruments</h2>
                 }
                 </TableTitle>
-                <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
-                    <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
-                </TableSubTitle>
+                {
+                    path !== "stake" ?
+                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
+                        <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
+                    </TableSubTitle> : 
+                    <TableSubTitle>
+                        <h2>STAKING REWARDS</h2>
+                    </TableSubTitle> 
+                }
+
                 {   menu ?
-                    <TableMarketsSortingDropdown>
+                    <TableMarketsSortingDropdown path={path}>
                         <TableMarketsSortingDropdownContent>
                             <TableMarketSortingBtn onClick={() => loanListing(null)}>
                                 All Markets
@@ -57,11 +68,12 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                         </TableMarketsSortingDropdownContent>
                     </TableMarketsSortingDropdown> : ""
                 }
-                
+
+
             </TableHeaderTitles>
 
             <div className="create-loan-wrapper">
-                {   path !== "lend" ?
+                {   path === "borrow" ?
                     <CreateLoanBtn>
                         <button onClick={HandleNewLoan}><img src={Create} alt="Create"/> <span>New loan</span></button>
                     </CreateLoanBtn> : ""

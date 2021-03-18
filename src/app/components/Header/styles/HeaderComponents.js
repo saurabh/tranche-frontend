@@ -7,11 +7,17 @@ const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 767px){
+    min-height: 100px;
+  }
 `;
 const HeaderContent = styled.div`
   margin: 39px 0px;
   @media (max-width: 992px) {
     margin: 39px 0px;
+  }
+  @media (max-width: 767px){
+    display: none;
   }
   ${({ path }) =>
     (path === "privacy" || path === "terms") &&
@@ -68,6 +74,11 @@ const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
   width: 336px;
+  ${({ tabs }) =>
+  tabs &&
+  `
+    width: auto;
+  `}
   & > a {
     position: relative;
     display: inline-block;
@@ -89,6 +100,7 @@ const NavbarLinks = styled.div`
       position: absolute;
       display: inline-block;
       color: #ffffff;
+      white-space: nowrap;
       :before {
         position: absolute;
         top: 0;
@@ -114,12 +126,56 @@ const HeaderTabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  @media (max-width: 992px) {
+  @media (max-width: 992px){
     flex-direction: row;
-    width: unset;
+    // width: auto;
     text-align: center;
     margin: 0;
   }
+
+  ${({ path }) => path === "stake" && `
+    justify-content: flex-end;
+  `}
+  
+
+
+
+  ${({ mobile }) => mobile && `
+    display: none;
+    a{
+      font-family: "Roboto", sans-serif;
+      background-color: transparent;
+      border: none;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      padding: 0;
+      transition: 300ms;
+      text-transform: uppercase;
+      color: #ffffff;
+      cursor: pointer;
+      opacity: 0.5;
+      border-bottom: 4px solid transparent;
+      margin-right: 12px;
+      &:focus {
+        outline: none;
+      }
+      :hover{
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
+    }
+    @media (max-width: 992px){
+      display: flex;
+    }
+  `}
+  ${({ desktop }) => desktop && `
+    display: none;
+    @media (min-width: 992px){
+      display: flex;
+    }
+  `}
 `;
 
 const MarketsTabsContainer = styled.div`
@@ -147,7 +203,7 @@ const MarketsTabsContainer = styled.div`
   ${({ page }) =>
     page === "earn" &&
     `
-        width: 100px !important;
+        width: 231px !important;
     `}
 `;
 const HeaderTabBtn = styled.button`
@@ -251,9 +307,17 @@ const RatesBoxWrapper = styled.div`
   border: 1px solid #efefef;
   box-sizing: border-box;
   @media (max-width: 992px) {
-    left: -217px;
-    transform: scale(0.9);
+    left: -29px;
+    transform: translateX(-50%);
   }
+  ${({ mobile }) =>mobile && ` 
+    left: 50% !important;
+    top: 0;
+    div{
+
+    }
+  `}
+  
 `;
 const RatesRowWrapper = styled.div`
   display: flex;
@@ -311,7 +375,7 @@ const RatesRowDash = styled.div`
 `;
 const TabIndicator = styled.div`
   height: 4px;
-  width: ${(props) => (props.path === "lend" ? "92px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "36px" : "0")};
+  width: ${(props) => ((props.path === "lend" && props.language === "en") ? "92px" : (props.path === "lend" && props.language === "zh") ? "64px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "115px" : "0")};
   background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "earn" ? "#ffffff" : "")};
   transition: 300ms;
   bottom: 0;
@@ -319,19 +383,128 @@ const TabIndicator = styled.div`
   left: ${(props) =>
     props.tab === "all"
       ? "-2px"
-      : props.tab === "own" && props.path === "lend"
+      : props.tab === "own" && props.path === "lend" && props.language === "en" //to be optimized
       ? "calc(100% - 88px)"
+      : props.tab === "own" && props.path === "lend" && props.language === "zh" //to be optimized
+      ? "calc(100% - 62px)"
       : props.tab === "own" && props.path === "borrow"
       ? "calc(100% - 78px)"
-      : props.tab === "buy" && props.path === "earn"
+      : props.tab === "allTranches" && props.path === "earn"  
       ? "-4px"
-      : props.tab === "sell" && props.path === "earn"
-      ? "calc(100% - 36px)"
+      : props.tab === "myTranches" && props.path === "earn"
+      ? "calc(100% - 110px)"
       : ""};
   @media (max-width: 992px) {
     display: none;
   }
 `;
+
+const NavBarMobile = styled.div`
+  width: 100%;
+  background: #282828;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition-property: height, opacity, padding;
+  transition-duration: 300ms, 100ms, 300ms;
+  transition-timing-function: ease;
+  ${({ rates }) => rates && `
+    left: -100px;
+    transition: 300ms;
+    background: #F1F1F1;
+    z-index: 2000;
+  `}
+`
+const NavBarMobileContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+  h2:nth-child(2){
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #686565;
+    margin: 12px auto;
+  }
+  ${({ first }) => first && `
+    div{
+      margin: 25px auto;
+      display: flex;
+      flex-direction: column;
+      a{
+        font-style: normal;
+        font-weight: normal;
+        margin: 14px auto;
+        font-size: 28px;
+        text-align: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
+    }
+  `}
+  
+  
+  button{
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+  }
+`
+const LocaleWrapper = styled.div`
+  position: relative;
+  margin-right: 15px;
+  h2, a{
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: normal;
+    cursor: pointer;
+    color: ${(props) => (props.color)}
+  }
+  img{
+    opacity: 0.7;
+  }
+  div{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 992px) {
+      position: relative;  
+    }
+  }
+  @media (max-width: 992px) {
+    margin-right: 0;
+  }
+  
+`
+const NavBarRightWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+`
+const OtherTabsContainer = styled.div`
+  position: relative;
+  width: 150px;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  @media (max-width: 767px){
+    width: auto;
+  }
+`
 
 export {
   HeaderWrapper,
@@ -355,5 +528,10 @@ export {
   RatesValueImg,
   RatesValueText,
   RatesRowDash,
-  TabIndicator
+  TabIndicator,
+  NavBarMobile,
+  NavBarMobileContent,
+  NavBarRightWrapper,
+  LocaleWrapper,
+  OtherTabsContainer
 };

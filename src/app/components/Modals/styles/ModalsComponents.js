@@ -34,9 +34,37 @@ padding: 0 35px;
     font-size: 12px;
   }
 }
+${({ stake }) => stake && `
+  h2{
+    color: #FFFFFF;
+  }
+`}
+${({ claim }) => claim && `
+  h2{
+    text-transform: capitalize;
+    font-weight: 700;
+  }
+`}
+${({ rightStakeModal }) => rightStakeModal && `
+  width: 50%;
+  z-index: -1;
+  h2{
+    color: #4F4F4F;
+  }
+`}
+
+
 ${({ error }) => error && `
   position: relative;
 `}
+${({ notFound }) => notFound && `
+  height: 46px;
+  justify-content: flex-end;
+  position: relative;
+  padding: 0 10px;
+`}
+
+
 
 `
 const ModalContent = styled.div`
@@ -117,6 +145,19 @@ width: 100%;
     color: red;
   }
 }
+${({ interest }) => interest && `
+  & > h2{
+    text-transform: uppercase;
+  }
+`}
+
+${({ stake }) => stake && `
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`}
+
 `
 const BtnLoanModal = styled.div`
 display: flex;
@@ -138,7 +179,7 @@ height: 38px;
 box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
 border-radius: 27px;
 border: none;
-margin: 12px 0 0 0;
+margin: 12px 0;
 background: ${props => props.backgroundColor ? props.backgroundColor  : "#ECECEC"};
 /*opacity: 0.75;*/
 font-family: Roboto;
@@ -160,8 +201,9 @@ color: ${props => props.btnColor ? props.btnColor : "#000000"};
   background: ${props => props.btnColor ? props.btnColor  : "#E42013"};*/
 }
 :disabled{
-  color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : "#000000" };
-  opacity: 0.5;
+  color: ${props => props.grayBtn && props.btnColor ? "#C1C1C1" : !props.grayBtn && props.btnColor ? props.btnColor : props.trade ? "#FFFFFF" : "#000000" };
+  background: ${props => props.trade ? "#E7E7E7" : "" };
+  opacity: ${props => props.trade ? "1" : "0.5" };;
   cursor: default;
   :hover{
     filter: brightness(1);
@@ -343,6 +385,12 @@ const ModalActionsContent = styled.div`
   @media (max-width: 633px){
     flex-direction: column-reverse;
   }
+  ${({ stakingMobile }) => stakingMobile && `
+    @media (max-width: 633px){
+      flex-direction: column;
+    }
+  `}
+
 `
 const ModalActionDetails = styled.div`
   position: relative;
@@ -360,13 +408,24 @@ const ModalActionDetails = styled.div`
     max-width: initial;
     display: none;
   }
+  ${({ stake, color}) => stake && color && `
+    background: ${color};
+  `}
+  
 `
 
 const ModalUserActions = styled.div`
   width: 100%;
+  ${({ form }) => form && `
+    display: flex;
+  `}
+
 `
 const ModalActionDetailsContent = styled.div`
   min-height: 290px;
+  ${({ stake }) => stake && `
+    min-height: 100px;
+  `}
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -378,6 +437,10 @@ const ModalActionDetailsContent = styled.div`
     min-height: 350px;
   `}
 
+  ${({ stake }) => stake && `
+    min-height: 100px;
+  `}
+
 `
 
 const LoanDetailsRow = styled.div`
@@ -386,6 +449,14 @@ const LoanDetailsRow = styled.div`
   
   ${({ newValue }) => newValue && `
     bottom: -50px;
+  `}
+  ${({ trade }) => trade && `
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    h2{
+      margin: 0 12px;
+    }
   `}
 `
 const LoanDetailsRowTitle = styled.h2`
@@ -398,6 +469,9 @@ const LoanDetailsRowTitle = styled.h2`
   ${({ row4 }) => row4 && `
     font-size: 12px;
   `}
+  ${({ stake }) => stake && `
+    color: #FFFFFF;
+  `}
 `
 const LoanDetailsRowValue = styled.h2`
   font-style: normal;
@@ -409,6 +483,9 @@ const LoanDetailsRowValue = styled.h2`
   margin: 5px 0 0 0;
   ${({ cursor }) => cursor && `
     cursor: ${cursor}
+  `}
+  ${({ stake }) => stake && `
+    color: #FFFFFF;
   `}
 `
 const ModalTextConfirm = styled.div`
@@ -424,6 +501,11 @@ const ModalTextConfirm = styled.div`
     color: #3F3F3F;
     margin: 10px auto 29px auto;
   }
+  ${({ error }) => error && `
+    h2{
+      width: 100%;
+    }
+  `}
 `
 
 const ModalTextConfirmBtnWrapper = styled.div`
@@ -492,13 +574,217 @@ const LoanDetailsMobile = styled.div`
       font-weight: 600;
     }
   }
+  ${({ trade }) => trade && `
+    margin-top: -100px;
+  `}
   @media (max-width: 633px){
     display: block !important;
   }
 `
 
+const StakingModalRow = styled.div`
+  margin: 25px 0;
+  h2:nth-child(1){
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    // line-height: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.45);
+  }
+  h2:nth-child(2){
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    // line-height: 37px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  h2:nth-child(3){
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    // line-height: 14px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.25);
+  }
+`;
+const StakingModalWrapper = styled.div`
+  margin: 100px 0;
+`;
 
+const SliceNotFound = styled.div`
+  min-height: 199px; 
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    margin: 12px 0 0 0;
+    text-align: center;
+    color: #3F3F3F;
+    padding: 0 23px;
+    width: 100%;
+  }
+`;
 
+const SliceNotFoundBtn = styled.div`
+  background: #F7F7FF;
+  min-height: 67px;
+  height: 100%;
+  padding: 0 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  a{
+    min-height: 33px;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    color: #FFFFFF;
+    background: ${props => props.color};
+    box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
+    border-radius: 4px;
+    width: 100%;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  ]
+  }
+`;
+
+const ClaimModalHalfWrapper = styled.div`
+  width: 100%;
+  min-height: 554px;
+  height: 100%;
+`;
+const ClaimModalHalfContentWrapper = styled.div`
+  width: 100%;
+  min-height: 554px;
+  height: 100%;
+  padding: 40px;
+`;
+const ClaimModalHalfContent = styled.div`
+  margin: 100px 0;
+`;
+const ClaimModalRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  max-height: 55px;
+  ${({ head }) => head && `
+    padding: 12px 4px;
+  `}
+  ${({ right }) => right && `
+    border-bottom: 1px solid #F0F0F6;
+  `}
+`;
+const ClaimModalCol = styled.div`
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 1);
+    img{
+      margin-right: 4px;
+    }
+  }
+  ${({ head }) => head && `
+    h2{
+      font-weight: 600;
+      font-size: 9.40209px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+  `}
+  ${({ right }) => right && `
+    h2{
+      font-weight: 600;
+      font-size: 9.40209px;
+      color: rgba(36, 39, 50, 0.6);
+    }
+  `}
+  ${({ pair }) => pair && `
+    width: 30%;
+  `}
+  ${({ rewards }) => rewards && `
+    width: 30%;
+  `}
+  ${({ claim }) => claim && `
+    width: 40%;
+    text-align: center;
+  `}
+
+  ${({ value }) => value && `
+    display: flex;
+    align-items: center;
+    img:nth-child(1){
+      position: relative;
+      z-index: 1;
+    }
+    img:nth-child(2){
+      margin: 0 -12px;
+    }
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #4F4F4F;
+      img{
+        margin-right: 4px;
+      }
+    }
+  `}
+  ${({ btn }) => btn && `
+    justify-content: center;
+    button{
+      background: #369987;
+      box-shadow: 0px 1.88042px 3.76084px rgba(0, 0, 0, 0.15);
+      border-radius: 25.3857px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 6px 20px;
+      h2{
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: capitalize;        
+        color: #FFFFFF;
+      }
+    }
+  `}
+  ${({ disabled }) => disabled && `
+    justify-content: center;
+    button{
+      pointer-events: none;
+      background: #E5E5E5;
+      h2{
+        color: #999999;
+      }
+    }
+  `}
+  
+`;
 
 export {
     ModalHeader, 
@@ -525,5 +811,14 @@ export {
     ModalTextConfirmBtn,
     ModalTextConfirmBtnWrapper,
     BtnLoadingIcon,
-    LoanDetailsMobile
+    LoanDetailsMobile,
+    StakingModalRow,
+    StakingModalWrapper,
+    SliceNotFound,
+    SliceNotFoundBtn,
+    ClaimModalHalfWrapper,
+    ClaimModalHalfContentWrapper,
+    ClaimModalHalfContent,
+    ClaimModalRow,
+    ClaimModalCol
 };
