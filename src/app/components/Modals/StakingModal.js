@@ -107,6 +107,7 @@ const StakingModal = ({
   modalType,
   isLPToken,
   hasAllowance,
+  setHasAllowance,
   approveLoading,
   tokenBalance,
   type,
@@ -203,6 +204,7 @@ const StakingModal = ({
             tokenAddress={tokenAddress}
             setTokenAddress={setTokenAddress}
             hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
             approveLoading={approveLoading}
             isLPToken={isLPToken}
             // Functions
@@ -260,7 +262,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {slice.balance}
+                        {slice.balance || 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -272,7 +274,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {lp.balance1}
+                        {lp.balance1 || 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -284,7 +286,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {lp.balance2}
+                        {lp.balance2 || 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -377,7 +379,7 @@ const StakingModal = ({
             </StakingModalRow>
 
             <StakingModalRow>
-              <h2>Staked SLICE Tokens</h2>
+              <h2>Staked LP Tokens</h2>
               {/* <h2>00.00</h2> */}
               <SummaryCardCounter stakingMobile>
                 <SummaryCardBtn stakingMobile onClick={() => openModal(true, 2)}>
