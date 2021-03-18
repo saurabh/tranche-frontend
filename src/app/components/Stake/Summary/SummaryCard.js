@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  fromWei,
-  addStake,
-  withdrawStake,
-  epochTimeRemaining
-  // getAccruedStakingRewards
-} from 'services/contractMethods';
+import { fromWei, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
 import { txMessage, StakingAddresses } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
 import {
@@ -21,6 +15,7 @@ import {
   SummaryCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
+import { ApproveBigNumber } from 'config';
 
 const SummaryCard = ({
   title,
@@ -36,6 +31,7 @@ const SummaryCard = ({
   modalType,
   summaryModal,
   ethereum: { web3, address, tokenBalance, notify },
+  userSummary: { totalAccruedRewards },
   hasAllowance,
   setHasAllowance,
   color
@@ -44,7 +40,6 @@ const SummaryCard = ({
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
-  const [accruedRewards, setAccruedRewards] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
@@ -63,7 +58,7 @@ const SummaryCard = ({
     const setEpochTime = async () => {
       if (type === 'reward') {
         const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-        setEpochTimeLeft((result));
+        setEpochTimeLeft(result);
       }
     };
 
@@ -71,16 +66,8 @@ const SummaryCard = ({
   }, [type]);
 
   useEffect(() => {
-    const getRewards = async () => {
-      if (type === 'reward' && address) {
-        // const result = await getAccruedStakingRewards(address);
-        // setAccruedRewards(fromWei(result))
-        setAccruedRewards(0);
-      }
-    };
     type === 'lp' ? setLPToken(true) : setLPToken(false);
-    getRewards();
-  }, [type, address]);
+  }, [type]);
 
   useEffect(() => {
     const setBalance = async () => {
@@ -118,12 +105,12 @@ const SummaryCard = ({
     }
   };
 
-  const stakingApproveContract = async (stakingAddress, tokenAddress, amount) => {
+  const stakingApproveContract = async (stakingAddress, tokenAddress) => {
     try {
-      amount = toWei(amount);
+      // console.log(safeDivide(safeSubtract(2**256, -1), 10**18).toString())
       const token = ERC20Setup(web3, tokenAddress);
       await token.methods
-        .approve(stakingAddress, amount)
+        .approve(stakingAddress, toWei(ApproveBigNumber))
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
@@ -148,9 +135,7 @@ const SummaryCard = ({
   const adjustStake = (e, stakingAddress, tokenAddress) => {
     try {
       e.preventDefault();
-      modalType
-        ? addStake(stakingAddress, tokenAddress)
-        : withdrawStake(stakingAddress, tokenAddress);
+      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -167,10 +152,10 @@ const SummaryCard = ({
 
               <SummaryCardValue>
                 {type === 'slice' || type === 'lp'
-                  ? `${roundNumber(value)}`
-                  : type === 'reward'
-                  ? `${roundNumber(accruedRewards, 2)}`
-                  : ''}
+                  ? `${roundNumber(value, 2)}`
+                  : type === 'reward' && roundNumber(totalAccruedRewards, 2) !== 'NaN'
+                  ? `${roundNumber(totalAccruedRewards, 2)}`
+                  : '0.00'}
                 <div></div>
               </SummaryCardValue>
               <SummaryCardDetails>
@@ -248,11 +233,13 @@ const SummaryCard = ({
 };
 
 SummaryCard.propTypes = {
-  ethereum: PropTypes.object.isRequired
+  ethereum: PropTypes.object.isRequired,
+  userSummary: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  userSummary: state.userSummary
 });
 
 export default connect(mapStateToProps, {})(SummaryCard);
