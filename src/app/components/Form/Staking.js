@@ -59,7 +59,7 @@ let StakingForm = ({
   // setBalanceModal,
   adjustStake,
   // Redux
-  ethereum: { tokenBalance },
+  ethereum: { tokenBalance, address },
   userSummary: { slice, lpList }
 }) => {
   const [balance, setBalance] = useState(0);
@@ -97,7 +97,8 @@ let StakingForm = ({
     setTokenAddress(tokenAddress);
     setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
-    let result = await stakingAllowanceCheck(lpList[0].address, lpList[0].stakingAddress);
+    let result = await stakingAllowanceCheck(lpList[index].address, lpList[index].stakingAddress, address);
+    console.log(result)
     setHasAllowance(result)
     setBalance(fromWei(balance.toString()));
     toggleLP(false);
