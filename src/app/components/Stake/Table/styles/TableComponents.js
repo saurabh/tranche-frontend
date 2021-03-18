@@ -1003,15 +1003,6 @@ const TableMoreLeftSection = styled.div`
   h2{
     font-family: 'Inter', sans-serif;
     font-style: normal;
-  }
-  h2:nth-child(1){
-    font-weight: bold;
-    font-size: 16px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #39295A;
-  }
-  h2:nth-child(2){
     font-weight: 500;
     font-size: 12px;
     letter-spacing: 0.05em;
@@ -1022,50 +1013,6 @@ const TableMoreLeftSection = styled.div`
   form{
     display: flex;
     flex-direction: column;
-    div{
-      position: relative;
-      button{
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        background: transparent;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: #39295A;
-      }
-      input{
-        width: 100%;
-        height: 33px;
-        border-radius: 4px;
-        border: 1px solid #CFCFE5;
-        outline: none;
-        padding: 2px 40px 2px 17px;
-        font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 12px;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: #39295A;
-      }
-      input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button{
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      input[type=number]{
-        -moz-appearance: textfield;
-      }
-    }
-    
     & > button{
       display: flex;
       justify-content: center;
@@ -1099,7 +1046,144 @@ const TableMoreLeftSection = styled.div`
     }
   `}
 `
+const FormContent = styled.div` 
+  position: relative;
+  button{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }
+  input{
+    width: 100%;
+    height: 33px;
+    border-radius: 4px;
+    border: 1px solid #CFCFE5;
+    outline: none;
+    padding: 2px 40px 2px 17px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number]{
+    -moz-appearance: textfield;
+  }
+`
+const CheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0 7px 4px 0;
+    color: #7C859B;
+  }
+`
+const CheckboxContent = styled.div`
+  input{
+    opacity: 0;
+    position: absolute;
+  }
+  input + label{
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    cursor: pointer;
+    -moz-transition: 0.4s ease;
+    -o-transition: 0.4s ease;
+    -webkit-transition: 0.4s ease;
+    transition: 0.4s ease;
+    -webkit-tap-highlight-color: transparent;
+    height: 19.99px;
+    width: 33.99px;
+    background: #CCCCCD;
+    border-radius: 60px;
+    :before{
+      content: "";
+      position: absolute;
+      display: block;
+      -moz-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      -o-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      -webkit-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      height: 19.99px;
+      width: 33.99px;
+      top: 0;
+      left: 0;
+      border-radius: 30px;
+    }
+    :after{
+      content: "";
+      position: absolute;
+      display: block;
+      box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 0px 0 hsla(0, 0%, 0%, 0.04), 0 4px 9px hsla(0, 0%, 0%, 0.13), 0 3px 3px hsla(0, 0%, 0%, 0.05);
+      -moz-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      -o-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      -webkit-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      background: #FAFAFA;
+      height: 11.34px;
+      width: 11.34px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 4px;
+      border-radius: 60px;
+    }
+  }
+  input:checked + label{
+    :before{
+      background: #4441CF;
+      -moz-transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+      -o-transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+      -webkit-transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+      transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+    }
+    :after{
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+`
 
+const TableMoreTitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > h2:nth-child(1){
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }
+`
 
 
 export {
@@ -1167,5 +1251,9 @@ export {
   TableMoreRowContent,
   TableMoreRowContentLeft,
   TableMoreRowContentRight,
-  TableMoreLeftSection
+  TableMoreLeftSection,
+  FormContent,
+  CheckboxWrapper,
+  CheckboxContent,
+  TableMoreTitleWrapper
 };

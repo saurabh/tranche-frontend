@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number } from 'utils/validations';
@@ -7,7 +7,11 @@ import {
   TableMoreRowContent,
   TableMoreRowContentLeft,
   TableMoreRowContentRight,
-  TableMoreLeftSection
+  TableMoreLeftSection,
+  FormContent,
+  CheckboxWrapper,
+  CheckboxContent,
+  TableMoreTitleWrapper
 } from '../../Stake/Table/styles/TableComponents';
 import Chart from '../../Chart/Chart';
 import { BtnArrow } from 'assets';
@@ -25,6 +29,9 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 ); 
 
 let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, buySellTrancheTokens, change }) => {
+  const [depositEnabled, setDepositEnabled] = useState(true);
+  const [withdrawEnabled, setWithdrawEnabled] = useState(false);
+
   const handleApprove = async (tokenAddress, contractAddress, e) => {
     e.persist();
     const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
@@ -36,11 +43,20 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
           <TableMoreLeftSection>
-            <h2>deposit</h2>
+            <TableMoreTitleWrapper>
+              <h2>deposit</h2>
+              <CheckboxWrapper>
+                <h2>{depositEnabled ? "Enabled" : "Disabled"}</h2>
+                <CheckboxContent>
+                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} checked={depositEnabled}/>
+                  <label for="depositIsApproved"></label>
+                </CheckboxContent>
+              </CheckboxWrapper>
+            </TableMoreTitleWrapper>
+           
             <h2>balance: 103,123 DAI</h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
-              <Field component='input' type='checkbox' name='depositIsApproved' onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} />
-              <div>
+              <FormContent>
                 <Field
                   component={InputField}
                   validate={[required, number]}
@@ -50,7 +66,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
                   step='0.001'
                 />
                 <button>max</button>
-              </div>
+              </FormContent>
               <button type='submit'>
                 <img src={BtnArrow} alt='arrow' />
                 deposit
@@ -58,11 +74,19 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
             </Form>
           </TableMoreLeftSection>
           <TableMoreLeftSection withdraw>
-            <h2>withdraw</h2>
-            <h2>balance: 3,528 TACDAI</h2>
-            <Field component='input' type='checkbox' name='withdrawIsApproved' onClick={(e) => handleApprove(dividendCoinAddress, contractAddress, e)} />
+            <TableMoreTitleWrapper>
+              <h2>withdraw</h2>
+              <CheckboxWrapper>
+                <h2>{withdrawEnabled ? "Enabled" : "Disabled"}</h2>
+                <CheckboxContent>
+                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' onClick={(e) => handleApprove(dividendCoinAddress, contractAddress, e)} checked={withdrawEnabled}/>
+                  <label for="withdrawIsApproved"></label>
+                </CheckboxContent>
+              </CheckboxWrapper>
+            </TableMoreTitleWrapper>
+            <h2>balance: 3,528 TACDAI</h2>            
             <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
-              <div>
+              <FormContent>
                 <Field
                   component={InputField}
                   validate={[required, number]}
@@ -72,7 +96,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
                   step='0.001'
                 />
                 <button>max</button>
-              </div>
+              </FormContent>
               <button type='submit'>
                 <img src={BtnArrow} alt='arrow' />
                 withdraw
