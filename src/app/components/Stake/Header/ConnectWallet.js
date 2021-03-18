@@ -50,8 +50,12 @@ const ConnectWallet = ({
   }, [pathname, parsePath]);
 
   const handleConnect = async () => {
-    await onboard.walletSelect();
-    await onboard.walletCheck();
+    try {
+      await onboard.walletSelect();
+      await onboard.walletCheck();
+    } catch (error) {
+      console.error(error);
+    }
   };
   
   const pathWindow =  window.location.pathname;

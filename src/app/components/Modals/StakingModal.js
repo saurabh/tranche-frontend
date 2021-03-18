@@ -183,17 +183,17 @@ const StakingModal = ({
             <ModalActionDetailsContent stake={true} trade={true}>
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>USER {tokenType} LOCKED</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(userStaked)}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(totalStaked)}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0 }%</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0}%</LoanDetailsRowValue>
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
@@ -262,7 +262,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {slice.balance || 0}
+                        {roundNumber(slice.balance) || 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -274,7 +274,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {lp.balance1 || 0}
+                        {roundNumber(lp.balance1) || 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -286,7 +286,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {lp.balance2 || 0}
+                        {roundNumber(lp.balance2) || 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
