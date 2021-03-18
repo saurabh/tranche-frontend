@@ -102,7 +102,7 @@ const Table = ({
 
 
   useEffect(() => {
-    window.ethereum.on('accountsChanged', function () {
+    window.ethereum.on('accountsChanged', function() {
       window.location.reload();
     })
   }, []);

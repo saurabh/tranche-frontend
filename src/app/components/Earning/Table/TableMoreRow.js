@@ -42,7 +42,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
-          <TableMoreLeftSection>
+          <TableMoreLeftSection disabled={!depositEnabled}>
             <TableMoreTitleWrapper>
               <h2>deposit</h2>
               <CheckboxWrapper>
@@ -60,6 +60,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
                 <Field
                   component={InputField}
                   validate={[required, number]}
+                  disabled={!depositEnabled}
                   // className='ModalFormInputNewLoan tradeFormInput'
                   name='depositAmount'
                   type='number'
@@ -73,7 +74,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
               </button>
             </Form>
           </TableMoreLeftSection>
-          <TableMoreLeftSection withdraw>
+          <TableMoreLeftSection withdraw disabled={!withdrawEnabled}>
             <TableMoreTitleWrapper>
               <h2>withdraw</h2>
               <CheckboxWrapper>
@@ -90,6 +91,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
                 <Field
                   component={InputField}
                   validate={[required, number]}
+                  disabled={!withdrawEnabled}
                   // className='ModalFormInputNewLoan tradeFormInput'
                   name='withdrawAmount'
                   type='number'
