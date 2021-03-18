@@ -97,7 +97,6 @@ let StakingForm = ({
     setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
     let result = await stakingAllowanceCheck(lpList[index].address, lpList[index].stakingAddress, address);
-    console.log(result)
     setHasAllowance(result)
     setBalance(fromWei(balance.toString()));
     toggleLP(false);
