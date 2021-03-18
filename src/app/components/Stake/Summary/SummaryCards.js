@@ -109,7 +109,7 @@ const SummaryCards = ({
     if (num === 2) {
       lpList && lpList.forEach((lp) => setTokenBalance(lp.address, address));
       if (type) {
-        let result = lpList ? await stakingAllowanceCheck(lpList[0].address, lpList[0].stakingAddress) : false;
+        let result = lpList ? await stakingAllowanceCheck(lpList[0].address, lpList[0].stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
     }
