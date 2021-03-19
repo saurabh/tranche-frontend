@@ -262,7 +262,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(slice.balance) || 0}
+                        {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -274,7 +274,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(lp.balance1) || 0}
+                        {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -286,7 +286,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(lp.balance2) || 0}
+                        {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
