@@ -1050,9 +1050,11 @@ const TableMoreLeftSection = styled.div`
       div{
         button{
           color: rgba(57, 41, 90, 0.5);
+          pointer-events: none;
         }
         input{
           background: rgba(207, 207, 229, 0.2);  
+          pointer-events: none;
         }
       }
       & > button{
