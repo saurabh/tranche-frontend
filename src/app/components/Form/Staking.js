@@ -184,7 +184,7 @@ let StakingForm = ({
                   : i18n.t('stake.modal.youHaveWithdraw') + ' ' + userStaked + ' ' + i18n.t('stake.modal.availableWithdraw')
                 : modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
-                : `You have ${userStaked} ${tokenName} available to withdraw`}
+                : `You have ${roundNumber(userStaked)} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
