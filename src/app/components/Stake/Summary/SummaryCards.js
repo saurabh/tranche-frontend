@@ -65,21 +65,21 @@ const SummaryCards = ({
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
-    if (isDesktop && currentPath !== 'stake') {
+    if (currentPath !== 'stake') {
       getRatio();
       getCollateral();
       getLoan();
-    } else if (isDesktop && currentPath === 'stake' && address) {
+    } else if (currentPath === 'stake' && address) {
       getStakingData();
     }
-  }, [isDesktop, currentPath, address, summaryFetchSuccess]);
+  }, [currentPath, address, summaryFetchSuccess]);
 
   useEffect(() => {
-    if (isDesktop && currentPath === 'stake' && address && slice && lpList) {
+    if (currentPath === 'stake' && address && slice && lpList) {
       setTokenBalance(slice.address, address);
       lpList.forEach((lp) => setTokenBalance(lp.address, address));
     }
-  }, [isDesktop, currentPath, address, lpList, slice, setTokenBalance]);
+  }, [currentPath, address, lpList, slice, setTokenBalance]);
 
   const getRatio = async () => {
     const res = await axios(`${BASE_URL + summaryRatio}`);
@@ -240,7 +240,6 @@ const SummaryCards = ({
           />
           <SummaryCard
             title={currentPath !== 'stake' ? 'Protocol Collateral' : i18n.t('stake.summary.sliceLP.title')}
-            tokenAddress={lp.address}
             lpList={lpList}
             value={currentPath !== 'stake' ? collateral : lp.balance}
             isLoading={collateralIsLoading}

@@ -90,8 +90,6 @@ const SummaryCard = ({
     setBalance();
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
-
-
   return (
     <div>
         <SummaryCardWrapper color={color}>

@@ -113,8 +113,8 @@ const StakingModal = ({
   approveLoading,
   tokenBalance,
   type,
-  sliceAdress,
-  lpAdress,
+  sliceAddress,
+  lpAddress,
   // tokenAddress,
   // Functions
   closeModal,
@@ -134,9 +134,8 @@ const StakingModal = ({
   const [stakedShare, setStakedShare] = useState(0);
   const [balanceMobile, setBalanceMobile] = useState(0);
   const [modalTypeMobile, setModalTypeMobile] = useState(undefined);
-  
-  const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
 
+  const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -166,19 +165,18 @@ const StakingModal = ({
     closeModal();
     setModalTypeMobile(undefined);
   };
-  const setBalanceCB =(balance) => {
+  const setBalanceCB = (balance) => {
     setBalanceMobile(roundNumber(balance));
-  }; 
+  };
   const toggleModalMobile = (bool, type) => {
     setModalTypeMobile(bool);
     setTypeMobile(type);
-    setLPTokenMobile(type === 'lp' ? true : false)
+    setLPTokenMobile(type === 'lp' ? true : false);
   };
   useEffect(() => {
     const setBalance = async () => {
-      let tokenAddressMobile = typeMobile === 'lp' ? lpAdress : typeMobile === 'slice' ? sliceAdress : ""
       if (tokenBalance) {
-        if (typeMobile === 'slice' && tokenAddressMobile) setBalanceCB(fromWei(tokenBalance[tokenAddressMobile]));
+        if (typeMobile === 'slice' && sliceAddress) setBalanceCB(fromWei(tokenBalance[sliceAddress]));
         if (typeMobile === 'lp' && lpList) {
           let lpBalance = 0;
           lpList.forEach((lp) => {
@@ -491,19 +489,22 @@ const StakingModal = ({
       </Modal>
     );
   };
-  let balanceIdentifier = isDesktop ? noBalance : balanceMobile === 0;
-  // return !isDesktop && summaryModal
-  //   ? InitialStakingModal()
-  //   : balanceIdentifier && modalType === true
-  //   ? notFound()
-  //   : modalType === null
-  //   ? claimModal()
-  //   : stakingModal();
-    return isDesktop ? 
-    (noBalance && modalType === true ? notFound() : modalType === null ? claimModal() : stakingModal()) : 
-    !isDesktop ? ((summaryModal && modalTypeMobile === undefined) ? InitialStakingModal() : (modalTypeMobile === true || modalTypeMobile === false) ? stakingModal() : modalTypeMobile === null ? claimModal() : balanceMobile === 0 ? notFound() : false) 
+
+  return isDesktop
+    ? noBalance && modalType === true
+      ? notFound()
+      : modalType === null
+      ? claimModal()
+      : stakingModal()
+    : !isDesktop
+    ? summaryModal && modalTypeMobile === undefined
+      ? InitialStakingModal()
+      : modalTypeMobile && Number(balanceMobile) === 0
+      ? notFound()
+      : modalTypeMobile === null
+      ? claimModal()
+      : (modalTypeMobile === true || modalTypeMobile === false) ? stakingModal() : false
     : false;
-  // return balance === 0 && modalType ? notFound() : stakingModal() ;
 };
 
 StakingModal.propTypes = {
