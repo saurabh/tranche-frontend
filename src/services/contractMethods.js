@@ -352,6 +352,22 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
 
 // Staking Functions
 
+export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, tokenBalance } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
+    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const epochTimeRemaining = async (stakingAddress) => {
   try {
     const state = store.getState();

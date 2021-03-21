@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fromWei, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
-import { txMessage, StakingAddresses } from 'config';
-import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
+import { fromWei, epochTimeRemaining } from 'services/contractMethods';
+import { StakingAddresses } from 'config';
+import { roundNumber, safeAdd } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -15,7 +15,6 @@ import {
   SummaryCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
-import { ApproveBigNumber } from 'config';
 
 const SummaryCard = ({
   title,
@@ -29,29 +28,30 @@ const SummaryCard = ({
   modalIsOpen,
   modalType,
   summaryModal,
+  adjustStake,
+  approveLoading,
+  stakingApproveContract,
   ethereum: { web3, address, tokenBalance, notify },
   userSummary: { totalAccruedRewards },
   hasAllowance,
   setHasAllowance,
   color
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  // const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
-  const [approveLoading, setApproveLoading] = useState(false);
-  const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
-    setBalance(roundNumber(balance));
+    setBalance(roundNumber(balance, undefined, 'down'));
   }, []);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
+  // const updateMedia = () => {
+  //   setDesktop(window.innerWidth > 992);
+  // };
+  // useEffect(() => {
+  //   window.addEventListener('resize', updateMedia);
+  //   return () => window.removeEventListener('resize', updateMedia);
+  // });
 
   useEffect(() => {
     const setEpochTime = async () => {
@@ -87,62 +87,8 @@ const SummaryCard = ({
     setBalance();
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
-  const stakingAllowanceCheck = async (stakingAddress, tokenAddress, amount) => {
-    try {
-      if (modalType && amount !== '') {
-        amount = toWei(amount);
-        const token = ERC20Setup(web3, tokenAddress);
-        let userAllowance = await token.methods.allowance(address, stakingAddress).call();
-        if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-          setHasAllowance(true);
-        } else {
-          setHasAllowance(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const stakingApproveContract = async (stakingAddress, tokenAddress) => {
-    try {
-      const token = ERC20Setup(web3, tokenAddress);
-      await token.methods
-        .approve(stakingAddress, toWei(ApproveBigNumber))
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          setApproveLoading(true);
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const adjustStake = (e, stakingAddress, tokenAddress) => {
-    try {
-      e.preventDefault();
-      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
-      closeModal();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <div>
-      {isDesktop ? (
         <SummaryCardWrapper color={color}>
           {value || value === 0 ? (
             <SummaryCardContainer>
@@ -194,36 +140,15 @@ const SummaryCard = ({
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
             hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
             approveLoading={approveLoading}
             isLPToken={isLPToken}
             // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
             type={type}
           />
         </SummaryCardWrapper>
-      ) : (
-        <StakingModal
-          // State Values
-          modalIsOpen={modalIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          tokenAddress={tokenAddress}
-          noBalance={Number(balance) === 0}
-          // Functions
-          closeModal={() => closeModal()}
-          openModal={(bool) => openModal(bool)}
-          hasAllowance={hasAllowance}
-          approveLoading={approveLoading}
-          isLPToken={isLPToken}
-          // Functions
-          stakingAllowanceCheck={stakingAllowanceCheck}
-          stakingApproveContract={stakingApproveContract}
-          adjustStake={adjustStake}
-          type={type}
-        />
-      )}
     </div>
   );
 };

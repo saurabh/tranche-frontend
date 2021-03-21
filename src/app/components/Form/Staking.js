@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber } from 'utils';
-import { fromWei } from 'services/contractMethods';
+import { fromWei, stakingAllowanceCheck } from 'services/contractMethods';
 import { selectUp, selectDown } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
@@ -25,7 +25,6 @@ import {
   SelectCurrencyOption
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
-import { ApproveBigNumber } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -51,15 +50,15 @@ let StakingForm = ({
   setTokenAddress,
   isLPToken,
   hasAllowance,
+  setHasAllowance,
   approveLoading,
   path,
   // Functions
-  stakingAllowanceCheck,
   stakingApproveContract,
   // setBalanceModal,
   adjustStake,
   // Redux
-  ethereum: { tokenBalance },
+  ethereum: { tokenBalance, address },
   userSummary: { slice, lpList }
 }) => {
   const [balance, setBalance] = useState(0);
@@ -70,6 +69,7 @@ let StakingForm = ({
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
 
+  
   useEffect(() => {
     if (isLPToken && lpList) {
       setDropdownName(lpList[0].name.split(' ')[0]);
@@ -86,27 +86,20 @@ let StakingForm = ({
     }
   }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
 
-  useEffect(() => {
-    const allowanceCheck = async () => {
-      await stakingAllowanceCheck(stakingAddress, tokenAddress, ApproveBigNumber)
-    }
-
-    stakingAddress && tokenAddress && allowanceCheck();
-  }, [stakingAddress, tokenAddress, stakingAllowanceCheck])
-
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);
   };
 
-  const handleLPSelect = (e, index, tokenAddress, stakingAddress) => {
+  const handleLPSelect = async (e, index, tokenAddress, stakingAddress) => {
     e.preventDefault();
     setSelectedLPName(lpList[index].name);
     setDropdownName(lpList[index].name.split(' ')[0]);
     setTokenAddress(tokenAddress);
     setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
+    let result = await stakingAllowanceCheck(lpList[index].address, lpList[index].stakingAddress, address);
+    setHasAllowance(result)
     setBalance(fromWei(balance.toString()));
-    // stakingAllowanceCheck(stakingAddress, tokenAddress, SLICETotalSupply)
     toggleLP(false);
   };
 
@@ -120,6 +113,7 @@ let StakingForm = ({
       } else {
         num = userStaked;
       }
+      num = roundNumber(num, 4, 'down')
       change('amount', num);
       setAmount(num);
     },
@@ -135,7 +129,11 @@ let StakingForm = ({
             <NewLoanFormInput>
               <NewLoanInputWrapper name='amount'>
                 <ModalFormLabel htmlFor='amount' tranche={true}>
-                  {tokenName === "SLICE" ? (modalType ? i18n.t('stake.modal.stakeFormTitle') : i18n.t('stake.modal.withdrawFormTitle')) : "Amount of " + tokenName + " to " + (modalType ? 'stake' : 'withdraw')} 
+                  {tokenName === 'SLICE'
+                    ? modalType
+                      ? i18n.t('stake.modal.stakeFormTitle')
+                      : i18n.t('stake.modal.withdrawFormTitle')
+                    : 'Amount of ' + tokenName + ' to ' + (modalType ? 'stake' : 'withdraw')}
                 </ModalFormLabel>
                 <FieldWrapper modalType={true} staking={true}>
                   <Field
@@ -152,12 +150,7 @@ let StakingForm = ({
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
-                <Field
-                  name='selectLP'
-                  component='input'
-                  id='selectLP'
-                  className='fieldStylingDisplay'
-                />
+                <Field name='selectLP' component='input' id='selectLP' className='fieldStylingDisplay' />
 
                 <SelectCurrencyView staking={true} onClick={() => toggleLPSelect()}>
                   <div>
@@ -187,17 +180,13 @@ let StakingForm = ({
               </LoanCustomSelect>
             </NewLoanFormInput>
             <h2>
-              {tokenName === 'SLICE' ?
-
-                (modalType
-                ? i18n.t('stake.modal.youHaveStake') + " " + roundNumber(balance) + " " + i18n.t('stake.modal.availableStake') : 
-                i18n.t('stake.modal.youHaveWithdraw') + " " + userStaked + " " + i18n.t('stake.modal.availableWithdraw')) : 
-                
-                modalType
+              {tokenName === 'SLICE'
+                ? modalType
+                  ? i18n.t('stake.modal.youHaveStake') + ' ' + roundNumber(balance) + ' ' + i18n.t('stake.modal.availableStake')
+                  : i18n.t('stake.modal.youHaveWithdraw') + ' ' + userStaked + ' ' + i18n.t('stake.modal.availableWithdraw')
+                : modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
-                : `You have ${userStaked} ${tokenName} available to withdraw`
-                
-              }
+                : `You have ${roundNumber(userStaked)} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
@@ -218,9 +207,7 @@ let StakingForm = ({
                   ) : !hasAllowance && approveLoading ? (
                     <div className='btnLoadingIconWrapper'>
                       <div className='btnLoadingIconCut'>
-                        <BtnLoadingIcon
-                          loadingColor={path === 'stake' ? '#4441CF' : '#936CE6'}
-                        ></BtnLoadingIcon>
+                        <BtnLoadingIcon loadingColor={path === 'stake' ? '#4441CF' : '#936CE6'}></BtnLoadingIcon>
                       </div>
                     </div>
                   ) : hasAllowance && !approveLoading ? (

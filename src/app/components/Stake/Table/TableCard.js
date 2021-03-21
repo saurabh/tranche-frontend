@@ -112,12 +112,12 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' stake>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <h2>{staked}</h2>
+              <h2>{roundNumber(staked)}</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>{reward} SLICE</h2>
+              <h2>{roundNumber(reward)} SLICE</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
