@@ -30,6 +30,8 @@ const SummaryCard = ({
   modalIsOpen,
   modalType,
   summaryModal,
+  adjustStake,
+  stakingApproveContract,
   ethereum: { web3, address, tokenBalance, notify },
   userSummary: { totalAccruedRewards },
   hasAllowance,
@@ -88,45 +90,10 @@ const SummaryCard = ({
     setBalance();
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
-  const stakingApproveContract = async (stakingAddress, tokenAddress) => {
-    try {
-      const token = ERC20Setup(web3, tokenAddress);
-      await token.methods
-        .approve(stakingAddress, toWei(ApproveBigNumber))
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          setApproveLoading(true);
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  const adjustStake = (e, stakingAddress, tokenAddress) => {
-    try {
-      e.preventDefault();
-      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
-      closeModal();
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div>
-      {isDesktop ? (
         <SummaryCardWrapper color={color}>
           {value || value === 0 ? (
             <SummaryCardContainer>
@@ -188,28 +155,6 @@ const SummaryCard = ({
             type={type}
           />
         </SummaryCardWrapper>
-      ) : (
-        <StakingModal
-          // State Values
-          path={path}
-          modalIsOpen={modalIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          tokenAddress={tokenAddress}
-          noBalance={Number(balance) === 0}
-          // Functions
-          closeModal={() => closeModal()}
-          openModal={(bool) => openModal(bool)}
-          hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
-          approveLoading={approveLoading}
-          isLPToken={isLPToken}
-          // Functions
-          stakingApproveContract={stakingApproveContract}
-          adjustStake={adjustStake}
-          type={type}
-        />
-      )}
     </div>
   );
 };

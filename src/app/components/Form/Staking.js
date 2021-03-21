@@ -69,6 +69,7 @@ let StakingForm = ({
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
 
+  
   useEffect(() => {
     if (isLPToken && lpList) {
       setDropdownName(lpList[0].name.split(' ')[0]);
