@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fromWei, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
-import { txMessage, StakingAddresses } from 'config';
-import { ERC20Setup, roundNumber, safeAdd } from 'utils';
+import { fromWei, epochTimeRemaining } from 'services/contractMethods';
+import { StakingAddresses } from 'config';
+import { roundNumber, safeAdd } from 'utils';
 import {
   SummaryCardWrapper,
   SummaryCardContainer,
@@ -15,7 +15,6 @@ import {
   SummaryCardBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
-import { ApproveBigNumber } from 'config';
 
 const SummaryCard = ({
   title,
@@ -39,22 +38,21 @@ const SummaryCard = ({
   setHasAllowance,
   color
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  // const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
-  const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
     setBalance(roundNumber(balance, undefined, 'down'));
   }, []);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
+  // const updateMedia = () => {
+  //   setDesktop(window.innerWidth > 992);
+  // };
+  // useEffect(() => {
+  //   window.addEventListener('resize', updateMedia);
+  //   return () => window.removeEventListener('resize', updateMedia);
+  // });
 
   useEffect(() => {
     const setEpochTime = async () => {
