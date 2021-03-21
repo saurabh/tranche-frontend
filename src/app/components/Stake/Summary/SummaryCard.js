@@ -31,6 +31,7 @@ const SummaryCard = ({
   modalType,
   summaryModal,
   adjustStake,
+  approveLoading,
   stakingApproveContract,
   ethereum: { web3, address, tokenBalance, notify },
   userSummary: { totalAccruedRewards },
@@ -42,7 +43,6 @@ const SummaryCard = ({
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
-  const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
     setBalance(roundNumber(balance, undefined, 'down'));

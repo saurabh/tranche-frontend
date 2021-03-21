@@ -166,7 +166,7 @@ const StakingModal = ({
     setModalTypeMobile(undefined);
   };
   const setBalanceCB = (balance) => {
-    setBalanceMobile(roundNumber(balance, undefined, 'down'));
+    setBalanceMobile(roundNumber(balance));
   };
   const toggleModalMobile = (bool, type) => {
     setModalTypeMobile(bool);
