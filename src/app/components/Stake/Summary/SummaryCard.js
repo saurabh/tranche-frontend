@@ -45,7 +45,7 @@ const SummaryCard = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
-    setBalance(roundNumber(balance));
+    setBalance(roundNumber(balance, undefined, 'down'));
   }, []);
 
   const updateMedia = () => {

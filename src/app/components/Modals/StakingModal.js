@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -166,7 +166,7 @@ const StakingModal = ({
     setModalTypeMobile(undefined);
   };
   const setBalanceCB = (balance) => {
-    setBalanceMobile(roundNumber(balance));
+    setBalanceMobile(roundNumber(balance, undefined, 'down'));
   };
   const toggleModalMobile = (bool, type) => {
     setModalTypeMobile(bool);
@@ -189,7 +189,7 @@ const StakingModal = ({
       }
     };
     setBalance();
-  }, [setModalTypeMobile, setTypeMobile, typeMobile, modalTypeMobile, isLPTokenMobile, setLPTokenMobile]);
+  }, [typeMobile, sliceAddress, lpList, tokenBalance]);
 
   const stakingModal = () => {
     return (

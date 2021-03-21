@@ -14,7 +14,7 @@ import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 import { stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
 import { ERC20Setup } from 'utils';
-import { ApproveBigNumber, txMessage} from 'config';
+import { ApproveBigNumber, txMessage } from 'config';
 
 const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
@@ -164,12 +164,12 @@ const SummaryCards = ({
               message: txMessage(transaction.hash)
             };
           });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
           emitter.on('txCancel', () => setApproveLoading(false));
           emitter.on('txFailed', () => setApproveLoading(false));
+        })
+        .on('confirmation', () => {
+          setHasAllowance(true);
+          setApproveLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -217,7 +217,7 @@ const SummaryCards = ({
           />
         </SummaryCardsWrapper>
       )}
-      { isDesktop &&
+      {isDesktop && (
         <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
           <SummaryCard
             title={currentPath !== 'stake' ? 'Decentralized Loans' : i18n.t('stake.summary.slice.title')}
@@ -274,7 +274,7 @@ const SummaryCards = ({
             color='#369987'
           />
         </SummaryCardsWrapper>
-      }
+      )}
     </div>
   );
 };
