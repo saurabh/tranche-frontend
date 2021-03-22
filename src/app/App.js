@@ -29,9 +29,8 @@ import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-const { loanList: loanListUrl, tranchesList: tranchesistUrl, stakingList: stakingListUrl } = apiUri;
+const { loanList, tranchesList, stakingList, stakingSummary } = apiUri;
 const baseRouteUrl = '/:locale(zh|kr|en)?';
-const { stakingSummary } = apiUri;
 
 const App = ({
   fetchTableData,
@@ -72,7 +71,7 @@ const App = ({
               type: filter
             }
           },
-          loanListUrl
+          loanList
         );
       });
     const priceOracle = web3.eth
@@ -91,7 +90,7 @@ const App = ({
               type: filter
             }
           },
-          loanListUrl
+          loanList
         );
       });
     const Protocol = web3.eth
@@ -109,7 +108,7 @@ const App = ({
               type: filter //ETH/JNT keep these in constant file
             }
           },
-          tranchesistUrl
+          tranchesList
         );
       });
     const Staking = web3.eth
@@ -126,7 +125,7 @@ const App = ({
               type: filter //ETH/JNT keep these in constant file
             }
           },
-          stakingListUrl
+          stakingList
         );
         const res = await axios(`${serverUrl + stakingSummary + address}`);
         const { result } = res.data;
