@@ -223,7 +223,7 @@ const StakingModal = ({
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{roundNumber(totalStaked)}</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
