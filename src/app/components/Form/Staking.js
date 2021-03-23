@@ -69,6 +69,7 @@ let StakingForm = ({
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
 
+  
   useEffect(() => {
     if (isLPToken && lpList) {
       setDropdownName(lpList[0].name.split(' ')[0]);
@@ -112,6 +113,7 @@ let StakingForm = ({
       } else {
         num = userStaked;
       }
+      num = roundNumber(num, 4, 'down')
       change('amount', num);
       setAmount(num);
     },
@@ -184,7 +186,7 @@ let StakingForm = ({
                   : i18n.t('stake.modal.youHaveWithdraw') + ' ' + userStaked + ' ' + i18n.t('stake.modal.availableWithdraw')
                 : modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
-                : `You have ${userStaked} ${tokenName} available to withdraw`}
+                : `You have ${roundNumber(userStaked)} ${tokenName} available to withdraw`}
             </h2>
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
