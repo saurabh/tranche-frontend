@@ -111,9 +111,10 @@ const TableCard = ({
 
   const handleApprove = async (e, type) => {
     try {
+      e.preventDefault();
       console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
       let tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
-      const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
+      // const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
       // if (result.message && result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
     } catch (error) {
       console.error(error);
