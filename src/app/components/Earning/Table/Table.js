@@ -202,7 +202,7 @@ const Table = ({
             ) : (
               data &&
               data.tranchesList.map((tranche, i) => (
-                <TableCard key={i} id={i} trancheList={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
               ))
             )}
           </div>
@@ -261,7 +261,7 @@ const Table = ({
               ) : (
                 data &&
                 data.tranchesList.map((tranche, i) => (
-                  <TableCard key={i} id={i} trancheList={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                  <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
                 ))
               )}
             </div>

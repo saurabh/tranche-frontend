@@ -17,7 +17,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
-import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo, DAITrancheTable, ChevronTable } from 'assets';
+import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -56,7 +56,7 @@ const TableCard = ({
   id,
   moreCardToggle,
   tableCardToggle,
-  trancheList,
+  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, subscription, apy, cryptoType, amount },
   path,
   setAddress,
   setNetwork,
@@ -72,7 +72,6 @@ const TableCard = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isEth, setIsEth] = useState(false);
-  let { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, dividendCoinAddress, type, subscriber, subscription, apy, cryptoType, amount } = trancheList;
   let disableBtn = false;
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
@@ -279,14 +278,11 @@ const TableCard = ({
               </InfoBoxWrapper> */}
             </FifthColContent>
           </TableFifthCol>
-          <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' trancheTableBtns>
-            <AdustBtnWrapper className='adjust-btn-wrapper'>
-              <AdjustLoanBtn color={PagesData[path].btnColor} onClick={() => alert('Congrats! You found an easter egg :)')}>
-                <img
-                  src={path === 'borrow' ? Adjust : path === 'lend' ? AdjustEarn : path === 'earn' && !disableBtn ? AdjustTrade : Adjust}
-                  alt='adjust'
-                />
-              </AdjustLoanBtn>
+          <TableSixthCol className='table-sixth-col table-col' trancheTableBtns>
+            <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
+              <button>
+                <img src={ChevronTable} alt="ChevronTable" />
+              </button>              
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
@@ -297,9 +293,9 @@ const TableCard = ({
             ) : (
               <TableMoreRow
                 isEth={isEth}
-                buyerCoinAddress={trancheList.buyerCoinAddress}
-                trancheTokenAddress={trancheList.trancheTokenAddress}
-                contractAddress={trancheList.contractAddress}
+                buyerCoinAddress={buyerCoinAddress}
+                trancheTokenAddress={trancheTokenAddress}
+                contractAddress={contractAddress}
                 handleApprove={handleApprove}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
@@ -357,7 +353,7 @@ const TableCard = ({
             ) : (
               <TableMoreRow
                 buyerCoinAddress={buyerCoinAddress}
-                dividendCoinAddress={dividendCoinAddress}
+                trancheTokenAddress={trancheTokenAddress}
                 contractAddress={contractAddress}
                 buySellTrancheTokens={buySellTrancheTokens}
               />

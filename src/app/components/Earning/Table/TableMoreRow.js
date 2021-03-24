@@ -31,17 +31,10 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddress, buySellTrancheTokens }) => {
   const [depositEnabled, setDepositEnabled] = useState(true);
   const [withdrawEnabled, setWithdrawEnabled] = useState(false);
-  const [coinAddress, setCoinAddress] = useState(buyerCoinAddress);
-  const [tokenAddress, setTokenAddress] = useState(trancheTokenAddress);
-  const [contract, setContract] = useState(contractAddress);
 
-  useEffect(()=>{
-    setCoinAddress(buyerCoinAddress)
-    setTokenAddress(trancheTokenAddress)
-    setContract(contractAddress)
-  }, [buyerCoinAddress, trancheTokenAddress, contractAddress])
   const handleApprove = async (tokenAddress, contractAddress, e) => {
     console.log(tokenAddress)
+    console.log(e.target)
     const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
     // if (result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
   }
@@ -55,8 +48,8 @@ let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddr
               <CheckboxWrapper hidden={isEth}>
                 <h2>{depositEnabled ? "Enabled" : "Disabled"}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' onClick={(e) => handleApprove(coinAddress, contract, e)} checked={depositEnabled}/>
-                  <label for="depositIsApproved"></label>
+                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' checked={depositEnabled}/>
+                  <label onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} for="depositIsApproved"></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
@@ -87,8 +80,8 @@ let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddr
               <CheckboxWrapper>
                 <h2>{withdrawEnabled ? "Enabled" : "Disabled"}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' onClick={(e) => handleApprove(tokenAddress, contract, e)} checked={withdrawEnabled}/>
-                  <label for="withdrawIsApproved"></label>
+                  <Field component='input'type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' checked={withdrawEnabled}/>
+                  <label onClick={(e) => handleApprove(trancheTokenAddress, contractAddress, e)}  for="withdrawIsApproved"></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
