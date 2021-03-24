@@ -19,7 +19,9 @@ import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from '../../Stake/Table/TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard,
+import {
+  TableWrapper,
+  TableContentCard,
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
@@ -72,45 +74,57 @@ const Table = ({
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("All tranches");
+  const [currentFilter, setCurrentFilter] = useState('All tranches');
+  const [moreCardToggle, setMoreCardToggle] = useState({ status: false, id: null });
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
 
-  const trancheListing = useCallback(_.debounce(async () => {
-    if (sort) {
-      await fetchTableData({
-        sort,
-        skip,
-        limit,
-        filter: {
-          address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
+  const trancheListing = useCallback(
+    _.debounce(
+      async () => {
+        if (sort) {
+          await fetchTableData(
+            {
+              sort,
+              skip,
+              limit,
+              filter: {
+                address: path === 'earn' && address ? address : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            tranchesListUrl
+          );
+        } else {
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                address: path === 'earn' && address ? address : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            tranchesListUrl
+          );
         }
-      }, tranchesListUrl);
-    } else {
-      await fetchTableData({
-        skip,
-        limit,
-        filter: {
-          address: path === 'earn' && tradeType === "myTranches" ? address : undefined,
-          type: filter //ETH/JNT keep these in constant file
-        }
-      }, tranchesListUrl);
-    }
-    
-  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, address, tradeType]);
-
+      },
+      3000,
+      { leading: true }
+    ),
+    [fetchTableData, filter, skip, limit, sort, address, tradeType]
+  );
 
   useEffect(() => {
-    window.ethereum.on('accountsChanged', function() {
+    window.ethereum.on('accountsChanged', function () {
       window.location.reload();
-    })
+    });
   }, []);
 
   useEffect(() => {
     changePath(currentPath);
     changeOwnAllFilter('all');
-    ownAllToggle("allTranches");
+    ownAllToggle('allTranches');
   }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
@@ -122,10 +136,14 @@ const Table = ({
     paginationCurrent(p);
   };
 
+  const tableCardToggle = (obj) => {
+    setMoreCardToggle(obj);
+  };
+
   const changeLoansFilter = useCallback(
     (filter) => {
       changeOwnAllFilter(filter);
-      let val = filter === "own" ? "My tranches" : filter === "all" ? "All tranches" : "";
+      let val = filter === 'own' ? 'My tranches' : filter === 'all' ? 'All tranches' : '';
       setCurrentFilter(val);
       setOpenFilterMenu(false);
     },
@@ -135,7 +153,7 @@ const Table = ({
   const changeOwnAllFilterHandler = (val) => {
     ownAllToggle(val);
     changeLoansFilter(val);
-  }
+  };
 
   const handleSorting = () => {
     trancheListing();
@@ -144,133 +162,116 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-      {/* { path !== "staking" &&
-      <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
-        <TableMobileFilterRow>
-          <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
-            <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
-            <img alt="filter" src={FilterChevron} />
-          </TableMobileFilter>
-          { path === "borrow" ?
-            <TableMobileRowCreateLoan>
-              <button onClick={HandleNewLoan}><img src={CreateLoan} alt="" /></button>
-            </TableMobileRowCreateLoan> : ""
-          }
-        </TableMobileFilterRow>
+        {path !== 'staking' && (
+          <TableMobileFiltersWrapper width={path === 'borrow' ? '80%' : '100%'}>
+            <TableMobileFilterRow>
+              <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>
+                <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
+                <img alt='filter' src={FilterChevron} />
+              </TableMobileFilter>
+              {path === 'borrow' ? (
+                <TableMobileRowCreateLoan>
+                  <button onClick={HandleNewLoan}>
+                    <img src={CreateLoan} alt='' />
+                  </button>
+                </TableMobileRowCreateLoan>
+              ) : (
+                ''
+              )}
+            </TableMobileFilterRow>
 
-        <TableMobileFiltersMenu className={openFilterMenu ? "" : "hideMenu"}>
-          <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('all')}>
-            <TableMobileFiltersText>All tranches</TableMobileFiltersText>
-          </TableMobileFilter>
-          <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('own')}>
-            <TableMobileFiltersText>My tranches</TableMobileFiltersText>
-          </TableMobileFilter>
-        </TableMobileFiltersMenu>
-      </TableMobileFiltersWrapper>
-      } */}
-      <TableWrapper mobile>
+            <TableMobileFiltersMenu className={openFilterMenu ? '' : 'hideMenu'}>
+              <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('all')}>
+                <TableMobileFiltersText>All tranches</TableMobileFiltersText>
+              </TableMobileFilter>
+              <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('own')}>
+                <TableMobileFiltersText>My tranches</TableMobileFiltersText>
+              </TableMobileFilter>
+            </TableMobileFiltersMenu>
+          </TableMobileFiltersWrapper>
+        )}
+        <TableWrapper mobile>
           <TableHead />
           <div className='table-content'>
-              {isLoading ? (
-                <div>
-                  <TableContentCard>
-                    <ReactLoading
-                      className='TableMoreLoading'
-                      type={'bubbles'}
-                      color='rgba(56,56,56,0.3)'
-                    />
-                  </TableContentCard>
-                </div>
-              ) 
-                
-              :
-              
-              (
-                data && data.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
-              )}
-            </div>
+            {isLoading ? (
+              <div>
+                <TableContentCard>
+                  <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
+                </TableContentCard>
+              </div>
+            ) : (
+              data &&
+              data.tranchesList.map((tranche, i) => (
+                <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+              ))
+            )}
+          </div>
         </TableWrapper>
         <TableWrapper desktop>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
             <div className='table-content'>
-                {
-                    isLoading ? <div>
-                      {
-                      [...Array(5)].map((i, idx) =>
-
-                      <TableContentCard key={idx}>
-                        <div className="loadingCard">
-                          <div className="loadingFirstCol">
-                            <div className="loadingFirslColContent">
-                              <div className="loadingAvatar loadingContent "></div>
-                              <div className="loadingText loadingContentWrapper loadingContent">
-                              </div>
-                            </div>
-                          </div>
-                          <div className="loadingSecondCol">
-                            <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
-                          </div>
-                          <div className="loadingFifthCol">
-                            <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
-                          </div>
-                          <div className="loadingSixthCol">
-                            <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
+              {isLoading ? (
+                <div>
+                  {[...Array(5)].map((i, idx) => (
+                    <TableContentCard key={idx}>
+                      <div className='loadingCard'>
+                        <div className='loadingFirstCol'>
+                          <div className='loadingFirslColContent'>
+                            <div className='loadingAvatar loadingContent '></div>
+                            <div className='loadingText loadingContentWrapper loadingContent'></div>
                           </div>
                         </div>
-                      </TableContentCard>)
-                      }
-                      
-                  
-                      </div> : (!isLoading && tradeType === 'myTranches' && data.tranchesList.length === 0) ?
-                  // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
+                        <div className='loadingSecondCol'>
+                          <div className='loadingContentCol loadingContentWrapper loadingContent'></div>
+                        </div>
+                        <div className='loadingFifthCol'>
+                          <div className='loadingFifthColContent loadingContentWrapper loadingContent'></div>
+                        </div>
+                        <div className='loadingSixthCol'>
+                          <div className='loadingSixthColContent loadingContentWrapper loadingContent'></div>
+                        </div>
+                      </div>
+                    </TableContentCard>
+                  ))}
+                </div>
+              ) : !isLoading && tradeType === 'myTranches' && data.tranchesList.length === 0 ? (
+                // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
 
-                          <TableContentCard pointer={false}>
+                <TableContentCard pointer={false}>
+                  <CallToActionTradeWrapper>
+                    <img src={EmptyBox} alt='EmptyBox' />
 
-                            <CallToActionTradeWrapper>
-                              <img src={EmptyBox} alt="EmptyBox"/>
-                              
-                              <CallToActionTradetext>
-                                <h2>You don’t have any loans, assets or instruments to sell.</h2>
-                                <h2>Buy a tranche or provide a loan to get started!</h2>
-                              </CallToActionTradetext>
+                    <CallToActionTradetext>
+                      <h2>You don’t have any loans, assets or instruments to sell.</h2>
+                      <h2>Buy a tranche or provide a loan to get started!</h2>
+                    </CallToActionTradetext>
 
-                              <CallToActionTradeBtns>
-
-                                <CallToActionTradeBtn type="loans">BROWSE <span>LOANS</span></CallToActionTradeBtn>
-                                <CallToActionTradeBtn>BROWSE <span>TRANCHES</span></CallToActionTradeBtn>
-
-                              </CallToActionTradeBtns>
-
-                            </CallToActionTradeWrapper>
-
-                          </TableContentCard>
-                  
-                  : data && data.tranchesList.map((tranche, i) => <TableCard key={i} tranche={tranche} path={path} />)
-                  }
+                    <CallToActionTradeBtns>
+                      <CallToActionTradeBtn type='loans'>
+                        BROWSE <span>LOANS</span>
+                      </CallToActionTradeBtn>
+                      <CallToActionTradeBtn>
+                        BROWSE <span>TRANCHES</span>
+                      </CallToActionTradeBtn>
+                    </CallToActionTradeBtns>
+                  </CallToActionTradeWrapper>
+                </TableContentCard>
+              ) : (
+                data &&
+                data.tranchesList.map((tranche, i) => (
+                  <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                ))
+              )}
             </div>
           </div>
         </TableWrapper>
 
         {data && data.count > limit ? (
           <div className='paginationWrapper'>
-            <Pagination
-              total={data && data.count}
-              limit={limit}
-              pageCount={pageCount}
-              currentPage={parseInt(current, 10)}
-            >
-              {({
-                pages,
-                currentPage,
-                hasNextPage,
-                hasPreviousPage,
-                previousPage,
-                nextPage,
-                totalPages,
-                getPageItemProps
-              }) => (
+            <Pagination total={data && data.count} limit={limit} pageCount={pageCount} currentPage={parseInt(current, 10)}>
+              {({ pages, currentPage, hasNextPage, hasPreviousPage, previousPage, nextPage, totalPages, getPageItemProps }) => (
                 <div>
                   <a
                     {...getPageItemProps({

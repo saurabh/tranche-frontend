@@ -1159,7 +1159,7 @@ const FormContent = styled.div`
   }
 `
 const CheckboxWrapper = styled.div`
-  display: flex;
+  display: ${({hidden}) => hidden ? 'none' : 'flex'};
   align-items: center;
   & > h2{
     font-family: 'Inter', sans-serif;

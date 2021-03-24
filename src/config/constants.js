@@ -25,6 +25,7 @@ export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
+export const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 export const ApproveBigNumber = '100000000000000';
 // Site Banner Data (imported in Header component)

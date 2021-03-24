@@ -157,7 +157,7 @@ const SummaryCard = ({
     return (
       <div>
         {isDesktop ? (
-          <SummaryCardWrapper color={color} stakeCard={stakeCard}>
+          <SummaryCardWrapper color={color}>
             {value || value === 0 ? (
               <SummaryCardContainer>
                 <SummaryCardTitle>{title}</SummaryCardTitle>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
+import { Form, Field, reduxForm, getFormValues } from 'redux-form';
 import { required, number } from 'utils/validations';
 import {
   TableMoreRowWrapper,
@@ -28,16 +28,15 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
   </div>
 ); 
 
-let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, buySellTrancheTokens, change }) => {
+let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddress, buySellTrancheTokens }) => {
   const [depositEnabled, setDepositEnabled] = useState(true);
   const [withdrawEnabled, setWithdrawEnabled] = useState(false);
 
   const handleApprove = async (tokenAddress, contractAddress, e) => {
-    e.persist();
+    console.log(tokenAddress)
     const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
-    if (result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
+    // if (result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
   }
-
   return (
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
@@ -45,7 +44,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
           <TableMoreLeftSection disabled={!depositEnabled}>
             <TableMoreTitleWrapper>
               <h2>deposit</h2>
-              <CheckboxWrapper>
+              <CheckboxWrapper hidden={isEth}>
                 <h2>{depositEnabled ? "Enabled" : "Disabled"}</h2>
                 <CheckboxContent>
                   <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} checked={depositEnabled}/>
@@ -80,7 +79,7 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
               <CheckboxWrapper>
                 <h2>{withdrawEnabled ? "Enabled" : "Disabled"}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' onClick={(e) => handleApprove(dividendCoinAddress, contractAddress, e)} checked={withdrawEnabled}/>
+                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' onClick={(e) => handleApprove(trancheTokenAddress, contractAddress, e)} checked={withdrawEnabled}/>
                   <label for="withdrawIsApproved"></label>
                 </CheckboxContent>
               </CheckboxWrapper>
@@ -116,13 +115,13 @@ let TableMoreRow = ({ buyerCoinAddress, dividendCoinAddress, contractAddress, bu
 
 TableMoreRow = reduxForm({
   form: 'earn',
-  enableReinitialize: true
+  initialValues: {},
+  destroyOnUnmount: true
 })(TableMoreRow);
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  initialValues: {},
   formValues: getFormValues('earn')(state)
 });
 
-export default TableMoreRow = connect(mapStateToProps, { change })(TableMoreRow);
+export default TableMoreRow = connect(mapStateToProps, {})(TableMoreRow);
