@@ -1223,6 +1223,13 @@ table, th, td {
     text-align: center;
     margin: 0 0 0 20px;
   }
+  .footerWrapper{
+    flex-direction: column;
+  }
+  .footerLinks a{
+    font-size: 9px;
+    margin: 0 2px;
+  }
   .desktopViewTabs{
     display: none !important;
   }

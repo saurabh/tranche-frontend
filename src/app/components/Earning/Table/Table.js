@@ -162,34 +162,6 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-        {path !== 'staking' && (
-          <TableMobileFiltersWrapper width={path === 'borrow' ? '80%' : '100%'}>
-            <TableMobileFilterRow>
-              <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>
-                <TableMobileFiltersText>{currentFilter}</TableMobileFiltersText>
-                <img alt='filter' src={FilterChevron} />
-              </TableMobileFilter>
-              {path === 'borrow' ? (
-                <TableMobileRowCreateLoan>
-                  <button onClick={HandleNewLoan}>
-                    <img src={CreateLoan} alt='' />
-                  </button>
-                </TableMobileRowCreateLoan>
-              ) : (
-                ''
-              )}
-            </TableMobileFilterRow>
-
-            <TableMobileFiltersMenu className={openFilterMenu ? '' : 'hideMenu'}>
-              <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('all')}>
-                <TableMobileFiltersText>All tranches</TableMobileFiltersText>
-              </TableMobileFilter>
-              <TableMobileFilter menu onClick={() => changeOwnAllFilterHandler('own')}>
-                <TableMobileFiltersText>My tranches</TableMobileFiltersText>
-              </TableMobileFilter>
-            </TableMobileFiltersMenu>
-          </TableMobileFiltersWrapper>
-        )}
         <TableWrapper mobile>
           <TableHead />
           <div className='table-content'>

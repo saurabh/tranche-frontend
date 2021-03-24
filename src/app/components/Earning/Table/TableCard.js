@@ -231,7 +231,9 @@ const TableCard = ({
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} subscription>
-            <FourthColContent className='content-3-col second-4-col-content'>{subscription ? roundNumber(subscription) : '0'}</FourthColContent>
+            <FourthColContent className='content-3-col second-4-col-content'>
+              <h2>{subscription ? roundNumber(subscription) : '0'}</h2>
+            </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
             <FifthColContent>
@@ -346,7 +348,7 @@ const TableCard = ({
             </TableMobilCardBtn>
           </TableColMobile>
         </TableContentCardMobile>
-        <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
+        <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
           <TableCardMoreContent>
             {isLoading ? (
               <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
