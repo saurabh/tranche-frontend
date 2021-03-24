@@ -17,7 +17,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
-import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
+import { Lock, Info, LinkArrow, ArrowGreen, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -56,7 +56,7 @@ const TableCard = ({
   id,
   moreCardToggle,
   tableCardToggle,
-  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, subscription, apy, cryptoType, amount },
+  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, subscription, apy, apyStatus, cryptoType, amount },
   path,
   setAddress,
   setNetwork,
@@ -72,7 +72,7 @@ const TableCard = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isEth, setIsEth] = useState(false);
-  let disableBtn = false;
+  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? ArrowGreen : apyStatus === 'decrease' ? 'arrowRed' : 'notFoundImage';
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
   });
@@ -220,7 +220,7 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <img src={ArrowGreen} alt='arrow' />
+              <img src={apyImage} alt='arrow' />
               <h2>{apy}</h2>
               <img src={Info} alt='info' />
             </SecondColContent>
