@@ -495,6 +495,10 @@ const TableContentCardWrapperMobile = styled.div`
   box-shadow: 0px 4px 4px rgb(189 189 189 / 7%);
   border-radius: 5px;
   margin: 12px 0;
+  ${({ tranche }) => tranche && `
+    min-height: 60px;
+    height: auto;
+  `}
 `
 const TableContentCardMobile = styled.div`
   position: relative;
@@ -511,6 +515,9 @@ const TableContentCardMobile = styled.div`
     position: absolute;
     left: 0;
   }
+  ${({ tranche }) => tranche && `
+   
+  `}
 `
 const TableMobilColContent = styled.div`
   h2{
@@ -555,6 +562,11 @@ const TableMobilCardBtn = styled.div`
   img{
     width: 7px;
   }
+  ${({ chevron }) => chevron && `
+    button{
+      background: transparent  !important;
+    }
+  `}
 `
 const TableMobileFiltersWrapper = styled.div`
   width: ${({width}) => width};
@@ -724,6 +736,21 @@ const TableCardImg = styled.div`
   img{
     border-radius: 50%;
     height: 37px;
+  }
+  span{
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #68D2FF;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: -9px;
+    bottom: 0;
+    img{
+      height: 9px;
+    }
   }
   
   ${({ tranche, color, type }) => tranche && type === "A" && `
@@ -959,13 +986,19 @@ const AdustBtnWrapper = styled.div`
       }
     }
   }
+  ${({ chevron }) => chevron && `
+    button{
+      background: transparent  !important;
+    }
+  `}
+  
 `
 const TableCardMore = styled.div`
   @media (max-width: 1200px){
     // padding: 0 39px 0 47px;
   }
   @media (max-width: 992px){
-    padding: 30px 12px 30px 12px;
+    padding: 0 !important;  
   }
 
 `
@@ -974,22 +1007,36 @@ const TableCardMoreContent = styled.div`
 `
 const TableMoreRowWrapper = styled.div`
   position: relative;   
+  @media (max-width: 992px){
+    padding: 0 !important;  
+  }
 `
 const TableMoreRowContent = styled.div` 
   display: flex;
   min-height: 220px;  
   width: 100%;
+  @media (max-width: 992px){
+    flex-direction: column;
+  }
 `
 
 const TableMoreRowContentLeft = styled.div` 
   display: flex;  
   width: 50%;
   min-height: 220px;
+  @media (max-width: 992px){
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 `
 
 const TableMoreRowContentRight = styled.div` 
   width: 50%;
   min-height: 220px;
+  @media (max-width: 992px){
+    width: 100%;
+  }
 `
 
 const TableMoreLeftSection = styled.div` 
@@ -999,6 +1046,7 @@ const TableMoreLeftSection = styled.div`
   border-right: 2px solid #F9F9FB;
   display: flex;
   flex-direction: column;
+  
   justify-content: center;
   h2{
     font-family: 'Inter', sans-serif;
@@ -1063,6 +1111,9 @@ const TableMoreLeftSection = styled.div`
       }
     }
   `}
+  @media (max-width: 992px){
+    width: 100%;
+  }
 `
 const FormContent = styled.div` 
   position: relative;

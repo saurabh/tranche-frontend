@@ -24,12 +24,12 @@ import { TableWrapper, TableContentCard,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
   CallToActionTradetext,
-  TableMobileFiltersWrapper,
-  TableMobileFilterRow,
-  TableMobileFiltersMenu,
-  TableMobileFilter,
-  TableMobileFiltersText,
-  TableMobileRowCreateLoan
+  // TableMobileFiltersWrapper,
+  // TableMobileFilterRow,
+  // TableMobileFiltersMenu,
+  // TableMobileFilter,
+  // TableMobileFiltersText,
+  // TableMobileRowCreateLoan
 } from '../../Stake/Table/styles/TableComponents';
 import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
 const { tranchesList: tranchesListUrl } = apiUri;
@@ -144,7 +144,7 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-      { path !== "staking" &&
+      {/* { path !== "staking" &&
       <TableMobileFiltersWrapper  width={path === "borrow" ? "80%" : "100%"}>
         <TableMobileFilterRow>
           <TableMobileFilter onClick={() => setOpenFilterMenu(!openFilterMenu)}>  
@@ -167,7 +167,7 @@ const Table = ({
           </TableMobileFilter>
         </TableMobileFiltersMenu>
       </TableMobileFiltersWrapper>
-      }
+      } */}
       <TableWrapper mobile>
           <TableHead />
           <div className='table-content'>

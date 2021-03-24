@@ -31,7 +31,7 @@ const HeaderContent = styled.div`
         }
     `}
     ${({ path }) =>
-    (path !== "stake") &&
+    (path !== "stake" && path !== "earn") &&
     `
       @media (max-width: 767px){
         display: none;

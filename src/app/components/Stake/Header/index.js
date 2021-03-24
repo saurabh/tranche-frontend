@@ -21,7 +21,6 @@ export function Header({updateDate}) {
   useEffect(() => {
     parsePath();
   }, [pathname, parsePath]);
-
   return (
     <div className='content-container container'>
       <Navbar path={parsedPath[parsedPath.length - 1]}/>

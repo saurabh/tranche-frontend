@@ -22,6 +22,7 @@ export function Header({updateDate}) {
     parsePath();
   }, [pathname, parsePath]);
 
+
   return (
     <div className='content-container container'>
       <Navbar path={parsedPath[parsedPath.length - 1]}/>

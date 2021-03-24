@@ -16,7 +16,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { PagesData, etherScanUrl, statuses } from 'config';
-import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo } from 'assets';
+import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -164,7 +164,10 @@ const TableCard = ({
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
-                <img src={CompoundLogo} alt='Tranche' />
+                <img src={CompoundLogo} alt='CompoundLogo' />
+                <span>
+                  <img src={DAITrancheTable} alt='DAITrancheTable' />
+                </span>
               </TableCardImg>
             </TableFirstColWrapper>
           </TableFirstCol>
@@ -253,17 +256,11 @@ const TableCard = ({
               </InfoBoxWrapper> */}
             </FifthColContent>
           </TableFifthCol>
-          <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' trancheTableBtns>
-            <AdustBtnWrapper className='adjust-btn-wrapper'>
-              <AdjustLoanBtn
-                color={PagesData[path].btnColor}
-                onClick={() => alert('Congrats! You found an easter egg :)')}
-              >
-                <img
-                  src={path === 'borrow' ? Adjust : path === 'lend' ? AdjustEarn : path === 'earn' && !disableBtn ? AdjustTrade : Adjust}
-                  alt='adjust'
-                />
-              </AdjustLoanBtn>
+          <TableSixthCol className='table-sixth-col table-col' trancheTableBtns>
+            <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
+              <button>
+                <img src={ChevronTable} alt="ChevronTable" />
+              </button>              
             </AdustBtnWrapper>
             {/* <EarnModal
               // State Values
@@ -310,8 +307,8 @@ const TableCard = ({
   };
   const TableCardMobile = () => {
     return (
-      <TableContentCardWrapperMobile>
-        <TableContentCardMobile>
+      <TableContentCardWrapperMobile tranche>
+        <TableContentCardMobile color={Object.values(searchObj(1))[0].background} onClick={() => cardToggle()} className={moreCardToggle ? 'table-card-toggle' : ''} tranche>
           <span></span>
           <TableColMobile address>
             <TableMobilColContent>
@@ -322,34 +319,48 @@ const TableCard = ({
 
           <TableColMobile>
             <TableMobilColContent col>
-              <h2>{amount.toString().length > 5 ? amount.toString().substring(0, 5) + '... ' : amount.toString() + ' '}</h2>
-              <h2>{cryptoType}</h2>
+              {/* <h2>{amount.toString().length > 5 ? amount.toString().substring(0, 5) + '... ' : amount.toString() + ' '}</h2>
+              <h2>{cryptoType}</h2> */}
+              <h2>100</h2>
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile>
             <TableMobilColContent col>
-              <h2>{rpbRate}</h2> <h2>%</h2>
+              {/* <h2>{rpbRate}</h2> <h2>%</h2> */}
+              <h2>100</h2>
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile>
             <TableMobilColContent col>
-              <h2>{subscriber}</h2>
+              {/* <h2>{subscriber}</h2> */}
+              <h2>100</h2>
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile btn>
-            <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
-              <button
-                // disabled={path === 'earn' || disableBtn}
-                onClick={() => alert('Congrats! You found an easter egg :)')}
-              >
-                <img alt='adjust' src={path === 'borrow' ? Adjust : path === 'lend' ? AdjustEarn : path === 'earn' ? AdjustTrade : Adjust} />
-              </button>
+            <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper' chevron>
+              <button>
+                <img src={ChevronTable} alt="ChevronTable" />
+              </button>      
             </TableMobilCardBtn>
           </TableColMobile>
         </TableContentCardMobile>
+        <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
+          <TableCardMoreContent>
+            {isLoading ? (
+              <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
+            ) : (
+              <TableMoreRow
+                buyerCoinAddress={buyerCoinAddress}
+                dividendCoinAddress={dividendCoinAddress}
+                contractAddress={contractAddress}
+                buySellTrancheTokens={buySellTrancheTokens}
+              />
+            )}
+          </TableCardMoreContent>
+        </TableCardMore>
       </TableContentCardWrapperMobile>
     );
   };

@@ -109,23 +109,22 @@ const TableHead = ({changeSorting, path}) => {
             <TableHeadWrapperMobile path={path}>
                 <TableColMobile address>
                     <TableHeadTitleMobile defaultCursor={true} address>
-                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? "STAKING POOL"  : "PLATFORM"}</h2>
                         <h2>INSTRUMENT</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "SIZE"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>APY</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD"  : "RETURN"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>Value Locked</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "accrued"  : "SUBSCRIPTION"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>SUBSCRIPTION</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile btn>
