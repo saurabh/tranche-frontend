@@ -16,13 +16,8 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-<<<<<<< HEAD
-import { PagesData, etherScanUrl, statuses } from 'config';
-import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
-=======
 import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
-import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo } from 'assets';
->>>>>>> 8cd8799d90c978f0153daec034a8429b9722987a
+import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo, DAITrancheTable, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -61,7 +56,7 @@ const TableCard = ({
   id,
   moreCardToggle,
   tableCardToggle,
-  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, subscription, apy, cryptoType, amount },
+  trancheList,
   path,
   setAddress,
   setNetwork,
@@ -77,6 +72,7 @@ const TableCard = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isEth, setIsEth] = useState(false);
+  let { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, dividendCoinAddress, type, subscriber, subscription, apy, cryptoType, amount } = trancheList;
   let disableBtn = false;
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
@@ -283,13 +279,6 @@ const TableCard = ({
               </InfoBoxWrapper> */}
             </FifthColContent>
           </TableFifthCol>
-<<<<<<< HEAD
-          <TableSixthCol className='table-sixth-col table-col' trancheTableBtns>
-            <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
-              <button>
-                <img src={ChevronTable} alt="ChevronTable" />
-              </button>              
-=======
           <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' trancheTableBtns>
             <AdustBtnWrapper className='adjust-btn-wrapper'>
               <AdjustLoanBtn color={PagesData[path].btnColor} onClick={() => alert('Congrats! You found an easter egg :)')}>
@@ -298,7 +287,6 @@ const TableCard = ({
                   alt='adjust'
                 />
               </AdjustLoanBtn>
->>>>>>> 8cd8799d90c978f0153daec034a8429b9722987a
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
@@ -309,9 +297,9 @@ const TableCard = ({
             ) : (
               <TableMoreRow
                 isEth={isEth}
-                buyerCoinAddress={buyerCoinAddress}
-                trancheTokenAddress={trancheTokenAddress}
-                contractAddress={contractAddress}
+                buyerCoinAddress={trancheList.buyerCoinAddress}
+                trancheTokenAddress={trancheList.trancheTokenAddress}
+                contractAddress={trancheList.contractAddress}
                 handleApprove={handleApprove}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
@@ -343,12 +331,7 @@ const TableCard = ({
 
           <TableColMobile>
             <TableMobilColContent col>
-<<<<<<< HEAD
-              {/* <h2>{rpbRate}</h2> <h2>%</h2> */}
-              <h2>100</h2>
-=======
               <h2>{apy}</h2> <h2>%</h2>
->>>>>>> 8cd8799d90c978f0153daec034a8429b9722987a
             </TableMobilColContent>
           </TableColMobile>
 

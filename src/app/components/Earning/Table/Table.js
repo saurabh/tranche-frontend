@@ -26,12 +26,12 @@ import {
   CallToActionTradeBtns,
   CallToActionTradeBtn,
   CallToActionTradetext,
-  // TableMobileFiltersWrapper,
-  // TableMobileFilterRow,
-  // TableMobileFiltersMenu,
-  // TableMobileFilter,
-  // TableMobileFiltersText,
-  // TableMobileRowCreateLoan
+  TableMobileFiltersWrapper,
+  TableMobileFilterRow,
+  TableMobileFiltersMenu,
+  TableMobileFilter,
+  TableMobileFiltersText,
+  TableMobileRowCreateLoan
 } from '../../Stake/Table/styles/TableComponents';
 import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
 const { tranchesList: tranchesListUrl } = apiUri;
@@ -202,7 +202,7 @@ const Table = ({
             ) : (
               data &&
               data.tranchesList.map((tranche, i) => (
-                <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                <TableCard key={i} id={i} trancheList={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
               ))
             )}
           </div>
@@ -261,7 +261,7 @@ const Table = ({
               ) : (
                 data &&
                 data.tranchesList.map((tranche, i) => (
-                  <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                  <TableCard key={i} id={i} trancheList={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
                 ))
               )}
             </div>
