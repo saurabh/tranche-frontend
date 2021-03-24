@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { change } from 'redux-form';
+import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { useOuterClick } from 'services/useOuterClick';
-import { fromWei, toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
+import { fromWei, toWei, allowanceCheck, approveContract, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -12,10 +12,11 @@ import {
   addrShortener,
   readyToTransact,
   isGreaterThan,
+  roundNumber
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { PagesData, etherScanUrl, statuses } from 'config';
+import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
 import { Adjust, AdjustEarn, AdjustTrade, Info, LinkArrow, ArrowGreen, CompoundLogo } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -49,27 +50,29 @@ import {
   TableMobilColContent,
   TableMobilCardBtn
 } from '../../Stake/Table/styles/TableComponents';
-import i18n from "app/components/locale/i18n";
+import i18n from 'app/components/locale/i18n';
 
 const TableCard = ({
-  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, dividendCoinAddress, type, subscriber, rpbRate, cryptoType, amount },
+  id,
+  moreCardToggle,
+  tableCardToggle,
+  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, subscription, apy, cryptoType, amount },
   path,
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
   ethereum: { tokenBalance, address, wallet },
-  change
+  change,
+  destroy
   // checkServer
 }) => {
   const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  const [moreCardToggle, setMoreCardToggle] = useState(false);
-  rpbRate = rpbRate && rpbRate.toString().split('.')[0];
-  rpbRate = rpbRate && fromWei(rpbRate);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEth, setIsEth] = useState(false);
   let disableBtn = false;
-  let isLoading = false;
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
   });
@@ -106,7 +109,19 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
+  const handleApprove = async (e, type) => {
+    try {
+      console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
+      let tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
+      const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
+      // if (result.message && result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const buySellTrancheTokens = (e, buy) => {
+    console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
     try {
       e.preventDefault();
       buy ? buyTrancheTokens(contractAddress, trancheId, type) : sellTrancheTokens(contractAddress, trancheId, type);
@@ -128,19 +143,31 @@ const TableCard = ({
   };
 
   const cardToggle = async () => {
-    if (!moreCardToggle) {
-      const ready = await readyToTransact(wallet, onboard);
-      if (!ready) return;
-      address = !address ? onboard.getState().address : address;
-      setTokenBalance(buyerCoinAddress, address);
-      setTokenBalance(trancheTokenAddress, address);
-      const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
-      change('earn', 'depositIsApproved', depositTokenHasAllowance);
-      const withdrawTokenHasAllowance = await allowanceCheck(dividendCoinAddress, contractAddress, address);
-      change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
-      setMoreCardToggle(!moreCardToggle);
+    console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    address = !address ? onboard.getState().address : address;
+    if (moreCardToggle.status && id === moreCardToggle.id) {
+      tableCardToggle({ status: false, id });
+    } else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
+      destroy('earn');
+      setIsLoading(true);
+      if (buyerCoinAddress === zeroAddress) {
+        setIsEth(true);
+        setTokenBalance(trancheTokenAddress, address);
+        const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
+        change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+      } else {
+        setTokenBalance(buyerCoinAddress, address);
+        setTokenBalance(trancheTokenAddress, address);
+        const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
+        change('earn', 'depositIsApproved', depositTokenHasAllowance);
+        const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
+        change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+      }
+      setIsLoading(false);
+      tableCardToggle({ status: true, id });
     }
-    setMoreCardToggle(!moreCardToggle);
   };
 
   const checkLoan = false;
@@ -149,7 +176,11 @@ const TableCard = ({
   const TableCardDesktop = () => {
     return (
       <TableContentCardWrapper>
-        <TableContentCard pointer={true} onClick={() => cardToggle()} className={moreCardToggle ? 'table-card-toggle' : ''}>
+        <TableContentCard
+          pointer={true}
+          onClick={() => cardToggle()}
+          className={moreCardToggle.status && id === moreCardToggle.id ? 'table-card-toggle' : ''}
+        >
           {checkLoan ? (
             <TableCardTag color={checkLoan.color}>
               <img src={checkLoan.img} alt='checkLoan' />
@@ -175,8 +206,8 @@ const TableCard = ({
                   <h2>{name && name}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
-                  <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <h2>{addrShortener(trancheTokenAddress)}</h2>
+                  <a href={etherScanUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -187,26 +218,17 @@ const TableCard = ({
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content'>
               <img src={ArrowGreen} alt='arrow' />
-              {/* <h2>
-                {type === 'TRANCHE_A' ? amount : subscriber} <span>{cryptoType}</span>
-              </h2> */}
-              <h2>100</h2>
+              <h2>{apy}</h2>
               <img src={Info} alt='info' />
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              {/* <h2>
-                {roundBasedOnUnit(rpbRate, cryptoType)} {gweiOrEther(rpbRate, cryptoType)}
-              </h2> */}
-              <h2>100</h2>
+              <h2>{roundNumber(subscriber)}</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} subscription>
-            <FourthColContent className='content-3-col second-4-col-content'>
-              {/* <h2>{subscriber}</h2> */}
-              <h2>100</h2>
-            </FourthColContent>
+            <FourthColContent className='content-3-col second-4-col-content'>{subscription ? roundNumber(subscription) : '0'}</FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
             <FifthColContent>
@@ -216,7 +238,7 @@ const TableCard = ({
                 backgroundColor={Object.values(searchObj(1))[0].background}
               >
                 {i18n.t('tranche.table.statuses.active')}
-              </StatusTextWrapper> 
+              </StatusTextWrapper>
 
               {/* <InfoBoxWrapper ref={innerRef}>
                 <img src={Info} alt='info' onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
@@ -255,51 +277,26 @@ const TableCard = ({
           </TableFifthCol>
           <TableSixthCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' trancheTableBtns>
             <AdustBtnWrapper className='adjust-btn-wrapper'>
-              <AdjustLoanBtn
-                color={PagesData[path].btnColor}
-                onClick={() => alert('Congrats! You found an easter egg :)')}
-              >
+              <AdjustLoanBtn color={PagesData[path].btnColor} onClick={() => alert('Congrats! You found an easter egg :)')}>
                 <img
                   src={path === 'borrow' ? Adjust : path === 'lend' ? AdjustEarn : path === 'earn' && !disableBtn ? AdjustTrade : Adjust}
                   alt='adjust'
                 />
               </AdjustLoanBtn>
             </AdustBtnWrapper>
-            {/* <EarnModal
-              // State Values
-              path={path}
-              modalIsOpen={modalIsOpen}
-              hasAllowance={hasAllowance}
-              withdraw={withdrawModal}
-              approveLoading={approveLoading}
-              hasBalance={hasBalance}
-              availableAmount={availableAmount}
-              // withdrawableFunds={withdrawableFunds}
-              // Functions
-              closeModal={() => closeModal()}
-              earnApproveContract={earnApproveContract}
-              buySellTrancheTokens={buySellTrancheTokens}
-              withdrawFundsFromTranche={withdrawFundsFromTranche}
-              // API Values
-              trancheName={name}
-              trancheType={type}
-              trancheTokenAddress={trancheTokenAddress}
-              amount={amount}
-              subscriber={subscriber}
-              cryptoType={cryptoType}
-              rpbRate={rpbRate}
-            /> */}
           </TableSixthCol>
         </TableContentCard>
-        <TableCardMore className={'table-card-more ' + (moreCardToggle ? 'table-more-card-toggle' : '')}>
+        <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
           <TableCardMoreContent>
             {isLoading ? (
               <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
             ) : (
               <TableMoreRow
+                isEth={isEth}
                 buyerCoinAddress={buyerCoinAddress}
-                dividendCoinAddress={dividendCoinAddress}
+                trancheTokenAddress={trancheTokenAddress}
                 contractAddress={contractAddress}
+                handleApprove={handleApprove}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
             )}
@@ -329,7 +326,7 @@ const TableCard = ({
 
           <TableColMobile>
             <TableMobilColContent col>
-              <h2>{rpbRate}</h2> <h2>%</h2>
+              <h2>{apy}</h2> <h2>%</h2>
             </TableMobilColContent>
           </TableColMobile>
 
@@ -368,7 +365,8 @@ TableCard.propTypes = {
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   form: state.form,
-  trade: state.trade
+  trancheCardOpen: state.data.trancheCardOpen,
+  activeTranche: state.data.activeTranche
 });
 
 export default connect(mapStateToProps, {
@@ -377,5 +375,6 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   checkServer,
-  change
+  change,
+  destroy
 })(TableCard);
