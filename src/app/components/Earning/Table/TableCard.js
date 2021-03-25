@@ -17,7 +17,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
-import { Lock, Info, LinkArrow, ArrowGreen, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
+import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -48,7 +48,8 @@ import {
   TableContentCardMobile,
   TableColMobile,
   TableMobilColContent,
-  TableMobilCardBtn
+  TableMobilCardBtn,
+  TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
 
@@ -72,7 +73,7 @@ const TableCard = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isEth, setIsEth] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? ArrowGreen : apyStatus === 'decrease' ? 'arrowRed' : 'notFoundImage';
+  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : 'notFoundImage';
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
   });
@@ -142,16 +143,21 @@ const TableCard = ({
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
   };
 
-  const cardToggle = async () => {
+  
+
+  const cardToggle = async () => {   
+    setIsLoading(true);
     console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
+
+
     if (moreCardToggle.status && id === moreCardToggle.id) {
       tableCardToggle({ status: false, id });
-    } else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
+    } 
+    else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
       destroy('earn');
-      setIsLoading(true);
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
         setTokenBalance(trancheTokenAddress, address);
@@ -165,9 +171,9 @@ const TableCard = ({
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
         change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
       }
-      setIsLoading(false);
       tableCardToggle({ status: true, id });
     }
+    setIsLoading(false);
   };
 
   const checkLoan = false;
@@ -220,9 +226,9 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <img src={apyImage} alt='arrow' />
+              <img src={apyImage} alt='image' />
               <h2>{apy}</h2>
-              <img src={Info} alt='info' />
+              <img src={Info} alt='imagew' />
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
@@ -288,11 +294,14 @@ const TableCard = ({
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
-        <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
+        {
+          isLoading ?
           <TableCardMoreContent>
-            {isLoading ? (
-              <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-            ) : (
+            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
+          </TableCardMoreContent>
+          :
+          <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
+            <TableCardMoreContent>
               <TableMoreRow
                 isEth={isEth}
                 buyerCoinAddress={buyerCoinAddress}
@@ -301,9 +310,9 @@ const TableCard = ({
                 handleApprove={handleApprove}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
-            )}
-          </TableCardMoreContent>
-        </TableCardMore>
+            </TableCardMoreContent>
+          </TableCardMore>
+        }
       </TableContentCardWrapper>
     );
   };
@@ -323,7 +332,8 @@ const TableCard = ({
             <TableMobilColContent col>
               {/* <h2>{amount.toString().length > 5 ? amount.toString().substring(0, 5) + '... ' : amount.toString() + ' '}</h2>
               <h2>{cryptoType}</h2> */}
-              <h2>100</h2>
+              <h2>{apy}</h2>
+              <h2>{cryptoType}</h2>
             </TableMobilColContent>
           </TableColMobile>
 
@@ -335,8 +345,9 @@ const TableCard = ({
 
           <TableColMobile>
             <TableMobilColContent col>
-              {/* <h2>{subscriber}</h2> */}
-              <h2>100</h2>
+              <h2>{roundNumber(subscriber)}</h2>
+              <h2></h2>
+
             </TableMobilColContent>
           </TableColMobile>
 
@@ -348,20 +359,25 @@ const TableCard = ({
             </TableMobilCardBtn>
           </TableColMobile>
         </TableContentCardMobile>
-        <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
-          <TableCardMoreContent>
-            {isLoading ? (
+        {
+          isLoading ?
+          <TableCardMore className={'table-card-more'}>
+            <TableCardMoreContent>
               <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-            ) : (
+            </TableCardMoreContent>
+          </TableCardMore> :
+          <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
+            <TableCardMoreContent>
               <TableMoreRow
                 buyerCoinAddress={buyerCoinAddress}
                 trancheTokenAddress={trancheTokenAddress}
                 contractAddress={contractAddress}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
-            )}
-          </TableCardMoreContent>
-        </TableCardMore>
+            </TableCardMoreContent>
+          </TableCardMore>
+        }
+        
       </TableContentCardWrapperMobile>
     );
   };

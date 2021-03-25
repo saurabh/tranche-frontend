@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues } from 'redux-form';
 import { required, number } from 'utils/validations';
@@ -49,7 +49,7 @@ let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddr
                 <h2>{depositEnabled ? "Enabled" : "Disabled"}</h2>
                 <CheckboxContent>
                   <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' checked={depositEnabled}/>
-                  <label onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} for="depositIsApproved"></label>
+                  <label onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} htmlFor="depositIsApproved"></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
@@ -81,7 +81,7 @@ let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddr
                 <h2>{withdrawEnabled ? "Enabled" : "Disabled"}</h2>
                 <CheckboxContent>
                   <Field component='input'type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' checked={withdrawEnabled}/>
-                  <label onClick={(e) => handleApprove(trancheTokenAddress, contractAddress, e)}  for="withdrawIsApproved"></label>
+                  <label onClick={(e) => handleApprove(trancheTokenAddress, contractAddress, e)}  htmlFor="withdrawIsApproved"></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
