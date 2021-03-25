@@ -144,56 +144,61 @@ const SummaryCards = ({
         </SummaryCardsWrapper>
       )}
 
-      <SummaryCardsWrapper
-        className='container content-container'
-        path={path}
-        isDesktop={isDesktop}
-      >
-        <SummaryCard
-          title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
-          isLoading={loanIsLoading}
-          value={path !== 'stake' ? loan : slice.balance}
+      {
+        isDesktop &&
+        <SummaryCardsWrapper
+          className='container content-container'
           path={path}
-          type={path !== 'stake' ? 'loan' : 'slice'}
-          details={path !== 'stake' ? '' : ''}
-          openModal={(bool, num = 1) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalFirstIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
-        />
-        <SummaryCard
-          title={path !== 'stake' ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
-          lpList={lpList}
-          value={path !== 'stake' ? collateral : lp.balance}
-          isLoading={collateralIsLoading}
-          path={path}
-          type={path !== 'stake' ? 'collateral' : 'lp'}
-          details={path !== 'stake' ? '' : ''}
-          openModal={(bool, num = 2) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalSecondIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
-        />
-        <SummaryCard
-          title={path !== 'stake' ? 'Collateralization Ratio' : 'Accrued SLICE Rewards'}
-          value={path !== 'stake' ? ratio : withdrawn.balance}
-          isLoading={false}
-          path={path}
-          type={path !== 'stake' ? 'ratio' : 'reward'}
-          details={path !== 'stake' ? 'Total Borrowed vs. Total Held' : ''}
-          openModal={(bool = null, num = 3) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalThirdIsOpen}
-          modalType={modalType}
-          summaryModal={false}
-        />
-      </SummaryCardsWrapper>
+          isDesktop={isDesktop}
+        >
+          <SummaryCard
+            title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
+            isLoading={loanIsLoading}
+            value={path !== 'stake' ? loan : slice.balance}
+            path={path}
+            type={path !== 'stake' ? 'loan' : 'slice'}
+            details={path !== 'stake' ? '' : ''}
+            openModal={(bool, num = 1) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalFirstIsOpen}
+            modalType={modalType}
+            summaryModal={summaryModal}
+            hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
+          />
+          <SummaryCard
+            title={path !== 'stake' ? 'Protocol Collateral' : 'Staked SLICE LP Tokens'}
+            lpList={lpList}
+            value={path !== 'stake' ? collateral : lp.balance}
+            isLoading={collateralIsLoading}
+            path={path}
+            type={path !== 'stake' ? 'collateral' : 'lp'}
+            details={path !== 'stake' ? '' : ''}
+            openModal={(bool, num = 2) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalSecondIsOpen}
+            modalType={modalType}
+            summaryModal={summaryModal}
+            hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
+          />
+          <SummaryCard
+            title={path !== 'stake' ? 'Collateralization Ratio' : 'Accrued SLICE Rewards'}
+            value={path !== 'stake' ? ratio : withdrawn.balance}
+            isLoading={false}
+            path={path}
+            type={path !== 'stake' ? 'ratio' : 'reward'}
+            details={path !== 'stake' ? 'Total Borrowed vs. Total Held' : ''}
+            openModal={(bool = null, num = 3) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalThirdIsOpen}
+            modalType={modalType}
+            summaryModal={false}
+          />
+        </SummaryCardsWrapper>
+      }
+
+     
     </div>
   );
 };
