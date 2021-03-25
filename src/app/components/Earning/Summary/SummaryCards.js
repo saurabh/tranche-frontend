@@ -4,7 +4,7 @@ import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 // import axios from 'axios';
 // import { apiUri, serverUrl } from 'config/constants';
-import { initOnboard } from 'services/blocknative';
+// import { initOnboard } from 'services/blocknative';
 import PropTypes from 'prop-types';
 
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';

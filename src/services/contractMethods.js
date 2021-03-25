@@ -238,41 +238,16 @@ export const sendValueToTranche = async (trancheId) => {
 export const allowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
   try {
     const state = store.getState();
-    const { web3 } = state.ethereum;
+    const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if (isGreaterThan(userAllowance, toWei(ApproveBigNumber)) || isEqualTo(userAllowance, toWei(ApproveBigNumber))) {
+    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
       return true;
     } else {
       return false;
     }
   } catch (error) {
     console.error(error);
-  }
-};
-
-export const approveContract = async (tokenAddress, contractAddress, checked) => {
-  try {
-    const state = store.getState();
-    const { web3, address, notify } = state.ethereum;
-    const amount = checked ? 0 : toWei(ApproveBigNumber);
-    const token = ERC20Setup(web3, tokenAddress);
-    await token.methods
-      .approve(contractAddress, amount)
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        const { emitter } = notify.hash(hash);
-        emitter.on('txPool', (transaction) => {
-          return {
-            message: txMessage(transaction.hash)
-          };
-        });
-        emitter.on('txConfirmed', () => {
-          return true;
-        });
-      });
-  } catch (error) {
-    return error;
   }
 };
 
