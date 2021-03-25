@@ -14,9 +14,9 @@ import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 import { stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
 import { ERC20Setup } from 'utils';
-import { ApproveBigNumber, txMessage} from 'config';
+import { ApproveBigNumber, txMessage } from 'config';
 
-const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
+const { stakingSummary } = apiUri;
 const BASE_URL = serverUrl;
 
 const SummaryCards = ({
@@ -29,13 +29,7 @@ const SummaryCards = ({
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
-  const [ratio, setRatio] = useState(null);
-  const [collateral, setCollateral] = useState(null);
-  const [loan, setLoan] = useState(null);
   const toWei = web3.utils.toWei;
-  // const [ratioIsLoading, setRatioIsLoading] = useState(false);
-  const [collateralIsLoading, setCollateralIsLoading] = useState(false);
-  const [loanIsLoading, setLoanIsLoading] = useState(false);
   const [modalFirstIsOpen, setFirstIsOpen] = useState(false);
   const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
@@ -65,11 +59,7 @@ const SummaryCards = ({
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
-    if (currentPath !== 'stake') {
-      getRatio();
-      getCollateral();
-      getLoan();
-    } else if (currentPath === 'stake' && address) {
+    if (currentPath === 'stake' && address) {
       getStakingData();
     }
   }, [currentPath, address, summaryFetchSuccess]);
@@ -80,25 +70,6 @@ const SummaryCards = ({
       lpList.forEach((lp) => setTokenBalance(lp.address, address));
     }
   }, [currentPath, address, lpList, slice, setTokenBalance]);
-
-  const getRatio = async () => {
-    const res = await axios(`${BASE_URL + summaryRatio}`);
-    const { result } = res.data;
-    setRatio(result);
-    // setRatioIsLoading(false);
-  };
-  const getCollateral = async () => {
-    const res = await axios(`${BASE_URL + summaryCollateral}`);
-    const { result } = res.data;
-    setCollateral(result);
-    setCollateralIsLoading(false);
-  };
-  const getLoan = async () => {
-    const res = await axios(`${BASE_URL + summaryLoan}`);
-    const { result } = res.data;
-    setLoan(result);
-    setLoanIsLoading(false);
-  };
 
   const openModal = async (type, num) => {
     const ready = await readyToTransact(wallet, onboard);
@@ -158,18 +129,19 @@ const SummaryCards = ({
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
+          console.log('true')
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
               message: txMessage(transaction.hash)
             };
           });
-          emitter.on('txConfirmed', () => {
-            setHasAllowance(true);
-            setApproveLoading(false);
-          });
           emitter.on('txCancel', () => setApproveLoading(false));
           emitter.on('txFailed', () => setApproveLoading(false));
+        })
+        .on('confirmation', () => {
+          setHasAllowance(true);
+          setApproveLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -217,53 +189,53 @@ const SummaryCards = ({
           />
         </SummaryCardsWrapper>
       )}
-      { isDesktop &&
+      {isDesktop && (
         <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
           <SummaryCard
-            title={currentPath !== 'stake' ? 'Decentralized Loans' : i18n.t('stake.summary.slice.title')}
+            title={i18n.t('stake.summary.slice.title')}
             tokenAddress={slice.address}
-            isLoading={loanIsLoading}
-            value={currentPath !== 'stake' ? loan : slice.balance}
+            value={slice.balance}
             path={currentPath}
-            type={currentPath !== 'stake' ? 'loan' : 'slice'}
-            details={currentPath !== 'stake' ? '' : ''}
+            type={'slice'}
+            details={''}
             openModal={(bool, num = 1) => openModal(bool, num)}
             closeModal={closeModal}
             modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalFirstIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
             hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
             adjustStake={adjustStake}
             stakingApproveContract={stakingApproveContract}
             setHasAllowance={setHasAllowance}
             color='#4441CF'
           />
           <SummaryCard
-            title={currentPath !== 'stake' ? 'Protocol Collateral' : i18n.t('stake.summary.sliceLP.title')}
+            title={i18n.t('stake.summary.sliceLP.title')}
             lpList={lpList}
-            value={currentPath !== 'stake' ? collateral : lp.balance}
-            isLoading={collateralIsLoading}
+            value={lp.balance}
             path={currentPath}
-            type={currentPath !== 'stake' ? 'collateral' : 'lp'}
-            details={currentPath !== 'stake' ? '' : ''}
+            type={'lp'}
+            details={''}
             openModal={(bool, num = 2) => openModal(bool, num)}
             closeModal={closeModal}
             modalIsOpen={!modalFirstIsOpen && !modalSecondIsOpen && !modalThirdIsOpen ? summaryModal : modalSecondIsOpen}
             modalType={modalType}
             summaryModal={summaryModal}
+            hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
             adjustStake={adjustStake}
             stakingApproveContract={stakingApproveContract}
-            hasAllowance={hasAllowance}
             setHasAllowance={setHasAllowance}
             color='#1E80DA'
           />
           <SummaryCard
-            title={currentPath !== 'stake' ? 'Collateralization Ratio' : i18n.t('stake.summary.sliceRewards.title')}
-            value={currentPath !== 'stake' ? ratio : withdrawn.balance}
+            title={i18n.t('stake.summary.sliceRewards.title')}
+            value={withdrawn.balance}
             isLoading={false}
             path={currentPath}
-            type={currentPath !== 'stake' ? 'ratio' : 'reward'}
-            details={currentPath !== 'stake' ? 'Total Borrowed vs. Total Held' : ''}
+            type={'reward'}
+            details={''}
             openModal={(bool = null, num = 3) => openModal(bool, num)}
             closeModal={closeModal}
             adjustStake={adjustStake}
@@ -274,7 +246,7 @@ const SummaryCards = ({
             color='#369987'
           />
         </SummaryCardsWrapper>
-      }
+      )}
     </div>
   );
 };

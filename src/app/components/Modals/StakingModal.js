@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -189,7 +189,7 @@ const StakingModal = ({
       }
     };
     setBalance();
-  }, [setModalTypeMobile, setTypeMobile, typeMobile, modalTypeMobile, isLPTokenMobile, setLPTokenMobile]);
+  }, [typeMobile, sliceAddress, lpList, tokenBalance]);
 
   const stakingModal = () => {
     return (
@@ -223,7 +223,7 @@ const StakingModal = ({
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{roundNumber(totalStaked)}</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>

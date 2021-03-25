@@ -113,6 +113,7 @@ let StakingForm = ({
       } else {
         num = userStaked;
       }
+      num = roundNumber(num, 4, 'down')
       change('amount', num);
       setAmount(num);
     },
