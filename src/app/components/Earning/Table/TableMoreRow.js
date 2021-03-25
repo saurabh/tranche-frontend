@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues } from 'redux-form';
 import { required, number } from 'utils/validations';
@@ -55,8 +55,8 @@ let TableMoreRow = ({
               <CheckboxWrapper hidden={isEth}>
                 <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' checked={isDepositApproved} />
-                  <label disabled={isApproveLoading} onClick={() => approveContract(true, isDepositApproved)} htmlFor='depositIsApproved'></label>
+                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' checked={isDepositApproved} disabled={isApproveLoading} />
+                  <label onClick={(e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
@@ -86,8 +86,8 @@ let TableMoreRow = ({
               <CheckboxWrapper>
                 <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' checked={isWithdrawApproved} />
-                  <label disabled={isApproveLoading} onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
+                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' checked={isWithdrawApproved} disabled={isApproveLoading} />
+                  <label onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>

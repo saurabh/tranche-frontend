@@ -876,6 +876,20 @@ const SecondColContent = styled.div`
   h2{
     text-align: center !important;
   }
+  img:nth-child(1){
+    height: 19px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 25px;
+  }
+  img:nth-child(3){
+    height: 15px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 25px;
+  }
 `
 const TableThirdCol = styled.div`
   width: 7%;
