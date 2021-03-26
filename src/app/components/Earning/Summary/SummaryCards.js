@@ -70,11 +70,11 @@ const SummaryCards = ({
       <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
         <SummaryCard
           title={
-            currentPath !== 'stake' && currentPath !== 'earn'
-              ? 'Decentralized Loans'
+            currentPath === 'stake'
+              ? i18n.t('stake.summary.slice.title')
               : currentPath === 'earn'
               ? i18n.t('tranche.summary.valueLocked.title')
-              : i18n.t('stake.summary.slice.title')
+              : 'Decentralized Loans'
           }
           tokenAddress={slice.address}
           value={'Card'}
@@ -91,11 +91,11 @@ const SummaryCards = ({
         />
         <SummaryCard
           title={
-            currentPath !== 'stake'
-              ? 'Protocol Collateral'
+            currentPath === 'stake'
+              ? i18n.t('stake.summary.sliceLP.title')
               : currentPath === 'earn'
               ? i18n.t('tranche.summary.slicePrice.title')
-              : i18n.t('stake.summary.sliceLP.title')
+              : 'Protocol Collateral'
           }
           tokenAddress={lp.address}
           lpList={lpList}
@@ -113,11 +113,11 @@ const SummaryCards = ({
         />
         <SummaryCard
           title={
-            currentPath !== 'stake'
-              ? 'Collateralization Ratio'
+            currentPath === 'stake'
+              ? i18n.t('stake.summary.sliceRewards.title')
               : currentPath === 'earn'
               ? 'SLICE 24H Volume'
-              : i18n.t('stake.summary.sliceRewards.title')
+              : 'Collateralization Ratio'
           }
           value={'Card'}
           isLoading={false}
