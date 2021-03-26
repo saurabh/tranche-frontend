@@ -258,7 +258,7 @@ const SummaryCard = ({
                   <h2>{i18n.t('tranche.summary.stakeLive.details')}</h2>
                 </StakeCardText>
                 <StakeCardBtn>
-                  <button>STAKE</button>
+                  <button><a href="/stake">STAKE</a></button>
                 </StakeCardBtn>
               </SummaryCardContainer>
             ) : (
