@@ -13,7 +13,6 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
-import { ApproveBigNumber } from 'config';
 
 const state = store.getState();
 const { web3 } = state.ethereum;

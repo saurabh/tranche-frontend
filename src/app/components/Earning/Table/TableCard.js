@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { useOuterClick } from 'services/useOuterClick';
 import { ERC20Setup } from 'utils/contractConstructor';
-import { fromWei, toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
+import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -26,7 +26,7 @@ import {
   TableContentCardWrapper,
   FifthColContent,
   StatusTextWrapper,
-  AdjustLoanBtn,
+  // AdjustLoanBtn,
   TableCardTag,
   TableCardImg,
   TableFirstCol,
@@ -50,7 +50,7 @@ import {
   TableColMobile,
   TableMobilColContent,
   TableMobilCardBtn,
-  TableMoreRowContent
+  // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
 
@@ -259,7 +259,7 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <img src={apyImage} alt='image' />
+              <img src={apyImage} alt='apyImage' />
               <h2>{apy}</h2>
               <img src={Info} alt='imagew' />
             </SecondColContent>
@@ -388,8 +388,6 @@ const TableCard = ({
           <TableColMobile>
             <TableMobilColContent col>
               <h2>{roundNumber(subscriber)}</h2>
-              <h2></h2>
-
             </TableMobilColContent>
           </TableColMobile>
 
