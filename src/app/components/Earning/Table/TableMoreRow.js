@@ -40,9 +40,10 @@ let TableMoreRow = ({
   isWithdrawApproved,
   approveContract,
   buySellTrancheTokens,
-  ethereum: { tokenBalance }
+  ethereum: { tokenBalance, balance }
 }) => {
-  let buyerTokenBalance = tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
+  let buyerTokenBalance =
+    cryptoType === 'ETH' ? balance && balance !== -1 && fromWei(balance) : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
   let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
   return (
@@ -55,13 +56,22 @@ let TableMoreRow = ({
               <CheckboxWrapper hidden={isEth}>
                 <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' checked={isDepositApproved} disabled={isApproveLoading} />
+                  <Field
+                    component='input'
+                    type='checkbox'
+                    name='depositIsApproved'
+                    id='depositIsApproved'
+                    checked={isDepositApproved}
+                    disabled={isApproveLoading}
+                  />
                   <label onClick={(e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
 
-            <h2>balance: {roundNumber(buyerTokenBalance)} {cryptoType}</h2>
+            <h2>
+              balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+            </h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
               <FormContent>
                 <Field
@@ -86,12 +96,21 @@ let TableMoreRow = ({
               <CheckboxWrapper>
                 <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' checked={isWithdrawApproved} disabled={isApproveLoading} />
+                  <Field
+                    component='input'
+                    type='checkbox'
+                    name='withdrawIsApproved'
+                    id='withdrawIsApproved'
+                    checked={isWithdrawApproved}
+                    disabled={isApproveLoading}
+                  />
                   <label onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
-            <h2>balance: {roundNumber(trancheTokenBalance)} {trancheType}</h2>
+            <h2>
+              balance: {roundNumber(trancheTokenBalance)} {trancheType}
+            </h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
               <FormContent>
                 <Field

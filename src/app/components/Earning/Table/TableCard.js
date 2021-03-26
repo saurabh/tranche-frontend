@@ -159,7 +159,7 @@ const TableCard = ({
   const buySellTrancheTokens = (e, buy) => {
     try {
       e.preventDefault();
-      buy ? buyTrancheTokens(contractAddress, trancheId, type) : sellTrancheTokens(contractAddress, trancheId, type);
+      buy ? cryptoType === 'ETH' ? buyTrancheTokens(contractAddress, trancheId, type, true) :  buyTrancheTokens(contractAddress, trancheId, type, false) : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
     }

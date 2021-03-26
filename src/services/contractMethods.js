@@ -251,17 +251,20 @@ export const allowanceCheck = async (tokenAddress, contractAddress, userAddress)
   }
 };
 
-export const buyTrancheTokens = async (contractAddress, trancheId, type) => {
+export const buyTrancheTokens = async (contractAddress, trancheId, type, depositEth) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { depositAmount } = state.form.earn.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = toWei(depositAmount);
+    let depositAmountInEth = depositEth ? depositAmount : 0; 
+    console.log('cryptoType === ETH ' + depositEth)
+    console.log('msg.value: ' + depositAmountInEth)
     if (type === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
-        .send({ from: address })
+        .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
