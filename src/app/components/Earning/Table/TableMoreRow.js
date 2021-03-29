@@ -140,14 +140,14 @@ let TableMoreRow = ({
 };
 
 TableMoreRow = reduxForm({
-  form: 'earn',
+  form: 'tranche',
   initialValues: {},
   destroyOnUnmount: true
 })(TableMoreRow);
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  formValues: getFormValues('earn')(state)
+  formValues: getFormValues('tranche')(state)
 });
 
 export default TableMoreRow = connect(mapStateToProps, {})(TableMoreRow);

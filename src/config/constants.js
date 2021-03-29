@@ -61,8 +61,8 @@ export const PagesData = {
       img: Agree
     }
   },
-  earn: {
-    pageType: 'earn',
+  tranche: {
+    pageType: 'tranche',
     color: 'rgba(0, 0, 0, 0.8)',
     secondaryColor: '#ffffff',
     btnColor: '#4441CF',

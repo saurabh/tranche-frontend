@@ -104,7 +104,7 @@ const App = ({
             skip,
             limit,
             filter: {
-              address: path === 'earn' && tradeType === 'myTranches' ? address : undefined,
+              address: path === 'tranche' && tradeType === 'myTranches' ? address : undefined,
               type: filter //ETH/JNT keep these in constant file
             }
           },
@@ -188,7 +188,7 @@ const App = ({
             <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
-            <Route exact path={baseRouteUrl + '/earn'} component={Trade} />
+            <Route exact path={baseRouteUrl + '/tranche'} component={Trade} />
             <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />

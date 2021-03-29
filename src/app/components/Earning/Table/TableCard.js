@@ -17,8 +17,8 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { PagesData, etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
+import { PagesData, etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage  } from 'config';
+import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable, InfoWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -185,24 +185,25 @@ const TableCard = ({
 
     if (moreCardToggle.status && id === moreCardToggle.id) {
       tableCardToggle({ status: false, id });
-    } else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
+    } 
+    else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
       setIsLoading(true);
-      destroy('earn');
+      destroy('tranche');
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
         await setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
-        setWithdrawApproved(withdrawTokenHasAllowance);
-        change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+        setWithdrawApproved(withdrawTokenHasAllowance); 
+        change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
         await setTokenBalance(buyerCoinAddress, address);
         await setTokenBalance(trancheTokenAddress, address);
         const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
-        setDepositApproved(depositTokenHasAllowance);
-        change('earn', 'depositIsApproved', depositTokenHasAllowance);
+        setDepositApproved(depositTokenHasAllowance);        
+        change('tranche', 'depositIsApproved', depositTokenHasAllowance);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
         setWithdrawApproved(withdrawTokenHasAllowance);
-        change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+        change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       }
       tableCardToggle({ status: true, id });
     }
@@ -258,10 +259,15 @@ const TableCard = ({
           </TableFirstCol>
 
           <TableSecondCol className='table-col' apy>
-            <SecondColContent className='content-3-col second-4-col-content'>
-              <img src={apyImage} alt='apyImage' />
+            <SecondColContent className='content-3-col second-4-col-content' tooltip={InfoBoxToggle}>
+              <img src={apyImage} alt='image' />
               <h2>{apy}</h2>
-              <img src={Info} alt='imagew' />
+              <div>
+                <img src={Info} alt='image' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
+                <div>
+                  <h2>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h2>
+                </div>
+              </div>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>

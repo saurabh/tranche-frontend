@@ -6,8 +6,7 @@
     "tranche": "tranche",
     "vote": "vote",
     "borrow": "borrow",
-    "lend": "lend",
-    "earn": "earn"
+    "lend": "lend"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -63,6 +62,14 @@
         "details": "Stake your SLICE or SLICE LP tokens"
       }
     }
+  },
+  "privacy": {
+    "title": "Privacy",
+    "text": ""
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "text": ""
   },
   "lend": {
     "title": "Lending Markets",

@@ -31,7 +31,7 @@ const HeaderContent = styled.div`
         }
     `}
     ${({ path }) =>
-    (path !== "stake" && path !== "earn") &&
+    (path !== "stake" && path !== "tranche") &&
     `
       @media (max-width: 767px){
         display: block;
@@ -203,7 +203,7 @@ const MarketsTabsContainer = styled.div`
     margin-left: auto; 
   }
   ${({ page }) =>
-    page === "earn" &&
+    page === "tranche" &&
     `
         width: 231px !important;
     `}
@@ -375,8 +375,8 @@ const RatesRowDash = styled.div`
 `;
 const TabIndicator = styled.div`
   height: 4px;
-  width: ${(props) => ((props.path === "lend" && props.language === "en") ? "92px" : (props.path === "lend" && props.language === "zh") ? "64px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "115px" : "0")};
-  background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "earn" ? "#ffffff" : "")};
+  width: ${(props) => ((props.path === "lend" && props.language === "en") ? "92px" : (props.path === "lend" && props.language === "zh") ? "64px" : props.path === "borrow" ? "81px" : props.path === "tranche" ? "115px" : "0")};
+  background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "tranche" ? "#ffffff" : "")};
   transition: 300ms;
   bottom: 0;
   position: absolute;
@@ -389,9 +389,9 @@ const TabIndicator = styled.div`
       ? "calc(100% - 62px)"
       : props.tab === "own" && props.path === "borrow"
       ? "calc(100% - 78px)"
-      : props.tab === "allTranches" && props.path === "earn"  
+      : props.tab === "allTranches" && props.path === "tranche"  
       ? "-4px"
-      : props.tab === "myTranches" && props.path === "earn"
+      : props.tab === "myTranches" && props.path === "tranche"
       ? "calc(100% - 110px)"
       : ""};
   @media (max-width: 992px) {

@@ -42,7 +42,7 @@ const SummaryCards = ({
   // });
 
   useEffect(() => {
-    if (currentPath === 'earn') {
+    if (currentPath === 'tranche') {
     }
   }, [isDesktop, currentPath, address, summaryFetchSuccess]);
 
@@ -72,7 +72,7 @@ const SummaryCards = ({
           title={
             currentPath === 'stake'
               ? i18n.t('stake.summary.slice.title')
-              : currentPath === 'earn'
+              : currentPath === 'tranche'
               ? i18n.t('tranche.summary.valueLocked.title')
               : 'Decentralized Loans'
           }
@@ -93,7 +93,7 @@ const SummaryCards = ({
           title={
             currentPath === 'stake'
               ? i18n.t('stake.summary.sliceLP.title')
-              : currentPath === 'earn'
+              : currentPath === 'tranche'
               ? i18n.t('tranche.summary.slicePrice.title')
               : 'Protocol Collateral'
           }
@@ -115,7 +115,7 @@ const SummaryCards = ({
           title={
             currentPath === 'stake'
               ? i18n.t('stake.summary.sliceRewards.title')
-              : currentPath === 'earn'
+              : currentPath === 'tranche'
               ? 'SLICE 24H Volume'
               : 'Collateralization Ratio'
           }
@@ -131,7 +131,7 @@ const SummaryCards = ({
           color='#2E65F3'
         />
         <SummaryCard
-          title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'earn' ? '' : i18n.t('stake.summary.sliceRewards.title')}
+          title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
           value={'Card'}
           isLoading={false}
           path={currentPath}

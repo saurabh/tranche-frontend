@@ -62,7 +62,7 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer className='container navbar-container'>
         <div id='logo-wrapper'>
-            <img src={Logo} alt='Logo' />
+            <a href="https://tranche.finance/"><img src={Logo} alt='Logo' /></a>
         </div>
         <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>
@@ -170,15 +170,15 @@ function Navbar({ path }) {
             {i18n.t("navbar.lend")}
             </NavLink>
             <NavLink
-              to={baseUrl + '/earn'}
+              to={baseUrl + '/tranche'}
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-              <span data-content={i18n.t("navbar.earn")}></span>
-              {i18n.t("navbar.earn")}
+              <span data-content={i18n.t("navbar.tranche")}></span>
+              {i18n.t("navbar.tranche")}
             </NavLink>
             <NavLink
               to={baseUrl + '/stake'}

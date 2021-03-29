@@ -1011,7 +1011,7 @@ table, th, td {
 
 
 .footerLinks{
-  max-width: 440px;
+  max-width: 480px;
   width: 100%;
   display: flex;
   justify-content: space-between;
