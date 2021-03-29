@@ -25,6 +25,14 @@
       "all": "ALL ASSETS"
     }
   },
+  "privacy": {
+    "title": "Privacy",
+    "text": ""
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "text": ""
+  },
   "stake": {
     "title": "Staking Pools",
     "text": "Stake Cryptocurrency for SLICE Rewards",
