@@ -185,7 +185,7 @@ const App = ({
         <Banner />
         <Router>
           <Switch location={window.location}>
-            <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
+            <Redirect exact from={baseRouteUrl + '/'} to='/stake' />
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/tranche'} component={Trade} />
