@@ -163,11 +163,7 @@ const SummaryCard = ({
                 <SummaryCardTitle>{title}</SummaryCardTitle>
   
                 <SummaryCardValue>
-                  {type === 'slice' || type === 'lp'
-                    ? `${roundNumber(value, 2)}`
-                    : type === 'reward'
-                    ? `${roundNumber(accruedRewardsTotal, 2)}`
-                    : ''}
+                  {'$' + roundNumber(value)}
                   <div></div>
                 </SummaryCardValue>
                 <SummaryCardDetails>
