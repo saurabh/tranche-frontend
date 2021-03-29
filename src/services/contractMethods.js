@@ -254,7 +254,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type, deposit
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    let { depositAmount } = state.form.earn.values;
+    let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = toWei(depositAmount);
     let depositAmountInEth = depositEth ? depositAmount : 0; 
@@ -292,7 +292,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    let { withdrawAmount } = state.form.earn.values;
+    let { withdrawAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     withdrawAmount = toWei(withdrawAmount);
     if (type === 'TRANCHE_A') {

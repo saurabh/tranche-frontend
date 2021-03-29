@@ -76,7 +76,7 @@ let TableMoreRow = ({
               <FormContent>
                 <Field
                   component={InputField}
-                  validate={[required, number]}
+                  validate={[number]}
                   // className='ModalFormInputNewLoan tradeFormInput'
                   name='depositAmount'
                   type='number'
@@ -115,7 +115,7 @@ let TableMoreRow = ({
               <FormContent>
                 <Field
                   component={InputField}
-                  validate={[required, number]}
+                  validate={[number]}
                   disabled={!isWithdrawApproved}
                   // className='ModalFormInputNewLoan tradeFormInput'
                   name='withdrawAmount'
