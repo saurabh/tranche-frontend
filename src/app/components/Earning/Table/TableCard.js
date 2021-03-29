@@ -259,10 +259,10 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' tooltip={InfoBoxToggle}>
-              <img src={apyImage} alt='image' />
+              <img src={apyImage} alt='apyImage' />
               <h2>{apy}</h2>
               <div>
-                <img src={Info} alt='image' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
+                <img src={Info} alt='infoImage' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
                 <div>
                   <h2>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h2>
                 </div>
