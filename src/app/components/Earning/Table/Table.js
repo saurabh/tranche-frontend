@@ -83,7 +83,7 @@ const Table = ({
               skip,
               limit,
               filter: {
-                address: path === 'tranche' && localAddress ? localAddress : undefined,
+                address: localAddress ? localAddress : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
@@ -95,7 +95,7 @@ const Table = ({
               skip,
               limit,
               filter: {
-                address: path === 'tranche' && localAddress ? localAddress : undefined,
+                address: localAddress ? localAddress : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
@@ -106,7 +106,7 @@ const Table = ({
       3000,
       { leading: true }
     ),
-    [fetchTableData, filter, skip, limit, sort, localAddress, tradeType]
+    [fetchTableData, filter, skip, limit, sort, localAddress]
   );
 
   useEffect(() => {
@@ -122,8 +122,8 @@ const Table = ({
   }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
-    trancheListing();
-  }, [trancheListing, filter, skip, limit, filterType, sort]);
+    path === 'tranche' && trancheListing();
+  }, [path, trancheListing, filter, skip, limit, filterType, sort]);
 
   const handlePageChange = (p) => {
     paginationOffset((p - 1) * limit);

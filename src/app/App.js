@@ -61,104 +61,120 @@ const App = ({
         address: LoanContractAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-              lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-              type: filter
-            }
-          },
-          loanList
-        );
+        if (path === 'borrow' || path === 'lend') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+                lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
+                type: filter
+              }
+            },
+            loanList
+          );
+        }
       });
     const priceOracle = web3.eth
       .subscribe('logs', {
         address: PriceOracleAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-              lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-              type: filter
-            }
-          },
-          loanList
-        );
+        if (path === 'borrow' || path === 'lend') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+                lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
+                type: filter
+              }
+            },
+            loanList
+          );
+        }
       });
     const Protocol = web3.eth
       .subscribe('logs', {
         address: ProtocolAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              address: path === 'tranche' && tradeType === 'myTranches' ? address : undefined,
-              type: filter //ETH/JNT keep these in constant file
-            }
-          },
-          tranchesList
-        );
+        if (path === 'tranche') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                address: tradeType === 'myTranches' ? address : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            tranchesList
+          );
+        }
       });
     const JCompound = web3.eth
       .subscribe('logs', {
         address: JCompoundAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              address: path === 'tranche' && address ? address : undefined,
-              type: filter //ETH/JNT keep these in constant file
-            }
-          },
-          tranchesList
-        );
+        console.log('test')
+        if (path === 'tranche') {
+          console.log('tranche')
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                address: address ? address : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            tranchesList
+          );
+        }
       });
     const Staking = web3.eth
       .subscribe('logs', {
         address: StakingAddresses
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              type: filter //ETH/JNT keep these in constant file
-            }
-          },
-          stakingList
-        );
-        const res = await axios(`${serverUrl + stakingSummary + address}`);
-        const { result } = res.data;
-        summaryFetchSuccess(result);
+        console.log('test')
+        if (path === 'stake') {
+          console.log('stake')
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            stakingList
+          );
+          const res = await axios(`${serverUrl + stakingSummary + address}`);
+          const { result } = res.data;
+          summaryFetchSuccess(result);
+        }
       });
     const YieldFarm = web3.eth
       .subscribe('logs', {
         address: YieldAddresses
       })
       .on('data', async () => {
-        await timeout(4000);
-        const res = await axios(`${serverUrl + stakingSummary + address}`);
-        const { result } = res.data;
-        summaryFetchSuccess(result);
+        if (path === 'stake') {
+          await timeout(4000);
+          const res = await axios(`${serverUrl + stakingSummary + address}`);
+          const { result } = res.data;
+          summaryFetchSuccess(result);
+        }
       });
 
     return () => {

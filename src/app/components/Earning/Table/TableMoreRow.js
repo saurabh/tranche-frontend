@@ -58,7 +58,7 @@ let TableMoreRow = ({
         change('withdrawAmount', num);
       }
     },
-    []
+    [buyerTokenBalance, trancheTokenBalance, change]
   );
 
   return (

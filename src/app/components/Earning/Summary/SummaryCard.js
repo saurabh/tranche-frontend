@@ -48,7 +48,6 @@ const SummaryCard = ({
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
-  const [accruedRewardsTotal, setAccruedRewardsTotal] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
@@ -202,7 +201,6 @@ const SummaryCard = ({
               summaryModal={summaryModal}
               tokenAddress={tokenAddress}
               noBalance={Number(balance) === 0}
-              setAccruedRewardsTotal={setAccruedRewardsTotal}
               // Functions
               closeModal={() => closeModal()}
               openModal={(bool) => openModal(bool)}
@@ -225,7 +223,6 @@ const SummaryCard = ({
             summaryModal={summaryModal}
             tokenAddress={tokenAddress}
             noBalance={Number(balance) === 0}
-            setAccruedRewardsTotal={setAccruedRewardsTotal}
             // Functions
             closeModal={() => closeModal()}
             openModal={(bool) => openModal(bool)}
