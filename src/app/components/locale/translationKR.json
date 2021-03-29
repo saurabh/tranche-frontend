@@ -6,8 +6,7 @@
     "tranche": "트렌치",
     "vote": "투표",
     "borrow": "borrow",
-    "lend": "lend",
-    "earn": "earn"
+    "lend": "lend"
   },
   "tranche": {
     "title": "트렌치 통계",
@@ -55,6 +54,14 @@
         "details": "당신의 슬라이스 또는 슬라이스 LP 토큰을 저장하세요"
       }
     }
+  },
+  "privacy": {
+    "title": "Privacy",
+    "text": ""
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "text": ""
   },
   "stake": {
     "title": "저장 풀스",

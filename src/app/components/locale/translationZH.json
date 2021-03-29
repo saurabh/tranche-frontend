@@ -6,8 +6,7 @@
     "tranche": "tranche",
     "vote": "投票",
     "borrow": "借入",
-    "lend": "借出",
-    "earn": "赚取"
+    "lend": "借出"
   },
   "borrow": {
     "title": "Borrower Markets",
@@ -71,6 +70,14 @@
         "details": "质押您的SLICE或SLICE LP代币"
       }
     }
+  },
+  "privacy": {
+    "title": "Privacy",
+    "text": ""
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "text": ""
   },
   "stake": {
     "title": "质押池",

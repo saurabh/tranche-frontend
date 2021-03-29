@@ -89,7 +89,7 @@ const Table = ({
               skip,
               limit,
               filter: {
-                address: path === 'earn' && address ? address : undefined,
+                address: path === 'tranche' && address ? address : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
@@ -101,7 +101,7 @@ const Table = ({
               skip,
               limit,
               filter: {
-                address: path === 'earn' && address ? address : undefined,
+                address: path === 'tranche' && address ? address : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },

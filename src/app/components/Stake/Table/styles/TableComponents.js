@@ -321,7 +321,7 @@ const TableMarketsSortingDropdown = styled.div`
   height: 55px;
   margin-top: 7px;
   overflow: hidden;
-  right: ${({path}) => path === "earn" ? "20px" : " -26px"};
+  right: ${({path}) => path === "tranche" ? "20px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
@@ -876,20 +876,60 @@ const SecondColContent = styled.div`
   h2{
     text-align: center !important;
   }
-  img:nth-child(1){
+  
+  & > img:nth-child(1){
     height: 19px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     left: 25px;
   }
-  img:nth-child(3){
-    height: 15px;
+  & > div{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     right: 25px;
+    z-index: 2000;
+    img{
+      height: 15px;
+      z-index: 3000;
+      transition: 500ms;
+      ${({ tooltip }) => tooltip && `
+        transform: rotate(360deg);
+      `}
+    }
+    div{
+      width: 225px;
+      height: 50px;
+      padding: 12px 12px 12px 30px;
+      background: #F3F3FE;
+      box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25);
+      border-radius: 7px;
+      position: absolute;
+      top: 50%;
+      left: -7px;
+      transform: translate(-25px, -50%);
+      transition: 300ms;
+      z-index: 2000;
+      visibility: hidden;
+      opacity: 0;
+      ${({ tooltip }) => tooltip && `
+        transform: translate(0, -50%);
+        opacity: 1;
+        visibility: visible;
+      `}
+      h2{
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 6px;
+        text-align: left !important;
+        color: #383838;
+      }
+    }
+    
   }
+  
 `
 const TableThirdCol = styled.div`
   width: 7%;

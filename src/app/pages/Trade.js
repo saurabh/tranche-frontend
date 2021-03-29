@@ -8,7 +8,7 @@ export default function Trade() {
   return (
     <Layout>
       <SummaryCards />
-      <Table pageType={PagesData.earn.pageType} />
+      <Table pageType={PagesData.tranche.pageType} />
     </Layout>
   );
 }

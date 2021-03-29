@@ -114,17 +114,17 @@ const TableHead = ({changeSorting, path}) => {
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>APY</h2>
+                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "amount")}>APY</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>Value Locked</h2>
+                        <h2 onClick={() => sortLoans(path !== "eatranchern" ? "remainingLoan" : "rpbRate")}>Value Locked</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>SUBSCRIPTION</h2>
+                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "subscriber")}>SUBSCRIPTION</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile btn>

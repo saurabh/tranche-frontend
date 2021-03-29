@@ -175,7 +175,7 @@ const SummaryCard = ({
                     ? balance + ' SLICE Available'
                     : type === 'lp'
                     ? balance + ' SLICE-LP Available'
-                    : path === 'earn' ? ""
+                    : path === 'tranche' ? ""
                     : epochTimeLeft + ' Until Next Distribution'}
                 </SummaryCardDetails>
                 {path === 'stake' && type !== 'reward' && (

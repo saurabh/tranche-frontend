@@ -17,7 +17,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
+import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable, InfoWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -157,19 +157,19 @@ const TableCard = ({
       tableCardToggle({ status: false, id });
     } 
     else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
-      destroy('earn');
+      destroy('tranche');
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
         setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
-        change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+        change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
         setTokenBalance(buyerCoinAddress, address);
         setTokenBalance(trancheTokenAddress, address);
         const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
-        change('earn', 'depositIsApproved', depositTokenHasAllowance);
+        change('tranche', 'depositIsApproved', depositTokenHasAllowance);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
-        change('earn', 'withdrawIsApproved', withdrawTokenHasAllowance);
+        change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       }
       tableCardToggle({ status: true, id });
     }
@@ -225,10 +225,15 @@ const TableCard = ({
           </TableFirstCol>
 
           <TableSecondCol className='table-col' apy>
-            <SecondColContent className='content-3-col second-4-col-content'>
+            <SecondColContent className='content-3-col second-4-col-content' tooltip={InfoBoxToggle}>
               <img src={apyImage} alt='image' />
               <h2>{apy}</h2>
-              <img src={Info} alt='imagew' />
+              <div>
+                <img src={Info} alt='image' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
+                <div>
+                  <h2>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h2>
+                </div>
+              </div>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>

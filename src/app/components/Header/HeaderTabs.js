@@ -75,12 +75,12 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 opacity: '1'
               }}
             >{i18n.t('navbar.lend')}</NavLink>
-            <NavLink to={baseUrl + '/earn'}
+            <NavLink to={baseUrl + '/tranche'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
-            >{i18n.t('navbar.earn')}</NavLink>
+            >{i18n.t('navbar.tranche')}</NavLink>
             <NavLink to={baseUrl + '/stake'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
@@ -124,8 +124,8 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
           <TabIndicator tab={filterType} path={path} language={i18n.language}></TabIndicator>
         </MarketsTabsContainer>
         :
-        (path === "earn") ?
-        <MarketsTabsContainer page="earn">
+        (path === "tranche") ?
+        <MarketsTabsContainer page="tranche">
           <HeaderTabBtn
             id='allTranches'
             active={tradeType === 'allTranches'}
