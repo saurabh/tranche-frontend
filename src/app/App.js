@@ -16,7 +16,8 @@ import {
   PriceOracleAddress,
   ProtocolAddress,
   StakingAddresses,
-  YieldAddresses
+  YieldAddresses,
+  JCompoundAddress
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -111,6 +112,24 @@ const App = ({
           tranchesList
         );
       });
+    const JCompound = web3.eth
+      .subscribe('logs', {
+        address: JCompoundAddress
+      })
+      .on('data', async () => {
+        await timeout(4000);
+        await fetchTableData(
+          {
+            skip,
+            limit,
+            filter: {
+              address: path === 'tranche' && address ? address : undefined,
+              type: filter //ETH/JNT keep these in constant file
+            }
+          },
+          tranchesList
+        );
+      });
     const Staking = web3.eth
       .subscribe('logs', {
         address: StakingAddresses
@@ -155,6 +174,9 @@ const App = ({
       Protocol.unsubscribe((error) => {
         if (error) console.error(error);
       });
+      JCompound.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
       Staking.unsubscribe((error) => {
         if (error) console.error(error);
       });
@@ -162,18 +184,7 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [
-    address,
-    filterType,
-    path,
-    fetchTableData,
-    limit,
-    filter,
-    setCurrentBlock,
-    summaryFetchSuccess,
-    tradeType,
-    skip
-  ]);
+  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, summaryFetchSuccess, tradeType, skip]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
