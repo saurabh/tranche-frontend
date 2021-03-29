@@ -1,7 +1,6 @@
 import React,  { useEffect, useState } from 'react';
 import { ChevronTableLanguage } from 'assets';
 import { useOuterClick } from 'services/useOuterClick';
-import i18n from '../locale/i18n';
 import { LanguageContainer, LanguageContent } from './styles/FooterComponents';
 
 
@@ -18,7 +17,7 @@ export function Footer() {
   let currentLng = parsedPathWindow[parsedPathWindow.length - 2];
   useEffect(() =>{
     setCurrentLanguage(currentLng === 'en' ? "English" : currentLng === 'zh' ? "Chinese" : currentLng === 'kr' ? "Korean" : "English")
-  }, [])
+  }, [currentLng])
   const newPath = (lng) =>{
     return `${"/" + lng + "/" + currentPath}`;
   }

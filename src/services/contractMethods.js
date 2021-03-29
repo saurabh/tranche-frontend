@@ -13,7 +13,6 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
-import { ApproveBigNumber } from 'config';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -238,10 +237,10 @@ export const sendValueToTranche = async (trancheId) => {
 export const allowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
   try {
     const state = store.getState();
-    const { web3 } = state.ethereum;
+    const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if (isGreaterThan(userAllowance, toWei(ApproveBigNumber)) || isEqualTo(userAllowance, toWei(ApproveBigNumber))) {
+    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
       return true;
     } else {
       return false;
@@ -251,42 +250,18 @@ export const allowanceCheck = async (tokenAddress, contractAddress, userAddress)
   }
 };
 
-export const approveContract = async (tokenAddress, contractAddress, checked) => {
-  try {
-    const state = store.getState();
-    const { web3, address, notify } = state.ethereum;
-    const amount = checked ? 0 : toWei(ApproveBigNumber);
-    const token = ERC20Setup(web3, tokenAddress);
-    await token.methods
-      .approve(contractAddress, amount)
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        const { emitter } = notify.hash(hash);
-        emitter.on('txPool', (transaction) => {
-          return {
-            message: txMessage(transaction.hash)
-          };
-        });
-        emitter.on('txConfirmed', () => {
-          return true;
-        });
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
-export const buyTrancheTokens = async (contractAddress, trancheId, type) => {
+export const buyTrancheTokens = async (contractAddress, trancheId, type, depositEth) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { depositAmount } = state.form.earn.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = toWei(depositAmount);
+    let depositAmountInEth = depositEth ? depositAmount : 0; 
     if (type === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
-        .send({ from: address })
+        .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
@@ -298,7 +273,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type) => {
     } else {
       await JCompound.methods
         .buyTrancheBToken(trancheId, depositAmount)
-        .send({ from: address })
+        .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {

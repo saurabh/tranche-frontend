@@ -4,7 +4,8 @@ import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { useOuterClick } from 'services/useOuterClick';
-import { fromWei, toWei, allowanceCheck, approveContract, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
+import { ERC20Setup } from 'utils/contractConstructor';
+import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -16,7 +17,7 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { PagesData, etherScanUrl, statuses, zeroAddress } from 'config';
+import { PagesData, etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage  } from 'config';
 import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable, InfoWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -25,7 +26,7 @@ import {
   TableContentCardWrapper,
   FifthColContent,
   StatusTextWrapper,
-  AdjustLoanBtn,
+  // AdjustLoanBtn,
   TableCardTag,
   TableCardImg,
   TableFirstCol,
@@ -49,7 +50,7 @@ import {
   TableColMobile,
   TableMobilColContent,
   TableMobilCardBtn,
-  TableMoreRowContent
+  // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
 
@@ -57,13 +58,28 @@ const TableCard = ({
   id,
   moreCardToggle,
   tableCardToggle,
-  tranche: { name, contractAddress, trancheId, buyerCoinAddress, trancheTokenAddress, type, subscriber, subscription, apy, apyStatus, cryptoType, amount },
+  tranche: {
+    name,
+    contractAddress,
+    trancheId,
+    buyerCoinAddress,
+    trancheTokenAddress,
+    type,
+    subscriber,
+    subscription,
+    apy,
+    apyStatus,
+    cryptoType,
+    trancheType,
+    amount
+  },
   path,
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { tokenBalance, address, wallet },
+  setTokenBalance,
+  ethereum: { tokenBalance, address, wallet, web3, notify },
   change,
   destroy
   // checkServer
@@ -72,8 +88,11 @@ const TableCard = ({
   const [hasBalance, setHasBalance] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
+  const [isApproveLoading, setApproveLoading] = useState(false);
+  const [isDepositApproved, setDepositApproved] = useState(false);
+  const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [isEth, setIsEth] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : 'notFoundImage';
+  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
   });
@@ -110,22 +129,37 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const handleApprove = async (e, type) => {
+  const approveContract = async (type, isApproved, e) => {
     try {
-      console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
-      let tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
-      const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
-      // if (result.message && result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
+      if(isApproveLoading) e.stopPropogation();
+      const amount = isApproved ? 0 : toWei(ApproveBigNumber);
+      const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
+      const token = ERC20Setup(web3, tokenAddress);
+      await token.methods
+        .approve(contractAddress, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          setApproveLoading(true);
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+        })
+        .on('confirmation', () => {
+          type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
+          setApproveLoading(false);
+        });
     } catch (error) {
-      console.error(error);
+      return error;
     }
   };
 
   const buySellTrancheTokens = (e, buy) => {
-    console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
     try {
       e.preventDefault();
-      buy ? buyTrancheTokens(contractAddress, trancheId, type) : sellTrancheTokens(contractAddress, trancheId, type);
+      buy ? cryptoType === 'ETH' ? buyTrancheTokens(contractAddress, trancheId, type, true) :  buyTrancheTokens(contractAddress, trancheId, type, false) : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
     }
@@ -143,11 +177,7 @@ const TableCard = ({
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
   };
 
-  
-
-  const cardToggle = async () => {   
-    setIsLoading(true);
-    console.log(buyerCoinAddress, trancheTokenAddress, contractAddress);
+  const cardToggle = async () => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
@@ -157,18 +187,22 @@ const TableCard = ({
       tableCardToggle({ status: false, id });
     } 
     else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
+      setIsLoading(true);
       destroy('tranche');
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
-        setTokenBalance(trancheTokenAddress, address);
+        await setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
+        setWithdrawApproved(withdrawTokenHasAllowance); 
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
-        setTokenBalance(buyerCoinAddress, address);
-        setTokenBalance(trancheTokenAddress, address);
+        await setTokenBalance(buyerCoinAddress, address);
+        await setTokenBalance(trancheTokenAddress, address);
         const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
+        setDepositApproved(depositTokenHasAllowance);        
         change('tranche', 'depositIsApproved', depositTokenHasAllowance);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
+        setWithdrawApproved(withdrawTokenHasAllowance);
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       }
       tableCardToggle({ status: true, id });
@@ -294,8 +328,8 @@ const TableCard = ({
           <TableSixthCol className='table-sixth-col table-col' trancheTableBtns>
             <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
               <button>
-                <img src={ChevronTable} alt="ChevronTable" />
-              </button>              
+                <img src={ChevronTable} alt='ChevronTable' />
+              </button>
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
@@ -309,10 +343,14 @@ const TableCard = ({
             <TableCardMoreContent>
               <TableMoreRow
                 isEth={isEth}
+                cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
+                trancheType={trancheType}
                 trancheTokenAddress={trancheTokenAddress}
-                contractAddress={contractAddress}
-                handleApprove={handleApprove}
+                isApproveLoading={isApproveLoading}
+                isDepositApproved={isDepositApproved}
+                isWithdrawApproved={isWithdrawApproved}
+                approveContract={approveContract}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
             </TableCardMoreContent>
@@ -324,7 +362,12 @@ const TableCard = ({
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile tranche>
-        <TableContentCardMobile color={Object.values(searchObj(1))[0].background} onClick={() => cardToggle()} className={moreCardToggle ? 'table-card-toggle' : ''} tranche>
+        <TableContentCardMobile
+          color={Object.values(searchObj(1))[0].background}
+          onClick={() => cardToggle()}
+          className={moreCardToggle ? 'table-card-toggle' : ''}
+          tranche
+        >
           <span></span>
           <TableColMobile address>
             <TableMobilColContent>
@@ -351,16 +394,14 @@ const TableCard = ({
           <TableColMobile>
             <TableMobilColContent col>
               <h2>{roundNumber(subscriber)}</h2>
-              <h2></h2>
-
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile btn>
             <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper' chevron>
               <button>
-                <img src={ChevronTable} alt="ChevronTable" />
-              </button>      
+                <img src={ChevronTable} alt='ChevronTable' />
+              </button>
             </TableMobilCardBtn>
           </TableColMobile>
         </TableContentCardMobile>
@@ -374,9 +415,14 @@ const TableCard = ({
           <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
+                isEth={isEth}
+                cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
+                trancheType={trancheType}
                 trancheTokenAddress={trancheTokenAddress}
-                contractAddress={contractAddress}
+                isApproveLoading={isApproveLoading}
+                isDepositApproved={isDepositApproved}
+                isWithdrawApproved={isWithdrawApproved}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
             </TableCardMoreContent>
@@ -410,6 +456,7 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  setTokenBalance,
   checkServer,
   change,
   destroy

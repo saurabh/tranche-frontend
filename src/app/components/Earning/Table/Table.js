@@ -25,15 +25,9 @@ import {
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
-  CallToActionTradetext,
-  TableMobileFiltersWrapper,
-  TableMobileFilterRow,
-  TableMobileFiltersMenu,
-  TableMobileFilter,
-  TableMobileFiltersText,
-  TableMobileRowCreateLoan
+  CallToActionTradetext
 } from '../../Stake/Table/styles/TableComponents';
-import { EmptyBox, FilterChevron, CreateLoan } from 'assets';
+import { EmptyBox } from 'assets';
 const { tranchesList: tranchesListUrl } = apiUri;
 
 const style = {
@@ -73,8 +67,8 @@ const Table = ({
   const { pathname } = useLocation();
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
-  const [openFilterMenu, setOpenFilterMenu] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState('All tranches');
+  // const [openFilterMenu, setOpenFilterMenu] = useState(false);
+  // const [currentFilter, setCurrentFilter] = useState('All tranches');
   const [moreCardToggle, setMoreCardToggle] = useState({ status: false, id: null });
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
@@ -140,20 +134,20 @@ const Table = ({
     setMoreCardToggle(obj);
   };
 
-  const changeLoansFilter = useCallback(
-    (filter) => {
-      changeOwnAllFilter(filter);
-      let val = filter === 'own' ? 'My tranches' : filter === 'all' ? 'All tranches' : '';
-      setCurrentFilter(val);
-      setOpenFilterMenu(false);
-    },
-    [changeOwnAllFilter]
-  );
+  // const changeLoansFilter = useCallback(
+  //   (filter) => {
+  //     changeOwnAllFilter(filter);
+  //     // let val = filter === 'own' ? 'My tranches' : filter === 'all' ? 'All tranches' : '';
+  //     // setCurrentFilter(val);
+  //     // setOpenFilterMenu(false);
+  //   },
+  //   [changeOwnAllFilter]
+  // );
 
-  const changeOwnAllFilterHandler = (val) => {
-    ownAllToggle(val);
-    changeLoansFilter(val);
-  };
+  // const changeOwnAllFilterHandler = (val) => {
+  //   ownAllToggle(val);
+  //   changeLoansFilter(val);
+  // };
 
   const handleSorting = () => {
     trancheListing();

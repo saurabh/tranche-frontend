@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues } from 'redux-form';
 import { required, number } from 'utils/validations';
@@ -15,7 +15,8 @@ import {
 } from '../../Stake/Table/styles/TableComponents';
 import Chart from '../../Chart/Chart';
 import { BtnArrow } from 'assets';
-import { approveContract } from 'services/contractMethods';
+import { fromWei } from 'services/contractMethods';
+import { roundNumber } from 'utils';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -26,41 +27,56 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
     )}
     {touched && error && <span></span>}
   </div>
-); 
+);
 
-let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddress, buySellTrancheTokens }) => {
-  const [depositEnabled, setDepositEnabled] = useState(true);
-  const [withdrawEnabled, setWithdrawEnabled] = useState(false);
+let TableMoreRow = ({
+  isEth,
+  cryptoType,
+  buyerCoinAddress,
+  trancheType,
+  trancheTokenAddress,
+  isApproveLoading,
+  isDepositApproved,
+  isWithdrawApproved,
+  approveContract,
+  buySellTrancheTokens,
+  ethereum: { tokenBalance, balance }
+}) => {
+  let buyerTokenBalance =
+    cryptoType === 'ETH' ? balance && balance !== -1 && fromWei(balance) : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
+  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
-  const handleApprove = async (tokenAddress, contractAddress, e) => {
-    console.log(tokenAddress)
-    console.log(e.target)
-    const result = await approveContract(tokenAddress, contractAddress, !e.target.checked);
-    // if (result.message.includes('User denied transaction signature')) change(e.target.name, !e.target.checked);
-  }
   return (
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
-          <TableMoreLeftSection disabled={!depositEnabled}>
+          <TableMoreLeftSection disabled={isApproveLoading}>
             <TableMoreTitleWrapper>
               <h2>deposit</h2>
               <CheckboxWrapper hidden={isEth}>
-                <h2>{depositEnabled ? "Enabled" : "Disabled"}</h2>
+                <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
                 <CheckboxContent>
-                  <Field component='input' type='checkbox' name='depositIsApproved' id='depositIsApproved' checked={depositEnabled}/>
-                  <label onClick={(e) => handleApprove(buyerCoinAddress, contractAddress, e)} htmlFor="depositIsApproved"></label>
+                  <Field
+                    component='input'
+                    type='checkbox'
+                    name='depositIsApproved'
+                    id='depositIsApproved'
+                    checked={isDepositApproved}
+                    disabled={isApproveLoading}
+                  />
+                  <label onClick={(e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
-           
-            <h2>balance: 103,123 DAI</h2>
+
+            <h2>
+              balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+            </h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
               <FormContent>
                 <Field
                   component={InputField}
                   validate={[required, number]}
-                  disabled={!depositEnabled}
                   // className='ModalFormInputNewLoan tradeFormInput'
                   name='depositAmount'
                   type='number'
@@ -74,24 +90,33 @@ let TableMoreRow = ({ isEth, buyerCoinAddress, trancheTokenAddress, contractAddr
               </button>
             </Form>
           </TableMoreLeftSection>
-          <TableMoreLeftSection withdraw disabled={!withdrawEnabled}>
+          <TableMoreLeftSection withdraw disabled={isApproveLoading}>
             <TableMoreTitleWrapper>
               <h2>withdraw</h2>
               <CheckboxWrapper>
-                <h2>{withdrawEnabled ? "Enabled" : "Disabled"}</h2>
+                <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
                 <CheckboxContent>
-                  <Field component='input'type='checkbox' name='withdrawIsApproved' id='withdrawIsApproved' checked={withdrawEnabled}/>
-                  <label onClick={(e) => handleApprove(trancheTokenAddress, contractAddress, e)}  htmlFor="withdrawIsApproved"></label>
+                  <Field
+                    component='input'
+                    type='checkbox'
+                    name='withdrawIsApproved'
+                    id='withdrawIsApproved'
+                    checked={isWithdrawApproved}
+                    disabled={isApproveLoading}
+                  />
+                  <label onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
-            <h2>balance: 3,528 TACDAI</h2>            
+            <h2>
+              balance: {roundNumber(trancheTokenBalance)} {trancheType}
+            </h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
               <FormContent>
                 <Field
                   component={InputField}
                   validate={[required, number]}
-                  disabled={!withdrawEnabled}
+                  disabled={!isWithdrawApproved}
                   // className='ModalFormInputNewLoan tradeFormInput'
                   name='withdrawAmount'
                   type='number'
