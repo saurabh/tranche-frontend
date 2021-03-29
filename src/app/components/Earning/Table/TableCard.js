@@ -182,7 +182,6 @@ const TableCard = ({
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
 
-
     if (moreCardToggle.status && id === moreCardToggle.id) {
       tableCardToggle({ status: false, id });
     } 

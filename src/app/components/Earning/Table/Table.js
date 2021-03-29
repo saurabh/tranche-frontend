@@ -61,10 +61,10 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address },
   ownAllToggle
 }) => {
   const { pathname } = useLocation();
+  let localAddress = window.localStorage.getItem('address');
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   // const [openFilterMenu, setOpenFilterMenu] = useState(false);
@@ -83,7 +83,7 @@ const Table = ({
               skip,
               limit,
               filter: {
-                address: path === 'tranche' && address ? address : undefined,
+                address: path === 'tranche' && localAddress ? localAddress : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
@@ -95,7 +95,7 @@ const Table = ({
               skip,
               limit,
               filter: {
-                address: path === 'tranche' && address ? address : undefined,
+                address: path === 'tranche' && localAddress ? localAddress : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
@@ -106,7 +106,7 @@ const Table = ({
       3000,
       { leading: true }
     ),
-    [fetchTableData, filter, skip, limit, sort, address, tradeType]
+    [fetchTableData, filter, skip, limit, sort, localAddress, tradeType]
   );
 
   useEffect(() => {
@@ -320,7 +320,6 @@ const Table = ({
 
 const mapStateToProps = (state) => {
   return {
-    ethereum: state.ethereum,
     data: state.data,
     path: state.path
   };

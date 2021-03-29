@@ -24,6 +24,7 @@ export const setAddress = (address) => (dispatch) => {
     type: SET_ADDRESS,
     payload: address
   });
+  window.localStorage.setItem('address', address);
 };
 
 export const setNetwork = (network) => (dispatch) => {

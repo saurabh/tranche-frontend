@@ -240,7 +240,7 @@ export const allowanceCheck = async (tokenAddress, contractAddress, userAddress)
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
+    if ((isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0') {
       return true;
     } else {
       return false;
