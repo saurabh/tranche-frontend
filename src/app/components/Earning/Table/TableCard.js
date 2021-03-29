@@ -70,7 +70,7 @@ const TableCard = ({
     apy,
     apyStatus,
     cryptoType,
-    trancheType,
+    trancheToken,
     amount
   },
   path,
@@ -339,7 +339,7 @@ const TableCard = ({
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
-                trancheType={trancheType}
+                trancheToken={trancheToken}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}
@@ -412,7 +412,7 @@ const TableCard = ({
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
-                trancheType={trancheType}
+                trancheToken={trancheToken}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}

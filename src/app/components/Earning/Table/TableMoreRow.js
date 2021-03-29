@@ -33,7 +33,7 @@ let TableMoreRow = ({
   isEth,
   cryptoType,
   buyerCoinAddress,
-  trancheType,
+  trancheToken,
   trancheTokenAddress,
   isApproveLoading,
   isDepositApproved,
@@ -109,7 +109,7 @@ let TableMoreRow = ({
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
             <h2>
-              balance: {roundNumber(trancheTokenBalance)} {trancheType}
+              balance: {roundNumber(trancheTokenBalance)} {trancheToken}
             </h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
               <FormContent>
