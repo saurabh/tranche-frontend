@@ -52,10 +52,10 @@ let TableMoreRow = ({
       e.preventDefault();
       if (type) {
         let num = roundNumber(buyerTokenBalance, 4, 'down')
-        change('depositAmount', num);
+        change('depositAmount', num.toString());
       } else {
         let num = roundNumber(trancheTokenBalance, 4, 'down')
-        change('withdrawAmount', num);
+        change('withdrawAmount', num.toString());
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
