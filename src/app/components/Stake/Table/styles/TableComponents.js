@@ -20,12 +20,12 @@ const TableContentCard = styled.div`
   // border-bottom: 1px solid #efefef;
   justify-content: space-between;
   cursor: pointer;
-  @media (max-width: 1200px) {
-    flex-direction: column;
-    align-items: flex-end;
-    // border-bottom: 3px solid #efefef;
-    padding: 0 12px;
-  }
+  // @media (max-width: 1200px) {
+  //   flex-direction: column;
+  //   align-items: flex-end;
+  //   // border-bottom: 3px solid #efefef;
+  //   padding: 0 12px;
+  // }
   ${({ pointer }) => !pointer && `
     cursor: default; 
   `}

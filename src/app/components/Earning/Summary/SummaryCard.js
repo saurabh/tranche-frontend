@@ -156,7 +156,6 @@ const SummaryCard = ({
   const Card = () =>{
     return (
       <div>
-        {isDesktop ? (
           <SummaryCardWrapper color={color}>
             {value || value === 0 ? (
               <SummaryCardContainer>
@@ -220,36 +219,13 @@ const SummaryCard = ({
               type={type}
             />
           </SummaryCardWrapper>
-        ) : (
-          <StakingModal
-            // State Values
-            path={path}
-            modalIsOpen={modalIsOpen}
-            modalType={modalType}
-            summaryModal={summaryModal}
-            tokenAddress={tokenAddress}
-            noBalance={Number(balance) === 0}
-            setAccruedRewardsTotal={setAccruedRewardsTotal}
-            // Functions
-            closeModal={() => closeModal()}
-            openModal={(bool) => openModal(bool)}
-            hasAllowance={hasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isLPToken}
-            // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
-            type={type}
-          />
-        )}
+
       </div>
     );
   }
   const StakeCard = () =>{
     return (
       <div>
-        {isDesktop && 
           <SummaryCardWrapper color={color} stakeCard={stakeCard}>
             {value || value === 0 ? (
               <SummaryCardContainer stakeCard>
@@ -268,9 +244,7 @@ const SummaryCard = ({
                 <div></div>
               </SummaryCardContainer>
             )}
-          </SummaryCardWrapper>
-         }
-      
+          </SummaryCardWrapper>      
       </div>
     );
   }
