@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { required, number } from 'utils/validations';
+import { number } from 'utils/validations';
 import {
   TableMoreRowWrapper,
   TableMoreRowContent,
@@ -16,7 +16,7 @@ import {
 import Chart from '../../Chart/Chart';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
-import { roundNumber } from 'utils';
+import { roundNumber, isGreaterThan } from 'utils';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -43,6 +43,8 @@ let TableMoreRow = ({
   ethereum: { tokenBalance, balance },
   change
 }) => {
+  const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
+  const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   let buyerTokenBalance =
     cryptoType === 'ETH' ? balance && balance !== -1 && fromWei(balance) : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
   let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
@@ -51,15 +53,23 @@ let TableMoreRow = ({
     (e, type) => {
       e.preventDefault();
       if (type) {
-        let num = roundNumber(buyerTokenBalance, 4, 'down')
+        let num = roundNumber(buyerTokenBalance, 4, 'down');
         change('depositAmount', num.toString());
       } else {
-        let num = roundNumber(trancheTokenBalance, 4, 'down')
+        let num = roundNumber(trancheTokenBalance, 4, 'down');
         change('withdrawAmount', num.toString());
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
   );
+
+  const handleInputChange = (newValue, type) => {
+    if (type) {
+      isGreaterThan(newValue, buyerTokenBalance) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+    } else {
+      isGreaterThan(newValue, trancheTokenBalance) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
+    }
+  };
 
   return (
     <TableMoreRowWrapper className='table-more-row'>
@@ -92,14 +102,16 @@ let TableMoreRow = ({
                 <Field
                   component={InputField}
                   validate={[number]}
-                  // className='ModalFormInputNewLoan tradeFormInput'
+                  onChange={(e, newValue) => handleInputChange(newValue, true)}
+                  disabled={!isDepositApproved}
+                  className={depositBalanceCheck}
                   name='depositAmount'
                   type='number'
                   step='0.001'
                 />
                 <button onClick={(e) => setMaxAmount(e, true)}>max</button>
               </FormContent>
-              <button type='submit'>
+              <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                 <img src={BtnArrow} alt='arrow' />
                 deposit
               </button>
@@ -131,15 +143,16 @@ let TableMoreRow = ({
                 <Field
                   component={InputField}
                   validate={[number]}
+                  onChange={(e, newValue) => handleInputChange(newValue, false)}
                   disabled={!isWithdrawApproved}
-                  // className='ModalFormInputNewLoan tradeFormInput'
+                  className={withdrawBalanceCheck}
                   name='withdrawAmount'
                   type='number'
                   step='0.001'
                 />
                 <button onClick={(e) => setMaxAmount(e, false)}>max</button>
               </FormContent>
-              <button type='submit'>
+              <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                 <img src={BtnArrow} alt='arrow' />
                 withdraw
               </button>
