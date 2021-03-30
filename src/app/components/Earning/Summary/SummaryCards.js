@@ -8,6 +8,8 @@ import 'react-multi-carousel/lib/styles.css';
 // import axios from 'axios';
 // import { apiUri, serverUrl } from 'config/constants';
 // import { initOnboard } from 'services/blocknative';
+import axios from 'axios';
+import { apiUri, serverUrl } from 'config/constants';
 import PropTypes from 'prop-types';
 
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
@@ -34,19 +36,17 @@ const responsive = {
 
 // const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
 // const BASE_URL = serverUrl;
+const { sliceSummary, totalValueLocked } = apiUri;
+const BASE_URL = serverUrl;
 
-const SummaryCards = ({
-  path,
-  ethereum: { wallet, address },
-  setTokenBalance,
-  userSummary: { slice, lp, lpList },
-  summaryFetchSuccess
-}) => {
+const SummaryCards = ({ path, ethereum: { address }, setTokenBalance, userSummary: { slice, lp, lpList }, summaryFetchSuccess }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [hasAllowance, setHasAllowance] = useState(false);
+  const [sliceStats, setSliceStats] = useState({});
+  const [tvl, setTvl] = useState({});
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -55,17 +55,13 @@ const SummaryCards = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
-  // const onboard = initOnboard({
-  //   address: setAddress,
-  //   network: setNetwork,
-  //   balance: setBalance,
-  //   wallet: setWalletAndWeb3
-  // });
 
   useEffect(() => {
     if (currentPath === 'tranche') {
+      getSliceStats();
+      getTvl();
     }
-  }, [isDesktop, currentPath, address, summaryFetchSuccess]);
+  }, [isDesktop, currentPath, address]);
 
   useEffect(() => {
     if (isDesktop && currentPath === 'stake' && address && slice && lpList) {
@@ -73,6 +69,17 @@ const SummaryCards = ({
       lpList.forEach((lp) => setTokenBalance(lp.address, address));
     }
   }, [isDesktop, currentPath, address, lpList, slice, setTokenBalance]);
+
+  const getSliceStats = async () => {
+    const res = await axios(`${BASE_URL + sliceSummary}`);
+    const { result } = res.data;
+    setSliceStats(result);
+  };
+  const getTvl = async () => {
+    const res = await axios(`${BASE_URL + totalValueLocked}`);
+    const { result } = res.data;
+    setTvl(result);
+  };
 
   const openModal = () => console.log('needs to be removed at the time of components merge');
   const closeModal = () => console.log('needs to be removed at the time of components merge');
@@ -99,9 +106,9 @@ const SummaryCards = ({
               : 'Decentralized Loans'
           }
           tokenAddress={slice.address}
-          value={'Card'}
+          value={tvl.total}
           path={currentPath}
-          type={''}
+          type={'tvl'}
           details={''}
           openModal={(bool, num = 1) => openModal(bool, num)}
           closeModal={closeModal}
@@ -121,9 +128,9 @@ const SummaryCards = ({
           }
           tokenAddress={lp.address}
           lpList={lpList}
-          value={'Card'}
+          value={sliceStats.price}
           path={currentPath}
-          type={''}
+          type={'price'}
           details={''}
           openModal={(bool, num = 2) => openModal(bool, num)}
           closeModal={closeModal}
@@ -141,10 +148,10 @@ const SummaryCards = ({
               ? 'SLICE 24H Volume'
               : 'Collateralization Ratio'
           }
-          value={'Card'}
+          value={sliceStats.volume}
           isLoading={false}
           path={currentPath}
-          type={''}
+          type={'volume'}
           details={''}
           openModal={(bool = null, num = 3) => openModal(bool, num)}
           closeModal={closeModal}

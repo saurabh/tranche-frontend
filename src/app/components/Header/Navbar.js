@@ -62,7 +62,9 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer className='container navbar-container'>
         <div id='logo-wrapper'>
-            <a href="https://tranche.finance/"><img src={Logo} alt='Logo' /></a>
+          <a href="https://tranche.finance/">
+            <img src={Logo} alt='Logo' />
+          </a>
         </div>
         <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>

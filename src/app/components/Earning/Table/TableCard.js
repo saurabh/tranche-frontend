@@ -70,7 +70,7 @@ const TableCard = ({
     apy,
     apyStatus,
     cryptoType,
-    trancheType,
+    trancheToken,
     amount
   },
   path,
@@ -182,7 +182,6 @@ const TableCard = ({
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
 
-
     if (moreCardToggle.status && id === moreCardToggle.id) {
       tableCardToggle({ status: false, id });
     } 
@@ -193,6 +192,7 @@ const TableCard = ({
         setIsEth(true);
         await setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
+        setDepositApproved(true);
         setWithdrawApproved(withdrawTokenHasAllowance); 
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
@@ -260,10 +260,10 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' tooltip={InfoBoxToggle}>
-              <img src={apyImage} alt='image' />
+              <img src={apyImage} alt='apyImage' />
               <h2>{apy}</h2>
               <div>
-                <img src={Info} alt='image' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
+                <img src={Info} alt='infoImage' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
                 <div>
                   <h2>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h2>
                 </div>
@@ -345,7 +345,7 @@ const TableCard = ({
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
-                trancheType={trancheType}
+                trancheToken={trancheToken}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}
@@ -418,7 +418,7 @@ const TableCard = ({
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
-                trancheType={trancheType}
+                trancheToken={trancheToken}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}

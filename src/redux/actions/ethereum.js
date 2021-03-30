@@ -16,7 +16,8 @@ import {
   SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
-  SET_CURRENT_BLOCK
+  SET_CURRENT_BLOCK,
+  SET_TRANSACTION_LOADING
 } from './constants';
 
 export const setAddress = (address) => (dispatch) => {
@@ -24,6 +25,7 @@ export const setAddress = (address) => (dispatch) => {
     type: SET_ADDRESS,
     payload: address
   });
+  window.localStorage.setItem('address', address);
 };
 
 export const setNetwork = (network) => (dispatch) => {
@@ -109,5 +111,12 @@ export const setCurrentBlock = (blockNumber) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_BLOCK,
     payload: blockNumber
+  });
+};
+
+export const setTxLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TRANSACTION_LOADING,
+    payload: bool
   });
 };

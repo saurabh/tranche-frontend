@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { Form, Field, reduxForm, getFormValues } from 'redux-form';
-import { required, number } from 'utils/validations';
+import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
+import { number } from 'utils/validations';
 import {
   TableMoreRowWrapper,
   TableMoreRowContent,
@@ -16,7 +16,7 @@ import {
 import Chart from '../../Chart/Chart';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
-import { roundNumber } from 'utils';
+import { roundNumber, isGreaterThan } from 'utils';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -33,24 +33,49 @@ let TableMoreRow = ({
   isEth,
   cryptoType,
   buyerCoinAddress,
-  trancheType,
+  trancheToken,
   trancheTokenAddress,
   isApproveLoading,
   isDepositApproved,
   isWithdrawApproved,
   approveContract,
   buySellTrancheTokens,
-  ethereum: { tokenBalance, balance }
+  ethereum: { tokenBalance, balance, txOngoing },
+  change
 }) => {
+  const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
+  const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   let buyerTokenBalance =
     cryptoType === 'ETH' ? balance && balance !== -1 && fromWei(balance) : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
   let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
+
+  const setMaxAmount = useCallback(
+    (e, type) => {
+      e.preventDefault();
+      if (type) {
+        let num = roundNumber(buyerTokenBalance, 4, 'down');
+        change('depositAmount', num.toString());
+      } else {
+        let num = roundNumber(trancheTokenBalance, 4, 'down');
+        change('withdrawAmount', num.toString());
+      }
+    },
+    [buyerTokenBalance, trancheTokenBalance, change]
+  );
+
+  const handleInputChange = (newValue, type) => {
+    if (type) {
+      isGreaterThan(newValue, buyerTokenBalance) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+    } else {
+      isGreaterThan(newValue, trancheTokenBalance) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
+    }
+  };
 
   return (
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
-          <TableMoreLeftSection disabled={isApproveLoading}>
+          <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
             <TableMoreTitleWrapper>
               <h2>deposit</h2>
               <CheckboxWrapper hidden={isEth}>
@@ -62,7 +87,7 @@ let TableMoreRow = ({
                     name='depositIsApproved'
                     id='depositIsApproved'
                     checked={isDepositApproved}
-                    disabled={isApproveLoading}
+                    disabled={isApproveLoading || txOngoing}
                   />
                   <label onClick={(e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
                 </CheckboxContent>
@@ -76,21 +101,23 @@ let TableMoreRow = ({
               <FormContent>
                 <Field
                   component={InputField}
-                  validate={[required, number]}
-                  // className='ModalFormInputNewLoan tradeFormInput'
+                  validate={[number]}
+                  onChange={(e, newValue) => handleInputChange(newValue, true)}
+                  disabled={!isDepositApproved}
+                  className={depositBalanceCheck}
                   name='depositAmount'
                   type='number'
                   step='0.001'
                 />
-                <button>max</button>
+                <button onClick={(e) => setMaxAmount(e, true)}>max</button>
               </FormContent>
-              <button type='submit'>
+              <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                 <img src={BtnArrow} alt='arrow' />
                 deposit
               </button>
             </Form>
           </TableMoreLeftSection>
-          <TableMoreLeftSection withdraw disabled={isApproveLoading}>
+          <TableMoreLeftSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing}>
             <TableMoreTitleWrapper>
               <h2>withdraw</h2>
               <CheckboxWrapper>
@@ -102,29 +129,30 @@ let TableMoreRow = ({
                     name='withdrawIsApproved'
                     id='withdrawIsApproved'
                     checked={isWithdrawApproved}
-                    disabled={isApproveLoading}
+                    disabled={isApproveLoading || txOngoing}
                   />
                   <label onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
             <h2>
-              balance: {roundNumber(trancheTokenBalance)} {trancheType}
+              balance: {roundNumber(trancheTokenBalance)} {trancheToken}
             </h2>
             <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
               <FormContent>
                 <Field
                   component={InputField}
-                  validate={[required, number]}
+                  validate={[number]}
+                  onChange={(e, newValue) => handleInputChange(newValue, false)}
                   disabled={!isWithdrawApproved}
-                  // className='ModalFormInputNewLoan tradeFormInput'
+                  className={withdrawBalanceCheck}
                   name='withdrawAmount'
                   type='number'
                   step='0.001'
                 />
-                <button>max</button>
+                <button onClick={(e) => setMaxAmount(e, false)}>max</button>
               </FormContent>
-              <button type='submit'>
+              <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                 <img src={BtnArrow} alt='arrow' />
                 withdraw
               </button>
@@ -150,4 +178,4 @@ const mapStateToProps = (state) => ({
   formValues: getFormValues('tranche')(state)
 });
 
-export default TableMoreRow = connect(mapStateToProps, {})(TableMoreRow);
+export default TableMoreRow = connect(mapStateToProps, { change })(TableMoreRow);

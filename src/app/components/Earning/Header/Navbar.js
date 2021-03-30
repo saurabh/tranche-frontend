@@ -180,7 +180,7 @@ function Navbar({ path }) {
               {i18n.t('navbar.stake')}            
             </NavLink>
             <NavLink
-              to={baseUrl + '/'}
+              to={baseUrl + '/tranche'}
               activeStyle={{
                 color: 'rgba(68, 65, 207, 1)'
               }}

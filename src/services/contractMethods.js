@@ -13,6 +13,7 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
+import { setTxLoading } from 'redux/actions/ethereum';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -240,7 +241,7 @@ export const allowanceCheck = async (tokenAddress, contractAddress, userAddress)
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
+    if ((isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0') {
       return true;
     } else {
       return false;
@@ -254,33 +255,37 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type, deposit
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    let { depositAmount } = state.form.earn.values;
+    let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = toWei(depositAmount);
-    let depositAmountInEth = depositEth ? depositAmount : 0; 
+    let depositAmountInEth = depositEth ? depositAmount : 0;
     if (type === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
         });
     } else {
       await JCompound.methods
         .buyTrancheBToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
         });
     }
   } catch (error) {
@@ -292,7 +297,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
-    let { withdrawAmount } = state.form.earn.values;
+    let { withdrawAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     withdrawAmount = toWei(withdrawAmount);
     if (type === 'TRANCHE_A') {
@@ -300,24 +305,28 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
         .redeemTrancheAToken(trancheId, withdrawAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
         });
     } else {
       await JCompound.methods
         .redeemTrancheBToken(trancheId, withdrawAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
         });
     }
   } catch (error) {

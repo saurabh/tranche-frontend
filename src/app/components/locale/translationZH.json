@@ -8,6 +8,14 @@
     "borrow": "借入",
     "lend": "借出"
   },
+  "privacy": {
+    "title": "Privacy",
+    "text": ""
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "text": ""
+  },
   "borrow": {
     "title": "Borrower Markets",
     "text": "APPLY FOR A COLLATERALIZED LOAN USING YOUR CRYPTOCURRENCY",

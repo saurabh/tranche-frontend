@@ -36,10 +36,10 @@ export function Header({updateDate}) {
                 </HeaderSubtitle> : ""
               }
               <HeaderTitle path={path}>
-                <h2>{i18n.t(`${path + ".title"}`)}</h2>
+                <h2>{i18n.t(`${path}.title`)}</h2>
               </HeaderTitle>
               <HeaderSubtitle path={path}>
-                <h2>{i18n.t(`${path + ".text"}`)}</h2>
+                <h2>{i18n.t(`${path}.text`)}</h2>
               </HeaderSubtitle>
             </HeaderContent>
       </HeaderWrapper>
