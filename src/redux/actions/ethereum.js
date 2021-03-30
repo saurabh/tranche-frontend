@@ -115,7 +115,6 @@ export const setCurrentBlock = (blockNumber) => (dispatch) => {
 };
 
 export const setTxLoading = (bool) => (dispatch) => {
-  console.log('call')
   dispatch({
     type: SET_TRANSACTION_LOADING,
     payload: bool
