@@ -40,7 +40,7 @@ let TableMoreRow = ({
   isWithdrawApproved,
   approveContract,
   buySellTrancheTokens,
-  ethereum: { tokenBalance, balance },
+  ethereum: { tokenBalance, balance, txOngoing },
   change
 }) => {
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
@@ -75,7 +75,7 @@ let TableMoreRow = ({
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
-          <TableMoreLeftSection disabled={isApproveLoading}>
+          <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
             <TableMoreTitleWrapper>
               <h2>deposit</h2>
               <CheckboxWrapper hidden={isEth}>
@@ -87,7 +87,7 @@ let TableMoreRow = ({
                     name='depositIsApproved'
                     id='depositIsApproved'
                     checked={isDepositApproved}
-                    disabled={isApproveLoading}
+                    disabled={isApproveLoading || txOngoing}
                   />
                   <label onClick={(e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
                 </CheckboxContent>
@@ -117,7 +117,7 @@ let TableMoreRow = ({
               </button>
             </Form>
           </TableMoreLeftSection>
-          <TableMoreLeftSection withdraw disabled={isApproveLoading}>
+          <TableMoreLeftSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing}>
             <TableMoreTitleWrapper>
               <h2>withdraw</h2>
               <CheckboxWrapper>
@@ -129,7 +129,7 @@ let TableMoreRow = ({
                     name='withdrawIsApproved'
                     id='withdrawIsApproved'
                     checked={isWithdrawApproved}
-                    disabled={isApproveLoading}
+                    disabled={isApproveLoading || txOngoing}
                   />
                   <label onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
                 </CheckboxContent>

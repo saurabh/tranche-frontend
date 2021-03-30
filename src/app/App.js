@@ -123,9 +123,7 @@ const App = ({
         address: JCompoundAddress
       })
       .on('data', async () => {
-        console.log('test')
         if (path === 'tranche') {
-          console.log('tranche')
           await timeout(4000);
           await fetchTableData(
             {
@@ -145,9 +143,7 @@ const App = ({
         address: StakingAddresses
       })
       .on('data', async () => {
-        console.log('test')
         if (path === 'stake') {
-          console.log('stake')
           await timeout(4000);
           await fetchTableData(
             {

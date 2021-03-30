@@ -192,6 +192,7 @@ const TableCard = ({
         setIsEth(true);
         await setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
+        setDepositApproved(true);
         setWithdrawApproved(withdrawTokenHasAllowance); 
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
