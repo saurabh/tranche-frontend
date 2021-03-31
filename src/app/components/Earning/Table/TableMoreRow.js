@@ -30,6 +30,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let TableMoreRow = ({
+  graphData,
   isEth,
   cryptoType,
   buyerCoinAddress,
@@ -131,7 +132,7 @@ let TableMoreRow = ({
                     checked={isWithdrawApproved}
                     disabled={isApproveLoading || txOngoing}
                   />
-                  <label onClick={() => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
+                  <label onClick={(e) => approveContract(false, isWithdrawApproved, e)} htmlFor='withdrawIsApproved'></label>
                 </CheckboxContent>
               </CheckboxWrapper>
             </TableMoreTitleWrapper>
@@ -160,7 +161,7 @@ let TableMoreRow = ({
           </TableMoreLeftSection>
         </TableMoreRowContentLeft>
         <TableMoreRowContentRight>
-          <Chart />
+          <Chart graphData={graphData} />
         </TableMoreRowContentRight>
       </TableMoreRowContent>
     </TableMoreRowWrapper>

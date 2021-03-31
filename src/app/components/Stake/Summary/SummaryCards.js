@@ -17,7 +17,6 @@ import { ERC20Setup } from 'utils';
 import { ApproveBigNumber, txMessage } from 'config';
 
 const { stakingSummary } = apiUri;
-const BASE_URL = serverUrl;
 
 const SummaryCards = ({
   path,
@@ -55,7 +54,7 @@ const SummaryCards = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${BASE_URL + stakingSummary + address}`);
+      const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
@@ -129,7 +128,7 @@ const SummaryCards = ({
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
-          console.log('true')
+          console.log('true');
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
+import axios from 'axios';
 import { useOuterClick } from 'services/useOuterClick';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
@@ -18,7 +19,7 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { PagesData, etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage  } from 'config';
+import { PagesData, etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl } from 'config';
 import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable, InfoWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -50,10 +51,11 @@ import {
   TableContentCardMobile,
   TableColMobile,
   TableMobilColContent,
-  TableMobilCardBtn,
+  TableMobilCardBtn
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
+const { graphUri } = apiUri;
 
 const TableCard = ({
   id,
@@ -86,6 +88,7 @@ const TableCard = ({
   // checkServer
 }) => {
   const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
+  const [graphData, setGraphData] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
@@ -94,6 +97,7 @@ const TableCard = ({
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [isEth, setIsEth] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  const graphTimeFrame = 'date';
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
   });
@@ -132,7 +136,7 @@ const TableCard = ({
 
   const approveContract = async (type, isApproved, e) => {
     try {
-      if(isApproveLoading) e.stopPropogation();
+      if (isApproveLoading) e.stopPropogation();
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
       const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
       const token = ERC20Setup(web3, tokenAddress);
@@ -160,7 +164,11 @@ const TableCard = ({
   const buySellTrancheTokens = (e, buy) => {
     try {
       e.preventDefault();
-      buy ? cryptoType === 'ETH' ? buyTrancheTokens(contractAddress, trancheId, type, true) :  buyTrancheTokens(contractAddress, trancheId, type, false) : sellTrancheTokens(contractAddress, trancheId, type);
+      buy
+        ? cryptoType === 'ETH'
+          ? buyTrancheTokens(contractAddress, trancheId, type, true)
+          : buyTrancheTokens(contractAddress, trancheId, type, false)
+        : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
     }
@@ -185,22 +193,26 @@ const TableCard = ({
 
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
-    } 
-    else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
+    } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
       setIsLoading(true);
       destroy('tranche');
+      const res = await axios(
+        `${serverUrl + graphUri}trancheId=${trancheId}&contractAddress=${contractAddress}&type=${graphTimeFrame}&trancheType=${type}`
+      );
+      const { result } = res.data;
+      setGraphData(result);
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
         await setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
         setDepositApproved(true);
-        setWithdrawApproved(withdrawTokenHasAllowance); 
+        setWithdrawApproved(withdrawTokenHasAllowance);
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
         await setTokenBalance(buyerCoinAddress, address);
         await setTokenBalance(trancheTokenAddress, address);
         const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
-        setDepositApproved(depositTokenHasAllowance);        
+        setDepositApproved(depositTokenHasAllowance);
         change('tranche', 'depositIsApproved', depositTokenHasAllowance);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
         setWithdrawApproved(withdrawTokenHasAllowance);
@@ -264,9 +276,12 @@ const TableCard = ({
               <img src={apyImage} alt='apyImage' />
               <h2>{apy}</h2>
               <div>
-                <img src={Info} alt='infoImage' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)}  />
+                <img src={Info} alt='infoImage' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)} />
                 <div>
-                  <h2>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h2>
+                  <h2>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </h2>
                 </div>
               </div>
             </SecondColContent>
@@ -334,15 +349,15 @@ const TableCard = ({
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
-        {
-          isLoading ?
+        {isLoading ? (
           <TableCardMoreContent>
             <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
           </TableCardMoreContent>
-          :
+        ) : (
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
+                graphData={graphData}
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
@@ -356,7 +371,7 @@ const TableCard = ({
               />
             </TableCardMoreContent>
           </TableCardMore>
-        }
+        )}
       </TableContentCardWrapper>
     );
   };
@@ -406,16 +421,17 @@ const TableCard = ({
             </TableMobilCardBtn>
           </TableColMobile>
         </TableContentCardMobile>
-        {
-          isLoading ?
+        {isLoading ? (
           <TableCardMore className={'table-card-more'}>
             <TableCardMoreContent>
               <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
             </TableCardMoreContent>
-          </TableCardMore> :
+          </TableCardMore>
+        ) : (
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
+                graphData={graphData}
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
@@ -424,12 +440,12 @@ const TableCard = ({
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}
                 isWithdrawApproved={isWithdrawApproved}
+                approveContract={approveContract}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
             </TableCardMoreContent>
           </TableCardMore>
-        }
-        
+        )}
       </TableContentCardWrapperMobile>
     );
   };

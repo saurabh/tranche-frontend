@@ -11,7 +11,6 @@ import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 
 const { sliceSummary, totalValueLocked } = apiUri;
-const BASE_URL = serverUrl;
 
 const SummaryCards = ({ path, ethereum: { address }, setTokenBalance, userSummary: { slice, lp, lpList }, summaryFetchSuccess }) => {
   const { pathname } = window.location;
@@ -45,12 +44,12 @@ const SummaryCards = ({ path, ethereum: { address }, setTokenBalance, userSummar
   }, [isDesktop, currentPath, address, lpList, slice, setTokenBalance]);
 
   const getSliceStats = async () => {
-    const res = await axios(`${BASE_URL + sliceSummary}`);
+    const res = await axios(`${serverUrl + sliceSummary}`);
     const { result } = res.data;
     setSliceStats(result);
   };
   const getTvl = async () => {
-    const res = await axios(`${BASE_URL + totalValueLocked}`);
+    const res = await axios(`${serverUrl + totalValueLocked}`);
     const { result } = res.data;
     setTvl(result);
   };
