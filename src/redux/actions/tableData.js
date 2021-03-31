@@ -16,7 +16,8 @@ import {
   STAKING_IS_LOADING,
   STAKING_SUCCESS,
   STAKING_COUNT,
-  OWN_ALL_TOGGLE
+  OWN_ALL_TOGGLE,
+  TRANCHE_CARD_TOGGLE
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -59,6 +60,13 @@ export const tranchesSetCount = (count) => (dispatch) => {
   dispatch({
     type: TRANCHES_COUNT,
     payload: count
+  });
+};
+
+export const trancheCardToggle = (obj) => (dispatch) => {
+  dispatch({
+    type: TRANCHE_CARD_TOGGLE,
+    payload: obj
   });
 };
 

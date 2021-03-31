@@ -7,6 +7,7 @@ import { useOuterClick } from 'services/useOuterClick';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
+import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import {
@@ -56,8 +57,8 @@ import i18n from 'app/components/locale/i18n';
 
 const TableCard = ({
   id,
-  moreCardToggle,
-  tableCardToggle,
+  trancheCard,
+  trancheCardToggle,
   tranche: {
     name,
     contractAddress,
@@ -182,10 +183,10 @@ const TableCard = ({
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
 
-    if (moreCardToggle.status && id === moreCardToggle.id) {
-      tableCardToggle({ status: false, id });
+    if (trancheCard.status && id === trancheCard.id) {
+      trancheCardToggle({ status: false, id });
     } 
-    else if ((moreCardToggle.status && id !== moreCardToggle.id) || !moreCardToggle.status) {
+    else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
       setIsLoading(true);
       destroy('tranche');
       if (buyerCoinAddress === zeroAddress) {
@@ -205,7 +206,7 @@ const TableCard = ({
         setWithdrawApproved(withdrawTokenHasAllowance);
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       }
-      tableCardToggle({ status: true, id });
+      trancheCardToggle({ status: true, id });
     }
     setIsLoading(false);
   };
@@ -219,7 +220,7 @@ const TableCard = ({
         <TableContentCard
           pointer={true}
           onClick={() => cardToggle()}
-          className={moreCardToggle.status && id === moreCardToggle.id ? 'table-card-toggle' : ''}
+          className={trancheCard.status && id === trancheCard.id ? 'table-card-toggle' : ''}
         >
           {checkLoan ? (
             <TableCardTag color={checkLoan.color}>
@@ -339,7 +340,7 @@ const TableCard = ({
             <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
           </TableCardMoreContent>
           :
-          <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
+          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
                 isEth={isEth}
@@ -365,7 +366,7 @@ const TableCard = ({
         <TableContentCardMobile
           color={Object.values(searchObj(1))[0].background}
           onClick={() => cardToggle()}
-          className={moreCardToggle ? 'table-card-toggle' : ''}
+          className={trancheCard ? 'table-card-toggle' : ''}
           tranche
         >
           <span></span>
@@ -412,7 +413,7 @@ const TableCard = ({
               <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
             </TableCardMoreContent>
           </TableCardMore> :
-          <TableCardMore className={'table-card-more ' + (moreCardToggle.status && id === moreCardToggle.id ? 'table-more-card-toggle' : '')}>
+          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
                 isEth={isEth}
@@ -447,8 +448,7 @@ TableCard.propTypes = {
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   form: state.form,
-  trancheCardOpen: state.data.trancheCardOpen,
-  activeTranche: state.data.activeTranche
+  trancheCard: state.data.trancheCard
 });
 
 export default connect(mapStateToProps, {
@@ -458,6 +458,7 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   setTokenBalance,
   checkServer,
+  trancheCardToggle,
   change,
   destroy
 })(TableCard);

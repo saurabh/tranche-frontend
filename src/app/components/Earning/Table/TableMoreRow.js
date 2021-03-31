@@ -170,7 +170,7 @@ let TableMoreRow = ({
 TableMoreRow = reduxForm({
   form: 'tranche',
   initialValues: {},
-  destroyOnUnmount: true
+  destroyOnUnmount: false
 })(TableMoreRow);
 
 const mapStateToProps = (state) => ({
