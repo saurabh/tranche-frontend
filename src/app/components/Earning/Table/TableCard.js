@@ -97,7 +97,7 @@ const TableCard = ({
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [isEth, setIsEth] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
-  const graphTimeFrame = 'date';
+  const graphTimeFrame = 'hour';
   const innerRef = useOuterClick((e) => {
     setInfoBoxToggle(false);
   });
