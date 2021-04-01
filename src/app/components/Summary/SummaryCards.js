@@ -8,18 +8,10 @@ import axios from 'axios';
 import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  setTokenBalances,
-  setTokenBalance
-} from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 
 const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
-const BASE_URL = serverUrl;
 
 const SummaryCards = ({
   path,
@@ -58,7 +50,7 @@ const SummaryCards = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${BASE_URL + stakingSummary + address}`);
+      const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
@@ -72,19 +64,19 @@ const SummaryCards = ({
   }, [isDesktop, pathname, address, summaryFetchSuccess]);
 
   const getRatio = async () => {
-    const res = await axios(`${BASE_URL + summaryRatio}`);
+    const res = await axios(`${serverUrl + summaryRatio}`);
     const { result } = res.data;
     setRatio(result);
     // setRatioIsLoading(false);
   };
   const getCollateral = async () => {
-    const res = await axios(`${BASE_URL + summaryCollateral}`);
+    const res = await axios(`${serverUrl + summaryCollateral}`);
     const { result } = res.data;
     setCollateral(result);
     setCollateralIsLoading(false);
   };
   const getLoan = async () => {
-    const res = await axios(`${BASE_URL + summaryLoan}`);
+    const res = await axios(`${serverUrl + summaryLoan}`);
     const { result } = res.data;
     setLoan(result);
     setLoanIsLoading(false);
@@ -122,7 +114,7 @@ const SummaryCards = ({
       setFirstIsOpen(false);
       setSecondIsOpen(false);
       setThirdIsOpen(true);
-    }   
+    }
   };
 
   const closeModal = () => {
@@ -144,13 +136,8 @@ const SummaryCards = ({
         </SummaryCardsWrapper>
       )}
 
-      {
-        isDesktop &&
-        <SummaryCardsWrapper
-          className='container content-container'
-          path={path}
-          isDesktop={isDesktop}
-        >
+      {isDesktop && (
+        <SummaryCardsWrapper className='container content-container' path={path} isDesktop={isDesktop}>
           <SummaryCard
             title={path !== 'stake' ? 'Decentralized Loans' : 'Staked SLICE Tokens'}
             isLoading={loanIsLoading}
@@ -196,9 +183,7 @@ const SummaryCards = ({
             summaryModal={false}
           />
         </SummaryCardsWrapper>
-      }
-
-     
+      )}
     </div>
   );
 };

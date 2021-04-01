@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
@@ -69,7 +69,6 @@ const Table = ({
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   // const [openFilterMenu, setOpenFilterMenu] = useState(false);
   // const [currentFilter, setCurrentFilter] = useState('All tranches');
-  const [moreCardToggle, setMoreCardToggle] = useState({ status: false, id: null });
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
 
@@ -130,10 +129,6 @@ const Table = ({
     paginationCurrent(p);
   };
 
-  const tableCardToggle = (obj) => {
-    setMoreCardToggle(obj);
-  };
-
   // const changeLoansFilter = useCallback(
   //   (filter) => {
   //     changeOwnAllFilter(filter);
@@ -168,7 +163,7 @@ const Table = ({
             ) : (
               data &&
               data.tranchesList.map((tranche, i) => (
-                <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                <TableCard key={i} id={i} tranche={tranche} path={path} />
               ))
             )}
           </div>
@@ -227,7 +222,7 @@ const Table = ({
               ) : (
                 data &&
                 data.tranchesList.map((tranche, i) => (
-                  <TableCard key={i} id={i} tranche={tranche} path={path} moreCardToggle={moreCardToggle} tableCardToggle={(obj) => tableCardToggle(obj)} />
+                  <TableCard key={i} id={i} tranche={tranche} path={path} />
                 ))
               )}
             </div>

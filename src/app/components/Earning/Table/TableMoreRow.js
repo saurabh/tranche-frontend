@@ -32,6 +32,7 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let TableMoreRow = ({
+  graphData,
   isEth,
   cryptoType,
   buyerCoinAddress,
@@ -282,7 +283,7 @@ let TableMoreRow = ({
         
         
         <TableMoreRowContentRight>
-          <Chart />
+          <Chart graphData={graphData} />
         </TableMoreRowContentRight>
       </TableMoreRowContent>
     </TableMoreRowWrapper>
@@ -292,7 +293,7 @@ let TableMoreRow = ({
 TableMoreRow = reduxForm({
   form: 'tranche',
   initialValues: {},
-  destroyOnUnmount: true
+  destroyOnUnmount: false
 })(TableMoreRow);
 
 const mapStateToProps = (state) => ({

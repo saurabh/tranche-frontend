@@ -5,7 +5,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import Banner from 'app/components/Banner/Banner';
-import { fetchTableData } from 'redux/actions/tableData';
+import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
@@ -37,6 +37,7 @@ const App = ({
   fetchTableData,
   setCurrentBlock,
   summaryFetchSuccess,
+  trancheCardToggle,
   path,
   ethereum: { address },
   data: { skip, limit, filter, filterType, tradeType },
@@ -136,6 +137,7 @@ const App = ({
             },
             tranchesList
           );
+          trancheCardToggle({ status: false, id: null });
         }
       });
     const Staking = web3.eth
@@ -247,6 +249,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchTableData,
   setCurrentBlock,
-  summaryFetchSuccess
-  // changePath
+  summaryFetchSuccess,
+  trancheCardToggle
 })(NetworkDetector(App));

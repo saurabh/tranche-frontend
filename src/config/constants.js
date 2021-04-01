@@ -140,16 +140,17 @@ export const trancheData = [{ address: ETHDAITrancheAAddress.toLowerCase() }, { 
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
-  tranchesList: 'earn',
-  stakingList: 'staking',
   transaction: 'loans/transaction',
+  summaryLoan: 'summary/loan',
   summaryRatio: 'summary/ratio',
   summaryCollateral: 'summary/collateral',
-  summaryLoan: 'summary/loan',
+  stakingList: 'staking',
   stakingSummaryDetail: 'staking/detail/',
   stakingSummary: 'staking/summary/',
   sliceSummary: 'slice/summary',
-  totalValueLocked: 'earn/summary/total'
+  tranchesList: 'earn',
+  totalValueLocked: 'earn/summary/total',
+  graphUri: 'earn/graph/apy?'
 };
 
 // Filters

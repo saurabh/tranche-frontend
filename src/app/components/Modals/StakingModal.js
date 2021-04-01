@@ -38,7 +38,6 @@ import { Lock, TrancheClaim } from 'assets';
 
 import i18n from '../locale/i18n';
 const { stakingSummaryDetail } = apiUri;
-const BASE_URL = serverUrl;
 
 const FirstCustomStyles = {
   overlay: {
@@ -151,7 +150,7 @@ const StakingModal = ({
 
   useEffect(() => {
     const getStakingDetails = async () => {
-      const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress + '/' + address}`);
+      const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
       setUserStaked(result.userStaked);
@@ -503,7 +502,9 @@ const StakingModal = ({
       ? notFound()
       : modalTypeMobile === null
       ? claimModal()
-      : (modalTypeMobile === true || modalTypeMobile === false) ? stakingModal() : false
+      : modalTypeMobile === true || modalTypeMobile === false
+      ? stakingModal()
+      : false
     : false;
 };
 

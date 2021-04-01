@@ -272,6 +272,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type, deposit
             };
           });
           emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
         });
     } else {
       await JCompound.methods
@@ -286,6 +288,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type, deposit
             };
           });
           emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
         });
     }
   } catch (error) {
@@ -313,6 +317,8 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
             };
           });
           emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
         });
     } else {
       await JCompound.methods
@@ -327,6 +333,8 @@ export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
             };
           });
           emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
         });
     }
   } catch (error) {
