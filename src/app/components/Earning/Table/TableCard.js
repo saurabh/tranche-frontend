@@ -438,7 +438,7 @@ const TableCard = ({
             <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
           </TableCardMoreContent>
             : 
-          <TableCardMore className={'table-card-more ' + (trancheCardToggle.status && id === trancheCardToggle.id ? 'table-more-card-toggle' : '')}>
+          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
                 graphData={graphData}
