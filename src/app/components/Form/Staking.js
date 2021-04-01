@@ -119,7 +119,6 @@ let StakingForm = ({
       e.preventDefault();
       let num = modalType ? balance : userStaked;
       change('amount', num);
-      console.log(num);
       setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
