@@ -4,7 +4,6 @@ import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import axios from 'axios';
-import { useOuterClick } from 'services/useOuterClick';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
@@ -14,13 +13,12 @@ import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
   readyToTransact,
-  isGreaterThan,
   roundNumber
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { PagesData, etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable, InfoWhite } from 'assets';
+import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl   } from 'config';
+import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -49,9 +47,10 @@ import {
   TableCardMoreContent,
   TableContentCardWrapperMobile,
   TableContentCardMobile,
-  TableColMobile,
-  TableMobilColContent,
-  TableMobilCardBtn
+  TableMobileContent,
+  TableMobileContentRow, 
+  TableMobileContentCol,
+  TableCardImgWrapper
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
@@ -89,7 +88,6 @@ const TableCard = ({
 }) => {
   const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   const [graphData, setGraphData] = useState(false);
-  const [hasBalance, setHasBalance] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setApproveLoading] = useState(false);
@@ -98,25 +96,8 @@ const TableCard = ({
   const [isEth, setIsEth] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
   const graphTimeFrame = 'hour';
-  const innerRef = useOuterClick((e) => {
-    setInfoBoxToggle(false);
-  });
-  const availableAmount = subscriber === 'N/A' && amount === 'N/A' ? 0 : subscriber === 'N/A' ? amount : amount - subscriber;
 
-  useEffect(() => {
-    const balanceCheck = () => {
-      try {
-        if (type === 'TRANCHE_A') {
-          if (cryptoType !== 'N/A' && amount !== 'N/A' && isGreaterThan(Number(tokenBalance[cryptoType]), Number(toWei(availableAmount.toString()))))
-            setHasBalance(true);
-        } else setHasBalance(true);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    balanceCheck();
-  }, [amount, type, cryptoType, subscriber, tokenBalance, availableAmount]);
+  
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -245,6 +226,7 @@ const TableCard = ({
             <TableFirstColWrapper>
               <TableCardImg
                 tranche={true}
+                background={true ? '#68D2FF' : '#FF7A7F'}
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
@@ -384,50 +366,78 @@ const TableCard = ({
           className={trancheCard ? 'table-card-toggle' : ''}
           tranche
         >
-          <span></span>
-          <TableColMobile address>
-            <TableMobilColContent>
-              <h2>{name && name}</h2>
-              <h2>{addrShortener(contractAddress)}</h2>
-            </TableMobilColContent>
-          </TableColMobile>
+          <TableCardImgWrapper>
+            <TableCardImg
+              tranche={true}
+              background={true ? '#68D2FF' : '#FF7A7F'}
+              // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+              // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+            >
+              <img src={CompoundLogo} alt='CompoundLogo' />
+              <span>
+                <img src={DAITrancheTable} alt='DAITrancheTable' />
+              </span>
+            </TableCardImg>
+          </TableCardImgWrapper>
 
-          <TableColMobile>
-            <TableMobilColContent col>
-              {/* <h2>{amount.toString().length > 5 ? amount.toString().substring(0, 5) + '... ' : amount.toString() + ' '}</h2>
-              <h2>{cryptoType}</h2> */}
-              <h2>{apy}</h2>
-              <h2>{cryptoType}</h2>
-            </TableMobilColContent>
-          </TableColMobile>
+          <TableMobileContent>
 
-          <TableColMobile>
-            <TableMobilColContent col>
-              <h2>{apy}</h2> <h2>%</h2>
-            </TableMobilColContent>
-          </TableColMobile>
 
-          <TableColMobile>
-            <TableMobilColContent col>
-              <h2>{roundNumber(subscriber)}</h2>
-            </TableMobilColContent>
-          </TableColMobile>
+            <TableMobileContentRow> 
+              <TableFirstColWrapper>
+                <FirstColContent instrument>
+                  <FirstColTitle>
+                    <h2>{name && name}</h2>
+                    <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
+                      <button>
+                        <img src={ChevronTable} alt='ChevronTable' />
+                      </button>
+                    </AdustBtnWrapper>
+                  </FirstColTitle>
+                  <FirstColSubtitle>
+                    <h2>{addrShortener(trancheTokenAddress)}</h2>
+                    <a href={etherScanUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                      <img src={LinkArrow} alt='' />
+                    </a>
+                  </FirstColSubtitle>
+                </FirstColContent>
+              </TableFirstColWrapper>
+            </TableMobileContentRow>
 
-          <TableColMobile btn>
-            <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper' chevron>
-              <button>
-                <img src={ChevronTable} alt='ChevronTable' />
-              </button>
-            </TableMobilCardBtn>
-          </TableColMobile>
+
+
+            <TableMobileContentRow>
+
+              <TableMobileContentCol>
+                <h2>annual yield (apy)</h2>
+                <h2>
+                  <img src={apyImage} alt='apyImage' />
+                  {apy}%
+                  <img src={Info} alt='infoImage' />
+                </h2>
+              </TableMobileContentCol>
+              <TableMobileContentCol>
+                <h2>total value locked</h2>
+                <h2>{roundNumber(subscriber)} <span>DAI</span></h2>
+              </TableMobileContentCol>
+              <TableMobileContentCol>
+                <h2>My Subscripton</h2>
+                <h2>{subscription ? roundNumber(subscription) : '0'} <span>DAI</span></h2>
+              </TableMobileContentCol>
+
+            </TableMobileContentRow>
+
+
+          </TableMobileContent>
+
+          
         </TableContentCardMobile>
-        {isLoading ? (
-          <TableCardMore className={'table-card-more'}>
-            <TableCardMoreContent>
-              <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-            </TableCardMoreContent>
-          </TableCardMore>
-        ) : (
+        {
+          isLoading ?
+          <TableCardMoreContent>
+            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
+          </TableCardMoreContent>
+            : 
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
             <TableCardMoreContent>
               <TableMoreRow
@@ -445,7 +455,8 @@ const TableCard = ({
               />
             </TableCardMoreContent>
           </TableCardMore>
-        )}
+        }
+  
       </TableContentCardWrapperMobile>
     );
   };

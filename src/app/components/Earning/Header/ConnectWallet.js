@@ -8,7 +8,6 @@ import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper } from './styles/HeaderComponents';
 import { PagesData } from 'config/constants';
 import Wallet from "assets/images/svg/wallet.svg";
-import { useOuterClick } from 'services/useOuterClick';
 import i18n from '../../locale/i18n';
 
 const ConnectWallet = ({

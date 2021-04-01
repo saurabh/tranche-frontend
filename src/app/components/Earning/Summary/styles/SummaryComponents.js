@@ -10,13 +10,18 @@ const SummaryCardWrapper = styled.div`
     box-sizing: border-box;
     padding: 17px;
     border-radius: 12px;
-    @media (max-width: 992px){
-        margin-bottom: 15px;
-        width: 100%;
+     @media (max-width: 992px){
+        margin: 0 19px;
+        width: 90% !important;
         // display: none !important;
     }
     ${({ stakeCard }) => stakeCard && `
         width: 434px !important;
+        @media (max-width: 992px){
+            margin: 15px auto;
+            width: 90% !important;
+            // display: none !important;
+        }
      `}
 `;
 const SummaryCardContainer = styled.div`
@@ -196,10 +201,18 @@ const StakeCardText = styled.div`
         h2:nth-child(1){
             font-weight: bold;
             font-size: 20px;
+
+            @media (max-width: 992px) {
+                font-size: 15px;            
+            }
+
         }
         h2:nth-child(2){
             font-size: 14px;
             font-weight: 500;
+            @media (max-width: 992px) {
+                font-size: 14px;
+            }
         }
 `;
 const StakeCardBtn = styled.div`

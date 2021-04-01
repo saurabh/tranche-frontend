@@ -84,7 +84,7 @@ const NavbarWrapper = styled.div`
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border: none;
+    border-bottom: 2px solid #E9E9FC;  
   }
 `;
 const NavbarContainer = styled.div`
@@ -275,12 +275,19 @@ const WalletBtn = styled.button`
   }
   @media (max-width: 992px) {
     margin: 5px 0;
+    width: 129px;
+    height: 33px;
   }
 `;
 
 const WalletBtnIcon = styled.div`
   display: flex;
   align-items: center;
+  @media (max-width: 992px) {
+    img{
+      width: 17px;
+    }
+  }
 `;
 
 const WalletBtnText = styled.div`
@@ -294,6 +301,9 @@ const WalletBtnText = styled.div`
     text-transform: uppercase;
     color: #FFFFFF;
     margin-left: 12px;
+    @media (max-width: 992px) {
+      font-size: 10px;
+    }
   }
 `;
 const RatesWrapper = styled.div`
@@ -404,7 +414,7 @@ const TabIndicator = styled.div`
 
 const NavBarMobile = styled.div`
   width: 100%;
-  background: #282828;
+  background: #F9F9FE;
   position: fixed;
   right: 0;
   top: 0;
@@ -450,7 +460,7 @@ const NavBarMobileContent = styled.div`
         text-align: center;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        color: #FFFFFF;
+        color: #282828;
         opacity: 0.5;
       }
     }
@@ -538,10 +548,11 @@ const HeaderTabsBtnsLinks = styled.div`
   }
 `
 const NavbarSpan = styled.span`
-  background: #778899 !important;
+  background: #4441CF !important;
 `
 const MobileNavbarIconWrapper = styled.div`
   display: none;
+  align-items: center;
   @media (max-width: 992px) {
     display: flex;
   }
@@ -549,6 +560,17 @@ const MobileNavbarIconWrapper = styled.div`
 `
 const NavbarIconWrapper = styled.div`
   margin-left: 12px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 30px;
+  height: 30px;
+  background: rgba(68, 65, 207, 0.1);
+  border-radius: 50%;
+`
+
+const NavbarIconContent = styled.div`
 `
 
 
@@ -583,5 +605,6 @@ export {
   HeaderTabsBtnsLinks,
   NavbarSpan,
   MobileNavbarIconWrapper,
-  NavbarIconWrapper
+  NavbarIconWrapper,
+  NavbarIconContent
 };

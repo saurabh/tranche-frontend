@@ -12,15 +12,14 @@ html{
 }
 #navbar-icon span{
   height: 2px;
-  margin: 4px 0;
+  width: 15px;  
+  margin: 3px 0;
   display: block;
   background: #ffffff;
   transition: all 0.3s ease-in-out;
-  width: 23px;
-
 }
 .NavIconActive span:nth-child(1){ 
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(5px) rotate(45deg);
 }
 
 .NavIconActive span:nth-child(2){
@@ -28,7 +27,7 @@ html{
   transform: translateX(-10px);
 }
 .NavIconActive span:nth-child(3){
-  transform: translateY(-6px) rotate(-45deg);
+  transform: translateY(-5px) rotate(-45deg);
 }
 #logo-wrapper img{
   height: 25px;
@@ -1138,14 +1137,14 @@ table, th, td {
     justify-content: center !important;
   }
   
-  .table-col{
+  /* .table-col{
     width: 100%;
     padding: 5px 0;
     border-bottom: 1px solid #EFEFEF;
     display: flex;
     justify-content: space-between;
-  }
-
+  } */
+/* 
   .table-col:before{
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -1154,7 +1153,7 @@ table, th, td {
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: rgba(56, 56, 56, 0.3);
-  }
+  } */
   .table-more-card-toggle {
     /*padding: 30px 12px 30px 12px;*/
     /* padding: 0 20px; */
@@ -1262,7 +1261,7 @@ table, th, td {
     opacity: 1 !important;
   }
   #navbar-icon{
-    display: block;
+    display: flex;  
   }
 
   .table-more-row{
@@ -1279,7 +1278,7 @@ table, th, td {
     justify-content: center !important;
   }
   
-  .table-col{
+  /* .table-col{
     width: 100%;
     padding: 5px 0;
     border-bottom: 1px solid #EFEFEF;
@@ -1294,7 +1293,7 @@ table, th, td {
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: rgba(56, 56, 56, 0.3);
-  }
+  } */
   .table-more-card-toggle {
     /*padding: 30px 12px 30px 12px;*/
     /* padding: 30px 39px 30px 47px; */

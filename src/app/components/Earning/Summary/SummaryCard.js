@@ -44,7 +44,6 @@ const SummaryCard = ({
   color,
   stakeCard
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
@@ -54,13 +53,6 @@ const SummaryCard = ({
     setBalance(roundNumber(balance));
   }, []);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
 
   useEffect(() => {
     const setEpochTime = async () => {
@@ -155,7 +147,6 @@ const SummaryCard = ({
   const Card = () =>{
     return (
       <div>
-        {isDesktop ? (
           <SummaryCardWrapper color={color}>
             {value || value === 0 ? (
               <SummaryCardContainer>
@@ -214,35 +205,12 @@ const SummaryCard = ({
               type={type}
             />
           </SummaryCardWrapper>
-        ) : (
-          <StakingModal
-            // State Values
-            path={path}
-            modalIsOpen={modalIsOpen}
-            modalType={modalType}
-            summaryModal={summaryModal}
-            tokenAddress={tokenAddress}
-            noBalance={Number(balance) === 0}
-            // Functions
-            closeModal={() => closeModal()}
-            openModal={(bool) => openModal(bool)}
-            hasAllowance={hasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isLPToken}
-            // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
-            type={type}
-          />
-        )}
       </div>
     );
   }
   const StakeCard = () =>{
     return (
       <div>
-        {isDesktop && 
           <SummaryCardWrapper color={color} stakeCard={stakeCard}>
             {value || value === 0 ? (
               <SummaryCardContainer stakeCard>
@@ -261,9 +229,7 @@ const SummaryCard = ({
                 <div></div>
               </SummaryCardContainer>
             )}
-          </SummaryCardWrapper>
-         }
-      
+          </SummaryCardWrapper>      
       </div>
     );
   }

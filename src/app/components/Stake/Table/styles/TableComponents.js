@@ -20,12 +20,12 @@ const TableContentCard = styled.div`
   // border-bottom: 1px solid #efefef;
   justify-content: space-between;
   cursor: pointer;
-  @media (max-width: 1200px) {
-    flex-direction: column;
-    align-items: flex-end;
-    // border-bottom: 3px solid #efefef;
-    padding: 0 12px;
-  }
+  // @media (max-width: 1200px) {
+  //   flex-direction: column;
+  //   align-items: flex-end;
+  //   // border-bottom: 3px solid #efefef;
+  //   padding: 0 12px;
+  // }
   ${({ pointer }) => !pointer && `
     cursor: default; 
   `}
@@ -259,23 +259,22 @@ const TableContainerHeader = styled.div`
 `;
 const TableTitle = styled.div`
     & > h2{
-        font-family: "Roboto", sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
-        text-transform: uppercase;
-        font-weight: 400;
-        font-size: 18px;
-        color: #292929;   
+        font-weight: bold;
+        font-size: 18.3333px;
+        line-height: 26px;        
+        color: #393F56;
     }
 `;
 const TableSubTitle = styled.div`
     & > h2{
-        font-family: "Roboto", sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
-        text-transform: uppercase;
-        font-weight: 400;
-        font-size: 10px;
-        cursor: pointer;
-        color: #292929;
+        font-weight: 500;
+        font-size: 12.5px;
+        line-height: 15px;
+        color: #9496B6;
         ${({ sorting }) => sorting && `
           text-align: center;
           letter-spacing: 2px;
@@ -496,7 +495,7 @@ const TableContentCardWrapperMobile = styled.div`
   border-radius: 5px;
   margin: 12px 0;
   ${({ tranche }) => tranche && `
-    min-height: 60px;
+    min-height: 92px;
     height: auto;
   `}
 `
@@ -518,8 +517,10 @@ const TableContentCardMobile = styled.div`
   ${({ tranche }) => tranche && `
    
   `}
+  border-bottom: none !important;
 `
 const TableMobilColContent = styled.div`
+
   h2{
     margin: 1px 0;
   }
@@ -729,6 +730,14 @@ const InfoBox = styled.div`
     }
   }
 `
+
+const TableCardImgWrapper = styled.div`
+  height: 92px;
+  width: 17%;
+  display: flex;
+  align-items: center;
+`
+
 const TableCardImg = styled.div`
   display: flex;
   position: relative;
@@ -741,17 +750,21 @@ const TableCardImg = styled.div`
     position: absolute;
     width: 16px;
     height: 16px;
-    background: #68D2FF;
+    background: ${props => props.background ? props.background : ''};
     border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
     right: -9px;
     bottom: 0;
+    @media (max-width: 992px){
+      left: 29px;
+    }
     img{
       height: 9px;
     }
   }
+  
   
   ${({ tranche, color, type }) => tranche && type === "A" && `
     ::after{
@@ -812,6 +825,9 @@ const TableFirstColWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 992px){
+    width: 100%;
+  }
 `
 const FirstColImg = styled.div`
   position: relative;
@@ -822,9 +838,14 @@ const FirstColImg = styled.div`
 `
 const FirstColContent = styled.div`
   position: relative;
+  margin-left: 12px;
+
   ${({ instrument }) => instrument && `
     margin-left: 0;
   `}
+  @media (max-width: 992px){
+    width: 100%;
+  }
   
 `
 const FirstColTitle = styled.div`
@@ -837,6 +858,21 @@ const FirstColTitle = styled.div`
     text-transform: uppercase;
     color: #39295A;
   }   
+  @media (max-width: 992px){
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    div{
+      button{
+        width: auto;
+        height: auto;
+        img{
+          width: 12px;
+        }
+      }
+    }
+  }
 `
 const FirstColSubtitle = styled.div`
   display: flex;
@@ -1053,6 +1089,7 @@ const TableCardMore = styled.div`
   }
   @media (max-width: 992px){
     padding: 0 !important;  
+    border-top: 2px solid #F9F9FB;
   }
 
 `
@@ -1291,6 +1328,9 @@ const CheckboxContent = styled.div`
       transform: translateY(-50%);
     }
   }
+  ${({ disabled }) => disabled && `
+    pointer-events: none;
+  `}
 `
 
 const TableMoreTitleWrapper = styled.div`
@@ -1307,7 +1347,93 @@ const TableMoreTitleWrapper = styled.div`
     color: #39295A;
   }
 `
+const TableMobileContent = styled.div`
+  width: 83%; 
+  height: 92px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
 
+const TableMobileContentRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`
+
+
+const TableMobileContentCol = styled.div`
+  width: 33.3333333%;
+  text-align: left;
+  :nth-child(1){
+    h2{
+      display: flex;
+      align-items: center;
+      img{
+        height: 12px;    
+        :nth-child(1){
+          margin: 0 5px 0 0;
+        }
+        :nth-child(2){
+          margin: 0 0 0 2px;
+        }
+      }
+    }
+  }
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 5.55px;
+    line-height: 7px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(36, 39, 50, 0.6);
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10.42px;
+    line-height: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+    margin: 3px 0 0 0;
+    span{
+      font-weight: normal;
+      height: auto;
+      width: auto;
+      background: none;
+      position: relative;
+    }
+  }
+`
+
+const MobileMoreFormBtns = styled.div`
+  button{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    padding: 7px 0;
+    outline: none;
+    opacity: 0.5;
+    margin-right: 12px;
+    color: #4441CF;
+  }
+`
+const MobileMoreFormBtn = styled.button`
+  ${({ current }) => current && `
+    border-bottom: 1px solid #4441CF !important;
+    opacity: 1 !important;
+  `}
+`
 
 export {
   TableWrapper,
@@ -1378,5 +1504,11 @@ export {
   FormContent,
   CheckboxWrapper,
   CheckboxContent,
-  TableMoreTitleWrapper
+  TableMoreTitleWrapper,
+  TableMobileContent,
+  TableMobileContentRow, 
+  TableMobileContentCol,
+  TableCardImgWrapper,
+  MobileMoreFormBtns,
+  MobileMoreFormBtn
 };
