@@ -198,7 +198,7 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, summaryFetchSuccess, tradeType, skip]);
+  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
