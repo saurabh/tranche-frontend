@@ -105,7 +105,13 @@ let StakingForm = ({
 
   const handleInputChange = (newValue) => {
     setAmount(newValue);
-    isGreaterThan(newValue, balance) ? setBalanceCheck('InputStylingError') : setBalanceCheck('');
+    modalType
+      ? isGreaterThan(newValue, balance)
+        ? setBalanceCheck('InputStylingError')
+        : setBalanceCheck('')
+      : isGreaterThan(newValue, userStaked)
+      ? setBalanceCheck('InputStylingError')
+      : setBalanceCheck('');
   };
 
   const setMaxAmount = useCallback(
@@ -113,7 +119,7 @@ let StakingForm = ({
       e.preventDefault();
       let num = modalType ? balance : userStaked;
       change('amount', num);
-      console.log(num)
+      console.log(num);
       setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,7 +225,7 @@ let StakingForm = ({
                 </ModalFormButton>
               )}
             </ApproveBtnWrapper>
-
+            
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}
