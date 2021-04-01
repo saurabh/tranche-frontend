@@ -105,25 +105,24 @@ let StakingForm = ({
 
   const handleInputChange = (newValue) => {
     setAmount(newValue);
-    isGreaterThan(newValue, balance) ? setBalanceCheck('InputStylingError') : setBalanceCheck('');
+    modalType
+      ? isGreaterThan(newValue, balance)
+        ? setBalanceCheck('InputStylingError')
+        : setBalanceCheck('')
+      : isGreaterThan(newValue, userStaked)
+      ? setBalanceCheck('InputStylingError')
+      : setBalanceCheck('');
   };
 
-  const setMaxSliceAmount = useCallback(
+  const setMaxAmount = useCallback(
     (e) => {
       e.preventDefault();
-      let num;
-      if (modalType) {
-        num = balance.replace(/,/g, '');
-        num = Number(num);
-      } else {
-        num = userStaked;
-      }
-      num = roundNumber(num, 4, 'down');
+      let num = modalType ? balance : userStaked;
       change('amount', num);
-      setAmount(num);
+      setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance, userStaked]
+    [balance, userStaked, modalType]
   );
 
   return (
@@ -151,7 +150,7 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>
+                  <button onClick={(e) => setMaxAmount(e)}>MAX</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
@@ -225,7 +224,7 @@ let StakingForm = ({
                 </ModalFormButton>
               )}
             </ApproveBtnWrapper>
-
+            
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}
