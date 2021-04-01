@@ -108,22 +108,16 @@ let StakingForm = ({
     isGreaterThan(newValue, balance) ? setBalanceCheck('InputStylingError') : setBalanceCheck('');
   };
 
-  const setMaxSliceAmount = useCallback(
+  const setMaxAmount = useCallback(
     (e) => {
       e.preventDefault();
-      let num;
-      if (modalType) {
-        num = balance.replace(/,/g, '');
-        num = Number(num);
-      } else {
-        num = userStaked;
-      }
-      num = roundNumber(num, 4, 'down');
+      let num = modalType ? balance : userStaked;
       change('amount', num);
-      setAmount(num);
+      console.log(num)
+      setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance, userStaked]
+    [balance, userStaked, modalType]
   );
 
   return (
@@ -151,7 +145,7 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>
+                  <button onClick={(e) => setMaxAmount(e)}>MAX</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>

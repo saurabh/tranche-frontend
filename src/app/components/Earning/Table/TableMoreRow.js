@@ -54,11 +54,9 @@ let TableMoreRow = ({
     (e, type) => {
       e.preventDefault();
       if (type) {
-        let num = roundNumber(buyerTokenBalance, 4, 'down');
-        change('depositAmount', num.toString());
+        change('depositAmount', buyerTokenBalance);
       } else {
-        let num = roundNumber(trancheTokenBalance, 4, 'down');
-        change('withdrawAmount', num.toString());
+        change('withdrawAmount', trancheTokenBalance);
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
