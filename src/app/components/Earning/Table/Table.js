@@ -157,7 +157,7 @@ const Table = ({
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper mobile>
-          <TableHead />
+          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-content'>
             {isLoading ? (
               <div>

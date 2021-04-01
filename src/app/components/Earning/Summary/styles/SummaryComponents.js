@@ -10,14 +10,19 @@ const SummaryCardWrapper = styled.div`
     box-sizing: border-box;
     padding: 17px;
     border-radius: 12px;
-    ${({ stakeCard }) => stakeCard && `
-        width: 434px !important;
-     `}
      @media (max-width: 992px){
-        margin-bottom: 15px;
-        width: 100% !important;
+        margin: 0 19px;
+        width: 90% !important;
         // display: none !important;
     }
+    ${({ stakeCard }) => stakeCard && `
+        width: 434px !important;
+        @media (max-width: 992px){
+            margin: 15px auto;
+            width: 90% !important;
+            // display: none !important;
+        }
+     `}
 `;
 const SummaryCardContainer = styled.div`
     display: flex;

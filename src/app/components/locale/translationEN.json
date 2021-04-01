@@ -28,8 +28,8 @@
     "balance": "Balance",
     "table": {
       "tableHeader": {
-        "title": "AVAILABLE INSTRUMENTS",
-        "subtitle": "PROTOCOL INTEGRATIONS"
+        "title": "Available Instruments",
+        "subtitle": "Protocol Integrations"
       },
       "tableHead": {
         "platform": "PLATFORM",

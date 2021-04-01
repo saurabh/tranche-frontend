@@ -44,7 +44,6 @@ const SummaryCard = ({
   color,
   stakeCard
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
@@ -54,13 +53,6 @@ const SummaryCard = ({
     setBalance(roundNumber(balance));
   }, []);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
 
   useEffect(() => {
     const setEpochTime = async () => {

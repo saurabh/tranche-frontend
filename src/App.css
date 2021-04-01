@@ -12,15 +12,14 @@ html{
 }
 #navbar-icon span{
   height: 2px;
-  margin: 4px 0;
+  width: 15px;  
+  margin: 3px 0;
   display: block;
   background: #ffffff;
   transition: all 0.3s ease-in-out;
-  width: 23px;
-
 }
 .NavIconActive span:nth-child(1){ 
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(5px) rotate(45deg);
 }
 
 .NavIconActive span:nth-child(2){
@@ -28,7 +27,7 @@ html{
   transform: translateX(-10px);
 }
 .NavIconActive span:nth-child(3){
-  transform: translateY(-6px) rotate(-45deg);
+  transform: translateY(-5px) rotate(-45deg);
 }
 #logo-wrapper img{
   height: 25px;
@@ -1262,7 +1261,7 @@ table, th, td {
     opacity: 1 !important;
   }
   #navbar-icon{
-    display: block;
+    display: flex;  
   }
 
   .table-more-row{

@@ -30,7 +30,7 @@ const responsive = {
   mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
-    paritialVisibilityGutter: 30
+    paritialVisibilityGutter: 100
   }
 };
 
@@ -178,88 +178,91 @@ const SummaryCards = ({ path, ethereum: { address }, setTokenBalance, userSummar
       
       {
         !isDesktop && 
-        <Carousel 
-          responsive={responsive} 
-          arrows={false}          
-          partialVisible={true} 
-        >
-        <SummaryCard
-          title={
-            currentPath === 'stake'
-              ? i18n.t('stake.summary.slice.title')
-              : currentPath === 'tranche'
-              ? i18n.t('tranche.summary.valueLocked.title')
-              : 'Decentralized Loans'
-          }
-          tokenAddress={slice.address}
-          value={'Card'}
-          path={currentPath}
-          type={''}
-          details={''}
-          openModal={(bool, num = 1) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalType={false}
-          summaryModal={''}
-          hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
-          color='#4441CF'
-        />
-        <SummaryCard
-          title={
-            currentPath === 'stake'
-              ? i18n.t('stake.summary.sliceLP.title')
-              : currentPath === 'tranche'
-              ? i18n.t('tranche.summary.slicePrice.title')
-              : 'Protocol Collateral'
-          }
-          tokenAddress={lp.address}
-          lpList={lpList}
-          value={'Card'}
-          path={currentPath}
-          type={''}
-          details={''}
-          openModal={(bool, num = 2) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalType={false}
-          summaryModal={''}
-          hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
-          color='#5826E5'
-        />
-        <SummaryCard
-          title={
-            currentPath === 'stake'
-              ? i18n.t('stake.summary.sliceRewards.title')
-              : currentPath === 'tranche'
-              ? 'SLICE 24H Volume'
-              : 'Collateralization Ratio'
-          }
-          value={'Card'}
-          isLoading={false}
-          path={currentPath}
-          type={''}
-          details={''}
-          openModal={(bool = null, num = 3) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalType={false}
-          summaryModal={''}
-          color='#2E65F3'
-        />
-        <SummaryCard
-          title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
-          value={'Card'}
-          isLoading={false}
-          path={currentPath}
-          type={''}
-          details={''}
-          openModal={(bool = null, num = 3) => openModal(bool, num)}
-          closeModal={closeModal}
-          modalType={false}
-          summaryModal={''}
-          color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
-          stakeCard={true}
-        />
-      </Carousel>
+        <SummaryCardsWrapper>
+          <Carousel 
+            responsive={responsive} 
+            arrows={false}          
+            partialVisible={true} 
+          >
+          <SummaryCard
+            title={
+              currentPath === 'stake'
+                ? i18n.t('stake.summary.slice.title')
+                : currentPath === 'tranche'
+                ? i18n.t('tranche.summary.valueLocked.title')
+                : 'Decentralized Loans'
+            }
+            tokenAddress={slice.address}
+            value={'Card'}
+            path={currentPath}
+            type={''}
+            details={''}
+            openModal={(bool, num = 1) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalType={false}
+            summaryModal={''}
+            hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
+            color='#4441CF'
+          />
+          <SummaryCard
+            title={
+              currentPath === 'stake'
+                ? i18n.t('stake.summary.sliceLP.title')
+                : currentPath === 'tranche'
+                ? i18n.t('tranche.summary.slicePrice.title')
+                : 'Protocol Collateral'
+            }
+            tokenAddress={lp.address}
+            lpList={lpList}
+            value={'Card'}
+            path={currentPath}
+            type={''}
+            details={''}
+            openModal={(bool, num = 2) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalType={false}
+            summaryModal={''}
+            hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
+            color='#5826E5'
+          />
+          <SummaryCard
+            title={
+              currentPath === 'stake'
+                ? i18n.t('stake.summary.sliceRewards.title')
+                : currentPath === 'tranche'
+                ? 'SLICE 24H Volume'
+                : 'Collateralization Ratio'
+            }
+            value={'Card'}
+            isLoading={false}
+            path={currentPath}
+            type={''}
+            details={''}
+            openModal={(bool = null, num = 3) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalType={false}
+            summaryModal={''}
+            color='#2E65F3'
+          />
+        </Carousel>
+          <SummaryCard
+            title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
+            value={'Card'}
+            isLoading={false}
+            path={currentPath}
+            type={''}
+            details={''}
+            openModal={(bool = null, num = 3) => openModal(bool, num)}
+            closeModal={closeModal}
+            modalType={false}
+            summaryModal={''}
+            color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
+            stakeCard={true}
+          />
+      </SummaryCardsWrapper>
+
       }
       
     </div>

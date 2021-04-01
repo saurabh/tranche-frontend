@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
-import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, LocaleWrapper, MobileNavbarIconWrapper, NavbarIconWrapper } from './styles/HeaderComponents';
+import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
 import { apiUri, pairData  } from 'config/constants';
-import { ETH, DAI, BackArrow, ChevronDown } from 'assets';
+import { ETH, DAI, BackArrow } from 'assets';
 import { getRequest } from 'services/axios';
-import { useOuterClick } from 'services/useOuterClick';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
 import i18n from "../../locale/i18n";
-
 import {
   RatesWrapper,
   RatesBoxWrapper,
@@ -31,11 +29,6 @@ function Navbar({ path }) {
   // const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
-  const [localeToggle, setLocaleToggle] = useState(false);
-
-  const innerRef = useOuterClick(e => {
-    setLocaleToggle(false);
-  });
 
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
@@ -61,12 +54,6 @@ function Navbar({ path }) {
     e.preventDefault();
     setRatesToggle(true);
   }
-  const pathWindow =  window.location.pathname;
-  let parsedPathWindow = pathWindow.split('/');
-  let currentPath = parsedPathWindow[parsedPathWindow.length - 1];
-  const newPath = (lng) =>{
-    return `${"/" + lng + "/" + currentPath}`;
-  }
   
   return (
     <NavbarWrapper>
@@ -75,21 +62,15 @@ function Navbar({ path }) {
             <a href="https://tranche.finance/"><img src={LogoColored} alt='Logo' /></a>
         </div>
         <MobileNavbarIconWrapper mobile>
-          <LocaleWrapper color="rgb(68,65,207)" ref={innerRef} mobile>
-            <h2 onClick={() => setLocaleToggle(!localeToggle)}>{i18n.language}<img src={ChevronDown} alt="chevron"/> </h2>
-            { localeToggle ?
-              <div>
-                <a href={newPath("en")}>en</a>
-                <a href={newPath("zh")}>ZH</a>
-                <a href={newPath("kr")}>KR</a>
-              </div> : ""
-            }
-          
-          </LocaleWrapper>
+
+          <ConnectWallet />
+
           <NavbarIconWrapper id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
-            <NavbarSpan></NavbarSpan>
-            <NavbarSpan></NavbarSpan>
-            <NavbarSpan></NavbarSpan>
+            <NavbarIconContent>
+              <NavbarSpan></NavbarSpan>
+              <NavbarSpan></NavbarSpan>
+              <NavbarSpan></NavbarSpan>
+            </NavbarIconContent>
           </NavbarIconWrapper>
         </MobileNavbarIconWrapper>
         

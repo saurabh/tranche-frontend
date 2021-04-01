@@ -26,7 +26,7 @@ import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFilterRow,
   TableMobileRowCreateLoan
 } from './styles/TableComponents';
-import { RequestLoan, ingAsset, FilterChevron, CreateLoan, EarningAsset} from 'assets';
+import { RequestLoan, FilterChevron, CreateLoan, EarningAsset} from 'assets';
 
 
 const style = {
