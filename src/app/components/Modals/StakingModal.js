@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
-import { massHarvest } from 'services/contractMethods';
+import { getUserStaked, massHarvest } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -127,6 +127,7 @@ const StakingModal = ({
   // const stakableAssets = useRef();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
+  const [stakingAddress, setStakingAddress] = useState(null);
   const [isLPTokenMobile, setLPTokenMobile] = useState(false);
   const [typeMobile, setTypeMobile] = useState('slice');
   const [totalStaked, setTotalStaked] = useState(0);
@@ -154,8 +155,9 @@ const StakingModal = ({
       const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress + '/' + address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
-      setUserStaked(result.userStaked);
-      setStakedShare((result.userStaked / result.staked) * 100);
+      let userStaked = await getUserStaked(stakingAddress, tokenAddress)
+      setUserStaked(userStaked);
+      setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
     };
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
@@ -237,7 +239,9 @@ const StakingModal = ({
             userStaked={userStaked}
             type={isDesktop ? type : typeMobile}
             tokenAddress={tokenAddress}
+            stakingAddress={stakingAddress}
             setTokenAddress={setTokenAddress}
+            setStakingAddress={setStakingAddress}
             hasAllowance={hasAllowance}
             setHasAllowance={setHasAllowance}
             approveLoading={approveLoading}
@@ -503,7 +507,9 @@ const StakingModal = ({
       ? notFound()
       : modalTypeMobile === null
       ? claimModal()
-      : (modalTypeMobile === true || modalTypeMobile === false) ? stakingModal() : false
+      : modalTypeMobile === true || modalTypeMobile === false
+      ? stakingModal()
+      : false
     : false;
 };
 
