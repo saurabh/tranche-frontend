@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { required, number, roundNumber } from 'utils';
+import { required, number, roundNumber, isGreaterThan } from 'utils';
 import { fromWei, stakingAllowanceCheck } from 'services/contractMethods';
 import { selectUp, selectDown } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
@@ -62,6 +62,7 @@ let StakingForm = ({
   userSummary: { slice, lpList }
 }) => {
   const [balance, setBalance] = useState(0);
+  const [balanceCheck, setBalanceCheck] = useState('');
   const [LPSelect, toggleLP] = useState(false);
   const [selectedLPName, setSelectedLPName] = useState(0);
   const [stakingAddress, setStakingAddress] = useState('');
@@ -69,7 +70,6 @@ let StakingForm = ({
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
 
-  
   useEffect(() => {
     if (isLPToken && lpList) {
       setDropdownName(lpList[0].name.split(' ')[0]);
@@ -98,27 +98,31 @@ let StakingForm = ({
     setStakingAddress(stakingAddress);
     let balance = tokenBalance[tokenAddress];
     let result = await stakingAllowanceCheck(lpList[index].address, lpList[index].stakingAddress, address);
-    setHasAllowance(result)
+    setHasAllowance(result);
     setBalance(fromWei(balance.toString()));
     toggleLP(false);
   };
 
-  const setMaxSliceAmount = useCallback(
+  const handleInputChange = (newValue) => {
+    setAmount(newValue);
+    modalType
+      ? isGreaterThan(newValue, balance)
+        ? setBalanceCheck('InputStylingError')
+        : setBalanceCheck('')
+      : isGreaterThan(newValue, userStaked)
+      ? setBalanceCheck('InputStylingError')
+      : setBalanceCheck('');
+  };
+
+  const setMaxAmount = useCallback(
     (e) => {
       e.preventDefault();
-      let num;
-      if (modalType) {
-        num = balance.replace(/,/g, '');
-        num = Number(num);
-      } else {
-        num = userStaked;
-      }
-      num = roundNumber(num, 4, 'down')
+      let num = modalType ? balance : userStaked;
       change('amount', num);
-      setAmount(num);
+      setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance, userStaked]
+    [balance, userStaked, modalType]
   );
 
   return (
@@ -138,15 +142,15 @@ let StakingForm = ({
                 <FieldWrapper modalType={true} staking={true}>
                   <Field
                     component={InputField}
-                    onChange={(e, newValue) => setAmount(newValue)}
+                    onChange={(e, newValue) => handleInputChange(newValue)}
                     validate={[required, number]}
-                    className='ModalFormInputNewLoan'
+                    className={`ModalFormInputNewLoan ${balanceCheck}`}
                     name='amount'
                     type='number'
                     step='0.0001'
                     id='amount'
                   />
-                  <button onClick={(e) => setMaxSliceAmount(e)}>MAX</button>
+                  <button onClick={(e) => setMaxAmount(e)}>MAX</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
@@ -220,11 +224,11 @@ let StakingForm = ({
                 </ModalFormButton>
               )}
             </ApproveBtnWrapper>
-
+            
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}
-              disabled={!hasAllowance || amount === 0}
+              disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
               stake
             >
               <h2>{modalType ? i18n.t('stake.modal.stake') : !modalType ? i18n.t('stake.modal.withdraw') : ''}</h2>

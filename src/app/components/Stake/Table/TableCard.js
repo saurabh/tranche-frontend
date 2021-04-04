@@ -160,20 +160,20 @@ const TableCard = ({
 
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{staked}</h2>
+              <h2>{roundNumber(staked)}</h2>
               {/* <h2></h2> */}
             </TableMobilColContent>
           </TableColMobile>
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{reward}</h2>
+              <h2>{roundNumber(reward)}</h2>
               <h2>SLICE</h2>
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{roundNumber(apy, false)}</h2>
+              <h2>{roundNumber(apy)}</h2>
               <h2>%</h2>
             </TableMobilColContent>
           </TableColMobile>

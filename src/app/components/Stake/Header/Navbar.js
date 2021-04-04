@@ -72,7 +72,9 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer>
         <div id='logo-wrapper'>
-            <img src={LogoColored} alt='Logo' />
+            <a href="https://tranche.finance/">
+              <img src={LogoColored} alt='Logo' />
+            </a>
         </div>
         <MobileNavbarIconWrapper mobile>
           <LocaleWrapper color="rgb(68,65,207)" ref={innerRef} mobile>
@@ -184,6 +186,7 @@ function Navbar({ path }) {
               activeStyle={{
                 color: 'rgba(68, 65, 207, 1)'
               }}
+              className="navLinkDisabled"
               exact
             >
              {i18n.t('navbar.tranche')}

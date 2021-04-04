@@ -75,12 +75,6 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
                 opacity: '1'
               }}
             >{i18n.t('navbar.lend')}</NavLink>
-            <NavLink to={baseUrl + '/earn'}
-              activeStyle={{
-                borderColor: PagesData[path].secondaryColor,
-                opacity: '1'
-              }}
-            >{i18n.t('navbar.earn')}</NavLink>
             <NavLink to={baseUrl + '/stake'}
               activeStyle={{
                 borderColor: PagesData[path].secondaryColor,
