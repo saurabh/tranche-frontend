@@ -360,6 +360,18 @@ export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userA
   }
 };
 
+export const getUserStaked = async (stakingAddress, tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
+    const Staking = StakingSetup(web3, stakingAddress);
+    let result = await Staking.methods.balanceOf(address, tokenAddress).call();
+    return fromWei(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const epochTimeRemaining = async (stakingAddress) => {
   try {
     const state = store.getState();
