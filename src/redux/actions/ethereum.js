@@ -21,11 +21,13 @@ import {
 } from './constants';
 
 export const setAddress = (address) => (dispatch) => {
-  dispatch({
-    type: SET_ADDRESS,
-    payload: address.toLowerCase()
-  });
-  window.localStorage.setItem('address', address.toLowerCase());
+  if (address) {
+    dispatch({
+      type: SET_ADDRESS,
+      payload: address.toLowerCase()
+    });
+    window.localStorage.setItem('address', address.toLowerCase());
+  }
 };
 
 export const setNetwork = (network) => (dispatch) => {
