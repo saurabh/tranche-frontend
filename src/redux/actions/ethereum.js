@@ -23,9 +23,9 @@ import {
 export const setAddress = (address) => (dispatch) => {
   dispatch({
     type: SET_ADDRESS,
-    payload: address
+    payload: address.toLowerCase()
   });
-  window.localStorage.setItem('address', address);
+  window.localStorage.setItem('address', address.toLowerCase());
 };
 
 export const setNetwork = (network) => (dispatch) => {
