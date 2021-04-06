@@ -146,10 +146,8 @@ const TableCard = ({
     try {
       e.preventDefault();
       buy
-        ? cryptoType === 'ETH'
-          ? buyTrancheTokens(contractAddress, trancheId, type, true)
-          : buyTrancheTokens(contractAddress, trancheId, type, false)
-        : sellTrancheTokens(contractAddress, trancheId, type);
+        ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType)
+        : sellTrancheTokens(contractAddress, trancheId, type, cryptoType);
     } catch (error) {
       console.error(error);
     }
@@ -190,7 +188,6 @@ const TableCard = ({
         setWithdrawApproved(withdrawTokenHasAllowance);
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
-        await setTokenBalance(buyerCoinAddress, address);
         await setTokenBalance(trancheTokenAddress, address);
         const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
         setDepositApproved(depositTokenHasAllowance);

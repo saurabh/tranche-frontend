@@ -50,12 +50,16 @@ let TableMoreRow = ({
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-
- 
-  
   let buyerTokenBalance =
-    cryptoType === 'ETH' ? balance && balance !== -1 && fromWei(balance) : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
-  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
+    cryptoType === 'ETH'
+      ? balance && balance !== -1 && fromWei(balance)
+      : cryptoType === 'USDC'
+      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
+  let trancheTokenBalance =
+    cryptoType === 'USDC'
+      ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
+      : tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -88,8 +92,7 @@ let TableMoreRow = ({
   return (
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
-        {
-          isDesktop ?
+        {isDesktop ? (
           <TableMoreRowContentLeft>
             <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
               <TableMoreTitleWrapper>
@@ -105,7 +108,10 @@ let TableMoreRow = ({
                       checked={isDepositApproved}
                       disabled={isApproveLoading || txOngoing}
                     />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : (e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
+                    <label
+                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                      htmlFor='depositIsApproved'
+                    ></label>
                   </CheckboxContent>
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
@@ -138,7 +144,7 @@ let TableMoreRow = ({
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
                   <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}> 
+                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
                       component='input'
                       type='checkbox'
@@ -147,7 +153,10 @@ let TableMoreRow = ({
                       checked={isWithdrawApproved}
                       disabled={isApproveLoading || txOngoing}
                     />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : () => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
+                    <label
+                      onClick={isApproveLoading || txOngoing ? () => {} : () => approveContract(false, isWithdrawApproved)}
+                      htmlFor='withdrawIsApproved'
+                    ></label>
                   </CheckboxContent>
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
@@ -174,112 +183,118 @@ let TableMoreRow = ({
                 </button>
               </Form>
             </TableMoreLeftSection>
-          </TableMoreRowContentLeft> :
-          <TableMoreRowContentLeft>
-            { formType === 'deposit' ?
-              <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
-              <TableMoreTitleWrapper>
-                <MobileMoreFormBtns>
-                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
-                    Deposit
-                  </MobileMoreFormBtn>
-                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
-                    Withdraw
-                  </MobileMoreFormBtn>
-                </MobileMoreFormBtns>
-                <CheckboxWrapper hidden={isEth}>
-                  <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
-                    <Field
-                      component='input'
-                      type='checkbox'
-                      name='depositIsApproved'
-                      id='depositIsApproved'
-                      checked={isDepositApproved}
-                      disabled={isApproveLoading || txOngoing}
-                    />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : (e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
-                  </CheckboxContent>
-                </CheckboxWrapper>
-              </TableMoreTitleWrapper>
-
-              <h2>
-                balance: {roundNumber(buyerTokenBalance)} {cryptoType}
-              </h2>
-              <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
-                <FormContent>
-                  <Field
-                    component={InputField}
-                    validate={[number]}
-                    onChange={(e, newValue) => handleInputChange(newValue, true)}
-                    disabled={!isDepositApproved}
-                    className={depositBalanceCheck}
-                    name='depositAmount'
-                    type='number'
-                    step='0.001'
-                  />
-                  <button onClick={(e) => setMaxAmount(e, true)}>max</button>
-                </FormContent>
-                <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
-                  <img src={BtnArrow} alt='arrow' />
-                  deposit
-                </button>
-              </Form>
-            </TableMoreLeftSection> :
-            <TableMoreLeftSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing}>
-              <TableMoreTitleWrapper>
-                <MobileMoreFormBtns>
-                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
-                    Deposit
-                  </MobileMoreFormBtn>
-                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
-                    Withdraw
-                  </MobileMoreFormBtn>
-                </MobileMoreFormBtns>
-                <CheckboxWrapper>
-                  <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
-                    <Field
-                      component='input'
-                      type='checkbox'
-                      name='withdrawIsApproved'
-                      id='withdrawIsApproved'
-                      checked={isWithdrawApproved}
-                      disabled={isApproveLoading || txOngoing}
-                    />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : () => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
-                  </CheckboxContent>
-                </CheckboxWrapper>
-              </TableMoreTitleWrapper>
-              <h2>
-                balance: {roundNumber(trancheTokenBalance)} {trancheToken}
-              </h2>
-              <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
-                <FormContent>
-                  <Field
-                    component={InputField}
-                    validate={[number]}
-                    onChange={(e, newValue) => handleInputChange(newValue, false)}
-                    disabled={!isWithdrawApproved}
-                    className={withdrawBalanceCheck}
-                    name='withdrawAmount'
-                    type='number'
-                    step='0.001'
-                  />
-                  <button onClick={(e) => setMaxAmount(e, false)}>max</button>
-                </FormContent>
-                <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
-                  <img src={BtnArrow} alt='arrow' />
-                  withdraw
-                </button>
-              </Form>
-            </TableMoreLeftSection>
-            }
-            
           </TableMoreRowContentLeft>
-        }
-        
-        
+        ) : (
+          <TableMoreRowContentLeft>
+            {formType === 'deposit' ? (
+              <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
+                <TableMoreTitleWrapper>
+                  <MobileMoreFormBtns>
+                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                      Deposit
+                    </MobileMoreFormBtn>
+                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                      Withdraw
+                    </MobileMoreFormBtn>
+                  </MobileMoreFormBtns>
+                  <CheckboxWrapper hidden={isEth}>
+                    <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
+                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                      <Field
+                        component='input'
+                        type='checkbox'
+                        name='depositIsApproved'
+                        id='depositIsApproved'
+                        checked={isDepositApproved}
+                        disabled={isApproveLoading || txOngoing}
+                      />
+                      <label
+                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                        htmlFor='depositIsApproved'
+                      ></label>
+                    </CheckboxContent>
+                  </CheckboxWrapper>
+                </TableMoreTitleWrapper>
+
+                <h2>
+                  balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+                </h2>
+                <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
+                  <FormContent>
+                    <Field
+                      component={InputField}
+                      validate={[number]}
+                      onChange={(e, newValue) => handleInputChange(newValue, true)}
+                      disabled={!isDepositApproved}
+                      className={depositBalanceCheck}
+                      name='depositAmount'
+                      type='number'
+                      step='0.001'
+                    />
+                    <button onClick={(e) => setMaxAmount(e, true)}>max</button>
+                  </FormContent>
+                  <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
+                    <img src={BtnArrow} alt='arrow' />
+                    deposit
+                  </button>
+                </Form>
+              </TableMoreLeftSection>
+            ) : (
+              <TableMoreLeftSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing}>
+                <TableMoreTitleWrapper>
+                  <MobileMoreFormBtns>
+                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                      Deposit
+                    </MobileMoreFormBtn>
+                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                      Withdraw
+                    </MobileMoreFormBtn>
+                  </MobileMoreFormBtns>
+                  <CheckboxWrapper>
+                    <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
+                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                      <Field
+                        component='input'
+                        type='checkbox'
+                        name='withdrawIsApproved'
+                        id='withdrawIsApproved'
+                        checked={isWithdrawApproved}
+                        disabled={isApproveLoading || txOngoing}
+                      />
+                      <label
+                        onClick={isApproveLoading || txOngoing ? () => {} : () => approveContract(false, isWithdrawApproved)}
+                        htmlFor='withdrawIsApproved'
+                      ></label>
+                    </CheckboxContent>
+                  </CheckboxWrapper>
+                </TableMoreTitleWrapper>
+                <h2>
+                  balance: {roundNumber(trancheTokenBalance)} {trancheToken}
+                </h2>
+                <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
+                  <FormContent>
+                    <Field
+                      component={InputField}
+                      validate={[number]}
+                      onChange={(e, newValue) => handleInputChange(newValue, false)}
+                      disabled={!isWithdrawApproved}
+                      className={withdrawBalanceCheck}
+                      name='withdrawAmount'
+                      type='number'
+                      step='0.001'
+                    />
+                    <button onClick={(e) => setMaxAmount(e, false)}>max</button>
+                  </FormContent>
+                  <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
+                    <img src={BtnArrow} alt='arrow' />
+                    withdraw
+                  </button>
+                </Form>
+              </TableMoreLeftSection>
+            )}
+          </TableMoreRowContentLeft>
+        )}
+
         <TableMoreRowContentRight>
           <Chart graphData={graphData} />
         </TableMoreRowContentRight>
