@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
-import { getUserStaked, massHarvest } from 'services/contractMethods';
+import { getUserStaked, massHarvest, stakingAllowanceCheck } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -106,6 +106,7 @@ const StakingModal = ({
   noBalance,
   modalIsOpen,
   modalType,
+  setModalType,
   isLPToken,
   hasAllowance,
   setHasAllowance,
@@ -118,7 +119,6 @@ const StakingModal = ({
   // Functions
   closeModal,
   openModal,
-  stakingAllowanceCheck,
   stakingApproveContract,
   adjustStake
   // API Values,
@@ -154,13 +154,13 @@ const StakingModal = ({
       const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
-      let userStaked = await getUserStaked(stakingAddress, tokenAddress)
+      let userStaked = await getUserStaked(stakingAddress, tokenAddress);
       setUserStaked(userStaked);
       setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
     };
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
-  }, [modalIsOpen, type, tokenAddress, address]);
+  }, [modalIsOpen, type, tokenAddress, stakingAddress, address]);
 
   const modalClose = () => {
     closeModal();
@@ -169,9 +169,21 @@ const StakingModal = ({
   const setBalanceCB = (balance) => {
     setBalanceMobile(roundNumber(balance));
   };
-  const toggleModalMobile = (bool, type) => {
+  const toggleModalMobile = async (bool, type) => {
     setModalTypeMobile(bool);
     setTypeMobile(type);
+    setModalType(bool)
+    if (type === 'slice') {
+      if (bool) {
+        let result = slice ? await stakingAllowanceCheck(sliceAddress, slice.stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
+    } else if (type === 'lp') {
+      if (bool) {
+        let result = lpList ? await stakingAllowanceCheck(lpAddress, lpList[0].stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
+    }
     setLPTokenMobile(type === 'lp' ? true : false);
   };
   useEffect(() => {
@@ -246,7 +258,6 @@ const StakingModal = ({
             approveLoading={approveLoading}
             isLPToken={isDesktop ? isLPToken : isLPTokenMobile}
             // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
             // setBalanceModal={setBalance}
@@ -439,7 +450,7 @@ const StakingModal = ({
           </StakingModalWrapper>
           <LoanDetailsMobile>
             <h2>
-              {i18n.t('stake.modal.sliceLocked')}— {totalStaked}
+              {i18n.t('stake.modal.sliceLocked')}— {roundNumber(totalStaked)}
               <span></span>
             </h2>{' '}
           </LoanDetailsMobile>
