@@ -76,7 +76,7 @@ const SummaryCards = ({
     address = !address ? onboard.getState().address : address;
     if (num === 1) {
       setTokenBalance(slice.address, address);
-      if (type) {
+      if (type) { 
         let result = slice ? await stakingAllowanceCheck(slice.address, slice.stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
@@ -170,9 +170,10 @@ const SummaryCards = ({
             path={path}
             modalIsOpen={summaryModal}
             modalType={modalType}
+            setModalType={setModalType}
             summaryModal={summaryModal}
             sliceAddress={slice.address}
-            lpAddress={lp.address}
+            lpAddress={lpList && lpList[0].address}
             tokenBalance={tokenBalance}
             lpList={lpList}
             // noBalance={Number(balance) === 0}

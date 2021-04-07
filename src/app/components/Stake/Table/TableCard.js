@@ -160,7 +160,7 @@ const TableCard = ({
 
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{staked}</h2>
+              <h2>{roundNumber(staked)}</h2>
               {/* <h2></h2> */}
             </TableMobilColContent>
           </TableColMobile>

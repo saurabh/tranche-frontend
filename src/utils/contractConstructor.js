@@ -11,7 +11,6 @@ import {
   LoanContractAddress,
   DAIAddress,
   SLICEAddress,
-  USDCAddress,
   networkId
 } from 'config/constants';
 
@@ -49,10 +48,6 @@ export function DAISetup(web3) {
 
 export function SLICESetup(web3) {
   return new web3.eth.Contract(ERC20ABI, SLICEAddress);
-}
-
-export function USDCSetup(web3) {
-  return new web3.eth.Contract(ERC20ABI, USDCAddress);
 }
 
 export function ERC20Setup(web3, address) {

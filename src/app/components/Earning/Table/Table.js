@@ -1,9 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-import { apiUri } from 'config/constants';
-import _ from 'lodash';
+import { apiUri, TrancheBuyerCoinAddresses } from 'config/constants';
+import { setTokenBalance } from 'redux/actions/ethereum';
 import {
   fetchTableData,
   changeFilter,
@@ -17,7 +18,6 @@ import {
   ModeThemes
 } from 'config/constants';
 import ReactLoading from 'react-loading';
-
 import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from '../../Stake/Table/TableHeader';
 import TableHead from './TableHead';
@@ -65,7 +65,8 @@ const Table = ({
   paginationOffset,
   paginationCurrent,
   ownAllToggle,
-  theme
+  theme,
+  setTokenBalance
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
@@ -113,12 +114,6 @@ const Table = ({
   );
 
   useEffect(() => {
-    window.ethereum.on('accountsChanged', function () {
-      window.location.reload();
-    });
-  }, []);
-
-  useEffect(() => {
     changePath(currentPath);
     changeOwnAllFilter('all');
     ownAllToggle('allTranches');
@@ -128,25 +123,14 @@ const Table = ({
     path === 'tranche' && trancheListing();
   }, [path, trancheListing, filter, skip, limit, filterType, sort]);
 
+  useEffect(() => {
+    path === 'tranche' && localAddress && TrancheBuyerCoinAddresses.forEach((tokenAddress) => setTokenBalance(tokenAddress, localAddress));
+  }, [path, localAddress, setTokenBalance]);
+
   const handlePageChange = (p) => {
     paginationOffset((p - 1) * limit);
     paginationCurrent(p);
   };
-
-  // const changeLoansFilter = useCallback(
-  //   (filter) => {
-  //     changeOwnAllFilter(filter);
-  //     // let val = filter === 'own' ? 'My tranches' : filter === 'all' ? 'All tranches' : '';
-  //     // setCurrentFilter(val);
-  //     // setOpenFilterMenu(false);
-  //   },
-  //   [changeOwnAllFilter]
-  // );
-
-  // const changeOwnAllFilterHandler = (val) => {
-  //   ownAllToggle(val);
-  //   changeLoansFilter(val);
-  // };
 
   const handleSorting = () => {
     trancheListing();
@@ -165,10 +149,7 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              data &&
-              data.tranchesList.map((tranche, i) => (
-                <TableCard key={i} id={i} tranche={tranche} path={path} />
-              ))
+              data && data.tranchesList.map((tranche, i) => <TableCard key={i} id={i} tranche={tranche} path={path} />)
             )}
           </div>
         </TableWrapper>
@@ -224,10 +205,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                data &&
-                data.tranchesList.map((tranche, i) => (
-                  <TableCard key={i} id={i} tranche={tranche} path={path} />
-                ))
+                data && data.tranchesList.map((tranche, i) => <TableCard key={i} id={i} tranche={tranche} path={path} />)
               )}
             </div>
           </div>
@@ -327,6 +305,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   fetchTableData,
+  setTokenBalance,
   changePath,
   changeFilter,
   paginationOffset,

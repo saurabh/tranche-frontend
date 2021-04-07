@@ -3,8 +3,6 @@ import store from '../store';
 import {
   DAISetup,
   SLICESetup,
-  // USDCSetup,
-  // JProtocolSetup,
   ERC20Setup
 } from 'utils/contractConstructor';
 import {
@@ -21,11 +19,13 @@ import {
 } from './constants';
 
 export const setAddress = (address) => (dispatch) => {
-  dispatch({
-    type: SET_ADDRESS,
-    payload: address
-  });
-  window.localStorage.setItem('address', address);
+  if (address) {
+    dispatch({
+      type: SET_ADDRESS,
+      payload: address.toLowerCase()
+    });
+    window.localStorage.setItem('address', address.toLowerCase());
+  }
 };
 
 export const setNetwork = (network) => (dispatch) => {
@@ -64,10 +64,8 @@ export const setTokenBalances = (address) => async (dispatch) => {
     const { web3 } = state.ethereum;
     const DAI = DAISetup(web3);
     const SLICE = SLICESetup(web3);
-    // const USDC = USDCSetup(web3);
     const daiBalance = await DAI.methods.balanceOf(address).call();
     const sliceBalance = await SLICE.methods.balanceOf(address).call();
-    // const usdcBalance = await USDC.methods.balanceOf(address).call();
 
     const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance };
     dispatch({

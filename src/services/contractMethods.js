@@ -251,15 +251,15 @@ export const allowanceCheck = async (tokenAddress, contractAddress, userAddress)
   }
 };
 
-export const buyTrancheTokens = async (contractAddress, trancheId, type, depositEth) => {
+export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = toWei(depositAmount);
-    let depositAmountInEth = depositEth ? depositAmount : 0;
-    if (type === 'TRANCHE_A') {
+    depositAmount = cryptoType === 'USDC' ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    let depositAmountInEth = cryptoType === 'ETH' ? depositAmount : 0;
+    if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
@@ -297,14 +297,14 @@ export const buyTrancheTokens = async (contractAddress, trancheId, type, deposit
   }
 };
 
-export const sellTrancheTokens = async (contractAddress, trancheId, type) => {
+export const sellTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { withdrawAmount } = state.form.tranche.values;
+    withdrawAmount = cryptoType === 'USDC' ? toWei(withdrawAmount, 'Mwei') : toWei(withdrawAmount);
     const JCompound = JCompoundSetup(web3, contractAddress);
-    withdrawAmount = toWei(withdrawAmount);
-    if (type === 'TRANCHE_A') {
+    if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .redeemTrancheAToken(trancheId, withdrawAmount)
         .send({ from: address })
@@ -355,6 +355,18 @@ export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userA
     } else {
       return false;
     }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getUserStaked = async (stakingAddress, tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
+    const Staking = StakingSetup(web3, stakingAddress);
+    let result = await Staking.methods.balanceOf(address, tokenAddress).call();
+    return fromWei(result);
   } catch (error) {
     console.error(error);
   }

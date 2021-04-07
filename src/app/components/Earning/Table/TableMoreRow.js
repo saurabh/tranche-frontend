@@ -55,12 +55,16 @@ let TableMoreRow = ({
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-
- 
-  
   let buyerTokenBalance =
-    cryptoType === 'ETH' ? balance && balance !== -1 && fromWei(balance) : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
-  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
+    cryptoType === 'ETH'
+      ? balance && balance !== -1 && fromWei(balance)
+      : cryptoType === 'USDC'
+      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
+  let trancheTokenBalance =
+    cryptoType === 'USDC'
+      ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
+      : tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -147,7 +151,10 @@ let TableMoreRow = ({
                       checked={isDepositApproved}
                       disabled={isApproveLoading || txOngoing}
                     />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : (e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
+                    <label
+                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                      htmlFor='depositIsApproved'
+                    ></label>
                   </CheckboxContent>
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
@@ -180,7 +187,7 @@ let TableMoreRow = ({
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
                   <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}> 
+                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
                       component='input'
                       type='checkbox'
@@ -189,7 +196,10 @@ let TableMoreRow = ({
                       checked={isWithdrawApproved}
                       disabled={isApproveLoading || txOngoing}
                     />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : () => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
+                    <label
+                      onClick={isApproveLoading || txOngoing ? () => {} : () => approveContract(false, isWithdrawApproved)}
+                      htmlFor='withdrawIsApproved'
+                    ></label>
                   </CheckboxContent>
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
@@ -233,12 +243,14 @@ let TableMoreRow = ({
                   <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
                   <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
-                      component='input'
-                      type='checkbox'
-                      name='depositIsApproved'
-                      id='depositIsApproved'
-                      checked={isDepositApproved}
-                      disabled={isApproveLoading || txOngoing}
+                      component={InputField}
+                      validate={[number]}
+                      onChange={(e, newValue) => handleInputChange(newValue, true)}
+                      disabled={!isDepositApproved}
+                      className={depositBalanceCheck}
+                      name='depositAmount'
+                      type='number'
+                      step='0.001'
                     />
                     <label onClick={(isApproveLoading || txOngoing) ? false : (e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
                   </CheckboxContent>
@@ -282,12 +294,14 @@ let TableMoreRow = ({
                   <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
                   <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
-                      component='input'
-                      type='checkbox'
-                      name='withdrawIsApproved'
-                      id='withdrawIsApproved'
-                      checked={isWithdrawApproved}
-                      disabled={isApproveLoading || txOngoing}
+                      component={InputField}
+                      validate={[number]}
+                      onChange={(e, newValue) => handleInputChange(newValue, false)}
+                      disabled={!isWithdrawApproved}
+                      className={withdrawBalanceCheck}
+                      name='withdrawAmount'
+                      type='number'
+                      step='0.001'
                     />
                     <label onClick={(isApproveLoading || txOngoing) ? false : () => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
                   </CheckboxContent>

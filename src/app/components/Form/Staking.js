@@ -47,7 +47,9 @@ let StakingForm = ({
   modalType,
   userStaked,
   tokenAddress,
+  stakingAddress,
   setTokenAddress,
+  setStakingAddress,
   isLPToken,
   hasAllowance,
   setHasAllowance,
@@ -65,7 +67,6 @@ let StakingForm = ({
   const [balanceCheck, setBalanceCheck] = useState('');
   const [LPSelect, toggleLP] = useState(false);
   const [selectedLPName, setSelectedLPName] = useState(0);
-  const [stakingAddress, setStakingAddress] = useState('');
   const [dropdownName, setDropdownName] = useState([]);
   const [amount, setAmount] = useState(0);
   const tokenName = isLPToken ? selectedLPName : 'SLICE';
@@ -84,7 +85,7 @@ let StakingForm = ({
       let balance = tokenBalance[slice.address];
       balance && setBalance(fromWei(balance.toString()));
     }
-  }, [tokenBalance, setTokenAddress, isLPToken, slice, lpList]);
+  }, [tokenBalance, setTokenAddress, setStakingAddress, isLPToken, slice, lpList]);
 
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);
@@ -105,7 +106,13 @@ let StakingForm = ({
 
   const handleInputChange = (newValue) => {
     setAmount(newValue);
-    isGreaterThan(newValue, balance) ? setBalanceCheck('InputStylingError') : setBalanceCheck('');
+    modalType
+      ? isGreaterThan(newValue, balance)
+        ? setBalanceCheck('InputStylingError')
+        : setBalanceCheck('')
+      : isGreaterThan(newValue, userStaked)
+      ? setBalanceCheck('InputStylingError')
+      : setBalanceCheck('');
   };
 
   const setMaxAmount = useCallback(
@@ -113,7 +120,6 @@ let StakingForm = ({
       e.preventDefault();
       let num = modalType ? balance : userStaked;
       change('amount', num);
-      console.log(num)
       setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,7 +188,7 @@ let StakingForm = ({
               {tokenName === 'SLICE'
                 ? modalType
                   ? i18n.t('stake.modal.youHaveStake') + ' ' + roundNumber(balance) + ' ' + i18n.t('stake.modal.availableStake')
-                  : i18n.t('stake.modal.youHaveWithdraw') + ' ' + userStaked + ' ' + i18n.t('stake.modal.availableWithdraw')
+                  : i18n.t('stake.modal.youHaveWithdraw') + ' ' + roundNumber(userStaked) + ' ' + i18n.t('stake.modal.availableWithdraw')
                 : modalType
                 ? `You have ${roundNumber(balance)} ${tokenName} available to stake`
                 : `You have ${roundNumber(userStaked)} ${tokenName} available to withdraw`}
@@ -219,7 +225,7 @@ let StakingForm = ({
                 </ModalFormButton>
               )}
             </ApproveBtnWrapper>
-
+            
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}

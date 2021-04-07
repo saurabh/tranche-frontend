@@ -1,6 +1,16 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon, TrancheClaim, DaiClaim, EthClaim } from 'assets';
-// import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
-// import { networks as StakingNetworks } from 'build/contracts/StakingMilestones.json';
+import {
+  Key,
+  Agree,
+  DaiLogo,
+  ETH as ETHicon,
+  SLICE as SLICEicon,
+  TrancheClaim,
+  DaiClaim,
+  EthClaim,
+  AAVE,
+  CompoundLogo,
+  DAITrancheTable,
+} from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -14,21 +24,23 @@ export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
+// Tranche
+export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
+export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS;
+// Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
-export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS;
-export const ETHDAITrancheAAddress = process.env.REACT_APP_TRANCHE_A_ADDRESS;
-export const ETHDAITrancheBAddress = process.env.REACT_APP_TRANCHE_B_ADDRESS;
+export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
+// Token Addresses
+export const zeroAddress = '0x0000000000000000000000000000000000000000';
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
-export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
-export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
-export const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 export const ApproveBigNumber = '100000000000000';
+
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {
@@ -100,6 +112,17 @@ export const PagesData = {
   }
 };
 
+export const trancheIcons = {
+  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
+  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHicon },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHicon },
+  AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
+  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon }
+};
+
 // pairData[0] is the default option in the loan creation process (value = pairId)
 export const pairData = [
   {
@@ -107,7 +130,7 @@ export const pairData = [
     text: 'DAI',
     value: 0,
     collateral: 'ETH',
-    img: DAIicon,
+    img: DaiLogo,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
   },
@@ -134,8 +157,6 @@ export const pairData = [
 ];
 
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
-
-export const trancheData = [{ address: ETHDAITrancheAAddress.toLowerCase() }, { address: ETHDAITrancheBAddress.toLowerCase() }];
 
 export const apiUri = {
   priceFeed: 'pairs',

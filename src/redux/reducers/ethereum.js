@@ -16,7 +16,7 @@ import { SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: '0', [SLICEAddress]: '0', [LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
+  tokenBalance: { [SLICEAddress]: '0', [LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
   address: undefined,
   web3,
   notify: initNotify(),
