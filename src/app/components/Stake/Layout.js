@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header } from 'app/components/Stake/Header';
-import  { Footer } from 'app/components/Footer/Footer';
+import Header from 'app/components/Stake/Header';
+import Footer from 'app/components/Footer/Footer';
 export function Layout({ children, updateDate }) {
   return (
     <div className="layout-wrapper">

@@ -17,15 +17,16 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl   } from 'config';
+import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl } from 'config';
 import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
-
+import {
+  ModeThemes
+} from 'config/constants';
 import {
   TableContentCard,
   TableContentCardWrapper,
   FifthColContent,
-  StatusTextWrapper,
   // AdjustLoanBtn,
   TableCardTag,
   TableCardImg,
@@ -53,7 +54,7 @@ import {
   TableCardImgWrapper
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
-import i18n from 'app/components/locale/i18n';
+// import i18n from 'app/components/locale/i18n';
 const { graphUri } = apiUri;
 
 const TableCard = ({
@@ -83,10 +84,10 @@ const TableCard = ({
   setTokenBalance,
   ethereum: { tokenBalance, address, wallet, web3, notify },
   change,
-  destroy
+  destroy,
+  theme
   // checkServer
 }) => {
-  const [InfoBoxToggle, setInfoBoxToggle] = useState(false);
   const [graphData, setGraphData] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
@@ -209,11 +210,13 @@ const TableCard = ({
 
   const TableCardDesktop = () => {
     return (
-      <TableContentCardWrapper>
+      <TableContentCardWrapper color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor} shadow={ModeThemes[theme].tableCardShadow}>
         <TableContentCard
           pointer={true}
           onClick={() => cardToggle()}
           className={trancheCard.status && id === trancheCard.id ? 'table-card-toggle' : ''}
+          border={trancheCard.status && id === trancheCard.id}
+          color={ModeThemes[theme].borderColor}         
         >
           {checkLoan ? (
             <TableCardTag color={checkLoan.color}>
@@ -240,7 +243,7 @@ const TableCard = ({
           <TableFirstCol className='table-col' instrument>
             <TableFirstColWrapper>
               <FirstColContent instrument>
-                <FirstColTitle>
+                <FirstColTitle color={ModeThemes[theme].tableText}>
                   <h2>{name && name}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
@@ -254,39 +257,27 @@ const TableCard = ({
           </TableFirstCol>
 
           <TableSecondCol className='table-col' apy>
-            <SecondColContent className='content-3-col second-4-col-content' tooltip={InfoBoxToggle}>
+            <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <img src={apyImage} alt='apyImage' />
               <h2>{apy}</h2>
-              <div>
-                <img src={Info} alt='infoImage' onMouseEnter={() => setInfoBoxToggle(true)} onMouseLeave={() => setInfoBoxToggle(false)} />
-                <div>
-                  <h2>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </h2>
-                </div>
-              </div>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
-            <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>{roundNumber(subscriber)}</h2>
+            <ThirdColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
+              <h2>$0.00</h2>
+              <h2>(31,783,551 dai)</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} subscription>
-            <FourthColContent className='content-3-col second-4-col-content'>
+            <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>{subscription ? roundNumber(subscription) : '0'}</h2>
+              <h2>(31,783,551 dai)</h2>
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
-            <FifthColContent>
-              <StatusTextWrapper
-                className='status-text-wrapper'
-                color={Object.values(searchObj(1))[0].color}
-                backgroundColor={Object.values(searchObj(1))[0].background}
-              >
-                {i18n.t('tranche.table.statuses.active')}
-              </StatusTextWrapper>
+            <FifthColContent color={ModeThemes[theme].tableText}>
+              <h2>$0.00</h2>
+              <h2>(00.00 dai)</h2>
 
               {/* <InfoBoxWrapper ref={innerRef}>
                 <img src={Info} alt='info' onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
@@ -336,7 +327,7 @@ const TableCard = ({
             <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
           </TableCardMoreContent>
         ) : (
-          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
+          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')} color={ModeThemes[theme].borderColor} border={trancheCard.status && id === trancheCard.id}>
             <TableCardMoreContent>
               <TableMoreRow
                 graphData={graphData}
@@ -359,7 +350,7 @@ const TableCard = ({
   };
   const TableCardMobile = () => {
     return (
-      <TableContentCardWrapperMobile tranche>
+      <TableContentCardWrapperMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor} >
         <TableContentCardMobile
           color={Object.values(searchObj(1))[0].background}
           onClick={() => cardToggle()}
@@ -438,7 +429,7 @@ const TableCard = ({
             <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
           </TableCardMoreContent>
             : 
-          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}>
+          <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')} color={ModeThemes[theme].backgroundBorder} border={trancheCard.status && id === trancheCard.id}>
             <TableCardMoreContent>
               <TableMoreRow
                 graphData={graphData}
@@ -475,7 +466,8 @@ TableCard.propTypes = {
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   form: state.form,
-  trancheCard: state.data.trancheCard
+  trancheCard: state.data.trancheCard,
+  theme: state.theme,
 });
 
 export default connect(mapStateToProps, {

@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body{
-    background-color: #F9F9FE;
+    background-color: ${props => props.theme.body};
     font-family: 'Roboto', sans-serif;
     overflow-x: hidden;
   }

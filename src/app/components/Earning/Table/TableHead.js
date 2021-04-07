@@ -21,7 +21,7 @@ import {
 import i18n from "app/components/locale/i18n";
 
 
-const TableHead = ({changeSorting, path}) => {
+const TableHead = ({ changeSorting, path, color }) => {
 
     const [order, setOrder] = useState("asc")
     const [menu, toggleMenu] = useState(false);
@@ -56,25 +56,25 @@ const TableHead = ({changeSorting, path}) => {
     const TableHeadDesktop = () => {
         return (
             <TableHeadWrapper path={path}>
-                <TableHeadTitle platform defaultCursor={true}>
+                <TableHeadTitle platform defaultCursor={true} color={color}>
                     <h2>{i18n.t('tranche.table.tableHead.platform')}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle instrument defaultCursor={true}>
+                <TableHeadTitle instrument defaultCursor={true} color={color}>
                     <h2>{i18n.t('tranche.table.tableHead.instrument')}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle apy>
+                <TableHeadTitle apy color={color}>
                     <h2>{i18n.t('tranche.table.tableHead.apy')}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle totalValue>
-                    <h2>{i18n.t('tranche.table.tableHead.valueLocked')}</h2>
+                <TableHeadTitle totalValue color={color}>
+                    <h2>TOTAL DEPOSITS</h2>
                 </TableHeadTitle>
-                <TableHeadTitle subscription>
-                    <h2>{i18n.t('tranche.table.tableHead.subscription')}</h2>
+                <TableHeadTitle subscription color={color}>
+                    <h2>MY DEPOSITS</h2>
                 </TableHeadTitle>
-                <TableHeadTitle status>
-                    <h2>{i18n.t('tranche.table.tableHead.status')}</h2>
+                <TableHeadTitle status color={color}>
+                    <h2>AVAILABLE TO DEPOSIT</h2>
                 </TableHeadTitle>
-                <TableHeadTitle trancheTableBtns>
+                <TableHeadTitle trancheTableBtns color={color}>
 
                 </TableHeadTitle>
                 <SortingMenu>
@@ -108,27 +108,27 @@ const TableHead = ({changeSorting, path}) => {
         return (
             <TableHeadWrapperMobile path={path}>
                 <TableColMobile address>
-                    <TableHeadTitleMobile defaultCursor={true} address>
+                    <TableHeadTitleMobile defaultCursor={true} address color={color}>
                         <h2>INSTRUMENT</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
                         <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "amount")}>APY</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
                         <h2 onClick={() => sortLoans(path !== "eatranchern" ? "remainingLoan" : "rpbRate")}>Value Locked</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
                         <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "subscriber")}>SUBSCRIPTION</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile btn>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
 
                     </TableHeadTitleMobile>
                 </TableColMobile>

@@ -46,3 +46,6 @@ export const OWN_ALL_TOGGLE = 'OWN_ALL_TOGGLE';
 
 // Path
 export const CHANGE_PATH = 'CHANGE_PATH';
+
+//theme
+export const CHANGE_THEME = 'CHANGE_THEME';

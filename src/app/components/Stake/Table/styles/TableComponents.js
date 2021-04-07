@@ -5,10 +5,10 @@ import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 const TableContentCardWrapper = styled.div`
   min-height: 66px;
   position: relative;
-  background: #FFFFFF;
-  border: 1px solid #F0F0F7;
+  background: ${props => props.color};
+  border: 1px solid ${props => props.borderColor};
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(189, 189, 189, 0.07);
+  box-shadow: ${props => props.shadow};
   border-radius: 5px;
   margin: 12px 0;
 `;
@@ -29,6 +29,11 @@ const TableContentCard = styled.div`
   ${({ pointer }) => !pointer && `
     cursor: default; 
   `}
+  ${({ border, color }) => border && `
+    border-bottom: 2px solid ${color} !important;
+  `}
+
+
 `;
 const TableCardTag = styled.div`
   position: absolute;
@@ -145,13 +150,13 @@ const TableHeadTitle = styled.div`
     display: flex;
     & > h2{
         cursor: pointer;
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 11px;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        color: rgba(56, 56, 56, 0.3);
+        color: ${props => props.color};
     }
     & > h2:nth-child(2){
       margin-left: 42px;
@@ -165,7 +170,7 @@ const TableHeadTitle = styled.div`
         & > h2{
             text-align: center;
             width: 100%;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 700;
             font-size: 11px;
@@ -264,7 +269,7 @@ const TableTitle = styled.div`
         font-weight: bold;
         font-size: 18.3333px;
         line-height: 26px;        
-        color: #393F56;
+        color: ${props => props.color};
     }
 `;
 const TableSubTitle = styled.div`
@@ -274,7 +279,7 @@ const TableSubTitle = styled.div`
         font-weight: 500;
         font-size: 12.5px;
         line-height: 15px;
-        color: #9496B6;
+        color: ${props => props.color};
         ${({ sorting }) => sorting && `
           text-align: center;
           letter-spacing: 2px;
@@ -285,7 +290,7 @@ const CreateLoanBtn = styled.div`
     & > button{
         background-color: transparent;
         border: none;
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
@@ -409,7 +414,7 @@ const CallToActionTradeBtns = styled.div`
 const CallToActionTradetext = styled.div`
   margin: -12px auto 29px auto;
   h2{
-    font-family: Roboto;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -488,8 +493,8 @@ const TableHeadTitleMobile = styled.div`
 const TableContentCardWrapperMobile = styled.div`
   width: 100%;
   height: 60px;
-  background: #FFFFFF;
-  border: 1px solid #F0F0F7;
+  background: ${props => props.color};
+  border: 1px solid ${props => props.borderColor};  
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgb(189 189 189 / 7%);
   border-radius: 5px;
@@ -856,7 +861,7 @@ const FirstColTitle = styled.div`
     font-size: 10px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color};
   }   
   @media (max-width: 992px){
     display: flex;
@@ -878,7 +883,7 @@ const FirstColSubtitle = styled.div`
   display: flex;
   align-items: center;
   h2{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 9px;
@@ -911,6 +916,7 @@ const TableSecondCol = styled.div`
 const SecondColContent = styled.div`
   h2{
     text-align: center !important;
+    color: ${props => props.color};
   }
   
   & > img:nth-child(1){
@@ -960,7 +966,6 @@ const SecondColContent = styled.div`
         font-weight: normal;
         font-size: 6px;
         text-align: left !important;
-        color: #383838;
       }
     }
     
@@ -979,8 +984,20 @@ const TableThirdCol = styled.div`
   position: relative;
 `
 const ThirdColContent = styled.div`
-  h2{
+  h2:first-child{
     text-align: center !important;
+    color: ${props => props.color};
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #CCCCCD;
   }
 `
 const TableFourthCol = styled.div`
@@ -998,17 +1015,28 @@ const TableFourthCol = styled.div`
 `
 const FourthColContent = styled.div`
   position: relative;
-  h2{
+  h2:first-child{
     text-align: center !important;
     display: flex;
     flex-direction: column;
-    padding-top: 13px;
+    color: ${props => props.color};
     span{
       position: relative;
       font-size: 10px;
       font-weight: bold !important;
       color: rgba(56,56,56,0.3);
     }
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #CCCCCD;
   }
 `
 const TableFifthCol = styled.div`
@@ -1023,7 +1051,28 @@ const TableFifthCol = styled.div`
   position: relative;
 `
 const FifthColContent = styled.div`
-  position: relative;   
+  position: relative;
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-align: center !important;
+    color: ${props => props.color};
+    text-transform: uppercase;
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #CCCCCD;
+  }
 `
 const TableSixthCol = styled.div`
   width: 18%;  
@@ -1091,6 +1140,10 @@ const TableCardMore = styled.div`
     padding: 0 !important;  
     border-top: 2px solid #F9F9FB;
   }
+  border-bottom: 2px solid ${props => props.color} !important;
+  ${({ border, color }) => border && `
+    border-bottom: 1px solid ${color};  
+  `}
 
 `
 const TableCardMoreContent = styled.div`
@@ -1112,7 +1165,79 @@ const TableMoreRowContent = styled.div`
 `
 
 const TableMoreRowContentLeft = styled.div` 
-  display: flex;  
+  width: 50%;
+  min-height: 220px;
+  @media (max-width: 992px){
+    width: 100%;
+  }
+`
+
+
+const TableMoreLeftTopSection = styled.div`
+  display: flex;
+  border-bottom: 2px solid ${props => props.color};
+`
+const TableMoreLeftBottomSection = styled.div`
+  height: 120px;
+  padding: 20px;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0 auto 5px auto;
+    color: ${props => props.title};
+  }
+  p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    margin: 5px  auto 0 auto;
+    color: ${props => props.value};
+  }
+`
+const TableMoreLeftSection = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 25%;
+  height: 100px;
+  ${({color }) => color && `
+    border-right: 2px solid ${color};
+  `}
+`
+const TableMoreLeftSectionContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    margin: 5px auto;
+  }
+  h2:first-child{
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.title};
+  }
+  h2:last-child{
+    font-weight: bold;
+    font-size: 17px;
+    text-transform: uppercase;
+    color: ${props => props.value};
+  }
+`
+
+
+
+const TableMoreRowContentRight = styled.div` 
+  display: flex;
   width: 50%;
   min-height: 220px;
   @media (max-width: 992px){
@@ -1122,19 +1247,11 @@ const TableMoreRowContentLeft = styled.div`
   }
 `
 
-const TableMoreRowContentRight = styled.div` 
-  width: 50%;
-  min-height: 220px;
-  @media (max-width: 992px){
-    width: 100%;
-  }
-`
-
-const TableMoreLeftSection = styled.div` 
+const TableMoreRightSection = styled.div` 
   width: 50%;
   min-height: 220px;
   padding: 0 20px;
-  border-right: 2px solid #F9F9FB;
+  border-left: 2px solid ${props => props.color};
   display: flex;
   flex-direction: column;
   
@@ -1184,7 +1301,7 @@ const TableMoreLeftSection = styled.div`
       }
     }
   `}
-  ${({ disabled }) => disabled && `
+  ${({ disabled, disabledBackground, btn }) => disabled && `
     form{
       div{
         button{
@@ -1192,13 +1309,14 @@ const TableMoreLeftSection = styled.div`
           pointer-events: none;
         }
         input{
-          background: rgba(207, 207, 229, 0.2);  
+          background: ${disabledBackground};  
           pointer-events: none;
+          border-color: ${btn}
         }
       }
       & > button{
         pointer-events: none;
-        background: #CCCCCD;
+        background: ${btn};
       }
     }
   `}
@@ -1223,7 +1341,7 @@ const FormContent = styled.div`
     font-size: 12px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color} !important;
   }
   input{
     width: 100%;
@@ -1262,6 +1380,14 @@ const CheckboxWrapper = styled.div`
     margin: 0 7px 4px 0;
     color: #7C859B;
   }
+  ${({ themeToggle }) => themeToggle &&  `
+    margin-left: 40px;
+    h2{
+      font-size: 11.91px;
+      color: #9496B6;
+      margin: 0 12px;
+    }
+  `}
 `
 const CheckboxContent = styled.div`
   input{
@@ -1331,6 +1457,12 @@ const CheckboxContent = styled.div`
   ${({ disabled }) => disabled && `
     pointer-events: none;
   `}
+  ${({ themeToggle }) => themeToggle && `
+    display: flex;
+    input + label{
+      background: #9496B6;
+    }
+  `}
 `
 
 const TableMoreTitleWrapper = styled.div`
@@ -1344,7 +1476,7 @@ const TableMoreTitleWrapper = styled.div`
     font-size: 16px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color} ;
   }
 `
 const TableMobileContent = styled.div`
@@ -1435,6 +1567,8 @@ const MobileMoreFormBtn = styled.button`
   `}
 `
 
+  
+
 export {
   TableWrapper,
   TableContentCardWrapper,
@@ -1500,7 +1634,7 @@ export {
   TableMoreRowContent,
   TableMoreRowContentLeft,
   TableMoreRowContentRight,
-  TableMoreLeftSection,
+  TableMoreRightSection,
   FormContent,
   CheckboxWrapper,
   CheckboxContent,
@@ -1510,5 +1644,9 @@ export {
   TableMobileContentCol,
   TableCardImgWrapper,
   MobileMoreFormBtns,
-  MobileMoreFormBtn
+  MobileMoreFormBtn,
+  TableMoreLeftSection, 
+  TableMoreLeftSectionContent,
+  TableMoreLeftTopSection,
+  TableMoreLeftBottomSection
 };

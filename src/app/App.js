@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
+import { ThemeProvider } from 'styled-components';
+
 import Banner from 'app/components/Banner/Banner';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
+
 import { setCurrentBlock } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
@@ -17,7 +20,8 @@ import {
   ProtocolAddress,
   StakingAddresses,
   YieldAddresses,
-  JCompoundAddress
+  JCompoundAddress,
+  ModeThemes
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -41,7 +45,8 @@ const App = ({
   path,
   ethereum: { address },
   data: { skip, limit, filter, filterType, tradeType },
-  checkServerStatus
+  checkServerStatus,
+  theme
 }) => {
   const [showModal, setShowModal] = useState(true);
 
@@ -205,7 +210,7 @@ const App = ({
   };
   const initApp = () => {
     return (
-      <>
+      <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
         <Banner />
         <Router>
@@ -220,7 +225,7 @@ const App = ({
             <Route component={NotFound} />
           </Switch>
         </Router>
-      </>
+      </ThemeProvider>
     );
   };
   return checkServerStatus ? initApp() : serverError();
@@ -243,7 +248,8 @@ const mapStateToProps = (state) => ({
   tranches: state.tranches,
   trade: state.trade,
   path: state.path,
-  checkServerStatus: state.checkServerStatus
+  checkServerStatus: state.checkServerStatus,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps, {

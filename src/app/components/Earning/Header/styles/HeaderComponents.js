@@ -46,7 +46,7 @@ const HeaderTitle = styled.div`
     font-weight: bold;
     font-size: 22px;
     line-height: 27px;
-    color: #393F56;    
+    color: ${props => props.color};    
     @media (max-width: 767px){
       font-size: 20px;
     }
@@ -63,7 +63,7 @@ const HeaderSubtitle = styled.div`
     line-height: 18px;
    
 
-    color: #9496B6;
+    color: ${props => props.color};
     @media (max-width: 767px){
       font-size: 12px;
       margin-top: 0;
@@ -80,11 +80,11 @@ const HeaderSubtitle = styled.div`
 const NavbarWrapper = styled.div`
   height: 112px;
   position: relative;
-  border-bottom: 2px solid #E9E9FC;
+  border-bottom: 2px solid rgba(233, 233, 252, 0.3);
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border-bottom: 2px solid #E9E9FC;  
+    border-bottom: 2px solid rgba(233, 233, 252, 0.3);
   }
 `;
 const NavbarContainer = styled.div`
@@ -115,9 +115,10 @@ const NavbarLinks = styled.div`
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(68, 65, 207, 0.5);
+    color: ${props => props.theme.navlinkTab};
+    opacity: 0.5;
     :hover{
-      color: rgba(68, 65, 207, 0.6);
+      opacity: 0.6;
     }
   }
   @media (max-width: 992px) {

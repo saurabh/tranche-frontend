@@ -13,6 +13,9 @@ import {
   changeOwnAllFilter,
   ownAllToggle
 } from 'redux/actions/tableData';
+import {
+  ModeThemes
+} from 'config/constants';
 import ReactLoading from 'react-loading';
 
 import { changePath } from 'redux/actions/TogglePath';
@@ -61,7 +64,8 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ownAllToggle
+  ownAllToggle,
+  theme
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
@@ -169,9 +173,9 @@ const Table = ({
           </div>
         </TableWrapper>
         <TableWrapper desktop>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
+          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} theme={theme}/>
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead}/>
             <div className='table-content'>
               {isLoading ? (
                 <div>
@@ -316,7 +320,8 @@ const Table = ({
 const mapStateToProps = (state) => {
   return {
     data: state.data,
-    path: state.path
+    path: state.path,
+    theme: state.theme
   };
 };
 

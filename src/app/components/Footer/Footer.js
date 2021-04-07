@@ -1,10 +1,15 @@
 import React,  { useEffect, useState } from 'react';
-import { ChevronTableLanguage } from 'assets';
+import { ChevronTableLanguage, ChevronTableLanguageWhite } from 'assets';
 import { useOuterClick } from 'services/useOuterClick';
-import { LanguageContainer, LanguageContent } from './styles/FooterComponents';
+import { changeTheme } from 'redux/actions/theme';
+import { connect } from 'react-redux';
+import { FooterContainer, LanguageContainer, LanguageContent, FooterLinks, FooterLeft } from './styles/FooterComponents';
+import { CheckboxWrapper, CheckboxContent } from '../Stake/Table/styles/TableComponents';
+import {
+  ModeThemes
+} from 'config/constants';
 
-
-export function Footer() {
+function Footer({ changeTheme, theme }) {
   const [languageMenu, setLanguageMenu] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('English');
   
@@ -22,33 +27,55 @@ export function Footer() {
     return `${"/" + lng + "/" + currentPath}`;
   }
   return (
-    <div className="footer-container">
+    <FooterContainer className="footer-container" color={ModeThemes[theme].footerBackground}>
       <div className="content-container container">
         <div className="footerWrapper">
-          <LanguageContainer>
-            <h2>Language</h2>
-            <LanguageContent menu={languageMenu} ref={innerRef}>
-              <div>
-                <a href={newPath("en")}>English</a>
-                <a href={newPath("zh")}>Chinese</a>
-                <a href={newPath("kr")}>Korean</a>
-              </div>
-              <div onClick={() => setLanguageMenu(!languageMenu)}>
-                <h2>{currentLanguage}</h2>
-                <img src={ChevronTableLanguage} alt="cheveron" />
-              </div>
-            </LanguageContent>
-          </LanguageContainer>
-          <div className="footerLinks">
+          <FooterLeft>
+            <LanguageContainer>
+              <h2>Language</h2>
+              <LanguageContent menu={languageMenu} ref={innerRef} color={ModeThemes[theme].languageToggleBackground} textColor={ModeThemes[theme].languageToggleText}>
+                <div>
+                  <a href={newPath("en")}>English</a>
+                  <a href={newPath("zh")}>Chinese</a>
+                  <a href={newPath("kr")}>Korean</a>
+                </div>
+                <div onClick={() => setLanguageMenu(!languageMenu)}>
+                  <h2>{currentLanguage}</h2>
+                  <img src={ theme === "dark" ? ChevronTableLanguageWhite : ChevronTableLanguage} alt="cheveron" />
+                </div>
+              </LanguageContent>
+            </LanguageContainer>
+            <CheckboxWrapper themeToggle>
+              <h2>Theme</h2>
+              <CheckboxContent themeToggle>
+                <input
+                  type='checkbox'
+                  name='ThemeToggle'
+                  id='ThemeToggle'
+                  checked={theme === "dark"}
+                />
+                <label htmlFor='ThemeToggle' onClick={() => changeTheme()}></label>
+              </CheckboxContent>
+              <h2>{theme}</h2>
+            </CheckboxWrapper>
+          </FooterLeft>
+          <FooterLinks className="footerLinks" color={ModeThemes[theme].footerLinks}>
             <a href="/privacy" target="_blank">Privacy</a> 
             <a href="/terms" target="_blank">Terms</a>
             <a href="https://discord.gg/DTZrm4j4Yc" target="_blank" rel="noopener noreferrer">Support</a>
             <a href="https://docs.tranche.finance" target="_blank" rel="noopener noreferrer">Documentation</a>
             <a href="https://github.com/tranche-jibrel" target="_blank" rel="noopener noreferrer">Github</a>
             <a href="https://app.tranche.finance/lend" target="_blank" rel="noopener noreferrer">Old App</a>
-          </div>
+          </FooterLinks>
         </div>
       </div>
-    </div>
+    </FooterContainer>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    theme: state.theme
+  };
+};
+
+export default connect(mapStateToProps, { changeTheme })(Footer);

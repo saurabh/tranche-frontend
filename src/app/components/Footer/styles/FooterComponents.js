@@ -4,7 +4,7 @@ const LanguageContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  max-width: 190px;  
+  max-width: 190px; 
   width: 100%;
   h2{
     font-family: 'Inter', sans-serif;
@@ -15,7 +15,7 @@ const LanguageContainer = styled.div`
   }
 `;
 const LanguageContent = styled.div` 
-  background: rgba(68, 65, 207, 0.1);
+  background: ${props => props.color};
   border-radius: 0 0 15px 15px;
   padding: 0 12px;
   width: 105px;
@@ -33,7 +33,7 @@ const LanguageContent = styled.div`
     font-style: normal;
     font-weight: bold;
     font-size: 11.4964px;
-    color: #4441CF;
+    color: ${props => props.textColor};
   }
   div:first-child{
     display: flex;
@@ -45,7 +45,7 @@ const LanguageContent = styled.div`
     width: 100%;
     left: 0;
     bottom: 29px;
-    background: rgba(68, 65, 207, 0.1);
+    background: ${props => props.color};
     a{
       padding: 0 12px;
       height: 29px;
@@ -53,7 +53,7 @@ const LanguageContent = styled.div`
       align-items: center;
       opacity: 0.8;
       :hover{
-        background: rgba(68,65,207,0.1);
+        background: ${props => props.color};
       }
     }
     ${({ menu }) => !menu && `
@@ -81,9 +81,26 @@ const LanguageContent = styled.div`
  
 `;
 
+const FooterLeft = styled.div` 
+  display: flex;
+  align-items: center;
+`;
+
+const FooterContainer = styled.div` 
+  background: ${props => props.color};
+`;
+const FooterLinks = styled.div` 
+  a{
+    color: ${props => props.color};
+  }
+`;
+
 
 
 export {
+  FooterContainer,
   LanguageContainer, 
-  LanguageContent
+  LanguageContent,
+  FooterLinks,
+  FooterLeft
 };

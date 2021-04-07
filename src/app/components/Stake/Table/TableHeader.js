@@ -14,10 +14,13 @@ import {
     TableMarketsSortingDropdown,
     TableMarketsSortingDropdownContent,
     TableMarketSortingBtn
-  } from './styles/TableComponents';
+} from './styles/TableComponents';
+import {
+    ModeThemes
+} from 'config/constants';
 import i18n from "app/components/locale/i18n";
 
-const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
+const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
     const innerRef = useOuterClick(e => {
@@ -37,7 +40,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
     return (
         <TableContainerHeader>
             <TableHeaderTitles>
-                <TableTitle>
+                <TableTitle color={ModeThemes[theme].HeaderTitle}>
                 {   path === "lend" ?
                     <h2>Earning Assets</h2> :
                     path === "borrow" ?
@@ -49,14 +52,14 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
                 </TableTitle>
                 {
                     path !== "stake" && path !== "tranche" ?
-                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
+                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} color={ModeThemes[theme].HeaderSubtitle}>
                         <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                     </TableSubTitle> : 
                     path === "tranche" ?
-                    <TableSubTitle>
+                    <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
                     <h2>{i18n.t('tranche.table.tableHeader.subtitle')}</h2>
                     </TableSubTitle> :
-                    <TableSubTitle>
+                    <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
                         <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>
                     </TableSubTitle> 
                 }
@@ -92,6 +95,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
 const mapStateToProps = (state) => {
     return {
       path: state.path,
+      theme: state.theme
     };
   };
   

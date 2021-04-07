@@ -7,18 +7,22 @@ import {
   TableMoreRowContent,
   TableMoreRowContentLeft,
   TableMoreRowContentRight,
-  TableMoreLeftSection,
+  TableMoreRightSection,
   FormContent,
   CheckboxWrapper,
   CheckboxContent,
   TableMoreTitleWrapper,
   MobileMoreFormBtns,
-  MobileMoreFormBtn
+  MobileMoreFormBtn,
+  TableMoreLeftSection, 
+  TableMoreLeftSectionContent,
+  TableMoreLeftTopSection,
+  TableMoreLeftBottomSection
 } from '../../Stake/Table/styles/TableComponents';
-import Chart from '../../Chart/Chart';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan } from 'utils';
+import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -44,7 +48,8 @@ let TableMoreRow = ({
   approveContract,
   buySellTrancheTokens,
   ethereum: { tokenBalance, balance, txOngoing },
-  change
+  change,
+  theme
 }) => {
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
@@ -88,11 +93,48 @@ let TableMoreRow = ({
   return (
     <TableMoreRowWrapper className='table-more-row'>
       <TableMoreRowContent>
+        <TableMoreRowContentLeft>
+          <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2>PRICE</h2>
+                <h2>0.024 DAI</h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+              
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2>Base APY</h2>
+                <h2>5%</h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2>SLICE APY</h2>
+                <h2>5%</h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+
+            <TableMoreLeftSection>
+              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2>NET APY</h2>
+                <h2>22.3%</h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+          </TableMoreLeftTopSection>
+          <TableMoreLeftBottomSection title={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
+            <h2>Fixed rate Yield</h2>
+            <p>JCD Tranche A is the senior tranche of the cDai token. This tranche yields a fixed rate of 4%, in addition to variable SLICE rewards yielding in the displayed Net APY.</p>
+          </TableMoreLeftBottomSection>
+
+        </TableMoreRowContentLeft>
+
         {
           isDesktop ?
-          <TableMoreRowContentLeft>
-            <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
-              <TableMoreTitleWrapper>
+          <TableMoreRowContentRight>
+            <TableMoreRightSection disabled={!isDepositApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>deposit</h2>
                 <CheckboxWrapper hidden={isEth}>
                   <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
@@ -114,7 +156,7 @@ let TableMoreRow = ({
                 balance: {roundNumber(buyerTokenBalance)} {cryptoType}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
-                <FormContent>
+                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
                   <Field
                     component={InputField}
                     validate={[number]}
@@ -132,9 +174,9 @@ let TableMoreRow = ({
                   deposit
                 </button>
               </Form>
-            </TableMoreLeftSection>
-            <TableMoreLeftSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing}>
-              <TableMoreTitleWrapper>
+            </TableMoreRightSection>
+            <TableMoreRightSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
                   <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
@@ -155,7 +197,7 @@ let TableMoreRow = ({
                 balance: {roundNumber(trancheTokenBalance)} {trancheToken}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
-                <FormContent>
+                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
                   <Field
                     component={InputField}
                     validate={[number]}
@@ -173,12 +215,12 @@ let TableMoreRow = ({
                   withdraw
                 </button>
               </Form>
-            </TableMoreLeftSection>
-          </TableMoreRowContentLeft> :
-          <TableMoreRowContentLeft>
+            </TableMoreRightSection>
+          </TableMoreRowContentRight> :
+          <TableMoreRowContentRight>
             { formType === 'deposit' ?
-              <TableMoreLeftSection disabled={!isDepositApproved || isApproveLoading || txOngoing}>
-              <TableMoreTitleWrapper>
+              <TableMoreRightSection disabled={!isDepositApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <MobileMoreFormBtns>
                   <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
                     Deposit
@@ -207,7 +249,7 @@ let TableMoreRow = ({
                 balance: {roundNumber(buyerTokenBalance)} {cryptoType}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
-                <FormContent>
+                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
                   <Field
                     component={InputField}
                     validate={[number]}
@@ -225,9 +267,9 @@ let TableMoreRow = ({
                   deposit
                 </button>
               </Form>
-            </TableMoreLeftSection> :
-            <TableMoreLeftSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing}>
-              <TableMoreTitleWrapper>
+            </TableMoreRightSection> :
+            <TableMoreRightSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <MobileMoreFormBtns>
                   <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
                     Deposit
@@ -255,7 +297,7 @@ let TableMoreRow = ({
                 balance: {roundNumber(trancheTokenBalance)} {trancheToken}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
-                <FormContent>
+                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
                   <Field
                     component={InputField}
                     validate={[number]}
@@ -273,16 +315,12 @@ let TableMoreRow = ({
                   withdraw
                 </button>
               </Form>
-            </TableMoreLeftSection>
+            </TableMoreRightSection>
             }
             
-          </TableMoreRowContentLeft>
+          </TableMoreRowContentRight>
         }
         
-        
-        <TableMoreRowContentRight>
-          <Chart graphData={graphData} />
-        </TableMoreRowContentRight>
       </TableMoreRowContent>
     </TableMoreRowWrapper>
   );
@@ -296,7 +334,8 @@ TableMoreRow = reduxForm({
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  formValues: getFormValues('tranche')(state)
+  formValues: getFormValues('tranche')(state),
+  theme: state.theme
 });
 
 export default TableMoreRow = connect(mapStateToProps, { change })(TableMoreRow);

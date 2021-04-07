@@ -5,7 +5,7 @@ const SummaryCardWrapper = styled.div`
     width: 250px;
     height: 121px;
     background: ${props => props.color};;
-    border: 1px solid #EFEFEF;
+    // border: 1px solid #EFEFEF;
     // border-top: 6px solid ${props => props.color};
     box-sizing: border-box;
     padding: 17px;
