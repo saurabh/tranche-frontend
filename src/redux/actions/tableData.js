@@ -137,8 +137,8 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(endpoint, { data }, null, true);
+    dispatch(checkServer(true));
     if(result.status){
-      dispatch(checkServer(true));
       if(endpoint === loanListUrl){
         dispatch(loansIsLoading(false));
         dispatch(loansFetchSuccess(result.result.list));
@@ -154,9 +154,6 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
         dispatch(stakingFetchSuccess(result.result.list));
         dispatch(stakingSetCount(result.result.count));
       }
-    }
-    else{
-      dispatch(checkServer(false));
     }
     return result;
   } catch (error) {

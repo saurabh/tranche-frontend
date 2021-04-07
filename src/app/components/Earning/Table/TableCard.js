@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
-import axios from 'axios';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
@@ -17,7 +16,7 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl, trancheIcons } from 'config';
+import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons } from 'config';
 import { Lock, Info, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import {
@@ -55,7 +54,6 @@ import {
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 // import i18n from 'app/components/locale/i18n';
-const { graphUri } = apiUri;
 
 const TableCard = ({
   id,
@@ -88,7 +86,6 @@ const TableCard = ({
   theme
   // checkServer
 }) => {
-  const [graphData, setGraphData] = useState(false);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setApproveLoading] = useState(false);
@@ -96,9 +93,6 @@ const TableCard = ({
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [isEth, setIsEth] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
-  const graphTimeFrame = 'hour';
-
-  
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -176,11 +170,6 @@ const TableCard = ({
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
       setIsLoading(true);
       destroy('tranche');
-      const res = await axios(
-        `${serverUrl + graphUri}trancheId=${trancheId}&contractAddress=${contractAddress}&type=${graphTimeFrame}&trancheType=${type}`
-      );
-      const { result } = res.data;
-      setGraphData(result);
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
         await setTokenBalance(trancheTokenAddress, address);
@@ -327,7 +316,6 @@ const TableCard = ({
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')} color={ModeThemes[theme].borderColor} border={trancheCard.status && id === trancheCard.id}>
             <TableCardMoreContent>
               <TableMoreRow
-                graphData={graphData}
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}
@@ -429,7 +417,6 @@ const TableCard = ({
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')} color={ModeThemes[theme].backgroundBorder} border={trancheCard.status && id === trancheCard.id}>
             <TableCardMoreContent>
               <TableMoreRow
-                graphData={graphData}
                 isEth={isEth}
                 cryptoType={cryptoType}
                 buyerCoinAddress={buyerCoinAddress}

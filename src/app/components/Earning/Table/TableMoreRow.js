@@ -36,7 +36,6 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let TableMoreRow = ({
-  graphData,
   isEth,
   cryptoType,
   buyerCoinAddress,
