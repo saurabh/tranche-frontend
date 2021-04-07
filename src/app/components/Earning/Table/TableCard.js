@@ -17,8 +17,8 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl   } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, CompoundLogo, ChevronTable, DAITrancheTable } from 'assets';
+import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl, trancheIcons } from 'config';
+import { Lock, Info, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -227,9 +227,9 @@ const TableCard = ({
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
-                <img src={CompoundLogo} alt='CompoundLogo' />
+                <img src={trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
                 <span>
-                  <img src={DAITrancheTable} alt='DAITrancheTable' />
+                  <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
                 </span>
               </TableCardImg>
             </TableFirstColWrapper>
@@ -370,9 +370,9 @@ const TableCard = ({
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
-              <img src={CompoundLogo} alt='CompoundLogo' />
+              <img src={trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
               <span>
-                <img src={DAITrancheTable} alt='DAITrancheTable' />
+                <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
               </span>
             </TableCardImg>
           </TableCardImgWrapper>

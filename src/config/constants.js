@@ -1,4 +1,16 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon, TrancheClaim, DaiClaim, EthClaim } from 'assets';
+import {
+  Key,
+  Agree,
+  DaiLogo,
+  ETH as ETHicon,
+  SLICE as SLICEicon,
+  TrancheClaim,
+  DaiClaim,
+  EthClaim,
+  AAVE,
+  CompoundLogo,
+  DAITrancheTable,
+} from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -100,6 +112,17 @@ export const PagesData = {
   }
 };
 
+export const trancheIcons = {
+  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
+  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHicon },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHicon },
+  AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
+  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon }
+};
+
 // pairData[0] is the default option in the loan creation process (value = pairId)
 export const pairData = [
   {
@@ -107,7 +130,7 @@ export const pairData = [
     text: 'DAI',
     value: 0,
     collateral: 'ETH',
-    img: DAIicon,
+    img: DaiLogo,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
   },
