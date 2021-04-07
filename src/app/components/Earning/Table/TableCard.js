@@ -4,7 +4,7 @@ import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
-import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens } from 'services/contractMethods';
+import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
@@ -12,7 +12,8 @@ import { initOnboard } from 'services/blocknative';
 import {
   addrShortener,
   readyToTransact,
-  roundNumber
+  roundNumber,
+  safeMultiply
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
@@ -66,6 +67,10 @@ const TableCard = ({
     buyerCoinAddress,
     trancheTokenAddress,
     type,
+    trancheValueUSD,
+    trancheValue,
+    subscriptionUSD,
+    cryptoTypePrice,
     subscriber,
     subscription,
     apy,
@@ -80,7 +85,7 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   setTokenBalance,
-  ethereum: { tokenBalance, address, wallet, web3, notify },
+  ethereum: { tokenBalance, balance, address, wallet, web3, notify },
   change,
   destroy,
   theme
@@ -93,6 +98,12 @@ const TableCard = ({
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [isEth, setIsEth] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  let buyerTokenBalance =
+    cryptoType === 'ETH'
+      ? balance && balance !== -1 && fromWei(balance)
+      : cryptoType === 'USDC'
+      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -250,20 +261,20 @@ const TableCard = ({
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
             <ThirdColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <h2>$0.00</h2>
-              <h2>(31,783,551 dai)</h2>
+              <h2>${roundNumber(trancheValueUSD)}</h2>
+              <h2>({roundNumber(trancheValue)} {cryptoType})</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} subscription>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <h2>{subscription ? roundNumber(subscription) : '0'}</h2>
-              <h2>(31,783,551 dai)</h2>
+              <h2>${roundNumber(subscriptionUSD)}</h2>
+              <h2>({subscription ? roundNumber(subscription) : '0'} {cryptoType})</h2>
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
             <FifthColContent color={ModeThemes[theme].tableText}>
-              <h2>$0.00</h2>
-              <h2>(00.00 dai)</h2>
+              <h2>${buyerTokenBalance ? roundNumber(safeMultiply(cryptoTypePrice, buyerTokenBalance)) : '0'}</h2>
+              <h2>({buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType})</h2>
 
               {/* <InfoBoxWrapper ref={innerRef}>
                 <img src={Info} alt='info' onClick={() => setInfoBoxToggle(!InfoBoxToggle)} />
@@ -394,7 +405,7 @@ const TableCard = ({
               </TableMobileContentCol>
               <TableMobileContentCol>
                 <h2>total value locked</h2>
-                <h2>{roundNumber(subscriber)} <span>DAI</span></h2>
+                <h2>{trancheValue ? roundNumber(trancheValue): '0'} <span>DAI</span></h2>
               </TableMobileContentCol>
               <TableMobileContentCol>
                 <h2>My Subscripton</h2>

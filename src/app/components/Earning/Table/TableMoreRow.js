@@ -115,7 +115,7 @@ let TableMoreRow = ({
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>SLICE APY</h2>
-                <h2>5%</h2>
+                <h2>TBD</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
