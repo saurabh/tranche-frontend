@@ -3,6 +3,7 @@ import {
   Agree,
   DaiLogo,
   ETH as ETHicon,
+  ETHWHITE,
   SLICE as SLICEicon,
   TrancheClaim,
   DaiClaim,
@@ -115,8 +116,8 @@ export const PagesData = {
 export const trancheIcons = {
   ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
   BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHicon },
-  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHicon },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHWHITE },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: ETHWHITE },
   AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
