@@ -255,11 +255,11 @@ let TableMoreRow = ({
                 btn={ModeThemes[theme].backgroundBorder}
               >
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                  <MobileMoreFormBtns>
-                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                  <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
+                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       Deposit
                     </MobileMoreFormBtn>
-                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
                       Withdraw
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
@@ -321,11 +321,11 @@ let TableMoreRow = ({
                 btn={ModeThemes[theme].backgroundBorder}
               >
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                  <MobileMoreFormBtns>
-                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                  <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
+                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       Deposit
                     </MobileMoreFormBtn>
-                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
                       Withdraw
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>

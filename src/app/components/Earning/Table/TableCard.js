@@ -406,7 +406,7 @@ const TableCard = ({
             </TableMobileContentRow>
 
             <TableMobileContentRow>
-              <TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>annual yield (apy)</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />

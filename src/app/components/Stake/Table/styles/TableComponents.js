@@ -1235,7 +1235,7 @@ const TableMoreLeftSectionContent = styled.div`
     text-transform: uppercase;
     color: ${props => props.title};
     @media (max-width: 992px){
-      font-size: 12px;
+      font-size: 10px;
     }
   }
   h2:last-child{
@@ -1244,7 +1244,7 @@ const TableMoreLeftSectionContent = styled.div`
     text-transform: uppercase;
     color: ${props => props.value};
     @media (max-width: 992px){
-      font-size: 14px;
+      font-size: 12px;
     }
   }
 `
