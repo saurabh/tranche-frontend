@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components';
 import Banner from 'app/components/Banner/Banner';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 
-import { setCurrentBlock } from 'redux/actions/ethereum';
+import { setCurrentBlock, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -21,7 +21,8 @@ import {
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
-  ModeThemes
+  ModeThemes,
+  TrancheBuyerCoinAddresses
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -40,6 +41,7 @@ const baseRouteUrl = '/:locale(zh|kr|en)?';
 const App = ({
   fetchTableData,
   setCurrentBlock,
+  setTokenBalance,
   summaryFetchSuccess,
   trancheCardToggle,
   path,
@@ -143,6 +145,7 @@ const App = ({
             tranchesList
           );
           trancheCardToggle({ status: false, id: null });
+          address && TrancheBuyerCoinAddresses.forEach((tokenAddress) => setTokenBalance(tokenAddress, address))
         }
       });
     const Staking = web3.eth
@@ -203,7 +206,7 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
+  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, setTokenBalance, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
@@ -255,6 +258,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchTableData,
   setCurrentBlock,
+  setTokenBalance,
   summaryFetchSuccess,
   trancheCardToggle
 })(NetworkDetector(App));
