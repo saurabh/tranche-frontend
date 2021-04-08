@@ -85,7 +85,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
               
 
         <OtherTabsContainer id="other-tabs-container">
-            <HeaderTabBtn link as='a' href='https://docs.tranche.finance' target='_blank' id='how-to-tab'>
+            <HeaderTabBtn link as='a' href='hhttps://docs.tranche.finance/tranchefinance/' target='_blank' id='how-to-tab'>
               DOCS
             </HeaderTabBtn>
         </OtherTabsContainer>
@@ -212,7 +212,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
             </HeaderTabBtn>
           </RatesWrapper>
           <div>
-            <HeaderTabBtn link as='a' href={"https://docs.tranche.finance/tranchefinance/guides/for-users/" + (path === "borrow" ? "borrowing" : path === "lend" ? "lending" : "")} target='_blank' id='how-to-tab'>
+            <HeaderTabBtn link as='a' href="https://docs.tranche.finance/tranchefinance/" target='_blank' id='how-to-tab'>
               {i18n.t("HowTo")}
             </HeaderTabBtn>
           </div>
