@@ -10,7 +10,7 @@ import {
   EthClaim,
   AAVE,
   CompoundLogo,
-  DAITrancheTable,
+  DAITrancheTable
 } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
@@ -41,6 +41,10 @@ export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCa
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
 export const ApproveBigNumber = '100000000000000';
+export const tokenDecimals = [
+  { key: 'USDC', decimals: 6 },
+  { key: 'USDT', decimals: 6 }
+];
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
@@ -118,6 +122,8 @@ export const trancheIcons = {
   BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
   ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
   BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
   AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
@@ -302,57 +308,57 @@ export const statuses = {
 };
 export const ModeThemes = {
   light: {
-      body: "#F9F9FE",
-      navlinkTab: "rgb(68, 65, 207)",
-      HeaderTitle: "#393F56",
-      HeaderSubtitle: "#9496B6",
-      TableHead: "rgba(36, 39, 50, 0.6)",
-      TableCard: "#FFFFFF",
-      TableCardBorderColor: "#F0F0F7",
-      footerBackground: "#F6F6FC",
-      footerLinks: "#AAA8E9",
-      languageToggleBackground: "rgba(68,65,207,0.1)",
-      languageToggleText: "#4441CF",
-      activeStatus: "#DDFFEB",
-      activeStatusText: "#2ECC71",
-      tableText: "#39295A",
-      tableCardShadow: "0px 4px 4px rgb(189 189 189 / 7%)",
-      dropDownBorder: "#F9F9FB",
-      dropDownText: "#39295A",
-      inputBackground: "rgb(255, 255, 255)",
-      inputDisabledBackground: "rgba(207,207,229,0.2)",
-      borderColor: "#EFEFEF",
-      backgroundBorder: "#CCCCCD",
-      titleSectionText: "rgba(124, 133, 155, 0.8)",
-      valueSectionText: "#393F56",
-      titleColor: "#393F56",
-      textColor: "#7C859B"
+    body: '#F9F9FE',
+    navlinkTab: 'rgb(68, 65, 207)',
+    HeaderTitle: '#393F56',
+    HeaderSubtitle: '#9496B6',
+    TableHead: 'rgba(36, 39, 50, 0.6)',
+    TableCard: '#FFFFFF',
+    TableCardBorderColor: '#F0F0F7',
+    footerBackground: '#F6F6FC',
+    footerLinks: '#AAA8E9',
+    languageToggleBackground: 'rgba(68,65,207,0.1)',
+    languageToggleText: '#4441CF',
+    activeStatus: '#DDFFEB',
+    activeStatusText: '#2ECC71',
+    tableText: '#39295A',
+    tableCardShadow: '0px 4px 4px rgb(189 189 189 / 7%)',
+    dropDownBorder: '#F9F9FB',
+    dropDownText: '#39295A',
+    inputBackground: 'rgb(255, 255, 255)',
+    inputDisabledBackground: 'rgba(207,207,229,0.2)',
+    borderColor: '#EFEFEF',
+    backgroundBorder: '#CCCCCD',
+    titleSectionText: 'rgba(124, 133, 155, 0.8)',
+    valueSectionText: '#393F56',
+    titleColor: '#393F56',
+    textColor: '#7C859B'
   },
   dark: {
-      body: "#100F36",
-      navlinkTab: "#FFFFFF",
-      HeaderTitle: "#FFFFFF",
-      HeaderSubtitle: "#C2C4DA",
-      TableHead: "rgba(255, 255, 255, 0.6)",
-      TableCard: "rgba(255, 255, 255, 0.07)",
-      TableCardBorderColor: "#363661",
-      footerBackground: "#07052F",
-      footerLinks: "rgba(255, 255, 255, 0.6)",
-      languageToggleBackground: "rgba(134, 132, 255, 0.25)",
-      languageToggleText: "#FFFFFF",
-      activeStatus: "rgba(46, 204, 113, 0.9)",
-      activeStatusText: "#FFFFFF",
-      tableText: "#FFFFFF",
-      tableCardShadow: "",
-      dropDownBorder: "#363661",
-      dropDownText: "#FFFFFF",
-      inputBackground: "rgba(255, 255, 255, 0.5)",
-      inputDisabledBackground: "transparent",
-      borderColor: "rgba(204, 204, 205, 0.15)",
-      backgroundBorder: "rgba(204, 204, 205, 0.15)",
-      titleSectionText: "rgba(255, 255, 255, 0.8);",
-      valueSectionText: "#FFFFFF",
-      titleColor: "#FFFFFF",
-      textColor: "#C2C4DA"
+    body: '#100F36',
+    navlinkTab: '#FFFFFF',
+    HeaderTitle: '#FFFFFF',
+    HeaderSubtitle: '#C2C4DA',
+    TableHead: 'rgba(255, 255, 255, 0.6)',
+    TableCard: 'rgba(255, 255, 255, 0.07)',
+    TableCardBorderColor: '#363661',
+    footerBackground: '#07052F',
+    footerLinks: 'rgba(255, 255, 255, 0.6)',
+    languageToggleBackground: 'rgba(134, 132, 255, 0.25)',
+    languageToggleText: '#FFFFFF',
+    activeStatus: 'rgba(46, 204, 113, 0.9)',
+    activeStatusText: '#FFFFFF',
+    tableText: '#FFFFFF',
+    tableCardShadow: '',
+    dropDownBorder: '#363661',
+    dropDownText: '#FFFFFF',
+    inputBackground: 'rgba(255, 255, 255, 0.5)',
+    inputDisabledBackground: 'transparent',
+    borderColor: 'rgba(204, 204, 205, 0.15)',
+    backgroundBorder: 'rgba(204, 204, 205, 0.15)',
+    titleSectionText: 'rgba(255, 255, 255, 0.8);',
+    valueSectionText: '#FFFFFF',
+    titleColor: '#FFFFFF',
+    textColor: '#C2C4DA'
   }
-}
+};

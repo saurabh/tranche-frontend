@@ -12,11 +12,12 @@ import {
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
-import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
+import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals } from 'config';
 import { setTxLoading } from 'redux/actions/ethereum';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
+const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
 export const toBN = web3.utils.toBN;
@@ -257,7 +258,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     const { web3, address, notify } = state.ethereum;
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = cryptoType === 'USDC' ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
     let depositAmountInEth = cryptoType === 'ETH' ? depositAmount : 0;
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
@@ -302,7 +303,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType,
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { withdrawAmount } = state.form.tranche.values;
-    withdrawAmount = cryptoType === 'USDC' ? toWei(withdrawAmount, 'Mwei') : toWei(withdrawAmount);
+    withdrawAmount = searchArr(cryptoType) ? toWei(withdrawAmount, 'Mwei') : toWei(withdrawAmount);
     const JCompound = JCompoundSetup(web3, contractAddress);
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
