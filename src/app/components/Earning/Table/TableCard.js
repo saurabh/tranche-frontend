@@ -71,13 +71,13 @@ const TableCard = ({
     trancheValue,
     subscriptionUSD,
     cryptoTypePrice,
-    subscriber,
     subscription,
     apy,
     apyStatus,
     cryptoType,
+    dividendType,
     trancheToken,
-    amount
+    trancheRate,
   },
   path,
   setAddress,
@@ -226,7 +226,7 @@ const TableCard = ({
             <TableFirstColWrapper>
               <TableCardImg
                 tranche={true}
-                background={true ? '#68D2FF' : '#FF7A7F'}
+                background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
@@ -256,7 +256,7 @@ const TableCard = ({
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <img src={apyImage} alt='apyImage' />
-              <h2>{apy}</h2>
+              <h2>{roundNumber(apy, 2)}%</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
@@ -268,7 +268,7 @@ const TableCard = ({
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} subscription>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>${roundNumber(subscriptionUSD)}</h2>
-              <h2>({subscription ? roundNumber(subscription) : '0'} {cryptoType})</h2>
+              <h2>({subscription ? roundNumber(subscription) : '0'} {trancheToken})</h2>
             </FourthColContent>
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
@@ -327,10 +327,15 @@ const TableCard = ({
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')} color={ModeThemes[theme].borderColor} border={trancheCard.status && id === trancheCard.id}>
             <TableCardMoreContent>
               <TableMoreRow
+                name={name}
+                type={type}
                 isEth={isEth}
+                apy={apy}
                 cryptoType={cryptoType}
+                dividendType={dividendType}
                 buyerCoinAddress={buyerCoinAddress}
                 trancheToken={trancheToken}
+                trancheRate={trancheRate}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}
@@ -356,7 +361,7 @@ const TableCard = ({
           <TableCardImgWrapper>
             <TableCardImg
               tranche={true}
-              background={true ? '#68D2FF' : '#FF7A7F'}
+              background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
@@ -399,7 +404,7 @@ const TableCard = ({
                 <h2>annual yield (apy)</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
-                  {apy}%
+                  {roundNumber(apy, 2)}%
                   <img src={Info} alt='infoImage' />
                 </h2>
               </TableMobileContentCol>
@@ -428,10 +433,15 @@ const TableCard = ({
           <TableCardMore className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')} color={ModeThemes[theme].backgroundBorder} border={trancheCard.status && id === trancheCard.id}>
             <TableCardMoreContent>
               <TableMoreRow
+                name={name}
+                type={type}
                 isEth={isEth}
+                apy={apy}
                 cryptoType={cryptoType}
+                dividendType={dividendType}
                 buyerCoinAddress={buyerCoinAddress}
                 trancheToken={trancheToken}
+                trancheRate={trancheRate}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}

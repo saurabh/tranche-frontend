@@ -14,7 +14,7 @@ import {
   TableMoreTitleWrapper,
   MobileMoreFormBtns,
   MobileMoreFormBtn,
-  TableMoreLeftSection, 
+  TableMoreLeftSection,
   TableMoreLeftSectionContent,
   TableMoreLeftTopSection,
   TableMoreLeftBottomSection
@@ -36,10 +36,15 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 );
 
 let TableMoreRow = ({
+  name,
+  type,
   isEth,
+  apy,
   cryptoType,
+  dividendType,
   buyerCoinAddress,
   trancheToken,
+  trancheRate,
   trancheTokenAddress,
   isApproveLoading,
   isDepositApproved,
@@ -101,14 +106,16 @@ let TableMoreRow = ({
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>PRICE</h2>
-                <h2>0.024 DAI</h2>
+                <h2>
+                  {roundNumber(trancheRate)} {cryptoType}
+                </h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
-              
+
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>Base APY</h2>
-                <h2>5%</h2>
+                <h2>{roundNumber(apy, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -122,21 +129,28 @@ let TableMoreRow = ({
             <TableMoreLeftSection>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>NET APY</h2>
-                <h2>22.3%</h2>
+                <h2>{roundNumber(apy, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
           </TableMoreLeftTopSection>
           <TableMoreLeftBottomSection title={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
-            <h2>Fixed rate Yield</h2>
-            <p>JCD Tranche A is the senior tranche of the cDai token. This tranche yields a fixed rate of 4%, in addition to variable SLICE rewards yielding in the displayed Net APY.</p>
+            <h2>{type === 'TRANCHE_A' ? 'Fixed rate Yield' : 'Variable rate Yield'}</h2>
+            <p>
+              {type === 'TRANCHE_A'
+                ? `${name} is the senior tranche of the ${dividendType} token. This tranche yields a fixed rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`
+                : `${name} is the junior tranche of the ${dividendType} token. This tranche yields a variable rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`}
+            </p>
           </TableMoreLeftBottomSection>
-
         </TableMoreRowContentLeft>
 
-        {
-          isDesktop ?
+        {isDesktop ? (
           <TableMoreRowContentRight>
-            <TableMoreRightSection disabled={!isDepositApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+            <TableMoreRightSection
+              disabled={!isDepositApproved || isApproveLoading || txOngoing}
+              color={ModeThemes[theme].dropDownBorder}
+              disabledBackground={ModeThemes[theme].inputDisabledBackground}
+              btn={ModeThemes[theme].backgroundBorder}
+            >
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>deposit</h2>
                 <CheckboxWrapper hidden={isEth}>
@@ -181,7 +195,13 @@ let TableMoreRow = ({
                 </button>
               </Form>
             </TableMoreRightSection>
-            <TableMoreRightSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+            <TableMoreRightSection
+              withdraw
+              disabled={!isWithdrawApproved || isApproveLoading || txOngoing}
+              color={ModeThemes[theme].dropDownBorder}
+              disabledBackground={ModeThemes[theme].inputDisabledBackground}
+              btn={ModeThemes[theme].backgroundBorder}
+            >
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
@@ -206,7 +226,12 @@ let TableMoreRow = ({
                 balance: {roundNumber(trancheTokenBalance)} {trancheToken}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
-                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
+                <FormContent
+                  color={ModeThemes[theme].dropDownText}
+                  background={ModeThemes[theme].inputBackground}
+                  disabledBackground={ModeThemes[theme].inputDisabledBackground}
+                  btn={ModeThemes[theme].backgroundBorder}
+                >
                   <Field
                     component={InputField}
                     validate={[number]}
@@ -225,22 +250,56 @@ let TableMoreRow = ({
                 </button>
               </Form>
             </TableMoreRightSection>
-          </TableMoreRowContentRight> :
+          </TableMoreRowContentRight>
+        ) : (
           <TableMoreRowContentRight>
-            { formType === 'deposit' ?
-              <TableMoreRightSection disabled={!isDepositApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
-              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                <MobileMoreFormBtns>
-                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
-                    Deposit
-                  </MobileMoreFormBtn>
-                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
-                    Withdraw
-                  </MobileMoreFormBtn>
-                </MobileMoreFormBtns>
-                <CheckboxWrapper hidden={isEth}>
-                  <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
+            {formType === 'deposit' ? (
+              <TableMoreRightSection
+                disabled={!isDepositApproved || isApproveLoading || txOngoing}
+                color={ModeThemes[theme].dropDownBorder}
+                disabledBackground={ModeThemes[theme].inputDisabledBackground}
+                btn={ModeThemes[theme].backgroundBorder}
+              >
+                <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
+                  <MobileMoreFormBtns>
+                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                      Deposit
+                    </MobileMoreFormBtn>
+                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                      Withdraw
+                    </MobileMoreFormBtn>
+                  </MobileMoreFormBtns>
+                  <CheckboxWrapper hidden={isEth}>
+                    <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
+                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                      <Field
+                        component={InputField}
+                        validate={[number]}
+                        onChange={(e, newValue) => handleInputChange(newValue, true)}
+                        disabled={!isDepositApproved}
+                        className={depositBalanceCheck}
+                        name='depositAmount'
+                        type='number'
+                        step='0.001'
+                      />
+                      <label
+                        onClick={isApproveLoading || txOngoing ? false : (e) => approveContract(true, isDepositApproved, e)}
+                        htmlFor='depositIsApproved'
+                      ></label>
+                    </CheckboxContent>
+                  </CheckboxWrapper>
+                </TableMoreTitleWrapper>
+
+                <h2>
+                  balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+                </h2>
+                <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
+                  <FormContent
+                    color={ModeThemes[theme].dropDownText}
+                    background={ModeThemes[theme].inputBackground}
+                    disabledBackground={ModeThemes[theme].inputDisabledBackground}
+                    btn={ModeThemes[theme].backgroundBorder}
+                  >
                     <Field
                       component={InputField}
                       validate={[number]}
@@ -251,47 +310,61 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : (e) => approveContract(true, isDepositApproved, e)} htmlFor='depositIsApproved'></label>
-                  </CheckboxContent>
-                </CheckboxWrapper>
-              </TableMoreTitleWrapper>
-
-              <h2>
-                balance: {roundNumber(buyerTokenBalance)} {cryptoType}
-              </h2>
-              <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
-                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
-                  <Field
-                    component={InputField}
-                    validate={[number]}
-                    onChange={(e, newValue) => handleInputChange(newValue, true)}
-                    disabled={!isDepositApproved}
-                    className={depositBalanceCheck}
-                    name='depositAmount'
-                    type='number'
-                    step='0.001'
-                  />
-                  <button onClick={(e) => setMaxAmount(e, true)}>max</button>
-                </FormContent>
-                <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
-                  <img src={BtnArrow} alt='arrow' />
-                  deposit
-                </button>
-              </Form>
-            </TableMoreRightSection> :
-            <TableMoreRightSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
-              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                <MobileMoreFormBtns>
-                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
-                    Deposit
-                  </MobileMoreFormBtn>
-                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
-                    Withdraw
-                  </MobileMoreFormBtn>
-                </MobileMoreFormBtns>
-                <CheckboxWrapper>
-                  <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                    <button onClick={(e) => setMaxAmount(e, true)}>max</button>
+                  </FormContent>
+                  <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
+                    <img src={BtnArrow} alt='arrow' />
+                    deposit
+                  </button>
+                </Form>
+              </TableMoreRightSection>
+            ) : (
+              <TableMoreRightSection
+                withdraw
+                disabled={!isWithdrawApproved || isApproveLoading || txOngoing}
+                color={ModeThemes[theme].dropDownBorder}
+                disabledBackground={ModeThemes[theme].inputDisabledBackground}
+                btn={ModeThemes[theme].backgroundBorder}
+              >
+                <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
+                  <MobileMoreFormBtns>
+                    <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                      Deposit
+                    </MobileMoreFormBtn>
+                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                      Withdraw
+                    </MobileMoreFormBtn>
+                  </MobileMoreFormBtns>
+                  <CheckboxWrapper>
+                    <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
+                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                      <Field
+                        component={InputField}
+                        validate={[number]}
+                        onChange={(e, newValue) => handleInputChange(newValue, false)}
+                        disabled={!isWithdrawApproved}
+                        className={withdrawBalanceCheck}
+                        name='withdrawAmount'
+                        type='number'
+                        step='0.001'
+                      />
+                      <label
+                        onClick={isApproveLoading || txOngoing ? false : () => approveContract(false, isWithdrawApproved)}
+                        htmlFor='withdrawIsApproved'
+                      ></label>
+                    </CheckboxContent>
+                  </CheckboxWrapper>
+                </TableMoreTitleWrapper>
+                <h2>
+                  balance: {roundNumber(trancheTokenBalance)} {trancheToken}
+                </h2>
+                <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
+                  <FormContent
+                    color={ModeThemes[theme].dropDownText}
+                    background={ModeThemes[theme].inputBackground}
+                    disabledBackground={ModeThemes[theme].inputDisabledBackground}
+                    btn={ModeThemes[theme].backgroundBorder}
+                  >
                     <Field
                       component={InputField}
                       validate={[number]}
@@ -302,38 +375,17 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <label onClick={(isApproveLoading || txOngoing) ? false : () => approveContract(false, isWithdrawApproved)} htmlFor='withdrawIsApproved'></label>
-                  </CheckboxContent>
-                </CheckboxWrapper>
-              </TableMoreTitleWrapper>
-              <h2>
-                balance: {roundNumber(trancheTokenBalance)} {trancheToken}
-              </h2>
-              <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
-                <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
-                  <Field
-                    component={InputField}
-                    validate={[number]}
-                    onChange={(e, newValue) => handleInputChange(newValue, false)}
-                    disabled={!isWithdrawApproved}
-                    className={withdrawBalanceCheck}
-                    name='withdrawAmount'
-                    type='number'
-                    step='0.001'
-                  />
-                  <button onClick={(e) => setMaxAmount(e, false)}>max</button>
-                </FormContent>
-                <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
-                  <img src={BtnArrow} alt='arrow' />
-                  withdraw
-                </button>
-              </Form>
-            </TableMoreRightSection>
-            }
-            
+                    <button onClick={(e) => setMaxAmount(e, false)}>max</button>
+                  </FormContent>
+                  <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
+                    <img src={BtnArrow} alt='arrow' />
+                    withdraw
+                  </button>
+                </Form>
+              </TableMoreRightSection>
+            )}
           </TableMoreRowContentRight>
-        }
-        
+        )}
       </TableMoreRowContent>
     </TableMoreRowWrapper>
   );
