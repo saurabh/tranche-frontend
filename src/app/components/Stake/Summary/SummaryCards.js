@@ -17,7 +17,6 @@ import { ERC20Setup } from 'utils';
 import { ApproveBigNumber, txMessage } from 'config';
 
 const { stakingSummary } = apiUri;
-const BASE_URL = serverUrl;
 
 const SummaryCards = ({
   path,
@@ -55,7 +54,7 @@ const SummaryCards = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${BASE_URL + stakingSummary + address}`);
+      const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
@@ -77,7 +76,7 @@ const SummaryCards = ({
     address = !address ? onboard.getState().address : address;
     if (num === 1) {
       setTokenBalance(slice.address, address);
-      if (type) {
+      if (type) { 
         let result = slice ? await stakingAllowanceCheck(slice.address, slice.stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
@@ -129,7 +128,7 @@ const SummaryCards = ({
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
-          console.log('true')
+          console.log('true');
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
@@ -160,7 +159,7 @@ const SummaryCards = ({
 
   return (
     <div>
-      {!isDesktop && currentPath === 'stake' && (
+      {!isDesktop && (
         <SummaryCardsWrapper className='container content-container'>
           <button onClick={() => openModal(undefined, 0)}>
             Stake and withdraw
@@ -171,9 +170,10 @@ const SummaryCards = ({
             path={path}
             modalIsOpen={summaryModal}
             modalType={modalType}
+            setModalType={setModalType}
             summaryModal={summaryModal}
             sliceAddress={slice.address}
-            lpAddress={lp.address}
+            lpAddress={lpList && lpList[0].address}
             tokenBalance={tokenBalance}
             lpList={lpList}
             // noBalance={Number(balance) === 0}
