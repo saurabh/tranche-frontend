@@ -42,7 +42,7 @@ let TableMoreRow = ({
   apy,
   cryptoType,
   dividendType,
-  buyerCoinAddress,
+  buyerTokenBalance,
   trancheToken,
   trancheRate,
   trancheTokenAddress,
@@ -59,12 +59,6 @@ let TableMoreRow = ({
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  let buyerTokenBalance =
-    cryptoType === 'ETH'
-      ? balance && balance !== -1 && fromWei(balance)
-      : cryptoType === 'USDC'
-      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
-      : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
   let trancheTokenBalance =
     cryptoType === 'USDC'
       ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
