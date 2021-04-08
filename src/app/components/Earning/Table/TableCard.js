@@ -18,7 +18,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, apiUri, serverUrl, trancheIcons } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, ChevronTable } from 'assets';
+import { Lock, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import {
   ModeThemes
@@ -312,7 +312,7 @@ const TableCard = ({
             </FifthColContent>
           </TableFifthCol>
           <TableSixthCol className='table-sixth-col table-col' trancheTableBtns>
-            <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
+            <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
               <button>
                 <img src={ChevronTable} alt='ChevronTable' />
               </button>
@@ -374,7 +374,7 @@ const TableCard = ({
             <TableMobileContentRow> 
               <TableFirstColWrapper>
                 <FirstColContent instrument>
-                  <FirstColTitle>
+                  <FirstColTitle color={ModeThemes[theme].tableText}>
                     <h2>{name && name}</h2>
                     <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
                       <button>
@@ -396,19 +396,18 @@ const TableCard = ({
 
             <TableMobileContentRow>
 
-              <TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>annual yield (apy)</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
                   {apy}%
-                  <img src={Info} alt='infoImage' />
                 </h2>
               </TableMobileContentCol>
-              <TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>total value locked</h2>
                 <h2>{roundNumber(subscriber)} <span>DAI</span></h2>
               </TableMobileContentCol>
-              <TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>My Subscripton</h2>
                 <h2>{subscription ? roundNumber(subscription) : '0'} <span>DAI</span></h2>
               </TableMobileContentCol>

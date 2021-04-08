@@ -3,7 +3,7 @@ import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 
 
 const TableContentCardWrapper = styled.div`
-  min-height: 66px;
+  min-height: 110px;
   position: relative;
   background: ${props => props.color};
   border: 1px solid ${props => props.borderColor};
@@ -15,7 +15,7 @@ const TableContentCardWrapper = styled.div`
 const TableContentCard = styled.div`
   display: flex;
   align-items: center;
-  min-height: 66px;
+  min-height: 110px;
   padding: 0 20px;
   // border-bottom: 1px solid #efefef;
   justify-content: space-between;
@@ -153,7 +153,7 @@ const TableHeadTitle = styled.div`
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 700;
-        font-size: 11px;
+        font-size: 14px;
         letter-spacing: 0.05em;
         text-transform: uppercase;
         color: ${props => props.color};
@@ -203,38 +203,38 @@ const TableHeadTitle = styled.div`
       width: 10%;
     `}
     ${({ instrument }) => instrument && `
-      width: 10%;
+      width: 21%;
     `}
     ${({ apy }) => apy && `
-      width: 18%;
+      width: 14%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
     ${({ totalValue }) => totalValue && `
-      width: 18%;
+      width: 15%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
     ${({ subscription }) => subscription && `
-      width: 18%;
+      width: 15%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
     ${({ status }) => status && `
-      width: 16%;
+      width: 15%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
     ${({ trancheTableBtns }) => trancheTableBtns && `
-       width: 10%;
+      width: 5%;
     `}
         
     
@@ -822,7 +822,7 @@ const TableFirstCol = styled.div`
     width: 10% !important;
   `}
   ${({ instrument }) => instrument && `
-    width: 10% !important;
+    width: 21% !important;
   `}
 `
 const TableFirstColWrapper = styled.div`
@@ -858,7 +858,7 @@ const FirstColTitle = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 10px;
+    font-size: 15px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color};
@@ -868,6 +868,9 @@ const FirstColTitle = styled.div`
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    h2{
+      font-size: 12px;
+    }
     div{
       button{
         width: auto;
@@ -905,7 +908,7 @@ const TableSecondCol = styled.div`
     width: 14%;
   `}
   ${({ apy }) => apy && `
-    width: 18% !important;
+    width: 14% !important;
     div{
       display: flex;
       justify-content: space-around; 
@@ -916,6 +919,7 @@ const TableSecondCol = styled.div`
 const SecondColContent = styled.div`
   h2{
     text-align: center !important;
+    font-size: 17px !important;
     color: ${props => props.color};
   }
   
@@ -978,7 +982,7 @@ const TableThirdCol = styled.div`
     width: 12% !important;
   `}
   ${({ totalValue }) => totalValue && `
-    width: 18% !important;
+    width: 15% !important;
   `}
 
   position: relative;
@@ -986,13 +990,14 @@ const TableThirdCol = styled.div`
 const ThirdColContent = styled.div`
   h2:first-child{
     text-align: center !important;
+    font-size: 17px !important;
     color: ${props => props.color};
   }
   h2:last-child{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 15px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -1009,7 +1014,7 @@ const TableFourthCol = styled.div`
     width: 10% !important;
   `}
   ${({ subscription }) => subscription && `
-    width: 18% !important;
+    width: 15% !important;
   `}
 
 `
@@ -1017,12 +1022,13 @@ const FourthColContent = styled.div`
   position: relative;
   h2:first-child{
     text-align: center !important;
+    font-size: 17px !important;
     display: flex;
     flex-direction: column;
     color: ${props => props.color};
     span{
       position: relative;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: bold !important;
       color: rgba(56,56,56,0.3);
     }
@@ -1031,7 +1037,7 @@ const FourthColContent = styled.div`
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 15px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -1045,7 +1051,7 @@ const TableFifthCol = styled.div`
     width: 30% !important;
   `}
   ${({ status }) => status && `
-    width: 16% !important;
+    width: 15% !important;
   `}
 
   position: relative;
@@ -1056,7 +1062,7 @@ const FifthColContent = styled.div`
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 17px !important;
     letter-spacing: 0.05em;
     text-align: center !important;
     color: ${props => props.color};
@@ -1066,7 +1072,7 @@ const FifthColContent = styled.div`
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 15px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -1080,7 +1086,7 @@ const TableSixthCol = styled.div`
     width: 0% !important;
   `}
   ${({ trancheTableBtns }) => trancheTableBtns && `
-    width: 10% !important;
+    width: 5% !important;
   `}
   display: flex;
   justify-content: center;
@@ -1108,7 +1114,10 @@ const AdustBtnWrapper = styled.div`
     justify-content: center;
     display: flex;
     overflow: hidden;
-    transition: 1s;
+    transition: none;
+    ${({ status }) => status && `
+      transform: rotate(180deg);
+    `}
     :hover{
       filter: brightness(97%);
     }
@@ -1225,12 +1234,18 @@ const TableMoreLeftSectionContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.title};
+    @media (max-width: 992px){
+      font-size: 12px;
+    }
   }
   h2:last-child{
     font-weight: bold;
     font-size: 17px;
     text-transform: uppercase;
     color: ${props => props.value};
+    @media (max-width: 992px){
+      font-size: 14px;
+    }
   }
 `
 
@@ -1328,7 +1343,7 @@ const FormContent = styled.div`
   position: relative;
   button{
     position: absolute;
-    right: 0;
+    right: 5px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -1348,15 +1363,16 @@ const FormContent = styled.div`
     height: 33px;
     border-radius: 4px;
     border: 1px solid #CFCFE5;
+    background: transparent;
     outline: none;
-    padding: 2px 40px 2px 17px;
+    padding: 2px 45px 2px 17px;
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color} !important;
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button{
@@ -1476,11 +1492,11 @@ const TableMoreTitleWrapper = styled.div`
     font-size: 16px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: ${props => props.color} ;
+    color: ${props => props.color};
   }
 `
 const TableMobileContent = styled.div`
-  width: 83%; 
+  width: 83%;
   height: 92px;
   padding: 16px 12px;
   display: flex;
@@ -1521,7 +1537,7 @@ const TableMobileContentCol = styled.div`
     line-height: 7px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(36, 39, 50, 0.6);
+    color: ${props => props.color};
   }
   h2:last-child{
     font-family: 'Inter', sans-serif;
@@ -1531,7 +1547,7 @@ const TableMobileContentCol = styled.div`
     line-height: 13px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color};
     margin: 3px 0 0 0;
     span{
       font-weight: normal;
@@ -1557,12 +1573,12 @@ const MobileMoreFormBtns = styled.div`
     outline: none;
     opacity: 0.5;
     margin-right: 12px;
-    color: #4441CF;
+    color: ${props => props.color};
   }
 `
 const MobileMoreFormBtn = styled.button`
-  ${({ current }) => current && `
-    border-bottom: 1px solid #4441CF !important;
+  ${({ current, color }) => current && `
+    border-bottom: 1px solid ${color} !important;
     opacity: 1 !important;
   `}
 `

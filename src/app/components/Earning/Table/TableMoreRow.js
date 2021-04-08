@@ -231,11 +231,11 @@ let TableMoreRow = ({
             { formType === 'deposit' ?
               <TableMoreRightSection disabled={!isDepositApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                <MobileMoreFormBtns>
-                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
+                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                     Deposit
                   </MobileMoreFormBtn>
-                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
                     Withdraw
                   </MobileMoreFormBtn>
                 </MobileMoreFormBtns>
@@ -243,7 +243,7 @@ let TableMoreRow = ({
                   <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
                   <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
-                      component={InputField}
+                      component='input'
                       validate={[number]}
                       onChange={(e, newValue) => handleInputChange(newValue, true)}
                       disabled={!isDepositApproved}
@@ -282,11 +282,11 @@ let TableMoreRow = ({
             </TableMoreRightSection> :
             <TableMoreRightSection withdraw disabled={!isWithdrawApproved || isApproveLoading || txOngoing} color={ModeThemes[theme].dropDownBorder} disabledBackground={ModeThemes[theme].inputDisabledBackground} btn={ModeThemes[theme].backgroundBorder}>
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                <MobileMoreFormBtns>
-                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')}>
+                <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
+                  <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                     Deposit
                   </MobileMoreFormBtn>
-                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')}>
+                  <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
                     Withdraw
                   </MobileMoreFormBtn>
                 </MobileMoreFormBtns>
@@ -294,7 +294,7 @@ let TableMoreRow = ({
                   <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
                   <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
-                      component={InputField}
+                      component='input'
                       validate={[number]}
                       onChange={(e, newValue) => handleInputChange(newValue, false)}
                       disabled={!isWithdrawApproved}
