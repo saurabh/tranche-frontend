@@ -4,7 +4,6 @@ import {
   DaiLogo,
   ETH as ETHicon,
   USDCWhite,
-  SLICE as SLICEicon,
   TrancheClaim,
   DaiClaim,
   EthClaim,
@@ -143,17 +142,17 @@ export const pairData = [
     img: DaiLogo,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
-  },
-  {
-    key: 'SLICE',
-    text: 'SLICE',
-    value: 1,
-    collateral: 'SLICE',
-    img: SLICEicon,
-    colIcon: SLICEicon
-    // collateralTokenSetup: SLICESetup,
-    // lendTokenSetup: SLICESetup
   }
+  // {
+  //   key: 'SLICE',
+  //   text: 'SLICE',
+  //   value: 1,
+  //   collateral: 'SLICE',
+  //   img: SLICEicon,
+  //   colIcon: SLICEicon
+  //   // collateralTokenSetup: SLICESetup,
+  //   // lendTokenSetup: SLICESetup
+  // }
   // {
   //   key: 'USDC',
   //   text: 'USDC',
