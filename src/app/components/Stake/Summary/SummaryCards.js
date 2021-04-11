@@ -9,7 +9,7 @@ import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
 
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 import { stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
@@ -62,13 +62,6 @@ const SummaryCards = ({
       getStakingData();
     }
   }, [currentPath, address, summaryFetchSuccess]);
-
-  useEffect(() => {
-    if (currentPath === 'stake' && address && slice && lpList) {
-      setTokenBalance(slice.address, address);
-      lpList.forEach((lp) => setTokenBalance(lp.address, address));
-    }
-  }, [currentPath, address, lpList, slice, setTokenBalance]);
 
   const openModal = async (type, num) => {
     const ready = await readyToTransact(wallet, onboard);
@@ -272,7 +265,6 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   setTokenBalance,
   summaryFetchSuccess
 })(SummaryCards);

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { setTokenBalances } from 'redux/actions/ethereum';
 import { pairData, blocksPerYear } from 'config/constants';
 import {
   loanAllowanceCheck,
@@ -77,7 +76,6 @@ let NewLoan = ({
   formValues,
   change,
   ethereum: { address, balance, tokenBalance, web3 },
-  setTokenBalances
 }) => {
   const [pair, setPair] = useState(pairData[0].value);
   const [currencySelect, toggleCurrency] = useState(false);
@@ -96,17 +94,6 @@ let NewLoan = ({
       : pairData[pair].collateral === 'SLICE'
       ? tokenBalance.SLICE
       : 0;
-
-  const fetchTokenBalances = useCallback(
-    _.debounce(
-      () => {
-        setTokenBalances(address);
-      },
-      2000,
-      { leading: true }
-    ),
-    [address, setTokenBalances]
-  );
 
   useEffect(() => {
     if (pair === 1) {
@@ -127,7 +114,6 @@ let NewLoan = ({
       setCollateralBalance(roundNumber(fromWei(collBalance)));
     }
 
-    fetchTokenBalances();
     getMaxBorrowed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, collBalance]);
@@ -528,4 +514,4 @@ const mapStateToProps = (state) => ({
   formValues: getFormValues('newLoan')(state)
 });
 
-export default NewLoan = connect(mapStateToProps, { change, setTokenBalances })(NewLoan);
+export default NewLoan = connect(mapStateToProps, { change })(NewLoan);

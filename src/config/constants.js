@@ -35,8 +35,11 @@ export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
+export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
+export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
+export const USDTAddress = process.env.REACT_APP_USDT_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
