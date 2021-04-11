@@ -1,0 +1,9 @@
+<svg width="20" height="10" viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="20" height="10" fill="url(#pattern0)"/>
+<defs>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0" transform="scale(0.05 0.1)"/>
+</pattern>
+<image id="image0" width="20" height="10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAYAAAC0VX7mAAABJUlEQVQ4EZ2Ru0oFMRCGt9LOytsL+Aq+w7ozBxUsLO20WPPHC2InloLNadRMUARtfBWx8FZYWCpYigiieI7MbiJ70eYsDLN//i//JCRJBvjS43yMBc8k6FeLBZcDxCXJf4EaPlBg3MTOEAk+qqeMXq3PnGxOksMaH62P1oyK6AjmWfCpYSzoxtAKUv6yQ8qClwDczR1sjDchFiyS4Ktk7J76rcCFi50h8tgnMb1gvv8VSmKXWPAdvN04jAQPWoWmw9UpElwppNdgZ7Y6YiZIcFusOXNfaGeXfwd6bMcw7Wk3H9ZK9PgseAsTH8nb6Qjqa5LgpvTMU2D67K2NTKuTx2vYcJ6e5SNNQB+GBNeB6WWClSZT05lHxh6ztcWGCKGnepuG1ZI/9AjAK8vA3XQAAAAASUVORK5CYII="/>
+</defs>
+</svg>

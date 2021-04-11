@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import {
   HeaderWrapper,
@@ -8,9 +9,12 @@ import {
 } from './styles/HeaderComponents';
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
+import {
+  ModeThemes
+} from 'config/constants';
 import i18n from "../../locale/i18n";
 
-export function Header({updateDate}) {
+function Header({updateDate, theme}) {
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
 
@@ -21,13 +25,12 @@ export function Header({updateDate}) {
   useEffect(() => {
     parsePath();
   }, [pathname, parsePath]);
-
   return (
     <div className='content-container container'>
-      <Navbar path={parsedPath[parsedPath.length - 1]}/>
+      <Navbar path={parsedPath[parsedPath.length - 1]} theme={theme}/>
       {
         path === "stake" &&
-        <HeaderTabs />
+        <HeaderTabs theme={theme}/>
       }
       <HeaderWrapper>
             <HeaderContent path={path}>
@@ -36,14 +39,21 @@ export function Header({updateDate}) {
                   <h2>Last Updated: {updateDate}</h2>
                 </HeaderSubtitle> : ""
               }
-              <HeaderTitle path={path}>
-                <h2>{i18n.t(`${path + ".title"}`)}</h2>
+              <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
+                <h2>{i18n.t(`${path}.title`)}</h2>
               </HeaderTitle>
-              <HeaderSubtitle path={path}>
-                <h2>{i18n.t(`${path + ".text"}`)}</h2>
+              <HeaderSubtitle path={path} color={ModeThemes[theme].HeaderSubtitle}>
+                <h2>{i18n.t(`${path}.text`)}</h2>
               </HeaderSubtitle>
             </HeaderContent>
       </HeaderWrapper>
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    theme: state.theme,
+  };
+};
+
+export default connect(mapStateToProps,  null)(Header);

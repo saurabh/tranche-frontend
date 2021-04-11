@@ -2,6 +2,7 @@ import { abi as JLoanHelperABI, networks as JLoanHelperNetworks } from 'build/co
 import { abi as JPriceOracleABI, networks as JPONetworks } from 'build/contracts/JPriceOracle.json';
 import { abi as JLoanABI } from 'build/contracts/JLoan.json';
 // import { abi as JProtocolABI, networks as JPNetworks } from 'build/contracts/JProtocol.json';
+import { abi as JCompoundABI } from 'build/contracts/JCompound.json';
 import { abi as StakingABI } from 'build/contracts/StakingMilestones.json';
 import { abi as YieldFarmABI } from 'build/contracts/YieldFarm.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
@@ -10,7 +11,6 @@ import {
   LoanContractAddress,
   DAIAddress,
   SLICEAddress,
-  USDCAddress,
   networkId
 } from 'config/constants';
 
@@ -21,6 +21,10 @@ export function JLoanSetup(web3) {
 // export function JProtocolSetup(web3) {
 //   return new web3.eth.Contract(JProtocolABI, JPNetworks[networkId].address);
 // }
+
+export function JCompoundSetup(web3, address) {
+  return new web3.eth.Contract(JCompoundABI, address);
+}
 
 export function JLoanHelperSetup(web3) {
   return new web3.eth.Contract(JLoanHelperABI, JLoanHelperNetworks[networkId].address);
@@ -44,10 +48,6 @@ export function DAISetup(web3) {
 
 export function SLICESetup(web3) {
   return new web3.eth.Contract(ERC20ABI, SLICEAddress);
-}
-
-export function USDCSetup(web3) {
-  return new web3.eth.Contract(ERC20ABI, USDCAddress);
 }
 
 export function ERC20Setup(web3, address) {

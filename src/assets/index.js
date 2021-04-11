@@ -18,6 +18,7 @@ import Agree from './images/svg/Agree.svg';
 import ServerError from './images/svg/ServerError.svg';
 import DAI from './images/svg/dai.svg';
 import ETH from './images/svg/EthForm.svg';
+import ETHWHITE from './images/svg/EthWhite.svg';
 import USDC from './images/svg/usdc.svg';
 import RequestLoan from './images/svg/RequestLoan.svg';
 import EarningAsset from './images/svg/EarningAsset.svg';
@@ -40,7 +41,24 @@ import DaiClaim from './images/svg/daiClaim.svg';
 import EthClaim from './images/svg/ethClaim.svg';
 import Lock from './images/svg/lock.svg';
 import TrancheClaim from './images/svg/trancheClaim.svg';
+import ArrowGreen from './images/svg/arrowGreen.svg';
+import BtnArrow from './images/svg/BtnArrow.svg';
+import CompoundLogo from './images/svg/compoundLogo.svg';
+import DAITrancheTable from './images/svg/DAITrancheTable.svg';
+import ChevronTable from './images/svg/ChevronTable.svg';
+import ChevronTableLanguage from './images/svg/ChevronTableLanguage.svg';
+import ChevronTableLanguageWhite from './images/svg/ChevronTableLanguageWhite.svg';
+import AAVE from './images/svg/AAVE.svg';
+import Compound from './images/svg/Compound.svg';
+import DaiBlue from './images/svg/DaiBlue.svg';
+import DaiRed from './images/svg/DaiRed.svg';
+import Down from './images/svg/Down.svg';
+import Up from './images/svg/Up.svg';
+import InfoWhite from './images/svg/InfoWhite.svg';
+import Logo from './images/svg/Logo.svg';
+import USDCWhite from './images/svg/USDCWhite.svg';
+
 
 export {
-    Adjust, DAI, DaiClaim, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
+    Adjust, DAI, DaiClaim, AAVE, Compound, Logo, USDCWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
 };

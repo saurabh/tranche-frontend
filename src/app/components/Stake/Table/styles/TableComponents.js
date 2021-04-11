@@ -3,32 +3,37 @@ import { WhiteAdjust, DarkAdjust, GrayAdjust } from 'assets';
 
 
 const TableContentCardWrapper = styled.div`
-  min-height: 66px;
+  min-height: 110px;
   position: relative;
-  background: #FFFFFF;
-  border: 1px solid #F0F0F7;
+  background: ${props => props.color};
+  border: 1px solid ${props => props.borderColor};
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(189, 189, 189, 0.07);
+  box-shadow: ${props => props.shadow};
   border-radius: 5px;
   margin: 12px 0;
 `;
 const TableContentCard = styled.div`
   display: flex;
   align-items: center;
-  min-height: 66px;
+  min-height: 110px;
   padding: 0 20px;
   // border-bottom: 1px solid #efefef;
   justify-content: space-between;
   cursor: pointer;
-  @media (max-width: 1200px) {
-    flex-direction: column;
-    align-items: flex-end;
-    // border-bottom: 3px solid #efefef;
-    padding: 0 12px;
-  }
+  // @media (max-width: 1200px) {
+  //   flex-direction: column;
+  //   align-items: flex-end;
+  //   // border-bottom: 3px solid #efefef;
+  //   padding: 0 12px;
+  // }
   ${({ pointer }) => !pointer && `
     cursor: default; 
   `}
+  ${({ border, color }) => border && `
+    border-bottom: 2px solid ${color} !important;
+  `}
+
+
 `;
 const TableCardTag = styled.div`
   position: absolute;
@@ -141,11 +146,31 @@ const SortingMenu = styled.div`
 `;
 
 const TableHeadTitle = styled.div`
+    position: relative;
+    display: flex;
+    & > h2{
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: ${props => props.color};
+    }
+    & > h2:nth-child(2){
+      margin-left: 42px;
+    }
     & > div {
         position: relative;
         cursor: pointer;
+        display: flex;
+        text-align: center;
+        width: 100%;
         & > h2{
-            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 700;
             font-size: 11px;
@@ -153,14 +178,63 @@ const TableHeadTitle = styled.div`
             text-transform: uppercase;
             color: rgba(56, 56, 56, 0.3);
         }
+        & > h2:nth-child(2){
+          margin-left: 73px;
+        }
     }
     @media (max-width: 1200px){
       display: none !important;
     }
+    ${({ stakingPool }) => stakingPool && `
+       width: 100%;
+       text-align: left;
+       div{
+        h2{
+          text-align: left !important;
+         }
+       }
+    `}
     ${({ defaultCursor }) => defaultCursor && `
-        & > div {
-            cursor: default;
-        }
+      & > div {
+          cursor: default;
+      }
+    `}
+    ${({ platform }) => platform && `
+      width: 10%;
+    `}
+    ${({ instrument }) => instrument && `
+      width: 21%;
+    `}
+    ${({ apy }) => apy && `
+      width: 14%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ totalValue }) => totalValue && `
+      width: 15%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ subscription }) => subscription && `
+      width: 15%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ status }) => status && `
+      width: 15%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ trancheTableBtns }) => trancheTableBtns && `
+      width: 5%;
     `}
         
     
@@ -190,23 +264,22 @@ const TableContainerHeader = styled.div`
 `;
 const TableTitle = styled.div`
     & > h2{
-        font-family: "Roboto", sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
-        text-transform: uppercase;
-        font-weight: 400;
-        font-size: 18px;
-        color: #292929;   
+        font-weight: bold;
+        font-size: 18.3333px;
+        line-height: 26px;        
+        color: ${props => props.color};
     }
 `;
 const TableSubTitle = styled.div`
     & > h2{
-        font-family: "Roboto", sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
-        text-transform: uppercase;
-        font-weight: 400;
-        font-size: 10px;
-        cursor: pointer;
-        color: #292929;
+        font-weight: 500;
+        font-size: 12.5px;
+        line-height: 15px;
+        color: ${props => props.color};
         ${({ sorting }) => sorting && `
           text-align: center;
           letter-spacing: 2px;
@@ -217,7 +290,7 @@ const CreateLoanBtn = styled.div`
     & > button{
         background-color: transparent;
         border: none;
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
@@ -252,7 +325,7 @@ const TableMarketsSortingDropdown = styled.div`
   height: 55px;
   margin-top: 7px;
   overflow: hidden;
-  right: ${({path}) => path === "earn" ? "20px" : " -26px"};
+  right: ${({path}) => path === "tranche" ? "20px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;
@@ -341,7 +414,7 @@ const CallToActionTradeBtns = styled.div`
 const CallToActionTradetext = styled.div`
   margin: -12px auto 29px auto;
   h2{
-    font-family: Roboto;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -393,29 +466,43 @@ const TableColMobile = styled.div`
 
 const TableHeadTitleMobile = styled.div`
   width: 100%;
+  width: 100%;
+  text-align: center;
   h2{
     font-style: normal;
     font-weight: 500;
     text-align: center;
     font-size: 8px;
     letter-spacing: 0.05em;
+    text-align: center;
     text-transform: uppercase;
     color: rgba(56,56,56,0.3);
+    width: 100%;
+    text-align: center;
     ${({ address }) => address && `
       text-align: left;
     `}
   }
+  display: flex;
+  h2:nth-child(2){
+    margin-left: 73px;
+  }
+  
 `
 
 const TableContentCardWrapperMobile = styled.div`
   width: 100%;
   height: 60px;
-  background: #FFFFFF;
-  border: 1px solid #F0F0F7;
+  background: ${props => props.color};
+  border: 1px solid ${props => props.borderColor};  
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgb(189 189 189 / 7%);
   border-radius: 5px;
   margin: 12px 0;
+  ${({ tranche }) => tranche && `
+    min-height: 92px;
+    height: auto;
+  `}
 `
 const TableContentCardMobile = styled.div`
   position: relative;
@@ -432,8 +519,13 @@ const TableContentCardMobile = styled.div`
     position: absolute;
     left: 0;
   }
+  ${({ tranche }) => tranche && `
+   
+  `}
+  border-bottom: none !important;
 `
 const TableMobilColContent = styled.div`
+
   h2{
     margin: 1px 0;
   }
@@ -476,6 +568,11 @@ const TableMobilCardBtn = styled.div`
   img{
     width: 7px;
   }
+  ${({ chevron }) => chevron && `
+    button{
+      background: transparent  !important;
+    }
+  `}
 `
 const TableMobileFiltersWrapper = styled.div`
   width: ${({width}) => width};
@@ -638,6 +735,14 @@ const InfoBox = styled.div`
     }
   }
 `
+
+const TableCardImgWrapper = styled.div`
+  height: 92px;
+  width: 17%;
+  display: flex;
+  align-items: center;
+`
+
 const TableCardImg = styled.div`
   display: flex;
   position: relative;
@@ -646,6 +751,25 @@ const TableCardImg = styled.div`
     border-radius: 50%;
     height: 37px;
   }
+  span{
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: ${props => props.background ? props.background : ''};
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: -9px;
+    bottom: 0;
+    @media (max-width: 992px){
+      left: 29px;
+    }
+    img{
+      height: 9px;
+    }
+  }
+  
   
   ${({ tranche, color, type }) => tranche && type === "A" && `
     ::after{
@@ -694,12 +818,21 @@ const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
   width: 28%;
+  ${({ platform }) => platform && `
+    width: 10% !important;
+  `}
+  ${({ instrument }) => instrument && `
+    width: 21% !important;
+  `}
 `
 const TableFirstColWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 992px){
+    width: 100%;
+  }
 `
 const FirstColImg = styled.div`
   position: relative;
@@ -710,24 +843,50 @@ const FirstColImg = styled.div`
 `
 const FirstColContent = styled.div`
   position: relative;
-  margin-left: 18px;
+  margin-left: 12px;
+
+  ${({ instrument }) => instrument && `
+    margin-left: 0;
+  `}
+  @media (max-width: 992px){
+    width: 100%;
+  }
+  
 `
 const FirstColTitle = styled.div`
   h2{
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 10px;
+    font-size: 15px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color};
   }   
+  @media (max-width: 992px){
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    h2{
+      font-size: 12px;
+    }
+    div{
+      button{
+        width: auto;
+        height: auto;
+        img{
+          width: 12px;
+        }
+      }
+    }
+  }
 `
 const FirstColSubtitle = styled.div`
   display: flex;
   align-items: center;
   h2{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 9px;
@@ -748,23 +907,102 @@ const TableSecondCol = styled.div`
   ${({ stake }) => stake && `
     width: 14%;
   `}
+  ${({ apy }) => apy && `
+    width: 14% !important;
+    div{
+      display: flex;
+      justify-content: space-around; 
+    }
+  `}
   position: relative;
 `
 const SecondColContent = styled.div`
   h2{
     text-align: center !important;
+    font-size: 17px !important;
+    color: ${props => props.color};
   }
+  
+  & > img:nth-child(1){
+    height: 19px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 25px;
+  }
+  & > div{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 25px;
+    z-index: 2000;
+    img{
+      height: 15px;
+      z-index: 3000;
+      transition: 500ms;
+      ${({ tooltip }) => tooltip && `
+        transform: rotate(360deg);
+      `}
+    }
+    div{
+      width: 225px;
+      height: 50px;
+      padding: 12px 12px 12px 30px;
+      background: #F3F3FE;
+      box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25);
+      border-radius: 7px;
+      position: absolute;
+      top: 50%;
+      left: -7px;
+      transform: translate(-25px, -50%);
+      transition: 300ms;
+      z-index: 2000;
+      visibility: hidden;
+      opacity: 0;
+      ${({ tooltip }) => tooltip && `
+        transform: translate(0, -50%);
+        opacity: 1;
+        visibility: visible;
+      `}
+      h2{
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 6px;
+        text-align: left !important;
+      }
+    }
+    
+  }
+  
 `
 const TableThirdCol = styled.div`
   width: 7%;
   ${({ stake }) => stake && `
     width: 12% !important;
   `}
+  ${({ totalValue }) => totalValue && `
+    width: 15% !important;
+  `}
+
   position: relative;
 `
 const ThirdColContent = styled.div`
-  h2{
+  h2:first-child{
     text-align: center !important;
+    font-size: 17px !important;
+    color: ${props => props.color};
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #CCCCCD;
   }
 `
 const TableFourthCol = styled.div`
@@ -775,20 +1013,36 @@ const TableFourthCol = styled.div`
   ${({ stake }) => stake && `
     width: 10% !important;
   `}
+  ${({ subscription }) => subscription && `
+    width: 15% !important;
+  `}
+
 `
 const FourthColContent = styled.div`
   position: relative;
-  h2{
+  h2:first-child{
     text-align: center !important;
+    font-size: 17px !important;
     display: flex;
     flex-direction: column;
-    padding-top: 13px;
+    color: ${props => props.color};
     span{
       position: relative;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: bold !important;
       color: rgba(56,56,56,0.3);
     }
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #CCCCCD;
   }
 `
 const TableFifthCol = styled.div`
@@ -796,15 +1050,43 @@ const TableFifthCol = styled.div`
   ${({ stake }) => stake && `
     width: 30% !important;
   `}
+  ${({ status }) => status && `
+    width: 15% !important;
+  `}
+
   position: relative;
 `
 const FifthColContent = styled.div`
-  position: relative;   
+  position: relative;
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 17px !important;
+    letter-spacing: 0.05em;
+    text-align: center !important;
+    color: ${props => props.color};
+    text-transform: uppercase;
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #CCCCCD;
+  }
 `
 const TableSixthCol = styled.div`
   width: 18%;  
   ${({ stake }) => stake && `
     width: 0% !important;
+  `}
+  ${({ trancheTableBtns }) => trancheTableBtns && `
+    width: 5% !important;
   `}
   display: flex;
   justify-content: center;
@@ -832,7 +1114,10 @@ const AdustBtnWrapper = styled.div`
     justify-content: center;
     display: flex;
     overflow: hidden;
-    transition: 1s;
+    transition: none;
+    ${({ status }) => status && `
+      transform: rotate(180deg);
+    `}
     :hover{
       filter: brightness(97%);
     }
@@ -849,23 +1134,456 @@ const AdustBtnWrapper = styled.div`
       }
     }
   }
+  ${({ chevron }) => chevron && `
+    button{
+      background: transparent  !important;
+    }
+  `}
+  
 `
 const TableCardMore = styled.div`
   @media (max-width: 1200px){
     // padding: 0 39px 0 47px;
   }
   @media (max-width: 992px){
-    padding: 30px 12px 30px 12px;
+    padding: 0 !important;  
+    border-top: 2px solid #F9F9FB;
   }
+  border-bottom: 2px solid ${props => props.color} !important;
+  ${({ border, color }) => border && `
+    border-bottom: 1px solid ${color};  
+  `}
 
 `
 const TableCardMoreContent = styled.div`
   position: relative;   
 `
+const TableMoreRowWrapper = styled.div`
+  position: relative;   
+  @media (max-width: 992px){
+    padding: 0 !important;  
+  }
+`
+const TableMoreRowContent = styled.div` 
+  display: flex;
+  min-height: 220px;  
+  width: 100%;
+  @media (max-width: 992px){
+    flex-direction: column;
+  }
+`
+
+const TableMoreRowContentLeft = styled.div` 
+  width: 50%;
+  min-height: 220px;
+  @media (max-width: 992px){
+    width: 100%;
+  }
+`
+
+
+const TableMoreLeftTopSection = styled.div`
+  display: flex;
+  border-bottom: 2px solid ${props => props.color};
+`
+const TableMoreLeftBottomSection = styled.div`
+  height: 120px;
+  padding: 20px;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0 auto 5px auto;
+    color: ${props => props.title};
+  }
+  p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    margin: 5px  auto 0 auto;
+    color: ${props => props.value};
+  }
+`
+const TableMoreLeftSection = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 25%;
+  height: 100px;
+  ${({color }) => color && `
+    border-right: 2px solid ${color};
+  `}
+`
+const TableMoreLeftSectionContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    margin: 5px auto;
+  }
+  h2:first-child{
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.title};
+    @media (max-width: 992px){
+      font-size: 10px;
+    }
+  }
+  h2:last-child{
+    font-weight: bold;
+    font-size: 17px;
+    text-transform: uppercase;
+    color: ${props => props.value};
+    @media (max-width: 992px){
+      font-size: 12px;
+    }
+  }
+`
 
 
 
+const TableMoreRowContentRight = styled.div` 
+  display: flex;
+  width: 50%;
+  min-height: 220px;
+  @media (max-width: 992px){
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+`
 
+const TableMoreRightSection = styled.div` 
+  width: 50%;
+  min-height: 220px;
+  padding: 0 20px;
+  border-left: 2px solid ${props => props.color};
+  display: flex;
+  flex-direction: column;
+  
+  justify-content: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #7C859B;
+    margin: 12px 0;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    & > button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 38px;
+      background: #4441CF;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin: 23px 0 0 0;
+      outline: none;
+      cursor: pointer;
+      img{
+        margin-right: 5px;
+      }
+    }
+  }
+  ${({ withdraw }) => withdraw && `
+    form{
+      button{
+        img{
+          transform: rotate(180deg);
+        }
+      }
+    }
+  `}
+  ${({ disabled, disabledBackground, btn }) => disabled && `
+    form{
+      div{
+        button{
+          color: rgba(57, 41, 90, 0.5);
+          pointer-events: none;
+        }
+        input{
+          background: ${disabledBackground};  
+          pointer-events: none;
+          border-color: ${btn}
+        }
+      }
+      & > button{
+        pointer-events: none;
+        background: ${btn};
+      }
+    }
+  `}
+  @media (max-width: 992px){
+    width: 100%;
+  }
+`
+const FormContent = styled.div` 
+  position: relative;
+  button{
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color} !important;
+  }
+  input{
+    width: 100%;
+    height: 33px;
+    border-radius: 4px;
+    border: 1px solid #CFCFE5;
+    background: transparent;
+    outline: none;
+    padding: 2px 45px 2px 17px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color} !important;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number]{
+    -moz-appearance: textfield;
+  }
+`
+const CheckboxWrapper = styled.div`
+  display: ${({hidden}) => hidden ? 'none' : 'flex'};
+  align-items: center;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0 7px 4px 0;
+    color: #7C859B;
+  }
+  ${({ themeToggle }) => themeToggle &&  `
+    margin-left: 40px;
+    h2{
+      font-size: 11.91px;
+      color: #9496B6;
+      margin: 0 12px;
+    }
+  `}
+`
+const CheckboxContent = styled.div`
+  input{
+    opacity: 0;
+    position: absolute;
+  }
+  input + label{
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    cursor: pointer;
+    -moz-transition: 0.4s ease;
+    -o-transition: 0.4s ease;
+    -webkit-transition: 0.4s ease;
+    transition: 0.4s ease;
+    -webkit-tap-highlight-color: transparent;
+    height: 19.99px;
+    width: 33.99px;
+    background: #CCCCCD;
+    border-radius: 60px;
+    :before{
+      content: "";
+      position: absolute;
+      display: block;
+      -moz-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      -o-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      -webkit-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
+      height: 19.99px;
+      width: 33.99px;
+      top: 0;
+      left: 0;
+      border-radius: 30px;
+    }
+    :after{
+      content: "";
+      position: absolute;
+      display: block;
+      box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 0px 0 hsla(0, 0%, 0%, 0.04), 0 4px 9px hsla(0, 0%, 0%, 0.13), 0 3px 3px hsla(0, 0%, 0%, 0.05);
+      -moz-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      -o-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      -webkit-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+      background: #FAFAFA;
+      height: 11.34px;
+      width: 11.34px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 4px;
+      border-radius: 60px;
+    }
+  }
+  input:checked + label{
+    :before{
+      background: #4441CF;
+      -moz-transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+      -o-transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+      -webkit-transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+      transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+    }
+    :after{
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  ${({ disabled }) => disabled && `
+    pointer-events: none;
+  `}
+  ${({ themeToggle }) => themeToggle && `
+    display: flex;
+    input + label{
+      background: #9496B6;
+    }
+  `}
+`
+
+const TableMoreTitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > h2:nth-child(1){
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color};
+  }
+`
+const TableMobileContent = styled.div`
+  width: 83%;
+  height: 92px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
+
+const TableMobileContentRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`
+
+
+const TableMobileContentCol = styled.div`
+  width: 33.3333333%;
+  text-align: left;
+  :nth-child(1){
+    h2{
+      display: flex;
+      align-items: center;
+      img{
+        height: 12px;    
+        :nth-child(1){
+          margin: 0 5px 0 0;
+        }
+        :nth-child(2){
+          margin: 0 0 0 2px;
+        }
+      }
+    }
+  }
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 5.55px;
+    line-height: 7px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color};
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10.42px;
+    line-height: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color};
+    margin: 3px 0 0 0;
+    span{
+      font-weight: normal;
+      height: auto;
+      width: auto;
+      background: none;
+      position: relative;
+    }
+  }
+`
+
+const MobileMoreFormBtns = styled.div`
+  button{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    padding: 7px 0;
+    outline: none;
+    opacity: 0.5;
+    margin-right: 12px;
+    color: ${props => props.color};
+  }
+`
+const MobileMoreFormBtn = styled.button`
+  ${({ current, color }) => current && `
+    border-bottom: 1px solid ${color} !important;
+    opacity: 1 !important;
+  `}
+`
+
+  
 
 export {
   TableWrapper,
@@ -927,5 +1645,24 @@ export {
   AdustBtnWrapper,
   TableCardMore,
   TableCardMoreContent,
-  WithdrawBtnWrapper
+  WithdrawBtnWrapper,
+  TableMoreRowWrapper,
+  TableMoreRowContent,
+  TableMoreRowContentLeft,
+  TableMoreRowContentRight,
+  TableMoreRightSection,
+  FormContent,
+  CheckboxWrapper,
+  CheckboxContent,
+  TableMoreTitleWrapper,
+  TableMobileContent,
+  TableMobileContentRow, 
+  TableMobileContentCol,
+  TableCardImgWrapper,
+  MobileMoreFormBtns,
+  MobileMoreFormBtn,
+  TableMoreLeftSection, 
+  TableMoreLeftSectionContent,
+  TableMoreLeftTopSection,
+  TableMoreLeftBottomSection
 };

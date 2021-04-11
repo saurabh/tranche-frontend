@@ -5,6 +5,7 @@ import data from './tableData';
 import userSummary from './summaryData';
 import path from './TogglePath';
 import checkServerStatus from './checkServer';
+import theme from './theme';
 
 import { reducer as form } from 'redux-form';
 
@@ -15,5 +16,6 @@ export default combineReducers({
   data,
   checkServerStatus,
   form,
-  userSummary
+  userSummary,
+  theme
 });

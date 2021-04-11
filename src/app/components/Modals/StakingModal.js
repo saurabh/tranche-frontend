@@ -4,10 +4,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
-import { massHarvest } from 'services/contractMethods';
+import { getUserStaked, massHarvest, stakingAllowanceCheck } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { fromWei } from 'services/contractMethods';
+import { safeAdd } from 'utils';
 import StakingForm from '../Form/Staking';
 import {
   ModalHeader,
@@ -36,7 +38,6 @@ import { Lock, TrancheClaim } from 'assets';
 
 import i18n from '../locale/i18n';
 const { stakingSummaryDetail } = apiUri;
-const BASE_URL = serverUrl;
 
 const FirstCustomStyles = {
   overlay: {
@@ -105,16 +106,19 @@ const StakingModal = ({
   noBalance,
   modalIsOpen,
   modalType,
+  setModalType,
   isLPToken,
   hasAllowance,
+  setHasAllowance,
   approveLoading,
   tokenBalance,
   type,
+  sliceAddress,
+  lpAddress,
   // tokenAddress,
   // Functions
   closeModal,
   openModal,
-  stakingAllowanceCheck,
   stakingApproveContract,
   adjustStake
   // API Values,
@@ -122,9 +126,15 @@ const StakingModal = ({
   // const stakableAssets = useRef();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [tokenAddress, setTokenAddress] = useState(null);
+  const [stakingAddress, setStakingAddress] = useState(null);
+  const [isLPTokenMobile, setLPTokenMobile] = useState(false);
+  const [typeMobile, setTypeMobile] = useState('slice');
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
+  const [balanceMobile, setBalanceMobile] = useState(0);
+  const [modalTypeMobile, setModalTypeMobile] = useState(undefined);
+
   const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
 
   const updateMedia = () => {
@@ -141,19 +151,58 @@ const StakingModal = ({
 
   useEffect(() => {
     const getStakingDetails = async () => {
-      const res = await axios(`${BASE_URL + stakingSummaryDetail + tokenAddress + '/' + address}`);
+      const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
-      setUserStaked(result.userStaked);
-      setStakedShare((result.userStaked / result.staked) * 100);
+      let userStaked = await getUserStaked(stakingAddress, tokenAddress);
+      setUserStaked(userStaked);
+      setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
     };
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
-  }, [modalIsOpen, type, tokenAddress, address]);
+  }, [modalIsOpen, type, tokenAddress, stakingAddress, address]);
 
   const modalClose = () => {
     closeModal();
+    setModalTypeMobile(undefined);
   };
+  const setBalanceCB = (balance) => {
+    setBalanceMobile(roundNumber(balance));
+  };
+  const toggleModalMobile = async (bool, type) => {
+    setModalTypeMobile(bool);
+    setTypeMobile(type);
+    setModalType(bool)
+    if (type === 'slice') {
+      if (bool) {
+        let result = slice ? await stakingAllowanceCheck(sliceAddress, slice.stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
+    } else if (type === 'lp') {
+      if (bool) {
+        let result = lpList ? await stakingAllowanceCheck(lpAddress, lpList[0].stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
+    }
+    setLPTokenMobile(type === 'lp' ? true : false);
+  };
+  useEffect(() => {
+    const setBalance = async () => {
+      if (tokenBalance) {
+        if (typeMobile === 'slice' && sliceAddress) setBalanceCB(fromWei(tokenBalance[sliceAddress]));
+        if (typeMobile === 'lp' && lpList) {
+          let lpBalance = 0;
+          lpList.forEach((lp) => {
+            if (tokenBalance[lp.address]) {
+              lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
+            }
+          });
+          setBalanceCB(lpBalance);
+        }
+      }
+    };
+    setBalance();
+  }, [typeMobile, sliceAddress, lpList, tokenBalance]);
 
   const stakingModal = () => {
     return (
@@ -182,31 +231,33 @@ const StakingModal = ({
             <ModalActionDetailsContent stake={true} trade={true}>
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>USER {tokenType} LOCKED</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{userStaked}</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(userStaked)}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{totalStaked}</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
                 <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
-                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0 }%</LoanDetailsRowValue>
+                <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0}%</LoanDetailsRowValue>
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
           <StakingForm
-            modalType={modalType}
+            modalType={isDesktop ? modalType : modalTypeMobile}
             userStaked={userStaked}
-            type={type}
+            type={isDesktop ? type : typeMobile}
             tokenAddress={tokenAddress}
+            stakingAddress={stakingAddress}
             setTokenAddress={setTokenAddress}
+            setStakingAddress={setStakingAddress}
             hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
             approveLoading={approveLoading}
-            isLPToken={isLPToken}
+            isLPToken={isDesktop ? isLPToken : isLPTokenMobile}
             // Functions
-            stakingAllowanceCheck={stakingAllowanceCheck}
             stakingApproveContract={stakingApproveContract}
             adjustStake={adjustStake}
             // setBalanceModal={setBalance}
@@ -260,7 +311,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {slice.balance}
+                        {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -272,7 +323,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {lp.balance1}
+                        {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -284,7 +335,7 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {lp.balance2}
+                        {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -367,23 +418,23 @@ const StakingModal = ({
               <h2>Staked SLICE Tokens</h2>
               {/* <h2>00.00</h2> */}
               <SummaryCardCounter stakingMobile>
-                <SummaryCardBtn stakingMobile onClick={() => openModal(true, 1)}>
+                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'slice')}>
                   +
                 </SummaryCardBtn>
-                <SummaryCardBtn stakingMobile onClick={() => openModal(false, 1)}>
+                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'slice')}>
                   -
                 </SummaryCardBtn>
               </SummaryCardCounter>
             </StakingModalRow>
 
             <StakingModalRow>
-              <h2>Staked SLICE Tokens</h2>
+              <h2>Staked LP Tokens</h2>
               {/* <h2>00.00</h2> */}
               <SummaryCardCounter stakingMobile>
-                <SummaryCardBtn stakingMobile onClick={() => openModal(true, 2)}>
+                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'lp')}>
                   +
                 </SummaryCardBtn>
-                <SummaryCardBtn stakingMobile onClick={() => openModal(false, 2)}>
+                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'lp')}>
                   -
                 </SummaryCardBtn>
               </SummaryCardCounter>
@@ -393,13 +444,13 @@ const StakingModal = ({
               <h2>SLICE Rewards Collected</h2>
               {/* <h2>00.00</h2> */}
               <SummaryClaimBtn stakingMobile claim>
-                <button onClick={() => openModal(null, 3)}>Claim</button>
+                <button onClick={() => toggleModalMobile(null, null)}>Claim</button>
               </SummaryClaimBtn>
             </StakingModalRow>
           </StakingModalWrapper>
           <LoanDetailsMobile>
             <h2>
-              {i18n.t('stake.modal.sliceLocked')}— {totalStaked}
+              {i18n.t('stake.modal.sliceLocked')}— {roundNumber(totalStaked)}
               <span></span>
             </h2>{' '}
           </LoanDetailsMobile>
@@ -452,14 +503,24 @@ const StakingModal = ({
       </Modal>
     );
   };
-  return !isDesktop && summaryModal
-    ? InitialStakingModal()
-    : noBalance && modalType === true
-    ? notFound()
-    : modalType === null
-    ? claimModal()
-    : stakingModal();
-  // return balance === 0 && modalType ? notFound() : stakingModal() ;
+
+  return isDesktop
+    ? noBalance && modalType === true
+      ? notFound()
+      : modalType === null
+      ? claimModal()
+      : stakingModal()
+    : !isDesktop
+    ? summaryModal && modalTypeMobile === undefined
+      ? InitialStakingModal()
+      : modalTypeMobile && Number(balanceMobile) === 0
+      ? notFound()
+      : modalTypeMobile === null
+      ? claimModal()
+      : modalTypeMobile === true || modalTypeMobile === false
+      ? stakingModal()
+      : false
+    : false;
 };
 
 StakingModal.propTypes = {

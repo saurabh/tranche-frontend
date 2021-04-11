@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
+import { ThemeProvider } from 'styled-components';
+
 import Banner from 'app/components/Banner/Banner';
-import { fetchTableData } from 'redux/actions/tableData';
-import { setCurrentBlock } from 'redux/actions/ethereum';
+import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
+
+import { setCurrentBlock, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -16,30 +19,36 @@ import {
   PriceOracleAddress,
   ProtocolAddress,
   StakingAddresses,
-  YieldAddresses
+  YieldAddresses,
+  JCompoundAddress,
+  ModeThemes,
+  TrancheBuyerCoinAddresses
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
+import Trade from 'app/pages/Trade';
 import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-const { loanList: loanListUrl, tranchesList: tranchesistUrl, stakingList: stakingListUrl } = apiUri;
+const { loanList, tranchesList, stakingList, stakingSummary } = apiUri;
 const baseRouteUrl = '/:locale(zh|kr|en)?';
-const { stakingSummary } = apiUri;
 
 const App = ({
   fetchTableData,
   setCurrentBlock,
+  setTokenBalance,
   summaryFetchSuccess,
+  trancheCardToggle,
   path,
   ethereum: { address },
   data: { skip, limit, filter, filterType, tradeType },
-  checkServerStatus
+  checkServerStatus,
+  theme
 }) => {
   const [showModal, setShowModal] = useState(true);
 
@@ -60,86 +69,118 @@ const App = ({
         address: LoanContractAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-              lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-              type: filter
-            }
-          },
-          loanListUrl
-        );
+        if (path === 'borrow' || path === 'lend') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+                lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
+                type: filter
+              }
+            },
+            loanList
+          );
+        }
       });
     const priceOracle = web3.eth
       .subscribe('logs', {
         address: PriceOracleAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-              lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-              type: filter
-            }
-          },
-          loanListUrl
-        );
+        if (path === 'borrow' || path === 'lend') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
+                lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
+                type: filter
+              }
+            },
+            loanList
+          );
+        }
       });
     const Protocol = web3.eth
       .subscribe('logs', {
         address: ProtocolAddress
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              address: path === 'earn' && tradeType === 'myTranches' ? address : undefined,
-              type: filter //ETH/JNT keep these in constant file
-            }
-          },
-          tranchesistUrl
-        );
+        if (path === 'tranche') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                address: tradeType === 'myTranches' ? address : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            tranchesList
+          );
+        }
+      });
+    const JCompound = web3.eth
+      .subscribe('logs', {
+        address: JCompoundAddress
+      })
+      .on('data', async () => {
+        if (path === 'tranche') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                address: address ? address : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            tranchesList
+          );
+          trancheCardToggle({ status: false, id: null });
+          address && TrancheBuyerCoinAddresses.forEach((tokenAddress) => setTokenBalance(tokenAddress, address))
+        }
       });
     const Staking = web3.eth
       .subscribe('logs', {
         address: StakingAddresses
       })
       .on('data', async () => {
-        await timeout(4000);
-        await fetchTableData(
-          {
-            skip,
-            limit,
-            filter: {
-              type: filter //ETH/JNT keep these in constant file
-            }
-          },
-          stakingListUrl
-        );
-        const res = await axios(`${serverUrl + stakingSummary + address}`);
-        const { result } = res.data;
-        summaryFetchSuccess(result);
+        if (path === 'stake') {
+          await timeout(4000);
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            stakingList
+          );
+          const res = await axios(`${serverUrl + stakingSummary + address}`);
+          const { result } = res.data;
+          summaryFetchSuccess(result);
+        }
       });
     const YieldFarm = web3.eth
       .subscribe('logs', {
         address: YieldAddresses
       })
       .on('data', async () => {
-        await timeout(4000);
-        const res = await axios(`${serverUrl + stakingSummary + address}`);
-        const { result } = res.data;
-        summaryFetchSuccess(result);
+        if (path === 'stake') {
+          await timeout(4000);
+          const res = await axios(`${serverUrl + stakingSummary + address}`);
+          const { result } = res.data;
+          summaryFetchSuccess(result);
+        }
       });
 
     return () => {
@@ -155,6 +196,9 @@ const App = ({
       Protocol.unsubscribe((error) => {
         if (error) console.error(error);
       });
+      JCompound.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
       Staking.unsubscribe((error) => {
         if (error) console.error(error);
       });
@@ -162,40 +206,29 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [
-    address,
-    filterType,
-    path,
-    fetchTableData,
-    limit,
-    filter,
-    setCurrentBlock,
-    summaryFetchSuccess,
-    tradeType,
-    skip
-  ]);
+  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, setTokenBalance, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
   };
   const initApp = () => {
     return (
-      <>
+      <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
         <Banner />
         <Router>
           <Switch location={window.location}>
-            <Redirect exact from={baseRouteUrl + '/'} to='/borrow' />
-            <Redirect exact from={baseRouteUrl + '/earn'} to='/borrow' />
+            <Redirect exact from={baseRouteUrl + '/'} to='/stake' />
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
+            <Route exact path={baseRouteUrl + '/tranche'} component={Trade} />
             <Route exact path={baseRouteUrl + '/stake'} component={Stake} />
             <Route exact path={baseRouteUrl + '/privacy'} component={Privacy} />
             <Route exact path={baseRouteUrl + '/terms'} component={TermsAndConditions} />
             <Route component={NotFound} />
           </Switch>
         </Router>
-      </>
+      </ThemeProvider>
     );
   };
   return checkServerStatus ? initApp() : serverError();
@@ -218,12 +251,14 @@ const mapStateToProps = (state) => ({
   tranches: state.tranches,
   trade: state.trade,
   path: state.path,
-  checkServerStatus: state.checkServerStatus
+  checkServerStatus: state.checkServerStatus,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps, {
   fetchTableData,
   setCurrentBlock,
-  summaryFetchSuccess
-  // changePath
+  setTokenBalance,
+  summaryFetchSuccess,
+  trancheCardToggle
 })(NetworkDetector(App));

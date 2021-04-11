@@ -62,7 +62,9 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer className='container navbar-container'>
         <div id='logo-wrapper'>
+          <a href="https://tranche.finance/">
             <img src={Logo} alt='Logo' />
+          </a>
         </div>
         <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>
@@ -77,7 +79,7 @@ function Navbar({ path }) {
             <div>
               <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
               <a href="/">DASHBOARD</a>
-              <a href="https://docs.tranche.finance/">DOCUMENTATION</a>
+              <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
               <a href="https://discord.gg/DTZrm4j4Yc">SUPPORT</a>
@@ -169,18 +171,17 @@ function Navbar({ path }) {
             <span data-content={i18n.t("navbar.lend")}></span>
             {i18n.t("navbar.lend")}
             </NavLink>
-            {/* <NavLink
-              className="navLinkDisabled"
-              to={baseUrl + '/earn'}
+            <NavLink
+              to={baseUrl + '/tranche'}
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-              <span data-content={i18n.t("navbar.earn")}></span>
-              {i18n.t("navbar.earn")}
-            </NavLink> */}
+              <span data-content={i18n.t("navbar.tranche")}></span>
+              {i18n.t("navbar.tranche")}
+            </NavLink>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{

@@ -112,12 +112,12 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' stake>
             <SecondColContent className='content-3-col second-4-col-content'>
-              <h2>{staked}</h2>
+              <h2>{roundNumber(staked)}</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>{reward} SLICE</h2>
+              <h2>{roundNumber(reward)} SLICE</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
@@ -160,20 +160,20 @@ const TableCard = ({
 
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{staked}</h2>
+              <h2>{roundNumber(staked)}</h2>
               {/* <h2></h2> */}
             </TableMobilColContent>
           </TableColMobile>
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{reward}</h2>
+              <h2>{roundNumber(reward)}</h2>
               <h2>SLICE</h2>
             </TableMobilColContent>
           </TableColMobile>
 
           <TableColMobile stake>
             <TableMobilColContent col>
-              <h2>{roundNumber(apy, false)}</h2>
+              <h2>{roundNumber(apy)}</h2>
               <h2>%</h2>
             </TableMobilColContent>
           </TableColMobile>

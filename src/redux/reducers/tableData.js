@@ -13,7 +13,8 @@ import {
   PAGINATION_CURRENT,
   CHANGE_OWN_ALL_FILTER,
   CHANGE_SORTING,
-  OWN_ALL_TOGGLE
+  OWN_ALL_TOGGLE,
+  TRANCHE_CARD_TOGGLE
 } from '../actions/constants';
 
 const initialState = {
@@ -28,7 +29,8 @@ const initialState = {
   filter: null,
   sort: null,
   filterType: 'all',
-  tradeType: 'allTranches'
+  tradeType: 'allTranches',
+  trancheCard: { status: false, id: null }
 };
 
 export default function (state = initialState, action) {
@@ -47,6 +49,8 @@ export default function (state = initialState, action) {
       return { ...state, tranchesList: payload };
     case TRANCHES_COUNT:
       return { ...state, count: payload };
+    case TRANCHE_CARD_TOGGLE:
+      return { ...state, trancheCard: payload };
     case STAKING_IS_LOADING:
       return { ...state, isLoading: payload };
     case STAKING_SUCCESS:

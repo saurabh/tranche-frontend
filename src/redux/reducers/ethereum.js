@@ -7,18 +7,20 @@ import {
   SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
-  SET_CURRENT_BLOCK
+  SET_CURRENT_BLOCK,
+  SET_TRANSACTION_LOADING
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
-import { SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants'
+import { SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
 
 const initialState = {
   balance: -1,
-  tokenBalance: { DAI: '0', [SLICEAddress]: '0',[LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
+  tokenBalance: { [SLICEAddress]: '0', [LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
   address: undefined,
   web3,
-  notify: initNotify()
+  notify: initNotify(),
+  txOngoing: false
 };
 
 export default function (state = initialState, action) {
@@ -43,6 +45,8 @@ export default function (state = initialState, action) {
       return { ...state, web3: payload };
     case SET_CURRENT_BLOCK:
       return { ...state, currentBlock: payload };
+    case SET_TRANSACTION_LOADING:
+      return { ...state, txOngoing: payload };
     default:
       return state;
   }

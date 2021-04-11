@@ -5,15 +5,19 @@ import {
   JPriceOracleSetup,
   // JTrancheTokenSetup,
   // JProtocolSetup,
+  JCompoundSetup,
   StakingSetup,
-  YieldFarmSetup
+  YieldFarmSetup,
+  ERC20Setup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
-import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
+import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals } from 'config';
+import { setTxLoading } from 'redux/actions/ethereum';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
+const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
 export const toBN = web3.utils.toBN;
@@ -42,9 +46,7 @@ export const calculateFees = async (collateralAmount) => {
     const { web3 } = state.ethereum;
     const JLoanHelper = JLoanHelperSetup(web3);
     if (collateralAmount) {
-      const result = await JLoanHelper.methods
-        .calculateCollFeesOnActivation(collateralAmount, factoryFees.toString())
-        .call();
+      const result = await JLoanHelper.methods.calculateCollFeesOnActivation(collateralAmount, factoryFees.toString()).call();
       return fromWei(result);
     }
   } catch (error) {
@@ -58,9 +60,7 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
     const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (askAmount !== '' && askAmount !== 0) {
-      const result = await JLoan.methods
-        .getMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount))
-        .call();
+      const result = await JLoan.methods.getMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount)).call();
       return web3.utils.fromWei(result);
     }
   } catch (error) {
@@ -88,9 +88,7 @@ export const calcAdjustCollateralRatio = async (loanId, amount, actionType) => {
     const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     if (amount !== '' && amount !== 0) {
-      const result = await JLoan.methods
-        .calcRatioAdjustingCollateral(loanId, toWei(amount), actionType)
-        .call();
+      const result = await JLoan.methods.calcRatioAdjustingCollateral(loanId, toWei(amount), actionType).call();
       return result;
     }
   } catch (error) {
@@ -189,9 +187,7 @@ export const getShareholderShares = async (loanId, address) => {
 //     const state = store.getState();
 //     const { web3 } = state.ethereum;
 //     const JProtocol = JProtocolSetup(web3);
-//     const result = await JProtocol.methods
-//       .getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex)
-//       .call();
+//     const result = await JProtocol.methods.getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex).call();
 //     return result;
 //   } catch (error) {
 //     console.error(error);
@@ -240,7 +236,142 @@ export const getShareholderShares = async (loanId, address) => {
 //   }
 // };
 
+export const allowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, tokenBalance } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
+    if ((isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0') {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    let { depositAmount } = state.form.tranche.values;
+    const JCompound = JCompoundSetup(web3, contractAddress);
+    depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    let depositAmountInEth = cryptoType === 'ETH' ? depositAmount : 0;
+    if (trancheType === 'TRANCHE_A') {
+      await JCompound.methods
+        .buyTrancheAToken(trancheId, depositAmount)
+        .send({ value: depositAmountInEth, from: address })
+        .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+        });
+    } else {
+      await JCompound.methods
+        .buyTrancheBToken(trancheId, depositAmount)
+        .send({ value: depositAmountInEth, from: address })
+        .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+        });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const sellTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
+  try {
+    const state = store.getState();
+    const { web3, address, notify } = state.ethereum;
+    let { withdrawAmount } = state.form.tranche.values;
+    withdrawAmount = searchArr(cryptoType) ? toWei(withdrawAmount, 'Mwei') : toWei(withdrawAmount);
+    const JCompound = JCompoundSetup(web3, contractAddress);
+    if (trancheType === 'TRANCHE_A') {
+      await JCompound.methods
+        .redeemTrancheAToken(trancheId, withdrawAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+        });
+    } else {
+      await JCompound.methods
+        .redeemTrancheBToken(trancheId, withdrawAmount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          store.dispatch(setTxLoading(true));
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+        });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // Staking Functions
+
+export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, tokenBalance } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
+    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getUserStaked = async (stakingAddress, tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
+    const Staking = StakingSetup(web3, stakingAddress);
+    let result = await Staking.methods.balanceOf(address, tokenAddress).call();
+    return fromWei(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const epochTimeRemaining = async (stakingAddress) => {
   try {

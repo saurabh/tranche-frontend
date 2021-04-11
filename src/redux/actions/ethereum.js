@@ -3,8 +3,6 @@ import store from '../store';
 import {
   DAISetup,
   SLICESetup,
-  // USDCSetup,
-  // JProtocolSetup,
   ERC20Setup
 } from 'utils/contractConstructor';
 import {
@@ -16,14 +14,18 @@ import {
   SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
-  SET_CURRENT_BLOCK
+  SET_CURRENT_BLOCK,
+  SET_TRANSACTION_LOADING
 } from './constants';
 
 export const setAddress = (address) => (dispatch) => {
-  dispatch({
-    type: SET_ADDRESS,
-    payload: address
-  });
+  if (address) {
+    dispatch({
+      type: SET_ADDRESS,
+      payload: address.toLowerCase()
+    });
+    window.localStorage.setItem('address', address.toLowerCase());
+  }
 };
 
 export const setNetwork = (network) => (dispatch) => {
@@ -62,10 +64,8 @@ export const setTokenBalances = (address) => async (dispatch) => {
     const { web3 } = state.ethereum;
     const DAI = DAISetup(web3);
     const SLICE = SLICESetup(web3);
-    // const USDC = USDCSetup(web3);
     const daiBalance = await DAI.methods.balanceOf(address).call();
     const sliceBalance = await SLICE.methods.balanceOf(address).call();
-    // const usdcBalance = await USDC.methods.balanceOf(address).call();
 
     const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance };
     dispatch({
@@ -109,5 +109,12 @@ export const setCurrentBlock = (blockNumber) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_BLOCK,
     payload: blockNumber
+  });
+};
+
+export const setTxLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TRANSACTION_LOADING,
+    payload: bool
   });
 };

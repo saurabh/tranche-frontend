@@ -16,7 +16,8 @@ import {
   STAKING_IS_LOADING,
   STAKING_SUCCESS,
   STAKING_COUNT,
-  OWN_ALL_TOGGLE
+  OWN_ALL_TOGGLE,
+  TRANCHE_CARD_TOGGLE
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -59,6 +60,13 @@ export const tranchesSetCount = (count) => (dispatch) => {
   dispatch({
     type: TRANCHES_COUNT,
     payload: count
+  });
+};
+
+export const trancheCardToggle = (obj) => (dispatch) => {
+  dispatch({
+    type: TRANCHE_CARD_TOGGLE,
+    payload: obj
   });
 };
 
@@ -129,8 +137,8 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(endpoint, { data }, null, true);
+    dispatch(checkServer(true));
     if(result.status){
-      dispatch(checkServer(true));
       if(endpoint === loanListUrl){
         dispatch(loansIsLoading(false));
         dispatch(loansFetchSuccess(result.result.list));
@@ -146,9 +154,6 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
         dispatch(stakingFetchSuccess(result.result.list));
         dispatch(stakingSetCount(result.result.count));
       }
-    }
-    else{
-      dispatch(checkServer(false));
     }
     return result;
   } catch (error) {

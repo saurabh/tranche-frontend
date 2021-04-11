@@ -131,6 +131,7 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
+  status = status ? status : 0;
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
 
@@ -565,8 +566,8 @@ const TableCard = ({
           <TableColMobile btn>
             <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
               <button
-                disabled={path === 'earn' || disableBtn}
-                onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
+                disabled={path === 'tranche' || disableBtn}
+                onClick={path === 'tranche' || disableBtn ? undefined : () => openModal()}
               >
                 <img
                   alt='adjust'
@@ -575,7 +576,7 @@ const TableCard = ({
                       ? Adjust
                       : path === 'lend'
                       ? AdjustEarn
-                      : path === 'earn'
+                      : path === 'tranche'
                       ? AdjustTrade
                       : Adjust
                   }
@@ -707,8 +708,8 @@ const TableCard = ({
             <AdustBtnWrapper className='adjust-btn-wrapper'>
               <AdjustLoanBtn
                 color={PagesData[path].btnColor}
-                disabled={path === 'earn' || disableBtn}
-                onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
+                disabled={path === 'tranche' || disableBtn}
+                onClick={path === 'tranche' || disableBtn ? undefined : () => openModal()}
               >
                 <img
                   src={
@@ -716,7 +717,7 @@ const TableCard = ({
                       ? Adjust
                       : path === 'lend'
                       ? AdjustEarn
-                      : path === 'earn'
+                      : path === 'tranche'
                       ? AdjustTrade
                       : Adjust
                   }
