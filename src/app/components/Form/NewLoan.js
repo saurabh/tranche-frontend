@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { pairData, blocksPerYear } from 'config/constants';
+import { pairData, blocksPerYear, SLICEAddress } from 'config/constants';
 import {
   loanAllowanceCheck,
   calcMinCollateralAmount,
@@ -92,7 +92,7 @@ let NewLoan = ({
     pairData[pair].collateral === 'ETH'
       ? balance
       : pairData[pair].collateral === 'SLICE'
-      ? tokenBalance.SLICE
+      ? tokenBalance[SLICEAddress]
       : 0;
 
   useEffect(() => {
@@ -156,7 +156,7 @@ let NewLoan = ({
       pairData[newPairId].collateral === 'ETH'
         ? balance
         : pairData[newPairId].collateral === 'SLICE'
-        ? tokenBalance.SLICE
+        ? tokenBalance[SLICEAddress]
         : undefined;
     setCollateralBalance(roundNumber(fromWei(collBalance)));
     let result = await calcMaxBorrowAmount(newPairId, collBalance);
