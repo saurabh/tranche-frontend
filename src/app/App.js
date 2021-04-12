@@ -10,7 +10,7 @@ import Banner from 'app/components/Banner/Banner';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 
 import { setCurrentBlock, setTokenBalances } from 'redux/actions/ethereum';
-import { summaryFetchSuccess } from 'redux/actions/summaryData';
+import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
 import {
   serverUrl,
@@ -34,7 +34,7 @@ import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-const { loanList, tranchesList, stakingList, stakingSummary } = apiUri;
+const { loanList, tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked } = apiUri;
 const baseRouteUrl = '/:locale(zh|kr|en)?';
 
 const App = ({
@@ -42,6 +42,8 @@ const App = ({
   setCurrentBlock,
   setTokenBalances,
   summaryFetchSuccess,
+  setSliceStats,
+  setTvl,
   trancheCardToggle,
   path,
   ethereum: { address },
@@ -148,6 +150,18 @@ const App = ({
           );
           trancheCardToggle({ status: false, id: null });
           address && setTokenBalances(address)
+          const getSliceStats = async () => {
+            const res = await axios(`${serverUrl + sliceSummary}`);
+            const { result } = res.data;
+            setSliceStats(result);
+          };
+          const getTvl = async () => {
+            const res = await axios(`${serverUrl + totalValueLocked}`);
+            const { result } = res.data;
+            setTvl(result);
+          };
+          getSliceStats();
+          getTvl();
         }
       });
     const Staking = web3.eth
@@ -250,7 +264,9 @@ App.propTypes = {
   path: PropTypes.string.isRequired,
   fetchTableData: PropTypes.func.isRequired,
   setCurrentBlock: PropTypes.func.isRequired,
-  summaryFetchSuccess: PropTypes.func.isRequired
+  summaryFetchSuccess: PropTypes.func.isRequired,
+  setSliceStats: PropTypes.func.isRequired,
+  setTvl: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -268,5 +284,7 @@ export default connect(mapStateToProps, {
   setCurrentBlock,
   setTokenBalances,
   summaryFetchSuccess,
+  setSliceStats,
+  setTvl,
   trancheCardToggle
 })(NetworkDetector(App));

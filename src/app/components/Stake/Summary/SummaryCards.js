@@ -22,7 +22,7 @@ const SummaryCards = ({
   path,
   ethereum: { wallet, address, web3, notify, tokenBalance },
   setTokenBalance,
-  userSummary: { slice, lp, withdrawn, lpList },
+  summaryData: { slice, lp, withdrawn, lpList },
   summaryFetchSuccess
 }) => {
   const { pathname } = window.location;
@@ -258,7 +258,7 @@ const mapStateToProps = (state) => {
   return {
     path: state.path,
     ethereum: state.ethereum,
-    userSummary: state.userSummary
+    summaryData: state.summaryData
   };
 };
 
