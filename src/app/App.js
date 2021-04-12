@@ -84,7 +84,7 @@ const App = ({
             },
             loanList
           );
-          address && setTokenBalances(address)
+          address && setTokenBalances(address);
         }
       });
     const priceOracle = web3.eth
@@ -106,7 +106,7 @@ const App = ({
             },
             loanList
           );
-          address && setTokenBalances(address)
+          address && setTokenBalances(address);
         }
       });
     const Protocol = web3.eth
@@ -127,7 +127,7 @@ const App = ({
             },
             tranchesList
           );
-          address && setTokenBalances(address)
+          address && setTokenBalances(address);
         }
       });
     const JCompound = web3.eth
@@ -149,7 +149,7 @@ const App = ({
             tranchesList
           );
           trancheCardToggle({ status: false, id: null });
-          address && setTokenBalances(address)
+          address && setTokenBalances(address);
           const getSliceStats = async () => {
             const res = await axios(`${serverUrl + sliceSummary}`);
             const { result } = res.data;
@@ -184,7 +184,7 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
-          address && setTokenBalances(address)
+          address && setTokenBalances(address);
         }
       });
     const YieldFarm = web3.eth
@@ -197,7 +197,7 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
-          address && setTokenBalances(address)
+          address && setTokenBalances(address);
         }
       });
 
@@ -224,11 +224,26 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, setTokenBalances, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
+  }, [
+    address,
+    filterType,
+    path,
+    fetchTableData,
+    limit,
+    filter,
+    setCurrentBlock,
+    setTokenBalances,
+    summaryFetchSuccess,
+    setSliceStats,
+    setTvl,
+    tradeType,
+    skip,
+    trancheCardToggle
+  ]);
 
   useEffect(() => {
-    address && setTokenBalances(address)
-  }, [address, setTokenBalances])
+    address && setTokenBalances(address);
+  }, [address, setTokenBalances]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
