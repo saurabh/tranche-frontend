@@ -69,7 +69,7 @@ const SummaryCards = ({
     address = !address ? onboard.getState().address : address;
     if (num === 1) {
       setTokenBalance(slice.address, address);
-      if (type) { 
+      if (type) {
         let result = slice ? await stakingAllowanceCheck(slice.address, slice.stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
@@ -131,9 +131,11 @@ const SummaryCards = ({
           emitter.on('txCancel', () => setApproveLoading(false));
           emitter.on('txFailed', () => setApproveLoading(false));
         })
-        .on('confirmation', () => {
-          setHasAllowance(true);
-          setApproveLoading(false);
+        .on('confirmation', (count) => {
+          if (count === 1) {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          }
         });
     } catch (error) {
       console.error(error);
