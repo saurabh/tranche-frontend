@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components';
 import Banner from 'app/components/Banner/Banner';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 
-import { setCurrentBlock, setTokenBalance } from 'redux/actions/ethereum';
+import { setCurrentBlock, setTokenBalances } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -21,8 +21,7 @@ import {
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
-  ModeThemes,
-  TrancheBuyerCoinAddresses
+  ModeThemes
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -41,7 +40,7 @@ const baseRouteUrl = '/:locale(zh|kr|en)?';
 const App = ({
   fetchTableData,
   setCurrentBlock,
-  setTokenBalance,
+  setTokenBalances,
   summaryFetchSuccess,
   trancheCardToggle,
   path,
@@ -83,6 +82,7 @@ const App = ({
             },
             loanList
           );
+          address && setTokenBalances(address)
         }
       });
     const priceOracle = web3.eth
@@ -104,6 +104,7 @@ const App = ({
             },
             loanList
           );
+          address && setTokenBalances(address)
         }
       });
     const Protocol = web3.eth
@@ -124,6 +125,7 @@ const App = ({
             },
             tranchesList
           );
+          address && setTokenBalances(address)
         }
       });
     const JCompound = web3.eth
@@ -145,7 +147,7 @@ const App = ({
             tranchesList
           );
           trancheCardToggle({ status: false, id: null });
-          address && TrancheBuyerCoinAddresses.forEach((tokenAddress) => setTokenBalance(tokenAddress, address))
+          address && setTokenBalances(address)
         }
       });
     const Staking = web3.eth
@@ -168,6 +170,7 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
+          address && setTokenBalances(address)
         }
       });
     const YieldFarm = web3.eth
@@ -180,6 +183,7 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
+          address && setTokenBalances(address)
         }
       });
 
@@ -206,7 +210,11 @@ const App = ({
         if (error) console.error(error);
       });
     };
-  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, setTokenBalance, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
+  }, [address, filterType, path, fetchTableData, limit, filter, setCurrentBlock, setTokenBalances, summaryFetchSuccess, tradeType, skip, trancheCardToggle]);
+
+  useEffect(() => {
+    address && setTokenBalances(address)
+  }, [address, setTokenBalances])
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
@@ -258,7 +266,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchTableData,
   setCurrentBlock,
-  setTokenBalance,
+  setTokenBalances,
   summaryFetchSuccess,
   trancheCardToggle
 })(NetworkDetector(App));

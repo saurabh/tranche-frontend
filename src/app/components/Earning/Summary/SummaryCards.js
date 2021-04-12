@@ -12,7 +12,7 @@ import axios from 'axios';
 import { apiUri, serverUrl } from 'config/constants';
 import PropTypes from 'prop-types';
 
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 
@@ -38,7 +38,7 @@ const responsive = {
 // const BASE_URL = serverUrl;
 const { sliceSummary, totalValueLocked } = apiUri;
 
-const SummaryCards = ({ path, ethereum: { address }, setTokenBalance, userSummary: { slice, lp, lpList }, summaryFetchSuccess }) => {
+const SummaryCards = ({ path, ethereum: { address }, userSummary: { slice, lp, lpList }, summaryFetchSuccess }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
@@ -61,13 +61,6 @@ const SummaryCards = ({ path, ethereum: { address }, setTokenBalance, userSummar
       getTvl();
     }
   }, [isDesktop, currentPath, address]);
-
-  useEffect(() => {
-    if (isDesktop && currentPath === 'stake' && address && slice && lpList) {
-      setTokenBalance(slice.address, address);
-      lpList.forEach((lp) => setTokenBalance(lp.address, address));
-    }
-  }, [isDesktop, currentPath, address, lpList, slice, setTokenBalance]);
 
   const getSliceStats = async () => {
     const res = await axios(`${serverUrl + sliceSummary}`);
@@ -289,7 +282,5 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
-  setTokenBalance,
   summaryFetchSuccess
 })(SummaryCards);
