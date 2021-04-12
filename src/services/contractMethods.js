@@ -12,12 +12,11 @@ import {
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
-import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals } from 'config';
+import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage } from 'config';
 import { setTxLoading } from 'redux/actions/ethereum';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
-// const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
 export const toBN = web3.utils.toBN;
