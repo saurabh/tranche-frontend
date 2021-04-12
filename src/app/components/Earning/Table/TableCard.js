@@ -144,6 +144,7 @@ const TableCard = ({
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
             setApproveLoading(false);
+            destroy('tranche');
           }
         });
     } catch (error) {

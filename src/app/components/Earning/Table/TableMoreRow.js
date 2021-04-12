@@ -21,7 +21,7 @@ import {
 } from '../../Stake/Table/styles/TableComponents';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
-import { roundNumber, isGreaterThan } from 'utils';
+import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -86,9 +86,9 @@ let TableMoreRow = ({
 
   const handleInputChange = (newValue, type) => {
     if (type) {
-      isGreaterThan(newValue, buyerTokenBalance) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+      isGreaterThan(newValue, buyerTokenBalance) || isEqualTo(newValue, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
     } else {
-      isGreaterThan(newValue, trancheTokenBalance) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
+      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
     }
   };
 
