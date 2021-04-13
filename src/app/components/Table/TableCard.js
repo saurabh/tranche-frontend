@@ -19,7 +19,6 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -98,7 +97,6 @@ const TableCard = ({
   setWalletAndWeb3,
   ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
-  setTokenBalances,
   checkServer
 }) => {
   const JLoan = JLoanSetup(web3);
@@ -465,7 +463,6 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(address);
     const allowanceResult = await loanAllowanceCheck(pairId, remainingLoan.toString());
     setHasAllowance(allowanceResult);
     const availableInterest = await getAccruedInterests(loanId);
@@ -833,6 +830,5 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   checkServer
 })(TableCard);

@@ -298,12 +298,12 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
   }
 };
 
-export const sellTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
+export const sellTrancheTokens = async (contractAddress, trancheId, trancheType) => {
   try {
     const state = store.getState();
     const { web3, address, notify } = state.ethereum;
     let { withdrawAmount } = state.form.tranche.values;
-    withdrawAmount = searchArr(cryptoType) ? toWei(withdrawAmount, 'Mwei') : toWei(withdrawAmount);
+    withdrawAmount = toWei(withdrawAmount);
     const JCompound = JCompoundSetup(web3, contractAddress);
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods

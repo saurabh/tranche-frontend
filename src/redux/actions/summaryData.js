@@ -1,4 +1,4 @@
-import { SET_ACCRUED_REWARDS, SET_STAKABLE_ASSETS, SUMMARY_SUCCESS } from './constants';
+import { SET_ACCRUED_REWARDS, SET_SLICE_STATS, SET_STAKABLE_ASSETS, SET_TVL, SUMMARY_SUCCESS } from './constants';
 import { getAccruedStakingRewards } from 'services/contractMethods';
 import store from '../store';
 
@@ -28,5 +28,19 @@ export const summaryFetchSuccess = (summary) => (dispatch) => {
   dispatch({
     type: SET_STAKABLE_ASSETS,
     payload: stakableAssets
+  });
+};
+
+export const setSliceStats = (sliceStats) => (dispatch) => {
+  dispatch({
+    type: SET_SLICE_STATS,
+    payload: sliceStats
+  });
+};
+
+export const setTvl = (tvl) => (dispatch) => {
+  dispatch({
+    type: SET_TVL,
+    payload: tvl
   });
 };

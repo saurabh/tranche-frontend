@@ -61,7 +61,7 @@ let StakingForm = ({
   adjustStake,
   // Redux
   ethereum: { tokenBalance, address },
-  userSummary: { slice, lpList }
+  summaryData: { slice, lpList }
 }) => {
   const [balance, setBalance] = useState(0);
   const [balanceCheck, setBalanceCheck] = useState('');
@@ -225,7 +225,7 @@ let StakingForm = ({
                 </ModalFormButton>
               )}
             </ApproveBtnWrapper>
-            
+
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}
@@ -249,7 +249,7 @@ StakingForm = reduxForm({
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  userSummary: state.userSummary,
+  summaryData: state.summaryData,
   initialValues: {
     amount: ''
   },

@@ -1,17 +1,12 @@
 import Web3 from 'web3';
 import store from '../store';
-import {
-  DAISetup,
-  SLICESetup,
-  ERC20Setup
-} from 'utils/contractConstructor';
+import { ERC20Setup } from 'utils/contractConstructor';
+import { ERC20Tokens } from 'config/constants';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
-  SET_TOKEN_BALANCES,
-  SET_TRANCHE_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK,
@@ -62,31 +57,22 @@ export const setTokenBalances = (address) => async (dispatch) => {
   try {
     const state = store.getState();
     const { web3 } = state.ethereum;
-    const DAI = DAISetup(web3);
-    const SLICE = SLICESetup(web3);
-    const daiBalance = await DAI.methods.balanceOf(address).call();
-    const sliceBalance = await SLICE.methods.balanceOf(address).call();
-
-    const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance };
-    dispatch({
-      type: SET_TOKEN_BALANCES,
-      payload: tokenBalances
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const setTrancheTokenBalances = (trancheName, tokenAddress, address) => async (dispatch) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const Tranche = ERC20Setup(web3, tokenAddress);
-    const trancheTokenBalance = await Tranche.methods.balanceOf(address).call();
-    dispatch({
-      type: SET_TRANCHE_TOKEN_BALANCES,
-      payload: { trancheName, trancheTokenBalance }
-    });
+    const batch = new web3.BatchRequest();
+    ERC20Tokens.map((tokenAddress) => {
+      let token = ERC20Setup(web3, tokenAddress);
+      batch.add(token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+        if (err) {
+          console.error(err);
+        } else {
+          dispatch({
+            type: SET_TOKEN_BALANCE,
+            payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
+          });
+        }
+      }))
+      return batch;
+    })
+    batch.execute();
   } catch (error) {
     console.error(error);
   }

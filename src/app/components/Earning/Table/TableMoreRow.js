@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { number } from 'utils/validations';
+import { number, required, greaterThanZero } from 'utils/validations';
 import {
   TableMoreRowWrapper,
   TableMoreRowContent,
@@ -21,7 +21,7 @@ import {
 } from '../../Stake/Table/styles/TableComponents';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
-import { roundNumber, isGreaterThan } from 'utils';
+import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -86,9 +86,9 @@ let TableMoreRow = ({
 
   const handleInputChange = (newValue, type) => {
     if (type) {
-      isGreaterThan(newValue, buyerTokenBalance) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+      isGreaterThan(newValue, buyerTokenBalance) || isEqualTo(newValue, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
     } else {
-      isGreaterThan(newValue, trancheTokenBalance) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
+      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
     }
   };
 
@@ -173,7 +173,7 @@ let TableMoreRow = ({
                 <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
                   <Field
                     component={InputField}
-                    validate={[number]}
+                    validate={[number, required, greaterThanZero]}
                     onChange={(e, newValue) => handleInputChange(newValue, true)}
                     disabled={!isDepositApproved}
                     className={depositBalanceCheck}
@@ -210,7 +210,7 @@ let TableMoreRow = ({
                       disabled={isApproveLoading || txOngoing}
                     />
                     <label
-                      onClick={isApproveLoading || txOngoing ? () => {} : () => approveContract(false, isWithdrawApproved)}
+                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
                       htmlFor='withdrawIsApproved'
                     ></label>
                   </CheckboxContent>
@@ -228,7 +228,7 @@ let TableMoreRow = ({
                 >
                   <Field
                     component={InputField}
-                    validate={[number]}
+                    validate={[number, required, greaterThanZero]}
                     onChange={(e, newValue) => handleInputChange(newValue, false)}
                     disabled={!isWithdrawApproved}
                     className={withdrawBalanceCheck}
@@ -267,17 +267,15 @@ let TableMoreRow = ({
                     <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
                     <CheckboxContent disabled={isApproveLoading || txOngoing}>
                       <Field
-                        component="input"
-                        validate={[number]}
-                        onChange={(e, newValue) => handleInputChange(newValue, true)}
-                        disabled={!isDepositApproved}
-                        className={depositBalanceCheck}
-                        name='depositAmount'
-                        type='number'
-                        step='0.001'
+                        component='input'
+                        type='checkbox'
+                        name='depositIsApproved'
+                        id='depositIsApproved'
+                        checked={isDepositApproved}
+                        disabled={isApproveLoading || txOngoing}
                       />
                       <label
-                        onClick={isApproveLoading || txOngoing ? false : (e) => approveContract(true, isDepositApproved, e)}
+                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
                         htmlFor='depositIsApproved'
                       ></label>
                     </CheckboxContent>
@@ -333,17 +331,15 @@ let TableMoreRow = ({
                     <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
                     <CheckboxContent disabled={isApproveLoading || txOngoing}>
                       <Field
-                        component="input"                        
-                        validate={[number]}
-                        onChange={(e, newValue) => handleInputChange(newValue, false)}
-                        disabled={!isWithdrawApproved}
-                        className={withdrawBalanceCheck}
-                        name='withdrawAmount'
-                        type='number'
-                        step='0.001'
+                        component='input'
+                        type='checkbox'
+                        name='withdrawIsApproved'
+                        id='withdrawIsApproved'
+                        checked={isWithdrawApproved}
+                        disabled={isApproveLoading || txOngoing}
                       />
                       <label
-                        onClick={isApproveLoading || txOngoing ? false : () => approveContract(false, isWithdrawApproved)}
+                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
                         htmlFor='withdrawIsApproved'
                       ></label>
                     </CheckboxContent>

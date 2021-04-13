@@ -7,8 +7,6 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
-  setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber } from 'utils';
@@ -206,7 +204,5 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
-  setTrancheTokenBalances,
   checkServer
 })(TableCard);
