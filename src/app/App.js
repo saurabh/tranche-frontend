@@ -21,7 +21,8 @@ import {
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
-  ModeThemes
+  ModeThemes,
+  ERC20Tokens
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -65,6 +66,22 @@ const App = ({
       }
       console.error(error);
     });
+    const ERC20Balances = web3.eth
+      .subscribe('logs', {
+        address: ERC20Tokens,
+        topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
+      })
+      .on('data', async (log) => {
+        if (address) {
+          for (let i = 1; i < 3; i++) {
+            let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
+            if (address === topicAddress) {
+              await timeout(7500);
+              setTokenBalances(address);
+            }
+          }
+        }
+      });
     const pairContract = web3.eth
       .subscribe('logs', {
         address: LoanContractAddress
@@ -84,7 +101,6 @@ const App = ({
             },
             loanList
           );
-          address && setTokenBalances(address);
         }
       });
     const priceOracle = web3.eth
@@ -106,7 +122,6 @@ const App = ({
             },
             loanList
           );
-          address && setTokenBalances(address);
         }
       });
     const Protocol = web3.eth
@@ -127,7 +142,6 @@ const App = ({
             },
             tranchesList
           );
-          address && setTokenBalances(address);
         }
       });
     const JCompound = web3.eth
@@ -149,7 +163,6 @@ const App = ({
             tranchesList
           );
           trancheCardToggle({ status: false, id: null });
-          address && setTokenBalances(address);
           const getSliceStats = async () => {
             const res = await axios(`${serverUrl + sliceSummary}`);
             const { result } = res.data;
@@ -184,7 +197,6 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
-          address && setTokenBalances(address);
         }
       });
     const YieldFarm = web3.eth
@@ -197,12 +209,14 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
-          address && setTokenBalances(address);
         }
       });
 
     return () => {
       currentBlock.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
+      ERC20Balances.unsubscribe((error) => {
         if (error) console.error(error);
       });
       pairContract.unsubscribe((error) => {
