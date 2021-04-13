@@ -72,7 +72,9 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer>
         <div id='logo-wrapper'>
-            <img src={LogoColored} alt='Logo' />
+            <a href="https://tranche.finance/">
+              <img src={LogoColored} alt='Logo' />
+            </a>
         </div>
         <MobileNavbarIconWrapper mobile>
           <LocaleWrapper color="rgb(68,65,207)" ref={innerRef} mobile>
@@ -100,7 +102,7 @@ function Navbar({ path }) {
             <div>
               <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
               <a href="/">DASHBOARD</a>
-              <a href="https://docs.tranche.finance/">DOCUMENTATION</a>
+              <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
               <a href="https://discord.gg/DTZrm4j4Yc">SUPPORT</a>
@@ -184,6 +186,7 @@ function Navbar({ path }) {
               activeStyle={{
                 color: 'rgba(68, 65, 207, 1)'
               }}
+              className="navLinkDisabled"
               exact
             >
              {i18n.t('navbar.tranche')}

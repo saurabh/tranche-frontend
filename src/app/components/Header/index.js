@@ -34,10 +34,10 @@ export function Header({updateDate}) {
               </HeaderSubtitle> : ""
             }
             <HeaderTitle className='header-text'>
-              <h2>{i18n.t(`${path + ".title"}`)}</h2>
+              <h2>{i18n.t(`${path}.title`)}</h2>
             </HeaderTitle>
             <HeaderSubtitle className='header-text'>
-              <h2>{i18n.t(`${path + ".text"}`)}</h2>
+              <h2>{i18n.t(`${path}.text`)}</h2>
             </HeaderSubtitle>
           </HeaderContent>
         </div>

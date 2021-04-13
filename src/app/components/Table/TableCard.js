@@ -131,6 +131,7 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
+  status = status ? status : 0;
 
   const searchArr = (key) => pairData.find((i) => i.key === key);
 

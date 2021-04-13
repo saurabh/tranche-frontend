@@ -6,7 +6,8 @@ import {
   JTrancheTokenSetup,
   JProtocolSetup,
   StakingSetup,
-  YieldFarmSetup
+  YieldFarmSetup,
+  ERC20Setup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
@@ -241,6 +242,34 @@ export const sendValueToTranche = async (trancheId) => {
 };
 
 // Staking Functions
+
+export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, tokenBalance } = state.ethereum;
+    const token = ERC20Setup(web3, tokenAddress);
+    let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
+    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getUserStaked = async (stakingAddress, tokenAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
+    const Staking = StakingSetup(web3, stakingAddress);
+    let result = await Staking.methods.balanceOf(address, tokenAddress).call();
+    return fromWei(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export const epochTimeRemaining = async (stakingAddress) => {
   try {
