@@ -45,7 +45,7 @@
     "web3": "^1.2.11"
   },
   "scripts": {
-    "start": "env-cmd -f ./src/config/.env.development react-scripts start",
+    "start": "env-cmd -f ./src/config/.env.preprod react-scripts start",
     "build": "env-cmd -f ./src/config/.env.preprod react-scripts build",
     "test": "env-cmd -f ./src/config/.env.development react-scripts test",
     "eject": "react-scripts eject"
