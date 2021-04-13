@@ -1,9 +1,5 @@
 import { isLessThan } from './helperFunctions';
-import {
-  calcMinCollateralAmount,
-  calcAdjustCollateralRatio,
-  getShareholderShares
-} from 'services/contractMethods';
+import { calcMinCollateralAmount, calcAdjustCollateralRatio, getShareholderShares } from 'services/contractMethods';
 import { generalParams } from 'config/constants';
 
 const validateCreate = (values) => {
@@ -29,24 +25,18 @@ const validateCreate = (values) => {
 
 const required = (value) => (value ? undefined : 'Required');
 const number = (value) => (value && isNaN(Number(value)) ? 'Must be a number' : undefined);
-const minValue = (min) => (value) =>
-  value && value <= min ? `Must be at least ${min}%` : undefined;
+const minValue = (min) => (value) => (value && value <= min ? `Must be at least ${min}%` : undefined);
+const greaterThanZero = (value) => (value && value > 0 ? 'Please enter a value greater than 0' : undefined);
 const minValue0 = minValue(0);
-const maxValue = (max) => (value) =>
-  value && value >= max ? `Must be ${max}% at most` : undefined;
+const maxValue = (max) => (value) => (value && value >= max ? `Must be ${max}% at most` : undefined);
 const maxValue100 = maxValue(100);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let asyncValidateCreate = (values) => {
   return sleep(0).then(async () => {
     let { borrowedAskAmount, collateralAmount, pairId } = values;
-    let minCollateralAmount = borrowedAskAmount
-      ? await calcMinCollateralAmount(pairId, borrowedAskAmount)
-      : undefined;
-    if (
-      borrowedAskAmount &&
-      (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))
-    ) {
+    let minCollateralAmount = borrowedAskAmount ? await calcMinCollateralAmount(pairId, borrowedAskAmount) : undefined;
+    if (borrowedAskAmount && (!collateralAmount || isLessThan(collateralAmount, minCollateralAmount))) {
       // eslint-disable-next-line
       throw {
         collateralAmount: 'Not enough collateral',
@@ -60,11 +50,7 @@ let asyncValidateAdjust = (values) => {
   return sleep(0).then(async () => {
     let { loanId, collateralAmount, actionType } = values;
     if (!actionType) {
-      let newCollateralRatio = await calcAdjustCollateralRatio(
-        loanId,
-        collateralAmount,
-        actionType
-      );
+      let newCollateralRatio = await calcAdjustCollateralRatio(loanId, collateralAmount, actionType);
       if (isLessThan(parseFloat(newCollateralRatio), generalParams.limitCollRatioForWithdraw)) {
         // eslint-disable-next-line
         throw {
@@ -92,13 +78,4 @@ let asyncValidateSell = (values) => {
   });
 };
 
-export {
-  required,
-  number,
-  minValue0,
-  maxValue100,
-  validateCreate,
-  asyncValidateCreate,
-  asyncValidateAdjust,
-  asyncValidateSell
-};
+export { required, number, greaterThanZero, minValue0, maxValue100, validateCreate, asyncValidateCreate, asyncValidateAdjust, asyncValidateSell };

@@ -98,7 +98,7 @@ const SummaryCards = ({
                 : 'Decentralized Loans'
             }
             tokenAddress={slice.address}
-            value={tvl.total}
+            value={tvl ? tvl.total : 0}
             path={currentPath}
             type={'tvl'}
             details={''}
@@ -120,7 +120,7 @@ const SummaryCards = ({
             }
             tokenAddress={lp.address}
             lpList={lpList}
-            value={sliceStats.price}
+            value={sliceStats ? sliceStats.price : 0}
             path={currentPath}
             type={'price'}
             details={''}
@@ -140,7 +140,7 @@ const SummaryCards = ({
                 ? 'SLICE 24H Volume'
                 : 'Collateralization Ratio'
             }
-            value={sliceStats.volume}
+            value={sliceStats ? sliceStats.volume : 0}
             isLoading={false}
             path={currentPath}
             type={'volume'}
