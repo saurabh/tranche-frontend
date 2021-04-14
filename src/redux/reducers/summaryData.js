@@ -1,4 +1,4 @@
-import { SET_ACCRUED_REWARDS, SET_STAKABLE_ASSETS, SUMMARY_SUCCESS } from '../actions/constants';
+import { SET_ACCRUED_REWARDS, SET_SLICE_STATS, SET_STAKABLE_ASSETS, SET_TVL, SUMMARY_SUCCESS } from '../actions/constants';
 
 const initialState = {
   slice: { balance: 0 },
@@ -8,6 +8,8 @@ const initialState = {
   stakableAssets: [],
   accruedRewards: {},
   totalAccruedRewards: 0,
+  sliceStats: {},
+  tvl: {}
 };
 
 export default function (state = initialState, action) {
@@ -20,6 +22,10 @@ export default function (state = initialState, action) {
       return { ...state, accruedRewards: payload.accruedRewards, totalAccruedRewards: payload.totalAccruedRewards };
     case SET_STAKABLE_ASSETS:
       return { ...state, stakableAssets: payload };
+    case SET_SLICE_STATS:
+      return { ...state, sliceStats: payload };
+    case SET_TVL:
+      return { ...state, tvl: payload };
     default:
       return state;
   }

@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginating';
-import { apiUri, TrancheBuyerCoinAddresses } from 'config/constants';
-import { setTokenBalance } from 'redux/actions/ethereum';
+import { apiUri } from 'config/constants';
 import {
   fetchTableData,
   changeFilter,
@@ -66,7 +65,6 @@ const Table = ({
   paginationCurrent,
   ownAllToggle,
   theme,
-  setTokenBalance
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
@@ -122,10 +120,6 @@ const Table = ({
   useEffect(() => {
     path === 'tranche' && trancheListing();
   }, [path, trancheListing, filter, skip, limit, filterType, sort]);
-
-  useEffect(() => {
-    path === 'tranche' && localAddress && TrancheBuyerCoinAddresses.forEach((tokenAddress) => setTokenBalance(tokenAddress, localAddress));
-  }, [path, localAddress, setTokenBalance]);
 
   const handlePageChange = (p) => {
     paginationOffset((p - 1) * limit);
@@ -305,7 +299,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   fetchTableData,
-  setTokenBalance,
   changePath,
   changeFilter,
   paginationOffset,

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import alert from './alert';
 import ethereum from './ethereum';
 import data from './tableData';
-import userSummary from './summaryData';
+import summaryData from './summaryData';
 import path from './TogglePath';
 import checkServerStatus from './checkServer';
 import theme from './theme';
@@ -16,6 +16,6 @@ export default combineReducers({
   data,
   checkServerStatus,
   form,
-  userSummary,
+  summaryData,
   theme
 });

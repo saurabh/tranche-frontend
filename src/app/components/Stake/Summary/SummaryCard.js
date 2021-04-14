@@ -32,7 +32,7 @@ const SummaryCard = ({
   approveLoading,
   stakingApproveContract,
   ethereum: { web3, address, tokenBalance, notify },
-  userSummary: { totalAccruedRewards },
+  summaryData: { totalAccruedRewards },
   hasAllowance,
   setHasAllowance,
   color
@@ -89,78 +89,78 @@ const SummaryCard = ({
 
   return (
     <div>
-        <SummaryCardWrapper color={color}>
-          {value || value === 0 ? (
-            <SummaryCardContainer>
-              <SummaryCardTitle>{title}</SummaryCardTitle>
+      <SummaryCardWrapper color={color}>
+        {value || value === 0 ? (
+          <SummaryCardContainer>
+            <SummaryCardTitle>{title}</SummaryCardTitle>
 
-              <SummaryCardValue>
-                {type === 'slice' || type === 'lp'
-                  ? `${roundNumber(value, 2)}`
-                  : type === 'reward' && roundNumber(totalAccruedRewards, 2) !== 'NaN'
-                  ? `${roundNumber(totalAccruedRewards, 2)}`
-                  : '0.00'}
-                <div></div>
-              </SummaryCardValue>
-              <SummaryCardDetails>
-                {type === 'slice'
-                  ? balance + ' SLICE Available'
-                  : type === 'lp'
-                  ? balance + ' SLICE-LP Available'
-                  : epochTimeLeft + ' Until Next Distribution'}
-              </SummaryCardDetails>
-              {/* {type !== 'reward' && (
-                <SummaryCardCounter>
-                  <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
-                  <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
-                </SummaryCardCounter>
-              )} */}
-              {type === 'reward' && (
-                <SummaryClaimBtn claim>
-                  <button onClick={() => openModal()}>Claim</button>
-                </SummaryClaimBtn>
-              )}
-            </SummaryCardContainer>
-          ) : (
-            <SummaryCardContainer loading>
+            <SummaryCardValue>
+              {type === 'slice' || type === 'lp'
+                ? `${roundNumber(value, 2)}`
+                : type === 'reward' && roundNumber(totalAccruedRewards, 2) !== 'NaN'
+                ? `${roundNumber(totalAccruedRewards, 2)}`
+                : '0.00'}
               <div></div>
-              <div></div>
-              <div></div>
-            </SummaryCardContainer>
-          )}
+            </SummaryCardValue>
+            <SummaryCardDetails>
+              {type === 'slice'
+                ? balance + ' SLICE Available'
+                : type === 'lp'
+                ? balance + ' SLICE-LP Available'
+                : epochTimeLeft + ' Until Next Distribution'}
+            </SummaryCardDetails>
+            {type !== 'reward' && (
+              <SummaryCardCounter>
+                <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
+                <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
+              </SummaryCardCounter>
+            )}
+            {type === 'reward' && (
+              <SummaryClaimBtn claim>
+                <button onClick={() => openModal()}>Claim</button>
+              </SummaryClaimBtn>
+            )}
+          </SummaryCardContainer>
+        ) : (
+          <SummaryCardContainer loading>
+            <div></div>
+            <div></div>
+            <div></div>
+          </SummaryCardContainer>
+        )}
 
-          <StakingModal
-            // State Values
-            modalIsOpen={modalIsOpen}
-            modalType={modalType}
-            summaryModal={summaryModal}
-            tokenAddress={tokenAddress}
-            noBalance={Number(balance) === 0}
-            // Functions
-            closeModal={() => closeModal()}
-            openModal={(bool) => openModal(bool)}
-            hasAllowance={hasAllowance}
-            setHasAllowance={setHasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isLPToken}
-            // Functions
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
-            type={type}
-          />
-        </SummaryCardWrapper>
+        <StakingModal
+          // State Values
+          modalIsOpen={modalIsOpen}
+          modalType={modalType}
+          summaryModal={summaryModal}
+          tokenAddress={tokenAddress}
+          noBalance={Number(balance) === 0}
+          // Functions
+          closeModal={() => closeModal()}
+          openModal={(bool) => openModal(bool)}
+          hasAllowance={hasAllowance}
+          setHasAllowance={setHasAllowance}
+          approveLoading={approveLoading}
+          isLPToken={isLPToken}
+          // Functions
+          stakingApproveContract={stakingApproveContract}
+          adjustStake={adjustStake}
+          type={type}
+        />
+      </SummaryCardWrapper>
     </div>
   );
 };
 
 SummaryCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
-  userSummary: PropTypes.object.isRequired
+  summaryData: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  userSummary: state.userSummary
+  summaryData: state.summaryData
 });
 
 export default connect(mapStateToProps, {})(SummaryCard);

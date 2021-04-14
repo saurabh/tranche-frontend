@@ -9,7 +9,7 @@ import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
 
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 import { stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
@@ -22,7 +22,7 @@ const SummaryCards = ({
   path,
   ethereum: { wallet, address, web3, notify, tokenBalance },
   setTokenBalance,
-  userSummary: { slice, lp, withdrawn, lpList },
+  summaryData: { slice, lp, withdrawn, lpList },
   summaryFetchSuccess
 }) => {
   const { pathname } = window.location;
@@ -64,20 +64,13 @@ const SummaryCards = ({
     }
   }, [currentPath, address, summaryFetchSuccess]);
 
-  useEffect(() => {
-    if (currentPath === 'stake' && address && slice && lpList) {
-      setTokenBalance(slice.address, address);
-      lpList.forEach((lp) => setTokenBalance(lp.address, address));
-    }
-  }, [currentPath, address, lpList, slice, setTokenBalance]);
-
   const openModal = async (type, num) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
     if (num === 1) {
       setTokenBalance(slice.address, address);
-      if (type) { 
+      if (type) {
         let result = slice ? await stakingAllowanceCheck(slice.address, slice.stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
@@ -139,9 +132,11 @@ const SummaryCards = ({
           emitter.on('txCancel', () => setApproveLoading(false));
           emitter.on('txFailed', () => setApproveLoading(false));
         })
-        .on('confirmation', () => {
-          setHasAllowance(true);
-          setApproveLoading(false);
+        .on('confirmation', (count) => {
+          if (count === 1) {
+            setHasAllowance(true);
+            setApproveLoading(false);
+          }
         });
     } catch (error) {
       console.error(error);
@@ -264,7 +259,7 @@ const mapStateToProps = (state) => {
   return {
     path: state.path,
     ethereum: state.ethereum,
-    userSummary: state.userSummary
+    summaryData: state.summaryData
   };
 };
 
@@ -273,7 +268,6 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   setTokenBalance,
   summaryFetchSuccess
 })(SummaryCards);

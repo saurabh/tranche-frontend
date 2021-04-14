@@ -8,7 +8,7 @@ import axios from 'axios';
 import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 
 const { summaryRatio, summaryCollateral, summaryLoan, stakingSummary } = apiUri;
@@ -17,7 +17,7 @@ const SummaryCards = ({
   path,
   ethereum: { wallet, address },
   setTokenBalance,
-  userSummary: { slice, lp, withdrawn, lpList },
+  summaryData: { slice, lp, withdrawn, lpList },
   summaryFetchSuccess
 }) => {
   const { pathname } = window.location;
@@ -200,7 +200,7 @@ const mapStateToProps = (state) => {
   return {
     path: state.path,
     ethereum: state.ethereum,
-    userSummary: state.userSummary
+    summaryData: state.summaryData
   };
 };
 
@@ -209,7 +209,6 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   setTokenBalance,
   summaryFetchSuccess
 })(SummaryCards);

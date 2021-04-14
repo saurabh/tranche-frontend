@@ -17,8 +17,8 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals} from 'config';
-import {  Lock, Info, LinkArrow, Up, Down, ChevronTable  } from 'assets';
+import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
+import { Lock, Info, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
 import {
@@ -137,10 +137,15 @@ const TableCard = ({
               message: txMessage(transaction.hash)
             };
           });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
         })
-        .on('confirmation', () => {
-          type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-          setApproveLoading(false);
+        .on('confirmation', (count) => {
+          if (count === 1) {
+            type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
+            setApproveLoading(false);
+            destroy('tranche');
+          }
         });
     } catch (error) {
       return error;
@@ -150,7 +155,7 @@ const TableCard = ({
   const buySellTrancheTokens = (e, buy) => {
     try {
       e.preventDefault();
-      buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type, cryptoType);
+      buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
     }

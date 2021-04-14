@@ -99,7 +99,7 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   path,
   ethereum: { address },
-  userSummary: { slice, lp, lpList, stakableAssets, accruedRewards },
+  summaryData: { slice, lp, lpList, stakableAssets, accruedRewards },
   // State Values
   summaryModal,
   stakingList,
@@ -536,14 +536,14 @@ const StakingModal = ({
 
 StakingModal.propTypes = {
   ethereum: PropTypes.object.isRequired,
-  userSummary: PropTypes.object.isRequired,
+  summaryData: PropTypes.object.isRequired,
   stakingList: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  userSummary: state.userSummary,
+  summaryData: state.summaryData,
   stakingList: state.data.stakingList,
   path: state.path
 });
