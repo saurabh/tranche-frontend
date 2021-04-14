@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
-import { number, required, greaterThanZero } from 'utils/validations';
+import { number } from 'utils/validations';
 import {
   TableMoreRowWrapper,
   TableMoreRowContent,
@@ -173,7 +173,7 @@ let TableMoreRow = ({
                 <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
                   <Field
                     component={InputField}
-                    validate={[number, required, greaterThanZero]}
+                    validate={[number]}
                     onChange={(e, newValue) => handleInputChange(newValue, true)}
                     disabled={!isDepositApproved}
                     className={depositBalanceCheck}
@@ -228,7 +228,7 @@ let TableMoreRow = ({
                 >
                   <Field
                     component={InputField}
-                    validate={[number, required, greaterThanZero]}
+                    validate={[number]}
                     onChange={(e, newValue) => handleInputChange(newValue, false)}
                     disabled={!isWithdrawApproved}
                     className={withdrawBalanceCheck}
