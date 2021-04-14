@@ -18,7 +18,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, ChevronTable } from 'assets';
+import { Lock, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
 import {
