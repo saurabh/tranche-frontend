@@ -12,8 +12,7 @@ import {
   getLoanForeclosingBlock,
   getAccruedInterests,
   loanAllowanceCheck,
-  getShareholderShares,
-  stakingAllowanceCheck
+  getShareholderShares
 } from 'services/contractMethods';
 import {
   setAddress,

@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
-import { getUserStaked, massHarvest, stakingAllowanceCheck } from 'services/contractMethods';
+import { getUserStaked, massHarvest } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { fromWei } from 'services/contractMethods';
-import { safeAdd } from 'utils';
 import StakingForm from '../Form/Staking';
 import {
   ModalHeader,
@@ -20,8 +18,6 @@ import {
   LoanDetailsRowTitle,
   LoanDetailsRowValue,
   LoanDetailsMobile,
-  StakingModalRow,
-  StakingModalWrapper,
   SliceNotFound,
   SliceNotFoundBtn,
   ModalUserActions,
@@ -32,7 +28,6 @@ import {
   ClaimModalCol
 } from './styles/ModalsComponents';
 
-import { SummaryCardCounter, SummaryCardBtn, SummaryClaimBtn } from '../Stake/Summary/styles/SummaryComponents';
 import { roundNumber } from 'utils';
 import { Lock, TrancheClaim } from 'assets';
 
@@ -126,30 +121,14 @@ const StakingModal = ({
   // API Values,
 }) => {
   // const stakableAssets = useRef();
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   // const [tokenAddress, setTokenAddress] = useState(null);
   const [stakingAddress, setStakingAddress] = useState(null);
-  const [isLPTokenMobile, setLPTokenMobile] = useState(false);
-  const [typeMobile, setTypeMobile] = useState('slice');
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
-  const [balanceMobile, setBalanceMobile] = useState(0);
-  const [modalTypeMobile, setModalTypeMobile] = useState(undefined);
 
   const tokenType = type === 'SLICE' ? 'SLICE' : (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? 'LP Tokens' : '';
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
 
   useEffect(() => {
     const getStakingDetails = async () => {
@@ -167,45 +146,7 @@ const StakingModal = ({
 
   const modalClose = () => {
     closeModal();
-    setModalTypeMobile(undefined);
   };
-  const setBalanceCB = (balance) => {
-    setBalanceMobile(roundNumber(balance));
-  };
-  const toggleModalMobile = async (bool, type) => {
-    setModalTypeMobile(bool);
-    setTypeMobile(type);
-    setModalType(bool)
-    if (type === 'SLICE') {
-      if (bool) {
-        let result = slice ? await stakingAllowanceCheck(sliceAddress, slice.stakingAddress, address) : false;
-        setHasAllowance(result);
-      } else setHasAllowance(true);
-    } else if (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') {
-      if (bool) {
-        let result = lpList ? await stakingAllowanceCheck(lpAddress, lpList[0].stakingAddress, address) : false;
-        setHasAllowance(result);
-      } else setHasAllowance(true);
-    }
-    setLPTokenMobile((type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? true : false);
-  };
-  useEffect(() => {
-    const setBalance = async () => {
-      if (tokenBalance) {
-        if (typeMobile === 'slice' && sliceAddress) setBalanceCB(fromWei(tokenBalance[sliceAddress]));
-        if (typeMobile === 'lp' && lpList) {
-          let lpBalance = 0;
-          lpList.forEach((lp) => {
-            if (tokenBalance[lp.address]) {
-              lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
-            }
-          });
-          setBalanceCB(lpBalance);
-        }
-      }
-    };
-    setBalance();
-  }, [typeMobile, sliceAddress, lpList, tokenBalance]);
 
   const stakingModal = () => {
     return (
@@ -400,75 +341,75 @@ const StakingModal = ({
       </Modal>
     );
   };
-  const InitialStakingModal = () => {
-    return (
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={FirstCustomStyles}
-        closeTimeoutMS={200}
-        shouldCloseOnOverlayClick={false}
-        contentLabel='Adjust'
-      >
-        <ModalHeader stake>
-          <h2>
-            {modalType === true
-              ? i18n.t('stake.modal.stakeModalTitle')
-              : modalType === false
-              ? i18n.t('stake.modal.withdrawModalTitle')
-              : 'Claim rewards'}
-          </h2>
-          <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
-          </button>
-        </ModalHeader>
+  // const InitialStakingModal = () => {
+  //   return (
+  //     <Modal
+  //       isOpen={modalIsOpen}
+  //       onRequestClose={closeModal}
+  //       style={FirstCustomStyles}
+  //       closeTimeoutMS={200}
+  //       shouldCloseOnOverlayClick={false}
+  //       contentLabel='Adjust'
+  //     >
+  //       <ModalHeader stake>
+  //         <h2>
+  //           {modalType === true
+  //             ? i18n.t('stake.modal.stakeModalTitle')
+  //             : modalType === false
+  //             ? i18n.t('stake.modal.withdrawModalTitle')
+  //             : 'Claim rewards'}
+  //         </h2>
+  //         <button onClick={() => modalClose()}>
+  //           <img src={CloseModal} alt='' />
+  //         </button>
+  //       </ModalHeader>
 
-        <ModalActionsContent stakingMobile>
-          <StakingModalWrapper>
-            <StakingModalRow>
-              <h2>Staked SLICE Tokens</h2>
-              {/* <h2>00.00</h2> */}
-              <SummaryCardCounter stakingMobile>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'slice')}>
-                  +
-                </SummaryCardBtn>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'slice')}>
-                  -
-                </SummaryCardBtn>
-              </SummaryCardCounter>
-            </StakingModalRow>
+  //       <ModalActionsContent stakingMobile>
+  //         <StakingModalWrapper>
+  //           <StakingModalRow>
+  //             <h2>Staked SLICE Tokens</h2>
+  //             {/* <h2>00.00</h2> */}
+  //             <SummaryCardCounter stakingMobile>
+  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'slice')}>
+  //                 +
+  //               </SummaryCardBtn>
+  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'slice')}>
+  //                 -
+  //               </SummaryCardBtn>
+  //             </SummaryCardCounter>
+  //           </StakingModalRow>
 
-            <StakingModalRow>
-              <h2>Staked LP Tokens</h2>
-              {/* <h2>00.00</h2> */}
-              <SummaryCardCounter stakingMobile>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'lp')}>
-                  +
-                </SummaryCardBtn>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'lp')}>
-                  -
-                </SummaryCardBtn>
-              </SummaryCardCounter>
-            </StakingModalRow>
+  //           <StakingModalRow>
+  //             <h2>Staked LP Tokens</h2>
+  //             {/* <h2>00.00</h2> */}
+  //             <SummaryCardCounter stakingMobile>
+  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'lp')}>
+  //                 +
+  //               </SummaryCardBtn>
+  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'lp')}>
+  //                 -
+  //               </SummaryCardBtn>
+  //             </SummaryCardCounter>
+  //           </StakingModalRow>
 
-            <StakingModalRow>
-              <h2>SLICE Rewards Collected</h2>
-              {/* <h2>00.00</h2> */}
-              <SummaryClaimBtn stakingMobile claim>
-                <button onClick={() => toggleModalMobile(null, null)}>Claim</button>
-              </SummaryClaimBtn>
-            </StakingModalRow>
-          </StakingModalWrapper>
-          <LoanDetailsMobile>
-            <h2>
-              {i18n.t('stake.modal.sliceLocked')}— {roundNumber(totalStaked)}
-              <span></span>
-            </h2>{' '}
-          </LoanDetailsMobile>
-        </ModalActionsContent>
-      </Modal>
-    );
-  };
+  //           <StakingModalRow>
+  //             <h2>SLICE Rewards Collected</h2>
+  //             {/* <h2>00.00</h2> */}
+  //             <SummaryClaimBtn stakingMobile claim>
+  //               <button onClick={() => toggleModalMobile(null, null)}>Claim</button>
+  //             </SummaryClaimBtn>
+  //           </StakingModalRow>
+  //         </StakingModalWrapper>
+  //         <LoanDetailsMobile>
+  //           <h2>
+  //             {i18n.t('stake.modal.sliceLocked')}— {roundNumber(totalStaked)}
+  //             <span></span>
+  //           </h2>{' '}
+  //         </LoanDetailsMobile>
+  //       </ModalActionsContent>
+  //     </Modal>
+  //   );
+  // };
   const notFound = () => {
     return (
       <Modal
@@ -515,23 +456,24 @@ const StakingModal = ({
     );
   };
 
-  return isDesktop
-    ? noBalance && modalType === true
+  // return isDesktop
+  //   ? 
+  return noBalance && modalType === true
       ? notFound()
       : modalType === null
       ? claimModal()
       : stakingModal()
-    : !isDesktop
-    ? summaryModal && modalTypeMobile === undefined
-      ? InitialStakingModal()
-      : modalTypeMobile && Number(balanceMobile) === 0
-      ? notFound()
-      : modalTypeMobile === null
-      ? claimModal()
-      : modalTypeMobile === true || modalTypeMobile === false
-      ? stakingModal()
-      : false
-    : false;
+    // : !isDesktop
+    // ? summaryModal && modalTypeMobile === undefined
+    //   ? InitialStakingModal()
+    //   : modalTypeMobile && Number(balanceMobile) === 0
+    //   ? notFound()
+    //   : modalTypeMobile === null
+    //   ? claimModal()
+    //   : modalTypeMobile === true || modalTypeMobile === false
+    //   ? stakingModal()
+    //   : false
+    // : false;
 };
 
 StakingModal.propTypes = {

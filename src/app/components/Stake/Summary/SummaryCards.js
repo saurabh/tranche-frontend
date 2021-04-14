@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
-import StakingModal from '../../Modals/StakingModal';
 import axios from 'axios';
 import { apiUri, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
@@ -155,7 +154,7 @@ const SummaryCards = ({
 
   return (
     <div>
-      {!isDesktop && (
+      {/* {!isDesktop && (
         <SummaryCardsWrapper className='container content-container'>
           <button onClick={() => openModal(undefined, 0)}>
             Stake and withdraw
@@ -184,7 +183,7 @@ const SummaryCards = ({
             adjustStake={adjustStake}
           />
         </SummaryCardsWrapper>
-      )}
+      )} */}
       {isDesktop && (
         <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
           <SummaryCard

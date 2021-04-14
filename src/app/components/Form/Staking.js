@@ -92,7 +92,7 @@ let StakingForm = ({
       let balance = tokenBalance[slice.address];
       balance && setBalance(fromWei(balance.toString()));
     }
-  }, [tokenBalance, setTokenAddress, setStakingAddress, isLPToken, slice, lpList]);
+  }, [tokenBalance, setTokenAddress, setStakingAddress, isLPToken, slice, lpList, type]);
 
   const toggleLPSelect = () => {
     toggleLP(!LPSelect);

@@ -8,29 +8,20 @@ import {
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
-  setTokenBalance,
-  setTrancheTokenBalances
+  setTokenBalance
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
-import { etherScanUrl, statuses, ApproveBigNumber, txMessage, StakingAddresses, serverUrl, apiUri } from 'config';
+import { etherScanUrl, statuses, ApproveBigNumber, txMessage } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 import { ModeThemes } from 'config/constants';
-import axios from 'axios';
 
 import {
   toWei,
   fromWei,
-  getLoanStatus,
-  calcAdjustCollateralRatio,
-  getLoanForeclosingBlock,
-  getAccruedInterests,
-  loanAllowanceCheck,
-  getShareholderShares,
   stakingAllowanceCheck,
   addStake, 
   withdrawStake,
-  epochTimeRemaining,
   getUserStaked
 } from 'services/contractMethods';
 import StakingModal from '../../Modals/StakingModal';
@@ -59,14 +50,9 @@ import {
   // AdustBtnWrapper,
   TableContentCardWrapperMobile,
   TableContentCardMobile,
-  TableColMobile,
-  TableMobilColContent,
   TableSeventhCol,
   StakeBtn,
   StakeBtns,
-  AdustBtnWrapper,
-  TableCardMore,
-  TableCardMoreContent,
   TableMobileContent,
   TableMobileContentRow,
   TableMobileContentCol,
@@ -75,7 +61,6 @@ import {
 } from './styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
 import { initOnboard } from 'services/blocknative';
-const { stakingSummaryDetail } = apiUri;
 
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy },
@@ -83,28 +68,24 @@ const TableCard = ({
   // trade: { tradeType },
   path,
   ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
-  userSummary: { slice, withdrawn, lp, lpList },
+  summaryData: { slice, withdrawn, lp, lpList },
   theme
   // checkServer
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [modalFirstIsOpen, setFirstIsOpen] = useState(false);
-  const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
-  const [modalThirdIsOpen, setThirdIsOpen] = useState(false);
   const [modalType, setModalType] = useState(true);
-  const [summaryModal, setSummaryModal] = useState(false);
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
 
   const [tokenAddress, setTokenAddress] = useState(null);
   const [balance, setBalance] = useState(0);
   const [isLPToken, setLPToken] = useState(false);  
-  const [epochTimeLeft, setEpochTimeLeft] = useState(0);
 
   const [userStaked, setUserStaked] = useState(0);
-  const [totalStaked, setTotalStaked] = useState(0);
+  // const [totalStaked, setTotalStaked] = useState(0);
   const [stakingAddress, setStakingAddress] = useState(null);
-  const [stakedShare, setStakedShare] = useState(0);
+  // const [stakedShare, setStakedShare] = useState(0);
   const onboard = initOnboard({
     address: setAddress,
     network: setNetwork,
@@ -150,12 +131,12 @@ const TableCard = ({
       setStakingAddress(lpList && lpList.stakingAddress)
     }
     const getStakingDetails = async () => {
-      const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
-      const { result } = res.data;
-      setTotalStaked(result.staked);
+      // const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
+      // const { result } = res.data;
+      // setTotalStaked(result.staked);
       let userStaked = await getUserStaked(stakingAddress, tokenAddress);
       setUserStaked(userStaked ? userStaked : 0);
-      setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
+      // setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
     };
 
     tokenAddress && getStakingDetails();
@@ -198,33 +179,17 @@ const TableCard = ({
     }
     setModalType(type);
     if (num === 0) {
-      setSummaryModal(true);
       setFirstIsOpen(false);
-      setSecondIsOpen(false);
-      setThirdIsOpen(false);
     } else if (num === 1) {
-      setSummaryModal(false);
       setFirstIsOpen(true);
-      setSecondIsOpen(false);
-      setThirdIsOpen(false);
     } else if (num === 2) {
-      setSummaryModal(false);
       setFirstIsOpen(false);
-      setSecondIsOpen(true);
-      setThirdIsOpen(false);
     } else if (num === 3) {
-      setSummaryModal(false);
       setFirstIsOpen(false);
-      setSecondIsOpen(false);
-      setThirdIsOpen(true);
     }
   };
   const closeModal = () => {
     setFirstIsOpen(false);
-    setSecondIsOpen(false);
-    setThirdIsOpen(false);
-    setModalType(true);
-    setSummaryModal(false);
   };
 
   const stakingApproveContract = async (stakingAddress, tokenAddress) => {
@@ -330,13 +295,13 @@ const TableCard = ({
           <TableThirdCol className={'table-col table-fourth-col-return '} stake>
             <ThirdColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>{roundNumber(staked)}</h2>
-              <h2></h2>
+              <h2>{""}</h2>
             </ThirdColContent>
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>{roundNumber(reward)} SLICE</h2>
-              <h2></h2>
+              <h2>{""}</h2>
             </FourthColContent>
           </TableFourthCol>
 
@@ -345,7 +310,7 @@ const TableCard = ({
           <TableSecondCol className='table-col' stake stakeStaked>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>{roundNumber(apy, false)}%</h2>
-              <h2></h2>
+              <h2>{""}</h2>
             </SecondColContent>
           </TableSecondCol>
           
@@ -359,7 +324,7 @@ const TableCard = ({
             color={ModeThemes[theme].tableText}
           >
             <h2>{userStaked}</h2>
-            <h2></h2>
+            <h2>{""}</h2>
           </TableSixthCol>
 
           <TableSeventhCol
@@ -379,7 +344,6 @@ const TableCard = ({
             // State Values
             modalIsOpen={modalFirstIsOpen} //modalIsOpen
             modalType={modalType}
-            summaryModal={summaryModal}
             tokenAddress={tokenAddress}
             setTokenAddress={setTokenAddress}
             noBalance={Number(balance) === 0}
@@ -461,6 +425,26 @@ const TableCard = ({
             </TableMobileContentRow>
           </TableMobileContent>
         </TableContentCardMobile>
+        <StakingModal
+            // State Values
+            modalIsOpen={modalFirstIsOpen} //modalIsOpen
+            modalType={modalType}
+            tokenAddress={tokenAddress}
+            setTokenAddress={setTokenAddress}
+            noBalance={Number(balance) === 0}
+            contractAddress={contractAddress}
+            // Functions
+            closeModal={() => closeModal()}
+            openModal={(bool) => openModal(bool)}
+            hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
+            approveLoading={approveLoading}
+            isLPToken={isLPToken}
+            // Functions
+            stakingApproveContract={stakingApproveContract}
+            adjustStake={adjustStake}
+            type={type}
+          />
       </TableContentCardWrapperMobile>
     );
   };
@@ -482,7 +466,7 @@ const mapStateToProps = (state) => ({
   form: state.form,
   trade: state.trade,
   theme: state.theme,
-  userSummary: state.userSummary
+  summaryData: state.summaryData
 });
 
 export default connect(mapStateToProps, {
@@ -492,6 +476,5 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   setTokenBalances,
   setTokenBalance,
-  setTrancheTokenBalances,
   checkServer
 })(TableCard);
