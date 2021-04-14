@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
@@ -8,12 +8,32 @@ import {
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
+  setTokenBalance,
   setTrancheTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import { addrShortener, roundNumber } from 'utils';
-import { etherScanUrl, statuses } from 'config';
+import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
+import { etherScanUrl, statuses, ApproveBigNumber, txMessage, StakingAddresses, serverUrl, apiUri } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
+import { ModeThemes } from 'config/constants';
+import axios from 'axios';
+
+import {
+  toWei,
+  fromWei,
+  getLoanStatus,
+  calcAdjustCollateralRatio,
+  getLoanForeclosingBlock,
+  getAccruedInterests,
+  loanAllowanceCheck,
+  getShareholderShares,
+  stakingAllowanceCheck,
+  addStake, 
+  withdrawStake,
+  epochTimeRemaining,
+  getUserStaked
+} from 'services/contractMethods';
+import StakingModal from '../../Modals/StakingModal';
 
 import {
   TableContentCard,
@@ -40,19 +60,108 @@ import {
   TableContentCardWrapperMobile,
   TableContentCardMobile,
   TableColMobile,
-  TableMobilColContent
+  TableMobilColContent,
+  TableSeventhCol,
+  StakeBtn,
+  StakeBtns,
+  AdustBtnWrapper,
+  TableCardMore,
+  TableCardMoreContent,
+  TableMobileContent,
+  TableMobileContentRow,
+  TableMobileContentCol,
+  TableCardImgWrapper
   // TableMobilCardBtn
 } from './styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
+import { initOnboard } from 'services/blocknative';
+const { stakingSummaryDetail } = apiUri;
 
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy },
+  setTokenBalance,
   // trade: { tradeType },
   path,
-  ethereum: { web3 }
+  ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
+  userSummary: { slice, withdrawn, lp, lpList },
+  theme
   // checkServer
 }) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  const [modalFirstIsOpen, setFirstIsOpen] = useState(false);
+  const [modalSecondIsOpen, setSecondIsOpen] = useState(false);
+  const [modalThirdIsOpen, setThirdIsOpen] = useState(false);
+  const [modalType, setModalType] = useState(true);
+  const [summaryModal, setSummaryModal] = useState(false);
+  const [hasAllowance, setHasAllowance] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+
+  const [tokenAddress, setTokenAddress] = useState(null);
+  const [balance, setBalance] = useState(0);
+  const [isLPToken, setLPToken] = useState(false);  
+  const [epochTimeLeft, setEpochTimeLeft] = useState(0);
+
+  const [userStaked, setUserStaked] = useState(0);
+  const [totalStaked, setTotalStaked] = useState(0);
+  const [stakingAddress, setStakingAddress] = useState(null);
+  const [stakedShare, setStakedShare] = useState(0);
+  const onboard = initOnboard({
+    address: setAddress,
+    network: setNetwork,
+    balance: setBalance,
+    wallet: setWalletAndWeb3
+  });
+
+  const setBalanceCB = useCallback((balance) => {
+    setBalance(roundNumber(balance, undefined, 'down'));
+  }, []);
+
+  useEffect(() => {
+    (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? setLPToken(true) : setLPToken(false);
+  }, [type]);
+
+  useEffect(() => {
+    const setBalance = async () => {
+      if (tokenBalance) {
+        if (type === 'SLICE' && slice.address) setBalanceCB(fromWei(tokenBalance[slice.address]));
+        if ((type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') && lpList) {
+          let lpBalance = 0;
+          lpList.forEach((lp) => {
+            if (tokenBalance[lp.address]) {
+              lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
+            }
+          });
+          setBalanceCB(lpBalance);
+        }
+      }
+    };
+
+    setBalance();
+  }, [type, slice, lp, tokenBalance, tokenAddress, lpList, setBalanceCB]);
+
+  useEffect(() => {
+    if(type === "SLICE"){
+      setTokenAddress(slice.address)
+      setStakingAddress(slice.stakingAddress)
+    }
+    else if((type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP')){
+      let lpObj = lpList && lpList.filter((i)=>i.name===type)[0];
+      setTokenAddress(lpList && lpObj.address)
+      setStakingAddress(lpList && lpList.stakingAddress)
+    }
+    const getStakingDetails = async () => {
+      const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
+      const { result } = res.data;
+      setTotalStaked(result.staked);
+      let userStaked = await getUserStaked(stakingAddress, tokenAddress);
+      setUserStaked(userStaked ? userStaked : 0);
+      setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
+    };
+
+    tokenAddress && getStakingDetails();
+  }, [type, tokenAddress, stakingAddress, address, slice, lpList]);
+
+  
   let moreCardToggle = false;
 
   const updateMedia = () => {
@@ -69,16 +178,106 @@ const TableCard = ({
       Object.entries(statuses).filter(([key, value]) => value.status === val)
     );
   };
+  const openModal = async (type, num) => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    address = !address ? onboard.getState().address : address;
+    if (num === 1) {
+      setTokenBalance(slice.address, address);
+      if (type) { 
+        let result = slice ? await stakingAllowanceCheck(slice.address, slice.stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
+    }
+    if (num === 2) {
+      lpList && lpList.forEach((lp) => setTokenBalance(lp.address, address));
+      if (type) {
+        let result = lpList ? await stakingAllowanceCheck(lpList[0].address, lpList[0].stakingAddress, address) : false;
+        setHasAllowance(result);
+      } else setHasAllowance(true);
+    }
+    setModalType(type);
+    if (num === 0) {
+      setSummaryModal(true);
+      setFirstIsOpen(false);
+      setSecondIsOpen(false);
+      setThirdIsOpen(false);
+    } else if (num === 1) {
+      setSummaryModal(false);
+      setFirstIsOpen(true);
+      setSecondIsOpen(false);
+      setThirdIsOpen(false);
+    } else if (num === 2) {
+      setSummaryModal(false);
+      setFirstIsOpen(false);
+      setSecondIsOpen(true);
+      setThirdIsOpen(false);
+    } else if (num === 3) {
+      setSummaryModal(false);
+      setFirstIsOpen(false);
+      setSecondIsOpen(false);
+      setThirdIsOpen(true);
+    }
+  };
+  const closeModal = () => {
+    setFirstIsOpen(false);
+    setSecondIsOpen(false);
+    setThirdIsOpen(false);
+    setModalType(true);
+    setSummaryModal(false);
+  };
+
+  const stakingApproveContract = async (stakingAddress, tokenAddress) => {
+    try {
+      const token = ERC20Setup(web3, tokenAddress);
+      await token.methods
+        .approve(stakingAddress, toWei(ApproveBigNumber))
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          setApproveLoading(true);
+          console.log('true');
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txCancel', () => setApproveLoading(false));
+          emitter.on('txFailed', () => setApproveLoading(false));
+        })
+        .on('confirmation', () => {
+          setHasAllowance(true);
+          setApproveLoading(false);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const adjustStake = (e, stakingAddress, tokenAddress) => {
+    try {
+      e.preventDefault();
+      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
+      closeModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const checkLoan = false;
 
   const TableCardDesktop = () => {
     return (
-      <TableContentCardWrapper>
+      <TableContentCardWrapper
+        color={ModeThemes[theme].TableCard}
+        borderColor={ModeThemes[theme].TableCardBorderColor}
+        shadow={ModeThemes[theme].tableCardShadow}
+      >
         <TableContentCard
           pointer={true}
           // onClick={() => cardToggle(contractAddress)}
           className={moreCardToggle ? 'table-card-toggle' : ''}
+          color={ModeThemes[theme].borderColor}
         >
           {checkLoan ? (
             <TableCardTag color={checkLoan.color}>
@@ -93,7 +292,7 @@ const TableCard = ({
                 <img src={TrancheImg} alt='Tranche' />
               </TableCardImg>
               <FirstColContent>
-                <FirstColTitle>
+                <FirstColTitle color={ModeThemes[theme].tableText}>
                   <h2>{type && type}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
@@ -110,79 +309,162 @@ const TableCard = ({
             </TableFirstColWrapper>
           </TableFirstCol>
 
-          <TableSecondCol className='table-col' stake>
-            <SecondColContent className='content-3-col second-4-col-content'>
-              <h2>{roundNumber(staked)}</h2>
-            </SecondColContent>
-          </TableSecondCol>
-          <TableThirdCol className={'table-col table-fourth-col-return '} stake>
-            <ThirdColContent className='content-3-col second-4-col-content'>
-              <h2>{roundNumber(reward)} SLICE</h2>
-            </ThirdColContent>
-          </TableThirdCol>
-          <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
-            <FourthColContent className='content-3-col second-4-col-content'>
-              <h2>{roundNumber(apy, false)}%</h2>
-            </FourthColContent>
-          </TableFourthCol>
-          <TableFifthCol className='table-col' stake>
+
+
+          <TableFifthCol className='table-col' stake stakeStatus>
             <FifthColContent>
               <StatusTextWrapper
                 className='status-text-wrapper'
-                color={Object.values(searchObj(isActive ? 1 : 0))[0].color}
-                backgroundColor={Object.values(searchObj(isActive ? 1 : 0))[0].background}
+                color={ModeThemes[theme].activeStatusText}
+                backgroundColor={ModeThemes[theme].activeStatus}
                 table='stake'
               >
                 {isActive ? i18n.t('stake.table.statuses.active') : ''}
               </StatusTextWrapper>
             </FifthColContent>
           </TableFifthCol>
+
+
+
+
+          <TableThirdCol className={'table-col table-fourth-col-return '} stake>
+            <ThirdColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
+              <h2>{roundNumber(staked)}</h2>
+              <h2></h2>
+            </ThirdColContent>
+          </TableThirdCol>
+          <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
+            <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
+              <h2>{roundNumber(reward)} SLICE</h2>
+              <h2></h2>
+            </FourthColContent>
+          </TableFourthCol>
+
+
+
+          <TableSecondCol className='table-col' stake stakeStaked>
+            <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
+              <h2>{roundNumber(apy, false)}%</h2>
+              <h2></h2>
+            </SecondColContent>
+          </TableSecondCol>
+          
+
+
           <TableSixthCol
             onClick={(e) => e.stopPropagation()}
             className='table-sixth-col table-col'
             stake
-          ></TableSixthCol>
+            APYStake
+            color={ModeThemes[theme].tableText}
+          >
+            <h2>{userStaked}</h2>
+            <h2></h2>
+          </TableSixthCol>
+
+          <TableSeventhCol
+            onClick={(e) => e.stopPropagation()}
+            className='table-sixth-col table-col'
+            stake
+            stakeCol
+          >
+            <StakeBtn background="#4441CF" onClick={() => openModal(true, 1)}>+</StakeBtn>
+            <StakeBtn background="#6E41CF" onClick={() => openModal(false, 1)}>-</StakeBtn>
+          </TableSeventhCol>
+
+
         </TableContentCard>
+
+        <StakingModal
+            // State Values
+            modalIsOpen={modalFirstIsOpen} //modalIsOpen
+            modalType={modalType}
+            summaryModal={summaryModal}
+            tokenAddress={tokenAddress}
+            setTokenAddress={setTokenAddress}
+            noBalance={Number(balance) === 0}
+            contractAddress={contractAddress}
+            // Functions
+            closeModal={() => closeModal()}
+            openModal={(bool) => openModal(bool)}
+            hasAllowance={hasAllowance}
+            setHasAllowance={setHasAllowance}
+            approveLoading={approveLoading}
+            isLPToken={isLPToken}
+            // Functions
+            stakingApproveContract={stakingApproveContract}
+            adjustStake={adjustStake}
+            type={type}
+          />
       </TableContentCardWrapper>
     );
   };
   const TableCardMobile = () => {
     return (
-      <TableContentCardWrapperMobile>
-        <TableContentCardMobile color={Object.values(searchObj(1))[0].background}>
-          <span></span>
-          <TableColMobile address>
-            <TableMobilColContent>
-              <h2>{type && type}</h2>
-              <h2>{addrShortener(contractAddress)}</h2>
-            </TableMobilColContent>
-          </TableColMobile>
+      <TableContentCardWrapperMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor}>
+        <TableContentCardMobile
+          color={Object.values(searchObj(1))[0].background}
+          tranche
+        >
+          <TableCardImgWrapper>
+            <TableCardImg
+              tranche={true}
+              background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
+              // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+              // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+            >
+             <img src={TrancheImg} alt='Tranche' />
 
-          <TableColMobile stake>
-            <TableMobilColContent col>
-              <h2>{roundNumber(staked)}</h2>
-              {/* <h2></h2> */}
-            </TableMobilColContent>
-          </TableColMobile>
-          <TableColMobile stake>
-            <TableMobilColContent col>
-              <h2>{roundNumber(reward)}</h2>
-              <h2>SLICE</h2>
-            </TableMobilColContent>
-          </TableColMobile>
+            </TableCardImg>
+          </TableCardImgWrapper>
 
-          <TableColMobile stake>
-            <TableMobilColContent col>
-              <h2>{roundNumber(apy)}</h2>
-              <h2>%</h2>
-            </TableMobilColContent>
-          </TableColMobile>
+          <TableMobileContent>
+            <TableMobileContentRow>
+              <TableFirstColWrapper>
+                <FirstColContent instrument>
+                  <FirstColTitle color={ModeThemes[theme].tableText}>
+                    <h2>{type && type}</h2>
+                    <StakeBtns>
+                      <StakeBtn background="#4441CF" onClick={() => openModal(true, 1)}>+</StakeBtn>
+                      <StakeBtn background="#6E41CF" onClick={() => openModal(false, 1)}>-</StakeBtn>
+                    </StakeBtns>
+                  </FirstColTitle>
+                  <FirstColSubtitle>
+                    <h2>{addrShortener(contractAddress)}</h2>
+                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                      <img src={LinkArrow} alt='' />
+                    </a>
+                  </FirstColSubtitle>
+                </FirstColContent>
+              </TableFirstColWrapper>
+            </TableMobileContentRow>
 
-          <TableColMobile btn stake></TableColMobile>
+            <TableMobileContentRow>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
+                <h2>total staked</h2>
+                <h2>{roundNumber(staked)}</h2>
+              </TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
+                <h2>EPOCH REWARDS</h2>
+                <h2>{roundNumber(reward)} SLICE</h2>
+              </TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
+                <h2>APY</h2>
+               <h2>{roundNumber(apy, false)}%</h2>
+              </TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
+                <h2>your stake</h2>
+                <h2>
+                  {userStaked}
+                </h2>
+              </TableMobileContentCol>
+            </TableMobileContentRow>
+          </TableMobileContent>
         </TableContentCardMobile>
       </TableContentCardWrapperMobile>
     );
   };
+  
   return isDesktop ? TableCardDesktop() : TableCardMobile();
 };
 
@@ -198,7 +480,9 @@ TableCard.propTypes = {
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   form: state.form,
-  trade: state.trade
+  trade: state.trade,
+  theme: state.theme,
+  userSummary: state.userSummary
 });
 
 export default connect(mapStateToProps, {
@@ -207,6 +491,7 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
+  setTokenBalance,
   setTrancheTokenBalances,
   checkServer
 })(TableCard);

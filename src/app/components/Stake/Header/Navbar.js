@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
-import { apiUri, pairData  } from 'config/constants';
-import { ETH, DAI, BackArrow } from 'assets';
+import { apiUri, pairData, ModeThemes  } from 'config/constants';
+import { ETH, DAI, BackArrow, Logo } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
@@ -23,7 +23,7 @@ import ConnectWallet from './ConnectWallet';
 import { TrancheIcon } from 'assets';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-function Navbar({ path }) {
+function Navbar({ path, theme }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   // const [pair1Value, setPair1Value] = useState(0);
@@ -59,7 +59,7 @@ function Navbar({ path }) {
     <NavbarWrapper>
       <NavbarContainer>
         <div id='logo-wrapper'>
-            <a href="https://tranche.finance/"><img src={LogoColored} alt='Logo' /></a>
+        <a href="https://tranche.finance/"><img src={theme === "dark" ? Logo : LogoColored} alt='Logo' /></a>
         </div>
         <MobileNavbarIconWrapper mobile>
 
@@ -150,11 +150,11 @@ function Navbar({ path }) {
         </NavBarMobile>
         
         <div className='navbar-right'>
-          <NavbarLinks>
+          <NavbarLinks theme={ModeThemes[theme]}>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
-                color: 'rgba(68, 65, 207, 1)'
+                opacity: 1
               }}
               exact
             >
@@ -163,7 +163,7 @@ function Navbar({ path }) {
             <NavLink
               to={baseUrl + '/tranche'}
               activeStyle={{
-                color: 'rgba(68, 65, 207, 1)'
+                opacity: 1
               }}
               exact
             >
@@ -172,7 +172,7 @@ function Navbar({ path }) {
             <NavLink
               to={baseUrl + '/'}
               activeStyle={{
-                color: 'rgba(68, 65, 207, 1)'
+                opacity: 1
               }}
               className="navLinkDisabled"
               exact
@@ -189,7 +189,8 @@ function Navbar({ path }) {
 }
 const mapStateToProps = (state) => {
   return {
-    path: state.path
+    path: state.path,
+    theme: state.theme
   };
 };
 export default connect(mapStateToProps, null)(Navbar);

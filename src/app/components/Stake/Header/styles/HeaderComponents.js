@@ -113,9 +113,10 @@ const NavbarLinks = styled.div`
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(68, 65, 207, 0.5);
+    color: ${props => props.theme.navlinkTab};
+    opacity: 0.5;
     :hover{
-      color: rgba(68, 65, 207, 0.6);
+      opacity: 0.6;
     }
   }
   @media (max-width: 992px) {
@@ -536,12 +537,16 @@ const HeaderTabsBtnsLinks = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     // color: #4441CF;
-    color: rgba(68, 65, 207, 0.5);
+    color: ${props => props.theme.navlinkTab};
     text-decoration: none;
     outline: none;
     cursor: pointer;
     border: none;
     background: transparent;
+    opacity: 0.5;
+    :hover{
+      opacity: 0.6;
+    }
   }
 `
 const NavbarSpan = styled.span`

@@ -115,17 +115,19 @@ const StakingModal = ({
   type,
   sliceAddress,
   lpAddress,
-  // tokenAddress,
+  tokenAddress,
   // Functions
   closeModal,
+  setTokenAddress,
   openModal,
   stakingApproveContract,
-  adjustStake
+  adjustStake,
+  contractAddress
   // API Values,
 }) => {
   // const stakableAssets = useRef();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
-  const [tokenAddress, setTokenAddress] = useState(null);
+  // const [tokenAddress, setTokenAddress] = useState(null);
   const [stakingAddress, setStakingAddress] = useState(null);
   const [isLPTokenMobile, setLPTokenMobile] = useState(false);
   const [typeMobile, setTypeMobile] = useState('slice');
@@ -135,7 +137,7 @@ const StakingModal = ({
   const [balanceMobile, setBalanceMobile] = useState(0);
   const [modalTypeMobile, setModalTypeMobile] = useState(undefined);
 
-  const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
+  const tokenType = type === 'SLICE' ? 'SLICE' : (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? 'LP Tokens' : '';
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -155,6 +157,7 @@ const StakingModal = ({
       const { result } = res.data;
       setTotalStaked(result.staked);
       let userStaked = await getUserStaked(stakingAddress, tokenAddress);
+      console.log(stakingAddress)
       setUserStaked(userStaked);
       setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
     };
@@ -173,18 +176,18 @@ const StakingModal = ({
     setModalTypeMobile(bool);
     setTypeMobile(type);
     setModalType(bool)
-    if (type === 'slice') {
+    if (type === 'SLICE') {
       if (bool) {
         let result = slice ? await stakingAllowanceCheck(sliceAddress, slice.stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
-    } else if (type === 'lp') {
+    } else if (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') {
       if (bool) {
         let result = lpList ? await stakingAllowanceCheck(lpAddress, lpList[0].stakingAddress, address) : false;
         setHasAllowance(result);
       } else setHasAllowance(true);
     }
-    setLPTokenMobile(type === 'lp' ? true : false);
+    setLPTokenMobile((type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? true : false);
   };
   useEffect(() => {
     const setBalance = async () => {
@@ -245,24 +248,32 @@ const StakingModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          <StakingForm
-            modalType={isDesktop ? modalType : modalTypeMobile}
-            userStaked={userStaked}
-            type={isDesktop ? type : typeMobile}
-            tokenAddress={tokenAddress}
-            stakingAddress={stakingAddress}
-            setTokenAddress={setTokenAddress}
-            setStakingAddress={setStakingAddress}
-            hasAllowance={hasAllowance}
-            setHasAllowance={setHasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isDesktop ? isLPToken : isLPTokenMobile}
-            // Functions
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
-            // setBalanceModal={setBalance}
-            path={path}
-          />
+          <ModalUserActions>
+            <ModalHeader rightStakeModal claim>
+              <h2>{modalType ? 'Increase' : 'Decrease'} Stake</h2>
+            </ModalHeader>
+
+            <StakingForm
+              modalType={modalType}
+              userStaked={userStaked}
+              type={type}
+              tokenAddress={tokenAddress}
+              stakingAddress={stakingAddress}
+              setTokenAddress={setTokenAddress}
+              setStakingAddress={setStakingAddress}
+              hasAllowance={hasAllowance}
+              setHasAllowance={setHasAllowance}
+              contractAddress={contractAddress}
+              approveLoading={approveLoading}
+              isLPToken={isLPToken}
+              // Functions
+              stakingApproveContract={stakingApproveContract}
+              adjustStake={adjustStake}
+              // setBalanceModal={setBalance}
+              path={path}
+            />
+          </ModalUserActions>
+          
 
           <LoanDetailsMobile>
             <h2>
@@ -473,7 +484,7 @@ const StakingModal = ({
             <img src={CloseModal} alt='' />
           </button>
         </ModalHeader>
-        {type === 'lp' ? (
+        {(type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? (
           <SliceNotFound>
             <p>{i18n.t('stake.modal.DontHaveSliceLP')}</p>
             <SliceNotFoundBtn color='#1E80DA'>

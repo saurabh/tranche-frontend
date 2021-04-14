@@ -256,7 +256,7 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <img src={apyImage} alt='apyImage' />
+              <img src={Up} alt='apyImage' />
               <h2>{roundNumber(apy, 2)}%</h2>
             </SecondColContent>
           </TableSecondCol>
@@ -387,7 +387,7 @@ const TableCard = ({
             <TableMobileContentRow>
               <TableFirstColWrapper>
                 <FirstColContent instrument>
-                  <FirstColTitle color={ModeThemes[theme].tableText}>
+                  <FirstColTitle color={ModeThemes[theme].tableText} tranche>
                     <h2>{name && name}</h2>
                     <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
                       <button>

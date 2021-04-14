@@ -73,16 +73,27 @@ const ModalFormLabel = styled.label`
   letter-spacing: 0.15em;
   color: #4F4F4F;
   text-transform: uppercase;
-<<<<<<< HEAD
   ${({ tranche }) => tranche && `
     margin: 7px auto;
   `}
+  ${({ stake }) => stake && `
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;      
+    color: #4F4F4F;
+    text-transform: capitalize;
+    text-align: left;
+    margin: 7px 0 7px 2px;
+  `}
 
-=======
+
+
+
+
   @media (max-width: 633px){
     text-align: left;
   }
->>>>>>> MobileView
 `
 
 const ModalFormSubmit = styled.div`
@@ -332,7 +343,8 @@ const ModalNewLoanDetailsContent = styled.div`
 
 const ModalAdjustForm = styled.div`
   /*min-height: 160px;*/
-  height: auto;
+  // height: auto;
+  height: 100%;
   width: 100%;
   //border-bottom: 1px solid rgba(63, 63, 63, 0.1);
   //background: rgba(247,247,247,1);
@@ -340,22 +352,22 @@ const ModalAdjustForm = styled.div`
   /*padding: 10px 35px;*/
   display: flex;
   & > form{
-  width: 100% !important;
-  //min-height: 351px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    width: 100% !important;
+    //min-height: 351px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
+  ${({ stake }) => stake && `
+    flex-direction: column;
+  `}
 `
 
 const SelectCurrencyView = styled.div`
   position: relative;
   & > div{
     width: 100px;
-    ${({ staking }) => staking && `
-      width: 126px;
-    `}
     height: 19px;
     border-left: 2px solid #F1F1F1;
     display: flex;
@@ -375,8 +387,18 @@ const SelectCurrencyView = styled.div`
     }
     & > img{
       margin: 0 6px 0 0;
-      height: 14px;
+      height: 19px;
     }
+    ${({ staking }) => staking && `
+      width: 126px;
+      & > h2{
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13.0035px;
+        letter-spacing: 0.05em;
+        color: rgba(57, 41, 90, 0.75);
+      }
+    `}
   }
   
 `
@@ -554,6 +576,17 @@ const ModalFormGrpNewLoan = styled.div`
       color: #838186;
     }
   `}
+  ${({ stake }) => stake && `
+    & > h2:last-child{
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: #838186;
+      margin: 15px 2px;
+      text-align: left;
+    }
+  `}
 
 
   
@@ -587,6 +620,16 @@ const FieldWrapper = styled.div`
   ${({ staking, modalType }) => staking && !modalType && `
     input{
       padding: 4px 134px 4px 10px;
+      height: 34.68px !important;
+      border-radius: 4px !important;
+    }
+  `}
+  ${({ staking }) => staking && `
+    input{
+      padding: 4px 134px 4px 10px;
+      height: 34.68px !important;
+      border-radius: 4px !important;
+      border-color: #CFCFE5 !important;
     }
   `}
   ${({ modalType }) => modalType && `
@@ -604,7 +647,7 @@ const FieldWrapper = styled.div`
     outline: none;
     position: absolute;
     left: 4px;
-    border-radius: 6px 0px 0px 6px;
+    border-radius: 2px 0px 0px 2px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 10px;
@@ -614,10 +657,68 @@ const FieldWrapper = styled.div`
     // color: rgb(57,41,90, 0.3);
     color: #B3B3B3;
     background: #F1F1F1;
+    ${({ staking }) => staking && `
+      background: rgba(57,41,90,0.3);
+      color: rgba(57,41,90,0.4);
+    `}
+    
   }
 `
 
 
+const SelectedStakingWrapper = styled.div`
+  width: 100%;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    color: #4F4F4F;
+    margin: 0 0 12px 0;
+  }
+`
+const SelectedStaking = styled.div`
+  width: 100%;
+  height: 56px;
+  background: rgba(68, 65, 207, 0.05);
+  border-radius: 4.33px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+`
+const SelectedStakingImg = styled.div`
+  display: flex;
+  margin-right: 12px;
+  img{
+    height: 25px;
+  }
+`
+
+const SelectedStakingContent = styled.div`
+  h2{
+    margin: 2px 0;
+  }
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 9.33278px;
+    line-height: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #39295A;
+  }
+  h2:last-child{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 7.77732px;
+    line-height: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #776E8B;
+  }
+`
 
 export {
   ModalFormGrp,
@@ -643,5 +744,9 @@ export {
   ModalFormInputNewLoan,
   ModalNewLoanDetailsContent,
   ApproveBtnWrapper,
-  FieldWrapper
+  FieldWrapper,
+  SelectedStakingWrapper,
+  SelectedStaking,
+  SelectedStakingImg,
+  SelectedStakingContent
 };

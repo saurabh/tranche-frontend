@@ -41,6 +41,7 @@ const SummaryCards = ({
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
+  // console.log(lpList)
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);

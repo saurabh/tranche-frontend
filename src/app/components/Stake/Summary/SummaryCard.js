@@ -109,12 +109,12 @@ const SummaryCard = ({
                   ? balance + ' SLICE-LP Available'
                   : epochTimeLeft + ' Until Next Distribution'}
               </SummaryCardDetails>
-              {type !== 'reward' && (
+              {/* {type !== 'reward' && (
                 <SummaryCardCounter>
                   <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
                   <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
                 </SummaryCardCounter>
-              )}
+              )} */}
               {type === 'reward' && (
                 <SummaryClaimBtn claim>
                   <button onClick={() => openModal()}>Claim</button>

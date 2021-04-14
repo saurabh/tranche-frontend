@@ -13,6 +13,7 @@ import {
   changeOwnAllFilter,
   ownAllToggle
 } from 'redux/actions/tableData';
+import { ModeThemes } from 'config/constants';
 
 import ReactLoading from 'react-loading';
 
@@ -61,7 +62,8 @@ const Table = ({
   paginationOffset,
   paginationCurrent,
   ethereum: { address },
-  ownAllToggle
+  ownAllToggle,
+  theme
 }) => {
   const { pathname } = useLocation();
   const pageCount = 5;
@@ -115,7 +117,6 @@ const Table = ({
     <div className='container content-container'>
       <div className='TableContentWrapper'>
       <TableWrapper mobile>
-          <TableHead />
           <div className='table-content'>
               {isLoading ? (
                 <div>
@@ -123,7 +124,7 @@ const Table = ({
                     <ReactLoading
                       className='TableMoreLoading'
                       type={'bubbles'}
-                      color='rgba(56,56,56,0.3)'
+                      color={ModeThemes[theme].TableHead}
                     />
                   </TableContentCard>
                 </div>
@@ -139,14 +140,14 @@ const Table = ({
         <TableWrapper desktop>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)} />
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead}/>
             <div className='table-content'>
                 {
                     isLoading ? <div>
                       {
                       [...Array(5)].map((i, idx) =>
 
-                      <TableContentCard key={idx}>
+                      <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
                         <div className="loadingCard">
                           <div className="loadingFirstCol">
                             <div className="loadingFirslColContent">
@@ -301,7 +302,8 @@ const mapStateToProps = (state) => {
   return {
     ethereum: state.ethereum,
     data: state.data,
-    path: state.path
+    path: state.path,
+    theme: state.theme
   };
 };
 

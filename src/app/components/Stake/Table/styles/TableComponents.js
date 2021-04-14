@@ -78,9 +78,12 @@ const TableWrapper = styled.div`
 
 
 const StatusTextWrapper = styled.h2`
-  color: ${props => props.color ? props.color : ""};
-  background: ${props => props.backgroundColor ? props.backgroundColor  : ""};
+  color: ${props => props.color ? props.color : ""} !important; 
+  background: ${props => props.backgroundColor ? props.backgroundColor  : ""} !important; 
   text-transform: uppercase;
+  font-size: 12px;
+  width: 102px;
+  padding: 12px 0px;
   position: relative;
   ${({ table, color }) => table === 'tranche' && `
     background: transparent;
@@ -235,9 +238,54 @@ const TableHeadTitle = styled.div`
     `}
     ${({ trancheTableBtns }) => trancheTableBtns && `
       width: 5%;
+      text-align: center;
     `}
-        
-    
+
+    ${({ stakingPoolStake }) => stakingPoolStake && `
+      width: 26%;
+    `}
+    ${({ statusStake }) => statusStake&& `
+      width: 14%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ reward }) => reward && `
+      width: 12%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ APYStake }) => APYStake && `
+      width: 10%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ staked }) => staked && `
+      width: 12%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ stakeCol }) => stakeCol && `
+      width: 10%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
+    ${({ btnsStake }) => btnsStake && `
+      width: 10%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
 `;
 
 const SortChevronWrapper = styled.div`
@@ -476,7 +524,7 @@ const TableHeadTitleMobile = styled.div`
     letter-spacing: 0.05em;
     text-align: center;
     text-transform: uppercase;
-    color: rgba(56,56,56,0.3);
+    color: ${props => props.color};
     width: 100%;
     text-align: center;
     ${({ address }) => address && `
@@ -525,7 +573,6 @@ const TableContentCardMobile = styled.div`
   border-bottom: none !important;
 `
 const TableMobilColContent = styled.div`
-
   h2{
     margin: 1px 0;
   }
@@ -535,7 +582,7 @@ const TableMobilColContent = styled.div`
     font-size: 10px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.color};
   }
   h2:last-child{
     font-style: normal;
@@ -544,7 +591,7 @@ const TableMobilColContent = styled.div`
     line-height: 10px;    
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #838186;
+    color: ${props => props.color};
   }
   ${({ col }) => col && `
     text-align: center;
@@ -817,7 +864,7 @@ const TableCardImg = styled.div`
 const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
-  width: 28%;
+  width: 26%;
   ${({ platform }) => platform && `
     width: 10% !important;
   `}
@@ -862,25 +909,35 @@ const FirstColTitle = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color};
-  }   
+  } 
   @media (max-width: 992px){
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    h2{
-      font-size: 12px;
-    }
-    div{
-      button{
-        width: auto;
-        height: auto;
-        img{
-          width: 12px;
+  }  
+  
+  ${({ tranche }) => tranche && `
+    @media (max-width: 992px){
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      h2{
+        font-size: 12px;
+      }
+      div{
+        button{
+          width: auto;
+          height: auto;
+          img{
+            width: 12px;
+          }
         }
       }
     }
-  }
+  `}
+  
 `
 const FirstColSubtitle = styled.div`
   display: flex;
@@ -914,6 +971,10 @@ const TableSecondCol = styled.div`
       justify-content: space-around; 
     }
   `}
+  ${({ stakeStaked }) => stakeStaked && `
+    width: 10% !important;
+  `}
+  
   position: relative;
 `
 const SecondColContent = styled.div`
@@ -1011,7 +1072,7 @@ const TableFourthCol = styled.div`
     width: 15%;
   `}
   ${({ stake }) => stake && `
-    width: 10% !important;
+    width: 12% !important;
   `}
   ${({ subscription }) => subscription && `
     width: 15% !important;
@@ -1053,6 +1114,9 @@ const TableFifthCol = styled.div`
   ${({ status }) => status && `
     width: 15% !important;
   `}
+  ${({ stakeStatus }) => stakeStatus && `
+    width: 14% !important;
+  `}
 
   position: relative;
 `
@@ -1083,7 +1147,7 @@ const FifthColContent = styled.div`
 const TableSixthCol = styled.div`
   width: 18%;  
   ${({ stake }) => stake && `
-    width: 0% !important;
+    width: 10% !important;
   `}
   ${({ trancheTableBtns }) => trancheTableBtns && `
     width: 5% !important;
@@ -1102,7 +1166,45 @@ const TableSixthCol = styled.div`
   @media (max-width: 992px){
     justify-content: center !important;
   }
+  h2{
+    text-align: center !important;
+    font-size: 17px !important;
+    color: ${props => props.color};
+  }
 `
+const TableSeventhCol = styled.div`
+  width: 10% !important;
+`
+const StakeBtn = styled.button`
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  padding-bottom: 2px;  
+  margin: 0 2px;
+  outline: none;
+  color: #FFFFFF;
+  background: ${props => props.background};
+  ${({ disabled }) => disabled && `
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+  `}
+  @media (max-width: 992px){
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+  } 
+`
+const StakeBtns = styled.div`
+  display: flex;
+`
+
+
 const AdustBtnWrapper = styled.div`
   button{
     box-sizing: border-box;
@@ -1502,6 +1604,7 @@ const TableMobileContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  
 `
 
 const TableMobileContentRow = styled.div`
@@ -1514,6 +1617,10 @@ const TableMobileContentRow = styled.div`
 const TableMobileContentCol = styled.div`
   width: 33.3333333%;
   text-align: left;
+  ${({ stake }) => stake && `
+    width: 25%;
+    text-align: center;
+  `}
   :nth-child(1){
     h2{
       display: flex;
@@ -1664,5 +1771,8 @@ export {
   TableMoreLeftSection, 
   TableMoreLeftSectionContent,
   TableMoreLeftTopSection,
-  TableMoreLeftBottomSection
+  TableMoreLeftBottomSection,
+  TableSeventhCol,
+  StakeBtn,
+  StakeBtns
 };

@@ -56,7 +56,7 @@ const HeaderTabs = ({ path }) => {
           <NavLink
             to={baseUrl + '/stake'}
             activeStyle={{
-              color: 'rgba(68, 65, 207, 1)'
+              opacity: 1
             }}
             exact
           >
