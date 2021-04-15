@@ -1,5 +1,5 @@
 {
-  "short_name": "Jibrel",
+  "short_name": "Tranche",
   "name": "Tranche by Jibrel",
   "icons": [
     {
@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "jibrel192.png",
+      "src": "tranche192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "jibrel512.png",
+      "src": "tranche512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

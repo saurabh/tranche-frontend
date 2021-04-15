@@ -277,7 +277,7 @@ const TableCard = ({
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>${roundNumber(subscriptionUSD)}</h2>
               <h2>
-                ({subscription ? roundNumber(subscription) : '0'} {trancheToken})
+                ({subscription ? roundNumber(subscription) : '0'} {trancheToken}) 
               </h2>
             </FourthColContent>
           </TableFourthCol>
@@ -422,13 +422,13 @@ const TableCard = ({
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>total value locked</h2>
                 <h2>
-                  {trancheValue ? roundNumber(trancheValue) : '0'} <span>DAI</span>
+                  {trancheValue ? roundNumber(trancheValue) : '0'} <span>{cryptoType}</span>
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>My Subscripton</h2>
                 <h2>
-                  {subscription ? roundNumber(subscription) : '0'} <span>DAI</span>
+                  {subscription ? roundNumber(subscription) : '0'} <span>{trancheToken}</span>
                 </h2>
               </TableMobileContentCol>
             </TableMobileContentRow>
