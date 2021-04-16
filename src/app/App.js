@@ -288,8 +288,6 @@ const App = ({
 App.propTypes = {
   ethereum: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  tranches: PropTypes.object.isRequired,
-  trade: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   fetchTableData: PropTypes.func.isRequired,
   setCurrentBlock: PropTypes.func.isRequired,

@@ -101,42 +101,32 @@ const StakingModal = ({
   noBalance,
   modalIsOpen,
   modalType,
-  setModalType,
   isLPToken,
   hasAllowance,
   setHasAllowance,
   approveLoading,
-  tokenBalance,
   type,
-  sliceAddress,
-  lpAddress,
   tokenAddress,
+  stakingAddress,
   // Functions
   closeModal,
-  setTokenAddress,
-  openModal,
   stakingApproveContract,
   adjustStake,
   contractAddress
   // API Values,
 }) => {
-  // const stakableAssets = useRef();
-  // const [tokenAddress, setTokenAddress] = useState(null);
-  const [stakingAddress, setStakingAddress] = useState(null);
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
 
   const tokenType = type === 'SLICE' ? 'SLICE' : (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? 'LP Tokens' : '';
-
-
+  
   useEffect(() => {
     const getStakingDetails = async () => {
       const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
       let userStaked = await getUserStaked(stakingAddress, tokenAddress);
-      console.log(stakingAddress)
       setUserStaked(userStaked);
       setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
     };
@@ -200,8 +190,6 @@ const StakingModal = ({
               type={type}
               tokenAddress={tokenAddress}
               stakingAddress={stakingAddress}
-              setTokenAddress={setTokenAddress}
-              setStakingAddress={setStakingAddress}
               hasAllowance={hasAllowance}
               setHasAllowance={setHasAllowance}
               contractAddress={contractAddress}

@@ -66,6 +66,7 @@ const Table = ({
   theme
 }) => {
   const { pathname } = useLocation();
+  let localAddress = window.localStorage.getItem('address');
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
@@ -78,6 +79,7 @@ const Table = ({
         skip,
         limit,
         filter: {
+          address: localAddress ? localAddress : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       }, stakingListUrl);
@@ -86,12 +88,13 @@ const Table = ({
         skip,
         limit,
         filter: {
+          address: localAddress ? localAddress : undefined,
           type: filter //ETH/JNT keep these in constant file
         }
       }, stakingListUrl);
     }
     
-  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, tradeType]);
+  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, tradeType, localAddress]);
 
   useEffect(() => {
     changePath(currentPath);
