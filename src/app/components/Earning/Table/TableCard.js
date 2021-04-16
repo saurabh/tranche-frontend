@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -83,6 +83,7 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   setTokenBalance,
+  setTokenBalances,
   ethereum: { tokenBalance, balance, address, wallet, web3, notify },
   change,
   destroy,
@@ -177,7 +178,7 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-
+    setTokenBalances(address);
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
@@ -495,6 +496,7 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTokenBalance,
+  setTokenBalances,
   checkServer,
   trancheCardToggle,
   change,
