@@ -78,10 +78,10 @@ let TableMoreRow = ({
       e.preventDefault();
       if (type) {
         change('depositAmount', buyerTokenBalance);
-        setDepositBalanceCheck('')
+        isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('')
       } else {
         change('withdrawAmount', trancheTokenBalance);
-        setWithdrawBalanceCheck('')
+        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('')
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
