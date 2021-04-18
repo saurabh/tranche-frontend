@@ -1418,6 +1418,17 @@ const TableMoreRightSection = styled.div`
       }
     }
   `}
+  ${({ loading }) => loading && `
+    opacity: 0.2;
+    pointer-events: none;
+    position: relative;
+    & > div:nth-of-type(1){
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  `}
   ${({ disabled, disabledBackground, btn }) => disabled && `
     form{
       div{

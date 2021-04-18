@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { number } from 'utils/validations';
+import ReactLoading from 'react-loading';
 import {
   TableMoreRowWrapper,
   TableMoreRowContent,
@@ -144,7 +145,14 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
+              loading={isApproveLoading}
             >
+              {
+               isApproveLoading && 
+                <div>
+                <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                </div>
+              }
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>deposit</h2>
                 <CheckboxWrapper hidden={isEth}>
@@ -195,7 +203,14 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
+              loading={isApproveLoading}
             >
+              {
+               isApproveLoading && 
+                <div>
+                <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                </div>
+              }
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
@@ -253,7 +268,14 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
+                loading={isApproveLoading}
               >
+                {
+                  isApproveLoading && 
+                  <div>
+                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                  </div>
+                }
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
@@ -317,7 +339,14 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
+                loading={isApproveLoading}
               >
+                {
+                  isApproveLoading && 
+                  <div>
+                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                  </div>
+                }
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>

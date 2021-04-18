@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber, isGreaterThan } from 'utils';
 import { fromWei } from 'services/contractMethods';
-import { selectUp, selectDown, TrancheImg, TrancheImgColored, LinkArrow } from 'assets';
+import { selectUp, selectDown, TrancheImg, TrancheImgColored } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
   // ModalFormGrp,
