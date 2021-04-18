@@ -28,6 +28,7 @@ export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS;
+export const TrancheTokenAddresses = process.env.REACT_APP_TRANCHE_TOKEN_ADDRESS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');

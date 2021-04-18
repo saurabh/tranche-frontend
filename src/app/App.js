@@ -7,7 +7,7 @@ import { GlobalStyle } from 'app/components';
 import { ThemeProvider } from 'styled-components';
 
 import Banner from 'app/components/Banner/Banner';
-import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
+import { fetchTableData } from 'redux/actions/tableData';
 
 import { setCurrentBlock, setTokenBalances } from 'redux/actions/ethereum';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
@@ -22,7 +22,8 @@ import {
   YieldAddresses,
   JCompoundAddress,
   ModeThemes,
-  ERC20Tokens
+  ERC20Tokens,
+  TrancheTokenAddresses
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -45,7 +46,6 @@ const App = ({
   summaryFetchSuccess,
   setSliceStats,
   setTvl,
-  trancheCardToggle,
   path,
   ethereum: { address },
   data: { skip, limit, filter, filterType, tradeType },
@@ -53,6 +53,7 @@ const App = ({
   theme
 }) => {
   const [showModal, setShowModal] = useState(true);
+  const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
 
   useEffect(() => {
     const timeout = (ms) => {
@@ -68,7 +69,7 @@ const App = ({
     });
     const ERC20Balances = web3.eth
       .subscribe('logs', {
-        address: ERC20Tokens,
+        address: Tokens,
         topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
       })
       .on('data', async (log) => {
@@ -162,7 +163,6 @@ const App = ({
             },
             tranchesList
           );
-          trancheCardToggle({ status: false, id: null });
           const getSliceStats = async () => {
             const res = await axios(`${serverUrl + sliceSummary}`);
             const { result } = res.data;
@@ -240,6 +240,7 @@ const App = ({
     };
   }, [
     address,
+    Tokens,
     filterType,
     path,
     fetchTableData,
@@ -252,7 +253,6 @@ const App = ({
     setTvl,
     tradeType,
     skip,
-    trancheCardToggle
   ]);
 
   useEffect(() => {
@@ -312,6 +312,5 @@ export default connect(mapStateToProps, {
   setTokenBalances,
   summaryFetchSuccess,
   setSliceStats,
-  setTvl,
-  trancheCardToggle
+  setTvl
 })(NetworkDetector(App));
