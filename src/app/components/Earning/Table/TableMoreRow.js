@@ -78,8 +78,10 @@ let TableMoreRow = ({
       e.preventDefault();
       if (type) {
         change('depositAmount', buyerTokenBalance);
+        setDepositBalanceCheck('')
       } else {
         change('withdrawAmount', trancheTokenBalance);
+        setWithdrawBalanceCheck('')
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
