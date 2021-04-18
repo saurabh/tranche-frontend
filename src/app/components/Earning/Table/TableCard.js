@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -18,7 +18,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
-import { Lock, Info, LinkArrow, Up, Down, ChevronTable } from 'assets';
+import { Lock, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
 import {
@@ -83,6 +83,7 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   setTokenBalance,
+  setTokenBalances,
   ethereum: { tokenBalance, balance, address, wallet, web3, notify },
   change,
   destroy,
@@ -177,7 +178,7 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-
+    setTokenBalances(address);
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
@@ -261,7 +262,7 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <img src={Up} alt='apyImage' />
+              <img src={apyImage} alt='apyImage' />
               <h2>{roundNumber(apy, 2)}%</h2>
             </SecondColContent>
           </TableSecondCol>
@@ -416,18 +417,18 @@ const TableCard = ({
                 <h2>
                   <img src={apyImage} alt='apyImage' />
                   {roundNumber(apy, 2)}%
-                  <img src={Info} alt='infoImage' />
+                  {/* <img src={Info} alt='infoImage' /> */}
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>total value locked</h2>
+                <h2>Total Deposits</h2>
                 <h2>${roundNumber(trancheValueUSD)}</h2>
                 <h2>
                   {trancheValue ? roundNumber(trancheValue) : '0'} <span>{cryptoType}</span>
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>My Subscripton</h2>
+                <h2>My Deposits</h2>
                 <h2>${roundNumber(subscriptionUSD)}</h2>
                 <h2>
                   {subscription ? roundNumber(subscription) : '0'} <span>{trancheToken}</span>
@@ -495,6 +496,7 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTokenBalance,
+  setTokenBalances,
   checkServer,
   trancheCardToggle,
   change,
