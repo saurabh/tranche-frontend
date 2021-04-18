@@ -548,7 +548,7 @@ const TableContentCardWrapperMobile = styled.div`
   border-radius: 5px;
   margin: 12px 0;
   ${({ tranche }) => tranche && `
-    min-height: 92px;
+    min-height: 110px;
     height: auto;
   `}
 `
@@ -1616,7 +1616,8 @@ const TableMobileContentRow = styled.div`
 
 const TableMobileContentCol = styled.div`
   width: 33.3333333%;
-  text-align: left;
+  // text-align: left;
+  text-align: center;
   ${({ stake }) => stake && `
     width: 25%;
     text-align: center;
@@ -1636,17 +1637,7 @@ const TableMobileContentCol = styled.div`
       }
     }
   }
-  h2:first-child{
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 5.55px;
-    line-height: 7px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: ${props => props.color};
-  }
-  h2:last-child{
+  h2{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
@@ -1663,6 +1654,20 @@ const TableMobileContentCol = styled.div`
       background: none;
       position: relative;
     }
+  }
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 5.55px;
+    line-height: 7px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color};
+  }
+  h2:nth-child(3){
+    font-size: 9px;
+    color: #CCCCCD;
   }
 `
 

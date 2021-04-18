@@ -84,7 +84,7 @@ function Navbar({ path, theme }) {
               <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
-              <a href="https://discord.gg/DTZrm4j4Yc">SUPPORT</a>
+              <a href="https://discord.com/invite/Nv44PTdF3K">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>

@@ -421,12 +421,14 @@ const TableCard = ({
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>total value locked</h2>
+                <h2>${roundNumber(trancheValueUSD)}</h2>
                 <h2>
                   {trancheValue ? roundNumber(trancheValue) : '0'} <span>{cryptoType}</span>
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>My Subscripton</h2>
+                <h2>${roundNumber(subscriptionUSD)}</h2>
                 <h2>
                   {subscription ? roundNumber(subscription) : '0'} <span>{trancheToken}</span>
                 </h2>

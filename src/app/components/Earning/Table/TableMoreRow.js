@@ -181,7 +181,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <button onClick={(e) => setMaxAmount(e, true)}>max</button>
+                  <button type="button" onClick={(e) => setMaxAmount(e, true)}>max</button>
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -236,7 +236,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <button onClick={(e) => setMaxAmount(e, false)}>max</button>
+                  <button type="button"  onClick={(e) => setMaxAmount(e, false)}>max</button>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -302,7 +302,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <button onClick={(e) => setMaxAmount(e, true)}>max</button>
+                    <button type="button"  onClick={(e) => setMaxAmount(e, true)}>max</button>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
@@ -365,7 +365,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <button onClick={(e) => setMaxAmount(e, false)}>max</button>
+                    <button type="button"  onClick={(e) => setMaxAmount(e, false)}>max</button>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
