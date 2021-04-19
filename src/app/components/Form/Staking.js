@@ -28,6 +28,7 @@ import {
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
 import { etherScanUrl } from 'config';
+import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -63,7 +64,8 @@ let StakingForm = ({
   // Redux
   ethereum: { tokenBalance },
   summaryData: { slice, lpList },
-  type
+  type,
+  theme
 }) => {
   const [balance, setBalance] = useState(0);
   const [balanceCheck, setBalanceCheck] = useState('');
@@ -112,31 +114,31 @@ let StakingForm = ({
     <ModalAdjustForm stake>
       <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
         <FormInputsWrapper trade={true}>
-          <SelectedStakingWrapper>
+          <SelectedStakingWrapper ModalText={ModeThemes[theme].ModalText}>
             <h2>Selected Staking Pool</h2>
-            <SelectedStaking>
+            <SelectedStaking color={ModeThemes[theme].SelectedStaking}>
               <SelectedStakingImg>
                 <img src={TrancheImg} alt='tranche' />
               </SelectedStakingImg>
-              <SelectedStakingContent>
+              <SelectedStakingContent SelectedStakingText={ModeThemes[theme].SelectedStakingText} SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}>
                 <h2>{type} STAKING POOL</h2>
                 <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
-                  {/* <img src={LinkArrow} alt='' /> */}{contractAddress}
+                  {contractAddress}
                 </a>
               </SelectedStakingContent>
             </SelectedStaking>
           </SelectedStakingWrapper>
-          <ModalFormGrpNewLoan trade={true} stake={true}>
+          <ModalFormGrpNewLoan trade={true} stake={true} StakingInputText={ModeThemes[theme].StakingInputText}>
             <NewLoanFormInput>
               <NewLoanInputWrapper name='amount'>
-                <ModalFormLabel htmlFor='amount' stake={true}>
+                <ModalFormLabel htmlFor='amount' stake={true} ModalText={ModeThemes[theme].ModalText}>
                   {tokenName === 'SLICE'
                     ? modalType
                       ? i18n.t('stake.modal.stakeFormTitle')
                       : i18n.t('stake.modal.withdrawFormTitle')
                     : 'Amount of ' + tokenName + ' to ' + (modalType ? 'stake' : 'withdraw')}
                 </ModalFormLabel>
-                <FieldWrapper modalType={true} staking={true}>
+                <FieldWrapper modalType={true} staking={true} StakingInputText={ModeThemes[theme].StakingInputText}  ModalText={ModeThemes[theme].ModalText}>
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleInputChange(newValue)}
@@ -153,7 +155,7 @@ let StakingForm = ({
               <LoanCustomSelect>
                 <Field name='selectLP' component='input' id='selectLP' className='fieldStylingDisplay' />
 
-                <SelectCurrencyView staking={true}>
+                <SelectCurrencyView staking={true} ModalText={ModeThemes[theme].ModalText}>
                   <div>
                     <img src={TrancheImgColored} alt='tranche' />
                     <h2>{isLPToken ? dropdownName : 'SLICE'}</h2>
@@ -192,7 +194,7 @@ let StakingForm = ({
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
 
-        <ModalFormSubmit>
+        <ModalFormSubmit ModalBackground={ModeThemes[theme].ModalBackground}>
           <BtnLoanModal>
             <ApproveBtnWrapper>
               {modalType && (
@@ -246,6 +248,7 @@ StakingForm = reduxForm({
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   summaryData: state.summaryData,
+  theme: state.theme,
   initialValues: {
     amount: ''
   },

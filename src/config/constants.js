@@ -334,7 +334,13 @@ export const ModeThemes = {
     titleSectionText: 'rgba(124, 133, 155, 0.8)',
     valueSectionText: '#393F56',
     titleColor: '#393F56',
-    textColor: '#7C859B'
+    textColor: '#7C859B',
+    ModalBackground: "#FFFFFF",
+    ModalText:"#4F4F4F",
+    SelectedStaking: "rgba(68, 65, 207, 0.05)",
+    SelectedStakingText: "#39295A",
+    SelectedStakingLink: "#776E8B",
+    StakingInputText: "#838186"
   },
   dark: {
     body: '#100F36',
@@ -361,6 +367,13 @@ export const ModeThemes = {
     titleSectionText: 'rgba(255, 255, 255, 0.8);',
     valueSectionText: '#FFFFFF',
     titleColor: '#FFFFFF',
-    textColor: '#C2C4DA'
+    textColor: '#C2C4DA',
+    ModalBackground: "#221F46",
+    ModalText:"#FFFFFF",
+    SelectedStaking: "rgba(151, 149, 255, 0.15)",
+    SelectedStakingText: "#FFFFFF",
+    SelectedStakingLink: "#CEC6FF",
+    StakingInputText: "rbga{255, 255, 255, 0.5}"
+
   }
 };

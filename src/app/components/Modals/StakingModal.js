@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
 import { getUserStaked, massHarvest } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal } from 'assets';
+import { CloseModal, CloseModalWhite } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import StakingForm from '../Form/Staking';
 import {
@@ -32,6 +32,7 @@ import { roundNumber } from 'utils';
 import { Lock, TrancheClaim } from 'assets';
 
 import i18n from '../locale/i18n';
+import { ModeThemes } from 'config';
 const { stakingSummaryDetail } = apiUri;
 
 const FirstCustomStyles = {
@@ -108,6 +109,7 @@ const StakingModal = ({
   type,
   tokenAddress,
   stakingAddress,
+  theme,
   // Functions
   closeModal,
   stakingApproveContract,
@@ -151,14 +153,11 @@ const StakingModal = ({
         <ModalHeader stake>
           <h2>
             {modalType === true
-              ? i18n.t('stake.modal.stakeModalTitle')
+              ? `Stake ${type} tokens` 
               : modalType === false
-              ? i18n.t('stake.modal.withdrawModalTitle')
+              ? `Withdraw ${type} tokens` 
               : 'Claim rewards'}
           </h2>
-          <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
-          </button>
         </ModalHeader>
         <ModalActionsContent stakingMobile>
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
@@ -179,9 +178,12 @@ const StakingModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          <ModalUserActions>
-            <ModalHeader rightStakeModal claim>
+          <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground}>
+            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}>
               <h2>{modalType ? 'Increase' : 'Decrease'} Stake</h2>
+              <button onClick={() => modalClose()}>
+                <img src={theme === "light" ? CloseModal : CloseModalWhite} alt='' />
+              </button>
             </ModalHeader>
 
             <StakingForm
@@ -226,9 +228,6 @@ const StakingModal = ({
       >
         <ModalHeader stake claim>
           <h2>Your Stakes</h2>
-          <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
-          </button>
         </ModalHeader>
         <ModalActionsContent stakingMobile>
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} claimModal stake>
@@ -284,9 +283,12 @@ const StakingModal = ({
             </ClaimModalHalfWrapper>
           </ModalActionDetails>
 
-          <ModalUserActions claimModal>
-            <ModalHeader rightStakeModal claim>
+          <ModalUserActions claimModal ModalBackground={ModeThemes[theme].ModalBackground}>
+            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}> 
               <h2>Available Rewards</h2>
+              <button onClick={() => modalClose()}>
+                <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
+              </button>
             </ModalHeader>
 
             <ClaimModalHalfWrapper>
@@ -310,7 +312,7 @@ const StakingModal = ({
                           <img src={TrancheClaim} alt='' />
                           <img src={pairLogos[item.name]} alt='' />
                         </ClaimModalCol>
-                        <ClaimModalCol value right rewards>
+                        <ClaimModalCol value right rewards ModalText={ModeThemes[theme].ModalText}>
                           <h2>{accruedRewards ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
                         </ClaimModalCol>
                         {/* <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn> */}
@@ -329,75 +331,6 @@ const StakingModal = ({
       </Modal>
     );
   };
-  // const InitialStakingModal = () => {
-  //   return (
-  //     <Modal
-  //       isOpen={modalIsOpen}
-  //       onRequestClose={closeModal}
-  //       style={FirstCustomStyles}
-  //       closeTimeoutMS={200}
-  //       shouldCloseOnOverlayClick={false}
-  //       contentLabel='Adjust'
-  //     >
-  //       <ModalHeader stake>
-  //         <h2>
-  //           {modalType === true
-  //             ? i18n.t('stake.modal.stakeModalTitle')
-  //             : modalType === false
-  //             ? i18n.t('stake.modal.withdrawModalTitle')
-  //             : 'Claim rewards'}
-  //         </h2>
-  //         <button onClick={() => modalClose()}>
-  //           <img src={CloseModal} alt='' />
-  //         </button>
-  //       </ModalHeader>
-
-  //       <ModalActionsContent stakingMobile>
-  //         <StakingModalWrapper>
-  //           <StakingModalRow>
-  //             <h2>Staked SLICE Tokens</h2>
-  //             {/* <h2>00.00</h2> */}
-  //             <SummaryCardCounter stakingMobile>
-  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'slice')}>
-  //                 +
-  //               </SummaryCardBtn>
-  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'slice')}>
-  //                 -
-  //               </SummaryCardBtn>
-  //             </SummaryCardCounter>
-  //           </StakingModalRow>
-
-  //           <StakingModalRow>
-  //             <h2>Staked LP Tokens</h2>
-  //             {/* <h2>00.00</h2> */}
-  //             <SummaryCardCounter stakingMobile>
-  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'lp')}>
-  //                 +
-  //               </SummaryCardBtn>
-  //               <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'lp')}>
-  //                 -
-  //               </SummaryCardBtn>
-  //             </SummaryCardCounter>
-  //           </StakingModalRow>
-
-  //           <StakingModalRow>
-  //             <h2>SLICE Rewards Collected</h2>
-  //             {/* <h2>00.00</h2> */}
-  //             <SummaryClaimBtn stakingMobile claim>
-  //               <button onClick={() => toggleModalMobile(null, null)}>Claim</button>
-  //             </SummaryClaimBtn>
-  //           </StakingModalRow>
-  //         </StakingModalWrapper>
-  //         <LoanDetailsMobile>
-  //           <h2>
-  //             {i18n.t('stake.modal.sliceLocked')}— {roundNumber(totalStaked)}
-  //             <span></span>
-  //           </h2>{' '}
-  //         </LoanDetailsMobile>
-  //       </ModalActionsContent>
-  //     </Modal>
-  //   );
-  // };
   const notFound = () => {
     return (
       <Modal
@@ -408,15 +341,15 @@ const StakingModal = ({
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
       >
-        <ModalHeader notFound>
+        <ModalHeader notFound ModalBackground={ModeThemes[theme].ModalBackground}>
           <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
+            <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
           </button>
         </ModalHeader>
         {(type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? (
-          <SliceNotFound>
+          <SliceNotFound ModalBackground={ModeThemes[theme].ModalBackground} ModalText={ModeThemes[theme].ModalText}>
             <p>{i18n.t('stake.modal.DontHaveSliceLP')}</p>
-            <SliceNotFoundBtn color='#1E80DA'>
+            <SliceNotFoundBtn color='#1E80DA'  ModalBackground={ModeThemes[theme].SelectedStaking}>
               <a
                 href='https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1'
                 target='_blank'
@@ -427,9 +360,9 @@ const StakingModal = ({
             </SliceNotFoundBtn>
           </SliceNotFound>
         ) : (
-          <SliceNotFound>
+          <SliceNotFound ModalBackground={ModeThemes[theme].ModalBackground} ModalText={ModeThemes[theme].ModalText}>
             <p>{i18n.t('stake.modal.DontHaveSlice')}</p>
-            <SliceNotFoundBtn color='#4441CF'>
+            <SliceNotFoundBtn color='#4441CF'  ModalBackground={ModeThemes[theme].SelectedStaking}>
               <a
                 href='https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1'
                 target='_blank'
@@ -444,24 +377,11 @@ const StakingModal = ({
     );
   };
 
-  // return isDesktop
-  //   ? 
   return noBalance && modalType === true
-      ? notFound()
-      : modalType === null
-      ? claimModal()
-      : stakingModal()
-    // : !isDesktop
-    // ? summaryModal && modalTypeMobile === undefined
-    //   ? InitialStakingModal()
-    //   : modalTypeMobile && Number(balanceMobile) === 0
-    //   ? notFound()
-    //   : modalTypeMobile === null
-    //   ? claimModal()
-    //   : modalTypeMobile === true || modalTypeMobile === false
-    //   ? stakingModal()
-    //   : false
-    // : false;
+    ? notFound()
+    : modalType === null
+    ? claimModal()
+    : stakingModal()
 };
 
 StakingModal.propTypes = {
@@ -475,7 +395,8 @@ const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   summaryData: state.summaryData,
   stakingList: state.data.stakingList,
-  path: state.path
+  path: state.path,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps, {})(StakingModal);
