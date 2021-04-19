@@ -4,7 +4,7 @@ import { change, destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
-import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
+import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
@@ -17,7 +17,7 @@ import {
   // gweiOrEther,
   // roundBasedOnUnit
 } from 'utils';
-import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
+import { etherScanUrl, statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
 import { Lock, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
@@ -94,7 +94,6 @@ const TableCard = ({
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
-  const [isEth, setIsEth] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
@@ -161,14 +160,6 @@ const TableCard = ({
     }
   };
 
-  // const openModal = async () => {
-  //   const ready = await readyToTransact(wallet, onboard);
-  //   if (!ready) return;
-  // };
-
-  // const closeModal = () => {
-  // };
-
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
   };
@@ -177,33 +168,18 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(address)
+    // setTokenBalances(address)
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
       setIsLoading(true);
       destroy('tranche');
-      if (buyerCoinAddress === zeroAddress) {
-        setIsEth(true);
-        const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
-        setDepositApproved(true);
-        setWithdrawApproved(withdrawTokenHasAllowance);
-        change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
-      } else {
-        const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
-        setDepositApproved(depositTokenHasAllowance);
-        change('tranche', 'depositIsApproved', depositTokenHasAllowance);
-        const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
-        setWithdrawApproved(withdrawTokenHasAllowance);
-        change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
-      }
       trancheCardToggle({ status: true, id });
     }
     setIsLoading(false);
   };
 
   const checkLoan = false;
-  // let tranche = name === 'ETHDAI Tranche A' || name === 'ETHDAI Tranche B';
 
   const TableCardDesktop = () => {
     return (
@@ -275,7 +251,7 @@ const TableCard = ({
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>${roundNumber(subscriptionUSD)}</h2>
               <h2>
-                ({subscription ? roundNumber(subscription) : '0'} {trancheToken}) 
+                ({subscription ? roundNumber(subscription) : '0'} {trancheToken})
               </h2>
             </FourthColContent>
           </TableFourthCol>
@@ -343,17 +319,19 @@ const TableCard = ({
               <TableMoreRow
                 name={name}
                 type={type}
-                isEth={isEth}
                 apy={apy}
                 cryptoType={cryptoType}
                 dividendType={dividendType}
                 buyerTokenBalance={buyerTokenBalance}
                 trancheToken={trancheToken}
                 trancheRate={trancheRate}
+                buyerCoinAddress={buyerCoinAddress}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}
+                setDepositApproved={setDepositApproved}
                 isWithdrawApproved={isWithdrawApproved}
+                setWithdrawApproved={setWithdrawApproved}
                 approveContract={approveContract}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
@@ -413,8 +391,7 @@ const TableCard = ({
                 <h2>annual yield (apy)</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
-                  {roundNumber(apy, 2)}%
-                  {/* <img src={Info} alt='infoImage' /> */}
+                  {roundNumber(apy, 2)}%{/* <img src={Info} alt='infoImage' /> */}
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
@@ -448,17 +425,19 @@ const TableCard = ({
               <TableMoreRow
                 name={name}
                 type={type}
-                isEth={isEth}
                 apy={apy}
                 cryptoType={cryptoType}
                 dividendType={dividendType}
                 buyerTokenBalance={buyerTokenBalance}
                 trancheToken={trancheToken}
                 trancheRate={trancheRate}
+                buyerCoinAddress={buyerCoinAddress}
                 trancheTokenAddress={trancheTokenAddress}
                 isApproveLoading={isApproveLoading}
                 isDepositApproved={isDepositApproved}
+                setDepositApproved={setDepositApproved}
                 isWithdrawApproved={isWithdrawApproved}
+                setWithdrawApproved={setWithdrawApproved}
                 approveContract={approveContract}
                 buySellTrancheTokens={buySellTrancheTokens}
               />
