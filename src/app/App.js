@@ -159,6 +159,7 @@ const App = ({
           };
           getSliceStats();
           getTvl();
+          address && setTokenBalances(address);
         }
       });
     const Staking = web3.eth
@@ -181,6 +182,7 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
+          address && setTokenBalances(address);
         }
       });
     const YieldFarm = web3.eth
@@ -193,6 +195,7 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
+          address && setTokenBalances(address);
         }
       });
 
