@@ -38,30 +38,46 @@ ${({ stake }) => stake && `
   h2{
     color: #FFFFFF;
   }
+  button{
+    position: absolute;
+    right: 0;
+    padding: 0 35px;
+  } 
 `}
-${({ claim }) => claim && `
+${({ claim, ModalHeader }) => claim && `
   h2{
     text-transform: capitalize;
     font-weight: 700;
+    color: ${ModalHeader};
   }
+  button{
+    position: absolute;
+    right: 0;
+    padding: 0 35px;
+  } 
 `}
-${({ rightStakeModal }) => rightStakeModal && `
+${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
   width: 50%;
-  z-index: -1;
   h2{
-    color: #4F4F4F;
+    color: ${ModalHeader};
   }
+  button{
+    position: absolute;
+    right: 0;
+    padding: 0 35px;
+  } 
 `}
 
 
 ${({ error }) => error && `
   position: relative;
 `}
-${({ notFound }) => notFound && `
+${({ notFound, ModalBackground }) => notFound && `
   height: 46px;
   justify-content: flex-end;
   position: relative;
   padding: 0 10px;
+  background: ${ModalBackground};
 `}
 
 
@@ -416,6 +432,7 @@ const ModalActionDetails = styled.div`
 
 const ModalUserActions = styled.div`
   width: 100%;
+  background: ${props => props.ModalBackground}
   ${({ form }) => form && `
     display: flex;
   `}
@@ -617,6 +634,7 @@ const StakingModalWrapper = styled.div`
 
 const SliceNotFound = styled.div`
   min-height: 199px; 
+  background: ${props => props.ModalBackground};
   height: auto;
   display: flex;
   flex-direction: column;
@@ -629,7 +647,7 @@ const SliceNotFound = styled.div`
     line-height: 19px;
     margin: 12px 0 0 0;
     text-align: center;
-    color: #3F3F3F;
+    color: ${props => props.ModalText};
     padding: 0 23px;
     width: 100%;
   }
@@ -643,6 +661,7 @@ const SliceNotFoundBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background: ${props => props.ModalBackground};
   a{
     min-height: 33px;
     height: 100%;
@@ -653,7 +672,6 @@ const SliceNotFoundBtn = styled.div`
     text-align: center;
     color: #FFFFFF;
     background: ${props => props.color};
-    box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
     border-radius: 4px;
     width: 100%;
     border: none;
@@ -723,8 +741,11 @@ const ClaimModalCol = styled.div`
   ${({ pair }) => pair && `
     width: 30%;
   `}
-  ${({ rewards }) => rewards && `
+  ${({ rewards, ModalText }) => rewards && `
     width: 30%;
+    h2{
+      color: ${ModalText} !important
+    }
   `}
   ${({ claim }) => claim && `
     width: 40%;

@@ -23,7 +23,7 @@ import {
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
-import { ModeThemes } from 'config';
+import { ModeThemes, zeroAddress } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -39,23 +39,26 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 let TableMoreRow = ({
   name,
   type,
-  isEth,
   apy,
   cryptoType,
   dividendType,
   buyerTokenBalance,
   trancheToken,
   trancheRate,
+  buyerCoinAddress,
   trancheTokenAddress,
   isApproveLoading,
   isDepositApproved,
   isWithdrawApproved,
+  setDepositApproved,
+  setWithdrawApproved,
   approveContract,
   buySellTrancheTokens,
-  ethereum: { tokenBalance, balance, txOngoing },
+  ethereum: { tokenBalance, trancheAllowance, txOngoing },
   change,
   theme
 }) => {
+  const [isEth, setIsEth] = useState(false);
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
@@ -73,13 +76,28 @@ let TableMoreRow = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
+
+  useEffect(() => {
+    if (buyerCoinAddress === zeroAddress) {
+      setIsEth(true);
+      setDepositApproved(true);
+    }
+    setDepositApproved(trancheAllowance[buyerCoinAddress]);
+    setWithdrawApproved(trancheAllowance[trancheTokenAddress]);
+    change('depositIsApproved', trancheAllowance[buyerCoinAddress]);
+    change('withdrawIsApproved', trancheAllowance[trancheTokenAddress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
+
   const setMaxAmount = useCallback(
     (e, type) => {
-      e.preventDefault();
+      // e.preventDefault();
       if (type) {
         change('depositAmount', buyerTokenBalance);
+        isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       } else {
         change('withdrawAmount', trancheTokenBalance);
+        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
@@ -89,7 +107,9 @@ let TableMoreRow = ({
     if (type) {
       isGreaterThan(newValue, buyerTokenBalance) || isEqualTo(newValue, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
     } else {
-      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
+      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0)
+        ? setWithdrawBalanceCheck('InputStylingError')
+        : setWithdrawBalanceCheck('');
     }
   };
 
@@ -147,12 +167,11 @@ let TableMoreRow = ({
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
             >
-              {
-               isApproveLoading && 
+              {isApproveLoading && (
                 <div>
-                <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                 </div>
-              }
+              )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>deposit</h2>
                 <CheckboxWrapper hidden={isEth}>
@@ -189,7 +208,9 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <button type="button" onClick={(e) => setMaxAmount(e, true)}>max</button>
+                  <button type='button' onClick={(e) => setMaxAmount(e, true)}>
+                    max
+                  </button>
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -205,12 +226,11 @@ let TableMoreRow = ({
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
             >
-              {
-               isApproveLoading && 
+              {isApproveLoading && (
                 <div>
-                <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                 </div>
-              }
+              )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
@@ -251,7 +271,9 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <button type="button"  onClick={(e) => setMaxAmount(e, false)}>max</button>
+                  <button type='button' onClick={(e) => setMaxAmount(e, false)}>
+                    max
+                  </button>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -270,18 +292,21 @@ let TableMoreRow = ({
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
               >
-                {
-                  isApproveLoading && 
+                {isApproveLoading && (
                   <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                   </div>
-                }
+                )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       Deposit
                     </MobileMoreFormBtn>
-                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
+                    <MobileMoreFormBtn
+                      current={formType === 'withdraw'}
+                      onClick={() => setFormType('withdraw')}
+                      color={ModeThemes[theme].dropDownText}
+                    >
                       Withdraw
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
@@ -324,7 +349,9 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <button type="button"  onClick={(e) => setMaxAmount(e, true)}>max</button>
+                    <button type='button' onClick={(e) => setMaxAmount(e, true)}>
+                      max
+                    </button>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
@@ -341,18 +368,21 @@ let TableMoreRow = ({
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
               >
-                {
-                  isApproveLoading && 
+                {isApproveLoading && (
                   <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                   </div>
-                }
+                )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       Deposit
                     </MobileMoreFormBtn>
-                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
+                    <MobileMoreFormBtn
+                      current={formType === 'withdraw'}
+                      onClick={() => setFormType('withdraw')}
+                      color={ModeThemes[theme].dropDownText}
+                    >
                       Withdraw
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
@@ -394,7 +424,9 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <button type="button"  onClick={(e) => setMaxAmount(e, false)}>max</button>
+                    <button type='button' onClick={(e) => setMaxAmount(e, false)}>
+                      max
+                    </button>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />

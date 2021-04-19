@@ -76,12 +76,12 @@ const ModalFormLabel = styled.label`
   ${({ tranche }) => tranche && `
     margin: 7px auto;
   `}
-  ${({ stake }) => stake && `
+  ${({ stake, ModalText }) => stake && `
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 12px;      
-    color: #4F4F4F;
+    color: ${ModalText};
     text-transform: capitalize;
     text-align: left;
     margin: 7px 0 7px 2px;
@@ -103,7 +103,7 @@ const ModalFormSubmit = styled.div`
   padding: 0 35px;
   box-sizing: border-box;
   //border-top: 1px solid rgba(63,63,63,0.1);
-  background: #ffffff;
+  background: ${props => props.ModalBackground}
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -389,15 +389,14 @@ const SelectCurrencyView = styled.div`
       margin: 0 6px 0 0;
       height: 19px;
     }
-    ${({ staking }) => staking && `
+    ${({ staking, ModalText}) => staking && `
       width: 126px;
       & > h2{
         font-style: normal;
         font-weight: normal;
         font-size: 13.0035px;
         letter-spacing: 0.05em;
-        color: rgba(57, 41, 90, 0.75);
-      }
+        color: ${ModalText};
     `}
   }
   
@@ -576,13 +575,13 @@ const ModalFormGrpNewLoan = styled.div`
       color: #838186;
     }
   `}
-  ${({ stake }) => stake && `
+  ${({ stake, StakingInputText }) => stake && `
     & > h2:last-child{
       font-style: normal;
       font-weight: normal;
       font-size: 12px;
       letter-spacing: 0.15em;
-      color: #838186;
+      color: ${StakingInputText};
       margin: 15px 2px;
       text-align: left;
     }
@@ -624,12 +623,14 @@ const FieldWrapper = styled.div`
       border-radius: 4px !important;
     }
   `}
-  ${({ staking }) => staking && `
+  ${({ staking, ModalText }) => staking && `
     input{
       padding: 4px 134px 4px 10px;
       height: 34.68px !important;
       border-radius: 4px !important;
       border-color: #CFCFE5 !important;
+      color: ${ModalText};
+      background: rgba(255, 255, 255, 0.1);
     }
   `}
   ${({ modalType }) => modalType && `
@@ -657,9 +658,9 @@ const FieldWrapper = styled.div`
     // color: rgb(57,41,90, 0.3);
     color: #B3B3B3;
     background: #F1F1F1;
-    ${({ staking }) => staking && `
+    ${({ staking, StakingInputText }) => staking && `
       background: rgba(57,41,90,0.3);
-      color: rgba(57,41,90,0.4);
+      color: ${StakingInputText}
     `}
     
   }
@@ -674,14 +675,14 @@ const SelectedStakingWrapper = styled.div`
     font-weight: 600;
     font-size: 12px;
     line-height: 15px;
-    color: #4F4F4F;
+    color: ${props => props.ModalText};
     margin: 0 0 12px 0;
   }
 `
 const SelectedStaking = styled.div`
   width: 100%;
   height: 56px;
-  background: rgba(68, 65, 207, 0.05);
+  background: ${props => props.color};
   border-radius: 4.33px;
   padding: 15px;
   display: flex;
@@ -696,10 +697,10 @@ const SelectedStakingImg = styled.div`
 `
 
 const SelectedStakingContent = styled.div`
-  h2{
+  h2, a{
     margin: 2px 0;
   }
-  h2:first-child{
+  h2{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -707,16 +708,16 @@ const SelectedStakingContent = styled.div`
     line-height: 11px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #39295A;
+    color: ${props => props.SelectedStakingText};
   }
-  h2:last-child{
+  a{
     font-style: normal;
     font-weight: 600;
     font-size: 7.77732px;
     line-height: 9px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #776E8B;
+    color: ${props => props.SelectedStakingLink};
   }
 `
 
