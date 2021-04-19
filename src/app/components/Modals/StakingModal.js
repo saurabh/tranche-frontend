@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { serverUrl, apiUri, pairLogos } from 'config';
-import { getUserStaked, massHarvest, stakingAllowanceCheck } from 'services/contractMethods';
+import { getUserStaked, massHarvest } from 'services/contractMethods';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal } from 'assets';
+import { CloseModal, CloseModalWhite } from 'assets';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { fromWei } from 'services/contractMethods';
-import { safeAdd } from 'utils';
 import StakingForm from '../Form/Staking';
 import {
   ModalHeader,
@@ -20,8 +18,6 @@ import {
   LoanDetailsRowTitle,
   LoanDetailsRowValue,
   LoanDetailsMobile,
-  StakingModalRow,
-  StakingModalWrapper,
   SliceNotFound,
   SliceNotFoundBtn,
   ModalUserActions,
@@ -32,11 +28,11 @@ import {
   ClaimModalCol
 } from './styles/ModalsComponents';
 
-import { SummaryCardCounter, SummaryCardBtn, SummaryClaimBtn } from '../Stake/Summary/styles/SummaryComponents';
 import { roundNumber } from 'utils';
 import { Lock, TrancheClaim } from 'assets';
 
 import i18n from '../locale/i18n';
+import { ModeThemes } from 'config';
 const { stakingSummaryDetail } = apiUri;
 
 const FirstCustomStyles = {
@@ -106,49 +102,27 @@ const StakingModal = ({
   noBalance,
   modalIsOpen,
   modalType,
-  setModalType,
   isLPToken,
   hasAllowance,
   setHasAllowance,
   approveLoading,
-  tokenBalance,
   type,
-  sliceAddress,
-  lpAddress,
-  // tokenAddress,
+  tokenAddress,
+  stakingAddress,
+  theme,
   // Functions
   closeModal,
-  openModal,
   stakingApproveContract,
-  adjustStake
+  adjustStake,
+  contractAddress
   // API Values,
 }) => {
-  // const stakableAssets = useRef();
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
-  const [tokenAddress, setTokenAddress] = useState(null);
-  const [stakingAddress, setStakingAddress] = useState(null);
-  const [isLPTokenMobile, setLPTokenMobile] = useState(false);
-  const [typeMobile, setTypeMobile] = useState('slice');
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
-  const [balanceMobile, setBalanceMobile] = useState(0);
-  const [modalTypeMobile, setModalTypeMobile] = useState(undefined);
 
-  const tokenType = type === 'slice' ? 'SLICE' : type === 'lp' ? 'LP Tokens' : '';
-
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
-
+  const tokenType = type === 'SLICE' ? 'SLICE' : (type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? 'LP Tokens' : '';
+  
   useEffect(() => {
     const getStakingDetails = async () => {
       const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
@@ -164,45 +138,7 @@ const StakingModal = ({
 
   const modalClose = () => {
     closeModal();
-    setModalTypeMobile(undefined);
   };
-  const setBalanceCB = (balance) => {
-    setBalanceMobile(roundNumber(balance));
-  };
-  const toggleModalMobile = async (bool, type) => {
-    setModalTypeMobile(bool);
-    setTypeMobile(type);
-    setModalType(bool);
-    if (type === 'slice') {
-      if (bool) {
-        let result = slice ? await stakingAllowanceCheck(sliceAddress, slice.stakingAddress, address) : false;
-        setHasAllowance(result);
-      } else setHasAllowance(true);
-    } else if (type === 'lp') {
-      if (bool) {
-        let result = lpList ? await stakingAllowanceCheck(lpAddress, lpList[0].stakingAddress, address) : false;
-        setHasAllowance(result);
-      } else setHasAllowance(true);
-    }
-    setLPTokenMobile(type === 'lp' ? true : false);
-  };
-  useEffect(() => {
-    const setBalance = async () => {
-      if (tokenBalance) {
-        if (typeMobile === 'slice' && sliceAddress) setBalanceCB(fromWei(tokenBalance[sliceAddress]));
-        if (typeMobile === 'lp' && lpList) {
-          let lpBalance = 0;
-          lpList.forEach((lp) => {
-            if (tokenBalance[lp.address]) {
-              lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
-            }
-          });
-          setBalanceCB(lpBalance);
-        }
-      }
-    };
-    setBalance();
-  }, [typeMobile, sliceAddress, lpList, tokenBalance]);
 
   const stakingModal = () => {
     return (
@@ -217,14 +153,11 @@ const StakingModal = ({
         <ModalHeader stake>
           <h2>
             {modalType === true
-              ? i18n.t('stake.modal.stakeModalTitle')
+              ? `Stake ${type} tokens` 
               : modalType === false
-              ? i18n.t('stake.modal.withdrawModalTitle')
+              ? `Withdraw ${type} tokens` 
               : 'Claim rewards'}
           </h2>
-          <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
-          </button>
         </ModalHeader>
         <ModalActionsContent stakingMobile>
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
@@ -245,24 +178,33 @@ const StakingModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          <StakingForm
-            modalType={isDesktop ? modalType : modalTypeMobile}
-            userStaked={userStaked}
-            type={isDesktop ? type : typeMobile}
-            tokenAddress={tokenAddress}
-            stakingAddress={stakingAddress}
-            setTokenAddress={setTokenAddress}
-            setStakingAddress={setStakingAddress}
-            hasAllowance={hasAllowance}
-            setHasAllowance={setHasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isDesktop ? isLPToken : isLPTokenMobile}
-            // Functions
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
-            // setBalanceModal={setBalance}
-            path={path}
-          />
+          <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground}>
+            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}>
+              <h2>{modalType ? 'Increase' : 'Decrease'} Stake</h2>
+              <button onClick={() => modalClose()}>
+                <img src={theme === "light" ? CloseModal : CloseModalWhite} alt='' />
+              </button>
+            </ModalHeader>
+
+            <StakingForm
+              modalType={modalType}
+              userStaked={userStaked}
+              type={type}
+              tokenAddress={tokenAddress}
+              stakingAddress={stakingAddress}
+              hasAllowance={hasAllowance}
+              setHasAllowance={setHasAllowance}
+              contractAddress={contractAddress}
+              approveLoading={approveLoading}
+              isLPToken={isLPToken}
+              // Functions
+              stakingApproveContract={stakingApproveContract}
+              adjustStake={adjustStake}
+              // setBalanceModal={setBalance}
+              path={path}
+            />
+          </ModalUserActions>
+          
 
           <LoanDetailsMobile>
             <h2>
@@ -286,9 +228,6 @@ const StakingModal = ({
       >
         <ModalHeader stake claim>
           <h2>Your Stakes</h2>
-          <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
-          </button>
         </ModalHeader>
         <ModalActionsContent stakingMobile>
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} claimModal stake>
@@ -344,9 +283,12 @@ const StakingModal = ({
             </ClaimModalHalfWrapper>
           </ModalActionDetails>
 
-          <ModalUserActions claimModal>
-            <ModalHeader rightStakeModal claim>
+          <ModalUserActions claimModal ModalBackground={ModeThemes[theme].ModalBackground}>
+            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}> 
               <h2>Available Rewards</h2>
+              <button onClick={() => modalClose()}>
+                <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
+              </button>
             </ModalHeader>
 
             <ClaimModalHalfWrapper>
@@ -370,7 +312,7 @@ const StakingModal = ({
                           <img src={TrancheClaim} alt='' />
                           <img src={pairLogos[item.name]} alt='' />
                         </ClaimModalCol>
-                        <ClaimModalCol value right rewards>
+                        <ClaimModalCol value right rewards ModalText={ModeThemes[theme].ModalText}>
                           <h2>{accruedRewards ? roundNumber(accruedRewards[item.address]) : '0'} SLICE</h2>
                         </ClaimModalCol>
                         {/* <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn> */}
@@ -389,75 +331,6 @@ const StakingModal = ({
       </Modal>
     );
   };
-  const InitialStakingModal = () => {
-    return (
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={FirstCustomStyles}
-        closeTimeoutMS={200}
-        shouldCloseOnOverlayClick={false}
-        contentLabel='Adjust'
-      >
-        <ModalHeader stake>
-          <h2>
-            {modalType === true
-              ? i18n.t('stake.modal.stakeModalTitle')
-              : modalType === false
-              ? i18n.t('stake.modal.withdrawModalTitle')
-              : 'Claim rewards'}
-          </h2>
-          <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
-          </button>
-        </ModalHeader>
-
-        <ModalActionsContent stakingMobile>
-          <StakingModalWrapper>
-            <StakingModalRow>
-              <h2>Staked SLICE Tokens</h2>
-              {/* <h2>00.00</h2> */}
-              <SummaryCardCounter stakingMobile>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'slice')}>
-                  +
-                </SummaryCardBtn>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'slice')}>
-                  -
-                </SummaryCardBtn>
-              </SummaryCardCounter>
-            </StakingModalRow>
-
-            <StakingModalRow>
-              <h2>Staked LP Tokens</h2>
-              {/* <h2>00.00</h2> */}
-              <SummaryCardCounter stakingMobile>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(true, 'lp')}>
-                  +
-                </SummaryCardBtn>
-                <SummaryCardBtn stakingMobile onClick={() => toggleModalMobile(false, 'lp')}>
-                  -
-                </SummaryCardBtn>
-              </SummaryCardCounter>
-            </StakingModalRow>
-
-            <StakingModalRow>
-              <h2>SLICE Rewards Collected</h2>
-              {/* <h2>00.00</h2> */}
-              <SummaryClaimBtn stakingMobile claim>
-                <button onClick={() => toggleModalMobile(null, null)}>Claim</button>
-              </SummaryClaimBtn>
-            </StakingModalRow>
-          </StakingModalWrapper>
-          <LoanDetailsMobile>
-            <h2>
-              {i18n.t('stake.modal.sliceLocked')}— {roundNumber(totalStaked)}
-              <span></span>
-            </h2>{' '}
-          </LoanDetailsMobile>
-        </ModalActionsContent>
-      </Modal>
-    );
-  };
   const notFound = () => {
     return (
       <Modal
@@ -468,15 +341,15 @@ const StakingModal = ({
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
       >
-        <ModalHeader notFound>
+        <ModalHeader notFound ModalBackground={ModeThemes[theme].ModalBackground}>
           <button onClick={() => modalClose()}>
-            <img src={CloseModal} alt='' />
+            <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
           </button>
         </ModalHeader>
-        {type === 'lp' ? (
-          <SliceNotFound>
+        {(type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') ? (
+          <SliceNotFound ModalBackground={ModeThemes[theme].ModalBackground} ModalText={ModeThemes[theme].ModalText}>
             <p>{i18n.t('stake.modal.DontHaveSliceLP')}</p>
-            <SliceNotFoundBtn color='#1E80DA'>
+            <SliceNotFoundBtn color='#1E80DA'  ModalBackground={ModeThemes[theme].SelectedStaking}>
               <a
                 href='https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1'
                 target='_blank'
@@ -487,9 +360,9 @@ const StakingModal = ({
             </SliceNotFoundBtn>
           </SliceNotFound>
         ) : (
-          <SliceNotFound>
+          <SliceNotFound ModalBackground={ModeThemes[theme].ModalBackground} ModalText={ModeThemes[theme].ModalText}>
             <p>{i18n.t('stake.modal.DontHaveSlice')}</p>
-            <SliceNotFoundBtn color='#4441CF'>
+            <SliceNotFoundBtn color='#4441CF'  ModalBackground={ModeThemes[theme].SelectedStaking}>
               <a
                 href='https://app.uniswap.org/#/swap?outputCurrency=0x0aee8703d34dd9ae107386d3eff22ae75dd616d1'
                 target='_blank'
@@ -504,23 +377,11 @@ const StakingModal = ({
     );
   };
 
-  return isDesktop
-    ? noBalance && modalType === true
-      ? notFound()
-      : modalType === null
-      ? claimModal()
-      : stakingModal()
-    : !isDesktop
-    ? summaryModal && modalTypeMobile === undefined
-      ? InitialStakingModal()
-      : modalTypeMobile && Number(balanceMobile) === 0
-      ? notFound()
-      : modalTypeMobile === null
-      ? claimModal()
-      : modalTypeMobile === true || modalTypeMobile === false
-      ? stakingModal()
-      : false
-    : false;
+  return noBalance && modalType === true
+    ? notFound()
+    : modalType === null
+    ? claimModal()
+    : stakingModal()
 };
 
 StakingModal.propTypes = {
@@ -534,7 +395,8 @@ const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   summaryData: state.summaryData,
   stakingList: state.data.stakingList,
-  path: state.path
+  path: state.path,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps, {})(StakingModal);

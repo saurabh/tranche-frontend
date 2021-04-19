@@ -51,7 +51,6 @@ const style = {
   }
 };
 const { loanList: loanListUrl } = apiUri;
-
 const Table = ({
   HandleNewLoan,
   fetchTableData,

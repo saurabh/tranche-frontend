@@ -97,7 +97,8 @@ const TableCard = ({
   setWalletAndWeb3,
   ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
-  checkServer
+  setTokenBalances,
+  checkServer,
 }) => {
   const JLoan = JLoanSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -116,6 +117,9 @@ const TableCard = ({
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  
+
+
   const checkLoan =
     path === 'borrow' && address === borrowerAddress
       ? PagesData[path].userTag
@@ -473,7 +477,7 @@ const TableCard = ({
     setShareholderShares(shares);
     setIsOpen(true);
   };
-
+  
   const closeModal = () => {
     setIsOpen(false);
   };

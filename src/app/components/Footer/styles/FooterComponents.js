@@ -84,6 +84,14 @@ const LanguageContent = styled.div`
 const FooterLeft = styled.div` 
   display: flex;
   align-items: center;
+  @media (max-width: 992px){
+    flex-direction: column;
+    & > div:last-child{
+      margin-left: 0 !important;
+      padding: 12px 0;
+    }
+  }
+
 `;
 
 const FooterContainer = styled.div` 

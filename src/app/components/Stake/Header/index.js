@@ -52,7 +52,7 @@ function Header({updateDate, theme}) {
 }
 const mapStateToProps = (state) => {
   return {
-    theme: state.theme,
+    theme: state.theme
   };
 };
 

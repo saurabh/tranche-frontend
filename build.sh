@@ -1,6 +1,6 @@
 git branch
 git checkout dev-build-2
-git pull origin master
+git pull origin dev-build-2
 git pull origin stakingAndEarning
 yarn build
 git add .

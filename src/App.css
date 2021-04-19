@@ -1224,9 +1224,10 @@ table, th, td {
   }
   .footerWrapper{
     flex-direction: column;
+    padding: 12px 0;
   }
   .footerLinks a{
-    font-size: 9px;
+    font-size: 7px;    
     margin: 0 2px;
   }
   .desktopViewTabs{

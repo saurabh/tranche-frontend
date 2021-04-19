@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
-import { apiUri, pairData } from 'config/constants';
+import { apiUri, pairData, ModeThemes } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
@@ -23,7 +23,7 @@ import {
 } from './styles/HeaderComponents';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-const HeaderTabs = ({ path }) => {
+const HeaderTabs = ({ path, theme }) => {
   // const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
@@ -52,11 +52,11 @@ const HeaderTabs = ({ path }) => {
   
   return (
     <HeaderTabsWrapper path={path} desktop>
-      <HeaderTabsBtnsLinks>
+      <HeaderTabsBtnsLinks color={ModeThemes[theme]}>
           <NavLink
             to={baseUrl + '/stake'}
             activeStyle={{
-              color: 'rgba(68, 65, 207, 1)'
+              opacity: 1
             }}
             exact
           >
@@ -138,7 +138,8 @@ const mapStateToProps = (state) => {
     ethereum: state.ethereum,
     data: state.data,
     path: state.path,
-    trade: state.trade
+    trade: state.trade,
+    theme: state.theme
   };
 };
 

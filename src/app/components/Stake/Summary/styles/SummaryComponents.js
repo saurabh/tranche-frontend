@@ -4,7 +4,7 @@ const SummaryCardWrapper = styled.div`
     width: 325px;
     height: 121px;
     background: ${props => props.color};;
-    border: 1px solid #EFEFEF;
+    // border: 1px solid #EFEFEF;
     // border-top: 6px solid ${props => props.color};
     box-sizing: border-box;
     padding: 17px;
@@ -122,7 +122,7 @@ const SummaryClaimBtn = styled.div`
             font-size: 12px;
             padding: 12px 25px;
             font-family: "Inter",sans-serif;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,1);
             border-radius: 10px;
             font-weight: 600;
             color: #369987;

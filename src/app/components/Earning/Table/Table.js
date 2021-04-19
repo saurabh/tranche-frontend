@@ -155,7 +155,7 @@ const Table = ({
               {isLoading ? (
                 <div>
                   {[...Array(5)].map((i, idx) => (
-                    <TableContentCard key={idx}>
+                    <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
                       <div className='loadingCard'>
                         <div className='loadingFirstCol'>
                           <div className='loadingFirslColContent'>

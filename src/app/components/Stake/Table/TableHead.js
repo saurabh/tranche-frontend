@@ -21,7 +21,7 @@ import {
 import i18n from "app/components/locale/i18n";
 
 
-const TableHead = ({changeSorting, path}) => {
+const TableHead = ({changeSorting, path, color}) => {
 
     const [order, setOrder] = useState("asc")
     const [menu, toggleMenu] = useState(false);
@@ -56,40 +56,34 @@ const TableHead = ({changeSorting, path}) => {
     const TableHeadDesktop = () => {
         return (
             <TableHeadWrapper path={path}>
-                <TableHeadTitle className="address-wrapper" defaultCursor={true} stakingPool>
-                    <div className="address-title-content">
-                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') :  "INSTRUMENT"}</h2>
-                    </div>
+                <TableHeadTitle defaultCursor={true} stakingPool color={color} stakingPoolStake>
+                    <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') :  "INSTRUMENT"}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle className={true ? "staked-wrapper" :"remaining-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "remaining-title-content" : path === "stake" ? "staked-title-content" : "tranche-size-content"} onClick={() => sortLoans(path === "tranche" ? "amount" : path === "stake" ? "staked" : "remainingLoan")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "TRANCHE SIZE"}</h2>
-                    </div>
+                <TableHeadTitle color={color} statusStake>
+                    <h2>{(path === "lend" || path === "borrow" || path === "stake") ? i18n.t('stake.table.tableHead.status') : "BOND APY"}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle className={(path === "lend" || path === "borrow") ? "ratio-wrapper" : path === "stake" ? "reward-wrapper" : "return-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "ratio-title-content" : path === "stake" ? "reward-title-content" : "return-content"} onClick={() => sortLoans(path === "tranche" ? "rpbRate" : path === "stake" ? "reward" : "collateralRatio")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN/BLOCK"}</h2>
-                    </div>
+                <TableHeadTitle color={color} staked>
+                    <h2>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "TRANCHE SIZE"}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle className={(path === "lend" || path === "borrow") ? "interest-paid-wrapper" : path === "stake" ? "accrued-wrapper" : "subscription-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "tranche" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "Variable APY" : "SUBSCRIPTION"}</h2>
-                        
-                    </div>
+                <TableHeadTitle color={color} reward>
+                    <h2>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN/BLOCK"}</h2>
+                </TableHeadTitle> 
+                <TableHeadTitle color={color} APYStake>
+                    <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "APY" : "SUBSCRIPTION"}</h2>
                 </TableHeadTitle>
-                <TableHeadTitle className={true ? "stake-status" :"status-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "status-title-content" : path === "stake" ? "staking-title-content" : "apy-content"}  onClick={() => sortLoans("displayPriority")}>
-                        <h2>{(path === "lend" || path === "borrow" || path === "stake") ? i18n.t('stake.table.tableHead.status') : "BOND APY"}</h2>
-                    </div>
+                <TableHeadTitle color={color} stakeCol>
+                    <h2>Your stake</h2>
                 </TableHeadTitle>
-                <TableHeadTitle className={true ? "status-btns" : "head-btns-wrapper"}>
+                <TableHeadTitle color={color} btnsStake>
+                    <h2>manage STAKE</h2>
+                </TableHeadTitle>
 
-                </TableHeadTitle>
+
                 <SortingMenu>
                     <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} sorting={true}>
                         <h2>Sort <img src={ChevronDown} alt="img"/> </h2>
                     </TableSubTitle>
-                    {   menu ?
+                    { menu ?
 
                     <TableMarketsSortingDropdown sorting={true}>
                             <TableMarketsSortingDropdownContent>
@@ -116,22 +110,22 @@ const TableHead = ({changeSorting, path}) => {
         return (
             <TableHeadWrapperMobile path={path}>
                 <TableColMobile address>
-                    <TableHeadTitleMobile defaultCursor={true} address stakingPool>
+                    <TableHeadTitleMobile defaultCursor={true} address stakingPool color={color}>
                         <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') : "INSTRUMENT"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
                         <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "SIZE"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
                         <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
-                    <TableHeadTitleMobile>
+                    <TableHeadTitleMobile color={color}>
                         <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "APY"  : "SUBSCRIPTION"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
