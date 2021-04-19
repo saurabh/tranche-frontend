@@ -72,20 +72,23 @@ const App = ({
           for (let i = 1; i < 3; i++) {
             let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
             if (address === topicAddress) {
-              await timeout(7500);
+              await timeout(10000);
               setTokenBalances(address);
             }
           }
         }
       });
-    ERC20Balances.unsubscribe((error) => {
-      if (error) console.error(error);
-    });
-  }, [address, setTokenBalances]);
+
+    return () => {
+      ERC20Balances.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
+    }
+  }, [address, setTokenBalances])
 
   useEffect(() => {
     address && checkTrancheAllowances(address);
-  }, [address, checkTrancheAllowances])
+  }, [address, checkTrancheAllowances]);
 
   useEffect(() => {
     const timeout = (ms) => {
@@ -98,7 +101,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'borrow' || path === 'lend') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -119,7 +122,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'borrow' || path === 'lend') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -140,7 +143,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'tranche') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -160,7 +163,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'tranche') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -185,8 +188,6 @@ const App = ({
           };
           getSliceStats();
           getTvl();
-          await timeout(2000);
-          address && setTokenBalances(address);
         }
       });
     const Staking = web3.eth
@@ -195,7 +196,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'stake') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -209,7 +210,6 @@ const App = ({
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
-          address && setTokenBalances(address);
         }
       });
     const YieldFarm = web3.eth
@@ -218,11 +218,10 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'stake') {
-          await timeout(4000);
+          await timeout(5000);
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
-          address && setTokenBalances(address);
         }
       });
 

@@ -194,7 +194,7 @@ let TableMoreRow = ({
               </TableMoreTitleWrapper>
 
               <h2>
-                balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+                balance: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
                 <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
@@ -252,7 +252,7 @@ let TableMoreRow = ({
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
               <h2>
-                balance: {roundNumber(trancheTokenBalance)} {trancheToken}
+                balance: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
                 <FormContent
@@ -330,7 +330,7 @@ let TableMoreRow = ({
                 </TableMoreTitleWrapper>
 
                 <h2>
-                  balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+                  balance: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
                 </h2>
                 <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
                   <FormContent
@@ -405,7 +405,7 @@ let TableMoreRow = ({
                   </CheckboxWrapper>
                 </TableMoreTitleWrapper>
                 <h2>
-                  balance: {roundNumber(trancheTokenBalance)} {trancheToken}
+                  balance: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
                 </h2>
                 <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
                   <FormContent
