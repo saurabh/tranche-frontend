@@ -82,6 +82,13 @@ export const setTokenBalances = (address) => async (dispatch) => {
   }
 };
 
+export const toggleApproval = (tokenAddress, bool) => async dispatch => {
+  dispatch({
+    type: SET_TRANCHE_ALLOWANCE,
+    payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
+  });
+}
+
 export const checkTrancheAllowances = (address) => async (dispatch) => {
   try {
     const Tokens = TrancheTokenAddresses.concat(TrancheBuyerCoinAddresses);

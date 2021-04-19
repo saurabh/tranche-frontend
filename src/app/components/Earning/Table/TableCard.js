@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { change, destroy } from 'redux-form';
+import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -83,7 +83,7 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   ethereum: { tokenBalance, balance, address, wallet, web3, notify },
-  change,
+  toggleApproval,
   destroy,
   theme
   // checkServer
@@ -141,6 +141,7 @@ const TableCard = ({
         .on('confirmation', (count) => {
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
+            toggleApproval(tokenAddress, !isApproved)
             setApproveLoading(false);
             destroy('tranche');
           }
@@ -455,6 +456,8 @@ TableCard.propTypes = {
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
+  trancheCardToggle: PropTypes.func.isRequired,
+  toggleApproval: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -471,6 +474,6 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   checkServer,
   trancheCardToggle,
-  change,
+  toggleApproval,
   destroy
 })(TableCard);
