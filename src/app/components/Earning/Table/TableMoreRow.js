@@ -75,11 +75,13 @@ let TableMoreRow = ({
   });
   const setMaxAmount = useCallback(
     (e, type) => {
-      e.preventDefault();
+      // e.preventDefault();
       if (type) {
         change('depositAmount', buyerTokenBalance);
+        isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('')
       } else {
         change('withdrawAmount', trancheTokenBalance);
+        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('')
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]

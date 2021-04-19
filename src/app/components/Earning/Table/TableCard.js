@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, allowanceCheck, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance, setTokenBalances } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -82,7 +82,6 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalance,
   setTokenBalances,
   ethereum: { tokenBalance, balance, address, wallet, web3, notify },
   change,
@@ -178,7 +177,7 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(address);
+    setTokenBalances(address)
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
@@ -186,13 +185,11 @@ const TableCard = ({
       destroy('tranche');
       if (buyerCoinAddress === zeroAddress) {
         setIsEth(true);
-        await setTokenBalance(trancheTokenAddress, address);
         const withdrawTokenHasAllowance = await allowanceCheck(trancheTokenAddress, contractAddress, address);
         setDepositApproved(true);
         setWithdrawApproved(withdrawTokenHasAllowance);
         change('tranche', 'withdrawIsApproved', withdrawTokenHasAllowance);
       } else {
-        await setTokenBalance(trancheTokenAddress, address);
         const depositTokenHasAllowance = await allowanceCheck(buyerCoinAddress, contractAddress, address);
         setDepositApproved(depositTokenHasAllowance);
         change('tranche', 'depositIsApproved', depositTokenHasAllowance);
@@ -480,7 +477,8 @@ TableCard.propTypes = {
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired
+  setWalletAndWeb3: PropTypes.func.isRequired,
+  setTokenBalances: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -495,7 +493,6 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalance,
   setTokenBalances,
   checkServer,
   trancheCardToggle,

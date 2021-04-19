@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import store from '../store';
 import { ERC20Setup } from 'utils/contractConstructor';
-import { ERC20Tokens } from 'config/constants';
+import { ERC20Tokens, TrancheTokenAddresses } from 'config/constants';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -55,10 +55,11 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
+    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses)
     const state = store.getState();
     const { web3 } = state.ethereum;
     const batch = new web3.BatchRequest();
-    ERC20Tokens.map((tokenAddress) => {
+    Tokens.map((tokenAddress) => {
       let token = ERC20Setup(web3, tokenAddress);
       batch.add(token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
         if (err) {

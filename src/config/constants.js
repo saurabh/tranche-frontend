@@ -28,6 +28,7 @@ export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
 export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS;
+export const TrancheTokenAddresses = process.env.REACT_APP_TRANCHE_TOKEN_ADDRESS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
@@ -35,6 +36,7 @@ export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
+export const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
