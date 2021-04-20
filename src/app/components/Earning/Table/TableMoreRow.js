@@ -97,7 +97,7 @@ let TableMoreRow = ({
         isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       } else {
         change('withdrawAmount', trancheTokenBalance);
-        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+        isEqualTo(trancheTokenBalance, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
@@ -130,7 +130,7 @@ let TableMoreRow = ({
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>Base APY</h2>
-                <h2>{roundNumber(apy, 2)}%</h2>
+                <h2>{max(apy, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
