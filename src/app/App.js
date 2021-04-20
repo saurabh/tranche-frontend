@@ -69,10 +69,14 @@ const App = ({
       })
       .on('data', async (log) => {
         if (address) {
+          // console.log(log.blockNumber)
+          // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
+          // let balanceOf = await token.methods.balanceOf(address).call();
+          // console.log(balanceOf)
           for (let i = 1; i < 3; i++) {
             let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
             if (address === topicAddress) {
-              await timeout(10000);
+              await timeout(5000);
               setTokenBalances(address);
             }
           }
@@ -202,6 +206,7 @@ const App = ({
               skip,
               limit,
               filter: {
+                address: address ? address : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
