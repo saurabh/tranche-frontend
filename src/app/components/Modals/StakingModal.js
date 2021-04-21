@@ -95,10 +95,8 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   path,
   ethereum: { address },
-  summaryData: { slice, lp, lpList, stakableAssets, accruedRewards },
+  summaryData: { slice, lp, stakableAssets, accruedRewards },
   // State Values
-  summaryModal,
-  stakingList,
   noBalance,
   modalIsOpen,
   modalType,
@@ -135,10 +133,6 @@ const StakingModal = ({
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
   }, [modalIsOpen, type, tokenAddress, stakingAddress, address]);
-
-  const modalClose = () => {
-    closeModal();
-  };
 
   const stakingModal = () => {
     return (
@@ -181,7 +175,7 @@ const StakingModal = ({
           <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground}>
             <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}>
               <h2>{modalType ? 'Increase' : 'Decrease'} Stake</h2>
-              <button onClick={() => modalClose()}>
+              <button onClick={() => closeModal()}>
                 <img src={theme === "light" ? CloseModal : CloseModalWhite} alt='' />
               </button>
             </ModalHeader>
@@ -286,7 +280,7 @@ const StakingModal = ({
           <ModalUserActions claimModal ModalBackground={ModeThemes[theme].ModalBackground}>
             <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}> 
               <h2>Available Rewards</h2>
-              <button onClick={() => modalClose()}>
+              <button onClick={() => closeModal()}>
                 <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
               </button>
             </ModalHeader>
@@ -342,7 +336,7 @@ const StakingModal = ({
         contentLabel='Adjust'
       >
         <ModalHeader notFound ModalBackground={ModeThemes[theme].ModalBackground}>
-          <button onClick={() => modalClose()}>
+          <button onClick={() => closeModal()}>
             <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
           </button>
         </ModalHeader>

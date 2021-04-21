@@ -177,7 +177,7 @@ const SummaryCard = ({
                 )}
               </SummaryCardContainer>
             ) : (
-              <SummaryCardContainer loading>
+              <SummaryCardContainer loading='true'>
                 <div></div>
                 <div></div>
                 <div></div>
@@ -223,7 +223,7 @@ const SummaryCard = ({
                 </StakeCardBtn>
               </SummaryCardContainer>
             ) : (
-              <SummaryCardContainer loading>
+              <SummaryCardContainer loading='true'>
                 <div></div>
                 <div></div>
                 <div></div>

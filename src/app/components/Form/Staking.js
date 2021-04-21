@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber, isGreaterThan } from 'utils';
 import { fromWei } from 'services/contractMethods';
-import { selectUp, selectDown, TrancheImg, TrancheImgColored } from 'assets';
+import { TrancheImg, TrancheImgColored } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
   // ModalFormGrp,
@@ -16,7 +16,6 @@ import {
   ModalFormButton,
   NewLoanInputWrapper,
   NewLoanFormInput,
-  SelectChevron,
   LoanCustomSelect,
   SelectCurrencyView,
   ApproveBtnWrapper,
@@ -160,26 +159,7 @@ let StakingForm = ({
                     <img src={TrancheImgColored} alt='tranche' />
                     <h2>{isLPToken ? dropdownName : 'SLICE'}</h2>
                   </div>
-                  <SelectChevron>
-                    <img src={selectUp} alt='' />
-                    <img src={selectDown} alt='' />
-                  </SelectChevron>
                 </SelectCurrencyView>
-                {/* {isLPToken && LPSelect ? (
-                  <SelectCurrencyOptions>
-                    {lpList.map((lp, index) => {
-                      return (
-                        <SelectCurrencyOption key={index}>
-                          <button onClick={(e) => handleLPSelect(e, index, lp.address, lp.stakingAddress)}>
-                            <img src={lp.img} alt='' /> {lp.name.split(' ')[0]}
-                          </button>
-                        </SelectCurrencyOption>
-                      );
-                    })}
-                  </SelectCurrencyOptions>
-                ) : (
-                  ''
-                )} */}
               </LoanCustomSelect>
             </NewLoanFormInput>
             <h2>
