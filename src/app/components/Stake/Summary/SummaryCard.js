@@ -29,7 +29,7 @@ const SummaryCard = ({
   adjustStake,
   approveLoading,
   stakingApproveContract,
-  ethereum: { web3, address, tokenBalance, notify },
+  ethereum: { tokenBalance },
   summaryData: { totalAccruedRewards },
   hasAllowance,
   setHasAllowance,
@@ -107,7 +107,7 @@ const SummaryCard = ({
                 ? balance + ' SLICE-LP Available'
                 : epochTimeLeft + ' Until Next Distribution'}
             </SummaryCardDetails>
-        
+
             {type === 'reward' && (
               <SummaryClaimBtn claim>
                 <button onClick={() => openModal()}>Claim</button>

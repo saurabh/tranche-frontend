@@ -14,7 +14,7 @@ import i18n from '../../locale/i18n';
 
 const { stakingSummary } = apiUri;
 
-const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp, withdrawn }, summaryFetchSuccess }) => {
+const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp, withdrawn, lpList }, summaryFetchSuccess }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
@@ -69,6 +69,7 @@ const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp,
         <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
           <SummaryCard
             title={i18n.t('stake.summary.slice.title')}
+            tokenAddress={slice.address}
             value={slice.balance}
             path={currentPath}
             type={'slice'}
@@ -79,6 +80,7 @@ const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp,
           />
           <SummaryCard
             title={i18n.t('stake.summary.sliceLP.title')}
+            lpList={lpList}
             value={lp.balance}
             path={currentPath}
             type={'lp'}
