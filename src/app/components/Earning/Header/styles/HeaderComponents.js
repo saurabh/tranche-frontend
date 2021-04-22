@@ -103,7 +103,7 @@ const NavbarLinks = styled.div`
   // width: 350px;
   // padding: 17px 36px;
   border-radius: 159px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid ${props => props.color};
   ${({ tabs }) =>
   tabs &&
   `

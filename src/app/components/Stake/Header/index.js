@@ -45,12 +45,13 @@ function Header({updateDate, theme}) {
       }
        {
         !isDesktop &&
-        <NavbarLinks theme={ModeThemes[theme]}>
+        <NavbarLinks theme={ModeThemes[theme]} color={ModeThemes[theme].NavbarBorder}>
           <NavLink
             to={baseUrl + '/stake'}
             activeStyle={{
               opacity: 1,
-              background: 'rgba(175, 155, 255, 0.15)'
+              background: ModeThemes[theme].NavbarBackground,
+              boxShadow: ModeThemes[theme].NavbarShadow
             }}
             exact
           >
@@ -60,7 +61,8 @@ function Header({updateDate, theme}) {
             to={baseUrl + '/tranche'}
             activeStyle={{
               opacity: 1,
-              background: 'rgba(175, 155, 255, 0.15)'
+              background: ModeThemes[theme].NavbarBackground,
+              boxShadow: ModeThemes[theme].NavbarShadow
             }}
             exact
           >
@@ -70,7 +72,8 @@ function Header({updateDate, theme}) {
             to={baseUrl + '/'}
             activeStyle={{
               opacity: 1,
-              background: 'rgba(175, 155, 255, 0.15)'
+              background: ModeThemes[theme].NavbarBackground,
+              boxShadow: ModeThemes[theme].NavbarShadow
             }}
             className="navLinkDisabled"
             exact

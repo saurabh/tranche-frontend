@@ -99,7 +99,7 @@ const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
   border-radius: 159px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid ${props => props.color};
   ${({ tabs }) =>
   tabs &&
   `
