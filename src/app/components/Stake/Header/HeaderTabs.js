@@ -123,7 +123,7 @@ const HeaderTabs = ({ path, theme }) => {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://docs.tranche.finance/tranchefinance/"
+            href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"
           >
             {i18n.t('stake.tabs.howTo')}
           </a>
