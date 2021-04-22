@@ -21,7 +21,9 @@ import { changePath } from 'redux/actions/TogglePath';
 import TableHeader from './TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
-import { TableWrapper, TableContentCard,
+import {
+  TableWrapper,
+  TableContentCard,
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
@@ -72,34 +74,46 @@ const Table = ({
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
 
-  const stakingListing = useCallback(_.debounce(async () => {
-    if (sort) {
-      await fetchTableData({
-        sort,
-        skip,
-        limit,
-        filter: {
-          address: localAddress ? localAddress : undefined,
-          type: filter //ETH/JNT keep these in constant file
+  const stakingListing = useCallback(
+    _.debounce(
+      async () => {
+        if (sort) {
+          await fetchTableData(
+            {
+              sort,
+              skip,
+              limit,
+              filter: {
+                address: localAddress ? localAddress : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            stakingListUrl
+          );
+        } else {
+          await fetchTableData(
+            {
+              skip,
+              limit,
+              filter: {
+                address: localAddress ? localAddress : undefined,
+                type: filter //ETH/JNT keep these in constant file
+              }
+            },
+            stakingListUrl
+          );
         }
-      }, stakingListUrl);
-    } else {
-      await fetchTableData({
-        skip,
-        limit,
-        filter: {
-          address: localAddress ? localAddress : undefined,
-          type: filter //ETH/JNT keep these in constant file
-        }
-      }, stakingListUrl);
-    }
-    
-  }, 3000, {leading: true}), [fetchTableData, filter, skip, limit, sort, tradeType, localAddress]);
+      },
+      3000,
+      { leading: true }
+    ),
+    [fetchTableData, filter, skip, limit, sort, tradeType, localAddress]
+  );
 
   useEffect(() => {
     changePath(currentPath);
     changeOwnAllFilter('all');
-    ownAllToggle("allTranches");
+    ownAllToggle('allTranches');
   }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
@@ -111,7 +125,6 @@ const Table = ({
     paginationCurrent(p);
   };
 
-
   const handleSorting = () => {
     stakingListing();
   };
@@ -119,108 +132,81 @@ const Table = ({
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
-      <TableWrapper mobile>
+        <TableWrapper mobile>
           <div className='table-content'>
-              {isLoading ? (
-                <div>
-                  <TableContentCard>
-                    <ReactLoading
-                      className='TableMoreLoading'
-                      type={'bubbles'}
-                      color={ModeThemes[theme].TableHead}
-                    />
-                  </TableContentCard>
-                </div>
-              ) 
-                
-              :
-              
-              (
-                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
-              )}
-            </div>
+            {isLoading ? (
+              <div>
+                <TableContentCard>
+                  <ReactLoading className='TableMoreLoading' type={'bubbles'} color={ModeThemes[theme].TableHead} />
+                </TableContentCard>
+              </div>
+            ) : (
+              data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
+            )}
+          </div>
         </TableWrapper>
         <TableWrapper desktop>
           <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead}/>
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead} />
             <div className='table-content'>
-                {
-                    isLoading ? <div>
-                      {
-                      [...Array(5)].map((i, idx) =>
-
-                      <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
-                        <div className="loadingCard">
-                          <div className="loadingFirstCol">
-                            <div className="loadingFirslColContent">
-                              <div className="loadingAvatar loadingContent "></div>
-                              <div className="loadingText loadingContentWrapper loadingContent">
-                              </div>
-                            </div>
-                          </div>
-                          <div className="loadingSecondCol">
-                            <div className="loadingContentCol loadingContentWrapper loadingContent"></div>
-                          </div>
-                          <div className="loadingFifthCol">
-                            <div className="loadingFifthColContent loadingContentWrapper loadingContent"></div>
-                          </div>
-                          <div className="loadingSixthCol">
-                            <div className="loadingSixthColContent loadingContentWrapper loadingContent"></div>
+              {isLoading ? (
+                <div>
+                  {[...Array(5)].map((i, idx) => (
+                    <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
+                      <div className='loadingCard'>
+                        <div className='loadingFirstCol'>
+                          <div className='loadingFirslColContent'>
+                            <div className='loadingAvatar loadingContent '></div>
+                            <div className='loadingText loadingContentWrapper loadingContent'></div>
                           </div>
                         </div>
-                      </TableContentCard>)
-                      }
-                      
-                  
-                      </div> : (!isLoading && tradeType === 'sell' && data.stakingList.length === 0) ?
-                  // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
+                        <div className='loadingSecondCol'>
+                          <div className='loadingContentCol loadingContentWrapper loadingContent'></div>
+                        </div>
+                        <div className='loadingFifthCol'>
+                          <div className='loadingFifthColContent loadingContentWrapper loadingContent'></div>
+                        </div>
+                        <div className='loadingSixthCol'>
+                          <div className='loadingSixthColContent loadingContentWrapper loadingContent'></div>
+                        </div>
+                      </div>
+                    </TableContentCard>
+                  ))}
+                </div>
+              ) : !isLoading && tradeType === 'sell' && data.stakingList.length === 0 ? (
+                // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
 
-                          <TableContentCard pointer={false}>
+                <TableContentCard pointer={false}>
+                  <CallToActionTradeWrapper>
+                    <img src={EmptyBox} alt='EmptyBox' />
 
-                            <CallToActionTradeWrapper>
-                              <img src={EmptyBox} alt="EmptyBox"/>
-                              
-                              <CallToActionTradetext>
-                                <h2>You don’t have any loans, assets or instruments to sell.</h2>
-                                <h2>Buy a tranche or provide a loan to get started!</h2>
-                              </CallToActionTradetext>
+                    <CallToActionTradetext>
+                      <h2>You don’t have any loans, assets or instruments to sell.</h2>
+                      <h2>Buy a tranche or provide a loan to get started!</h2>
+                    </CallToActionTradetext>
 
-                              <CallToActionTradeBtns>
-
-                                <CallToActionTradeBtn type="loans">BROWSE <span>LOANS</span></CallToActionTradeBtn>
-                                <CallToActionTradeBtn>BROWSE <span>TRANCHES</span></CallToActionTradeBtn>
-
-                              </CallToActionTradeBtns>
-
-                            </CallToActionTradeWrapper>
-
-                          </TableContentCard>
-                  
-                  : data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
-                  }
+                    <CallToActionTradeBtns>
+                      <CallToActionTradeBtn type='loans'>
+                        BROWSE <span>LOANS</span>
+                      </CallToActionTradeBtn>
+                      <CallToActionTradeBtn>
+                        BROWSE <span>TRANCHES</span>
+                      </CallToActionTradeBtn>
+                    </CallToActionTradeBtns>
+                  </CallToActionTradeWrapper>
+                </TableContentCard>
+              ) : (
+                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
+              )}
             </div>
           </div>
         </TableWrapper>
 
         {data && data.count > limit ? (
           <div className='paginationWrapper'>
-            <Pagination
-              total={data && data.count}
-              limit={limit}
-              pageCount={pageCount}
-              currentPage={parseInt(current, 10)}
-            >
-              {({
-                pages,
-                currentPage,
-                hasNextPage,
-                hasPreviousPage,
-                previousPage,
-                nextPage,
-                totalPages,
-                getPageItemProps
-              }) => (
+            <Pagination total={data && data.count} limit={limit} pageCount={pageCount} currentPage={parseInt(current, 10)}>
+              {({ pages, currentPage, hasNextPage, hasPreviousPage, previousPage, nextPage, totalPages, getPageItemProps }) => (
                 <div>
                   <a
                     {...getPageItemProps({

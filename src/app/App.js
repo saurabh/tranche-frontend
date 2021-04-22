@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components';
 import Banner from 'app/components/Banner/Banner';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 
-import { setCurrentBlock, setTokenBalances } from 'redux/actions/ethereum';
+import { setTokenBalances, checkTrancheAllowances } from 'redux/actions/ethereum';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -22,7 +22,8 @@ import {
   YieldAddresses,
   JCompoundAddress,
   ModeThemes,
-  Tokens
+  ERC20Tokens,
+  TrancheTokenAddresses
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -40,8 +41,8 @@ const baseRouteUrl = '/:locale(zh|kr|en)?';
 
 const App = ({
   fetchTableData,
-  setCurrentBlock,
   setTokenBalances,
+  checkTrancheAllowances,
   summaryFetchSuccess,
   setSliceStats,
   setTvl,
@@ -55,24 +56,56 @@ const App = ({
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
+    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
-    // const currentBlock = web3.eth.subscribe('newBlockHeaders', (error, blockHeader) => {
-    //   if (!error) {
-    //     setCurrentBlock(blockHeader.number);
-    //     return;
-    //   }
-    //   console.error(error);
-    // });
+    address && setTokenBalances(address);
+    const ERC20Balances = web3.eth
+      .subscribe('logs', {
+        address: Tokens,
+        topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
+      })
+      .on('data', async (log) => {
+        if (address) {
+          // console.log(log.blockNumber)
+          // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
+          // let balanceOf = await token.methods.balanceOf(address).call();
+          // console.log(balanceOf)
+          for (let i = 1; i < 3; i++) {
+            let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
+            if (address === topicAddress) {
+              await timeout(5000);
+              setTokenBalances(address);
+            }
+          }
+        }
+      });
+
+    return () => {
+      ERC20Balances.unsubscribe((error) => {
+        if (error) console.error(error);
+      });
+    }
+  }, [address, setTokenBalances])
+
+  useEffect(() => {
+    address && checkTrancheAllowances(address);
+  }, [address, checkTrancheAllowances]);
+
+  useEffect(() => {
+    const timeout = (ms) => {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    };
+
     const pairContract = web3.eth
       .subscribe('logs', {
         address: LoanContractAddress
       })
       .on('data', async () => {
         if (path === 'borrow' || path === 'lend') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -93,7 +126,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'borrow' || path === 'lend') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -114,7 +147,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'tranche') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -134,7 +167,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'tranche') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
@@ -167,12 +200,13 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'stake') {
-          await timeout(4000);
+          await timeout(5000);
           await fetchTableData(
             {
               skip,
               limit,
               filter: {
+                address: address ? address : undefined,
                 type: filter //ETH/JNT keep these in constant file
               }
             },
@@ -189,7 +223,7 @@ const App = ({
       })
       .on('data', async () => {
         if (path === 'stake') {
-          await timeout(4000);
+          await timeout(5000);
           const res = await axios(`${serverUrl + stakingSummary + address}`);
           const { result } = res.data;
           summaryFetchSuccess(result);
@@ -226,7 +260,6 @@ const App = ({
     fetchTableData,
     limit,
     filter,
-    setCurrentBlock,
     setTokenBalances,
     summaryFetchSuccess,
     setSliceStats,
@@ -235,33 +268,6 @@ const App = ({
     skip,
     trancheCardToggle
   ]);
-
-  useEffect(() => {
-    const timeout = (ms) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    };
-
-    address && setTokenBalances(address);
-    const ERC20Balances = web3.eth
-      .subscribe('logs', {
-        address: Tokens,
-        topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
-      })
-      .on('data', async (log) => {
-        if (address) {
-          for (let i = 1; i < 3; i++) {
-            let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
-            if (address === topicAddress) {
-              await timeout(7500);
-              setTokenBalances(address);
-            }
-          }
-        }
-      });
-    ERC20Balances.unsubscribe((error) => {
-      if (error) console.error(error);
-    });
-  }, [address, setTokenBalances]);
 
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
@@ -294,10 +300,11 @@ App.propTypes = {
   data: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   fetchTableData: PropTypes.func.isRequired,
-  setCurrentBlock: PropTypes.func.isRequired,
   summaryFetchSuccess: PropTypes.func.isRequired,
   setSliceStats: PropTypes.func.isRequired,
-  setTvl: PropTypes.func.isRequired
+  setTvl: PropTypes.func.isRequired.bind,
+  setTokenBalances: PropTypes.func.isRequired,
+  checkTrancheAllowances: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -312,8 +319,8 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   fetchTableData,
-  setCurrentBlock,
   setTokenBalances,
+  checkTrancheAllowances,
   summaryFetchSuccess,
   setSliceStats,
   trancheCardToggle,

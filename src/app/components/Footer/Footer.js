@@ -53,6 +53,7 @@ function Footer({ changeTheme, theme }) {
                   name='ThemeToggle'
                   id='ThemeToggle'
                   checked={theme === "dark"}
+                  readOnly
                 />
                 <label htmlFor='ThemeToggle' onClick={() => changeTheme()}></label>
               </CheckboxContent>

@@ -1,16 +1,18 @@
 import Web3 from 'web3';
 import store from '../store';
-import { ERC20Setup } from 'utils/contractConstructor';
-import { ERC20Tokens, TrancheTokenAddresses } from 'config/constants';
+import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
+import { ERC20Tokens, TrancheTokenAddresses, JCompoundAddress, TrancheBuyerCoinAddresses } from 'config/constants';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
+  // SET_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK,
-  SET_TRANSACTION_LOADING
+  SET_TRANSACTION_LOADING,
+  SET_TRANCHE_ALLOWANCE
 } from './constants';
 
 export const setAddress = (address) => (dispatch) => {
@@ -55,24 +57,90 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
-    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses)
+    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
     const state = store.getState();
     const { web3 } = state.ethereum;
     const batch = new web3.BatchRequest();
+    // const tokenBalance = {};
     Tokens.map((tokenAddress) => {
       let token = ERC20Setup(web3, tokenAddress);
-      batch.add(token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
-        if (err) {
-          console.error(err);
-        } else {
-          dispatch({
-            type: SET_TOKEN_BALANCE,
-            payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
-          });
-        }
-      }))
+      batch.add(
+        token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+          if (err) {
+            console.error(err);
+          } else {
+            // if (tokenAddress === '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b') {
+            //   console.log(res);
+            // }
+            dispatch({
+              type: SET_TOKEN_BALANCE,
+              payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
+            });
+          }
+        })
+      );
       return batch;
-    })
+    });
+    batch.execute();
+    // dispatch({
+    //   type: SET_TOKEN_BALANCES,
+    //   payload: tokenBalance
+    // });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const toggleApproval = (tokenAddress, bool) => async (dispatch) => {
+  dispatch({
+    type: SET_TRANCHE_ALLOWANCE,
+    payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
+  });
+};
+
+export const checkTrancheAllowances = (address) => async (dispatch) => {
+  try {
+    const Tokens = TrancheTokenAddresses.concat(TrancheBuyerCoinAddresses);
+    const state = store.getState();
+    const { web3 } = state.ethereum;
+    const batch = new web3.BatchRequest();
+    let tokenBalance = {};
+    Tokens.map((tokenAddress) => {
+      let token = ERC20Setup(web3, tokenAddress);
+      batch.add(
+        token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+          if (err) {
+            console.error(err);
+          } else {
+            tokenBalance[tokenAddress] = res;
+          }
+        })
+      );
+      return batch;
+    });
+    Tokens.map((tokenAddress) => {
+      let token = ERC20Setup(web3, tokenAddress);
+      batch.add(
+        token.methods.allowance(address, JCompoundAddress).call.request({ from: address }, (err, res) => {
+          if (err) {
+            console.error(err);
+          } else {
+            if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {
+              dispatch({
+                type: SET_TRANCHE_ALLOWANCE,
+                payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: true }
+              });
+            } else {
+              dispatch({
+                type: SET_TRANCHE_ALLOWANCE,
+                payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: false }
+              });
+            }
+          }
+        })
+      );
+      return batch;
+    });
     batch.execute();
   } catch (error) {
     console.error(error);

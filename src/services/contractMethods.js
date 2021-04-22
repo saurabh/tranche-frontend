@@ -236,7 +236,7 @@ export const sendValueToTranche = async (trancheId) => {
   }
 };
 
-export const allowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
+export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
   try {
     const state = store.getState();
     const { web3, tokenBalance } = state.ethereum;

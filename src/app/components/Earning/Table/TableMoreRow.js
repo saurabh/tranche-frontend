@@ -24,7 +24,7 @@ import {
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
-import { ModeThemes } from 'config';
+import { ModeThemes, zeroAddress } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -40,23 +40,26 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 let TableMoreRow = ({
   name,
   type,
-  isEth,
   apy,
   cryptoType,
   dividendType,
   buyerTokenBalance,
   trancheToken,
   trancheRate,
+  buyerCoinAddress,
   trancheTokenAddress,
   isApproveLoading,
   isDepositApproved,
   isWithdrawApproved,
+  setDepositApproved,
+  setWithdrawApproved,
   approveContract,
   buySellTrancheTokens,
-  ethereum: { tokenBalance, balance, txOngoing },
+  ethereum: { tokenBalance, trancheAllowance, txOngoing },
   change,
   theme
 }) => {
+  const [isEth, setIsEth] = useState(false);
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
@@ -80,15 +83,28 @@ let TableMoreRow = ({
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
+
+  useEffect(() => {
+    if (buyerCoinAddress === zeroAddress) {
+      setIsEth(true);
+      setDepositApproved(true);
+    }
+    setDepositApproved(trancheAllowance[buyerCoinAddress]);
+    setWithdrawApproved(trancheAllowance[trancheTokenAddress]);
+    change('depositIsApproved', trancheAllowance[buyerCoinAddress]);
+    change('withdrawIsApproved', trancheAllowance[trancheTokenAddress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
+
   const setMaxAmount = useCallback(
     (e, type) => {
       // e.preventDefault();
       if (type) {
         change('depositAmount', buyerTokenBalance);
-        isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('')
+        isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       } else {
         change('withdrawAmount', trancheTokenBalance);
-        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('')
+        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
@@ -98,7 +114,9 @@ let TableMoreRow = ({
     if (type) {
       isGreaterThan(newValue, buyerTokenBalance) || isEqualTo(newValue, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
     } else {
-      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
+      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0)
+        ? setWithdrawBalanceCheck('InputStylingError')
+        : setWithdrawBalanceCheck('');
     }
   };
 
@@ -159,14 +177,13 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading}
+              loading={isApproveLoading ? 'true' : 'false'}
             >
-              {
-               isApproveLoading && 
+              {isApproveLoading && (
                 <div>
                 <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                 </div>
-              }
+              )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>deposit</h2>
                 <CheckboxWrapper hidden={isEth}>
@@ -189,7 +206,7 @@ let TableMoreRow = ({
               </TableMoreTitleWrapper>
 
               <h2>
-                balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+                balance: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
                 <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
@@ -217,14 +234,13 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading}
+              loading={isApproveLoading ? 'true' : 'false'}
             >
-              {
-               isApproveLoading && 
+              {isApproveLoading && (
                 <div>
-                <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                 </div>
-              }
+              )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>withdraw</h2>
                 <CheckboxWrapper>
@@ -246,7 +262,7 @@ let TableMoreRow = ({
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
               <h2>
-                balance: {roundNumber(trancheTokenBalance)} {trancheToken}
+                balance: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
                 <FormContent
@@ -282,20 +298,23 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading}
+                loading={isApproveLoading ? 'true' : 'false'}
               >
-                {
-                  isApproveLoading && 
+                {isApproveLoading && (
                   <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                   </div>
-                }
+                )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       Deposit
                     </MobileMoreFormBtn>
-                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
+                    <MobileMoreFormBtn
+                      current={formType === 'withdraw'}
+                      onClick={() => setFormType('withdraw')}
+                      color={ModeThemes[theme].dropDownText}
+                    >
                       Withdraw
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
@@ -319,7 +338,7 @@ let TableMoreRow = ({
                 </TableMoreTitleWrapper>
 
                 <h2>
-                  balance: {roundNumber(buyerTokenBalance)} {cryptoType}
+                  balance: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
                 </h2>
                 <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
                   <FormContent
@@ -353,20 +372,23 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading}
+                loading={isApproveLoading ? 'true' : 'false'}
               >
-                {
-                  isApproveLoading && 
+                {isApproveLoading && (
                   <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)'/>
+                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
                   </div>
-                }
+                )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       Deposit
                     </MobileMoreFormBtn>
-                    <MobileMoreFormBtn current={formType === 'withdraw'} onClick={() => setFormType('withdraw')} color={ModeThemes[theme].dropDownText}>
+                    <MobileMoreFormBtn
+                      current={formType === 'withdraw'}
+                      onClick={() => setFormType('withdraw')}
+                      color={ModeThemes[theme].dropDownText}
+                    >
                       Withdraw
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
@@ -389,7 +411,7 @@ let TableMoreRow = ({
                   </CheckboxWrapper>
                 </TableMoreTitleWrapper>
                 <h2>
-                  balance: {roundNumber(trancheTokenBalance)} {trancheToken}
+                  balance: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
                 </h2>
                 <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
                   <FormContent
