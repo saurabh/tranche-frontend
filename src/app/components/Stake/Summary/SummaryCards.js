@@ -103,20 +103,22 @@ const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp,
           />
         </SummaryCardsWrapper>
       ) : (
-        <SummaryCard
-          title={i18n.t('stake.summary.sliceRewards.title')}
-          value={withdrawn.balance}
-          isLoading={false}
-          path={currentPath}
-          type={'reward'}
-          details={''}
-          openModal={(bool = null) => openModal(bool)}
-          closeModal={closeModal}
-          modalIsOpen={ModalIsOpen}
-          modalType={modalType}
-          summaryModal={summaryModal}
-          color='#369987'
-        />
+        <div className="content-container container">
+          <SummaryCard
+            title={i18n.t('stake.summary.sliceRewards.title')}
+            value={withdrawn.balance}
+            isLoading={false}
+            path={currentPath}
+            type={'reward'}
+            details={''}
+            openModal={(bool = null) => openModal(bool)}
+            closeModal={closeModal}
+            modalIsOpen={ModalIsOpen}
+            modalType={modalType}
+            summaryModal={summaryModal}
+            color='#369987'
+          />
+        </div>
       )}
     </div>
   );
