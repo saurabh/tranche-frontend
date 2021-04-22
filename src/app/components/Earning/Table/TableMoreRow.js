@@ -165,7 +165,7 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading ? 'true' : 'false'}
+              loading={isApproveLoading}
             >
               {isApproveLoading && (
                 <div>
@@ -224,7 +224,7 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading ? 'true' : 'false'}
+              loading={isApproveLoading}
             >
               {isApproveLoading && (
                 <div>
@@ -290,7 +290,7 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading ? 'true' : 'false'}
+                loading={isApproveLoading}
               >
                 {isApproveLoading && (
                   <div>
@@ -366,7 +366,7 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading ? 'true' : 'false'}
+                loading={isApproveLoading}
               >
                 {isApproveLoading && (
                   <div>
