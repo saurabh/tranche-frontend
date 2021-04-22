@@ -203,10 +203,7 @@ const TableHeadTitle = styled.div`
       }
     `}
     ${({ platform }) => platform && `
-      width: 10%;
-    `}
-    ${({ instrument }) => instrument && `
-      width: 21%;
+      width: 31%;
     `}
     ${({ apy }) => apy && `
       width: 14%;
@@ -286,6 +283,13 @@ const TableHeadTitle = styled.div`
         width: 100%;
       }
     `}
+    ${({ tranche }) => tranche && `
+      & > h2{
+        text-decoration: underline dashed;
+
+      }
+    `}
+
 `;
 
 const SortChevronWrapper = styled.div`
@@ -866,10 +870,7 @@ const TableFirstCol = styled.div`
   align-items: center;
   width: 26%;
   ${({ platform }) => platform && `
-    width: 10% !important;
-  `}
-  ${({ instrument }) => instrument && `
-    width: 21% !important;
+    width: 31% !important;
   `}
 `
 const TableFirstColWrapper = styled.div`
@@ -893,10 +894,11 @@ const FirstColContent = styled.div`
   margin-left: 12px;
 
   ${({ instrument }) => instrument && `
-    margin-left: 0;
+    margin-left: 25px;
   `}
   @media (max-width: 992px){
     width: 100%;
+    margin-left: 0px;
   }
   
 `
@@ -1325,12 +1327,12 @@ const TableMoreLeftSectionContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  h2{
+  & > h2{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     margin: 5px auto;
   }
-  h2:first-child{
+  & > h2:nth-of-type(1){
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 0.05em;
@@ -1340,7 +1342,7 @@ const TableMoreLeftSectionContent = styled.div`
       font-size: 10px;
     }
   }
-  h2:last-child{
+  & > h2:nth-of-type(2){
     font-weight: bold;
     font-size: 17px;
     text-transform: uppercase;
@@ -1418,7 +1420,7 @@ const TableMoreRightSection = styled.div`
       }
     }
   `}
-  ${({ loading }) => loading && `
+  ${({ loading }) => loading === 'true' && `
     opacity: 0.2;
     pointer-events: none;
     position: relative;
@@ -1494,6 +1496,24 @@ const FormContent = styled.div`
   }
   input[type=number]{
     -moz-appearance: textfield;
+  }
+  h2{
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color} !important;
+    margin: 0;
   }
 `
 const CheckboxWrapper = styled.div`
@@ -1705,8 +1725,125 @@ const MobileMoreFormBtn = styled.button`
     opacity: 1 !important;
   `}
 `
+const TooltipWrapper = styled.div`
+  position: absolute !important;
+  bottom: calc(100% + 13px);
+  transition: 300ms;
+  ${({ row }) => row && `
+    bottom: calc(95%);
+  `}
+  // ${({ tooltip }) => tooltip && `
+  //   z-index: 1;
+  // `}
+  ${({ platform }) => platform && `
+    left: calc(100% - 135px);
+  `}
+  ${({ apy }) => apy && `
+    left: calc(100% - 40px);
+  `}
+  ${({ totalValue }) => totalValue && `
+    left: calc(100% - 15px);
+  `}
+  ${({ deposit }) => deposit && `
+    left: calc(100% - 25px);
+  `}
+  ${({ available }) => available && `
+    left: calc(100% + 5px);
+  `}
+  ${({ summary }) => summary && `
+    transform: translateX(25px);
+  `}
+  div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 240px;
+    width: 100%;
+    max-height: 100px;    
+    padding: 12px 10px;    
+    background: ${props => props.color};
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    top: 50%;
+    left: -7px;
+    transition: 300ms;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    ${({ tooltip }) => tooltip && `
+      opacity: 1;
+      visibility: visible;
+    `}
+    
+    
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #FFFFFF;
+      text-align: left !important;
+    }
+    :after{
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: -14px !important;
+      transform: rotate(-90deg);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 14px 10px 12px;
+      border-color: transparent transparent ${props => props.color} transparent;
+    }
+    ${({ platform }) => platform && `
+      transform: translateY(110%);
+    `}
+    ${({ apy }) => apy && `
+      transform: translateY(110%);
+    `}
+    ${({ deposit }) => deposit && `
+      transform: translateY(110%);
+    `}
+    ${({ totalValue }) => totalValue && `
+      transform: translateY(110%);
+    `}
+    ${({ available }) => available && `
+      transform: translateY(110%);
+    `}
+    ${({ summary }) => summary && `
+      transform: translateY(-15%);
+      h2{
+        color: #FFFFFF;
+      }
+      :after{
+        position: absolute;
+        top: unset;
+        bottom: -8px !important;
+        right: 10px !important;
+        left: unset !important;
+        transform: rotate(180deg);
+      }
+    `}
+    ${({ row }) => row && `
+      padding: 7px 5px;
+      bottom: calc(95%);
+      h2{
+        text-align: center !important;
+      }
+      :after{
+        top: unset;
+        bottom: -8px !important;
+        right: unset !important;
+        left: 50% !important;
+        transform: rotate(180deg) translateX(50%);
+      }
+    `}
+    
+  }
+`
 
-  
+
 
 export {
   TableWrapper,
@@ -1790,5 +1927,6 @@ export {
   TableMoreLeftBottomSection,
   TableSeventhCol,
   StakeBtn,
-  StakeBtns
+  StakeBtns,
+  TooltipWrapper
 };

@@ -18,7 +18,8 @@ import {
   TableMoreLeftSection,
   TableMoreLeftSectionContent,
   TableMoreLeftTopSection,
-  TableMoreLeftBottomSection
+  TableMoreLeftBottomSection,
+  TooltipWrapper
 } from '../../Stake/Table/styles/TableComponents';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
@@ -63,6 +64,8 @@ let TableMoreRow = ({
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  const [TooltipToggle, setTooltipToggle] = useState("");
+
   let trancheTokenBalance =
     cryptoType === 'USDC'
       ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
@@ -71,6 +74,10 @@ let TableMoreRow = ({
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
   };
+
+  const tooltipToggle = (val) => {
+    setTooltipToggle(val);
+  }
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
@@ -114,16 +121,21 @@ let TableMoreRow = ({
   };
 
   return (
-    <TableMoreRowWrapper className='table-more-row'>
+    <TableMoreRowWrapper>
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>PRICE</h2>
+                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>PRICE</h2>
                 <h2>
                   {roundNumber(trancheRate)} {cryptoType}
                 </h2>
+                <TooltipWrapper tooltip={TooltipToggle === "PRICE"} row color={ModeThemes[theme].Tooltip}>
+                  <div>
+                      <h2>The value of each instrument token.</h2>
+                  </div>
+                </TooltipWrapper>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -161,7 +173,6 @@ let TableMoreRow = ({
         {isDesktop ? (
           <TableMoreRowContentRight>
             <TableMoreRightSection
-              disabled={!isDepositApproved || isApproveLoading || txOngoing}
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
@@ -169,7 +180,7 @@ let TableMoreRow = ({
             >
               {isApproveLoading && (
                 <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -208,9 +219,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <button type='button' onClick={(e) => setMaxAmount(e, true)}>
-                    max
-                  </button>
+                  <h2 onClick={(e) => setMaxAmount(e, true)}>max</h2>
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -220,7 +229,6 @@ let TableMoreRow = ({
             </TableMoreRightSection>
             <TableMoreRightSection
               withdraw
-              disabled={!isWithdrawApproved || isApproveLoading || txOngoing}
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
@@ -271,9 +279,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <button type='button' onClick={(e) => setMaxAmount(e, false)}>
-                    max
-                  </button>
+                  <h2 onClick={(e) => setMaxAmount(e, false)}>max</h2>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -286,7 +292,6 @@ let TableMoreRow = ({
           <TableMoreRowContentRight>
             {formType === 'deposit' ? (
               <TableMoreRightSection
-                disabled={!isDepositApproved || isApproveLoading || txOngoing}
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
@@ -349,9 +354,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <button type='button' onClick={(e) => setMaxAmount(e, true)}>
-                      max
-                    </button>
+                    <h2 onClick={(e) => setMaxAmount(e, true)}>max</h2>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
@@ -362,7 +365,6 @@ let TableMoreRow = ({
             ) : (
               <TableMoreRightSection
                 withdraw
-                disabled={!isWithdrawApproved || isApproveLoading || txOngoing}
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
@@ -424,9 +426,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <button type='button' onClick={(e) => setMaxAmount(e, false)}>
-                      max
-                    </button>
+                    <h2 onClick={(e) => setMaxAmount(e, false)}>max</h2>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />

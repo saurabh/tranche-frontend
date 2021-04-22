@@ -24,6 +24,9 @@ import {
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
 import i18n from '../../locale/i18n';
+import { TooltipWrapper } from 'app/components/Stake/Table/styles/TableComponents';
+import { InfoWhite } from 'assets';
+import { ModeThemes } from 'config';
 
 const SummaryCard = ({
   title,
@@ -42,12 +45,14 @@ const SummaryCard = ({
   hasAllowance,
   setHasAllowance,
   color,
-  stakeCard
+  stakeCard,
+  theme
 }) => {
   const [isLPToken, setLPToken] = useState(false);
   const [balance, setBalance] = useState(0);
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
+  const [TooltipToggle, setTooltipToggle] = useState("");
   const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
     setBalance(roundNumber(balance));
@@ -131,6 +136,9 @@ const SummaryCard = ({
       console.error(error);
     }
   };
+  const tooltipToggle = (val) => {
+    setTooltipToggle(val);
+  }
 
   const adjustStake = (e, stakingAddress, tokenAddress) => {
     try {
@@ -150,7 +158,24 @@ const SummaryCard = ({
           <SummaryCardWrapper color={color}>
             {value || value === 0 ? (
               <SummaryCardContainer>
-                <SummaryCardTitle>{title}</SummaryCardTitle>
+                <SummaryCardTitle>
+                  {title}
+                  {
+                    title === i18n.t('tranche.summary.valueLocked.title') &&
+                    <div>
+                      <img src={InfoWhite} alt="info" onMouseOver={() => tooltipToggle("valueLocked")} onMouseLeave={() => tooltipToggle("")}/>
+                      <TooltipWrapper tooltip={TooltipToggle === "valueLocked"} summary color={ModeThemes[theme].Tooltip}> 
+                        <div>
+                            <h2>
+                              The total amount of staked or deposited assets in USD on the Tranche Protocol.
+                            </h2>
+                        </div>
+                      </TooltipWrapper>
+                    </div>
+                    
+                  }
+                  
+                </SummaryCardTitle>
   
                 <SummaryCardValue>
                   {'$' + roundNumber(value)}
@@ -241,7 +266,8 @@ SummaryCard.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps, {})(SummaryCard);

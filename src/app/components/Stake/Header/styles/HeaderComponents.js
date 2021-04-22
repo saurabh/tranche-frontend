@@ -98,7 +98,8 @@ const NavbarContainer = styled.div`
 const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 336px;
+  border-radius: 159px;
+  border: 1px solid ${props => props.color};
   ${({ tabs }) =>
   tabs &&
   `
@@ -114,14 +115,19 @@ const NavbarLinks = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.theme.navlinkTab};
+    padding: 17px 37px;
+    border-radius: 159px;
     opacity: 0.5;
     :hover{
       opacity: 0.6;
     }
   }
   @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
+    margin: 12px 0;
+    a{
+      font-size: 12px;
+      padding: 9px 25px;
+    }
   }
 `;
 const HeaderTabsWrapper = styled.div`

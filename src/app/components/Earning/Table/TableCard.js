@@ -18,7 +18,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { etherScanUrl, statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
-import { Lock, LinkArrow, Up, Down, ChevronTable } from 'assets';
+import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
 import {
@@ -93,7 +93,7 @@ const TableCard = ({
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
     cryptoType === 'ETH'
@@ -214,10 +214,6 @@ const TableCard = ({
                   <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
                 </span>
               </TableCardImg>
-            </TableFirstColWrapper>
-          </TableFirstCol>
-          <TableFirstCol className='table-col' instrument>
-            <TableFirstColWrapper>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
                   <h2>{name && name}</h2>
@@ -369,7 +365,7 @@ const TableCard = ({
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText} tranche>
                     <h2>{name && name}</h2>
-                    <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
+                    <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
                       <button>
                         <img src={ChevronTable} alt='ChevronTable' />
                       </button>

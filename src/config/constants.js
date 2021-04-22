@@ -341,7 +341,12 @@ export const ModeThemes = {
     SelectedStaking: "rgba(68, 65, 207, 0.05)",
     SelectedStakingText: "#39295A",
     SelectedStakingLink: "#776E8B",
-    StakingInputText: "#838186"
+    StakingInputText: "#838186",
+    loadingSpinner: "rgba(124,133,155,0.8)",
+    Tooltip: "#2F2F2F",
+    NavbarBorder: "#E9E9FC",
+    NavbarBackground: "#FFFFFF",
+    NavbarShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)"
   },
   dark: {
     body: '#100F36',
@@ -374,7 +379,12 @@ export const ModeThemes = {
     SelectedStaking: "rgba(151, 149, 255, 0.15)",
     SelectedStakingText: "#FFFFFF",
     SelectedStakingLink: "#CEC6FF",
-    StakingInputText: "rbga{255, 255, 255, 0.5}"
+    StakingInputText: "rbga{255, 255, 255, 0.5}",
+    loadingSpinner: "rgba(255,255,255,0.3)",
+    Tooltip: "#383765",
+    NavbarBorder: "rgba(255, 255, 255, 0.1)",
+    NavbarBackground: "rgba(175, 155, 255, 0.15)",
+    NavbarShadow: "none"
 
   }
 };

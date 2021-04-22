@@ -62,6 +62,13 @@ const SummaryCardTitle = styled.h2`
     font-weight: normal;
     font-size: 14px;
     color: #FFFFFF;
+    div{
+        img{
+            position: absolute;
+            right: -9px;
+            top: -9px;
+        }
+    }
 `;
 const SummaryCardValue = styled.h2`
     font-family: 'Roboto', sans-serif;

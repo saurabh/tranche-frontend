@@ -59,6 +59,7 @@ html{
   border-bottom: 1px solid #EFEFEF;
   opacity: 1;
   height: auto;
+  overflow: visible;
 }
 .remaining-title-content{
   text-align: center;

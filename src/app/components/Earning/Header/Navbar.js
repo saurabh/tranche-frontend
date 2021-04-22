@@ -150,11 +150,13 @@ function Navbar({ path, theme }) {
         </NavBarMobile>
         
         <div className='navbar-right'>
-          <NavbarLinks theme={ModeThemes[theme]}>
+          <NavbarLinks theme={ModeThemes[theme]} color={ModeThemes[theme].NavbarBorder}>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
-                opacity: 1
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
               }}
               exact
             >
@@ -163,7 +165,9 @@ function Navbar({ path, theme }) {
             <NavLink
               to={baseUrl + '/tranche'}
               activeStyle={{
-                opacity: 1
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
               }}
               exact
             >
@@ -172,7 +176,9 @@ function Navbar({ path, theme }) {
             <NavLink
               to={baseUrl + '/'}
               activeStyle={{
-                opacity: 1
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
               }}
               className="navLinkDisabled"
               exact
