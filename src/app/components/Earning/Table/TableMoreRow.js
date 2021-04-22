@@ -173,7 +173,6 @@ let TableMoreRow = ({
         {isDesktop ? (
           <TableMoreRowContentRight>
             <TableMoreRightSection
-              disabled={!isDepositApproved || isApproveLoading || txOngoing}
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
@@ -230,7 +229,6 @@ let TableMoreRow = ({
             </TableMoreRightSection>
             <TableMoreRightSection
               withdraw
-              disabled={!isWithdrawApproved || isApproveLoading || txOngoing}
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
@@ -294,7 +292,6 @@ let TableMoreRow = ({
           <TableMoreRowContentRight>
             {formType === 'deposit' ? (
               <TableMoreRightSection
-                disabled={!isDepositApproved || isApproveLoading || txOngoing}
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
@@ -368,7 +365,6 @@ let TableMoreRow = ({
             ) : (
               <TableMoreRightSection
                 withdraw
-                disabled={!isWithdrawApproved || isApproveLoading || txOngoing}
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}

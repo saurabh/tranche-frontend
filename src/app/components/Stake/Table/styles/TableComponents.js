@@ -1420,7 +1420,7 @@ const TableMoreRightSection = styled.div`
       }
     }
   `}
-  ${({ loading }) => loading && `
+  ${({ loading }) => loading === 'true' && `
     opacity: 0.2;
     pointer-events: none;
     position: relative;
