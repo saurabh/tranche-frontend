@@ -365,7 +365,7 @@ const TableCard = ({
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText} tranche>
                     <h2>{name && name}</h2>
-                    <AdustBtnWrapper className='adjust-btn-wrapper' chevron>
+                    <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
                       <button>
                         <img src={ChevronTable} alt='ChevronTable' />
                       </button>
