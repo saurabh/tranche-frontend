@@ -18,7 +18,6 @@ import {
 } from 'config/constants';
 import ReactLoading from 'react-loading';
 import { changePath } from 'redux/actions/TogglePath';
-import TableHeader from '../../Stake/Table/TableHeader';
 import TableHead from './TableHead';
 import TableCard from './TableCard';
 import {
@@ -134,7 +133,6 @@ const Table = ({
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper mobile>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
           <div className='table-content'>
             {isLoading ? (
               <div>
@@ -148,7 +146,6 @@ const Table = ({
           </div>
         </TableWrapper>
         <TableWrapper desktop>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} theme={theme}/>
           <div className='table-container'>
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead}/>
             <div className='table-content'>

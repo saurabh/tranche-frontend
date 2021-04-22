@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { changeTheme } from 'redux/actions/theme';
-import { useLocation } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
 import {
   HeaderWrapper,
   HeaderContent,
   HeaderTitle,
-  HeaderSubtitle
+  HeaderSubtitle,
+  NavbarLinks
 } from './styles/HeaderComponents';
 import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
@@ -14,15 +15,24 @@ import {
   ModeThemes
 } from 'config/constants';
 import i18n from "../../locale/i18n";
+export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 function Header({updateDate, theme}) {
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
   const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || "borrow");
   const parsePath = useCallback(() =>{
     setPath(parsedPath[parsedPath.length - 1]);
   }, [parsedPath]);
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
   useEffect(() => {
     parsePath();
   }, [pathname, parsePath]);
@@ -35,6 +45,43 @@ function Header({updateDate, theme}) {
         path === "stake" &&
         <HeaderTabs theme={theme}/>
       }
+      {
+        !isDesktop &&
+        <NavbarLinks theme={ModeThemes[theme]}>
+          <NavLink
+            to={baseUrl + '/stake'}
+            activeStyle={{
+              opacity: 1,
+              background: 'rgba(175, 155, 255, 0.15)'
+            }}
+            exact
+          >
+            {i18n.t('navbar.stake')}            
+          </NavLink>
+          <NavLink
+            to={baseUrl + '/tranche'}
+            activeStyle={{
+              opacity: 1,
+              background: 'rgba(175, 155, 255, 0.15)'
+            }}
+            exact
+          >
+          {i18n.t('navbar.tranche')}
+          </NavLink>
+          <NavLink
+            to={baseUrl + '/'}
+            activeStyle={{
+              opacity: 1,
+              background: 'rgba(175, 155, 255, 0.15)'
+            }}
+            className="navLinkDisabled"
+            exact
+          >
+          {i18n.t('navbar.vote')}
+
+          </NavLink>
+        </NavbarLinks>
+          }
       <HeaderWrapper>
             <HeaderContent path={path}>
               {  (path === "privacy" || path === "terms") ? 

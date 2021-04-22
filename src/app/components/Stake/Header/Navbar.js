@@ -154,7 +154,8 @@ function Navbar({ path, theme }) {
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
-                opacity: 1
+                opacity: 1,
+                background: 'rgba(175, 155, 255, 0.15)'
               }}
               exact
             >
@@ -163,7 +164,8 @@ function Navbar({ path, theme }) {
             <NavLink
               to={baseUrl + '/tranche'}
               activeStyle={{
-                opacity: 1
+                opacity: 1,
+                background: 'rgba(175, 155, 255, 0.15)'
               }}
               exact
             >
@@ -172,7 +174,8 @@ function Navbar({ path, theme }) {
             <NavLink
               to={baseUrl + '/'}
               activeStyle={{
-                opacity: 1
+                opacity: 1,
+                background: 'rgba(175, 155, 255, 0.15)'
               }}
               className="navLinkDisabled"
               exact

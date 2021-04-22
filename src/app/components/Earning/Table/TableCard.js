@@ -18,7 +18,7 @@ import {
   // roundBasedOnUnit
 } from 'utils';
 import { etherScanUrl, statuses, zeroAddress, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
-import { Lock, LinkArrow, Up, Down, ChevronTable } from 'assets';
+import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
 import {
@@ -95,7 +95,7 @@ const TableCard = ({
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [isEth, setIsEth] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? Lock : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
     cryptoType === 'ETH'
@@ -239,10 +239,6 @@ const TableCard = ({
                   <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
                 </span>
               </TableCardImg>
-            </TableFirstColWrapper>
-          </TableFirstCol>
-          <TableFirstCol className='table-col' instrument>
-            <TableFirstColWrapper>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
                   <h2>{name && name}</h2>
