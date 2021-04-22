@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Pagination from 'react-paginating';
 import { apiUri } from 'config/constants';
 import _ from 'lodash';
@@ -63,7 +64,6 @@ const Table = ({
   changePath,
   paginationOffset,
   paginationCurrent,
-  ethereum: { address },
   ownAllToggle,
   theme
 }) => {
@@ -287,9 +287,14 @@ const Table = ({
   );
 };
 
+Table.propTypes = {
+  data: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  theme: PropTypes.string.isRequired,
+};
+
 const mapStateToProps = (state) => {
   return {
-    ethereum: state.ethereum,
     data: state.data,
     path: state.path,
     theme: state.theme

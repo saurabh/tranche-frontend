@@ -1,4 +1,4 @@
-import { apiUri } from 'config/constants';
+import { apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
 import { postRequest } from 'services/axios';
 import { checkServer } from './checkServer';
 import {
@@ -78,9 +78,14 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
+  const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
+  const orderedList = [];
+  orderedList.push(searchArr(SLICEAddress));
+  orderedList.push(searchArr(LP1TokenAddress));
+  orderedList.push(searchArr(LP2TokenAddress));
   dispatch({
     type: STAKING_SUCCESS,
-    payload: list
+    payload: orderedList
   });
 };
 
@@ -102,14 +107,14 @@ export const changeSorting = (sort) => {
   return {
     type: CHANGE_SORTING,
     payload: sort
-  }
+  };
 };
 
 export const ownAllToggle = (type) => (dispatch) => {
-    dispatch({
-      type: OWN_ALL_TOGGLE,
-      payload: type
-    });
+  dispatch({
+    type: OWN_ALL_TOGGLE,
+    payload: type
+  });
 };
 
 export const changeOwnAllFilter = (filterType) => (dispatch) => {
@@ -138,18 +143,16 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(endpoint, { data }, null, true);
     dispatch(checkServer(true));
-    if(result.status){
-      if(endpoint === loanListUrl){
+    if (result.status) {
+      if (endpoint === loanListUrl) {
         dispatch(loansIsLoading(false));
         dispatch(loansFetchSuccess(result.result.list));
         dispatch(loansSetCount(result.result.count));
-      }
-      else if(endpoint === tranchesListUrl){
+      } else if (endpoint === tranchesListUrl) {
         dispatch(tranchesIsLoading(false));
         dispatch(tranchesFetchSuccess(result.result.list));
         dispatch(tranchesSetCount(result.result.count));
-      }
-      else if(endpoint === stakingListUrl){
+      } else if (endpoint === stakingListUrl) {
         dispatch(stakingIsLoading(false));
         dispatch(stakingFetchSuccess(result.result.list));
         dispatch(stakingSetCount(result.result.count));
