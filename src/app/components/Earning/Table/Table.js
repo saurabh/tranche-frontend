@@ -148,7 +148,7 @@ const Table = ({
         </TableWrapper>
         <TableWrapper desktop>
           <div className='table-container'>
-            <HeaderTabs />
+            {/* <HeaderTabs /> */}
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead}/>
             <div className='table-content'>
               {isLoading ? (
