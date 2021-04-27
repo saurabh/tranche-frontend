@@ -87,8 +87,8 @@ const App = ({
       ERC20Balances.unsubscribe((error) => {
         if (error) console.error(error);
       });
-    }
-  }, [address, setTokenBalances])
+    };
+  }, [address, setTokenBalances]);
 
   useEffect(() => {
     address && checkTrancheAllowances(address);
@@ -165,21 +165,24 @@ const App = ({
       .subscribe('logs', {
         address: JCompoundAddress
       })
-      .on('data', async () => {
+      .on('data', async (log) => {
         if (path === 'tranche') {
+          let userAddress = address.split('0x')[1];
           await timeout(5000);
-          await fetchTableData(
-            {
-              skip,
-              limit,
-              filter: {
-                address: address ? address : undefined,
-                type: filter //ETH/JNT keep these in constant file
-              }
-            },
-            tranchesList
-          );
-          trancheCardToggle({ status: false, id: null });
+          if (log.data.includes(userAddress)) {
+            await fetchTableData(
+              {
+                skip,
+                limit,
+                filter: {
+                  address: address ? address : undefined,
+                  type: filter //ETH/JNT keep these in constant file
+                }
+              },
+              tranchesList
+            );
+            trancheCardToggle({ status: false, id: null });
+          }
           const getSliceStats = async () => {
             const res = await axios(`${serverUrl + sliceSummary}`);
             const { result } = res.data;
