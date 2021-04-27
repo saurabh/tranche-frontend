@@ -17,7 +17,8 @@ import {
   STAKING_SUCCESS,
   STAKING_COUNT,
   OWN_ALL_TOGGLE,
-  TRANCHE_CARD_TOGGLE
+  TRANCHE_CARD_TOGGLE,
+  TRANCHE_MARKETS
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -135,6 +136,12 @@ export const paginationCurrent = (current) => (dispatch) => {
   dispatch({
     type: PAGINATION_CURRENT,
     payload: current
+  });
+};
+export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  dispatch({
+    type: TRANCHE_MARKETS,
+    payload: trancheMarket
   });
 };
 

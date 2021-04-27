@@ -1406,6 +1406,10 @@ const TableMoreRightSection = styled.div`
       margin: 23px 0 0 0;
       outline: none;
       cursor: pointer;
+      :disabled{
+        opacity: 0.5;
+        pointer-events: none;
+      }
       img{
         margin-right: 5px;
       }
@@ -1420,7 +1424,7 @@ const TableMoreRightSection = styled.div`
       }
     }
   `}
-  ${({ loading }) => loading === 'true' && `
+  ${({ loading }) => loading && `
     opacity: 0.2;
     pointer-events: none;
     position: relative;

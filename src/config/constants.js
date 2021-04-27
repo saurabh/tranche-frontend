@@ -346,7 +346,15 @@ export const ModeThemes = {
     Tooltip: "#2F2F2F",
     NavbarBorder: "#E9E9FC",
     NavbarBackground: "#FFFFFF",
-    NavbarShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)"
+    NavbarShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
+    TrancheMarketsTitle: "#393F56",
+    TrancheModalLinkColor: "#4939D7",
+    TrancheModalLinkBackground: "#E7E7F9",
+    TrancheBtnBackground: "#FFFFFF",
+    TrancheBtnBackgroundCurrent: "rgba(255, 255, 255, 0.5);",
+    TrancheBtnBorder: "#E9E9FC",
+    TrancheBtnColor: "#000000",
+    TrancheBtnSpan: "#E9E9FC"
   },
   dark: {
     body: '#100F36',
@@ -384,7 +392,14 @@ export const ModeThemes = {
     Tooltip: "#383765",
     NavbarBorder: "rgba(255, 255, 255, 0.1)",
     NavbarBackground: "rgba(175, 155, 255, 0.15)",
-    NavbarShadow: "none"
-
+    NavbarShadow: "none",
+    TrancheMarketsTitle: "#FFFFFF",
+    TrancheModalLinkColor: "#FFFFFF",
+    TrancheModalLinkBackground: "rgba(202, 197, 255, 0.13)",
+    TrancheBtnBackground: "#1C1B40",
+    TrancheBtnBackgroundCurrent: "#322E5D",
+    TrancheBtnBorder: "#322E5D",
+    TrancheBtnColor: "#FFFFFF",
+    TrancheBtnSpan: "#363661"
   }
 };

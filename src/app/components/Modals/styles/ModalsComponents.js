@@ -633,7 +633,7 @@ const StakingModalWrapper = styled.div`
 `;
 
 const SliceNotFound = styled.div`
-  min-height: 199px; 
+  min-height: 200px;
   background: ${props => props.ModalBackground};
   height: auto;
   display: flex;
@@ -669,6 +669,78 @@ const SliceNotFoundBtn = styled.div`
     font-style: normal;
     font-weight: bold;
     font-size: 11px;
+    text-align: center;
+    color: #FFFFFF;
+    background: ${props => props.color};
+    border-radius: 4px;
+    width: 100%;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  ]
+  }
+`;
+const ModalMarketWrapper = styled.div`
+  min-height: 342px;
+  background: ${props => props.ModalBackground};
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  & > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  & > div p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    margin: 12px 0 0 0;
+    text-align: center;
+    color: ${props => props.ModalText};
+    padding: 0 23px;
+    width: 100%;
+  }
+  & > div a{
+    background: ${props => props.linkBackground};
+    border-radius: 80.8581px;
+    padding: 12px 26px;
+    margin: 15px 0 0 0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10.5116px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: ${props => props.linkColor};
+  }
+`;
+
+const ModalMarketWrapperBtn = styled.div`
+  background: #F7F7FF;
+  min-height: 67px;
+  height: 100%;
+  padding: 0 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${props => props.ModalBackground};
+  button{
+    min-height: 33px;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
     text-align: center;
     color: #FFFFFF;
     background: ${props => props.color};
@@ -841,5 +913,7 @@ export {
     ClaimModalHalfContentWrapper,
     ClaimModalHalfContent,
     ClaimModalRow,
-    ClaimModalCol
+    ClaimModalCol,
+    ModalMarketWrapperBtn,
+    ModalMarketWrapper
 };

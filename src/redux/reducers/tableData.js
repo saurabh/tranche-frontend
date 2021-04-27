@@ -14,7 +14,8 @@ import {
   CHANGE_OWN_ALL_FILTER,
   CHANGE_SORTING,
   OWN_ALL_TOGGLE,
-  TRANCHE_CARD_TOGGLE
+  TRANCHE_CARD_TOGGLE,
+  TRANCHE_MARKETS
 } from '../actions/constants';
 
 const initialState = {
@@ -30,7 +31,8 @@ const initialState = {
   sort: null,
   filterType: 'all',
   tradeType: 'allTranches',
-  trancheCard: { status: false, id: null }
+  trancheCard: { status: false, id: null },
+  trancheMarket: "compound"
 };
 
 export default function (state = initialState, action) {
@@ -69,6 +71,8 @@ export default function (state = initialState, action) {
       return { ...state, filterType: payload };
     case OWN_ALL_TOGGLE:
       return { ...state, tradeType: payload };
+    case TRANCHE_MARKETS:
+      return { ...state, trancheMarket: payload };
     default:
       return state;
   }

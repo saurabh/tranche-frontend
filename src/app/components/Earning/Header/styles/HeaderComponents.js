@@ -580,8 +580,91 @@ const NavbarIconWrapper = styled.div`
 `
 
 const NavbarIconContent = styled.div`
+  
 `
-
+const MarketsTabsWrapper = styled.div`
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+    color: ${props => props.color};
+  }
+`
+const MarketsTabs = styled.div`
+  display: flex;
+  margin: 30px 0 20px 0;
+`
+const MarketTab = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: 300ms;
+  padding: 0 29px;
+  margin-right: ${props => props.market === "compound" ? "14px" : "0"};
+  border-radius: 5px;
+  height: 51px;
+  background: ${props => props.current ? props.backgroundActive : props.background};
+  border: 1px solid ${props => props.border};
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14.14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: ${props => props.color};
+  img{
+    margin-right: ${props => props.market === "aavePolygon" ? "5px" : "0"};
+  }
+  span{
+    width: 1px;
+    height: 70%;
+    background: ${props => props.span};
+    display: block;
+    margin: 0 12px;
+  }
+`
+const BridgeTokensWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #4441CF;
+  border: 2px solid #4441CF;
+  box-sizing: border-box;
+  border-radius: 12px;
+  padding: 26px;
+  margin: 0 0 25px 0;
+  z-index: 1000;
+  p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 21px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    width: 75%;
+  }
+  button{
+    background: #FFFFFF;
+    padding: 12px 40px;
+    border: 2px solid #FFFFFF;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 10px;    
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #4441CF;
+  }
+`
 
 export {
   HeaderWrapper,
@@ -615,5 +698,9 @@ export {
   NavbarSpan,
   MobileNavbarIconWrapper,
   NavbarIconWrapper,
-  NavbarIconContent
+  NavbarIconContent,
+  MarketsTabsWrapper,
+  MarketsTabs,
+  MarketTab,
+  BridgeTokensWrapper
 };

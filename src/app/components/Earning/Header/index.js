@@ -5,7 +5,6 @@ import { useLocation, NavLink } from 'react-router-dom';
 import {
   HeaderWrapper,
   HeaderContent,
-  HeaderTitle,
   HeaderSubtitle,
   NavbarLinks
 } from './styles/HeaderComponents';
@@ -92,12 +91,12 @@ function Header({updateDate, theme}) {
                   <h2>Last Updated: {updateDate}</h2>
                 </HeaderSubtitle> : ""
               }
-              <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
+              {/* <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
                 <h2>{i18n.t("tranche.title")}</h2>
               </HeaderTitle>
               <HeaderSubtitle path={path} color={ModeThemes[theme].HeaderSubtitle}>
                 <h2>{i18n.t("tranche.text")}</h2>
-              </HeaderSubtitle>
+              </HeaderSubtitle> */}
             </HeaderContent>
       </HeaderWrapper>
     </div>
