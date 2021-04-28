@@ -354,7 +354,9 @@ export const ModeThemes = {
     TrancheBtnBackgroundCurrent: "rgba(255, 255, 255, 0.5);",
     TrancheBtnBorder: "#E9E9FC",
     TrancheBtnColor: "#000000",
-    TrancheBtnSpan: "#E9E9FC"
+    TrancheBtnSpan: "#E9E9FC",
+    ClaimHead: "rgba(36, 39, 50, 0.6)",
+    StakingMax: "rgba(57,41,90,0.3)"
   },
   dark: {
     body: '#100F36',
@@ -400,6 +402,8 @@ export const ModeThemes = {
     TrancheBtnBackgroundCurrent: "#322E5D",
     TrancheBtnBorder: "#322E5D",
     TrancheBtnColor: "#FFFFFF",
-    TrancheBtnSpan: "#363661"
+    TrancheBtnSpan: "#363661",
+    ClaimHead: "rgba(255, 255, 255, 0.6)",
+    StakingMax: "rgb(57,41,90)"
   }
 };

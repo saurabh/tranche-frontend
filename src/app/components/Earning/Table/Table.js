@@ -29,7 +29,7 @@ import {
   CallToActionTradetext
 } from '../../Stake/Table/styles/TableComponents';
 import { EmptyBox } from 'assets';
-import HeaderTabs from '../Header/HeaderTabs';
+// import HeaderTabs from '../Header/HeaderTabs';
 const { tranchesList: tranchesListUrl } = apiUri;
 
 const style = {

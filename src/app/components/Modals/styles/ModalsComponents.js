@@ -792,8 +792,14 @@ const ClaimModalCol = styled.div`
     font-size: 12px;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    span{
+      margin: 3px 0 0 0;
+    }
     img{
       margin-right: 4px;
+      width: 12px;
     }
   }
   ${({ head }) => head && `
@@ -803,11 +809,11 @@ const ClaimModalCol = styled.div`
       color: rgba(255, 255, 255, 0.6);
     }
   `}
-  ${({ right }) => right && `
+  ${({ right, color }) => right && `
     h2{
       font-weight: 600;
       font-size: 9.40209px;
-      color: rgba(36, 39, 50, 0.6);
+      color: ${color} !important;
     }
   `}
   ${({ pair }) => pair && `
@@ -816,7 +822,7 @@ const ClaimModalCol = styled.div`
   ${({ rewards, ModalText }) => rewards && `
     width: 30%;
     h2{
-      color: ${ModalText} !important
+      color: ${ModalText} !important;
     }
   `}
   ${({ claim }) => claim && `

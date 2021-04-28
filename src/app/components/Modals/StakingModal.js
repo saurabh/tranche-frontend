@@ -244,7 +244,9 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
+                        <span>
+                          {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
+                        </span>
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -256,7 +258,9 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
+                        <span>
+                          {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
+                        </span>
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -268,7 +272,9 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
+                        <span>
+                          {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
+                        </span>
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -289,13 +295,13 @@ const StakingModal = ({
               <ClaimModalHalfContentWrapper>
                 <ClaimModalHalfContent>
                   <ClaimModalRow head right>
-                    <ClaimModalCol head right pair>
+                    <ClaimModalCol head right pair color={ModeThemes[theme].ClaimHead}>
                       <h2>PAIR</h2>
                     </ClaimModalCol>
-                    <ClaimModalCol head right rewards>
+                    <ClaimModalCol head right rewards color={ModeThemes[theme].ClaimHead}>
                       <h2>Rewards</h2>
                     </ClaimModalCol>
-                    <ClaimModalCol head right claim>
+                    <ClaimModalCol head right claim color={ModeThemes[theme].ClaimHead}>
                       <h2>Claim</h2>
                     </ClaimModalCol>
                   </ClaimModalRow>

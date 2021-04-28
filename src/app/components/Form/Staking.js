@@ -137,7 +137,7 @@ let StakingForm = ({
                       : i18n.t('stake.modal.withdrawFormTitle')
                     : 'Amount of ' + tokenName + ' to ' + (modalType ? 'stake' : 'withdraw')}
                 </ModalFormLabel>
-                <FieldWrapper modalType={true} staking={true} StakingInputText={ModeThemes[theme].StakingInputText}  ModalText={ModeThemes[theme].ModalText}>
+                <FieldWrapper modalType={true} staking={true} StakingInputText={ModeThemes[theme].StakingInputText} StakingMax={ModeThemes[theme].StakingMax} ModalText={ModeThemes[theme].ModalText}>
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleInputChange(newValue)}

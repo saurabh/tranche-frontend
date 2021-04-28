@@ -369,7 +369,7 @@ const SelectCurrencyView = styled.div`
   & > div{
     width: 100px;
     height: 19px;
-    border-left: 2px solid #F1F1F1;
+    border-left: 2px solid #CFCFE5;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -658,9 +658,9 @@ const FieldWrapper = styled.div`
     // color: rgb(57,41,90, 0.3);
     color: #B3B3B3;
     background: #F1F1F1;
-    ${({ staking, StakingInputText }) => staking && `
-      background: rgba(57,41,90,0.3);
-      color: ${StakingInputText}
+    ${({ staking, StakingInputText, StakingMax }) => staking && `
+      background: ${StakingMax};
+      color: ${StakingInputText};
     `}
     
   }
