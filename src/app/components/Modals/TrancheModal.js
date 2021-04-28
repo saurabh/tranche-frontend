@@ -27,6 +27,7 @@ const TrancheMarketStyles = {
   content: {
     position: 'relative',
     maxWidth: '372px',
+    maxHeight: '388px',
     width: '100%',
     minHeight: '366px',
     //height: '326px',

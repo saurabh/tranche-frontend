@@ -134,6 +134,7 @@ const Table = ({
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper mobile>
+          <HeaderTabs />
           <div className='table-content'>
             {isLoading ? (
               <div>
