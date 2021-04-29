@@ -77,19 +77,7 @@ const TableWrapper = styled.div`
 
 
 
-const StatusTextWrapper = styled.h2`
-  color: ${props => props.color ? props.color : ""} !important; 
-  background: ${props => props.backgroundColor ? props.backgroundColor  : ""} !important; 
-  text-transform: uppercase;
-  font-size: 12px;
-  width: 102px;
-  padding: 12px 0px;
-  position: relative;
-  ${({ table, color }) => table === 'tranche' && `
-    background: transparent;
-    border: ${color ? "1px solid " + color : ""};
-  `}
-`
+
 const MoreRowSpan = styled.span`
   color: ${props => props.color ? props.color : ""};
 `
@@ -239,38 +227,38 @@ const TableHeadTitle = styled.div`
     `}
 
     ${({ stakingPoolStake }) => stakingPoolStake && `
-      width: 26%;
+      width: 17%;;
     `}
     ${({ statusStake }) => statusStake&& `
-      width: 14%;
+      width: 15%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
     ${({ reward }) => reward && `
-      width: 12%;
+      width: 14%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
     ${({ APYStake }) => APYStake && `
-      width: 10%;
-      h2{
-        text-align: center;
-        width: 100%;
-      }
-    `}
-    ${({ staked }) => staked && `
       width: 12%;
       h2{
         text-align: center;
         width: 100%;
       }
     `}
+    ${({ staked }) => staked && `
+      width: 14%;
+      h2{
+        text-align: center;
+        width: 100%;
+      }
+    `}
     ${({ stakeCol }) => stakeCol && `
-      width: 10%;
+      width: 12%;
       h2{
         text-align: center;
         width: 100%;
@@ -319,10 +307,11 @@ const TableTitle = styled.div`
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 18.3333px;
+        font-size: 24px;
         line-height: 26px;        
         color: ${props => props.color};
     }
+    margin: ${props => props.summary ? "10px 0 29px 0" : ""};
 `;
 const TableSubTitle = styled.div`
     & > h2{
@@ -868,7 +857,7 @@ const TableCardImg = styled.div`
 const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
-  width: 26%;
+  width: 17%;
   ${({ platform }) => platform && `
     width: 31% !important;
   `}
@@ -974,7 +963,7 @@ const TableSecondCol = styled.div`
     }
   `}
   ${({ stakeStaked }) => stakeStaked && `
-    width: 10% !important;
+    width: 12% !important;
   `}
   
   position: relative;
@@ -1042,7 +1031,7 @@ const SecondColContent = styled.div`
 const TableThirdCol = styled.div`
   width: 7%;
   ${({ stake }) => stake && `
-    width: 12% !important;
+    width: 14% !important;
   `}
   ${({ totalValue }) => totalValue && `
     width: 15% !important;
@@ -1074,7 +1063,7 @@ const TableFourthCol = styled.div`
     width: 15%;
   `}
   ${({ stake }) => stake && `
-    width: 12% !important;
+    width: 14% !important;
   `}
   ${({ subscription }) => subscription && `
     width: 15% !important;
@@ -1117,7 +1106,7 @@ const TableFifthCol = styled.div`
     width: 15% !important;
   `}
   ${({ stakeStatus }) => stakeStatus && `
-    width: 14% !important;
+    width: 15% !important;
   `}
 
   position: relative;
@@ -1127,8 +1116,8 @@ const FifthColContent = styled.div`
   h2:first-child{
     font-family: 'Inter', sans-serif;
     font-style: normal;
-    font-weight: bold;
-    font-size: 17px !important;
+    font-weight: 600;
+    font-size: 14px !important;
     letter-spacing: 0.05em;
     text-align: center !important;
     color: ${props => props.color};
@@ -1146,10 +1135,27 @@ const FifthColContent = styled.div`
     color: #CCCCCD;
   }
 `
+const StatusTextWrapper = styled.h2`
+  color: ${props => props.color ? props.color : ""} !important; 
+  background: ${props => props.backgroundColor ? props.backgroundColor  : ""} !important; 
+  text-transform: uppercase;
+  font-size: 12px;
+  width: 102px;
+  padding: 12px 0px;
+  position: relative;
+  ${({ table, color }) => table === 'tranche' && `
+    background: transparent;
+    border: ${color ? "1px solid " + color : ""};
+  `}
+  ${({ table }) => table === 'stake' && `
+    font-weight: 600;
+    font-size: 14px !important;
+  `}
+`
 const TableSixthCol = styled.div`
   width: 18%;  
   ${({ stake }) => stake && `
-    width: 10% !important;
+    width: 12% !important;
   `}
   ${({ trancheTableBtns }) => trancheTableBtns && `
     width: 5% !important;

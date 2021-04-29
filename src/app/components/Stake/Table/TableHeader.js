@@ -58,10 +58,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                     path === "tranche" ?
                     <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
                     <h2>{i18n.t('tranche.table.tableHeader.subtitle')}</h2>
-                    </TableSubTitle> :
-                    <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
-                        <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>
-                    </TableSubTitle> 
+                    </TableSubTitle> : ""
                 }
 
                 {   menu ?

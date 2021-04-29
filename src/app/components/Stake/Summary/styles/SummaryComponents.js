@@ -64,7 +64,7 @@ const SummaryCardDetails = styled.h2`
 `;
 
 const SummaryCardsWrapper = styled.div`
-  margin-top: ${props => props.path === "stake" && !props.isDesktop ? "" : "30px"};
+//   margin-top: ${props => props.path === "stake" && !props.isDesktop ? "" : "30px"};
   display: flex;
   justify-content: space-between;
   @media (max-width: 992px) {
