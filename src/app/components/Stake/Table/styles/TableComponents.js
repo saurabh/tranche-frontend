@@ -303,6 +303,11 @@ const TableContainerHeader = styled.div`
     align-items: center;
 `;
 const TableTitle = styled.div`
+    
+    ${({ withHowto }) => withHowto && `
+      display: flex;
+      align-items: center;
+    `}
     & > h2{
         font-family: 'Inter', sans-serif;
         font-style: normal;
@@ -311,7 +316,7 @@ const TableTitle = styled.div`
         line-height: 26px;        
         color: ${props => props.color};
     }
-    margin: ${props => props.summary ? "10px 0 29px 0" : ""};
+    margin: ${props => props.summary ? "50px 0 29px 0" : ""};
 `;
 const TableSubTitle = styled.div`
     & > h2{
@@ -1853,6 +1858,24 @@ const TooltipWrapper = styled.div`
   }
 `
 
+const HowToLink = styled.a`
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 10.9635px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: rgba(175, 155, 255, 0.15);
+  border-radius: 110.967px;
+  padding: 11px 22px;
+  margin-left: 20px;
+  :hover{
+    color: #FFFFFF; 
+  }
+
+`
+
 
 
 export {
@@ -1938,5 +1961,6 @@ export {
   TableSeventhCol,
   StakeBtn,
   StakeBtns,
-  TooltipWrapper
+  TooltipWrapper,
+  HowToLink
 };

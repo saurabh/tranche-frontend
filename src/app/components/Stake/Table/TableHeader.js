@@ -13,7 +13,8 @@ import {
     CreateLoanBtn,
     TableMarketsSortingDropdown,
     TableMarketsSortingDropdownContent,
-    TableMarketSortingBtn
+    TableMarketSortingBtn,
+    HowToLink
 } from './styles/TableComponents';
 import {
     ModeThemes
@@ -40,7 +41,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
     return (
         <TableContainerHeader>
             <TableHeaderTitles>
-                <TableTitle color={ModeThemes[theme].HeaderTitle}>
+                <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto>
                 {   path === "lend" ?
                     <h2>Earning Assets</h2> :
                     path === "borrow" ?
@@ -49,6 +50,13 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                     <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
                     <h2>{i18n.t('tranche.table.tableHeader.title')}</h2>
                 }
+                {
+                    path === "stake" || path === "tranche" ?
+                    <HowToLink href="">
+                        HOW-TO
+                    </HowToLink> : ""
+                }
+                
                 </TableTitle>
                 {
                     path !== "stake" && path !== "tranche" ?

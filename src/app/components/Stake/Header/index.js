@@ -4,7 +4,7 @@ import { useLocation, NavLink } from 'react-router-dom';
 import {
   NavbarLinks
 } from './styles/HeaderComponents';
-import HeaderTabs from "./HeaderTabs"
+// import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
 import {
   ModeThemes
@@ -37,7 +37,7 @@ function Header({updateDate, theme}) {
       <Navbar path={parsedPath[parsedPath.length - 1]} theme={theme}/>
       {
         path === "stake" &&
-        <HeaderTabs theme={theme}/>
+        ""
       }
        {
         !isDesktop &&
