@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
@@ -85,10 +85,10 @@ const TableCard = ({
   ethereum: { tokenBalance, balance, address, wallet, web3, notify },
   toggleApproval,
   destroy,
-  theme
+  theme,
+  isDesktop
   // checkServer
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
@@ -102,14 +102,7 @@ const TableCard = ({
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 1200);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
+  
 
   const onboard = initOnboard({
     address: setAddress,
@@ -190,7 +183,7 @@ const TableCard = ({
         <TableContentCard
           pointer={true}
           onClick={() => cardToggle()}
-          className={trancheCard.status && id === trancheCard.id ? 'table-card-toggle' : ''}
+          // className={trancheCard.status && id === trancheCard.id ? 'table-card-toggle' : ''}
           border={trancheCard.status && id === trancheCard.id}
           color={ModeThemes[theme].borderColor}
         >

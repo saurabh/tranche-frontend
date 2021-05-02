@@ -53,10 +53,10 @@ const TableCard = ({
   setTokenBalance,
   ethereum: { tokenBalance, address, wallet, web3, notify },
   summaryData: { slice, withdrawn, lp, lpList },
-  theme
+  theme,
+  isDesktop
   // checkServer
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [ModalIsOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState(true);
   const [hasAllowance, setHasAllowance] = useState(false);
@@ -115,14 +115,7 @@ const TableCard = ({
 
   let moreCardToggle = false;
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 1200);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
+  
 
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));

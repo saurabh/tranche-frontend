@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -70,10 +70,18 @@ const Table = ({
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
   const pageCount = 5;
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 1200);
+  };
 
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
   const stakingListing = useCallback(
     _.debounce(
       async () => {
@@ -141,7 +149,7 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
+              data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
@@ -197,7 +205,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
+                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop} />)
               )}
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
@@ -68,12 +68,22 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const pageCount = 5;
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   // const [openFilterMenu, setOpenFilterMenu] = useState(false);
   // const [currentFilter, setCurrentFilter] = useState('All tranches');
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 1200);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
 
   const trancheListing = useCallback(
     _.debounce(
@@ -142,7 +152,7 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              data && data.tranchesList.map((tranche, i) => <TableCard key={i} id={i} tranche={tranche} path={path} />)
+              data && data.tranchesList.map((tranche, i) => <TableCard key={i} id={i} tranche={tranche} path={path} isDesktop={isDesktop}/>)
             )}
           </div>
         </TableWrapper>
@@ -198,7 +208,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                data && data.tranchesList.map((tranche, i) => <TableCard key={i} id={i} tranche={tranche} path={path} />)
+                data && data.tranchesList.map((tranche, i) => <TableCard key={i} id={i} tranche={tranche} path={path} isDesktop={isDesktop} />)
               )}
             </div>
           </div>
