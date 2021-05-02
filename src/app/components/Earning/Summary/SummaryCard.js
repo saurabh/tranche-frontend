@@ -5,8 +5,8 @@ import {
   fromWei,
   addStake,
   withdrawStake,
-  epochTimeRemaining
-  // getAccruedStakingRewards
+  epochTimeRemaining,
+  toWei
 } from 'services/contractMethods';
 import { txMessage, StakingAddresses } from 'config';
 import { ERC20Setup, roundNumber, isGreaterThan, isEqualTo, safeAdd } from 'utils';
@@ -53,7 +53,6 @@ const SummaryCard = ({
   const [epochTimeLeft, setEpochTimeLeft] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
   const [TooltipToggle, setTooltipToggle] = useState("");
-  const toWei = web3.utils.toWei;
   const setBalanceCB = useCallback((balance) => {
     setBalance(roundNumber(balance));
   }, []);

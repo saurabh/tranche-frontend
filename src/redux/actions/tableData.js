@@ -18,7 +18,9 @@ import {
   STAKING_COUNT,
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
-  TRANCHE_MARKETS
+  TRANCHE_MARKETS,
+  SET_NETWORK,
+  SET_WEB3
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -138,7 +140,23 @@ export const paginationCurrent = (current) => (dispatch) => {
     payload: current
   });
 };
+
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  if (trancheMarket === 'compound') {
+    dispatch({
+      type: SET_NETWORK,
+      payload: 42
+    })
+    dispatch({
+      type: SET_WEB3,
+      // payload: 
+    })
+  } else if (trancheMarket === 'aavePolygon') {
+    dispatch({
+      type: SET_NETWORK,
+      payload: 137
+    })
+  }
   dispatch({
     type: TRANCHE_MARKETS,
     payload: trancheMarket
