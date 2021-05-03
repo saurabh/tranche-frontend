@@ -1,5 +1,5 @@
 import { apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
-import { postRequest } from 'services/axios';
+import { postRequest, initOnboard } from 'services';
 import { checkServer } from './checkServer';
 import {
   LOANS_IS_LOADING,
@@ -142,20 +142,25 @@ export const paginationCurrent = (current) => (dispatch) => {
 };
 
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  const onboard = initOnboard();
   if (trancheMarket === 'compound') {
+    onboard.config({ networkId: 42 });
+    console.log(onboard)  
     dispatch({
       type: SET_NETWORK,
       payload: 42
-    })
+    });
     dispatch({
-      type: SET_WEB3,
-      // payload: 
-    })
+      type: SET_WEB3
+      // payload:
+    });
   } else if (trancheMarket === 'aavePolygon') {
+    onboard.config({ networkId: 137 });
+    console.log(onboard)
     dispatch({
       type: SET_NETWORK,
       payload: 137
-    })
+    });
   }
   dispatch({
     type: TRANCHE_MARKETS,
