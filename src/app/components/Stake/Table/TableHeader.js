@@ -52,7 +52,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                 }
                 {
                     path === "stake" || path === "tranche" ?
-                    <HowToLink href="">
+                    <HowToLink href="https://docs.tranche.finance/tranchefinance/">
                         HOW-TO
                     </HowToLink> : ""
                 }
