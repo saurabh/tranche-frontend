@@ -127,15 +127,10 @@ let TableMoreRow = ({
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>PRICE</h2>
+                <h2 >cDAI</h2>
                 <h2>
-                  {roundNumber(trancheRate)} {cryptoType}
+                  0
                 </h2>
-                <TooltipWrapper tooltip={TooltipToggle === "PRICE"} row color={ModeThemes[theme].Tooltip}>
-                  <div>
-                      <h2>The value of each instrument token.</h2>
-                  </div>
-                </TooltipWrapper>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -153,10 +148,17 @@ let TableMoreRow = ({
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
-            <TableMoreLeftSection>
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>NET APY</h2>
-                <h2>{roundNumber(apy, 2)}%</h2>
+                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>PRICE</h2>
+                <h2>
+                  {roundNumber(trancheRate)} {cryptoType}
+                </h2>
+                <TooltipWrapper tooltip={TooltipToggle === "PRICE"} row color={ModeThemes[theme].Tooltip}>
+                  <div>
+                      <h2>The value of each instrument token.</h2>
+                  </div>
+                </TooltipWrapper>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
           </TableMoreLeftTopSection>

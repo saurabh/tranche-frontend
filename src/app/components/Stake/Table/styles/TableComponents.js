@@ -303,7 +303,7 @@ const TableContainerHeader = styled.div`
     align-items: center;
 `;
 const TableTitle = styled.div`
-    
+    z-index: 1;
     ${({ withHowto }) => withHowto && `
       display: flex;
       align-items: center;
@@ -316,7 +316,7 @@ const TableTitle = styled.div`
         line-height: 26px;        
         color: ${props => props.color};
     }
-    margin: ${props => props.summary ? "50px 0 29px 0" : ""};
+    margin: ${props => props.summary ? "33px 0 29px 0" : ""};
 `;
 const TableSubTitle = styled.div`
     & > h2{
@@ -1767,6 +1767,10 @@ const TooltipWrapper = styled.div`
   `}
   ${({ summary }) => summary && `
     transform: translateX(25px);
+    z-index: -1;
+  `}
+  ${({ tooltip }) => tooltip && `
+    z-index: 1 !important;
   `}
   div{
     display: flex;
@@ -1775,7 +1779,10 @@ const TooltipWrapper = styled.div`
     max-width: 240px;
     width: 100%;
     max-height: 100px;    
-    padding: 12px 10px;    
+    padding: 12px 10px;  
+    ${({ summary }) => summary && `
+      z-index: -1;
+    `}
     background: ${props => props.color};
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
@@ -1788,7 +1795,9 @@ const TooltipWrapper = styled.div`
     ${({ tooltip }) => tooltip && `
       opacity: 1;
       visibility: visible;
+      z-index: 1 !important;
     `}
+    
     
     
     h2{
