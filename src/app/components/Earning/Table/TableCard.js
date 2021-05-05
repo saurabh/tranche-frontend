@@ -245,7 +245,7 @@ const TableCard = ({
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
             <FifthColContent color={ModeThemes[theme].tableText}>
-              <h2>${buyerTokenBalance ? roundNumber(safeMultiply(cryptoTypePrice, buyerTokenBalance)) : '0'}</h2>
+              <h2>${buyerTokenBalance && cryptoTypePrice ? roundNumber(safeMultiply(cryptoTypePrice, buyerTokenBalance)) : '0'}</h2>
               <h2>
                 ({buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType})
               </h2>
