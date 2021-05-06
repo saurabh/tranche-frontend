@@ -114,13 +114,13 @@ let StakingForm = ({
       <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
         <FormInputsWrapper trade={true}>
           <SelectedStakingWrapper ModalText={ModeThemes[theme].ModalText}>
-            <h2>Selected Staking Pool</h2>
+            <h2>{i18n.t('stake.modal.selectedStaking')}</h2>
             <SelectedStaking color={ModeThemes[theme].SelectedStaking}>
               <SelectedStakingImg>
                 <img src={TrancheImg} alt='tranche' />
               </SelectedStakingImg>
               <SelectedStakingContent SelectedStakingText={ModeThemes[theme].SelectedStakingText} SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}>
-                <h2>{type} STAKING POOL</h2>
+                <h2>{type} {i18n.t('stake.modal.stakingPool')}</h2>
                 <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                   {contractAddress}
                 </a>
@@ -148,7 +148,7 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  <button onClick={(e) => setMaxAmount(e)}>MAX</button>
+                  <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>

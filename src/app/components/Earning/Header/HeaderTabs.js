@@ -11,7 +11,9 @@ import {
   BridgeTokensWrapper
 } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
-
+import {
+  HowToLink
+} from '../../Stake/Table/styles/TableComponents';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
@@ -28,7 +30,14 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   }
   return (
     <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle}>
-      <h2>Tranche Markets</h2>
+      <div>
+        <h2>
+          Tranche Markets
+        </h2>
+        <HowToLink href="https://docs.tranche.finance/tranchefinance/">
+            HOW-TO
+        </HowToLink>
+      </div>
       <MarketsTabs>
           <MarketTab market="compound" current={trancheMarket === "compound"} onClick={() => trancheMarketsToggle("compound")} background={ModeThemes[theme].TrancheBtnBackground} backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent} border={ModeThemes[theme].TrancheBtnBorder} color={ModeThemes[theme].TrancheBtnColor}><img src={theme === "light" ? CompoundBtnBlack : CompoundBtn} alt="" /></MarketTab>
           <MarketTab market="aavePolygon" current={trancheMarket === "aavePolygon"} onClick={() => trancheMarket !== "aavePolygon"  && openModal()} span={ModeThemes[theme].TrancheBtnSpan} background={ModeThemes[theme].TrancheBtnBackground} backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent} border={ModeThemes[theme].TrancheBtnBorder} color={ModeThemes[theme].TrancheBtnColor}><img src={AaveBtn} alt="" /> Market <span></span> <img src={theme === "light" ? PolygonLogoBlack : PolygonLogo } alt="" /></MarketTab>

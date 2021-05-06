@@ -13,6 +13,7 @@ import {
   SummaryClaimBtn
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
+import i18n from '../../locale/i18n';
 
 const SummaryCard = ({
   title,
@@ -102,15 +103,15 @@ const SummaryCard = ({
             </SummaryCardValue>
             <SummaryCardDetails>
               {type === 'slice'
-                ? balance + ' SLICE Available'
+                ? balance + " " + i18n.t('stake.summary.slice.details')
                 : type === 'lp'
-                ? balance + ' SLICE-LP Available'
+                ? balance + " " + i18n.t('stake.summary.sliceLP.details')
                 : epochTimeLeft + ' Until Next Distribution'}
             </SummaryCardDetails>
 
             {type === 'reward' && (
               <SummaryClaimBtn claim>
-                <button onClick={() => openModal()}>Claim</button>
+                <button onClick={() => openModal()}>{i18n.t('stake.modal.claim')}</button>
               </SummaryClaimBtn>
             )}
           </SummaryCardContainer>

@@ -142,7 +142,7 @@ const SummaryCards = ({
               currentPath === 'stake'
                 ? i18n.t('stake.summary.sliceRewards.title')
                 : currentPath === 'tranche'
-                ? 'SLICE 24H Volume'
+                ? i18n.t('tranche.summary.sliceVolume.title')
                 : 'Collateralization Ratio'
             }
             value={sliceStats ? sliceStats.volume : 0}

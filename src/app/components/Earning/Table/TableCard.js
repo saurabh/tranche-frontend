@@ -75,7 +75,7 @@ const TableCard = ({
     cryptoType,
     dividendType,
     trancheToken,
-    trancheRate
+    trancheRate  
   },
   path,
   setAddress,

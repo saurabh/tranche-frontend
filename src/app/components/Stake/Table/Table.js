@@ -137,6 +137,8 @@ const Table = ({
     stakingListing();
   };
 
+  console.log(data.stakingList)
+
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -149,7 +151,7 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
@@ -205,7 +207,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop} />)
+                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop} />)
               )}
             </div>
           </div>

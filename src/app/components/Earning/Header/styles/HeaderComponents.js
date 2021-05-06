@@ -583,25 +583,34 @@ const NavbarIconContent = styled.div`
   
 `
 const MarketsTabsWrapper = styled.div`
-  & > h2{
+  & > div{
+    display: flex;
+    align-items: center;s
+  }
+  & > div h2{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
     line-height: 29px;
     color: ${props => props.color};
+    @media (max-width: 992px) {
+      font-size: 20px;
+    }
   }
 `
 const MarketsTabs = styled.div`
   display: flex;
   margin: 30px 0 20px 0;
+  @media (max-width: 992px) {
+    margin: 15px 0px 15px 0;
+  }
 `
 const MarketTab = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 1000;
   transition: 300ms;
   padding: 0 29px;
   margin-right: ${props => props.market === "compound" ? "14px" : "0"};
@@ -625,6 +634,16 @@ const MarketTab = styled.button`
     background: ${props => props.span};
     display: block;
     margin: 0 12px;
+  }
+  @media (max-width: 992px) {
+    img{
+      width: ${props => props.market === "aavePolygon" ? "32px" : "73px"};
+    }
+    padding: 12px;
+    height: 45px;
+    h2{
+      font-size: 12px;
+    }
   }
 `
 const BridgeTokensWrapper = styled.div`
@@ -663,6 +682,20 @@ const BridgeTokensWrapper = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #4441CF;
+  }
+  @media (max-width: 992px) {
+    flex-direction: column;
+    width: 100%;
+    padding: 15px;
+    p{
+      font-size: 12px;
+      text-align: center;
+      width: 100%;
+    }
+    button{
+      margin: 12px 0 0 0;
+      font-size: 10px;
+    }
   }
 `
 

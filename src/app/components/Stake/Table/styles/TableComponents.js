@@ -146,6 +146,7 @@ const TableHeadTitle = styled.div`
         font-weight: 700;
         font-size: 14px;
         letter-spacing: 0.05em;
+        text-decoration: underline dashed;
         text-transform: uppercase;
         color: ${props => props.color};
     }
@@ -1750,20 +1751,60 @@ const TooltipWrapper = styled.div`
   // ${({ tooltip }) => tooltip && `
   //   z-index: 1;
   // `}
-  ${({ platform }) => platform && `
-    left: calc(100% - 135px);
+  ${({ platform, language }) => platform && `
+    left: ${language === "en" ? "calc(100% - 135px)" : "calc(100% - 273px)" };
+    z-index: -1;
   `}
-  ${({ apy }) => apy && `
-    left: calc(100% - 40px);
+  ${({ apy, language }) => apy && `
+    left: ${language === "en" ? "calc(100% - 40px)" : language === "kr" ? "calc(100% + 9px)" : "calc(100% - 39px)" };
+    z-index: -1;
   `}
-  ${({ totalValue }) => totalValue && `
-    left: calc(100% - 15px);
+  ${({ totalValue, language}) => totalValue && `
+    left: ${language === "en" ? "calc(100% - 15px)" : language === "kr" ? "calc(100% - 50px)" : "calc(100% - 55px)" };
+    z-index: -1;
   `}
-  ${({ deposit }) => deposit && `
-    left: calc(100% - 25px);
+  ${({ deposit, language }) => deposit && `
+    left: ${language === "en" ? "calc(100% - 25px)" : language === "kr" ? "calc(100% - 50px)" : "calc(100% - 45px)" }; 
+    z-index: -1;
   `}
-  ${({ available }) => available && `
-    left: calc(100% + 5px);
+  ${({ available, language}) => available && `
+    left: ${language === "en" ? "calc(100% + 5px)" : language === "kr" ? "calc(100% - 36px)" : "calc(100% - 45px)" };
+    z-index: -1;
+  `}
+  ${({ stakingPool, language }) => stakingPool && `
+    top: calc(100% - 23px) ;
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% - 76px)" : language === "kr" ? "calc(100% - 115px)" : "calc(100% - 140px)" };;
+  `}
+  ${({ status, language }) => status && `
+    top: calc(100% - 23px);
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% - 47px)" : language === "kr" ? "calc(100% - 65px)" : "calc(100% - 65px)" };
+  `}
+  ${({ staked, language }) => staked && `
+    top: calc(100% - 23px);
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% - 15px)" : language === "kr" ? "calc(100% - 45px)" : "calc(100% - 45px)" };
+  `}
+  ${({ reward, language }) => reward && `
+    top: calc(100% - 23px);
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% - 5px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 30px)" };
+  `}
+  ${({ APY, language}) => APY && `
+    top: calc(100% - 23px);
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% - 45px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 45px)" };
+  `}
+  ${({ yourStake, language }) => yourStake && `
+    top: calc(100% - 23px);
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% - 12px)" : language === "kr" ? "calc(100% - 25px)" : "calc(100% - 25px)" };
+  `}
+  ${({ manageStake, language }) => manageStake && `
+    top: calc(100% - 23px);
+    bottom: unset;
+    left: ${language === "en" ? "calc(100% + 9px)" : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
   `}
   ${({ summary }) => summary && `
     transform: translateX(25px);

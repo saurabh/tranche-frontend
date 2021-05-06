@@ -1,5 +1,5 @@
 {
-  "caution": "Caution! Tranche is still in beta. Use at your own risk.",
+  "caution": "주의 ! 트랜치는 아직 베타버전입니다. 사용자 책임하에 사용하십시오. ",
   "connect": "연결하다",
   "navbar": {
     "stake": "저장",
@@ -15,6 +15,22 @@
       "own": "我的资产",
       "all": "所有资产"
     },
+    "trancheData": {
+      "baseAPY": "기본 수익률",
+      "price": "가격",
+      "fixedRate": "고정비율 산출",
+      "trancheADAI": "트랜치 A - 컴파운드 다이(COMPOUND DAI)는 cDAI 토큰(CDAI)의 시니어 트랜치로 순 연간 수익률(Net APT)에 표시되어진대로 슬라이스(SLICE) 보상에 추가하여 3.99%의 고정비율을 산출합니다.",
+      "deposit": "예치금",
+      "withdraw": "인출",
+      "balance": "내역",
+      "max": "최대치",
+      "disabled": "비화설화됨",
+      "enabled": "활성화됨",
+      "variableRate": "가변비율 산출",
+      "trancheBDAI": "트랜치 B - 컴파운드 다이(COMPOUND DAI)는 cDAI 토큰(CDAI)의 주니어 트랜치로 순 연간 수익률(Net APT)에 표시되어진대로 슬라이스(SLICE) 보상에 추가하여 -5.83%의 가변비율을 산출합니다.",
+      "trancheAUSDT": "트랜치 A - 컴파운드(COMPOUND) USDT는 cUSDT 토큰(CUSDT)의 시니어 트랜치로 순 연간 수익률(Net APT) 에 표시되어진대로 슬라이스(SLICE) 보상에 추가하여 1.99%의 고정비율을 산출합니다.",
+      "trancheBUSDT": "트랜치 B - 컴파운드(COMPOUND) USDT는 cUSDT 토큰(CUSDT)의 주니어 트랜치로 순 연간 수익률(Net APT) 에 표시되어진대로 슬라이스(SLICE) 보상에 추가하여 -1.35%의 가변비율을 산출합니다."
+    },
     "deposit": "입금",
     "withdraw": "출금",
     "balance": "잔고",
@@ -24,12 +40,11 @@
         "subtitle": "프로토콜 통합"
       },
       "tableHead": {
-        "platform": "플랫폼",
-        "instrument": "상품",
-        "apy": "연수입",
-        "valueLocked": "총 잠김 금액",
-        "subscription": "내 구독보기",
-        "status": "상태"
+        "platform": "플랫폼 및 기기 ",
+        "apy": "순 연간 수익률(NET APY)",
+        "totalDeposits": "총 예치금",
+        "myDeposits": "예치금",
+        "available": "가능한 예치금"
       },
       "statuses": {
         "active": "유효한"
@@ -41,12 +56,11 @@
         "details": ""
       },
       "slicePrice" :{
-        "title": "슬라이스 가격",
+        "title": "슬라이스(SLICE) 가격",
         "details": ""
       },
       "sliceVolume" :{
-        "titleFirst": "",
-        "titleSecond": "",
+        "title": "슬라이스(SLICE) 24시간 ",
         "details": ""
       },
       "stakeLive" :{
@@ -94,16 +108,34 @@
       "DontHaveSlice": "저장 할 수있는 슬라이스가 없습니다. 아래 버튼을 클릭하여 유니스웹으로 이동하여 슬라이스 토큰을 받으세요.",
       "DontHaveSliceLP": "저장 할 수있는 슬라이스-LP가 없습니다. 아래 버튼을 클릭하여 유니스웹으로 이동하여 슬라이스-LP 토큰을 받으세요.",
       "getSliceLP": "슬라이스 LP 토큰 받기",
-      "getSlice": "슬라이스 토큰 받기"
+      "getSlice": "슬라이스 토큰 받기",
+      "claim": "청구하기 ",
+      "availableRewards": "가능한 보상금",
+      "user": "",
+      "total": "",
+      "locked": "",
+      "pair": "쌍",
+      "totalLocked": "보관된 총수량 ",
+      "rewards": "보상금",
+      "increaseStake": "스테이크 증가",
+      "stakeSlice": "슬라이스(SLICE) 토큰 스테이크 하기 ",
+      "stakingPool": "스테이킹 풀",
+      "selectedStaking": "선택된 스테이킹 풀",
+      "approved": "승인됨",
+      "userLocked": "개별 보관된 슬라이스(SLICE)",
+      "yourStakes": "내 스테이크",
+      "yourShare": "공유내역",
+      "decreaseStake": "스테이크 감소",
+      "withdrawSlice": "슬라이스(SLICE) 토큰 인출하기"
     },
     "summary": {
       "slice": {
         "title": "저장된 슬라이스 토큰",
-        "details": ""
+        "details": "슬라이스(SLICE) 가능  "
       },
       "sliceLP": {
         "title": "저장된 슬라이스 LP 토큰",
-        "details": ""
+        "details": "슬라이스 LP(SLICE-LP) 가능"
       },
       "sliceRewards": {
         "title": "수거된 보상",
@@ -118,13 +150,43 @@
       "tableHead": {
         "stakingPool": "저장 중인 풀",
         "staked": "저장된",
-        "reward": "보상/블록",
+        "reward": "에포크 보상",
+        "apy": "APY",
+        "yourStake": "내 스테이크 ",
+        "manageStake": "스테이크 관리",
         "status": "상태"
       },
       "statuses": {
         "active": "유효한"
       }
     }
+  },
+  "toolTips": {
+    "table": {
+      "stakingPool": "각 풀에는 예출할 수 있는 다른 기본 화폐가 있습니다.",
+      "status": "풀의 현재 상태",
+      "totalStaked": "각 풀에 베팅된 금액",
+      "reward": "에포크 기간 당 보상 금액",
+      "apy": "지분 자산에 대한 순 연간 수익률",
+      "yourStake": "내가 예치한 금액",
+      "manageStake": "지분 자산 예치 및 인출",
+      "platform": "기기는 주요 프로토콜로부터 수익 창출 자산에서 파생된 다양한 자산을 나타냅니다. 자세한 내용을 확인하려면 기기를 눌러주시기 바랍니다.",
+      "netApy": "슬라이스(SLICE) 보상으로 인한 트랜치 기기의 수익을 추가함으로써 예상되는 순 연간 수익률 ",
+      "totalDeposits": "특정 트랜치에 대한 모든 사용자의 총 예치금",
+      "myDeposits": "발생된 이자를 포함, 어떤 주어진 시점에서 보유하고 있는 USD 표시 가치 ",
+      "available": "트랜치에 입금이 가능한 보유하고 있는 화폐"
+    }
+  },
+  "footer": {
+    "language": "언어",
+    "theme": "테마",
+    "dark": "어두움",
+    "light": "밝기",
+    "privacy": "개인정보",
+    "terms": "조건",
+    "support":"지원",
+    "docs": "설명서",
+    "oldApp": "기존 앱"
   },
   "rates": "Rates",
   "HowTo": "HOW-TO",

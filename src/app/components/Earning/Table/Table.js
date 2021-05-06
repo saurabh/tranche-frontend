@@ -29,7 +29,7 @@ import {
   CallToActionTradetext
 } from '../../Stake/Table/styles/TableComponents';
 import { EmptyBox } from 'assets';
-// import HeaderTabs from '../Header/HeaderTabs';
+import HeaderTabs from '../Header/HeaderTabs';
 const { tranchesList: tranchesListUrl } = apiUri;
 
 const style = {
@@ -144,6 +144,7 @@ const Table = ({
     <div className='container content-container'>
       <div className='TableContentWrapper'>
         <TableWrapper mobile>
+          <HeaderTabs />
           <div className='table-content'>
             {isLoading ? (
               <div>
@@ -158,7 +159,7 @@ const Table = ({
         </TableWrapper>
         <TableWrapper desktop>
           <div className='table-container'>
-            {/* <HeaderTabs /> */}
+            <HeaderTabs />
             <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead}/>
             <div className='table-content'>
               {isLoading ? (
