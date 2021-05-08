@@ -1914,14 +1914,16 @@ const HowToLink = styled.a`
   font-size: 10.9635px;
   text-align: center;
   letter-spacing: 0.05em;
+  border: ${props => props.border};
+  box-shadow: ${props => props.shadow};
   text-transform: uppercase;
-  color: #FFFFFF;
-  background: rgba(175, 155, 255, 0.15);
+  color: ${props => props.color};
+  background: ${props => props.background};
   border-radius: 110.967px;
   padding: 11px 22px;
   margin-left: 20px;
   :hover{
-    color: #FFFFFF; 
+    color: ${props => props.color}; 
   }
 
 `

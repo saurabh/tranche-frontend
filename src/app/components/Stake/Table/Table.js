@@ -137,7 +137,6 @@ const Table = ({
     stakingListing();
   };
 
-  console.log(data.stakingList)
 
   return (
     <div className='container content-container'>

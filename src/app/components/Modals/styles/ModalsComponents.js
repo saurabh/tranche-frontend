@@ -44,6 +44,17 @@ ${({ stake }) => stake && `
     padding: 0 35px;
   } 
 `}
+${({ stake, font, left }) => (stake && left) && `
+  h2{
+    color: #FFFFFF;
+    font-size: ${font};
+  }
+  button{
+    position: absolute;
+    right: 0;
+    padding: 0 35px;
+  } 
+`}
 ${({ claim, ModalHeader }) => claim && `
   h2{
     text-transform: capitalize;

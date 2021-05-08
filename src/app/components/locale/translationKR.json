@@ -111,9 +111,10 @@
       "getSlice": "슬라이스 토큰 받기",
       "claim": "청구하기 ",
       "availableRewards": "가능한 보상금",
-      "user": "",
-      "total": "",
-      "locked": "",
+      "userSLICE": "개별 보관된 슬라이스(SLICE)",
+      "userSLICELP": "개별 보관된 이더리움 LP(ETHLP) 토큰",
+      "totalSLICE": "보관된 총 슬라이스(SLICE)",
+      "totalSLICELP": "보관된 총 이더리움 LP(ETHLP) 토큰",
       "pair": "쌍",
       "totalLocked": "보관된 총수량 ",
       "rewards": "보상금",
@@ -126,7 +127,12 @@
       "yourStakes": "내 스테이크",
       "yourShare": "공유내역",
       "decreaseStake": "스테이크 감소",
-      "withdrawSlice": "슬라이스(SLICE) 토큰 인출하기"
+      "withdrawSlice": "슬라이스(SLICE) 토큰 인출하기",
+      "withdrawSliceETHLP": "슬라이스(SLICE) / 이더리움 LP(ETHLP) 토큰 인출하기",
+      "withdrawSliceDAILP": "슬라이스(SLICE) / 다이LP(DAI LP)  토큰 인출하기",
+      "stakeSliceTokens": "슬라이스(SLICE) 토큰 스테이크 하기 ",
+      "stakeSliceETHLPTokens": "슬라이스(SLICE) / 이더리움 LP(ETHLP)  스테이크 하기",
+      "stakeSliceDAILPTokens": "슬라이스(SLICE) / 다이LP(DAI LP) 토큰 스테이크 하기"
     },
     "summary": {
       "slice": {
@@ -139,7 +145,8 @@
       },
       "sliceRewards": {
         "title": "수거된 보상",
-        "details": ""
+        "details": "다음 배포까지",
+        "details2": "분 소요"
       }
     },
     "table": {

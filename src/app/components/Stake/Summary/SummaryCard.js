@@ -85,6 +85,7 @@ const SummaryCard = ({
 
     setBalance();
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
+  console.log(epochTimeLeft)
 
   return (
     <div>
@@ -106,7 +107,7 @@ const SummaryCard = ({
                 ? balance + " " + i18n.t('stake.summary.slice.details')
                 : type === 'lp'
                 ? balance + " " + i18n.t('stake.summary.sliceLP.details')
-                : epochTimeLeft + ' Until Next Distribution'}
+                : epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Minutes' ? epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.details') + " " + i18n.t('stake.summary.sliceRewards.details2') :  epochTimeLeft + " Until Next Distribution"}
             </SummaryCardDetails>
 
             {type === 'reward' && (

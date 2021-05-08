@@ -127,14 +127,15 @@
       "getSlice": "获得SLICE代币",
       "claim": "领取",
       "availableRewards": "可领奖励",
-      "user": "",
-      "total": "",
-      "locked": "",
+      "userSLICE": "用户SLICE已锁定",
+      "userSLICELP": "用户LP代币锁定",
+      "totalSLICE": "总锁定SLICE",
+      "totalSLICELP": "LP代币锁定总量",
       "pair": "对",
       "totalLocked": "总锁定",
+      "stakeSlice": "质押SLICE代币",
       "rewards": "奖励",
       "increaseStake": "增加质押",
-      "stakeSlice": "质押SLICE代币",
       "selectedStaking": "已选择质押池",
       "stakingPool": "质押池",
       "approved": "批准",
@@ -142,7 +143,12 @@
       "yourStakes": "你的质押",
       "yourShare": "你的分享",
       "decreaseStake": "减少质押",
-      "withdrawSlice": "提取SLICE代币"
+      "withdrawSlice": "提取SLICE代币",
+      "withdrawSliceETHLP": "提取SLICE/ETH LP代币",
+      "withdrawSliceDAILP": "提取SLICE/DAI LP代币",
+      "stakeSliceTokens": "质押SLICE代币",
+      "stakeSliceETHLPTokens": "股权SLICE/ETH LP代币",
+      "stakeSliceDAILPTokens": "质押切片/DAI LP代币"
     },
     "summary": {
       "slice": {
@@ -155,7 +161,8 @@
       },
       "sliceRewards": {
         "title": "已收集奖励",
-        "details": ""
+        "details": "距离下一次分配还有",
+        "details2": "分钟"
       }
     },
     "table": {

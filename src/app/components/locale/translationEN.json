@@ -127,9 +127,10 @@
       "getSlice": "GET SLICE TOKENS",
       "claim": "CLAIM",
       "availableRewards": "Available Rewards",
-      "user": "user",
-      "total": "total",
-      "locked": "locked",
+      "userSLICE": "USER SLICE LOCKED",
+      "userSLICELP": "USER LP TOKENS LOCKED",
+      "totalSLICE": "TOTAL SLICE LOCKED",
+      "totalSLICELP": "TOTAL LP TOKENS LOCKED",
       "pair": "PAIR",
       "totalLocked": "TOTAL LOCKED",
       "rewards": "REWARDS",
@@ -142,7 +143,12 @@
       "yourStakes": "YOUR STAKE",
       "yourShare": "YOUR SHARE",
       "decreaseStake": "Decrease Stake",
-      "withdrawSlice": "WITHDRAW SLICE TOKENS"
+      "withdrawSlice": "WITHDRAW SLICE TOKENS",
+      "withdrawSliceETHLP": "WITHDRAW SLICE/ETH LP TOKENS",
+      "withdrawSliceDAILP": "WITHDRAW SLICE/DAI LP TOKENS",
+      "stakeSliceTokens": "STAKE SLICE TOKENS",
+      "stakeSliceETHLPTokens": "STAKE SLICE/ETH LP TOKENS",
+      "stakeSliceDAILPTokens": "STAKE SLICE/DAI LP TOKENS"
     },
     "summary": {
       "slice": {
@@ -155,7 +161,8 @@
       },
       "sliceRewards": {
         "title": "SLICE Rewards Accrued",
-        "details": "Minutes Until Next Distribution"
+        "details": "Minutes Until Next",
+        "details2": "Distribution"
       }
     },
     "table": {

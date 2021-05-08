@@ -133,7 +133,6 @@ const StakingModal = ({
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
   }, [modalIsOpen, type, tokenAddress, stakingAddress, address]);
-
   const stakingModal = () => {
     return (
       <Modal
@@ -144,12 +143,12 @@ const StakingModal = ({
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
       >
-        <ModalHeader stake>
+        <ModalHeader stake font={i18n.language === "kr" || i18n.language === "zh" ? "12px" : "17px"} left>
           <h2>
             {modalType === true
-              ? `Stake ${type} tokens` 
+              ? (`${type === "SLICE" ? i18n.t('stake.modal.stakeSliceTokens') : type === "SLICE/ETH LP" ? i18n.t('stake.modal.stakeSliceETHLPTokens') : type === "SLICE/DAI LP" ? i18n.t('stake.modal.stakeSliceDAILPTokens') : ""}`)
               : modalType === false
-              ? `Withdraw ${type} tokens` 
+              ? (`${type === "SLICE" ? i18n.t('stake.modal.withdrawSlice') : type === "SLICE/ETH LP" ? i18n.t('stake.modal.withdrawSliceETHLP') : type === "SLICE/DAI LP" ? i18n.t('stake.modal.withdrawSliceDAILP') : ""}`)
               : 'Claim rewards'}
           </h2>
         </ModalHeader>
@@ -157,12 +156,12 @@ const StakingModal = ({
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
             <ModalActionDetailsContent stake={true} trade={true}>
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>USER {tokenType} LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>{tokenType === "SLICE" ? i18n.t('stake.modal.userSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.userSLICELP') : ""}</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{roundNumber(userStaked)}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>{tokenType === "SLICE" ? i18n.t('stake.modal.totalSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.totalSLICELP') : ""}</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}</LoanDetailsRowValue>
               </LoanDetailsRow>
 

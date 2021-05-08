@@ -356,7 +356,11 @@ export const ModeThemes = {
     TrancheBtnColor: "#000000",
     TrancheBtnSpan: "#E9E9FC",
     ClaimHead: "rgba(36, 39, 50, 0.6)",
-    StakingMax: "rgba(57,41,90,0.3)"
+    StakingMax: "rgba(57,41,90,0.3)",
+    HowTo: "#FFFFFF",
+    HowToText: "#4441CF",
+    HowToBorder: "0.872727px solid #E9E9FC",
+    HowToShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)"
   },
   dark: {
     body: '#100F36',
@@ -404,6 +408,10 @@ export const ModeThemes = {
     TrancheBtnColor: "#FFFFFF",
     TrancheBtnSpan: "#363661",
     ClaimHead: "rgba(255, 255, 255, 0.6)",
-    StakingMax: "rgb(57,41,90)"
+    StakingMax: "rgb(57,41,90)",
+    HowTo: "rgba(175, 155, 255, 0.15)",
+    HowToText: "#FFFFFF",
+    HowToBorder: "none",
+    HowToShadow: "none"
   }
 };
