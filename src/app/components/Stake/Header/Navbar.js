@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
-import { apiUri, pairData, ModeThemes  } from 'config/constants';
+import { apiUri, pairData, ModeThemes, dashboardUrl  } from 'config/constants';
 import { ETH, DAI, BackArrow, Logo } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
@@ -173,19 +173,17 @@ function Navbar({ path, theme }) {
             >
              {i18n.t('navbar.tranche')}
             </NavLink>
-            <NavLink
-              to={baseUrl + '/'}
+            <a
+              href={dashboardUrl}
               activeStyle={{
                 opacity: 1,
                 background: ModeThemes[theme].NavbarBackground,
                 boxShadow: ModeThemes[theme].NavbarShadow
               }}
-              className="navLinkDisabled"
-              exact
             >
             {i18n.t('navbar.vote')}
 
-            </NavLink>
+            </a>
           </NavbarLinks>
           <ConnectWallet path={path} />
         </div>
