@@ -1,8 +1,33 @@
 import styled from 'styled-components';
 
+
+
+const SummaryCardWrapperContent = styled.div`
+    //change
+    width: 21.6666667%;
+    height: 121px;
+    background: ${props => props.color};;
+    // border: 1px solid #EFEFEF;
+    // border-top: 6px solid ${props => props.color};
+    box-sizing: border-box;
+    border-radius: 12px;
+     @media (max-width: 992px){
+        // margin: 0 19px;
+        width: 90% !important;
+        // display: none !important;
+    }
+    ${({ stakeCard }) => stakeCard && `
+        width: 30% !important;
+        @media (max-width: 992px){
+            margin: 15px 0;
+            width: 90% !important;
+            // display: none !important;
+        }
+     `}
+`;
 const SummaryCardWrapper = styled.div`
     //change
-    width: 250px;
+    width: 100%;
     height: 121px;
     background: ${props => props.color};;
     // border: 1px solid #EFEFEF;
@@ -15,14 +40,6 @@ const SummaryCardWrapper = styled.div`
         width: 90% !important;
         // display: none !important;
     }
-    ${({ stakeCard }) => stakeCard && `
-        width: 434px !important;
-        @media (max-width: 992px){
-            margin: 15px auto;
-            width: 90% !important;
-            // display: none !important;
-        }
-     `}
 `;
 const SummaryCardContainer = styled.div`
     display: flex;
@@ -245,6 +262,7 @@ const StakeCardBtn = styled.div`
 
 
 export {
+    SummaryCardWrapperContent,
     SummaryCardWrapper,
     SummaryCardContainer,
     SummaryCardTitle,

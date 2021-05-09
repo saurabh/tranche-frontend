@@ -10,7 +10,8 @@ import {
   SummaryCardTitle,
   SummaryCardValue,
   SummaryCardDetails,
-  SummaryClaimBtn
+  SummaryClaimBtn,
+  SummaryCardWrapperContent
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
 import i18n from '../../locale/i18n';
@@ -88,7 +89,7 @@ const SummaryCard = ({
   console.log(epochTimeLeft)
 
   return (
-    <div>
+    <SummaryCardWrapperContent>
       <SummaryCardWrapper color={color}>
         {value || value === 0 ? (
           <SummaryCardContainer>
@@ -144,7 +145,7 @@ const SummaryCard = ({
           type={type}
         />
       </SummaryCardWrapper>
-    </div>
+    </SummaryCardWrapperContent>
   );
 };
 

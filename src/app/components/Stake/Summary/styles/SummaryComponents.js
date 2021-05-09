@@ -1,7 +1,22 @@
 import styled from 'styled-components';
 
+
+const SummaryCardWrapperContent = styled.div`
+    width: 30%;
+    height: 121px;
+    background: ${props => props.color};;
+    // border: 1px solid #EFEFEF;
+    // border-top: 6px solid ${props => props.color};
+    box-sizing: border-box;
+    border-radius: 12px;
+    @media (max-width: 992px){
+        margin-bottom: 15px;
+        width: 100%;
+        // display: none !important;
+    }
+`;
 const SummaryCardWrapper = styled.div`
-    width: 325px;
+    width: 100%;
     height: 121px;
     background: ${props => props.color};;
     // border: 1px solid #EFEFEF;
@@ -182,6 +197,7 @@ const SummaryCardBtn = styled.button`
 
 
 export {
+    SummaryCardWrapperContent,
     SummaryCardWrapper,
     SummaryCardContainer,
     SummaryCardTitle,

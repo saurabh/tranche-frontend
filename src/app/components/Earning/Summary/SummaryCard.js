@@ -12,7 +12,8 @@ import {
   SummaryClaimBtn,
   SummaryCardBtn,
   StakeCardBtn,
-  StakeCardText
+  StakeCardText,
+  SummaryCardWrapperContent
 } from './styles/SummaryComponents';
 import i18n from '../../locale/i18n';
 import { TooltipWrapper } from 'app/components/Stake/Table/styles/TableComponents';
@@ -37,7 +38,7 @@ const SummaryCard = ({
 
   const Card = () =>{
     return (
-      <div>
+      <SummaryCardWrapperContent>
           <SummaryCardWrapper color={color}>
             {value || value === 0 ? (
               <SummaryCardContainer>
@@ -86,13 +87,13 @@ const SummaryCard = ({
               </SummaryCardContainer>
             )}
           </SummaryCardWrapper>
-      </div>
+      </SummaryCardWrapperContent>
     );
   }
   const StakeCard = () =>{
     return (
-      <div>
-          <SummaryCardWrapper color={color} stakeCard={stakeCard}>
+      <SummaryCardWrapperContent stakeCard={stakeCard}>
+          <SummaryCardWrapper color={color}>
             {value || value === 0 ? (
               <SummaryCardContainer stakeCard>
                 <StakeCardText>
@@ -111,7 +112,7 @@ const SummaryCard = ({
               </SummaryCardContainer>
             )}
           </SummaryCardWrapper>      
-      </div>
+      </SummaryCardWrapperContent>
     );
   }
   return stakeCard ? StakeCard() : Card();
