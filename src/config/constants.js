@@ -15,6 +15,7 @@ import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
+export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;

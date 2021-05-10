@@ -86,7 +86,6 @@ const SummaryCard = ({
 
     setBalance();
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
-  console.log(epochTimeLeft)
 
   return (
     <SummaryCardWrapperContent>
