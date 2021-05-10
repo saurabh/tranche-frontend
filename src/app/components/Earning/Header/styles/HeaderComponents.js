@@ -80,11 +80,11 @@ const HeaderSubtitle = styled.div`
 const NavbarWrapper = styled.div`
   height: 112px;
   position: relative;
-  border-bottom: 2px solid rgba(233, 233, 252, 0.3);
+  border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border-bottom: 2px solid rgba(233, 233, 252, 0.3);
+    border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   }
 `;
 const NavbarContainer = styled.div`
@@ -613,6 +613,7 @@ const MarketTab = styled.button`
   cursor: pointer;
   transition: 300ms;
   padding: 0 29px;
+  position: relative;
   margin-right: ${props => props.market === "compound" ? "14px" : "0"};
   border-radius: 5px;
   height: 51px;
@@ -645,6 +646,24 @@ const MarketTab = styled.button`
       font-size: 12px;
     }
   }
+
+  ${({ market }) => market === "aavePolygon" && `
+    opacity: 0.5;
+    pointer-events: none;
+    h2{
+      left: 0;
+      font-size: 9px !important;
+      font-weight: lighter !important;
+      position: absolute;
+      bottom: -4px;
+      padding: 0 29px;
+    }
+  `}
+
+
+ 
+
+    
 `
 const BridgeTokensWrapper = styled.div`
   display: flex;

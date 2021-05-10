@@ -360,7 +360,9 @@ export const ModeThemes = {
     HowTo: "#FFFFFF",
     HowToText: "#4441CF",
     HowToBorder: "0.872727px solid #E9E9FC",
-    HowToShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)"
+    HowToShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
+    LoadingColorOne: "#eee",
+    LoadingColorTwo: "#f7f7f7"
   },
   dark: {
     body: '#100F36',
@@ -412,6 +414,8 @@ export const ModeThemes = {
     HowTo: "rgba(175, 155, 255, 0.15)",
     HowToText: "#FFFFFF",
     HowToBorder: "none",
-    HowToShadow: "none"
+    HowToShadow: "none",
+    LoadingColorOne: "rgba(255,255,255,0.07)",
+    LoadingColorTwo: "#363661"
   }
 };

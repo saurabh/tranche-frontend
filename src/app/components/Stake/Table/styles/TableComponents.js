@@ -16,7 +16,7 @@ const TableContentCard = styled.div`
   display: flex;
   align-items: center;
   min-height: 110px;
-  padding: 0 20px;
+  // padding: 0 20px;
   // border-bottom: 1px solid #efefef;
   justify-content: space-between;
   cursor: pointer;
@@ -118,7 +118,7 @@ const AdjustModalBtn = styled.button`
 `
 const TableHeadWrapper = styled.div`
     min-height: 28px;
-    padding: 0 20px;
+    // padding: 0 20px;
     // background: ${props => props.path === "borrow" ? "rgb(223, 210, 251, 0.2)" : props.path === "lend" ? "rgb(215, 255, 183, 0.2)" : "#F8F8F8"};
     // border-top: 1px solid #EFEFEF;
     // border-bottom: 1px solid #EFEFEF;
@@ -146,7 +146,7 @@ const TableHeadTitle = styled.div`
         font-weight: 700;
         font-size: 14px;
         letter-spacing: 0.05em;
-        text-decoration: underline dashed;
+        border-bottom: 2px dashed ${props => props.color};
         text-transform: uppercase;
         color: ${props => props.color};
     }
@@ -198,28 +198,28 @@ const TableHeadTitle = styled.div`
       width: 14%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ totalValue }) => totalValue && `
       width: 15%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ subscription }) => subscription && `
       width: 15%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ status }) => status && `
       width: 15%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ trancheTableBtns }) => trancheTableBtns && `
@@ -228,54 +228,53 @@ const TableHeadTitle = styled.div`
     `}
 
     ${({ stakingPoolStake }) => stakingPoolStake && `
-      width: 17%;;
+      width: 17%;
     `}
     ${({ statusStake }) => statusStake&& `
       width: 15%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ reward }) => reward && `
       width: 14%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ APYStake }) => APYStake && `
       width: 12%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ staked }) => staked && `
       width: 14%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;      
       }
     `}
     ${({ stakeCol }) => stakeCol && `
       width: 12%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
     ${({ btnsStake }) => btnsStake && `
       width: 10%;
       h2{
         text-align: center;
-        width: 100%;
+        margin: 0 auto;
       }
     `}
-    ${({ tranche }) => tranche && `
+    ${({ tranche, color }) => tranche && `
       & > h2{
-        text-decoration: underline dashed;
-
+        border-bottom: 2px dashed ${color};
       }
     `}
 
@@ -864,6 +863,7 @@ const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
   width: 17%;
+  padding-left: 20px;
   ${({ platform }) => platform && `
     width: 31% !important;
   `}
@@ -1928,6 +1928,12 @@ const HowToLink = styled.a`
 
 `
 
+const LoadingContent = styled.div`
+  animation: gradient-slide 2.2s ease infinite;
+  background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, ${props => props.colorOne}), color-stop(50%, ${props => props.colorTwo}), color-stop(60%, ${props => props.colorOne}));
+  background: 0 0/300% 300% linear-gradient(90deg, ${props => props.colorOne} 40%, ${props => props.colorTwo} 50%, ${props => props.colorOne} 60%);
+`
+
 
 
 export {
@@ -2014,5 +2020,6 @@ export {
   StakeBtn,
   StakeBtns,
   TooltipWrapper,
-  HowToLink
+  HowToLink,
+  LoadingContent
 };

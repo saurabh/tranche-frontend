@@ -41,8 +41,8 @@ const SummaryCardContainer = styled.div`
             width: 100%;
             height: 7px;
             animation: gradient-slide 2.2s ease infinite;
-            background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, #eee), color-stop(50%, #f7f7f7), color-stop(60%, #eee));
-            background: 0 0/300% 300% linear-gradient(90deg, #eee 40%, #f7f7f7 50%, #eee 60%);
+            background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, rgba(255,255,255,0.09) ), color-stop(50%, rgba(255,255,255,0.09) ), color-stop(60%, rgba(255,255,255,0.09) ));
+            background: 0 0/300% 300% linear-gradient(90deg, rgba(255,255,255,0.09)  40%, rgba(255,255,255,0.09)  50%, rgba(255,255,255,0.09)  60%);
         }
         div:nth-child(1){
             width: 50%;
@@ -56,21 +56,21 @@ const SummaryCardContainer = styled.div`
   `}
 `;
 const SummaryCardTitle = styled.h2`
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
     color: #FFFFFF;
 `;
 const SummaryCardValue = styled.h2`
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
     color: #FFFFFF;
 `;
 const SummaryCardDetails = styled.h2`
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -171,7 +171,7 @@ const SummaryCardBtn = styled.button`
     border: none;
     outline: none;
     font-size: 24px;
-    font-family: 'Roboto';
+    font-family: 'Inter', sans-serif;
     font-weight: 100;
     width: 24px;
     height: 24px;

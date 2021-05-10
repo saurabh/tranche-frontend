@@ -78,11 +78,11 @@ const HeaderSubtitle = styled.div`
 const NavbarWrapper = styled.div`
   height: 112px;
   position: relative;
-  border-bottom: 2px solid rgba(233, 233, 252, 0.3);
+  border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border-bottom: 2px solid #E9E9FC;  
+    border-bottom: 2px solid rgba(233, 233, 252, 0.1);;  
   }
 `;
 const NavbarContainer = styled.div`

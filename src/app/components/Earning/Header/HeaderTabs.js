@@ -40,7 +40,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
       </div>
       <MarketsTabs>
           <MarketTab market="compound" current={trancheMarket === "compound"} onClick={() => trancheMarketsToggle("compound")} background={ModeThemes[theme].TrancheBtnBackground} backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent} border={ModeThemes[theme].TrancheBtnBorder} color={ModeThemes[theme].TrancheBtnColor}><img src={theme === "light" ? CompoundBtnBlack : CompoundBtn} alt="" /></MarketTab>
-          <MarketTab market="aavePolygon" current={trancheMarket === "aavePolygon"} onClick={() => trancheMarket !== "aavePolygon"  && openModal()} span={ModeThemes[theme].TrancheBtnSpan} background={ModeThemes[theme].TrancheBtnBackground} backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent} border={ModeThemes[theme].TrancheBtnBorder} color={ModeThemes[theme].TrancheBtnColor}><img src={AaveBtn} alt="" /> Market <span></span> <img src={theme === "light" ? PolygonLogoBlack : PolygonLogo } alt="" /></MarketTab>
+          <MarketTab market="aavePolygon" current={trancheMarket === "aavePolygon"} onClick={() => (trancheMarket !== "aavePolygon" || true) && openModal()} span={ModeThemes[theme].TrancheBtnSpan} background={ModeThemes[theme].TrancheBtnBackground} backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent} border={ModeThemes[theme].TrancheBtnBorder} color={ModeThemes[theme].TrancheBtnColor}><img src={AaveBtn} alt="" /> Market <h2>coming soon</h2> <span></span> <img src={theme === "light" ? PolygonLogoBlack : PolygonLogo } alt="" /></MarketTab>
       </MarketsTabs>
       {trancheMarket === "aavePolygon" &&
         <BridgeTokensWrapper>

@@ -654,6 +654,7 @@ const FieldWrapper = styled.div`
     font-size: 10px;
     font-weight: bold;
     cursor: pointer;
+    text-transform: uppercase;
     padding: 6px 8px;
     // color: rgb(57,41,90, 0.3);
     color: #B3B3B3;

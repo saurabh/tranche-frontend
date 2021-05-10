@@ -28,7 +28,8 @@ import {
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
-  CallToActionTradetext
+  CallToActionTradetext,
+  LoadingContent
 } from './styles/TableComponents';
 import { EmptyBox } from 'assets';
 const { stakingList: stakingListUrl } = apiUri;
@@ -166,18 +167,18 @@ const Table = ({
                       <div className='loadingCard'>
                         <div className='loadingFirstCol'>
                           <div className='loadingFirslColContent'>
-                            <div className='loadingAvatar loadingContent '></div>
-                            <div className='loadingText loadingContentWrapper loadingContent'></div>
+                            <LoadingContent className='loadingAvatar loadingContent ' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
+                            <LoadingContent className='loadingText loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                           </div>
                         </div>
                         <div className='loadingSecondCol'>
-                          <div className='loadingContentCol loadingContentWrapper loadingContent'></div>
+                          <LoadingContent className='loadingContentCol loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                         </div>
                         <div className='loadingFifthCol'>
-                          <div className='loadingFifthColContent loadingContentWrapper loadingContent'></div>
+                          <LoadingContent className='loadingFifthColContent loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                         </div>
                         <div className='loadingSixthCol'>
-                          <div className='loadingSixthColContent loadingContentWrapper loadingContent'></div>
+                          <LoadingContent className='loadingSixthColContent loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                         </div>
                       </div>
                     </TableContentCard>
