@@ -42,6 +42,7 @@ let TableMoreRow = ({
   name,
   type,
   apy,
+  contractAddress,
   cryptoType,
   dividendType,
   buyerTokenBalance,
@@ -90,10 +91,10 @@ let TableMoreRow = ({
       setIsEth(true);
       setDepositApproved(true);
     }
-    setDepositApproved(trancheAllowance[buyerCoinAddress]);
-    setWithdrawApproved(trancheAllowance[trancheTokenAddress]);
-    change('depositIsApproved', trancheAllowance[buyerCoinAddress]);
-    change('withdrawIsApproved', trancheAllowance[trancheTokenAddress]);
+    setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
+    setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+    change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
+    change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
 

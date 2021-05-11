@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import store from '../store';
 import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
-import { ERC20Tokens, TrancheTokenAddresses, JCompoundAddress, TrancheBuyerCoinAddresses } from 'config/constants';
+import { ERC20Tokens, JCompoundAddress, CompTrancheTokens, JAaveAddress, AaveTrancheTokens, TrancheBuyerCoinAddresses } from 'config/constants';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -57,7 +57,7 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
-    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
+    const Tokens = ERC20Tokens.concat(CompTrancheTokens);
     const state = store.getState();
     const { web3 } = state.ethereum;
     const batch = new web3.BatchRequest();
@@ -98,9 +98,14 @@ export const toggleApproval = (tokenAddress, bool) => async (dispatch) => {
   });
 };
 
-export const checkTrancheAllowances = (address) => async (dispatch) => {
+export const checkTrancheAllowances = (address, contractAddress) => async (dispatch) => {
   try {
-    const Tokens = TrancheTokenAddresses.concat(TrancheBuyerCoinAddresses);
+    const Tokens =
+      contractAddress === JCompoundAddress
+        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : contractAddress === JAaveAddress
+        ? AaveTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : [];
     const state = store.getState();
     const { web3 } = state.ethereum;
     const batch = new web3.BatchRequest();
@@ -121,19 +126,19 @@ export const checkTrancheAllowances = (address) => async (dispatch) => {
     Tokens.map((tokenAddress) => {
       let token = ERC20Setup(web3, tokenAddress);
       batch.add(
-        token.methods.allowance(address, JCompoundAddress).call.request({ from: address }, (err, res) => {
+        token.methods.allowance(address, contractAddress).call.request({ from: address }, (err, res) => {
           if (err) {
             console.error(err);
           } else {
             if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {
               dispatch({
                 type: SET_TRANCHE_ALLOWANCE,
-                payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: true }
+                payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: true }
               });
             } else {
               dispatch({
                 type: SET_TRANCHE_ALLOWANCE,
-                payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: false }
+                payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: false }
               });
             }
           }

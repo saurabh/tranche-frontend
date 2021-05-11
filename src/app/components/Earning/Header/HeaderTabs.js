@@ -19,7 +19,6 @@ export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { trancheMarket } = data;
-  console.log(trancheMarket)
 
   const openModal = () =>{
     setModalIsOpen(true);
