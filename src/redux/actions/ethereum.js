@@ -91,10 +91,10 @@ export const setTokenBalances = (address) => async (dispatch) => {
   }
 };
 
-export const toggleApproval = (tokenAddress, bool) => async (dispatch) => {
+export const toggleApproval = (tokenAddress, contractAddress, bool) => async (dispatch) => {
   dispatch({
     type: SET_TRANCHE_ALLOWANCE,
-    payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
+    payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
   });
 };
 

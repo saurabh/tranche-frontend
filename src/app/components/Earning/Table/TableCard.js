@@ -134,7 +134,7 @@ const TableCard = ({
         .on('confirmation', (count) => {
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-            toggleApproval(tokenAddress, !isApproved)
+            toggleApproval(tokenAddress, contractAddress, !isApproved)
             setApproveLoading(false);
             destroy('tranche');
           }
