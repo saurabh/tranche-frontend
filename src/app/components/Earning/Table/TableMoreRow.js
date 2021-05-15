@@ -91,10 +91,12 @@ let TableMoreRow = ({
       setIsEth(true);
       setDepositApproved(true);
     }
-    setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
-    setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
-    change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
-    change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+    if (trancheAllowance[contractAddress]) {
+      setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
+      setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+      change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
+      change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
 
