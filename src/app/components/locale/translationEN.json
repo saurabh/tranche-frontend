@@ -23,6 +23,22 @@
       "own": "My Tranches",
       "all": "All Tranches"
     },
+    "trancheData": {
+      "baseAPY": "BASE APY",
+      "price": "PRICE",
+      "fixedRate": "FIXED RATE YIELD",
+      "trancheADAI": "Tranche A - Compound DAI is the senior tranche of the CDAI token. This tranche yields a fixed rate of 3.99%, in addition to SLICE rewards as shown in Net APY.",
+      "deposit": "Deposit",
+      "withdraw": "Withdraw",
+      "balance": "Balance",
+      "max": "Max",
+      "disabled": "Disabled",
+      "enabled": "Enabled",
+      "variableRate": "VARIABLE RATE YIELD",
+      "trancheBDAI": "Tranche B - Compound DAI is the junior tranche of the CDAI token. This tranche yields a variable rate of -5.83%, in addition to SLICE rewards as shown in Net APY.",
+      "trancheAUSDT": "Tranche A - Compound USDT is the senior tranche of the CUSDT token. This tranche yields a fixed rate of 1.99%, in addition to SLICE rewards as shown in Net APY.",
+      "trancheBUSDT": "Tranche B - Compound USDT is the junior tranche of the CUSDT token. This tranche yields a variable rate of -1.35%, in addition to SLICE rewards as shown in Net APY."
+    },
     "deposit": "Deposit",
     "withdraw": "Withdraw",
     "balance": "Balance",
@@ -32,12 +48,11 @@
         "subtitle": "Protocol Integrations"
       },
       "tableHead": {
-        "platform": "PLATFORM",
-        "instrument": "INSTRUMENT",
-        "apy": "ANNUAL YIELD (APY)",
-        "valueLocked": "TOTAL VALUE LOCKED",
-        "subscription": "MY SUBSCRIPTION",
-        "status": "STATUS"
+        "platform": "PLATFORM AND INSTRUMENT",
+        "apy": "NET APY",
+        "totalDeposits": "TOTAL DEPOSITS",
+        "myDeposits": "MY DEPOSITS",
+        "available": "AVAILABLE TO DEPOSIT"
       },
       "statuses": {
         "active": "active"
@@ -53,8 +68,7 @@
         "details": ""
       },
       "sliceVolume" :{
-        "titleFirst": "SLICE",
-        "titleSecond": "Volume",
+        "title": "SLICE 24H Volume",
         "details": ""
       },
       "stakeLive" :{
@@ -110,37 +124,92 @@
       "DontHaveSlice": "You don’t have any SLICE available to stake. Click the button below to purchase SLICE Tokens",
       "DontHaveSliceLP": "You don’t have any SLICE-LP available to stake. Click the button below to go to UniSwap and get SLICE-LP Tokens",
       "getSliceLP": "GET SLICE LP TOKENS",
-      "getSlice": "GET SLICE TOKENS"
+      "getSlice": "GET SLICE TOKENS",
+      "claim": "CLAIM",
+      "availableRewards": "Available Rewards",
+      "userSLICE": "USER SLICE LOCKED",
+      "userSLICELP": "USER LP TOKENS LOCKED",
+      "totalSLICE": "TOTAL SLICE LOCKED",
+      "totalSLICELP": "TOTAL LP TOKENS LOCKED",
+      "pair": "PAIR",
+      "totalLocked": "TOTAL LOCKED",
+      "rewards": "REWARDS",
+      "increaseStake": "Increase Stake",
+      "stakeSlice": "STAKE SLICE TOKENS",
+      "selectedStaking": "Selected Staking Pool",
+      "stakingPool": "STAKING POOL",
+      "approved": "Approved",
+      "userLocked": "USER SLICE LOCKED",
+      "yourStakes": "YOUR STAKE",
+      "yourShare": "YOUR SHARE",
+      "decreaseStake": "Decrease Stake",
+      "withdrawSlice": "WITHDRAW SLICE TOKENS",
+      "withdrawSliceETHLP": "WITHDRAW SLICE/ETH LP TOKENS",
+      "withdrawSliceDAILP": "WITHDRAW SLICE/DAI LP TOKENS",
+      "stakeSliceTokens": "STAKE SLICE TOKENS",
+      "stakeSliceETHLPTokens": "STAKE SLICE/ETH LP TOKENS",
+      "stakeSliceDAILPTokens": "STAKE SLICE/DAI LP TOKENS"
     },
     "summary": {
       "slice": {
         "title": "Staked SLICE Tokens",
-        "details": ""
+        "details": "SLICE Available"
       },
       "sliceLP": {
         "title": "Staked SLICE LP Tokens",
-        "details": ""
+        "details": "SLICE-LP Available"
       },
       "sliceRewards": {
         "title": "SLICE Rewards Accrued",
-        "details": ""
+        "details": "Minutes Until Next",
+        "details2": "Distribution"
       }
     },
     "table": {
       "tableHeader": {
-        "title": "Current Pools",
+        "title": "Staking Pools",
         "subtitle": "Staking Rewards"
       },
       "tableHead": {
         "stakingPool": "Staking Pool",
         "staked": "total Staked",
         "reward": "EPOCH REWARDS",
+        "apy": "APY",
+        "yourStake": "Your Stake",
+        "manageStake": "Manage Stake",
         "status": "STATUS"
       },
       "statuses": {
         "active": "active"
       }
     }
+  },
+  "toolTips": {
+    "table": {
+      "stakingPool": "Each pool has a different base currency that you can deposit into.",
+      "status": "Current status of the pool",
+      "totalStaked": "The amount staked in each pool.",
+      "reward": "The reward amount per epoch duration, which is currently one week.",
+      "apy": "The annualized return of return on your staked assets.",
+      "yourStake": "The amount that you deposited. ",
+      "manageStake": "Deposit or withdraw your staked assets.",
+      "platform": "Instruments represent different assets derived from yield generating assets from major protocols, press on the instrument to learn more.",
+      "netApy": "The expected yearly return on investment by adding the yield from the Tranche instrument in addition to SLICE rewards.",
+      "totalDeposits": "Total deposits accross all users into each specific Tranche.",
+      "myDeposits": "Your holdings in the USD value at any given point, including accrued interest.",
+      "available": "Your holdings of the currency that you may deposit into this Tranche."
+    }
+  },
+  "footer": {
+    "language": "Language",
+    "theme": "THEME",
+    "dark": "DARK",
+    "light": "LIGHT",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "support":"Support",
+    "docs": "Documentation",
+    "oldApp": "Old App"
   },
   
   "rates": "Rates",

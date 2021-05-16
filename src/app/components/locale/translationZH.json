@@ -1,5 +1,5 @@
 {
-  "caution": "警告！Tranche目前还是测试版本。请自己斟酌风险后使用。",
+  "caution": "谨慎!Tranche仍处于beta阶段。使用风险自负。",
   "connect": "连接",
   "navbar":{
     "stake": "质押",
@@ -39,6 +39,22 @@
       "own": "我的资产",
       "all": "所有资产"
     },
+    "trancheData": {
+      "baseAPY": "基础APY",
+      "price": "价格",
+      "fixedRate": "固定利率的收益率",
+      "trancheADAI": "Tranche A -复合DAI是CDAI代币的高级部分。这部分的收益率固定为3.99%，此外，还有净APY所示的SLICE回报。",
+      "deposit": "存入",
+      "withdraw": "提取",
+      "balance": "余额",
+      "max": "最大",
+      "disabled": "禁用",
+      "enabled": "启用",
+      "variableRate": "可变利率收益率",
+      "trancheBDAI": "Tranche B - 复合DAI是CDAI代币的次级部分。这部分的收益率可变率为-5.83%，除此之外，如净APY所示的SLICE回报。",
+      "trancheAUSDT": "Tranche A - 复合USDT是CUSDT令牌的高级分级。这部分的收益率固定为1.99%，此外，还有净APY所示的SLICE回报。",
+      "trancheBUSDT": "Tranche B - 组合USDT是CUSDT代币的次级Tranche。这部分的收益率可变率为-1.35%，除此之外，还有净APY所示的SLICE回报。"
+    },
     "deposit": "存入",
     "withdraw": "提取",
     "balance": "余额",
@@ -48,12 +64,11 @@
         "subtitle": "协议集成"
       },
       "tableHead": {
-        "platform": "平台",
-        "instrument": "工具",
-        "apy": "年产量（apy）",
-        "valueLocked": "总计价值已锁定",
-        "subscription": "我的订阅",
-        "status": "状态"
+        "platform": "平台和工具",
+        "apy": "APY净值",
+        "totalDeposits": "总存款",
+        "myDeposits": "我的存款",
+        "available": "可存入额"
       },
       "statuses": {
         "active": "活跃"
@@ -69,8 +84,7 @@
         "details": ""
       },
       "sliceVolume" :{
-        "titleFirst": "",
-        "titleSecond": "",
+        "title": "SLICE 24小时量",
         "details": ""
       },
       "stakeLive" :{
@@ -110,20 +124,45 @@
       "DontHaveSlice": "你没有任何可供质押的SLICE。点击下面的按钮购买SLICE代币",
       "DontHaveSliceLP": "您没有任何SLICE-LP可以下注。单击下面的按钮转到UniSwap并获取SLICE-LP代币",
       "getSliceLP": "获得SLICE LP代币",
-      "getSlice": "获得SLICE代币"
+      "getSlice": "获得SLICE代币",
+      "claim": "领取",
+      "availableRewards": "可领奖励",
+      "userSLICE": "用户SLICE已锁定",
+      "userSLICELP": "用户LP代币锁定",
+      "totalSLICE": "总锁定SLICE",
+      "totalSLICELP": "LP代币锁定总量",
+      "pair": "对",
+      "totalLocked": "总锁定",
+      "stakeSlice": "质押SLICE代币",
+      "rewards": "奖励",
+      "increaseStake": "增加质押",
+      "selectedStaking": "已选择质押池",
+      "stakingPool": "质押池",
+      "approved": "批准",
+      "userLocked": "用户SLICE已锁定",
+      "yourStakes": "你的质押",
+      "yourShare": "你的分享",
+      "decreaseStake": "减少质押",
+      "withdrawSlice": "提取SLICE代币",
+      "withdrawSliceETHLP": "提取SLICE/ETH LP代币",
+      "withdrawSliceDAILP": "提取SLICE/DAI LP代币",
+      "stakeSliceTokens": "质押SLICE代币",
+      "stakeSliceETHLPTokens": "股权SLICE/ETH LP代币",
+      "stakeSliceDAILPTokens": "质押切片/DAI LP代币"
     },
     "summary": {
       "slice": {
         "title": "已质押SLICE代币",
-        "details": ""
+        "details": "SLICE 可用"
       },
       "sliceLP": {
         "title": "已质押SLICE LP代币",
-        "details": ""
+        "details": "SLICE-LP可用"
       },
       "sliceRewards": {
         "title": "已收集奖励",
-        "details": ""
+        "details": "距离下一次分配还有",
+        "details2": "分钟"
       }
     },
     "table": {
@@ -133,14 +172,44 @@
       },
       "tableHead": {
         "stakingPool": "质押池",
-        "staked": "已质押",
-        "reward": "奖励/区块",
+        "staked": "总质押",
+        "reward": "Epoch 奖励",
+        "apy": "APY",
+        "yourStake": "你的质押",
+        "manageStake": "管理股份",
         "status": "状态"
       },
       "statuses": {
         "active": "活跃"
       }
     }
+  },
+  "toolTips": {
+    "table": {
+      "stakingPool": "每个池都可以存入不同的基础货币。",
+      "status": "池的当前状态",
+      "totalStaked": "在每个池的质押的数量。",
+      "reward": "每个持续期间（目前是一个星期）的奖励总额。",
+      "apy": "你的质押资产的年化回报率。",
+      "yourStake": "你存入的总额。",
+      "manageStake": "存入或提取您的股份资产。",
+      "platform": "工具代表不同的资产衍生自产生资产的主要协议，点击工具了解更多。",
+      "netApy": "通过将部分债券工具的收益和SLICE回报相加得到的预期年度投资回报。",
+      "totalDeposits": "所有用户在每个Tranche中总计存入总额",
+      "myDeposits": "您所持美元在任何时间点的价值，包括应计利息。",
+      "available": "您所持有的可存入此部分的货币。"
+    }
+  },
+  "footer": {
+    "language": "语言",
+    "theme": "主题",
+    "dark": "黑暗",
+    "light": "亮白",
+    "privacy": "隐私",
+    "terms": "政策",
+    "support":"支持",
+    "docs": "文档",
+    "oldApp": "旧款应用程序"
   },
   "rates": "兑换率",
   "HowTo": "步骤",

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
+import { TableTitle } from '../../Stake/Table/styles/TableComponents';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import axios from 'axios';
-import { apiUri, serverUrl } from 'config/constants';
+import { apiUri, ModeThemes, serverUrl } from 'config/constants';
 import PropTypes from 'prop-types';
 
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
@@ -40,7 +41,8 @@ const SummaryCards = ({
   summaryData: { slice, lp, lpList, sliceStats, tvl },
   summaryFetchSuccess,
   setSliceStats,
-  setTvl
+  setTvl,
+  theme
 }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
@@ -79,6 +81,9 @@ const SummaryCards = ({
 
   return (
     <div>
+      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
+        <h2>Tranche Stats</h2>
+      </TableTitle>
       {!isDesktop && currentPath === 'stake' && (
         <SummaryCardsWrapper className='container content-container'>
           <button onClick={() => openModal(undefined, 0)}>
@@ -137,7 +142,7 @@ const SummaryCards = ({
               currentPath === 'stake'
                 ? i18n.t('stake.summary.sliceRewards.title')
                 : currentPath === 'tranche'
-                ? 'SLICE 24H Volume'
+                ? i18n.t('tranche.summary.sliceVolume.title')
                 : 'Collateralization Ratio'
             }
             value={sliceStats ? sliceStats.volume : 0}
@@ -268,7 +273,8 @@ const mapStateToProps = (state) => {
   return {
     path: state.path,
     ethereum: state.ethereum,
-    summaryData: state.summaryData
+    summaryData: state.summaryData,
+    theme: state.theme
   };
 };
 

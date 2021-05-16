@@ -52,11 +52,13 @@ const HeaderTabs = ({ path, theme }) => {
   
   return (
     <HeaderTabsWrapper path={path} desktop>
-      <HeaderTabsBtnsLinks color={ModeThemes[theme]}>
+      <HeaderTabsBtnsLinks color={ModeThemes[theme]} colorBorder={ModeThemes[theme].NavbarBorder}>
           <NavLink
             to={baseUrl + '/stake'}
             activeStyle={{
-              opacity: 1
+              opacity: 1,
+              background: ModeThemes[theme].NavbarBackground,
+              boxShadow: ModeThemes[theme].NavbarShadow
             }}
             exact
           >

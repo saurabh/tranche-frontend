@@ -78,11 +78,11 @@ const HeaderSubtitle = styled.div`
 const NavbarWrapper = styled.div`
   height: 112px;
   position: relative;
-  border-bottom: 2px solid rgba(233, 233, 252, 0.3);
+  border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border-bottom: 2px solid #E9E9FC;  
+    border-bottom: 2px solid rgba(233, 233, 252, 0.1);;  
   }
 `;
 const NavbarContainer = styled.div`
@@ -107,7 +107,7 @@ const NavbarLinks = styled.div`
   `}
   & > a {
     // display: inline-block;
-    font-family: 'Inter';
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -316,7 +316,7 @@ const RatesWrapper = styled.div`
 
 const RatesBoxWrapper = styled.div`
   position: absolute;
-  top: -88px;
+  top: -102px;
   right: -220px;
   width: 298px;
   height: auto;
@@ -532,14 +532,16 @@ const OtherTabsContainer = styled.div`
   }
 `
 const HeaderTabsBtnsLinks = styled.div`
-  width: 481px;
+  // width: 481px;
   display: flex;
   justify-content: space-between;
+  border-radius: 159px;
+  border: 1px solid ${props => props.colorBorder};
   a, div > button{
     font-family: "Inter", sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     // color: #4441CF;
@@ -549,9 +551,18 @@ const HeaderTabsBtnsLinks = styled.div`
     cursor: pointer;
     border: none;
     background: transparent;
+    padding: 17px 37px;
+    border-radius: 159px;
     opacity: 0.5;
     :hover{
       opacity: 0.6;
+    }
+  }
+  @media (max-width: 992px) {
+    margin: 12px 0;
+    a{
+      font-size: 12px;
+      padding: 9px 25px;
     }
   }
 `

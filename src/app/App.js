@@ -17,13 +17,14 @@ import {
   apiUri,
   LoanContractAddress,
   PriceOracleAddress,
-  ProtocolAddress,
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
+  JAaveAddress,
   ModeThemes,
   ERC20Tokens,
-  TrancheTokenAddresses
+  CompTrancheTokens,
+  AaveTrancheTokens
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -56,7 +57,7 @@ const App = ({
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
-    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
+    const Tokens = ERC20Tokens.concat(CompTrancheTokens).concat(AaveTrancheTokens);
     const timeout = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
@@ -91,7 +92,10 @@ const App = ({
   }, [address, setTokenBalances]);
 
   useEffect(() => {
-    address && checkTrancheAllowances(address);
+    if (address) {
+      checkTrancheAllowances(address, JCompoundAddress);
+      checkTrancheAllowances(address, JAaveAddress);
+    }
   }, [address, checkTrancheAllowances]);
 
   useEffect(() => {
@@ -138,26 +142,6 @@ const App = ({
               }
             },
             loanList
-          );
-        }
-      });
-    const Protocol = web3.eth
-      .subscribe('logs', {
-        address: ProtocolAddress
-      })
-      .on('data', async () => {
-        if (path === 'tranche') {
-          await timeout(5000);
-          await fetchTableData(
-            {
-              skip,
-              limit,
-              filter: {
-                address: tradeType === 'myTranches' ? address : undefined,
-                type: filter //ETH/JNT keep these in constant file
-              }
-            },
-            tranchesList
           );
         }
       });
@@ -243,9 +227,6 @@ const App = ({
       priceOracle.unsubscribe((error) => {
         if (error) console.error(error);
       });
-      Protocol.unsubscribe((error) => {
-        if (error) console.error(error);
-      });
       JCompound.unsubscribe((error) => {
         if (error) console.error(error);
       });
@@ -282,7 +263,7 @@ const App = ({
         <Banner />
         <Router>
           <Switch location={window.location}>
-            <Redirect exact from={baseRouteUrl + '/'} to='/stake' />
+            <Redirect exact from={baseRouteUrl + '/'} to='/tranche' />
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/tranche'} component={Trade} />

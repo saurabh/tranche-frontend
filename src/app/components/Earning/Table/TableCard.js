@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
@@ -75,7 +75,7 @@ const TableCard = ({
     cryptoType,
     dividendType,
     trancheToken,
-    trancheRate
+    trancheRate  
   },
   path,
   setAddress,
@@ -85,10 +85,10 @@ const TableCard = ({
   ethereum: { tokenBalance, balance, address, wallet, web3, notify },
   toggleApproval,
   destroy,
-  theme
+  theme,
+  isDesktop
   // checkServer
 }) => {
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
@@ -102,14 +102,7 @@ const TableCard = ({
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 1200);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
+  
 
   const onboard = initOnboard({
     address: setAddress,
@@ -141,7 +134,7 @@ const TableCard = ({
         .on('confirmation', (count) => {
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-            toggleApproval(tokenAddress, !isApproved)
+            toggleApproval(tokenAddress, contractAddress, !isApproved)
             setApproveLoading(false);
             destroy('tranche');
           }
@@ -190,7 +183,7 @@ const TableCard = ({
         <TableContentCard
           pointer={true}
           onClick={() => cardToggle()}
-          className={trancheCard.status && id === trancheCard.id ? 'table-card-toggle' : ''}
+          // className={trancheCard.status && id === trancheCard.id ? 'table-card-toggle' : ''}
           border={trancheCard.status && id === trancheCard.id}
           color={ModeThemes[theme].borderColor}
         >
@@ -252,7 +245,7 @@ const TableCard = ({
           </TableFourthCol>
           <TableFifthCol className='table-col' status>
             <FifthColContent color={ModeThemes[theme].tableText}>
-              <h2>${buyerTokenBalance ? roundNumber(safeMultiply(cryptoTypePrice, buyerTokenBalance)) : '0'}</h2>
+              <h2>${buyerTokenBalance && cryptoTypePrice ? roundNumber(safeMultiply(cryptoTypePrice, buyerTokenBalance)) : '0'}</h2>
               <h2>
                 ({buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType})
               </h2>
@@ -315,6 +308,7 @@ const TableCard = ({
                 name={name}
                 type={type}
                 apy={apy}
+                contractAddress={contractAddress}
                 cryptoType={cryptoType}
                 dividendType={dividendType}
                 buyerTokenBalance={buyerTokenBalance}
@@ -421,6 +415,7 @@ const TableCard = ({
                 name={name}
                 type={type}
                 apy={apy}
+                contractAddress={contractAddress}
                 cryptoType={cryptoType}
                 dividendType={dividendType}
                 buyerTokenBalance={buyerTokenBalance}
