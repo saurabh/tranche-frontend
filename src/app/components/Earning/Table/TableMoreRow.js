@@ -127,7 +127,7 @@ let TableMoreRow = ({
 
   return (
     <TableMoreRowWrapper>
-      <TableMoreRowContent></TableMoreRowContent>
+      <TableMoreRowContent>
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
