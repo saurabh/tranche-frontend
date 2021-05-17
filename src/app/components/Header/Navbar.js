@@ -79,10 +79,10 @@ function Navbar({ path }) {
             <div>
               <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
               <a href="/">DASHBOARD</a>
-              <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
+              <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer">DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
-              <a href="https://discord.com/invite/Nv44PTdF3K">SUPPORT</a>
+              <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>

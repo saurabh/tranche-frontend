@@ -73,10 +73,10 @@ function Navbar({ path, theme }) {
             <img src={TrancheIcon} alt="icon" />
             {/* <h2>0xB51F1234DA3124124468</h2> */}
             <div>
-              <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
+              <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer">DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
-              <a href="https://discord.com/invite/Nv44PTdF3K">SUPPORT</a>
+              <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>
