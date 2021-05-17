@@ -130,7 +130,7 @@ let TableMoreRow = ({
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{dividendType}</h2>
                 <h2>
                   0
@@ -139,21 +139,21 @@ let TableMoreRow = ({
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.baseAPY')}</h2>
                 <h2>{roundNumber(apy, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>SLICE APY</h2>
                 <h2>TBD</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.trancheData.price')}</h2>
                 <h2>
                   {roundNumber(trancheRate)} {cryptoType}
@@ -166,7 +166,7 @@ let TableMoreRow = ({
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
           </TableMoreLeftTopSection>
-          <TableMoreLeftBottomSection title={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
+          <TableMoreLeftBottomSection titleColor={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
             <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
@@ -242,7 +242,7 @@ let TableMoreRow = ({
             >
               {isApproveLoading && (
                 <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -305,7 +305,7 @@ let TableMoreRow = ({
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -379,7 +379,7 @@ let TableMoreRow = ({
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
