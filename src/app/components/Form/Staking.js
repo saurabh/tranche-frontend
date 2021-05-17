@@ -120,7 +120,7 @@ let StakingForm = ({
                 <img src={TrancheImg} alt='tranche' />
               </SelectedStakingImg>
               <SelectedStakingContent SelectedStakingText={ModeThemes[theme].SelectedStakingText} SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}>
-                <h2>{type} {i18n.t('stake.modal.stakingPool')}</h2>
+                <h2>{type}</h2>
                 <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                   {contractAddress}
                 </a>

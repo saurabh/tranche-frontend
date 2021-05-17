@@ -74,6 +74,7 @@ const TableCard = ({
     apyStatus,
     cryptoType,
     dividendType,
+    protocolAPY,
     trancheToken,
     trancheRate  
   },
@@ -311,6 +312,7 @@ const TableCard = ({
                 contractAddress={contractAddress}
                 cryptoType={cryptoType}
                 dividendType={dividendType}
+                protocolAPY={protocolAPY}
                 buyerTokenBalance={buyerTokenBalance}
                 trancheToken={trancheToken}
                 trancheRate={trancheRate}
@@ -418,6 +420,7 @@ const TableCard = ({
                 contractAddress={contractAddress}
                 cryptoType={cryptoType}
                 dividendType={dividendType}
+                protocolAPY={protocolAPY}
                 buyerTokenBalance={buyerTokenBalance}
                 trancheToken={trancheToken}
                 trancheRate={trancheRate}
