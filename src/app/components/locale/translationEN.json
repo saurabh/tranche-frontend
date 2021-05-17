@@ -24,7 +24,7 @@
       "all": "All Tranches"
     },
     "trancheData": {
-      "baseAPY": "BASE APY",
+      "APY": "APY",
       "trancheAPY": "TRANCHE APY",
       "sliceAPY": "SLICE APY",
       "price": "PRICE",

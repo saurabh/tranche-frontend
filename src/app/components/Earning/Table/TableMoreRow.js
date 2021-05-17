@@ -127,12 +127,12 @@ let TableMoreRow = ({
 
   return (
     <TableMoreRowWrapper>
-      <TableMoreRowContent>
+      <TableMoreRowContent></TableMoreRowContent>
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>{i18n.t('tranche.trancheData.baseAPY')}</h2>
+                <h2>{dividendType} {i18n.t('tranche.trancheData.APY')}</h2>
                 <h2>
                   {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
                 </h2>
