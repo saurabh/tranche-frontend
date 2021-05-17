@@ -154,7 +154,7 @@ let TableMoreRow = ({
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.trancheData.price')}</h2>
                 <h2>
                   {roundNumber(trancheRate)} {cryptoType}
@@ -167,7 +167,7 @@ let TableMoreRow = ({
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
           </TableMoreLeftTopSection>
-          <TableMoreLeftBottomSection title={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
+          <TableMoreLeftBottomSection titleColor={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
             <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
@@ -184,6 +184,7 @@ let TableMoreRow = ({
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
+              disabled={!isDepositApproved}
             >
               {isApproveLoading && (
                 <div>
@@ -240,10 +241,11 @@ let TableMoreRow = ({
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
+              disabled={!isWithdrawApproved}
             >
               {isApproveLoading && (
                 <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -303,10 +305,11 @@ let TableMoreRow = ({
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
+                disabled={!isDepositApproved}
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -377,10 +380,11 @@ let TableMoreRow = ({
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
+                disabled={!isWithdrawApproved}
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>

@@ -1313,7 +1313,7 @@ const TableMoreLeftBottomSection = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     margin: 0 auto 5px auto;
-    color: ${props => props.title};
+    color: ${props => props.titleColor};
   }
   p{
     font-family: 'Inter', sans-serif;
@@ -1349,7 +1349,7 @@ const TableMoreLeftSectionContent = styled.div`
     font-size: 14px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: ${props => props.title};
+    color: ${props => props.titleColor};
     @media (max-width: 992px){
       font-size: 10px;
     }
@@ -1451,18 +1451,18 @@ const TableMoreRightSection = styled.div`
     form{
       div{
         button{
-          color: rgba(57, 41, 90, 0.5);
-          pointer-events: none;
+          color: rgba(57, 41, 90, 0.5) !important;
+          pointer-events: none !important;
         }
         input{
-          background: ${disabledBackground};  
-          pointer-events: none;
-          border-color: ${btn}
+          background: ${disabledBackground} !important;  
+          pointer-events: none !important;
+          border-color: ${btn} !important;
         }
       }
       & > button{
-        pointer-events: none;
-        background: ${btn};
+        pointer-events: none !important;
+        background: ${btn} !important;
       }
     }
   `}

@@ -839,6 +839,8 @@ const ClaimModalCol = styled.div`
   ${({ claim }) => claim && `
     width: 40%;
     text-align: center;
+    display: flex;
+    justify-content: center;
   `}
 
   ${({ value }) => value && `
