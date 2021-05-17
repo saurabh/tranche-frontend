@@ -183,6 +183,7 @@ let TableMoreRow = ({
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
+              disabled={!isDepositApproved}
             >
               {isApproveLoading && (
                 <div>
@@ -239,6 +240,7 @@ let TableMoreRow = ({
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
+              disabled={!isWithdrawApproved}
             >
               {isApproveLoading && (
                 <div>
@@ -302,6 +304,7 @@ let TableMoreRow = ({
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
+                disabled={!isDepositApproved}
               >
                 {isApproveLoading && (
                   <div>
@@ -376,6 +379,7 @@ let TableMoreRow = ({
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
+                disabled={!isWithdrawApproved}
               >
                 {isApproveLoading && (
                   <div>

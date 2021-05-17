@@ -1451,18 +1451,18 @@ const TableMoreRightSection = styled.div`
     form{
       div{
         button{
-          color: rgba(57, 41, 90, 0.5);
-          pointer-events: none;
+          color: rgba(57, 41, 90, 0.5) !important;
+          pointer-events: none !important;
         }
         input{
-          background: ${disabledBackground};  
-          pointer-events: none;
-          border-color: ${btn}
+          background: ${disabledBackground} !important;  
+          pointer-events: none !important;
+          border-color: ${btn} !important;
         }
       }
       & > button{
-        pointer-events: none;
-        background: ${btn};
+        pointer-events: none !important;
+        background: ${btn} !important;
       }
     }
   `}
