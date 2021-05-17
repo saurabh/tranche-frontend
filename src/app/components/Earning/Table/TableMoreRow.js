@@ -131,7 +131,7 @@ let TableMoreRow = ({
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.baseAPY')}</h2>
                 <h2>
                   {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
@@ -140,14 +140,14 @@ let TableMoreRow = ({
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.trancheAPY')}</h2>
                 <h2>{roundNumber(apy, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.sliceAPY')}</h2>
                 <h2>TBD</h2>
               </TableMoreLeftSectionContent>
