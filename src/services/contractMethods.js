@@ -3,7 +3,6 @@ import {
   JLoanSetup,
   JLoanHelperSetup,
   JPriceOracleSetup,
-  JTrancheTokenSetup,
   JProtocolSetup,
   JCompoundSetup,
   StakingSetup,
@@ -150,20 +149,6 @@ export const getShareholderShares = async (loanId, address) => {
     const { web3 } = state.ethereum;
     const JLoan = JLoanSetup(web3);
     const result = await JLoan.methods.getShareholderShares(loanId, address).call();
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// Tranche Calls
-
-export const getWithdrawableFunds = async (trancheAddress, address) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const TrancheToken = JTrancheTokenSetup(web3, trancheAddress);
-    const result = await TrancheToken.methods.withdrawableFundsOf(address).call();
     return result;
   } catch (error) {
     console.error(error);

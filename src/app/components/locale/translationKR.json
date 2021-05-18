@@ -17,6 +17,8 @@
     },
     "trancheData": {
       "baseAPY": "기본 수익률",
+      "trancheAPY": "TRANCHE APY",
+      "sliceAPY": "SLICE APY",
       "price": "가격",
       "fixedRate": "고정비율 산출",
       "trancheADAI": "트랜치 A - 컴파운드 다이(COMPOUND DAI)는 cDAI 토큰(CDAI)의 시니어 트랜치로 순 연간 수익률(Net APT)에 표시되어진대로 슬라이스(SLICE) 보상에 추가하여 3.99%의 고정비율을 산출합니다.",

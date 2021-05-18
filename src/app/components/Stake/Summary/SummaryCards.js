@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import axios from 'axios';
-import { apiUri, ModeThemes, serverUrl } from 'config/constants';
+import { networkId, apiUri, ModeThemes, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
@@ -15,7 +15,7 @@ import { TableTitle } from '../Table/styles/TableComponents';
 
 const { stakingSummary } = apiUri;
 
-const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp, withdrawn, lpList }, summaryFetchSuccess, theme }) => {
+const SummaryCards = ({ ethereum: { wallet, address, network }, summaryData: { slice, lp, withdrawn, lpList }, summaryFetchSuccess, theme }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
@@ -46,10 +46,10 @@ const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp,
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
-    if (currentPath === 'stake' && address) {
+    if (network === networkId && currentPath === 'stake' && address) {
       getStakingData();
     }
-  }, [currentPath, address, summaryFetchSuccess]);
+  }, [currentPath, network, address, summaryFetchSuccess]);
 
   const openModal = async (type) => {
     const ready = await readyToTransact(wallet, onboard);

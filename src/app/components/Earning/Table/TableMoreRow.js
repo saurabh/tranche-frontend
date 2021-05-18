@@ -45,6 +45,7 @@ let TableMoreRow = ({
   contractAddress,
   cryptoType,
   dividendType,
+  protocolAPY,
   buyerTokenBalance,
   trancheToken,
   trancheRate,
@@ -131,23 +132,23 @@ let TableMoreRow = ({
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>{dividendType}</h2>
+                <h2>{dividendType} {i18n.t('tranche.trancheData.APY')}</h2>
                 <h2>
-                  0
+                  {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
                 </h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>{i18n.t('tranche.trancheData.baseAPY')}</h2>
+                <h2>{i18n.t('tranche.trancheData.trancheAPY')}</h2>
                 <h2>{roundNumber(apy, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>SLICE APY</h2>
+                <h2>{i18n.t('tranche.trancheData.sliceAPY')}</h2>
                 <h2>TBD</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>

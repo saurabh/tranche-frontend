@@ -33,7 +33,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
         <h2>
           Tranche Markets
         </h2>
-        <HowToLink href="https://docs.tranche.finance/tranchefinance/" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+        <HowToLink href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
             HOW-TO
         </HowToLink>
       </div>

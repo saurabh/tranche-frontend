@@ -41,6 +41,8 @@
     },
     "trancheData": {
       "baseAPY": "基础APY",
+      "trancheAPY": "TRANCHE APY",
+      "sliceAPY": "SLICE APY",
       "price": "价格",
       "fixedRate": "固定利率的收益率",
       "trancheADAI": "Tranche A -复合DAI是CDAI代币的高级部分。这部分的收益率固定为3.99%，此外，还有净APY所示的SLICE回报。",

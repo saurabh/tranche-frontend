@@ -24,7 +24,9 @@
       "all": "All Tranches"
     },
     "trancheData": {
-      "baseAPY": "BASE APY",
+      "APY": "APY",
+      "trancheAPY": "TRANCHE APY",
+      "sliceAPY": "SLICE APY",
       "price": "PRICE",
       "fixedRate": "FIXED RATE YIELD",
       "trancheADAI": "Tranche A - Compound DAI is the senior tranche of the CDAI token. This tranche yields a fixed rate of 3.99%, in addition to SLICE rewards as shown in Net APY.",
