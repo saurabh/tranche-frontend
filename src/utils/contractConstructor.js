@@ -6,7 +6,6 @@ import { abi as JCompoundABI } from 'build/contracts/JCompound.json';
 import { abi as StakingABI } from 'build/contracts/StakingMilestones.json';
 import { abi as YieldFarmABI } from 'build/contracts/YieldFarm.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
-import { abi as TrancheTokenABI } from 'build/contracts/JETHTrancheA.json';
 import {
   LoanContractAddress,
   DAIAddress,
@@ -52,8 +51,4 @@ export function SLICESetup(web3) {
 
 export function ERC20Setup(web3, address) {
   return new web3.eth.Contract(ERC20ABI, address);
-}
-
-export function JTrancheTokenSetup(web3, address) {
-  return new web3.eth.Contract(TrancheTokenABI, address);
 }
