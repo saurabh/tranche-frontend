@@ -28,6 +28,13 @@
       "price": "PRICE",
       "fixedRate": "FIXED RATE YIELD",
       "trancheADAI": "Tranche A - Compound DAI is the senior tranche of the CDAI token. This tranche yields a fixed rate of 3.99%, in addition to SLICE rewards as shown in Net APY.",
+      "isTheSenior": "is the senior tranche of the",
+      "token": "token",
+      "thisTrancheFixed": "This tranche yields a fixed rate of",
+      "inAddition": "in addition to SLICE rewards as shown in Net APY.",
+      "isTheJunior": "is the junior tranche of the",
+      "thisTrancheVariable": "This tranche yields a variable rate of",
+      "polygonModal": "",
       "deposit": "Deposit",
       "withdraw": "Withdraw",
       "balance": "Balance",
@@ -76,14 +83,6 @@
         "details": "Stake your SLICE or SLICE LP tokens"
       }
     }
-  },
-  "privacy": {
-    "title": "Privacy",
-    "text": ""
-  },
-  "terms": {
-    "title": "Terms & Conditions",
-    "text": ""
   },
   "lend": {
     "title": "Lending Markets",

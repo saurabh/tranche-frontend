@@ -23,6 +23,13 @@
       "deposit": "예치금",
       "withdraw": "인출",
       "balance": "내역",
+      "isTheSenior": "선순위 Tranche 입니다",
+      "token": "토큰 ",
+      "thisTrancheFixed": "이 Tranche는 고정비율을 산출합니다 ",
+      "inAddition": "Net APY에 대한 SLICE 추가 보상금",
+      "isTheJunior": "후순위 Tranche 입니다",
+      "thisTrancheVariable": "이 Tranche는 다양한 비율을 산출합니다 ",
+      "polygonModal": "Polygon 시장은 Polygon 네트워크 플랫폼에서 첫 번째로 구현된 AAVE으로, 레이어 2 확장성 솔루션으로 이더리움의 네트워크의 비용과 속도를 향상시켰습니다. Polygon 시장에 접근하려면, 자산을 Polygon 브리지를 사용하여 Polygon 사이드 체인에 옮겨야 합니다. 그런 다음에야 거래가 성사됩니다. ",
       "max": "최대치",
       "disabled": "비화설화됨",
       "enabled": "활성화됨",
@@ -68,14 +75,6 @@
         "details": "당신의 슬라이스 또는 슬라이스 LP 토큰을 저장하세요"
       }
     }
-  },
-  "privacy": {
-    "title": "Privacy",
-    "text": ""
-  },
-  "terms": {
-    "title": "Terms & Conditions",
-    "text": ""
   },
   "privacy": {
     "title": "Privacy",

@@ -47,6 +47,13 @@
       "deposit": "存入",
       "withdraw": "提取",
       "balance": "余额",
+      "isTheSenior": "",
+      "token": "",
+      "thisTrancheFixed": "",
+      "inAddition": "",
+      "isTheJunior": "",
+      "thisTrancheVariable": "",
+      "polygonModal": "",
       "max": "最大",
       "disabled": "禁用",
       "enabled": "启用",
@@ -92,14 +99,6 @@
         "details": "质押您的SLICE或SLICE LP代币"
       }
     }
-  },
-  "privacy": {
-    "title": "Privacy",
-    "text": ""
-  },
-  "terms": {
-    "title": "Terms & Conditions",
-    "text": ""
   },
   "stake": {
     "title": "质押池",

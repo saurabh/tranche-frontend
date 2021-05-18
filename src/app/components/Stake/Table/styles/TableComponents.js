@@ -1922,8 +1922,10 @@ const HowToLink = styled.a`
   border-radius: 110.967px;
   padding: 11px 22px;
   margin-left: 20px;
+  transition: 200ms;
   :hover{
     color: ${props => props.color}; 
+    filter: brightness(1.2);
   }
 
 `

@@ -86,6 +86,9 @@ const SummaryCardTitle = styled.h2`
             position: absolute;
             right: -9px;
             top: -9px;
+            @media (max-width: 992px){
+                display: none;
+            }
         }
     }
 `;

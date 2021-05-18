@@ -293,11 +293,7 @@ const TableCard = ({
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
-        {isLoading ? (
-          <TableCardMoreContent>
-            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-          </TableCardMoreContent>
-        ) : (
+
           <TableCardMore
             className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
             color={ModeThemes[theme].borderColor}
@@ -326,7 +322,7 @@ const TableCard = ({
               />
             </TableCardMoreContent>
           </TableCardMore>
-        )}
+        
       </TableContentCardWrapper>
     );
   };
@@ -400,13 +396,9 @@ const TableCard = ({
             </TableMobileContentRow>
           </TableMobileContent>
         </TableContentCardMobile>
-        {isLoading ? (
-          <TableCardMoreContent>
-            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-          </TableCardMoreContent>
-        ) : (
+
           <TableCardMore
-            className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
+            className={'table-card-more ' + ((trancheCard.status && id === trancheCard.id) ? 'table-more-card-toggle' : '')}
             color={ModeThemes[theme].backgroundBorder}
             border={trancheCard.status && id === trancheCard.id}
           >
@@ -433,7 +425,6 @@ const TableCard = ({
               />
             </TableCardMoreContent>
           </TableCardMore>
-        )}
       </TableContentCardWrapperMobile>
     );
   };

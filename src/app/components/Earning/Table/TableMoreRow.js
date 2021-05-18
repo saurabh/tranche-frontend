@@ -170,8 +170,8 @@ let TableMoreRow = ({
             <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
-                ? `${name} is the senior tranche of the ${dividendType} token. This tranche yields a fixed rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`
-                : `${name} is the junior tranche of the ${dividendType} token. This tranche yields a variable rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`}
+                ? `${name} ${i18n.t('tranche.trancheData.isTheSenior')} ${dividendType} ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheFixed')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`
+                : `${name} ${i18n.t('tranche.trancheData.isTheJunior')}  ${dividendType} ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheVariable')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`}
             </p>
           </TableMoreLeftBottomSection>
         </TableMoreRowContentLeft>
