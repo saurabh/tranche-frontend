@@ -182,6 +182,7 @@ const TableCard = ({
         color={ModeThemes[theme].TableCard}
         borderColor={ModeThemes[theme].TableCardBorderColor}
         shadow={ModeThemes[theme].tableCardShadow}
+        cardShadow={ModeThemes[theme].cardShadow}
       >
         <TableContentCard
           pointer={true}

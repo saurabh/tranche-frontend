@@ -30,6 +30,8 @@
       "thisTrancheFixed": "이 Tranche는 고정비율을 산출합니다 ",
       "inAddition": "Net APY에 대한 SLICE 추가 보상금",
       "isTheJunior": "후순위 Tranche 입니다",
+      "TrancheStats": "Tranche 조회",
+      "TrancheMarkets": "",
       "thisTrancheVariable": "이 Tranche는 다양한 비율을 산출합니다 ",
       "polygonModal": "Polygon 시장은 Polygon 네트워크 플랫폼에서 첫 번째로 구현된 AAVE으로, 레이어 2 확장성 솔루션으로 이더리움의 네트워크의 비용과 속도를 향상시켰습니다. Polygon 시장에 접근하려면, 자산을 Polygon 브리지를 사용하여 Polygon 사이드 체인에 옮겨야 합니다. 그런 다음에야 거래가 성사됩니다. ",
       "max": "최대치",
@@ -94,6 +96,7 @@
       "rates": "금리, 요금",
       "howTo": "어떻게"
     },
+    "StakingStats": "내 스테이킹 ",
     "modal": {
       "sliceLocked": "잠긴 슬라이스",
       "stakeModalTitle": "슬라이스 토큰 저장",
@@ -147,7 +150,9 @@
       "sliceRewards": {
         "title": "수거된 보상",
         "details": "다음 배포까지",
-        "details2": "분 소요"
+        "details2": "분 소요",
+        "detailsHour1": "다음 배포까지 ",
+        "detailsHour2": "시간 "
       }
     },
     "table": {
@@ -169,6 +174,7 @@
       }
     }
   },
+  "howToLink": "사용방법  ",
   "toolTips": {
     "table": {
       "stakingPool": "각 풀에는 예출할 수 있는 다른 기본 화폐가 있습니다.",
@@ -182,7 +188,8 @@
       "netApy": "슬라이스(SLICE) 보상으로 인한 트랜치 기기의 수익을 추가함으로써 예상되는 순 연간 수익률 ",
       "totalDeposits": "특정 트랜치에 대한 모든 사용자의 총 예치금",
       "myDeposits": "발생된 이자를 포함, 어떤 주어진 시점에서 보유하고 있는 USD 표시 가치 ",
-      "available": "트랜치에 입금이 가능한 보유하고 있는 화폐"
+      "available": "트랜치에 입금이 가능한 보유하고 있는 화폐",
+      "totalAmount": "Tranche 프로토콜에서 USD로 산출된 지분 또는 예치된 자산의  총액 "
     }
   },
   "footer": {

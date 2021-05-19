@@ -51,7 +51,7 @@ const SummaryCard = ({
                       <TooltipWrapper tooltip={TooltipToggle === "valueLocked"} summary color={ModeThemes[theme].Tooltip}> 
                         <div>
                             <h2>
-                              The total amount of staked or deposited assets in USD on the Tranche Protocol.
+                              {i18n.t('toolTips.table.totalAmount')}
                             </h2>
                         </div>
                       </TooltipWrapper>
@@ -101,7 +101,7 @@ const SummaryCard = ({
                   <h2>{i18n.t('tranche.summary.stakeLive.details')}</h2>
                 </StakeCardText>
                 <StakeCardBtn>
-                  <button><a href="/stake">STAKE</a></button>
+                  <button><a href="/stake">{i18n.t('stake.modal.stake')}</a></button>
                 </StakeCardBtn>
               </SummaryCardContainer>
             ) : (

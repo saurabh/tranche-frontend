@@ -49,12 +49,14 @@
       "deposit": "存入",
       "withdraw": "提取",
       "balance": "余额",
-      "isTheSenior": "",
-      "token": "",
-      "thisTrancheFixed": "",
-      "inAddition": "",
-      "isTheJunior": "",
-      "thisTrancheVariable": "",
+      "isTheSenior": "是代币的",
+      "token": "高级组成部分",
+      "thisTrancheFixed": "除了净APY显示的SLICE奖励外",
+      "inAddition": "这份固定收益率为",
+      "isTheJunior": "是代币的",
+      "thisTrancheVariable": "是代币的",
+      "TrancheStats": "Tranche状态",
+      "TrancheMarkets": "Tranche市场",
       "polygonModal": "",
       "max": "最大",
       "disabled": "禁用",
@@ -110,6 +112,7 @@
       "rates": "比率",
       "howTo": "如何执行"
     },
+    "StakingStats": "您的质押状态",
     "modal": {
       "sliceLocked": "已锁定SLICE",
       "stakeModalTitle": "质押Slice代币",
@@ -163,7 +166,9 @@
       "sliceRewards": {
         "title": "已收集奖励",
         "details": "距离下一次分配还有",
-        "details2": "分钟"
+        "details2": "分钟",
+        "detailsHour1": "",
+        "detailsHour2": "小时后才会进行下次分配"
       }
     },
     "table": {
@@ -185,6 +190,7 @@
       }
     }
   },
+  "howToLink": "如何操作",
   "toolTips": {
     "table": {
       "stakingPool": "每个池都可以存入不同的基础货币。",
@@ -198,7 +204,8 @@
       "netApy": "通过将部分债券工具的收益和SLICE回报相加得到的预期年度投资回报。",
       "totalDeposits": "所有用户在每个Tranche中总计存入总额",
       "myDeposits": "您所持美元在任何时间点的价值，包括应计利息。",
-      "available": "您所持有的可存入此部分的货币。"
+      "available": "您所持有的可存入此部分的货币。",
+      "totalAmount": "在Tranche协议中以美元表示的抵押或存放资产总额。"
     }
   },
   "footer": {

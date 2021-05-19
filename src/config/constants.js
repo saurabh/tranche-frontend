@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, USDCWhite, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, DAITrancheTable } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -112,12 +112,12 @@ export const PagesData = {
 };
 
 export const trancheIcons = {
-  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
@@ -353,7 +353,8 @@ export const ModeThemes = {
     HowToBorder: '0.872727px solid #E9E9FC',
     HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
     LoadingColorOne: '#eee',
-    LoadingColorTwo: '#f7f7f7'
+    LoadingColorTwo: '#f7f7f7',
+    cardShadow: "0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent"
   },
   dark: {
     body: '#100F36',
@@ -407,6 +408,7 @@ export const ModeThemes = {
     HowToBorder: 'none',
     HowToShadow: 'none',
     LoadingColorOne: 'rgba(255,255,255,0.07)',
-    LoadingColorTwo: '#363661'
+    LoadingColorTwo: '#363661',
+    cardShadow: "0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent"
   }
 };

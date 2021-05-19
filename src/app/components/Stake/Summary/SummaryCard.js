@@ -107,7 +107,11 @@ const SummaryCard = ({
                 ? balance + " " + i18n.t('stake.summary.slice.details')
                 : type === 'lp'
                 ? balance + " " + i18n.t('stake.summary.sliceLP.details')
-                : epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Minutes' ? epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.details') + " " + i18n.t('stake.summary.sliceRewards.details2') :  epochTimeLeft + " Until Next Distribution"}
+                : epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Minutes' ? epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.details') + " " + i18n.t('stake.summary.sliceRewards.details2') :  
+
+                epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Hours' ? i18n.t('stake.summary.sliceRewards.detailsHour1') + " " + epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.detailsHour2') :  
+                
+                epochTimeLeft + " Until Next Distribution"}
             </SummaryCardDetails>
 
             {type === 'reward' && (

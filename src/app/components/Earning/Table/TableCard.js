@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
-import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } from 'redux/actions/ethereum';
@@ -90,7 +89,7 @@ const TableCard = ({
   isDesktop
   // checkServer
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
@@ -165,11 +164,11 @@ const TableCard = ({
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      setIsLoading(true);
+      // setIsLoading(true);
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   const checkLoan = false;
@@ -180,6 +179,8 @@ const TableCard = ({
         color={ModeThemes[theme].TableCard}
         borderColor={ModeThemes[theme].TableCardBorderColor}
         shadow={ModeThemes[theme].tableCardShadow}
+        cardShadow={ModeThemes[theme].cardShadow}
+        tranche
       >
         <TableContentCard
           pointer={true}
