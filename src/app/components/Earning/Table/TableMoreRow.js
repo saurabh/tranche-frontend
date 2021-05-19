@@ -131,8 +131,8 @@ let TableMoreRow = ({
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>{dividendType} {i18n.t('tranche.trancheData.APY')}</h2>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText} dividend>
+                <h2>{dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()} {i18n.t('tranche.trancheData.APY')}</h2>
                 <h2>
                   {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
                 </h2>
@@ -171,8 +171,8 @@ let TableMoreRow = ({
             <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
-                ? `${name} is the senior tranche of the ${dividendType} token. This tranche yields a fixed rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`
-                : `${name} is the junior tranche of the ${dividendType} token. This tranche yields a variable rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`}
+                ? `${name} ${i18n.t('tranche.trancheData.isTheSenior')} ${dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()}  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheFixed')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`
+                : `${name} ${i18n.t('tranche.trancheData.isTheJunior')}  ${dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()}  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheVariable')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`}
             </p>
           </TableMoreLeftBottomSection>
         </TableMoreRowContentLeft>

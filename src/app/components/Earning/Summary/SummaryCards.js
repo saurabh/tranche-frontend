@@ -82,7 +82,7 @@ const SummaryCards = ({
   return (
     <div>
       <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
-        <h2>Tranche Stats</h2>
+        <h2>{i18n.t('tranche.trancheData.TrancheStats')}</h2>
       </TableTitle>
       {!isDesktop && currentPath === 'stake' && (
         <SummaryCardsWrapper className='container content-container'>

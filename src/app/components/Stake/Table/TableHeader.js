@@ -53,7 +53,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                 {
                     path === "stake" || path === "tranche" ?
                     <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking" target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
-                        HOW-TO
+                        {i18n.t('footer.docs')}
                     </HowToLink> : ""
                 }
                 

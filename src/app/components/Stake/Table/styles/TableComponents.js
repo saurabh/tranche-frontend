@@ -11,6 +11,13 @@ const TableContentCardWrapper = styled.div`
   box-shadow: ${props => props.shadow};
   border-radius: 5px;
   margin: 12px 0;
+  transition: 300ms;
+  ${({ tranche, cardShadow }) => tranche && `
+    :hover{
+      box-shadow: ${cardShadow};   
+    }
+  `}
+  
 `;
 const TableContentCard = styled.div`
   display: flex;
@@ -792,6 +799,7 @@ const TableCardImg = styled.div`
   display: flex;
   position: relative;
   align-items: center;
+  margin-top: -9px;
   img{
     border-radius: 50%;
     height: 37px;
@@ -800,7 +808,6 @@ const TableCardImg = styled.div`
     position: absolute;
     width: 16px;
     height: 16px;
-    background: ${props => props.background ? props.background : ''};
     border-radius: 4px;
     display: flex;
     justify-content: center;
@@ -811,7 +818,7 @@ const TableCardImg = styled.div`
       left: 29px;
     }
     img{
-      height: 9px;
+      height: 36px;
     }
   }
   
@@ -889,7 +896,7 @@ const FirstColContent = styled.div`
   margin-left: 12px;
 
   ${({ instrument }) => instrument && `
-    margin-left: 25px;
+    margin: 4px 0 0 31px;
   `}
   @media (max-width: 992px){
     width: 100%;
@@ -1208,6 +1215,9 @@ const StakeBtn = styled.button`
     opacity: 0.5;
     cursor: default;
   `}
+  :hover{
+    filter: brightness(1.2);
+  }
   @media (max-width: 992px){
     width: 25px;
     height: 25px;
@@ -1363,6 +1373,12 @@ const TableMoreLeftSectionContent = styled.div`
       font-size: 12px;
     }
   }
+  
+  ${({ dividend }) => dividend && `
+    & > h2:nth-of-type(1){
+      text-transform: initial;
+    }
+  `}
 `
 
 
@@ -1922,8 +1938,10 @@ const HowToLink = styled.a`
   border-radius: 110.967px;
   padding: 11px 22px;
   margin-left: 20px;
+  transition: 200ms;
   :hover{
     color: ${props => props.color}; 
+    filter: brightness(1.3);
   }
 
 `

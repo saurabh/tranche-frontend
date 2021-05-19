@@ -172,6 +172,7 @@ function Navbar({ path, theme }) {
                 background: ModeThemes[theme].NavbarBackground,
                 boxShadow: ModeThemes[theme].NavbarShadow
               }}
+              className="navLinkDisabled"
             >
             {i18n.t('navbar.vote')}
 

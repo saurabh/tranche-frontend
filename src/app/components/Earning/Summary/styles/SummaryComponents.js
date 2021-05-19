@@ -86,6 +86,9 @@ const SummaryCardTitle = styled.h2`
             position: absolute;
             right: -9px;
             top: -9px;
+            @media (max-width: 992px){
+                display: none;
+            }
         }
     }
 `;
@@ -256,8 +259,13 @@ const StakeCardBtn = styled.div`
             text-transform: uppercase;
             padding: 7px 27px;
             outline: none;
+            transition: 300ms;
             cursor: pointer;
             color: #1D19E1;
+            :hover{
+                filter: drop-shadow(0px 3px 2px rgba(0,0,0,0.3));
+                
+            }
 
         }
 `;

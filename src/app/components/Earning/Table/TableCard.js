@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
-import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } from 'redux/actions/ethereum';
@@ -90,7 +89,7 @@ const TableCard = ({
   isDesktop
   // checkServer
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
@@ -115,6 +114,8 @@ const TableCard = ({
   const approveContract = async (type, isApproved, e) => {
     try {
       if (isApproveLoading) e.stopPropogation();
+      const ready = await readyToTransact(wallet, onboard);
+      if (!ready) return;
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
       const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
       const token = ERC20Setup(web3, tokenAddress);
@@ -145,9 +146,11 @@ const TableCard = ({
     }
   };
 
-  const buySellTrancheTokens = (e, buy) => {
+  const buySellTrancheTokens = async (e, buy) => {
     try {
       e.preventDefault();
+      const ready = await readyToTransact(wallet, onboard);
+      if (!ready) return;
       buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
@@ -159,17 +162,14 @@ const TableCard = ({
   };
 
   const cardToggle = async () => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    address = !address ? onboard.getState().address : address;
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      setIsLoading(true);
+      // setIsLoading(true);
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   const checkLoan = false;
@@ -180,6 +180,8 @@ const TableCard = ({
         color={ModeThemes[theme].TableCard}
         borderColor={ModeThemes[theme].TableCardBorderColor}
         shadow={ModeThemes[theme].tableCardShadow}
+        cardShadow={ModeThemes[theme].cardShadow}
+        tranche
       >
         <TableContentCard
           pointer={true}
@@ -294,11 +296,7 @@ const TableCard = ({
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
-        {isLoading ? (
-          <TableCardMoreContent>
-            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-          </TableCardMoreContent>
-        ) : (
+
           <TableCardMore
             className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
             color={ModeThemes[theme].borderColor}
@@ -328,7 +326,7 @@ const TableCard = ({
               />
             </TableCardMoreContent>
           </TableCardMore>
-        )}
+        
       </TableContentCardWrapper>
     );
   };
@@ -402,13 +400,9 @@ const TableCard = ({
             </TableMobileContentRow>
           </TableMobileContent>
         </TableContentCardMobile>
-        {isLoading ? (
-          <TableCardMoreContent>
-            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
-          </TableCardMoreContent>
-        ) : (
+
           <TableCardMore
-            className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
+            className={'table-card-more ' + ((trancheCard.status && id === trancheCard.id) ? 'table-more-card-toggle' : '')}
             color={ModeThemes[theme].backgroundBorder}
             border={trancheCard.status && id === trancheCard.id}
           >
@@ -436,7 +430,6 @@ const TableCard = ({
               />
             </TableCardMoreContent>
           </TableCardMore>
-        )}
       </TableContentCardWrapperMobile>
     );
   };

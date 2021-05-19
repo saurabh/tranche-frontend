@@ -41,13 +41,14 @@ html{
   justify-content: space-between;
 }
 .table-card-more{
-  height: 0;
+  /* height: 0; */
+  max-height: 0;
   overflow: hidden;
   border: none;
   opacity: 0;
-  transition-property: height, opacity, padding;
-  transition-duration: 300ms, 100ms, 300ms;
-  transition-timing-function: ease;
+  transition-property: max-height, opacity, padding;
+  transition-duration: 300ms, 100ms, 1s;
+  transition-timing-function: ease-out;
   padding: 0 12px 0 102px;
 }
 
@@ -57,8 +58,12 @@ html{
   /* padding: 0 20px; */
   padding: 0;
   border-bottom: 1px solid #EFEFEF;
+  transition-property: max-height, opacity, padding;
+  transition-duration: 300ms, 400ms, 100ms;
+  transition-timing-function: ease-in;
   opacity: 1;
-  height: auto;
+  /* height: auto; */
+  max-height: 500px;
   overflow: visible;
 }
 .remaining-title-content{

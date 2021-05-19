@@ -30,6 +30,15 @@
       "price": "PRICE",
       "fixedRate": "FIXED RATE YIELD",
       "trancheADAI": "Tranche A - Compound DAI is the senior tranche of the CDAI token. This tranche yields a fixed rate of 3.99%, in addition to SLICE rewards as shown in Net APY.",
+      "isTheSenior": "is the senior tranche of the",
+      "token": "token",
+      "thisTrancheFixed": "This tranche yields a fixed rate of",
+      "inAddition": "in addition to SLICE rewards as shown in Net APY.",
+      "isTheJunior": "is the junior tranche of the",
+      "thisTrancheVariable": "This tranche yields a variable rate of",
+      "TrancheStats": "Tranche Stats",
+      "TrancheMarkets": "Tranche Markets",
+      "polygonModal": "",
       "deposit": "Deposit",
       "withdraw": "Withdraw",
       "balance": "Balance",
@@ -75,17 +84,9 @@
       },
       "stakeLive" :{
         "title": "SLICE staking is live!",
-        "details": "Stake your SLICE or SLICE LP tokens"
+        "details": "Stake your SLICE or SLICE LP tokens to earn rewards"
       }
     }
-  },
-  "privacy": {
-    "title": "Privacy",
-    "text": ""
-  },
-  "terms": {
-    "title": "Terms & Conditions",
-    "text": ""
   },
   "lend": {
     "title": "Lending Markets",
@@ -111,6 +112,7 @@
       "rates": "Rates",
       "howTo": "How-To"
     },
+    "StakingStats": "Your Staking Stats",
     "modal": {
       "sliceLocked": "SLICE LOCKED",
       "stakeModalTitle": "Stake Slice Tokens",
@@ -164,7 +166,9 @@
       "sliceRewards": {
         "title": "SLICE Rewards Accrued",
         "details": "Minutes Until Next",
-        "details2": "Distribution"
+        "details2": "Distribution",
+        "detailsHour1": "",
+        "detailsHour2": "Hours Until Next Distribution"
       }
     },
     "table": {
@@ -186,6 +190,7 @@
       }
     }
   },
+  "howToLink": "How-To",
   "toolTips": {
     "table": {
       "stakingPool": "Each pool has a different base currency that you can deposit into.",
@@ -199,7 +204,8 @@
       "netApy": "The expected yearly return on investment by adding the yield from the Tranche instrument in addition to SLICE rewards.",
       "totalDeposits": "Total deposits accross all users into each specific Tranche.",
       "myDeposits": "Your holdings in the USD value at any given point, including accrued interest.",
-      "available": "Your holdings of the currency that you may deposit into this Tranche."
+      "available": "Your holdings of the currency that you may deposit into this Tranche.",
+      "totalAmount": "The total amount of staked or deposited assets in USD on the Tranche Protocol."
     }
   },
   "footer": {
