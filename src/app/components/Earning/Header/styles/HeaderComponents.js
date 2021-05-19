@@ -650,6 +650,8 @@ const MarketTab = styled.button`
   ${({ market, color }) => market === "aavePolygon" && `
     opacity: 0.5;
     pointer-events: none;
+    padding: 0 20px;
+    
     h2{
       display: flex;
       flex-direction: column;
