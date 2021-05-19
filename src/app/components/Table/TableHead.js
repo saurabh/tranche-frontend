@@ -62,7 +62,7 @@ const TableHead = ({changeSorting, path}) => {
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className="remaining-wrapper">
-                    <div className={(path === "lend" || path === "borrow") ? "remaining-title-content" : path === "stake" ? "staked-title-content" : "tranche-size-content"} onClick={() => sortLoans(path === "earn" ? "amount" : path === "stake" ? "staked" : "remainingLoan")}>
+                    <div className={(path === "lend" || path === "borrow") ? "remaining-title-content" : path === "stake" ? "staked-title-content" : "tranche-size-content"} onClick={() => sortLoans(path === "tranche" ? "amount" : path === "stake" ? "staked" : "remainingLoan")}>
                         <h2>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "TRANCHE SIZE"}</h2>
                         <SortChevronWrapper>
                             <img src={upChevron} alt="upChevron"/>
@@ -71,7 +71,7 @@ const TableHead = ({changeSorting, path}) => {
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "ratio-wrapper" : path === "stake" ? "reward-wrapper" : "return-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "ratio-title-content" : path === "stake" ? "reward-title-content" : "return-content"} onClick={() => sortLoans(path === "earn" ? "rpbRate" : path === "stake" ? "reward" : "collateralRatio")}>
+                    <div className={(path === "lend" || path === "borrow") ? "ratio-title-content" : path === "stake" ? "reward-title-content" : "return-content"} onClick={() => sortLoans(path === "tranche" ? "rpbRate" : path === "stake" ? "reward" : "collateralRatio")}>
                         <h2>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD/BLOCK" : "RETURN/BLOCK"}</h2>
                         <SortChevronWrapper>
                             <img src={upChevron} alt="upChevron"/>
@@ -80,7 +80,7 @@ const TableHead = ({changeSorting, path}) => {
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "interest-paid-wrapper" : path === "stake" ? "accrued-wrapper" : "subscription-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "earn" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
+                    <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "tranche" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
                         <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "" : "SUBSCRIPTION"}</h2>
                         {   path !== "stake" &&
                             <SortChevronWrapper>
@@ -141,17 +141,17 @@ const TableHead = ({changeSorting, path}) => {
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "SIZE"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "SIZE"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD"  : "RETURN"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? "REWARD"  : "RETURN"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile>
                     <TableHeadTitleMobile>
-                        <h2 onClick={() => sortLoans(path !== "earn" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "accrued"  : "SUBSCRIPTION"}</h2>
+                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "accrued"  : "SUBSCRIPTION"}</h2>
                     </TableHeadTitleMobile>
                 </TableColMobile>
                 <TableColMobile btn>

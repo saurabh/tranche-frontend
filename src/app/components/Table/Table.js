@@ -26,7 +26,7 @@ import { TableWrapper, TableContentCard, CallToActionWrapper,
   TableMobileFilterRow,
   TableMobileRowCreateLoan
 } from './styles/TableComponents';
-import { RequestLoan, EarningAsset, FilterChevron, CreateLoan } from 'assets';
+import { RequestLoan, FilterChevron, CreateLoan, EarningAsset} from 'assets';
 
 
 const style = {
@@ -51,7 +51,6 @@ const style = {
   }
 };
 const { loanList: loanListUrl } = apiUri;
-
 const Table = ({
   HandleNewLoan,
   fetchTableData,
@@ -194,7 +193,7 @@ const Table = ({
                   <CallToActionWrapper>
                     <h2>
                       You don’t have any{' '}
-                      {path === 'borrow' ? 'loans' : path === 'earn' ? 'assets' : ''} yet
+                      {path === 'borrow' ? 'loans' : path === 'tranche' ? 'assets' : ''} yet
                     </h2>
                     <button
                       onClick={() =>
@@ -225,7 +224,7 @@ const Table = ({
                       onClick={() =>
                         path === 'borrow'
                           ? HandleNewLoan()
-                          : path === 'earn'
+                          : path === 'tranche'
                           ? history.push("/borrow")
                           : false
                       }

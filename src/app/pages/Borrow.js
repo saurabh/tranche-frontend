@@ -6,7 +6,6 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
@@ -39,10 +38,6 @@ const Borrow = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     setShowModal(true);
-    if (!address) {
-      const { address } = onboard.getState();
-      setTokenBalances(address);
-    } else setTokenBalances(address);
   };
 
   return (

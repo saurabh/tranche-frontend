@@ -1,10 +1,9 @@
-import { Key, Agree, DaiLogo as DAIicon, ETH as ETHicon, SLICE as SLICEicon, TrancheClaim, DaiClaim, EthClaim } from 'assets';
-// import { Key, Agree, DaiLogo as DAIicon, USDC as USDCicon, ETH as ETHicon, SLICE as SLICEicon } from 'assets';
-// import { networks as StakingNetworks } from 'build/contracts/StakingMilestones.json';
+import { Key, Agree, DaiLogo, ETH as ETHicon, USDCWhite, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, DAITrancheTable } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
+export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
@@ -14,19 +13,33 @@ export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
+// Tranche
+export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
+export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS.toLowerCase();
+export const CompTrancheTokens = process.env.REACT_APP_COMP_TRANCHE_TOKENS.split(',');
+export const JAaveAddress = process.env.REACT_APP_AAVE_TRANCHE_ADDRESS.toLowerCase();
+export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
+// Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
-export const ETHDAITrancheAAddress = process.env.REACT_APP_TRANCHE_A_ADDRESS;
-export const ETHDAITrancheBAddress = process.env.REACT_APP_TRANCHE_B_ADDRESS;
+export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
+// Token Addresses
+export const zeroAddress = '0x0000000000000000000000000000000000000000';
+export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
+export const USDTAddress = process.env.REACT_APP_USDT_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
-export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 
 export const ApproveBigNumber = '100000000000000';
+export const tokenDecimals = [
+  { key: 'USDC', decimals: 6 },
+  { key: 'USDT', decimals: 6 }
+];
+
 // Site Banner Data (imported in Header component)
 export const PagesData = {
   home: {
@@ -60,11 +73,11 @@ export const PagesData = {
       img: Agree
     }
   },
-  earn: {
-    pageType: 'earn',
+  tranche: {
+    pageType: 'tranche',
     color: 'rgba(0, 0, 0, 0.8)',
     secondaryColor: '#ffffff',
-    btnColor: '#1f1f1f',
+    btnColor: '#4441CF',
     cardColor: 'rgba(0, 0, 0, 0.8)',
     title: 'Earning Markets',
     description: 'DEPOSIT STABLE COINS FOR DIFFERENT RETURNS'
@@ -98,6 +111,19 @@ export const PagesData = {
   }
 };
 
+export const trancheIcons = {
+  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
+  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
+  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon }
+};
+
 // pairData[0] is the default option in the loan creation process (value = pairId)
 export const pairData = [
   {
@@ -105,21 +131,21 @@ export const pairData = [
     text: 'DAI',
     value: 0,
     collateral: 'ETH',
-    img: DAIicon,
+    img: DaiLogo,
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
-  },
-  {
-    key: 'SLICE',
-    text: 'SLICE',
-    value: 1,
-    collateral: 'SLICE',
-    img: SLICEicon,
-    colIcon: SLICEicon,
-    // collateralTokenSetup: SLICESetup,
-    // lendTokenSetup: SLICESetup
   }
-    // {
+  // {
+  //   key: 'SLICE',
+  //   text: 'SLICE',
+  //   value: 1,
+  //   collateral: 'SLICE',
+  //   img: SLICEicon,
+  //   colIcon: SLICEicon
+  //   // collateralTokenSetup: SLICESetup,
+  //   // lendTokenSetup: SLICESetup
+  // }
+  // {
   //   key: 'USDC',
   //   text: 'USDC',
   //   value: 1,
@@ -133,22 +159,20 @@ export const pairData = [
 
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
-export const trancheData = [
-  { address: ETHDAITrancheAAddress.toLowerCase() },
-  { address: ETHDAITrancheBAddress.toLowerCase() }
-];
-
 export const apiUri = {
   priceFeed: 'pairs',
   loanList: 'loans',
-  tranchesList: 'earn',
-  stakingList: 'staking',
   transaction: 'loans/transaction',
+  summaryLoan: 'summary/loan',
   summaryRatio: 'summary/ratio',
   summaryCollateral: 'summary/collateral',
-  summaryLoan: 'summary/loan',
+  stakingList: 'staking',
   stakingSummaryDetail: 'staking/detail/',
-  stakingSummary: 'staking/summary/'
+  stakingSummary: 'staking/summary/',
+  sliceSummary: 'slice/summary',
+  tranchesList: 'earn',
+  totalValueLocked: 'earn/summary/total',
+  graphUri: 'earn/graph/apy?'
 };
 
 // Filters
@@ -168,7 +192,7 @@ export const pairLogos = {
   SLICE: TrancheClaim,
   'SLICE/ETH LP': EthClaim,
   'SLICE/DAI LP': DaiClaim
-}
+};
 
 export const actionTypes = {
   Cancel: {
@@ -225,7 +249,7 @@ export const statuses = {
     key: 'Active',
     status: 1,
     color: '#2ECC71',
-    background: 'rgba(46, 204, 113, 0.24)'
+    background: '#DDFFEB'
   },
   Under_Collateralized: {
     key: 'Under Collateralized',
@@ -274,5 +298,115 @@ export const statuses = {
     status: 9,
     color: '#E70D52',
     background: 'rgba(231, 13, 82, 0.24)'
+  }
+};
+export const ModeThemes = {
+  light: {
+    body: '#F9F9FE',
+    navlinkTab: 'rgb(68, 65, 207)',
+    HeaderTitle: '#393F56',
+    HeaderSubtitle: '#9496B6',
+    TableHead: 'rgba(36, 39, 50, 0.6)',
+    TableCard: '#FFFFFF',
+    TableCardBorderColor: '#F0F0F7',
+    footerBackground: '#F6F6FC',
+    footerLinks: '#AAA8E9',
+    languageToggleBackground: 'rgba(68,65,207,0.1)',
+    languageToggleText: '#4441CF',
+    activeStatus: '#DDFFEB',
+    activeStatusText: '#2ECC71',
+    tableText: '#39295A',
+    tableCardShadow: '0px 4px 4px rgb(189 189 189 / 7%)',
+    dropDownBorder: '#F9F9FB',
+    dropDownText: '#39295A',
+    inputBackground: 'rgb(255, 255, 255)',
+    inputDisabledBackground: 'rgba(207,207,229,0.2)',
+    borderColor: '#EFEFEF',
+    backgroundBorder: '#CCCCCD',
+    titleSectionText: 'rgba(124, 133, 155, 0.8)',
+    valueSectionText: '#393F56',
+    titleColor: '#393F56',
+    textColor: '#7C859B',
+    ModalBackground: '#FFFFFF',
+    ModalText: '#4F4F4F',
+    SelectedStaking: 'rgba(68, 65, 207, 0.05)',
+    SelectedStakingText: '#39295A',
+    SelectedStakingLink: '#776E8B',
+    StakingInputText: '#838186',
+    loadingSpinner: 'rgba(124,133,155,0.8)',
+    Tooltip: '#2F2F2F',
+    NavbarBorder: '#E9E9FC',
+    NavbarBackground: '#FFFFFF',
+    NavbarShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
+    TrancheMarketsTitle: '#393F56',
+    TrancheModalLinkColor: '#4939D7',
+    TrancheModalLinkBackground: '#E7E7F9',
+    TrancheBtnBackground: '#FFFFFF',
+    TrancheBtnBackgroundCurrent: 'rgba(255, 255, 255, 0.5);',
+    TrancheBtnBorder: '#E9E9FC',
+    TrancheBtnColor: '#000000',
+    TrancheBtnSpan: '#E9E9FC',
+    ClaimHead: 'rgba(36, 39, 50, 0.6)',
+    StakingMax: 'rgba(57,41,90,0.3)',
+    HowTo: '#FFFFFF',
+    HowToText: '#4441CF',
+    HowToBorder: '0.872727px solid #E9E9FC',
+    HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
+    LoadingColorOne: '#eee',
+    LoadingColorTwo: '#f7f7f7'
+  },
+  dark: {
+    body: '#100F36',
+    navlinkTab: '#FFFFFF',
+    HeaderTitle: '#FFFFFF',
+    HeaderSubtitle: '#C2C4DA',
+    TableHead: 'rgba(255, 255, 255, 0.6)',
+    TableCard: 'rgba(255, 255, 255, 0.07)',
+    TableCardBorderColor: '#363661',
+    footerBackground: '#07052F',
+    footerLinks: 'rgba(255, 255, 255, 0.6)',
+    languageToggleBackground: 'rgba(134, 132, 255, 0.25)',
+    languageToggleText: '#FFFFFF',
+    activeStatus: 'rgba(46, 204, 113, 0.9)',
+    activeStatusText: '#FFFFFF',
+    tableText: '#FFFFFF',
+    tableCardShadow: '',
+    dropDownBorder: '#363661',
+    dropDownText: '#FFFFFF',
+    inputBackground: 'rgba(255, 255, 255, 0.5)',
+    inputDisabledBackground: 'transparent',
+    borderColor: 'rgba(204, 204, 205, 0.15)',
+    backgroundBorder: 'rgba(204, 204, 205, 0.15)',
+    titleSectionText: 'rgba(255, 255, 255, 0.8);',
+    valueSectionText: '#FFFFFF',
+    titleColor: '#FFFFFF',
+    textColor: '#C2C4DA',
+    ModalBackground: '#221F46',
+    ModalText: '#FFFFFF',
+    SelectedStaking: 'rgba(151, 149, 255, 0.15)',
+    SelectedStakingText: '#FFFFFF',
+    SelectedStakingLink: '#CEC6FF',
+    StakingInputText: 'rbga{255, 255, 255, 0.5}',
+    loadingSpinner: 'rgba(255,255,255,0.3)',
+    Tooltip: '#383765',
+    NavbarBorder: 'rgba(255, 255, 255, 0.1)',
+    NavbarBackground: 'rgba(175, 155, 255, 0.15)',
+    NavbarShadow: 'none',
+    TrancheMarketsTitle: '#FFFFFF',
+    TrancheModalLinkColor: '#FFFFFF',
+    TrancheModalLinkBackground: 'rgba(202, 197, 255, 0.13)',
+    TrancheBtnBackground: '#1C1B40',
+    TrancheBtnBackgroundCurrent: '#322E5D',
+    TrancheBtnBorder: '#322E5D',
+    TrancheBtnColor: '#FFFFFF',
+    TrancheBtnSpan: '#363661',
+    ClaimHead: 'rgba(255, 255, 255, 0.6)',
+    StakingMax: 'rgb(57,41,90)',
+    HowTo: 'rgba(175, 155, 255, 0.15)',
+    HowToText: '#FFFFFF',
+    HowToBorder: 'none',
+    HowToShadow: 'none',
+    LoadingColorOne: 'rgba(255,255,255,0.07)',
+    LoadingColorTwo: '#363661'
   }
 };

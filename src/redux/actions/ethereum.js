@@ -1,23 +1,32 @@
 import Web3 from 'web3';
+import axios from 'axios';
 import store from '../store';
+import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
 import {
-  DAISetup,
-  SLICESetup,
-  // USDCSetup,
-  // JProtocolSetup,
-  ERC20Setup
-} from 'utils/contractConstructor';
+  networkId,
+  serverUrl,
+  apiUri,
+  ERC20Tokens,
+  JCompoundAddress,
+  CompTrancheTokens,
+  JAaveAddress,
+  AaveTrancheTokens,
+  TrancheBuyerCoinAddresses
+} from 'config/constants';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
-  SET_TOKEN_BALANCES,
-  SET_TRANCHE_TOKEN_BALANCES,
+  // SET_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
-  SET_CURRENT_BLOCK
+  SET_CURRENT_BLOCK,
+  SET_TRANSACTION_LOADING,
+  SET_TRANCHE_ALLOWANCE
 } from './constants';
+import { summaryFetchSuccess } from './summaryData';
+const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
   if (address) {
@@ -29,11 +38,23 @@ export const setAddress = (address) => (dispatch) => {
   }
 };
 
-export const setNetwork = (network) => (dispatch) => {
+export const setNetwork = (network) => async (dispatch) => {
+  const state = store.getState();
+  const { path, ethereum } = state;
+  const { address } = ethereum;
   dispatch({
     type: SET_NETWORK,
     payload: network
   });
+  if (network === networkId && address) {
+    store.dispatch(setTokenBalances(address));
+    store.dispatch(checkTrancheAllowances(address, JCompoundAddress));
+    if (path === 'stake') {
+      const res = await axios(`${serverUrl + stakingSummary + address}`);
+      const { result } = res.data;
+      store.dispatch(summaryFetchSuccess(result));
+    }
+  }
 };
 
 export const setBalance = (balance) => (dispatch) => {
@@ -61,35 +82,100 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
+    const Tokens = ERC20Tokens.concat(CompTrancheTokens);
     const state = store.getState();
-    const { web3 } = state.ethereum;
-    const DAI = DAISetup(web3);
-    const SLICE = SLICESetup(web3);
-    // const USDC = USDCSetup(web3);
-    const daiBalance = await DAI.methods.balanceOf(address).call();
-    const sliceBalance = await SLICE.methods.balanceOf(address).call();
-    // const usdcBalance = await USDC.methods.balanceOf(address).call();
-
-    const tokenBalances = { DAI: daiBalance, SLICE: sliceBalance };
-    dispatch({
-      type: SET_TOKEN_BALANCES,
-      payload: tokenBalances
-    });
+    const { web3, network } = state.ethereum;
+    if (network === networkId) {
+      const batch = new web3.BatchRequest();
+      // const tokenBalance = {};
+      Tokens.map((tokenAddress) => {
+        let token = ERC20Setup(web3, tokenAddress);
+        batch.add(
+          token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+            if (err) {
+              console.error(err);
+            } else {
+              // if (tokenAddress === '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b') {
+              //   console.log(res);
+              // }
+              dispatch({
+                type: SET_TOKEN_BALANCE,
+                payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
+              });
+            }
+          })
+        );
+        return batch;
+      });
+      batch.execute();
+      // dispatch({
+      //   type: SET_TOKEN_BALANCES,
+      //   payload: tokenBalance
+      // });
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
-export const setTrancheTokenBalances = (trancheName, tokenAddress, address) => async (dispatch) => {
+export const toggleApproval = (tokenAddress, contractAddress, bool) => async (dispatch) => {
+  dispatch({
+    type: SET_TRANCHE_ALLOWANCE,
+    payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
+  });
+};
+
+export const checkTrancheAllowances = (address, contractAddress) => async (dispatch) => {
   try {
+    const Tokens =
+      contractAddress === JCompoundAddress
+        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : contractAddress === JAaveAddress
+        ? AaveTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : [];
     const state = store.getState();
-    const { web3 } = state.ethereum;
-    const Tranche = ERC20Setup(web3, tokenAddress);
-    const trancheTokenBalance = await Tranche.methods.balanceOf(address).call();
-    dispatch({
-      type: SET_TRANCHE_TOKEN_BALANCES,
-      payload: { trancheName, trancheTokenBalance }
-    });
+    const { web3, network } = state.ethereum;
+    if (network === networkId) {
+      const batch = new web3.BatchRequest();
+      let tokenBalance = {};
+      Tokens.map((tokenAddress) => {
+        let token = ERC20Setup(web3, tokenAddress);
+        batch.add(
+          token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+            if (err) {
+              console.error(err);
+            } else {
+              tokenBalance[tokenAddress] = res;
+            }
+          })
+        );
+        return batch;
+      });
+      Tokens.map((tokenAddress) => {
+        let token = ERC20Setup(web3, tokenAddress);
+        batch.add(
+          token.methods.allowance(address, contractAddress).call.request({ from: address }, (err, res) => {
+            if (err) {
+              console.error(err);
+            } else {
+              if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {
+                dispatch({
+                  type: SET_TRANCHE_ALLOWANCE,
+                  payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: true }
+                });
+              } else {
+                dispatch({
+                  type: SET_TRANCHE_ALLOWANCE,
+                  payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: false }
+                });
+              }
+            }
+          })
+        );
+        return batch;
+      });
+      batch.execute();
+    }
   } catch (error) {
     console.error(error);
   }
@@ -112,5 +198,12 @@ export const setCurrentBlock = (blockNumber) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_BLOCK,
     payload: blockNumber
+  });
+};
+
+export const setTxLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TRANSACTION_LOADING,
+    payload: bool
   });
 };

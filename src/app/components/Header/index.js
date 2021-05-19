@@ -11,7 +11,7 @@ import Navbar from "./Navbar"
 import { PagesData } from 'config/constants';
 import i18n from "../locale/i18n";
 
-export function Header({updateDate}) {
+function Header({updateDate}) {
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
 
@@ -42,11 +42,12 @@ export function Header({updateDate}) {
           </HeaderContent>
         </div>
         {
-          (path === "borrow" || path === "lend" || path === "earn" || path === 
+          (path === "borrow" || path === "lend" || path === "tranche" || path === 
           "stake") ?
           <HeaderTabs /> : ""
         }
-        
     </HeaderWrapper>
   );
 }
+
+export default Header;

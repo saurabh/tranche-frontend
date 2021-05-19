@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber, isGreaterThan } from 'utils';
-import { fromWei, stakingAllowanceCheck } from 'services/contractMethods';
-import { selectUp, selectDown } from 'assets';
+import { fromWei } from 'services/contractMethods';
+import { TrancheImg, TrancheImgColored } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
   // ModalFormGrp,
@@ -16,15 +16,18 @@ import {
   ModalFormButton,
   NewLoanInputWrapper,
   NewLoanFormInput,
-  SelectChevron,
   LoanCustomSelect,
   SelectCurrencyView,
   ApproveBtnWrapper,
   FieldWrapper,
-  SelectCurrencyOptions,
-  SelectCurrencyOption
+  SelectedStakingWrapper,
+  SelectedStaking,
+  SelectedStakingImg,
+  SelectedStakingContent
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
+import { etherScanUrl } from 'config';
+import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -48,8 +51,6 @@ let StakingForm = ({
   userStaked,
   tokenAddress,
   stakingAddress,
-  setTokenAddress,
-  setStakingAddress,
   isLPToken,
   hasAllowance,
   setHasAllowance,
@@ -57,15 +58,17 @@ let StakingForm = ({
   path,
   // Functions
   stakingApproveContract,
-  // setBalanceModal,
   adjustStake,
+  contractAddress,
   // Redux
-  ethereum: { tokenBalance, address },
-  userSummary: { slice, lpList }
+  ethereum: { tokenBalance },
+  summaryData: { slice, lpList },
+  type,
+  theme
 }) => {
   const [balance, setBalance] = useState(0);
   const [balanceCheck, setBalanceCheck] = useState('');
-  const [LPSelect, toggleLP] = useState(false);
+  // const [LPSelect, toggleLP] = useState(false);
   const [selectedLPName, setSelectedLPName] = useState(0);
   const [dropdownName, setDropdownName] = useState([]);
   const [amount, setAmount] = useState(0);
@@ -73,36 +76,16 @@ let StakingForm = ({
 
   useEffect(() => {
     if (isLPToken && lpList) {
-      setDropdownName(lpList[0].name.split(' ')[0]);
-      setSelectedLPName(lpList[0].name);
-      setTokenAddress(lpList[0].address);
-      setStakingAddress(lpList[0].stakingAddress);
-      let balance = tokenBalance[lpList[0].address];
+      let lpObj = lpList.filter((i) => i.name === type)[0];
+      setDropdownName(lpObj.name.split(' ')[0]);
+      setSelectedLPName(lpObj.name);
+      let balance = tokenBalance[lpObj.address];
       balance && setBalance(fromWei(balance.toString()));
     } else {
-      setTokenAddress(slice.address);
-      setStakingAddress(slice.stakingAddress);
       let balance = tokenBalance[slice.address];
       balance && setBalance(fromWei(balance.toString()));
     }
-  }, [tokenBalance, setTokenAddress, setStakingAddress, isLPToken, slice, lpList]);
-
-  const toggleLPSelect = () => {
-    toggleLP(!LPSelect);
-  };
-
-  const handleLPSelect = async (e, index, tokenAddress, stakingAddress) => {
-    e.preventDefault();
-    setSelectedLPName(lpList[index].name);
-    setDropdownName(lpList[index].name.split(' ')[0]);
-    setTokenAddress(tokenAddress);
-    setStakingAddress(stakingAddress);
-    let balance = tokenBalance[tokenAddress];
-    let result = await stakingAllowanceCheck(lpList[index].address, lpList[index].stakingAddress, address);
-    setHasAllowance(result);
-    setBalance(fromWei(balance.toString()));
-    toggleLP(false);
-  };
+  }, [tokenBalance, isLPToken, slice, lpList, type]);
 
   const handleInputChange = (newValue) => {
     setAmount(newValue);
@@ -127,20 +110,34 @@ let StakingForm = ({
   );
 
   return (
-    <ModalAdjustForm>
+    <ModalAdjustForm stake>
       <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
         <FormInputsWrapper trade={true}>
-          <ModalFormGrpNewLoan trade={true} tranche={true}>
+          <SelectedStakingWrapper ModalText={ModeThemes[theme].ModalText}>
+            <h2>{i18n.t('stake.modal.selectedStaking')}</h2>
+            <SelectedStaking color={ModeThemes[theme].SelectedStaking}>
+              <SelectedStakingImg>
+                <img src={TrancheImg} alt='tranche' />
+              </SelectedStakingImg>
+              <SelectedStakingContent SelectedStakingText={ModeThemes[theme].SelectedStakingText} SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}>
+                <h2>{type}</h2>
+                <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  {contractAddress}
+                </a>
+              </SelectedStakingContent>
+            </SelectedStaking>
+          </SelectedStakingWrapper>
+          <ModalFormGrpNewLoan trade={true} stake={true} StakingInputText={ModeThemes[theme].StakingInputText}>
             <NewLoanFormInput>
               <NewLoanInputWrapper name='amount'>
-                <ModalFormLabel htmlFor='amount' tranche={true}>
+                <ModalFormLabel htmlFor='amount' stake={true} ModalText={ModeThemes[theme].ModalText}>
                   {tokenName === 'SLICE'
                     ? modalType
                       ? i18n.t('stake.modal.stakeFormTitle')
                       : i18n.t('stake.modal.withdrawFormTitle')
                     : 'Amount of ' + tokenName + ' to ' + (modalType ? 'stake' : 'withdraw')}
                 </ModalFormLabel>
-                <FieldWrapper modalType={true} staking={true}>
+                <FieldWrapper modalType={true} staking={true} StakingInputText={ModeThemes[theme].StakingInputText} StakingMax={ModeThemes[theme].StakingMax} ModalText={ModeThemes[theme].ModalText}>
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleInputChange(newValue)}
@@ -151,37 +148,18 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  <button onClick={(e) => setMaxAmount(e)}>MAX</button>
+                  <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
                 <Field name='selectLP' component='input' id='selectLP' className='fieldStylingDisplay' />
 
-                <SelectCurrencyView staking={true} onClick={() => toggleLPSelect()}>
+                <SelectCurrencyView staking={true} ModalText={ModeThemes[theme].ModalText}>
                   <div>
-                    {/* <img src={pairData[pair].img} alt='' /> */}
+                    <img src={TrancheImgColored} alt='tranche' />
                     <h2>{isLPToken ? dropdownName : 'SLICE'}</h2>
                   </div>
-                  <SelectChevron>
-                    <img src={selectUp} alt='' />
-                    <img src={selectDown} alt='' />
-                  </SelectChevron>
                 </SelectCurrencyView>
-                {isLPToken && LPSelect ? (
-                  <SelectCurrencyOptions>
-                    {lpList.map((lp, index) => {
-                      return (
-                        <SelectCurrencyOption key={index}>
-                          <button onClick={(e) => handleLPSelect(e, index, lp.address, lp.stakingAddress)}>
-                            <img src={lp.img} alt='' /> {lp.name.split(' ')[0]}
-                          </button>
-                        </SelectCurrencyOption>
-                      );
-                    })}
-                  </SelectCurrencyOptions>
-                ) : (
-                  ''
-                )}
               </LoanCustomSelect>
             </NewLoanFormInput>
             <h2>
@@ -196,7 +174,7 @@ let StakingForm = ({
           </ModalFormGrpNewLoan>
         </FormInputsWrapper>
 
-        <ModalFormSubmit>
+        <ModalFormSubmit ModalBackground={ModeThemes[theme].ModalBackground}>
           <BtnLoanModal>
             <ApproveBtnWrapper>
               {modalType && (
@@ -225,7 +203,7 @@ let StakingForm = ({
                 </ModalFormButton>
               )}
             </ApproveBtnWrapper>
-            
+
             <ModalFormButton
               type='submit'
               backgroundColor={modalType ? '#4441CF' : !modalType ? '#6E41CF' : '#845AD9'}
@@ -249,7 +227,8 @@ StakingForm = reduxForm({
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  userSummary: state.userSummary,
+  summaryData: state.summaryData,
+  theme: state.theme,
   initialValues: {
     amount: ''
   },

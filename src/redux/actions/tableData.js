@@ -1,4 +1,4 @@
-import { apiUri } from 'config/constants';
+import { apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
 import { postRequest } from 'services/axios';
 import { checkServer } from './checkServer';
 import {
@@ -16,7 +16,9 @@ import {
   STAKING_IS_LOADING,
   STAKING_SUCCESS,
   STAKING_COUNT,
-  OWN_ALL_TOGGLE
+  OWN_ALL_TOGGLE,
+  TRANCHE_CARD_TOGGLE,
+  TRANCHE_MARKETS
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -62,6 +64,13 @@ export const tranchesSetCount = (count) => (dispatch) => {
   });
 };
 
+export const trancheCardToggle = (obj) => (dispatch) => {
+  dispatch({
+    type: TRANCHE_CARD_TOGGLE,
+    payload: obj
+  });
+};
+
 export const stakingIsLoading = (bool) => (dispatch) => {
   dispatch({
     type: STAKING_IS_LOADING,
@@ -70,9 +79,14 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
+  const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
+  const orderedList = [];
+  orderedList.push(searchArr(SLICEAddress));
+  orderedList.push(searchArr(LP1TokenAddress));
+  orderedList.push(searchArr(LP2TokenAddress));
   dispatch({
     type: STAKING_SUCCESS,
-    payload: list
+    payload: orderedList
   });
 };
 
@@ -94,14 +108,14 @@ export const changeSorting = (sort) => {
   return {
     type: CHANGE_SORTING,
     payload: sort
-  }
+  };
 };
 
 export const ownAllToggle = (type) => (dispatch) => {
-    dispatch({
-      type: OWN_ALL_TOGGLE,
-      payload: type
-    });
+  dispatch({
+    type: OWN_ALL_TOGGLE,
+    payload: type
+  });
 };
 
 export const changeOwnAllFilter = (filterType) => (dispatch) => {
@@ -124,31 +138,32 @@ export const paginationCurrent = (current) => (dispatch) => {
     payload: current
   });
 };
+export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  dispatch({
+    type: TRANCHE_MARKETS,
+    payload: trancheMarket
+  });
+};
 
 export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(endpoint, { data }, null, true);
-    if(result.status){
-      dispatch(checkServer(true));
-      if(endpoint === loanListUrl){
+    dispatch(checkServer(true));
+    if (result.status) {
+      if (endpoint === loanListUrl) {
         dispatch(loansIsLoading(false));
         dispatch(loansFetchSuccess(result.result.list));
         dispatch(loansSetCount(result.result.count));
-      }
-      else if(endpoint === tranchesListUrl){
+      } else if (endpoint === tranchesListUrl) {
         dispatch(tranchesIsLoading(false));
         dispatch(tranchesFetchSuccess(result.result.list));
         dispatch(tranchesSetCount(result.result.count));
-      }
-      else if(endpoint === stakingListUrl){
+      } else if (endpoint === stakingListUrl) {
         dispatch(stakingIsLoading(false));
         dispatch(stakingFetchSuccess(result.result.list));
         dispatch(stakingSetCount(result.result.count));
       }
-    }
-    else{
-      dispatch(checkServer(false));
     }
     return result;
   } catch (error) {
