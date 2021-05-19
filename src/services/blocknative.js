@@ -27,9 +27,7 @@ export function initOnboard(subscriptions) {
           { walletName: 'coinbase', preferred: true },
           { walletName: 'status', preferred: true },
           { walletName: 'trust', rpcUrl, preferred: true },
-          { walletName: 'ledger', rpcUrl, preferred: true },
           { walletName: 'torus', preferred: true },
-          { walletName: 'authereum', preferred: true }
         ]
       },
       walletCheck: [
