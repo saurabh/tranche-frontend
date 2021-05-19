@@ -69,10 +69,7 @@ let TableMoreRow = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [TooltipToggle, setTooltipToggle] = useState("");
 
-  let trancheTokenBalance =
-    cryptoType === 'USDC'
-      ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
-      : tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
+  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress])
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
