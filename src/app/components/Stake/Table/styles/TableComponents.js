@@ -985,6 +985,7 @@ const SecondColContent = styled.div`
   h2{
     text-align: center !important;
     font-size: 17px !important;
+    font-family: 'Inter', sans-serif;
     color: ${props => props.color};
   }
   
@@ -1130,7 +1131,7 @@ const FifthColContent = styled.div`
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 14px !important;
+    font-size: 17px !important;
     letter-spacing: 0.05em;
     text-align: center !important;
     color: ${props => props.color};
@@ -1189,6 +1190,7 @@ const TableSixthCol = styled.div`
   }
   h2{
     text-align: center !important;
+    font-family: 'Inter', sans-serif;
     font-size: 17px !important;
     color: ${props => props.color};
   }
