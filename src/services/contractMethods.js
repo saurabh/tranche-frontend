@@ -3,7 +3,6 @@ import {
   JLoanSetup,
   JLoanHelperSetup,
   JPriceOracleSetup,
-  JProtocolSetup,
   JCompoundSetup,
   StakingSetup,
   YieldFarmSetup,
@@ -150,72 +149,6 @@ export const getShareholderShares = async (loanId, address) => {
     const JLoan = JLoanSetup(web3);
     const result = await JLoan.methods.getShareholderShares(loanId, address).call();
     return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getTrancheParameters = async (trancheId) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JProtocol = JProtocolSetup(web3);
-    const result = await JProtocol.methods.trancheParameters(trancheId).call();
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getLoansAccruedInterest = async (trancheId, startIndex, stopIndex) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JProtocol = JProtocolSetup(web3);
-    const result = await JProtocol.methods.getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex).call();
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const collectLoansAccruedInterest = async (trancheId, startIndex, stopIndex) => {
-  try {
-    const state = store.getState();
-    const { web3, address, notify } = state.ethereum;
-    const JProtocol = JProtocolSetup(web3);
-    await JProtocol.methods
-      .getTrancheAccruedInterests(trancheId, startIndex, stopIndex)
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        const { emitter } = notify.hash(hash);
-        emitter.on('txPool', (transaction) => {
-          return {
-            message: txMessage(transaction.hash)
-          };
-        });
-      });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const sendValueToTranche = async (trancheId) => {
-  try {
-    const state = store.getState();
-    const { web3, address, notify } = state.ethereum;
-    const JProtocol = JProtocolSetup(web3);
-    await JProtocol.methods
-      .sendValueToTrancheTokens(trancheId)
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        const { emitter } = notify.hash(hash);
-        emitter.on('txPool', (transaction) => {
-          return {
-            message: txMessage(transaction.hash)
-          };
-        });
-      });
   } catch (error) {
     console.error(error);
   }

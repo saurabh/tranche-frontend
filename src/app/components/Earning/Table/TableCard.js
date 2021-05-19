@@ -114,6 +114,8 @@ const TableCard = ({
   const approveContract = async (type, isApproved, e) => {
     try {
       if (isApproveLoading) e.stopPropogation();
+      const ready = await readyToTransact(wallet, onboard);
+      if (!ready) return;
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
       const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
       const token = ERC20Setup(web3, tokenAddress);
@@ -144,9 +146,11 @@ const TableCard = ({
     }
   };
 
-  const buySellTrancheTokens = (e, buy) => {
+  const buySellTrancheTokens = async (e, buy) => {
     try {
       e.preventDefault();
+      const ready = await readyToTransact(wallet, onboard);
+      if (!ready) return;
       buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
     } catch (error) {
       console.error(error);
@@ -158,9 +162,6 @@ const TableCard = ({
   };
 
   const cardToggle = async () => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    address = !address ? onboard.getState().address : address;
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
