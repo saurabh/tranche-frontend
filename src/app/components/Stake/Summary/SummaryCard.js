@@ -10,11 +10,11 @@ import {
   SummaryCardTitle,
   SummaryCardValue,
   SummaryCardDetails,
-  SummaryCardCounter,
   SummaryClaimBtn,
-  SummaryCardBtn
+  SummaryCardWrapperContent
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
+import i18n from '../../locale/i18n';
 
 const SummaryCard = ({
   title,
@@ -23,7 +23,6 @@ const SummaryCard = ({
   value,
   type,
   details,
-  path,
   openModal,
   closeModal,
   modalIsOpen,
@@ -32,8 +31,8 @@ const SummaryCard = ({
   adjustStake,
   approveLoading,
   stakingApproveContract,
-  ethereum: { web3, address, tokenBalance, notify },
-  userSummary: { totalAccruedRewards },
+  ethereum: { tokenBalance },
+  summaryData: { totalAccruedRewards },
   hasAllowance,
   setHasAllowance,
   color
@@ -89,80 +88,74 @@ const SummaryCard = ({
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
   return (
-    <div>
-        <SummaryCardWrapper color={color}>
-          {value || value === 0 ? (
-            <SummaryCardContainer>
-              <SummaryCardTitle>{title}</SummaryCardTitle>
+    <SummaryCardWrapperContent>
+      <SummaryCardWrapper color={color}>
+        {value || value === 0 ? (
+          <SummaryCardContainer>
+            <SummaryCardTitle>{title}</SummaryCardTitle>
 
-              <SummaryCardValue>
-                {type === 'slice' || type === 'lp'
-                  ? `${roundNumber(value, 2)}`
-                  : type === 'reward' && roundNumber(totalAccruedRewards, 2) !== 'NaN'
-                  ? `${roundNumber(totalAccruedRewards, 2)}`
-                  : '0.00'}
-                <div></div>
-              </SummaryCardValue>
-              <SummaryCardDetails>
-                {type === 'slice'
-                  ? balance + ' SLICE Available'
-                  : type === 'lp'
-                  ? balance + ' SLICE-LP Available'
-                  : epochTimeLeft + ' Until Next Distribution'}
-              </SummaryCardDetails>
-              {path === 'stake' && type !== 'reward' && (
-                <SummaryCardCounter>
-                  <SummaryCardBtn onClick={() => openModal(true)}>+</SummaryCardBtn>
-                  <SummaryCardBtn onClick={() => openModal(false)}>-</SummaryCardBtn>
-                </SummaryCardCounter>
-              )}
-              {path === 'stake' && type === 'reward' && (
-                <SummaryClaimBtn claim>
-                  <button onClick={() => openModal()}>Claim</button>
-                </SummaryClaimBtn>
-              )}
-            </SummaryCardContainer>
-          ) : (
-            <SummaryCardContainer loading>
+            <SummaryCardValue>
+              {type === 'slice' || type === 'lp'
+                ? `${roundNumber(value, 2)}`
+                : type === 'reward' && roundNumber(totalAccruedRewards, 2) !== 'NaN'
+                ? `${roundNumber(totalAccruedRewards, 2)}`
+                : '0.00'}
               <div></div>
-              <div></div>
-              <div></div>
-            </SummaryCardContainer>
-          )}
+            </SummaryCardValue>
+            <SummaryCardDetails>
+              {type === 'slice'
+                ? balance + " " + i18n.t('stake.summary.slice.details')
+                : type === 'lp'
+                ? balance + " " + i18n.t('stake.summary.sliceLP.details')
+                : epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Minutes' ? epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.details') + " " + i18n.t('stake.summary.sliceRewards.details2') :  epochTimeLeft + " Until Next Distribution"}
+            </SummaryCardDetails>
 
-          <StakingModal
-            // State Values
-            path={path}
-            modalIsOpen={modalIsOpen}
-            modalType={modalType}
-            summaryModal={summaryModal}
-            tokenAddress={tokenAddress}
-            noBalance={Number(balance) === 0}
-            // Functions
-            closeModal={() => closeModal()}
-            openModal={(bool) => openModal(bool)}
-            hasAllowance={hasAllowance}
-            setHasAllowance={setHasAllowance}
-            approveLoading={approveLoading}
-            isLPToken={isLPToken}
-            // Functions
-            stakingApproveContract={stakingApproveContract}
-            adjustStake={adjustStake}
-            type={type}
-          />
-        </SummaryCardWrapper>
-    </div>
+            {type === 'reward' && (
+              <SummaryClaimBtn claim>
+                <button onClick={() => openModal()}>{i18n.t('stake.modal.claim')}</button>
+              </SummaryClaimBtn>
+            )}
+          </SummaryCardContainer>
+        ) : (
+          <SummaryCardContainer loading>
+            <div></div>
+            <div></div>
+            <div></div>
+          </SummaryCardContainer>
+        )}
+
+        <StakingModal
+          // State Values
+          modalIsOpen={modalIsOpen}
+          modalType={modalType}
+          summaryModal={summaryModal}
+          tokenAddress={tokenAddress}
+          noBalance={Number(balance) === 0}
+          // Functions
+          closeModal={() => closeModal()}
+          openModal={(bool) => openModal(bool)}
+          hasAllowance={hasAllowance}
+          setHasAllowance={setHasAllowance}
+          approveLoading={approveLoading}
+          isLPToken={isLPToken}
+          // Functions
+          stakingApproveContract={stakingApproveContract}
+          adjustStake={adjustStake}
+          type={type}
+        />
+      </SummaryCardWrapper>
+    </SummaryCardWrapperContent>
   );
 };
 
 SummaryCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
-  userSummary: PropTypes.object.isRequired
+  summaryData: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
-  userSummary: state.userSummary
+  summaryData: state.summaryData
 });
 
 export default connect(mapStateToProps, {})(SummaryCard);

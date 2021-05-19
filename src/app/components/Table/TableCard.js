@@ -19,7 +19,6 @@ import {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -99,7 +98,7 @@ const TableCard = ({
   ethereum: { tokenBalance, address, wallet, web3, currentBlock, notify },
   form,
   setTokenBalances,
-  checkServer
+  checkServer,
 }) => {
   const JLoan = JLoanSetup(web3);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -118,6 +117,9 @@ const TableCard = ({
   const [canBeForeclosed, setCanBeForeclosed] = useState(false);
   const [accruedInterest, setAccruedInterest] = useState(0);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  
+
+
   const checkLoan =
     path === 'borrow' && address === borrowerAddress
       ? PagesData[path].userTag
@@ -465,7 +467,6 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalances(address);
     const allowanceResult = await loanAllowanceCheck(pairId, remainingLoan.toString());
     setHasAllowance(allowanceResult);
     const availableInterest = await getAccruedInterests(loanId);
@@ -476,7 +477,7 @@ const TableCard = ({
     setShareholderShares(shares);
     setIsOpen(true);
   };
-
+  
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -566,8 +567,8 @@ const TableCard = ({
           <TableColMobile btn>
             <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
               <button
-                disabled={path === 'earn' || disableBtn}
-                onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
+                disabled={path === 'tranche' || disableBtn}
+                onClick={path === 'tranche' || disableBtn ? undefined : () => openModal()}
               >
                 <img
                   alt='adjust'
@@ -576,7 +577,7 @@ const TableCard = ({
                       ? Adjust
                       : path === 'lend'
                       ? AdjustEarn
-                      : path === 'earn'
+                      : path === 'tranche'
                       ? AdjustTrade
                       : Adjust
                   }
@@ -708,8 +709,8 @@ const TableCard = ({
             <AdustBtnWrapper className='adjust-btn-wrapper'>
               <AdjustLoanBtn
                 color={PagesData[path].btnColor}
-                disabled={path === 'earn' || disableBtn}
-                onClick={path === 'earn' || disableBtn ? undefined : () => openModal()}
+                disabled={path === 'tranche' || disableBtn}
+                onClick={path === 'tranche' || disableBtn ? undefined : () => openModal()}
               >
                 <img
                   src={
@@ -717,7 +718,7 @@ const TableCard = ({
                       ? Adjust
                       : path === 'lend'
                       ? AdjustEarn
-                      : path === 'earn'
+                      : path === 'tranche'
                       ? AdjustTrade
                       : Adjust
                   }
@@ -833,6 +834,5 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   checkServer
 })(TableCard);

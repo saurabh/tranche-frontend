@@ -1,97 +1,70 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
-import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, LocaleWrapper, MobileNavbarIconWrapper, NavbarIconWrapper } from './styles/HeaderComponents';
-import { apiUri, pairData  } from 'config/constants';
-import { ETH, DAI, BackArrow, ChevronDown } from 'assets';
-import { getRequest } from 'services/axios';
-import { useOuterClick } from 'services/useOuterClick';
-import { roundNumber, safeDivide } from 'utils/helperFunctions';
+import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
+import { ModeThemes, dashboardUrl  } from 'config/constants';
+import { BackArrow, Logo } from 'assets';
+// import { getRequest } from 'services/axios';
+// import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
 import i18n from "../../locale/i18n";
-
 import {
   RatesWrapper,
   RatesBoxWrapper,
-  RatesRowWrapper,
-  RatesRowContent,
-  RatesValue,
-  RatesValueImg,
-  RatesValueText,
-  RatesRowDash,
   NavbarSpan
 } from './styles/HeaderComponents';
 import ConnectWallet from './ConnectWallet';
 import { TrancheIcon } from 'assets';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-function Navbar({ path }) {
+function Navbar({ path, theme }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pair0Value, setPair0Value] = useState(0);
+  // const [pair0Value, setPair0Value] = useState(0);
   // const [pair1Value, setPair1Value] = useState(0);
-  const [ratesVisability, setRatesVisability] = useState(false);
+  // const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
-  const [localeToggle, setLocaleToggle] = useState(false);
 
-  const innerRef = useOuterClick(e => {
-    setLocaleToggle(false);
-  });
+  // const getPriceFeed = async () => {
+  //   const { priceFeed: priceUrl } = apiUri;
+  //   setRatesVisability(!ratesVisability);
+  //   try {
+  //     const { data: result } = await getRequest(priceUrl, {}, null);
+  //     result.result.forEach(pair => {
+  //       let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
+  //       price = roundNumber(price);
+  //       if (pair.pairId === pairData[0].value) setPair0Value(price)
+  //       // if (pair.pairId === pairData[1].value) setPair1Value(price)
+  //     })
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // useEffect(()=>{
+  //   getPriceFeed();
+  //   //eslint to be fixed
+  // }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getPriceFeed = async () => {
-    const { priceFeed: priceUrl } = apiUri;
-    setRatesVisability(!ratesVisability);
-    try {
-      const { data: result } = await getRequest(priceUrl, {}, null);
-      result.result.forEach(pair => {
-        let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
-        price = roundNumber(price);
-        if (pair.pairId === pairData[0].value) setPair0Value(price)
-        // if (pair.pairId === pairData[1].value) setPair1Value(price)
-      })
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(()=>{
-    getPriceFeed();
-    //eslint to be fixed
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // const ratesToggleBtn = (e) =>{
+  //   e.preventDefault();
+  //   setRatesToggle(true);
+  // }
 
-  const ratesToggleBtn = (e) =>{
-    e.preventDefault();
-    setRatesToggle(true);
-  }
-  const pathWindow =  window.location.pathname;
-  let parsedPathWindow = pathWindow.split('/');
-  let currentPath = parsedPathWindow[parsedPathWindow.length - 1];
-  const newPath = (lng) =>{
-    return `${"/" + lng + "/" + currentPath}`;
-  }
-  
   return (
     <NavbarWrapper>
       <NavbarContainer>
         <div id='logo-wrapper'>
-            <a href="https://tranche.finance/">
-              <img src={LogoColored} alt='Logo' />
-            </a>
+        <a href="https://tranche.finance/"><img src={theme === "dark" ? Logo : LogoColored} alt='Logo' /></a>
         </div>
         <MobileNavbarIconWrapper mobile>
-          <LocaleWrapper color="rgb(68,65,207)" ref={innerRef} mobile>
-            <h2 onClick={() => setLocaleToggle(!localeToggle)}>{i18n.language}<img src={ChevronDown} alt="chevron"/> </h2>
-            { localeToggle ?
-              <div>
-                <a href={newPath("en")}>en</a>
-                <a href={newPath("zh")}>ZH</a>
-                <a href={newPath("kr")}>KR</a>
-              </div> : ""
-            }
-          
-          </LocaleWrapper>
+
+          <ConnectWallet />
+
           <NavbarIconWrapper id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
-            <NavbarSpan></NavbarSpan>
-            <NavbarSpan></NavbarSpan>
-            <NavbarSpan></NavbarSpan>
+            <NavbarIconContent>
+              <NavbarSpan></NavbarSpan>
+              <NavbarSpan></NavbarSpan>
+              <NavbarSpan></NavbarSpan>
+            </NavbarIconContent>
           </NavbarIconWrapper>
         </MobileNavbarIconWrapper>
         
@@ -100,12 +73,10 @@ function Navbar({ path }) {
             <img src={TrancheIcon} alt="icon" />
             {/* <h2>0xB51F1234DA3124124468</h2> */}
             <div>
-              <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
-              <a href="/">DASHBOARD</a>
-              <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
+              <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer" >DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
-              <a href="https://discord.gg/DTZrm4j4Yc">SUPPORT</a>
+              <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>
@@ -118,7 +89,7 @@ function Navbar({ path }) {
                 className='ratesBoxWrapper'
                 mobile
               >
-                <RatesRowWrapper border={false}>
+                {/* <RatesRowWrapper border={false}>
                   <RatesRowContent>
                     <RatesValue>
                       <RatesValueImg>
@@ -140,7 +111,7 @@ function Navbar({ path }) {
                       </RatesValueText>
                     </RatesValue>
                   </RatesRowContent>
-                </RatesRowWrapper>
+                </RatesRowWrapper> */}
 
                 {/* <RatesRowWrapper>
                   <RatesRowContent>
@@ -171,37 +142,40 @@ function Navbar({ path }) {
         </NavBarMobile>
         
         <div className='navbar-right'>
-          <NavbarLinks>
+          <NavbarLinks theme={ModeThemes[theme]} color={ModeThemes[theme].NavbarBorder}>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
-                color: 'rgba(68, 65, 207, 1)'
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
               }}
               exact
             >
               {i18n.t('navbar.stake')}            
             </NavLink>
             <NavLink
-              to={baseUrl + '/'}
+              to={baseUrl + '/tranche'}
               activeStyle={{
-                color: 'rgba(68, 65, 207, 1)'
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
               }}
-              className="navLinkDisabled"
               exact
             >
              {i18n.t('navbar.tranche')}
             </NavLink>
-            <NavLink
-              to={baseUrl + '/'}
+            <a
+              href={dashboardUrl}
               activeStyle={{
-                color: 'rgba(68, 65, 207, 1)'
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
               }}
-              className="navLinkDisabled"
-              exact
             >
             {i18n.t('navbar.vote')}
 
-            </NavLink>
+            </a>
           </NavbarLinks>
           <ConnectWallet path={path} />
         </div>
@@ -211,7 +185,8 @@ function Navbar({ path }) {
 }
 const mapStateToProps = (state) => {
   return {
-    path: state.path
+    path: state.path,
+    theme: state.theme
   };
 };
 export default connect(mapStateToProps, null)(Navbar);

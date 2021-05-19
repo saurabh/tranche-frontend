@@ -13,11 +13,15 @@ import {
     CreateLoanBtn,
     TableMarketsSortingDropdown,
     TableMarketsSortingDropdownContent,
-    TableMarketSortingBtn
-  } from './styles/TableComponents';
+    TableMarketSortingBtn,
+    HowToLink
+} from './styles/TableComponents';
+import {
+    ModeThemes
+} from 'config/constants';
 import i18n from "app/components/locale/i18n";
 
-const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
+const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
     const innerRef = useOuterClick(e => {
@@ -37,24 +41,32 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
     return (
         <TableContainerHeader>
             <TableHeaderTitles>
-                <TableTitle>
+                <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto>
                 {   path === "lend" ?
                     <h2>Earning Assets</h2> :
                     path === "borrow" ?
                     <h2>Open Loans</h2> : 
                     path === "stake" ?
                     <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
-                    <h2>Available Instruments</h2>
+                    <h2>{i18n.t('tranche.table.tableHeader.title')}</h2>
                 }
+                {
+                    path === "stake" || path === "tranche" ?
+                    <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking" target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+                        HOW-TO
+                    </HowToLink> : ""
+                }
+                
                 </TableTitle>
                 {
-                    path !== "stake" ?
-                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()}>
+                    path !== "stake" && path !== "tranche" ?
+                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} color={ModeThemes[theme].HeaderSubtitle}>
                         <h2>{`${filterValue === null ? 'All': filterValue} Markets`} <img src={ChevronDown} alt=""/> </h2>
                     </TableSubTitle> : 
-                    <TableSubTitle>
-                        <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>
-                    </TableSubTitle> 
+                    path === "tranche" ?
+                    <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
+                    <h2>{i18n.t('tranche.table.tableHeader.subtitle')}</h2>
+                    </TableSubTitle> : ""
                 }
 
                 {   menu ?
@@ -88,6 +100,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter }) => {
 const mapStateToProps = (state) => {
     return {
       path: state.path,
+      theme: state.theme
     };
   };
   

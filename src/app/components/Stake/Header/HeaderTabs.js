@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
-import { apiUri, pairData } from 'config/constants';
+import { apiUri, pairData, ModeThemes } from 'config/constants';
 import { useOuterClick } from 'services/useOuterClick';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { ETH, DaiLogo } from 'assets';
 import { NavLink } from 'react-router-dom';
-import i18n from "../../locale/i18n";
+import i18n from '../../locale/i18n';
 
 import {
   HeaderTabsWrapper,
@@ -19,16 +19,16 @@ import {
   RatesValue,
   RatesValueImg,
   RatesValueText,
-  RatesRowDash,
+  RatesRowDash
 } from './styles/HeaderComponents';
-export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
+export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ path }) => {
+const HeaderTabs = ({ path, theme }) => {
   // const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
   const [pair0Value, setPair0Value] = useState(0);
   // const [pair1Value, setPair1Value] = useState(0);
-  
+
   const innerRef = useOuterClick((e) => {
     setRatesVisability(false);
   });
@@ -37,39 +37,35 @@ const HeaderTabs = ({ path }) => {
     setRatesVisability(!ratesVisability);
     try {
       const { data: result } = await getRequest(priceUrl, {}, null);
-      result.result.forEach(pair => {
-        let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
+      result.result.forEach((pair) => {
+        let price = safeDivide(pair.pairValue, 10 ** pair.pairDecimals);
         price = roundNumber(price);
-        if (pair.pairId === pairData[0].value) setPair0Value(price)
+        if (pair.pairId === pairData[0].value) setPair0Value(price);
         // if (pair.pairId === pairData[1].value) setPair1Value(price)
-      })
+      });
     } catch (error) {
       console.error(error);
     }
   };
-  
-  
-  
+
   return (
     <HeaderTabsWrapper path={path} desktop>
-      <HeaderTabsBtnsLinks>
-          <NavLink
-            to={baseUrl + '/stake'}
-            activeStyle={{
-              color: 'rgba(68, 65, 207, 1)'
-            }}
-            exact
-          >
-            {i18n.t('stake.tabs.dashboard')}
-          </NavLink>
-          <div ref={innerRef}>
-            <button onClick={() => getPriceFeed()}>
-            {i18n.t('stake.tabs.rates')}
-            </button>
-            <RatesWrapper>
-              <RatesBoxWrapper
-                className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}
-              >
+      <HeaderTabsBtnsLinks color={ModeThemes[theme]} colorBorder={ModeThemes[theme].NavbarBorder}>
+        <NavLink
+          to={baseUrl + '/stake'}
+          activeStyle={{
+            opacity: 1,
+            background: ModeThemes[theme].NavbarBackground,
+            boxShadow: ModeThemes[theme].NavbarShadow
+          }}
+          exact
+        >
+          {i18n.t('stake.tabs.dashboard')}
+        </NavLink>
+        <div ref={innerRef}>
+          <button onClick={() => getPriceFeed()}>{i18n.t('stake.tabs.rates')}</button>
+          <RatesWrapper>
+            <RatesBoxWrapper className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}>
               <RatesRowWrapper border={false}>
                 <RatesRowContent>
                   <RatesValue>
@@ -93,7 +89,7 @@ const HeaderTabs = ({ path }) => {
                   </RatesValue>
                 </RatesRowContent>
               </RatesRowWrapper>
-            {/* 
+              {/* 
               <RatesRowWrapper>
                 <RatesRowContent>
                   <RatesValue>
@@ -117,18 +113,13 @@ const HeaderTabs = ({ path }) => {
                   </RatesValue>
                 </RatesRowContent>
               </RatesRowWrapper> */}
-          </RatesBoxWrapper>
-        </RatesWrapper>
-          </div>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docs.tranche.finance/tranchefinance/"
-          >
-            {i18n.t('stake.tabs.howTo')}
-          </a>
+            </RatesBoxWrapper>
+          </RatesWrapper>
+        </div>
+        <a href="https://docs.tranche.finance/tranchefinance/tranche-app/staking" target="_blank" rel="noopener noreferrer">
+          {i18n.t('stake.tabs.howTo')}
+        </a>
       </HeaderTabsBtnsLinks>
-      
     </HeaderTabsWrapper>
   );
 };
@@ -138,7 +129,8 @@ const mapStateToProps = (state) => {
     ethereum: state.ethereum,
     data: state.data,
     path: state.path,
-    trade: state.trade
+    trade: state.trade,
+    theme: state.theme
   };
 };
 

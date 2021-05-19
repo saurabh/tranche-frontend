@@ -1,8 +1,6 @@
 import queryString from 'qs';
 import axios from 'axios';
-import { serverUrl } from 'config/constants'
-
-const BASE_URL = serverUrl;
+import { serverUrl } from 'config/constants';
 
 const DEFAULT_OPTIONS = {
   headers: {
@@ -11,15 +9,8 @@ const DEFAULT_OPTIONS = {
   }
 };
 
-function _fetch(
-  method,
-  path,
-  { qs = null, data = {} } = {},
-  token,
-  isFormData,
-  isFile
-) {
-  let url = BASE_URL + path;
+function _fetch(method, path, { qs = null, data = {} } = {}, token, isFormData, isFile) {
+  let url = serverUrl + path;
 
   if (qs) {
     url += `?${queryString.stringify(qs)}`;
@@ -63,13 +54,7 @@ export function getRequest(path, { qs = null, data = {} } = {}, token) {
   return _fetch('GET', path, { qs, data }, token);
 }
 
-export function postRequest(
-  path,
-  { qs = null, data = {} } = {},
-  token,
-  isFormData,
-  isFile = false
-) {
+export function postRequest(path, { qs = null, data = {} } = {}, token, isFormData, isFile = false) {
   return _fetch('POST', path, { qs, data }, token, isFormData, isFile);
 }
 

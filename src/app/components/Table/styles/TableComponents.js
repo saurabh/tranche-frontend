@@ -246,7 +246,7 @@ const TableMarketsSortingDropdown = styled.div`
   height: 55px;
   margin-top: 7px;
   overflow: hidden;
-  right: ${({path}) => path === "earn" ? "20px" : " -26px"};
+  right: ${({path}) => path === "tranche" ? "20px" : " -26px"};
   background: #FFFFFF;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.19);
   border-radius: 6px;

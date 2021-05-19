@@ -12,6 +12,7 @@ const HeaderWrapper = styled.div`
   @media (max-width: 767px){
     min-height: 100px;
     padding: 0 20px;
+    margin: 12px 0;
     z-index: -1;
   }
 `;
@@ -31,10 +32,10 @@ const HeaderContent = styled.div`
         }
     `}
     ${({ path }) =>
-    (path !== "stake") &&
+    (path !== "stake" && path !== "tranche") &&
     `
       @media (max-width: 767px){
-        display: none;
+        display: block;
       }
     `}
 `;
@@ -77,11 +78,11 @@ const HeaderSubtitle = styled.div`
 const NavbarWrapper = styled.div`
   height: 112px;
   position: relative;
-  border-bottom: 2px solid #E9E9FC;
+  border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border: none;
+    border-bottom: 2px solid rgba(233, 233, 252, 0.1);;  
   }
 `;
 const NavbarContainer = styled.div`
@@ -97,7 +98,8 @@ const NavbarContainer = styled.div`
 const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 336px;
+  border-radius: 159px;
+  border: 1px solid ${props => props.color};
   ${({ tabs }) =>
   tabs &&
   `
@@ -105,21 +107,27 @@ const NavbarLinks = styled.div`
   `}
   & > a {
     // display: inline-block;
-    font-family: 'Inter';
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(68, 65, 207, 0.5);
+    color: ${props => props.theme.navlinkTab};
+    padding: 17px 37px;
+    border-radius: 159px;
+    opacity: 0.5;
     :hover{
-      color: rgba(68, 65, 207, 0.6);
+      opacity: 0.6;
     }
   }
   @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
+    margin: 12px 0;
+    a{
+      font-size: 12px;
+      padding: 9px 25px;
+    }
   }
 `;
 const HeaderTabsWrapper = styled.div`
@@ -203,7 +211,7 @@ const MarketsTabsContainer = styled.div`
     margin-left: auto; 
   }
   ${({ page }) =>
-    page === "earn" &&
+    page === "tranche" &&
     `
         width: 231px !important;
     `}
@@ -250,7 +258,6 @@ const HeaderTabBtn = styled.button`
         }
     `}
 `;
-
 const WalletBtn = styled.button`
   display: flex;
   justify-content: space-between;
@@ -272,12 +279,19 @@ const WalletBtn = styled.button`
   }
   @media (max-width: 992px) {
     margin: 5px 0;
+    width: 129px;
+    height: 33px;
   }
 `;
 
 const WalletBtnIcon = styled.div`
   display: flex;
   align-items: center;
+  @media (max-width: 992px) {
+    img{
+      width: 17px;
+    }
+  }
 `;
 
 const WalletBtnText = styled.div`
@@ -291,6 +305,9 @@ const WalletBtnText = styled.div`
     text-transform: uppercase;
     color: #FFFFFF;
     margin-left: 12px;
+    @media (max-width: 992px) {
+      font-size: 10px;
+    }
   }
 `;
 const RatesWrapper = styled.div`
@@ -299,7 +316,7 @@ const RatesWrapper = styled.div`
 
 const RatesBoxWrapper = styled.div`
   position: absolute;
-  top: -88px;
+  top: -102px;
   right: -220px;
   width: 298px;
   height: auto;
@@ -375,8 +392,8 @@ const RatesRowDash = styled.div`
 `;
 const TabIndicator = styled.div`
   height: 4px;
-  width: ${(props) => ((props.path === "lend" && props.language === "en") ? "92px" : (props.path === "lend" && props.language === "zh") ? "64px" : props.path === "borrow" ? "81px" : props.path === "earn" ? "115px" : "0")};
-  background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "earn" ? "#ffffff" : "")};
+  width: ${(props) => ((props.path === "lend" && props.language === "en") ? "92px" : (props.path === "lend" && props.language === "zh") ? "64px" : props.path === "borrow" ? "81px" : props.path === "tranche" ? "115px" : "0")};
+  background: ${(props) => (props.path === "lend" ? "#D7FFB7" : props.path === "borrow" ? "#CEB7FF" : props.path === "tranche" ? "#ffffff" : "")};
   transition: 300ms;
   bottom: 0;
   position: absolute;
@@ -389,9 +406,9 @@ const TabIndicator = styled.div`
       ? "calc(100% - 62px)"
       : props.tab === "own" && props.path === "borrow"
       ? "calc(100% - 78px)"
-      : props.tab === "allTranches" && props.path === "earn"  
+      : props.tab === "allTranches" && props.path === "tranche"  
       ? "-4px"
-      : props.tab === "myTranches" && props.path === "earn"
+      : props.tab === "myTranches" && props.path === "tranche"
       ? "calc(100% - 110px)"
       : ""};
   @media (max-width: 992px) {
@@ -401,7 +418,7 @@ const TabIndicator = styled.div`
 
 const NavBarMobile = styled.div`
   width: 100%;
-  background: #282828;
+  background: #F9F9FE;
   position: fixed;
   right: 0;
   top: 0;
@@ -447,7 +464,7 @@ const NavBarMobileContent = styled.div`
         text-align: center;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        color: #FFFFFF;
+        color: #282828;
         opacity: 0.5;
       }
     }
@@ -515,37 +532,64 @@ const OtherTabsContainer = styled.div`
   }
 `
 const HeaderTabsBtnsLinks = styled.div`
-  width: 481px;
+  // width: 481px;
   display: flex;
   justify-content: space-between;
+  border-radius: 159px;
+  border: 1px solid ${props => props.colorBorder};
   a, div > button{
     font-family: "Inter", sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     // color: #4441CF;
-    color: rgba(68, 65, 207, 0.5);
+    color: ${props => props.theme.navlinkTab};
     text-decoration: none;
     outline: none;
     cursor: pointer;
     border: none;
     background: transparent;
+    padding: 17px 37px;
+    border-radius: 159px;
+    opacity: 0.5;
+    :hover{
+      opacity: 0.6;
+    }
+  }
+  @media (max-width: 992px) {
+    margin: 12px 0;
+    a{
+      font-size: 12px;
+      padding: 9px 25px;
+    }
   }
 `
 const NavbarSpan = styled.span`
-  background: #778899 !important;
+  background: #4441CF !important;
 `
 const MobileNavbarIconWrapper = styled.div`
   display: none;
   @media (max-width: 992px) {
     display: flex;
+    align-items: center;
   }
 
 `
 const NavbarIconWrapper = styled.div`
   margin-left: 12px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 30px;
+  height: 30px;
+  background: rgba(68, 65, 207, 0.1);
+  border-radius: 50%;
+`
+
+const NavbarIconContent = styled.div`
 `
 
 
@@ -580,5 +624,6 @@ export {
   HeaderTabsBtnsLinks,
   NavbarSpan,
   MobileNavbarIconWrapper,
-  NavbarIconWrapper
+  NavbarIconWrapper,
+  NavbarIconContent
 };

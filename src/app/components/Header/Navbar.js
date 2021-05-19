@@ -79,10 +79,10 @@ function Navbar({ path }) {
             <div>
               <a href="/" onClick={(e) => ratesToggleBtn(e)}>RATES</a>
               <a href="/">DASHBOARD</a>
-              <a href="https://docs.tranche.finance/tranchefinance/">DOCUMENTATION</a>
+              <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer">DOCUMENTATION</a>
               <a href="/privacy">PRIVACY</a>
               <a href="/terms">TERMS</a>
-              <a href="https://discord.gg/DTZrm4j4Yc">SUPPORT</a>
+              <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">SUPPORT</a>
             </div>
           </NavBarMobileContent>
         </NavBarMobile>
@@ -171,18 +171,17 @@ function Navbar({ path }) {
             <span data-content={i18n.t("navbar.lend")}></span>
             {i18n.t("navbar.lend")}
             </NavLink>
-            {/* <NavLink
-              className="navLinkDisabled"
-              to={baseUrl + '/earn'}
+            <NavLink
+              to={baseUrl + '/tranche'}
               activeStyle={{
                 borderBottom: '2px solid',
                 borderColor: PagesData[path].secondaryColor,
                 opacity: '1'
               }}
             >
-              <span data-content={i18n.t("navbar.earn")}></span>
-              {i18n.t("navbar.earn")}
-            </NavLink> */}
+              <span data-content={i18n.t("navbar.tranche")}></span>
+              {i18n.t("navbar.tranche")}
+            </NavLink>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
