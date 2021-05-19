@@ -31,7 +31,7 @@
       "inAddition": "Net APY에 대한 SLICE 추가 보상금",
       "isTheJunior": "후순위 Tranche 입니다",
       "TrancheStats": "Tranche 조회",
-      "TrancheMarkets": "",
+      "TrancheMarkets": "Tranche 시장",
       "thisTrancheVariable": "이 Tranche는 다양한 비율을 산출합니다 ",
       "polygonModal": "Polygon 시장은 Polygon 네트워크 플랫폼에서 첫 번째로 구현된 AAVE으로, 레이어 2 확장성 솔루션으로 이더리움의 네트워크의 비용과 속도를 향상시켰습니다. Polygon 시장에 접근하려면, 자산을 Polygon 브리지를 사용하여 Polygon 사이드 체인에 옮겨야 합니다. 그런 다음에야 거래가 성사됩니다. ",
       "max": "최대치",
@@ -52,7 +52,7 @@
       },
       "tableHead": {
         "platform": "플랫폼 및 기기 ",
-        "apy": "순 연간 수익률(NET APY)",
+        "apy": "순 연간 수익률",
         "totalDeposits": "총 예치금",
         "myDeposits": "예치금",
         "available": "가능한 예치금"
