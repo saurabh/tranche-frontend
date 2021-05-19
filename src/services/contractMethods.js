@@ -3,7 +3,6 @@ import {
   JLoanSetup,
   JLoanHelperSetup,
   JPriceOracleSetup,
-  JProtocolSetup,
   JCompoundSetup,
   StakingSetup,
   YieldFarmSetup,
@@ -155,29 +154,29 @@ export const getShareholderShares = async (loanId, address) => {
   }
 };
 
-export const getTrancheParameters = async (trancheId) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JProtocol = JProtocolSetup(web3);
-    const result = await JProtocol.methods.trancheParameters(trancheId).call();
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
+// export const getTrancheParameters = async (trancheId) => {
+//   try {
+//     const state = store.getState();
+//     const { web3 } = state.ethereum;
+//     const JProtocol = JProtocolSetup(web3);
+//     const result = await JProtocol.methods.trancheParameters(trancheId).call();
+//     return result;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
-export const getLoansAccruedInterest = async (trancheId, startIndex, stopIndex) => {
-  try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JProtocol = JProtocolSetup(web3);
-    const result = await JProtocol.methods.getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex).call();
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
+// export const getLoansAccruedInterest = async (trancheId, startIndex, stopIndex) => {
+//   try {
+//     const state = store.getState();
+//     const { web3 } = state.ethereum;
+//     const JProtocol = JProtocolSetup(web3);
+//     const result = await JProtocol.methods.getTotalLoansAccruedInterest(trancheId, startIndex, stopIndex).call();
+//     return result;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 export const collectLoansAccruedInterest = async (trancheId, startIndex, stopIndex) => {
   try {
