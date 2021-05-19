@@ -18,18 +18,18 @@ import {
   LP2TokenAddress,
   JCompoundAddress,
   CompTrancheTokens,
-  JAaveAddress,
-  AaveTrancheTokens,
+  // JAaveAddress,
+  // AaveTrancheTokens,
   TrancheBuyerCoinAddresses,
   zeroAddress
 } from 'config/constants';
 
 const CompTokens = CompTrancheTokens.concat(TrancheBuyerCoinAddresses);
-const AaveTokens = AaveTrancheTokens.concat(TrancheBuyerCoinAddresses);
+// const AaveTokens = AaveTrancheTokens.concat(TrancheBuyerCoinAddresses);
 let compAllowance = { [zeroAddress]: true };
-let aaveAllowance = {};
+// let aaveAllowance = {};
 CompTokens.map((tokenAddress) => (compAllowance[tokenAddress.toLowerCase()] = false));
-AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
+// AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
 
 const initialState = {
   balance: -1,
@@ -40,7 +40,7 @@ const initialState = {
   txOngoing: false,
   trancheAllowance: {
     [JCompoundAddress]: compAllowance,
-    [JAaveAddress]: aaveAllowance
+    // [JAaveAddress]: aaveAllowance
   }
 };
 

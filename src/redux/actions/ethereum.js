@@ -9,8 +9,8 @@ import {
   ERC20Tokens,
   JCompoundAddress,
   CompTrancheTokens,
-  JAaveAddress,
-  AaveTrancheTokens,
+  // JAaveAddress,
+  // AaveTrancheTokens,
   TrancheBuyerCoinAddresses
 } from 'config/constants';
 import {
@@ -130,8 +130,8 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
     const Tokens =
       contractAddress === JCompoundAddress
         ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
-        : contractAddress === JAaveAddress
-        ? AaveTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        // : contractAddress === JAaveAddress
+        // ? AaveTrancheTokens.concat(TrancheBuyerCoinAddresses)
         : [];
     const state = store.getState();
     const { web3, network } = state.ethereum;

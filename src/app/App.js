@@ -20,11 +20,11 @@ import {
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
-  JAaveAddress,
+  // JAaveAddress,
   ModeThemes,
-  ERC20Tokens,
-  CompTrancheTokens,
-  AaveTrancheTokens
+  // ERC20Tokens,
+  // CompTrancheTokens,
+  // AaveTrancheTokens
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -57,44 +57,44 @@ const App = ({
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
-    const Tokens = ERC20Tokens.concat(CompTrancheTokens).concat(AaveTrancheTokens);
-    const timeout = (ms) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    };
+    // const Tokens = ERC20Tokens.concat(CompTrancheTokens).concat(AaveTrancheTokens);
+    // const timeout = (ms) => {
+    //   return new Promise((resolve) => setTimeout(resolve, ms));
+    // };
 
     address && setTokenBalances(address);
-    const ERC20Balances = web3.eth
-      .subscribe('logs', {
-        address: Tokens,
-        topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
-      })
-      .on('data', async (log) => {
-        if (address) {
-          // console.log(log.blockNumber)
-          // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
-          // let balanceOf = await token.methods.balanceOf(address).call();
-          // console.log(balanceOf)
-          for (let i = 1; i < 3; i++) {
-            let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
-            if (address === topicAddress) {
-              await timeout(5000);
-              setTokenBalances(address);
-            }
-          }
-        }
-      });
+    // const ERC20Balances = web3.eth
+    //   .subscribe('logs', {
+    //     address: Tokens,
+    //     topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
+    //   })
+    //   .on('data', async (log) => {
+    //     if (address) {
+    //       // console.log(log.blockNumber)
+    //       // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
+    //       // let balanceOf = await token.methods.balanceOf(address).call();
+    //       // console.log(balanceOf)
+    //       for (let i = 1; i < 3; i++) {
+    //         let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
+    //         if (address === topicAddress) {
+    //           await timeout(5000);
+    //           setTokenBalances(address);
+    //         }
+    //       }
+    //     }
+    //   });
 
-    return () => {
-      ERC20Balances.unsubscribe((error) => {
-        if (error) console.error(error);
-      });
-    };
+    // return () => {
+    //   ERC20Balances.unsubscribe((error) => {
+    //     if (error) console.error(error);
+    //   });
+    // };
   }, [address, setTokenBalances]);
 
   useEffect(() => {
     if (address) {
       checkTrancheAllowances(address, JCompoundAddress);
-      checkTrancheAllowances(address, JAaveAddress);
+      // checkTrancheAllowances(address, JAaveAddress);
     }
   }, [address, checkTrancheAllowances]);
 
