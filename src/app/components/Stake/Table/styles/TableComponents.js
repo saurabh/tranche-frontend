@@ -896,7 +896,7 @@ const FirstColContent = styled.div`
   margin-left: 12px;
 
   ${({ instrument }) => instrument && `
-    margin: 4px 0 0 31px;
+    margin: 4px 0 0 45px;
   `}
   @media (max-width: 992px){
     width: 100%;
