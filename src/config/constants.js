@@ -24,6 +24,8 @@ export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS && pr
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
+//Google Analytics
+export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
