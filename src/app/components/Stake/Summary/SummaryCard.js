@@ -10,9 +10,11 @@ import {
   SummaryCardTitle,
   SummaryCardValue,
   SummaryCardDetails,
-  SummaryClaimBtn
+  SummaryClaimBtn,
+  SummaryCardWrapperContent
 } from './styles/SummaryComponents';
 import StakingModal from '../../Modals/StakingModal';
+import i18n from '../../locale/i18n';
 
 const SummaryCard = ({
   title,
@@ -86,7 +88,7 @@ const SummaryCard = ({
   }, [type, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
   return (
-    <div>
+    <SummaryCardWrapperContent>
       <SummaryCardWrapper color={color}>
         {value || value === 0 ? (
           <SummaryCardContainer>
@@ -102,15 +104,19 @@ const SummaryCard = ({
             </SummaryCardValue>
             <SummaryCardDetails>
               {type === 'slice'
-                ? balance + ' SLICE Available'
+                ? balance + " " + i18n.t('stake.summary.slice.details')
                 : type === 'lp'
-                ? balance + ' SLICE-LP Available'
-                : epochTimeLeft + ' Until Next Distribution'}
+                ? balance + " " + i18n.t('stake.summary.sliceLP.details')
+                : epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Minutes' ? epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.details') + " " + i18n.t('stake.summary.sliceRewards.details2') :  
+
+                epochTimeLeft && epochTimeLeft.split(' ')[1] === 'Hours' ? i18n.t('stake.summary.sliceRewards.detailsHour1') + " " + epochTimeLeft && epochTimeLeft.split(' ')[0] + " " + i18n.t('stake.summary.sliceRewards.detailsHour2') :  
+                
+                epochTimeLeft + " Until Next Distribution"}
             </SummaryCardDetails>
 
             {type === 'reward' && (
               <SummaryClaimBtn claim>
-                <button onClick={() => openModal()}>Claim</button>
+                <button onClick={() => openModal()}>{i18n.t('stake.modal.claim')}</button>
               </SummaryClaimBtn>
             )}
           </SummaryCardContainer>
@@ -142,7 +148,7 @@ const SummaryCard = ({
           type={type}
         />
       </SummaryCardWrapper>
-    </div>
+    </SummaryCardWrapperContent>
   );
 };
 

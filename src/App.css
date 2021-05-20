@@ -41,13 +41,14 @@ html{
   justify-content: space-between;
 }
 .table-card-more{
-  height: 0;
+  /* height: 0; */
+  max-height: 0;
   overflow: hidden;
   border: none;
   opacity: 0;
-  transition-property: height, opacity, padding;
-  transition-duration: 300ms, 100ms, 300ms;
-  transition-timing-function: ease;
+  transition-property: max-height, opacity, padding;
+  transition-duration: 300ms, 100ms, 1s;
+  transition-timing-function: ease-out;
   padding: 0 12px 0 102px;
 }
 
@@ -57,8 +58,12 @@ html{
   /* padding: 0 20px; */
   padding: 0;
   border-bottom: 1px solid #EFEFEF;
+  transition-property: max-height, opacity, padding;
+  transition-duration: 300ms, 400ms, 100ms;
+  transition-timing-function: ease-in;
   opacity: 1;
-  height: auto;
+  /* height: auto; */
+  max-height: 500px;
   overflow: visible;
 }
 .remaining-title-content{
@@ -231,7 +236,7 @@ html{
 }
 
 .second-4-col-content h2{
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 12px;
@@ -1050,7 +1055,8 @@ table, th, td {
 
 .footer-container{
   position: relative;
-  border-top: 2px solid rgba(233, 233, 252, 0.5);  display: flex;
+  border-top: 2px solid rgba(233, 233, 252, 0.1); 
+  display: flex;
   background: #F6F6FC;
   /* padding-bottom: 15px; */
 }
@@ -1060,7 +1066,7 @@ table, th, td {
   min-height: 100vh;
 }
 .layout-container{
-  margin-top: 3vh;
+  /* margin-top: 3vh; */
 }
 
 .InputStyling{
@@ -1347,15 +1353,11 @@ table, th, td {
   width: 28%;
 }
 .loadingAvatar{
-  height: 37px;
-  width: 37px;
+  height: 47px;
+  width: 47px;
   border-radius: 50%;
 }
-.loadingContent{
-  animation: gradient-slide 2.2s ease infinite;
-  background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, #eee), color-stop(50%, #f7f7f7), color-stop(60%, #eee));
-  background: 0 0/300% 300% linear-gradient(90deg, #eee 40%, #f7f7f7 50%, #eee 60%);
-}
+
 .loadingCard{
   width: 100%;
   display: flex;
@@ -1370,21 +1372,21 @@ table, th, td {
 .loadingText{
   margin-left: 18px;
   width: 80%;
-  height: 27px;
+  height: 47px;
 }
 
 .loadingContentCol{
   width: 100%;;
-  height: 27px;
+  height: 47px;
 }
 .loadingFifthColContent{
   width: 100%;;
-  height: 27px;
+  height: 47px;
 }
 
 .loadingSixthColContent{
   width: 100%;;
-  height: 27px;
+  height: 47px;
 }
 .loadingSecondCol{
   width: 45%;

@@ -25,6 +25,7 @@ import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
 import { ModeThemes, zeroAddress } from 'config';
+import i18n from '../../locale/i18n';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
   <div>
@@ -41,8 +42,10 @@ let TableMoreRow = ({
   name,
   type,
   apy,
+  contractAddress,
   cryptoType,
   dividendType,
+  protocolAPY,
   buyerTokenBalance,
   trancheToken,
   trancheRate,
@@ -66,10 +69,7 @@ let TableMoreRow = ({
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const [TooltipToggle, setTooltipToggle] = useState("");
 
-  let trancheTokenBalance =
-    cryptoType === 'USDC'
-      ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
-      : tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
+  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress])
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -89,10 +89,12 @@ let TableMoreRow = ({
       setIsEth(true);
       setDepositApproved(true);
     }
-    setDepositApproved(trancheAllowance[buyerCoinAddress]);
-    setWithdrawApproved(trancheAllowance[trancheTokenAddress]);
-    change('depositIsApproved', trancheAllowance[buyerCoinAddress]);
-    change('withdrawIsApproved', trancheAllowance[trancheTokenAddress]);
+    if (trancheAllowance[contractAddress]) {
+      setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
+      setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+      change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
+      change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
 
@@ -126,8 +128,31 @@ let TableMoreRow = ({
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>PRICE</h2>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText} dividend>
+                <h2>{dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()} {i18n.t('tranche.trancheData.APY')}</h2>
+                <h2>
+                  {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
+                </h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2>{i18n.t('tranche.trancheData.trancheAPY')}</h2>
+                <h2>{roundNumber(apy, 2)}%</h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2>{i18n.t('tranche.trancheData.sliceAPY')}</h2>
+                <h2>TBD</h2>
+              </TableMoreLeftSectionContent>
+            </TableMoreLeftSection>
+
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
+                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.trancheData.price')}</h2>
                 <h2>
                   {roundNumber(trancheRate)} {cryptoType}
                 </h2>
@@ -138,34 +163,13 @@ let TableMoreRow = ({
                 </TooltipWrapper>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
-
-            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>Base APY</h2>
-                <h2>{roundNumber(apy, 2)}%</h2>
-              </TableMoreLeftSectionContent>
-            </TableMoreLeftSection>
-
-            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>SLICE APY</h2>
-                <h2>TBD</h2>
-              </TableMoreLeftSectionContent>
-            </TableMoreLeftSection>
-
-            <TableMoreLeftSection>
-              <TableMoreLeftSectionContent title={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>NET APY</h2>
-                <h2>{roundNumber(apy, 2)}%</h2>
-              </TableMoreLeftSectionContent>
-            </TableMoreLeftSection>
           </TableMoreLeftTopSection>
-          <TableMoreLeftBottomSection title={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
-            <h2>{type === 'TRANCHE_A' ? 'Fixed rate Yield' : 'Variable rate Yield'}</h2>
+          <TableMoreLeftBottomSection titleColor={ModeThemes[theme].titleColor} value={ModeThemes[theme].textColor}>
+            <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
-                ? `${name} is the senior tranche of the ${dividendType} token. This tranche yields a fixed rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`
-                : `${name} is the junior tranche of the ${dividendType} token. This tranche yields a variable rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`}
+                ? `${name} ${i18n.t('tranche.trancheData.isTheSenior')} ${dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()}  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheFixed')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`
+                : `${name} ${i18n.t('tranche.trancheData.isTheJunior')}  ${dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()}  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheVariable')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`}
             </p>
           </TableMoreLeftBottomSection>
         </TableMoreRowContentLeft>
@@ -177,6 +181,7 @@ let TableMoreRow = ({
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
+              disabled={!isDepositApproved}
             >
               {isApproveLoading && (
                 <div>
@@ -184,9 +189,9 @@ let TableMoreRow = ({
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                <h2>deposit</h2>
+                <h2>{i18n.t('tranche.trancheData.deposit')}</h2>
                 <CheckboxWrapper hidden={isEth}>
-                  <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
+                  <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
                   <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
                       component='input'
@@ -205,7 +210,7 @@ let TableMoreRow = ({
               </TableMoreTitleWrapper>
 
               <h2>
-                balance: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
+                {i18n.t('tranche.trancheData.balance')}: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
                 <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
@@ -219,11 +224,11 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={(e) => setMaxAmount(e, true)}>max</h2>
+                  <h2 onClick={(e) => setMaxAmount(e, true)}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
-                  deposit
+                  {i18n.t('tranche.trancheData.deposit')}
                 </button>
               </Form>
             </TableMoreRightSection>
@@ -233,16 +238,17 @@ let TableMoreRow = ({
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
               loading={isApproveLoading}
+              disabled={!isWithdrawApproved}
             >
               {isApproveLoading && (
                 <div>
-                  <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
-                <h2>withdraw</h2>
+                <h2>{i18n.t('tranche.trancheData.withdraw')}</h2>
                 <CheckboxWrapper>
-                  <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
+                  <h2>{isWithdrawApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
                   <CheckboxContent disabled={isApproveLoading || txOngoing}>
                     <Field
                       component='input'
@@ -260,7 +266,7 @@ let TableMoreRow = ({
                 </CheckboxWrapper>
               </TableMoreTitleWrapper>
               <h2>
-                balance: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
+                {i18n.t('tranche.trancheData.balance')}: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
               </h2>
               <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
                 <FormContent
@@ -279,11 +285,11 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={(e) => setMaxAmount(e, false)}>max</h2>
+                  <h2 onClick={(e) => setMaxAmount(e, false)}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
-                  withdraw
+                  {i18n.t('tranche.trancheData.withdraw')}
                 </button>
               </Form>
             </TableMoreRightSection>
@@ -296,27 +302,29 @@ let TableMoreRow = ({
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
+                disabled={!isDepositApproved}
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
-                      Deposit
+                      {i18n.t('tranche.trancheData.deposit')}
                     </MobileMoreFormBtn>
                     <MobileMoreFormBtn
                       current={formType === 'withdraw'}
                       onClick={() => setFormType('withdraw')}
                       color={ModeThemes[theme].dropDownText}
                     >
-                      Withdraw
+                      {i18n.t('tranche.trancheData.withdraw') }
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
                   <CheckboxWrapper hidden={isEth}>
-                    <h2>{isDepositApproved ? 'Enabled' : 'Disabled'}</h2>
+                    <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
+
                     <CheckboxContent disabled={isApproveLoading || txOngoing}>
                       <Field
                         component='input'
@@ -335,7 +343,7 @@ let TableMoreRow = ({
                 </TableMoreTitleWrapper>
 
                 <h2>
-                  balance: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
+                  {i18n.t('tranche.trancheData.balance')}: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
                 </h2>
                 <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
                   <FormContent
@@ -354,11 +362,11 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={(e) => setMaxAmount(e, true)}>max</h2>
+                    <h2 onClick={(e) => setMaxAmount(e, true)}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
-                    deposit
+                    {i18n.t('tranche.trancheData.deposit')}
                   </button>
                 </Form>
               </TableMoreRightSection>
@@ -369,27 +377,29 @@ let TableMoreRow = ({
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={isApproveLoading}
+                disabled={!isWithdrawApproved}
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color='rgba(255,255,255, 0.5)' />
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
-                      Deposit
+                      {i18n.t('tranche.trancheData.deposit')}
                     </MobileMoreFormBtn>
                     <MobileMoreFormBtn
                       current={formType === 'withdraw'}
                       onClick={() => setFormType('withdraw')}
                       color={ModeThemes[theme].dropDownText}
                     >
-                      Withdraw
+                      {i18n.t('tranche.trancheData.withdraw')}
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
                   <CheckboxWrapper>
-                    <h2>{isWithdrawApproved ? 'Enabled' : 'Disabled'}</h2>
+                    <h2>{isWithdrawApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
+
                     <CheckboxContent disabled={isApproveLoading || txOngoing}>
                       <Field
                         component='input'
@@ -407,7 +417,7 @@ let TableMoreRow = ({
                   </CheckboxWrapper>
                 </TableMoreTitleWrapper>
                 <h2>
-                  balance: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
+                  {i18n.t('tranche.trancheData.balance')}: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
                 </h2>
                 <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
                   <FormContent
@@ -426,11 +436,11 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={(e) => setMaxAmount(e, false)}>max</h2>
+                    <h2 onClick={(e) => setMaxAmount(e, false)}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
-                    withdraw
+                    {i18n.t('tranche.trancheData.withdraw')}
                   </button>
                 </Form>
               </TableMoreRightSection>

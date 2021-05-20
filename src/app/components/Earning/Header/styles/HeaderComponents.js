@@ -80,11 +80,11 @@ const HeaderSubtitle = styled.div`
 const NavbarWrapper = styled.div`
   height: 112px;
   position: relative;
-  border-bottom: 2px solid rgba(233, 233, 252, 0.3);
+  border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   @media (max-width: 992px) {
     height: auto;
     padding: 15px 0;
-    border-bottom: 2px solid rgba(233, 233, 252, 0.3);
+    border-bottom: 2px solid rgba(233, 233, 252, 0.1);
   }
 `;
 const NavbarContainer = styled.div`
@@ -583,7 +583,11 @@ const NavbarIconContent = styled.div`
   
 `
 const MarketsTabsWrapper = styled.div`
-  & > h2{
+  & > div{
+    display: flex;
+    align-items: center;s
+  }
+  & > div h2{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
@@ -601,17 +605,16 @@ const MarketsTabs = styled.div`
   @media (max-width: 992px) {
     margin: 15px 0px 15px 0;
   }
-  
 `
 const MarketTab = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 1000;
   transition: 300ms;
   outline: none;
   padding: 0 29px;
+  position: relative;
   margin-right: ${props => props.market === "compound" ? "14px" : "0"};
   border-radius: 5px;
   height: 51px;
@@ -628,7 +631,7 @@ const MarketTab = styled.button`
     width: ${props => props.market === "aavePolygon" ? "32px" : "73px"};
     margin-right: ${props => props.market === "aavePolygon" ? "5px" : "0"};
   }
-  span{
+  & > span{
     width: 1px;
     height: 70%;
     background: ${props => props.span};
@@ -636,10 +639,61 @@ const MarketTab = styled.button`
     margin: 0 12px;
   }
   @media (max-width: 992px) {
+    img{
+      width: ${props => props.market === "aavePolygon" ? "32px" : "73px"};
+    }
     padding: 12px;
     height: 45px;
-    font-size: 12px;
+    h2{
+      font-size: 12px;
+    }
   }
+
+  ${({ market, color }) => market === "aavePolygon" && `
+    /* opacity: 0.5;
+    pointer-events: none;
+    padding: 0 20px; */
+    
+    h2{
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      align-items: baseline;
+      justify-content: center;
+      span{
+        font-family: 'Inter', sans-serif !important;
+        font-style: normal !important;
+        font-weight: 500 !important;
+        font-size: 14.14px !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        height: 34%;
+        display: flex;
+        align-items: center;
+        color: ${color};
+        @media (max-width: 992px) {
+          height: 73%;
+        }
+      }
+      span:last-child{
+        font-size: 9px !important;
+        font-weight: lighter !important;
+      }
+    }
+    // h2{
+    //   left: 0;
+    //   font-size: 9px !important;
+    //   font-weight: lighter !important;
+    //   position: absolute;
+    //   bottom: -4px;
+    //   padding: 0 29px;
+    // }
+  `}
+
+
+ 
+
+    
 `
 const BridgeTokensWrapper = styled.div`
   display: flex;

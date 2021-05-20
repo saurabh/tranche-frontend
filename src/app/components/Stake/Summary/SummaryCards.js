@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
 import axios from 'axios';
-import { apiUri, serverUrl } from 'config/constants';
+import { networkId, apiUri, ModeThemes, serverUrl } from 'config/constants';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils/helperFunctions';
 import PropTypes from 'prop-types';
@@ -11,10 +11,11 @@ import PropTypes from 'prop-types';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
+import { TableTitle } from '../Table/styles/TableComponents';
 
 const { stakingSummary } = apiUri;
 
-const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp, withdrawn, lpList }, summaryFetchSuccess }) => {
+const SummaryCards = ({ ethereum: { wallet, address, network }, summaryData: { slice, lp, withdrawn, lpList }, summaryFetchSuccess, theme }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
@@ -45,10 +46,10 @@ const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp,
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
-    if (currentPath === 'stake' && address) {
+    if (network === networkId && currentPath === 'stake' && address) {
       getStakingData();
     }
-  }, [currentPath, address, summaryFetchSuccess]);
+  }, [currentPath, network, address, summaryFetchSuccess]);
 
   const openModal = async (type) => {
     const ready = await readyToTransact(wallet, onboard);
@@ -65,6 +66,9 @@ const SummaryCards = ({ ethereum: { wallet, address }, summaryData: { slice, lp,
 
   return (
     <div>
+      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary>
+        <h2>{i18n.t('stake.StakingStats')}</h2>
+      </TableTitle>
       {isDesktop ? (
         <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
           <SummaryCard
@@ -138,7 +142,8 @@ const mapStateToProps = (state) => {
   return {
     path: state.path,
     ethereum: state.ethereum,
-    summaryData: state.summaryData
+    summaryData: state.summaryData,
+    theme: state.theme
   };
 };
 

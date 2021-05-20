@@ -17,13 +17,14 @@ import {
   apiUri,
   LoanContractAddress,
   PriceOracleAddress,
-  ProtocolAddress,
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
+  // JAaveAddress,
   ModeThemes,
-  ERC20Tokens,
-  TrancheTokenAddresses
+  // ERC20Tokens,
+  // CompTrancheTokens,
+  // AaveTrancheTokens
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -56,42 +57,45 @@ const App = ({
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
-    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
-    const timeout = (ms) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    };
+    // const Tokens = ERC20Tokens.concat(CompTrancheTokens).concat(AaveTrancheTokens);
+    // const timeout = (ms) => {
+    //   return new Promise((resolve) => setTimeout(resolve, ms));
+    // };
 
     address && setTokenBalances(address);
-    const ERC20Balances = web3.eth
-      .subscribe('logs', {
-        address: Tokens,
-        topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
-      })
-      .on('data', async (log) => {
-        if (address) {
-          // console.log(log.blockNumber)
-          // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
-          // let balanceOf = await token.methods.balanceOf(address).call();
-          // console.log(balanceOf)
-          for (let i = 1; i < 3; i++) {
-            let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
-            if (address === topicAddress) {
-              await timeout(5000);
-              setTokenBalances(address);
-            }
-          }
-        }
-      });
+    // const ERC20Balances = web3.eth
+    //   .subscribe('logs', {
+    //     address: Tokens,
+    //     topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
+    //   })
+    //   .on('data', async (log) => {
+    //     if (address) {
+    //       // console.log(log.blockNumber)
+    //       // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
+    //       // let balanceOf = await token.methods.balanceOf(address).call();
+    //       // console.log(balanceOf)
+    //       for (let i = 1; i < 3; i++) {
+    //         let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
+    //         if (address === topicAddress) {
+    //           await timeout(5000);
+    //           setTokenBalances(address);
+    //         }
+    //       }
+    //     }
+    //   });
 
-    return () => {
-      ERC20Balances.unsubscribe((error) => {
-        if (error) console.error(error);
-      });
-    }
-  }, [address, setTokenBalances])
+    // return () => {
+    //   ERC20Balances.unsubscribe((error) => {
+    //     if (error) console.error(error);
+    //   });
+    // };
+  }, [address, setTokenBalances]);
 
   useEffect(() => {
-    address && checkTrancheAllowances(address);
+    if (address) {
+      checkTrancheAllowances(address, JCompoundAddress);
+      // checkTrancheAllowances(address, JAaveAddress);
+    }
   }, [address, checkTrancheAllowances]);
 
   useEffect(() => {
@@ -141,45 +145,28 @@ const App = ({
           );
         }
       });
-    const Protocol = web3.eth
-      .subscribe('logs', {
-        address: ProtocolAddress
-      })
-      .on('data', async () => {
-        if (path === 'tranche') {
-          await timeout(5000);
-          await fetchTableData(
-            {
-              skip,
-              limit,
-              filter: {
-                address: tradeType === 'myTranches' ? address : undefined,
-                type: filter //ETH/JNT keep these in constant file
-              }
-            },
-            tranchesList
-          );
-        }
-      });
     const JCompound = web3.eth
       .subscribe('logs', {
         address: JCompoundAddress
       })
-      .on('data', async () => {
+      .on('data', async (log) => {
         if (path === 'tranche') {
+          let userAddress = address.split('0x')[1];
           await timeout(5000);
-          await fetchTableData(
-            {
-              skip,
-              limit,
-              filter: {
-                address: address ? address : undefined,
-                type: filter //ETH/JNT keep these in constant file
-              }
-            },
-            tranchesList
-          );
-          trancheCardToggle({ status: false, id: null });
+          if (log.data.includes(userAddress)) {
+            await fetchTableData(
+              {
+                skip,
+                limit,
+                filter: {
+                  address: address ? address : undefined,
+                  type: filter //ETH/JNT keep these in constant file
+                }
+              },
+              tranchesList
+            );
+            trancheCardToggle({ status: false, id: null });
+          }
           const getSliceStats = async () => {
             const res = await axios(`${serverUrl + sliceSummary}`);
             const { result } = res.data;
@@ -240,9 +227,6 @@ const App = ({
       priceOracle.unsubscribe((error) => {
         if (error) console.error(error);
       });
-      Protocol.unsubscribe((error) => {
-        if (error) console.error(error);
-      });
       JCompound.unsubscribe((error) => {
         if (error) console.error(error);
       });
@@ -279,7 +263,7 @@ const App = ({
         <Banner />
         <Router>
           <Switch location={window.location}>
-            <Redirect exact from={baseRouteUrl + '/'} to='/stake' />
+            <Redirect exact from={baseRouteUrl + '/'} to='/tranche' />
             <Route exact path={baseRouteUrl + '/lend'} component={Earn} />
             <Route exact path={baseRouteUrl + '/borrow'} component={Borrow} />
             <Route exact path={baseRouteUrl + '/tranche'} component={Trade} />

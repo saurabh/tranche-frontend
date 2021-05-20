@@ -12,10 +12,24 @@ import {
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
-import { SLICEAddress, LP1TokenAddress, LP2TokenAddress, TrancheTokenAddresses, TrancheBuyerCoinAddresses, zeroAddress } from 'config/constants';
-const Tokens = TrancheTokenAddresses.concat(TrancheBuyerCoinAddresses);
-let trancheAllowance = { [zeroAddress]: true };
-Tokens.map((tokenAddress) => (trancheAllowance[tokenAddress.toLowerCase()] = false));
+import {
+  SLICEAddress,
+  LP1TokenAddress,
+  LP2TokenAddress,
+  JCompoundAddress,
+  CompTrancheTokens,
+  // JAaveAddress,
+  // AaveTrancheTokens,
+  TrancheBuyerCoinAddresses,
+  zeroAddress
+} from 'config/constants';
+
+const CompTokens = CompTrancheTokens.concat(TrancheBuyerCoinAddresses);
+// const AaveTokens = AaveTrancheTokens.concat(TrancheBuyerCoinAddresses);
+let compAllowance = { [zeroAddress]: true };
+// let aaveAllowance = {};
+CompTokens.map((tokenAddress) => (compAllowance[tokenAddress.toLowerCase()] = false));
+// AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
 
 const initialState = {
   balance: -1,
@@ -24,7 +38,10 @@ const initialState = {
   web3,
   notify: initNotify(),
   txOngoing: false,
-  trancheAllowance
+  trancheAllowance: {
+    [JCompoundAddress]: compAllowance,
+    // [JAaveAddress]: aaveAllowance
+  }
 };
 
 export default function (state = initialState, action) {
@@ -42,7 +59,13 @@ export default function (state = initialState, action) {
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
     case SET_TRANCHE_ALLOWANCE:
-      return { ...state, trancheAllowance: { ...state.trancheAllowance, [payload.tokenAddress]: payload.isApproved } };
+      return {
+        ...state,
+        trancheAllowance: {
+          ...state.trancheAllowance,
+          [payload.contractAddress]: { ...state.trancheAllowance[payload.contractAddress], [payload.tokenAddress]: payload.isApproved }
+        }
+      };
     case SET_WALLET:
       return { ...state, wallet: payload };
     case SET_WEB3:

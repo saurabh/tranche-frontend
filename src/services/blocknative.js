@@ -1,5 +1,6 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
+import store from 'redux/store';
 import {
   networkId,
   alchemyHttpUrl as rpcUrl,
@@ -12,10 +13,13 @@ let notify = undefined;
 
 export function initOnboard(subscriptions) {
   if (!onboard) {
+    const state = store.getState();
+    const { theme } = state;
     onboard = Onboard({
       subscriptions,
       hideBranding: true,
       networkId,
+      darkMode: theme === 'dark' ? true : theme === 'light' ? false : null,
       walletSelect: {
         wallets: [
           { walletName: 'metamask', preferred: true },
@@ -23,9 +27,7 @@ export function initOnboard(subscriptions) {
           { walletName: 'coinbase', preferred: true },
           { walletName: 'status', preferred: true },
           { walletName: 'trust', rpcUrl, preferred: true },
-          { walletName: 'ledger', rpcUrl, preferred: true },
           { walletName: 'torus', preferred: true },
-          { walletName: 'authereum', preferred: true }
         ]
       },
       walletCheck: [

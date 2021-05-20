@@ -1,20 +1,9 @@
-import {
-  Key,
-  Agree,
-  DaiLogo,
-  ETH as ETHicon,
-  USDCWhite,
-  TrancheClaim,
-  DaiClaim,
-  EthClaim,
-  AAVE,
-  CompoundLogo,
-  DAITrancheTable
-} from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
+export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
@@ -27,8 +16,10 @@ export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 // Tranche
 export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
-export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS;
-export const TrancheTokenAddresses = process.env.REACT_APP_TRANCHE_TOKEN_ADDRESS.split(',');
+export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS.toLowerCase();
+export const CompTrancheTokens = process.env.REACT_APP_COMP_TRANCHE_TOKENS.split(',');
+// export const JAaveAddress = process.env.REACT_APP_AAVE_TRANCHE_ADDRESS.toLowerCase();
+export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS && process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
@@ -39,7 +30,6 @@ export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
-export const USDTAddress = process.env.REACT_APP_USDT_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
@@ -121,12 +111,12 @@ export const PagesData = {
 };
 
 export const trancheIcons = {
-  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
+  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
@@ -336,25 +326,34 @@ export const ModeThemes = {
     valueSectionText: '#393F56',
     titleColor: '#393F56',
     textColor: '#7C859B',
-    ModalBackground: "#FFFFFF",
-    ModalText:"#4F4F4F",
-    SelectedStaking: "rgba(68, 65, 207, 0.05)",
-    SelectedStakingText: "#39295A",
-    SelectedStakingLink: "#776E8B",
-    StakingInputText: "#838186",
-    loadingSpinner: "rgba(124,133,155,0.8)",
-    Tooltip: "#2F2F2F",
-    NavbarBorder: "#E9E9FC",
-    NavbarBackground: "#FFFFFF",
-    NavbarShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
-    TrancheMarketsTitle: "#393F56",
-    TrancheModalLinkColor: "#4939D7",
-    TrancheModalLinkBackground: "#E7E7F9",
-    TrancheBtnBackground: "#FFFFFF",
-    TrancheBtnBackgroundCurrent: "rgba(255, 255, 255, 0.5);",
-    TrancheBtnBorder: "#E9E9FC",
-    TrancheBtnColor: "#000000",
-    TrancheBtnSpan: "#E9E9FC"
+    ModalBackground: '#FFFFFF',
+    ModalText: '#4F4F4F',
+    SelectedStaking: 'rgba(68, 65, 207, 0.05)',
+    SelectedStakingText: '#39295A',
+    SelectedStakingLink: '#776E8B',
+    StakingInputText: '#838186',
+    loadingSpinner: 'rgba(124,133,155,0.8)',
+    Tooltip: '#2F2F2F',
+    NavbarBorder: '#E9E9FC',
+    NavbarBackground: '#FFFFFF',
+    NavbarShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
+    TrancheMarketsTitle: '#393F56',
+    TrancheModalLinkColor: '#4939D7',
+    TrancheModalLinkBackground: '#E7E7F9',
+    TrancheBtnBackground: '#FFFFFF',
+    TrancheBtnBackgroundCurrent: 'rgba(255, 255, 255, 0.5);',
+    TrancheBtnBorder: '#E9E9FC',
+    TrancheBtnColor: '#000000',
+    TrancheBtnSpan: '#E9E9FC',
+    ClaimHead: 'rgba(36, 39, 50, 0.6)',
+    StakingMax: 'rgba(57,41,90,0.3)',
+    HowTo: '#FFFFFF',
+    HowToText: '#4441CF',
+    HowToBorder: '0.872727px solid #E9E9FC',
+    HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
+    LoadingColorOne: '#eee',
+    LoadingColorTwo: '#f7f7f7',
+    cardShadow: "0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent"
   },
   dark: {
     body: '#100F36',
@@ -382,24 +381,33 @@ export const ModeThemes = {
     valueSectionText: '#FFFFFF',
     titleColor: '#FFFFFF',
     textColor: '#C2C4DA',
-    ModalBackground: "#221F46",
-    ModalText:"#FFFFFF",
-    SelectedStaking: "rgba(151, 149, 255, 0.15)",
-    SelectedStakingText: "#FFFFFF",
-    SelectedStakingLink: "#CEC6FF",
-    StakingInputText: "rbga{255, 255, 255, 0.5}",
-    loadingSpinner: "rgba(255,255,255,0.3)",
-    Tooltip: "#383765",
-    NavbarBorder: "rgba(255, 255, 255, 0.1)",
-    NavbarBackground: "rgba(175, 155, 255, 0.15)",
-    NavbarShadow: "none",
-    TrancheMarketsTitle: "#FFFFFF",
-    TrancheModalLinkColor: "#FFFFFF",
-    TrancheModalLinkBackground: "rgba(202, 197, 255, 0.13)",
-    TrancheBtnBackground: "#1C1B40",
-    TrancheBtnBackgroundCurrent: "#322E5D",
-    TrancheBtnBorder: "#322E5D",
-    TrancheBtnColor: "#FFFFFF",
-    TrancheBtnSpan: "#363661"
+    ModalBackground: '#221F46',
+    ModalText: '#FFFFFF',
+    SelectedStaking: 'rgba(151, 149, 255, 0.15)',
+    SelectedStakingText: '#FFFFFF',
+    SelectedStakingLink: '#CEC6FF',
+    StakingInputText: 'rbga{255, 255, 255, 0.5}',
+    loadingSpinner: 'rgba(255,255,255,0.3)',
+    Tooltip: '#383765',
+    NavbarBorder: 'rgba(255, 255, 255, 0.1)',
+    NavbarBackground: 'rgba(175, 155, 255, 0.15)',
+    NavbarShadow: 'none',
+    TrancheMarketsTitle: '#FFFFFF',
+    TrancheModalLinkColor: '#FFFFFF',
+    TrancheModalLinkBackground: 'rgba(202, 197, 255, 0.13)',
+    TrancheBtnBackground: '#1C1B40',
+    TrancheBtnBackgroundCurrent: '#322E5D',
+    TrancheBtnBorder: '#322E5D',
+    TrancheBtnColor: '#FFFFFF',
+    TrancheBtnSpan: '#363661',
+    ClaimHead: 'rgba(255, 255, 255, 0.6)',
+    StakingMax: 'rgb(57,41,90)',
+    HowTo: 'rgba(175, 155, 255, 0.15)',
+    HowToText: '#FFFFFF',
+    HowToBorder: 'none',
+    HowToShadow: 'none',
+    LoadingColorOne: 'rgba(255,255,255,0.07)',
+    LoadingColorTwo: '#363661',
+    cardShadow: "0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent"
   }
 };

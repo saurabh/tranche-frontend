@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -28,7 +28,8 @@ import {
   CallToActionTradeWrapper,
   CallToActionTradeBtns,
   CallToActionTradeBtn,
-  CallToActionTradetext
+  CallToActionTradetext,
+  LoadingContent
 } from './styles/TableComponents';
 import { EmptyBox } from 'assets';
 const { stakingList: stakingListUrl } = apiUri;
@@ -70,10 +71,18 @@ const Table = ({
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
   const pageCount = 5;
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 1200);
+  };
 
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
   const stakingListing = useCallback(
     _.debounce(
       async () => {
@@ -129,6 +138,7 @@ const Table = ({
     stakingListing();
   };
 
+
   return (
     <div className='container content-container'>
       <div className='TableContentWrapper'>
@@ -141,7 +151,7 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
+              (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
@@ -157,18 +167,18 @@ const Table = ({
                       <div className='loadingCard'>
                         <div className='loadingFirstCol'>
                           <div className='loadingFirslColContent'>
-                            <div className='loadingAvatar loadingContent '></div>
-                            <div className='loadingText loadingContentWrapper loadingContent'></div>
+                            <LoadingContent className='loadingAvatar loadingContent ' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
+                            <LoadingContent className='loadingText loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                           </div>
                         </div>
                         <div className='loadingSecondCol'>
-                          <div className='loadingContentCol loadingContentWrapper loadingContent'></div>
+                          <LoadingContent className='loadingContentCol loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                         </div>
                         <div className='loadingFifthCol'>
-                          <div className='loadingFifthColContent loadingContentWrapper loadingContent'></div>
+                          <LoadingContent className='loadingFifthColContent loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                         </div>
                         <div className='loadingSixthCol'>
-                          <div className='loadingSixthColContent loadingContentWrapper loadingContent'></div>
+                          <LoadingContent className='loadingSixthColContent loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                         </div>
                       </div>
                     </TableContentCard>
@@ -197,7 +207,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                data && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} />)
+                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop} />)
               )}
             </div>
           </div>

@@ -6,7 +6,7 @@ import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack }
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
-
+import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
@@ -22,7 +22,20 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   };
   return (
     <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle}>
-      <h2>Tranche Markets</h2>
+      <div>
+        <h2>{i18n.t('tranche.trancheData.TrancheMarkets')}</h2>
+        <HowToLink
+          href='https://docs.tranche.finance/tranchefinance/'
+          target='_blank'
+          rel='noopener noreferrer'
+          color={ModeThemes[theme].HowToText}
+          background={ModeThemes[theme].HowTo}
+          shadow={ModeThemes[theme].HowToShadow}
+          border={ModeThemes[theme].HowToBorder}
+        >
+          {i18n.t('footer.docs')}
+        </HowToLink>
+      </div>
       <MarketsTabs>
         <MarketTab
           market='compound'
@@ -38,14 +51,20 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarket !== 'aavePolygon' && openModal()}
+          onClick={() => (trancheMarket !== 'aavePolygon' || true) && openModal()}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
           border={ModeThemes[theme].TrancheBtnBorder}
           color={ModeThemes[theme].TrancheBtnColor}
         >
-          <img src={AaveBtn} alt='' /> Market <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+          <h2>
+            <span>
+              <img src={AaveBtn} alt='' /> Market
+            </span>{' '}
+            <span>coming soon</span>
+          </h2>{' '}
+          <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
       </MarketsTabs>
       {trancheMarket === 'aavePolygon' && (

@@ -2,13 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useLocation, NavLink } from 'react-router-dom';
 import {
-  HeaderWrapper,
-  HeaderContent,
-  HeaderTitle,
-  HeaderSubtitle,
   NavbarLinks
 } from './styles/HeaderComponents';
-import HeaderTabs from "./HeaderTabs"
+// import HeaderTabs from "./HeaderTabs"
 import Navbar from "./Navbar"
 import {
   ModeThemes
@@ -41,7 +37,7 @@ function Header({updateDate, theme}) {
       <Navbar path={parsedPath[parsedPath.length - 1]} theme={theme}/>
       {
         path === "stake" &&
-        <HeaderTabs theme={theme}/>
+        ""
       }
        {
         !isDesktop &&
@@ -83,7 +79,7 @@ function Header({updateDate, theme}) {
           </NavLink>
         </NavbarLinks>
           }
-      <HeaderWrapper>
+      {/* <HeaderWrapper>
             <HeaderContent path={path}>
               {  (path === "privacy" || path === "terms") ? 
                 <HeaderSubtitle className='header-text' fontSize="9px">
@@ -97,7 +93,7 @@ function Header({updateDate, theme}) {
                 <h2>{i18n.t(`${path}.text`)}</h2>
               </HeaderSubtitle>
             </HeaderContent>
-      </HeaderWrapper>
+      </HeaderWrapper> */}
     </div>
   );
 }
