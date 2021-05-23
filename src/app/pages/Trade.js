@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import ReactGA from 'react-ga';
+import { withRouter } from 'react-router-dom';
 import { Layout } from 'app/components/Earning/Layout';
 import SummaryCards from '../components/Earning/Summary/SummaryCards';
 import Table from '../components/Earning/Table/Table';
-import { PagesData } from 'config/constants';
+import { PagesData, GoogleAnalyticsTrackingID } from 'config/constants';
 
-export default function Trade() {
+
+ReactGA.initialize(GoogleAnalyticsTrackingID);
+function Trade() {
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search); 
+  })
   return (
     <Layout>
       <SummaryCards />
@@ -12,3 +19,4 @@ export default function Trade() {
     </Layout>
   );
 }
+export default withRouter(Trade);
