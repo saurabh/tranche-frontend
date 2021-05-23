@@ -4,28 +4,33 @@ import { DAISetup } from 'utils/contractConstructor';
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
 export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
+export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
+export const maticNetworkId = 137;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
+export const maticHttpUrl = process.env.REACT_APP_MATIC_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
+export const maticWebSocketsUrl = process.env.REACT_APP_MATIC_WEBSOCKETS_URL;
 export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
-export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
-// Tranche
-export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
-export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
+// Ethereum Tranches
 export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS.toLowerCase();
+export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const CompTrancheTokens = process.env.REACT_APP_COMP_TRANCHE_TOKENS.split(',');
-// export const JAaveAddress = process.env.REACT_APP_AAVE_TRANCHE_ADDRESS.toLowerCase();
-export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS && process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
+// Polygon Tranches
+export const JAaveAddress = process.env.REACT_APP_AAVE_TRANCHE_ADDRESS.toLowerCase();
+export const PolygonBuyerCoinAddresses = process.env.REACT_APP_MATIC_BUYER_COIN_ADDRESS.split(',');
+export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
+export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toLowerCase();
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
@@ -120,7 +125,19 @@ export const trancheIcons = {
   AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
-  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon }
+  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
+  MTA: { protocolIcon: AAVE, assetIcon: ETHicon },
+  MTB: { protocolIcon: AAVE, assetIcon: ETHicon },
+  USDCA: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  USDCB: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  WMTA: { protocolIcon: AAVE, assetIcon: ETHicon },
+  WMTB: { protocolIcon: AAVE, assetIcon: ETHicon },
+  USDTA: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  USDTB: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  DTA: { protocolIcon: AAVE, assetIcon: DAICARD },
+  DTB: { protocolIcon: AAVE, assetIcon: DAICARD },
+  WBTA: { protocolIcon: AAVE, assetIcon: ETHicon },
+  WBTB: { protocolIcon: AAVE, assetIcon: ETHicon },
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)

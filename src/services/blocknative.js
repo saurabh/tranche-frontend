@@ -19,6 +19,7 @@ export function initOnboard(subscriptions) {
       subscriptions,
       hideBranding: true,
       networkId,
+      networkName: 'Polygon',
       darkMode: theme === 'dark' ? true : theme === 'light' ? false : null,
       walletSelect: {
         wallets: [

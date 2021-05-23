@@ -12,7 +12,11 @@ import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 import { setTokenBalances, checkTrancheAllowances } from 'redux/actions/ethereum';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { web3 } from 'utils/getWeb3';
+// import { maticWeb3, maticSocket } from 'utils/maticWeb3';
+// import { JAaveSetup } from 'utils/contractConstructor';
 import {
+  networkId,
+  maticNetworkId,
   serverUrl,
   apiUri,
   LoanContractAddress,
@@ -20,11 +24,8 @@ import {
   StakingAddresses,
   YieldAddresses,
   JCompoundAddress,
-  // JAaveAddress,
-  ModeThemes,
-  // ERC20Tokens,
-  // CompTrancheTokens,
-  // AaveTrancheTokens
+  JAaveAddress,
+  ModeThemes
 } from 'config/constants';
 import ErrorModal from 'app/components/Modals/Error';
 // Routes
@@ -49,54 +50,58 @@ const App = ({
   setTvl,
   trancheCardToggle,
   path,
-  ethereum: { address },
+  ethereum: { address, network },
   data: { skip, limit, filter, filterType, tradeType },
   checkServerStatus,
   theme
 }) => {
+  // let localNetwork = window.localStorage.getItem('network');
+  // let trancheMarketAddress = localNetwork ? localNetwork === 'polygon' ? JAaveAddress : JCompoundAddress : undefined;
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
-    // const Tokens = ERC20Tokens.concat(CompTrancheTokens).concat(AaveTrancheTokens);
-    // const timeout = (ms) => {
-    //   return new Promise((resolve) => setTimeout(resolve, ms));
-    // };
-
-    address && setTokenBalances(address);
-    // const ERC20Balances = web3.eth
-    //   .subscribe('logs', {
-    //     address: Tokens,
-    //     topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
-    //   })
-    //   .on('data', async (log) => {
-    //     if (address) {
-    //       // console.log(log.blockNumber)
-    //       // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
-    //       // let balanceOf = await token.methods.balanceOf(address).call();
-    //       // console.log(balanceOf)
-    //       for (let i = 1; i < 3; i++) {
-    //         let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
-    //         if (address === topicAddress) {
-    //           await timeout(5000);
-    //           setTokenBalances(address);
-    //         }
-    //       }
-    //     }
-    //   });
-
-    // return () => {
-    //   ERC20Balances.unsubscribe((error) => {
-    //     if (error) console.error(error);
-    //   });
-    // };
-  }, [address, setTokenBalances]);
-
-  useEffect(() => {
     if (address) {
-      checkTrancheAllowances(address, JCompoundAddress);
-      // checkTrancheAllowances(address, JAaveAddress);
+      setTokenBalances(address);
+      if (network === networkId) checkTrancheAllowances(address, JCompoundAddress);
+      if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
     }
-  }, [address, checkTrancheAllowances]);
+  }, [address, network, setTokenBalances, checkTrancheAllowances]);
+
+  // useEffect(() => {
+  // const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
+  // const timeout = (ms) => {
+  //   return new Promise((resolve) => setTimeout(resolve, ms));
+  // };
+
+  // address && setTokenBalances(address);
+  // const ERC20Balances = web3.eth
+  //   .subscribe('logs', {
+  //     address: Tokens,
+  //     topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
+  //   })
+  //   .on('data', async (log) => {
+  //     if (address) {
+  //       // console.log(log.blockNumber)
+  //       // let token = ERC20Setup(web3, '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b');
+  //       // let balanceOf = await token.methods.balanceOf(address).call();
+  //       // console.log(balanceOf)
+  //       for (let i = 1; i < 3; i++) {
+  //         let topicAddress = '0x' + log.topics[i].split('0x000000000000000000000000')[1];
+  //         if (address === topicAddress) {
+  //           await timeout(5000);
+  //           setTokenBalances(address);
+  //         }
+  //       }
+  //     }
+  //   });
+
+  // return () => {
+  //   ERC20Balances.unsubscribe((error) => {
+  //     if (error) console.error(error);
+  //   });
+  // };
+  // }, [address, setTokenBalances]);
+
 
   useEffect(() => {
     const timeout = (ms) => {

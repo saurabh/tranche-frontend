@@ -96,7 +96,7 @@ const TableCard = ({
   const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
-    cryptoType === 'ETH'
+    cryptoType === 'ETH' || 'MATIC'
       ? balance && balance !== -1 && fromWei(balance)
       : searchArr(cryptoType)
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
@@ -205,9 +205,9 @@ const TableCard = ({
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
-                <img src={trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
                 <span>
-                  <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
                 </span>
               </TableCardImg>
               <FirstColContent instrument>
@@ -346,9 +346,9 @@ const TableCard = ({
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
-              <img src={trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+              <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
               <span>
-                <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
               </span>
             </TableCardImg>
           </TableCardImgWrapper>

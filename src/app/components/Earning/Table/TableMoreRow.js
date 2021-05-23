@@ -24,7 +24,7 @@ import {
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
-import { ModeThemes, zeroAddress } from 'config';
+import { ModeThemes, zeroAddress, maticAddress } from 'config';
 import i18n from '../../locale/i18n';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -85,15 +85,15 @@ let TableMoreRow = ({
   });
 
   useEffect(() => {
-    if (buyerCoinAddress === zeroAddress) {
-      setIsEth(true);
-      setDepositApproved(true);
-    }
     if (trancheAllowance[contractAddress]) {
       setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
       setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
       change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
       change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+    }
+    if (buyerCoinAddress === zeroAddress || buyerCoinAddress === maticAddress) {
+      setIsEth(true);
+      setDepositApproved(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
@@ -106,7 +106,7 @@ let TableMoreRow = ({
         isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       } else {
         change('withdrawAmount', trancheTokenBalance);
-        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+        isEqualTo(trancheTokenBalance, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]

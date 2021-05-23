@@ -4,14 +4,16 @@ import store from '../store';
 import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
 import {
   networkId,
+  maticNetworkId,
   serverUrl,
   apiUri,
   ERC20Tokens,
   JCompoundAddress,
   CompTrancheTokens,
-  // JAaveAddress,
-  // AaveTrancheTokens,
-  TrancheBuyerCoinAddresses
+  TrancheBuyerCoinAddresses,
+  JAaveAddress,
+  AaveTrancheTokens,
+  PolygonBuyerCoinAddresses,
 } from 'config/constants';
 import {
   SET_ADDRESS,
@@ -26,6 +28,7 @@ import {
   SET_TRANCHE_ALLOWANCE
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
+import { trancheMarketsToggle } from './tableData';
 const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
@@ -46,14 +49,18 @@ export const setNetwork = (network) => async (dispatch) => {
     type: SET_NETWORK,
     payload: network
   });
+  window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
+
   if (network === networkId && address) {
-    store.dispatch(setTokenBalances(address));
-    store.dispatch(checkTrancheAllowances(address, JCompoundAddress));
+    store.dispatch(trancheMarketsToggle('compound'));
     if (path === 'stake') {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
       store.dispatch(summaryFetchSuccess(result));
     }
+  }
+  if (network === maticNetworkId) {
+    store.dispatch(trancheMarketsToggle('aavePolygon'));
   }
 };
 
@@ -82,10 +89,16 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
-    const Tokens = ERC20Tokens.concat(CompTrancheTokens);
     const state = store.getState();
-    const { web3, network } = state.ethereum;
-    if (network === networkId) {
+    let { web3, network, maticWeb3 } = state.ethereum;
+    web3 = network === maticNetworkId ? maticWeb3.http : web3;
+    const Tokens =
+      network === networkId
+        ? ERC20Tokens.concat(CompTrancheTokens)
+        : network === maticNetworkId
+        ? PolygonBuyerCoinAddresses.concat(AaveTrancheTokens)
+        : [];
+    if (network === networkId || network === maticNetworkId) {
       const batch = new web3.BatchRequest();
       // const tokenBalance = {};
       Tokens.map((tokenAddress) => {
@@ -93,11 +106,10 @@ export const setTokenBalances = (address) => async (dispatch) => {
         batch.add(
           token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
             if (err) {
+              console.log('balanceCheck error');
+              console.log(tokenAddress);
               console.error(err);
             } else {
-              // if (tokenAddress === '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b') {
-              //   console.log(res);
-              // }
               dispatch({
                 type: SET_TOKEN_BALANCE,
                 payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
@@ -108,10 +120,6 @@ export const setTokenBalances = (address) => async (dispatch) => {
         return batch;
       });
       batch.execute();
-      // dispatch({
-      //   type: SET_TOKEN_BALANCES,
-      //   payload: tokenBalance
-      // });
     }
   } catch (error) {
     console.error(error);
@@ -127,15 +135,17 @@ export const toggleApproval = (tokenAddress, contractAddress, bool) => async (di
 
 export const checkTrancheAllowances = (address, contractAddress) => async (dispatch) => {
   try {
-    const Tokens =
-      contractAddress === JCompoundAddress
-        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
-        // : contractAddress === JAaveAddress
-        // ? AaveTrancheTokens.concat(TrancheBuyerCoinAddresses)
-        : [];
     const state = store.getState();
-    const { web3, network } = state.ethereum;
-    if (network === networkId) {
+    let { web3, network, maticWeb3 } = state.ethereum;
+    if ((network === networkId && contractAddress === JAaveAddress) || (network === maticNetworkId && contractAddress === JCompoundAddress)) return;
+    web3 = network === maticNetworkId ? maticWeb3.http : web3;
+    const Tokens =
+      network === networkId
+        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : network === maticNetworkId
+        ? AaveTrancheTokens.concat(PolygonBuyerCoinAddresses)
+        : [];
+    if (network === networkId || network === maticNetworkId) {
       const batch = new web3.BatchRequest();
       let tokenBalance = {};
       Tokens.map((tokenAddress) => {
@@ -143,6 +153,8 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
         batch.add(
           token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
             if (err) {
+              console.log('allowanceCheck balance error');
+              console.log(contractAddress, tokenAddress);
               console.error(err);
             } else {
               tokenBalance[tokenAddress] = res;
@@ -156,6 +168,8 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
         batch.add(
           token.methods.allowance(address, contractAddress).call.request({ from: address }, (err, res) => {
             if (err) {
+              console.log('allowanceCheck allowance error');
+              console.log(contractAddress, tokenAddress);
               console.error(err);
             } else {
               if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {

@@ -1,4 +1,5 @@
-import { apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
+import store from '../store';
+import { networkId, maticNetworkId, apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
 import { postRequest, initOnboard } from 'services';
 import { checkServer } from './checkServer';
 import {
@@ -19,8 +20,6 @@ import {
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
   TRANCHE_MARKETS,
-  SET_NETWORK,
-  SET_WEB3
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -144,24 +143,13 @@ export const paginationCurrent = (current) => (dispatch) => {
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   const onboard = initOnboard();
   if (trancheMarket === 'compound') {
-    onboard.config({ networkId: 42 });
-    console.log(onboard)  
-    dispatch({
-      type: SET_NETWORK,
-      payload: 42
-    });
-    dispatch({
-      type: SET_WEB3
-      // payload:
-    });
+    onboard.config({ networkId });
+    store.dispatch(changeFilter('ethereum'))
   } else if (trancheMarket === 'aavePolygon') {
-    onboard.config({ networkId: 137 });
-    console.log(onboard)
-    dispatch({
-      type: SET_NETWORK,
-      payload: 137
-    });
+    onboard.config({ networkId: maticNetworkId });
+    store.dispatch(changeFilter('polygon'))
   }
+  store.dispatch(trancheCardToggle({ status: false, id: null }))
   dispatch({
     type: TRANCHE_MARKETS,
     payload: trancheMarket
