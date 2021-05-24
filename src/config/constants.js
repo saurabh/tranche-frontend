@@ -32,7 +32,6 @@ export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 export const GoogleAnalyticsTrackingID = ''; // UA-197572899-1
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
-export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toLowerCase();
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();

@@ -24,7 +24,7 @@ import {
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
-import { ModeThemes, zeroAddress, maticAddress } from 'config';
+import { ModeThemes, zeroAddress } from 'config';
 import i18n from '../../locale/i18n';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -67,9 +67,9 @@ let TableMoreRow = ({
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  const [TooltipToggle, setTooltipToggle] = useState("");
+  const [TooltipToggle, setTooltipToggle] = useState('');
 
-  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress])
+  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -77,7 +77,7 @@ let TableMoreRow = ({
 
   const tooltipToggle = (val) => {
     setTooltipToggle(val);
-  }
+  };
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
@@ -85,15 +85,17 @@ let TableMoreRow = ({
   });
 
   useEffect(() => {
-    if (trancheAllowance[contractAddress]) {
+    if (buyerCoinAddress === zeroAddress) {
+      setIsEth(true);
+      setDepositApproved(true);
+      setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+      change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+    } else {
+      setIsEth(false);
       setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
       setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
       change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
       change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
-    }
-    if (buyerCoinAddress === zeroAddress || buyerCoinAddress === maticAddress) {
-      setIsEth(true);
-      setDepositApproved(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
@@ -129,10 +131,10 @@ let TableMoreRow = ({
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText} dividend>
-                <h2>{dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()} {i18n.t('tranche.trancheData.APY')}</h2>
                 <h2>
-                  {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
+                  {dividendType} {i18n.t('tranche.trancheData.APY')}
                 </h2>
+                <h2>{protocolAPY ? roundNumber(protocolAPY, 2) : 0}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -152,13 +154,15 @@ let TableMoreRow = ({
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.trancheData.price')}</h2>
+                <h2 onMouseOver={() => tooltipToggle('PRICE')} onMouseLeave={() => tooltipToggle('')}>
+                  {i18n.t('tranche.trancheData.price')}
+                </h2>
                 <h2>
                   {roundNumber(trancheRate)} {cryptoType}
                 </h2>
-                <TooltipWrapper tooltip={TooltipToggle === "PRICE"} row color={ModeThemes[theme].Tooltip}>
+                <TooltipWrapper tooltip={TooltipToggle === 'PRICE'} row color={ModeThemes[theme].Tooltip}>
                   <div>
-                      <h2>The value of each instrument token.</h2>
+                    <h2>The value of each instrument token.</h2>
                   </div>
                 </TooltipWrapper>
               </TableMoreLeftSectionContent>
@@ -168,8 +172,16 @@ let TableMoreRow = ({
             <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
-                ? `${name} ${i18n.t('tranche.trancheData.isTheSenior')} ${dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()}  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheFixed')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`
-                : `${name} ${i18n.t('tranche.trancheData.isTheJunior')}  ${dividendType && dividendType[0].toLowerCase() + dividendType.substring(1).toUpperCase()}  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheVariable')} ${apy}%, ${i18n.t('tranche.trancheData.inAddition')}`}
+                ? `${name} ${i18n.t('tranche.trancheData.isTheSenior')} ${
+                    dividendType
+                  }  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheFixed')} ${roundNumber(apy, 2)}%, ${i18n.t(
+                    'tranche.trancheData.inAddition'
+                  )}`
+                : `${name} ${i18n.t('tranche.trancheData.isTheJunior')}  ${
+                    dividendType
+                  }  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheVariable')} ${roundNumber(apy, 2)}%, ${i18n.t(
+                    'tranche.trancheData.inAddition'
+                  )}`}
             </p>
           </TableMoreLeftBottomSection>
         </TableMoreRowContentLeft>
@@ -185,7 +197,7 @@ let TableMoreRow = ({
             >
               {isApproveLoading && (
                 <div>
-                <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -306,7 +318,7 @@ let TableMoreRow = ({
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -319,7 +331,7 @@ let TableMoreRow = ({
                       onClick={() => setFormType('withdraw')}
                       color={ModeThemes[theme].dropDownText}
                     >
-                      {i18n.t('tranche.trancheData.withdraw') }
+                      {i18n.t('tranche.trancheData.withdraw')}
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
                   <CheckboxWrapper hidden={isEth}>
@@ -381,7 +393,7 @@ let TableMoreRow = ({
               >
                 {isApproveLoading && (
                   <div>
-                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>

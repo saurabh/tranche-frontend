@@ -13,8 +13,6 @@ import {
   readyToTransact,
   roundNumber,
   safeMultiply
-  // gweiOrEther,
-  // roundBasedOnUnit
 } from 'utils';
 import { etherScanUrl, statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
@@ -75,7 +73,7 @@ const TableCard = ({
     dividendType,
     protocolAPY,
     trancheToken,
-    trancheRate  
+    trancheRate
   },
   path,
   setAddress,
@@ -93,16 +91,23 @@ const TableCard = ({
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  const apyImage =
+    apyStatus && apyStatus === 'fixed'
+      ? theme === 'light'
+        ? LockLight
+        : Lock
+      : apyStatus === 'increase'
+      ? Up
+      : apyStatus === 'decrease'
+      ? Down
+      : '';
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
-    cryptoType === 'ETH' || 'MATIC'
-      ? balance && balance !== -1 && fromWei(balance)
-      : searchArr(cryptoType)
-      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
-      : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
-
-  
+  cryptoType === ('ETH' || 'MATIC')
+    ? balance && balance !== -1 && fromWei(balance)
+    : searchArr(cryptoType)
+    ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+    : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
   const onboard = initOnboard({
     address: setAddress,
@@ -136,7 +141,7 @@ const TableCard = ({
         .on('confirmation', (count) => {
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-            toggleApproval(tokenAddress, contractAddress, !isApproved)
+            toggleApproval(tokenAddress, contractAddress, !isApproved);
             setApproveLoading(false);
             destroy('tranche');
           }
@@ -297,36 +302,35 @@ const TableCard = ({
           </TableSixthCol>
         </TableContentCard>
 
-          <TableCardMore
-            className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
-            color={ModeThemes[theme].borderColor}
-            border={trancheCard.status && id === trancheCard.id}
-          >
-            <TableCardMoreContent>
-              <TableMoreRow
-                name={name}
-                type={type}
-                apy={apy}
-                contractAddress={contractAddress}
-                cryptoType={cryptoType}
-                dividendType={dividendType}
-                protocolAPY={protocolAPY}
-                buyerTokenBalance={buyerTokenBalance}
-                trancheToken={trancheToken}
-                trancheRate={trancheRate}
-                buyerCoinAddress={buyerCoinAddress}
-                trancheTokenAddress={trancheTokenAddress}
-                isApproveLoading={isApproveLoading}
-                isDepositApproved={isDepositApproved}
-                setDepositApproved={setDepositApproved}
-                isWithdrawApproved={isWithdrawApproved}
-                setWithdrawApproved={setWithdrawApproved}
-                approveContract={approveContract}
-                buySellTrancheTokens={buySellTrancheTokens}
-              />
-            </TableCardMoreContent>
-          </TableCardMore>
-        
+        <TableCardMore
+          className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
+          color={ModeThemes[theme].borderColor}
+          border={trancheCard.status && id === trancheCard.id}
+        >
+          <TableCardMoreContent>
+            <TableMoreRow
+              name={name}
+              type={type}
+              apy={apy}
+              contractAddress={contractAddress}
+              cryptoType={cryptoType}
+              dividendType={dividendType}
+              protocolAPY={protocolAPY}
+              buyerTokenBalance={buyerTokenBalance}
+              trancheToken={trancheToken}
+              trancheRate={trancheRate}
+              buyerCoinAddress={buyerCoinAddress}
+              trancheTokenAddress={trancheTokenAddress}
+              isApproveLoading={isApproveLoading}
+              isDepositApproved={isDepositApproved}
+              setDepositApproved={setDepositApproved}
+              isWithdrawApproved={isWithdrawApproved}
+              setWithdrawApproved={setWithdrawApproved}
+              approveContract={approveContract}
+              buySellTrancheTokens={buySellTrancheTokens}
+            />
+          </TableCardMoreContent>
+        </TableCardMore>
       </TableContentCardWrapper>
     );
   };
@@ -401,35 +405,35 @@ const TableCard = ({
           </TableMobileContent>
         </TableContentCardMobile>
 
-          <TableCardMore
-            className={'table-card-more ' + ((trancheCard.status && id === trancheCard.id) ? 'table-more-card-toggle' : '')}
-            color={ModeThemes[theme].backgroundBorder}
-            border={trancheCard.status && id === trancheCard.id}
-          >
-            <TableCardMoreContent>
-              <TableMoreRow
-                name={name}
-                type={type}
-                apy={apy}
-                contractAddress={contractAddress}
-                cryptoType={cryptoType}
-                dividendType={dividendType}
-                protocolAPY={protocolAPY}
-                buyerTokenBalance={buyerTokenBalance}
-                trancheToken={trancheToken}
-                trancheRate={trancheRate}
-                buyerCoinAddress={buyerCoinAddress}
-                trancheTokenAddress={trancheTokenAddress}
-                isApproveLoading={isApproveLoading}
-                isDepositApproved={isDepositApproved}
-                setDepositApproved={setDepositApproved}
-                isWithdrawApproved={isWithdrawApproved}
-                setWithdrawApproved={setWithdrawApproved}
-                approveContract={approveContract}
-                buySellTrancheTokens={buySellTrancheTokens}
-              />
-            </TableCardMoreContent>
-          </TableCardMore>
+        <TableCardMore
+          className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
+          color={ModeThemes[theme].backgroundBorder}
+          border={trancheCard.status && id === trancheCard.id}
+        >
+          <TableCardMoreContent>
+            <TableMoreRow
+              name={name}
+              type={type}
+              apy={apy}
+              contractAddress={contractAddress}
+              cryptoType={cryptoType}
+              dividendType={dividendType}
+              protocolAPY={protocolAPY}
+              buyerTokenBalance={buyerTokenBalance}
+              trancheToken={trancheToken}
+              trancheRate={trancheRate}
+              buyerCoinAddress={buyerCoinAddress}
+              trancheTokenAddress={trancheTokenAddress}
+              isApproveLoading={isApproveLoading}
+              isDepositApproved={isDepositApproved}
+              setDepositApproved={setDepositApproved}
+              isWithdrawApproved={isWithdrawApproved}
+              setWithdrawApproved={setWithdrawApproved}
+              approveContract={approveContract}
+              buySellTrancheTokens={buySellTrancheTokens}
+            />
+          </TableCardMoreContent>
+        </TableCardMore>
       </TableContentCardWrapperMobile>
     );
   };
@@ -444,7 +448,7 @@ TableCard.propTypes = {
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
   trancheCardToggle: PropTypes.func.isRequired,
-  toggleApproval: PropTypes.func.isRequired,
+  toggleApproval: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
