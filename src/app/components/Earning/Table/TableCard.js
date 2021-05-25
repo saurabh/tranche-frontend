@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } from 'redux/actions/ethereum';
+import useAnalytics from 'services/analytics';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -94,6 +95,8 @@ const TableCard = ({
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  const Tracker = useAnalytics("ButtonClicks");
+
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
     cryptoType === 'ETH'
@@ -152,6 +155,7 @@ const TableCard = ({
       const ready = await readyToTransact(wallet, onboard);
       if (!ready) return;
       buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
+      buy ? Tracker("Deposit", "User address: " + address) : Tracker("Withdraw", "User address: " + address) ;
     } catch (error) {
       console.error(error);
     }

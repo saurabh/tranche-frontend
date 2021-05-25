@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
+import useAnalytics from 'services/analytics';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
@@ -65,6 +66,8 @@ const TableCard = ({
   const [balance, setBalance] = useState(0);
   const [isLPToken, setLPToken] = useState(false);
   const [stakingAddress, setStakingAddress] = useState(null);
+  const Tracker = useAnalytics("ButtonClicks");
+
 
   const onboard = initOnboard({
     address: setAddress,
@@ -168,6 +171,7 @@ const TableCard = ({
     try {
       e.preventDefault();
       modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
+      modalType? Tracker("addStake", "User address: " + address) : Tracker("withdrawStake", "User address: " + address) ;
       closeModal();
     } catch (error) {
       console.error(error);

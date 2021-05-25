@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 
-
-
-
 const SummaryCardWrapperContent = styled.div`
     //change
     width: 21.6666667%;
