@@ -236,7 +236,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={(e) => setMaxAmount(e, true)}>{i18n.t('tranche.trancheData.max')}</h2>
+                  <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : false}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -297,7 +297,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={(e) => setMaxAmount(e, false)}>{i18n.t('tranche.trancheData.max')}</h2>
+                  <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : false}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -374,7 +374,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={(e) => setMaxAmount(e, true)}>{i18n.t('tranche.trancheData.max')}</h2>
+                    <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : false}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
@@ -448,7 +448,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={(e) => setMaxAmount(e, false)}>{i18n.t('tranche.trancheData.max')}</h2>
+                    <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : false}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
