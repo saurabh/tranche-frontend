@@ -7,8 +7,6 @@ import {
   maticNetworkId,
   serverUrl,
   apiUri,
-  etherScanUrl,
-  maticBlockExplorerUrl,
   ERC20Tokens,
   JCompoundAddress,
   CompTrancheTokens,
@@ -56,7 +54,6 @@ export const setNetwork = (network) => async (dispatch) => {
 
   if (network === networkId) {
     store.dispatch(trancheMarketsToggle('compound'));
-    store.dispatch(setBlockExplorerUrl(etherScanUrl));
     if (path === 'stake' && address) {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
@@ -65,7 +62,6 @@ export const setNetwork = (network) => async (dispatch) => {
   }
   if (network === maticNetworkId) {
     store.dispatch(trancheMarketsToggle('aavePolygon'));
-    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
 };
 
