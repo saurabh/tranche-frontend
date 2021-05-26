@@ -7,13 +7,15 @@ import {
   maticNetworkId,
   serverUrl,
   apiUri,
+  etherScanUrl,
+  maticBlockExplorerUrl,
   ERC20Tokens,
   JCompoundAddress,
   CompTrancheTokens,
   TrancheBuyerCoinAddresses,
   JAaveAddress,
   AaveTrancheTokens,
-  PolygonBuyerCoinAddresses,
+  PolygonBuyerCoinAddresses
 } from 'config/constants';
 import {
   SET_ADDRESS,
@@ -25,7 +27,8 @@ import {
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE
+  SET_TRANCHE_ALLOWANCE,
+  SET_BLOCKEXPLORER_URL
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
 import { trancheMarketsToggle } from './tableData';
@@ -51,9 +54,10 @@ export const setNetwork = (network) => async (dispatch) => {
   });
   window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
 
-  if (network === networkId && address) {
+  if (network === networkId) {
     store.dispatch(trancheMarketsToggle('compound'));
-    if (path === 'stake') {
+    store.dispatch(setBlockExplorerUrl(etherScanUrl));
+    if (path === 'stake' && address) {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
       store.dispatch(summaryFetchSuccess(result));
@@ -61,6 +65,7 @@ export const setNetwork = (network) => async (dispatch) => {
   }
   if (network === maticNetworkId) {
     store.dispatch(trancheMarketsToggle('aavePolygon'));
+    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
 };
 
@@ -68,6 +73,13 @@ export const setBalance = (balance) => (dispatch) => {
   dispatch({
     type: SET_BALANCE,
     payload: balance
+  });
+};
+
+export const setBlockExplorerUrl = (url) => (dispatch) => {
+  dispatch({
+    type: SET_BLOCKEXPLORER_URL,
+    payload: url
   });
 };
 

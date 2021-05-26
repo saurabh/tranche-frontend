@@ -7,6 +7,7 @@ export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
+export const maticBlockExplorerUrl = process.env.REACT_APP_MATIC_BLOCK_EXPLORER_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
@@ -138,7 +139,7 @@ export const trancheIcons = {
   DTA: { protocolIcon: AAVE, assetIcon: DAICARD },
   DTB: { protocolIcon: AAVE, assetIcon: DAICARD },
   WBTA: { protocolIcon: AAVE, assetIcon: ETHicon },
-  WBTB: { protocolIcon: AAVE, assetIcon: ETHicon },
+  WBTB: { protocolIcon: AAVE, assetIcon: ETHicon }
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)
@@ -371,7 +372,7 @@ export const ModeThemes = {
     HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
     LoadingColorOne: '#eee',
     LoadingColorTwo: '#f7f7f7',
-    cardShadow: "0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent"
+    cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent'
   },
   dark: {
     body: '#100F36',
@@ -426,6 +427,6 @@ export const ModeThemes = {
     HowToShadow: 'none',
     LoadingColorOne: 'rgba(255,255,255,0.07)',
     LoadingColorTwo: '#363661',
-    cardShadow: "0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent"
+    cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent'
   }
 };

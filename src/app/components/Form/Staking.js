@@ -26,7 +26,6 @@ import {
   SelectedStakingContent
 } from './styles/FormComponents';
 import i18n from '../locale/i18n';
-import { etherScanUrl } from 'config';
 import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -61,7 +60,7 @@ let StakingForm = ({
   adjustStake,
   contractAddress,
   // Redux
-  ethereum: { tokenBalance },
+  ethereum: { tokenBalance, blockExplorerUrl },
   summaryData: { slice, lpList },
   type,
   theme
@@ -119,9 +118,12 @@ let StakingForm = ({
               <SelectedStakingImg>
                 <img src={TrancheImg} alt='tranche' />
               </SelectedStakingImg>
-              <SelectedStakingContent SelectedStakingText={ModeThemes[theme].SelectedStakingText} SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}>
+              <SelectedStakingContent
+                SelectedStakingText={ModeThemes[theme].SelectedStakingText}
+                SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}
+              >
                 <h2>{type}</h2>
-                <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                   {contractAddress}
                 </a>
               </SelectedStakingContent>
@@ -137,7 +139,13 @@ let StakingForm = ({
                       : i18n.t('stake.modal.withdrawFormTitle')
                     : 'Amount of ' + tokenName + ' to ' + (modalType ? 'stake' : 'withdraw')}
                 </ModalFormLabel>
-                <FieldWrapper modalType={true} staking={true} StakingInputText={ModeThemes[theme].StakingInputText} StakingMax={ModeThemes[theme].StakingMax} ModalText={ModeThemes[theme].ModalText}>
+                <FieldWrapper
+                  modalType={true}
+                  staking={true}
+                  StakingInputText={ModeThemes[theme].StakingInputText}
+                  StakingMax={ModeThemes[theme].StakingMax}
+                  ModalText={ModeThemes[theme].ModalText}
+                >
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleInputChange(newValue)}

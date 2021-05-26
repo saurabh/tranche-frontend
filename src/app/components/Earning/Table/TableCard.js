@@ -14,7 +14,7 @@ import {
   roundNumber,
   safeMultiply
 } from 'utils';
-import { etherScanUrl, statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
@@ -80,7 +80,7 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { tokenBalance, balance, address, wallet, web3, notify },
+  ethereum: { tokenBalance, balance, address, wallet, web3, notify, blockExplorerUrl },
   toggleApproval,
   destroy,
   theme,
@@ -221,7 +221,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(trancheTokenAddress)}</h2>
-                  <a href={etherScanUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -371,7 +371,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(trancheTokenAddress)}</h2>
-                    <a href={etherScanUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>

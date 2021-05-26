@@ -8,7 +8,8 @@ import {
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE
+  SET_TRANCHE_ALLOWANCE,
+  SET_BLOCKEXPLORER_URL
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
@@ -72,6 +73,8 @@ export default function (state = initialState, action) {
       return { ...state, wallet: payload };
     case SET_WEB3:
       return { ...state, web3: payload };
+    case SET_BLOCKEXPLORER_URL:
+      return { ...state, blockExplorerUrl: payload }
     case SET_CURRENT_BLOCK:
       return { ...state, currentBlock: payload };
     case SET_TRANSACTION_LOADING:

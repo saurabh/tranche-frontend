@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
-import { etherScanUrl, statuses, ApproveBigNumber, txMessage } from 'config';
+import { statuses, ApproveBigNumber, txMessage } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 import { ModeThemes } from 'config/constants';
 
@@ -51,8 +51,8 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
   setTokenBalance,
-  ethereum: { tokenBalance, address, wallet, web3, notify },
-  summaryData: { slice, withdrawn, lp, lpList },
+  ethereum: { tokenBalance, address, wallet, web3, notify, blockExplorerUrl },
+  summaryData: { slice, lp, lpList },
   theme,
   isDesktop
   // checkServer
@@ -115,8 +115,6 @@ const TableCard = ({
 
   let moreCardToggle = false;
 
-  
-
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
   };
@@ -125,7 +123,7 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalance(tokenAddress, address)
+    setTokenBalance(tokenAddress, address);
     if (type) {
       let result = await stakingAllowanceCheck(tokenAddress, stakingAddress, address);
       setHasAllowance(result);
@@ -208,7 +206,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -324,7 +322,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
