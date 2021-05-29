@@ -628,7 +628,6 @@ const MarketTab = styled.button`
   text-transform: uppercase;
   color: ${props => props.color};
   img{
-    width: ${props => props.market === "aavePolygon" ? "32px" : "73px"};
     margin-right: ${props => props.market === "aavePolygon" ? "5px" : "0"};
   }
   & > span{
