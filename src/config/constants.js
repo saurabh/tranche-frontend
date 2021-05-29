@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, ETHCARD } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -126,20 +126,20 @@ export const trancheIcons = {
   BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
-  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
-  MTA: { protocolIcon: AAVE, assetIcon: ETHicon },
-  MTB: { protocolIcon: AAVE, assetIcon: ETHicon },
+  AAETH: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  BAETH: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  MTA: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  MTB: { protocolIcon: AAVE, assetIcon: ETHCARD },
   USDCA: { protocolIcon: AAVE, assetIcon: USDCCArd },
   USDCB: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  WMTA: { protocolIcon: AAVE, assetIcon: ETHicon },
-  WMTB: { protocolIcon: AAVE, assetIcon: ETHicon },
+  WMTA: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  WMTB: { protocolIcon: AAVE, assetIcon: ETHCARD },
   USDTA: { protocolIcon: AAVE, assetIcon: USDCCArd },
   USDTB: { protocolIcon: AAVE, assetIcon: USDCCArd },
   DTA: { protocolIcon: AAVE, assetIcon: DAICARD },
   DTB: { protocolIcon: AAVE, assetIcon: DAICARD },
-  WBTA: { protocolIcon: AAVE, assetIcon: ETHicon },
-  WBTB: { protocolIcon: AAVE, assetIcon: ETHicon }
+  WBTA: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  WBTB: { protocolIcon: AAVE, assetIcon: ETHCARD }
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)

@@ -59,10 +59,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
           color={ModeThemes[theme].TrancheBtnColor}
         >
           <h2>
-            <span>
               <img src={AaveBtn} alt='' /> Market
-            </span>{' '}
-            <span>coming soon</span>
           </h2>{' '}
           <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>

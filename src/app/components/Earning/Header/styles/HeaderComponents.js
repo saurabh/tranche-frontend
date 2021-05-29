@@ -656,38 +656,24 @@ const MarketTab = styled.button`
     
     h2{
       display: flex;
-      flex-direction: column;
       height: 100%;
       align-items: baseline;
       justify-content: center;
-      span{
-        font-family: 'Inter', sans-serif !important;
-        font-style: normal !important;
-        font-weight: 500 !important;
-        font-size: 14.14px !important;
-        letter-spacing: 0.05em !important;
-        text-transform: uppercase !important;
-        height: 34%;
-        display: flex;
-        align-items: center;
-        color: ${color};
-        @media (max-width: 992px) {
-          height: 73%;
-        }
-      }
-      span:last-child{
-        font-size: 9px !important;
-        font-weight: lighter !important;
-      }
+      font-family: 'Inter', sans-serif !important;
+      font-style: normal !important;
+      font-weight: 500 !important;
+      font-size: 14.14px !important;
+      letter-spacing: 0.05em !important;
+      text-transform: uppercase !important;
+      height: 34%;
+      display: flex;
+      align-items: center;
+      color: ${color};
+      @media (max-width: 992px) {
+        height: 73%;
+      }  
     }
-    // h2{
-    //   left: 0;
-    //   font-size: 9px !important;
-    //   font-weight: lighter !important;
-    //   position: absolute;
-    //   bottom: -4px;
-    //   padding: 0 29px;
-    // }
+
   `}
 
 
