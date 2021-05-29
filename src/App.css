@@ -1229,6 +1229,9 @@ table, th, td {
     text-align: center;
     margin: 0 0 0 20px;
   }
+  .ReactModal__Content--after-open{
+    transform: scale(1) translateY(50%) !important;
+  }
   .footerWrapper{
     flex-direction: column;
     padding: 12px 0;
@@ -1344,6 +1347,7 @@ table, th, td {
     transform: scale(0.5) translateY(50%);
   }
 }
+
 
 
 
@@ -1510,7 +1514,7 @@ table, th, td {
 }
 
 .ReactModal__Content--after-open{
-  transform: scale(1) translateY(50%);
+  transform: scale(1) translateY(0);
 }
 .ReactModal__Content--before-close {
   transform: scale(0.5) translateY(50%);
