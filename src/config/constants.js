@@ -124,22 +124,12 @@ export const trancheIcons = {
   BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
-  AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  AAETH: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  BAETH: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  MTA: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  MTB: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  USDCA: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  USDCB: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  WMTA: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  WMTB: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  USDTA: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  USDTB: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  DTA: { protocolIcon: AAVE, assetIcon: DAICARD },
-  DTB: { protocolIcon: AAVE, assetIcon: DAICARD },
-  WBTA: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  WBTB: { protocolIcon: AAVE, assetIcon: ETHCARD }
+  aamMATIC: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  bamMATIC: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  aamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)
