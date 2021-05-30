@@ -51,7 +51,6 @@ let TableMoreRow = ({
   trancheRate,
   buyerCoinAddress,
   trancheTokenAddress,
-  isApproveLoading,
   isDepositApproved,
   isWithdrawApproved,
   setDepositApproved,
@@ -194,10 +193,10 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading}
+              loading={txOngoing}
               disabled={!isDepositApproved}
             >
-              {isApproveLoading && (
+              {txOngoing && (
                 <div>
                   <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
@@ -206,17 +205,17 @@ let TableMoreRow = ({
                 <h2>{i18n.t('tranche.trancheData.deposit')}</h2>
                 <CheckboxWrapper hidden={isEth}>
                   <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                  <CheckboxContent disabled={txOngoing}>
                     <Field
                       component='input'
                       type='checkbox'
                       name='depositIsApproved'
                       id='depositIsApproved'
                       checked={isDepositApproved}
-                      disabled={isApproveLoading || txOngoing}
+                      disabled={txOngoing}
                     />
                     <label
-                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                      onClick={txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
                       htmlFor='depositIsApproved'
                     ></label>
                   </CheckboxContent>
@@ -251,10 +250,10 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading}
+              loading={txOngoing}
               disabled={!isWithdrawApproved}
             >
-              {isApproveLoading && (
+              {txOngoing && (
                 <div>
                   <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
@@ -263,17 +262,17 @@ let TableMoreRow = ({
                 <h2>{i18n.t('tranche.trancheData.withdraw')}</h2>
                 <CheckboxWrapper>
                   <h2>{isWithdrawApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                  <CheckboxContent disabled={txOngoing}>
                     <Field
                       component='input'
                       type='checkbox'
                       name='withdrawIsApproved'
                       id='withdrawIsApproved'
                       checked={isWithdrawApproved}
-                      disabled={isApproveLoading || txOngoing}
+                      disabled={txOngoing}
                     />
                     <label
-                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
+                      onClick={txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
                       htmlFor='withdrawIsApproved'
                     ></label>
                   </CheckboxContent>
@@ -315,10 +314,10 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading}
+                loading={txOngoing}
                 disabled={!isDepositApproved}
               >
-                {isApproveLoading && (
+                {txOngoing && (
                   <div>
                     <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
@@ -339,17 +338,17 @@ let TableMoreRow = ({
                   <CheckboxWrapper hidden={isEth}>
                     <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
 
-                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                    <CheckboxContent disabled={txOngoing}>
                       <Field
                         component='input'
                         type='checkbox'
                         name='depositIsApproved'
                         id='depositIsApproved'
                         checked={isDepositApproved}
-                        disabled={isApproveLoading || txOngoing}
+                        disabled={txOngoing}
                       />
                       <label
-                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                        onClick={txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
                         htmlFor='depositIsApproved'
                       ></label>
                     </CheckboxContent>
@@ -390,10 +389,10 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading}
+                loading={txOngoing}
                 disabled={!isWithdrawApproved}
               >
-                {isApproveLoading && (
+                {txOngoing && (
                   <div>
                     <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
@@ -414,17 +413,17 @@ let TableMoreRow = ({
                   <CheckboxWrapper>
                     <h2>{isWithdrawApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
 
-                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                    <CheckboxContent disabled={txOngoing}>
                       <Field
                         component='input'
                         type='checkbox'
                         name='withdrawIsApproved'
                         id='withdrawIsApproved'
                         checked={isWithdrawApproved}
-                        disabled={isApproveLoading || txOngoing}
+                        disabled={txOngoing}
                       />
                       <label
-                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
+                        onClick={txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
                         htmlFor='withdrawIsApproved'
                       ></label>
                     </CheckboxContent>

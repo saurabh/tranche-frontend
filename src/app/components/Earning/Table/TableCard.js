@@ -4,16 +4,15 @@ import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading } from 'redux/actions/ethereum';
 import useAnalytics from 'services/analytics';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck } from 'config';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
-import { ModeThemes } from 'config/constants';
 import {
   TableContentCard,
   TableContentCardWrapper,
@@ -76,15 +75,15 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  ethereum: { tokenBalance, balance, address, wallet, web3, notify, blockExplorerUrl },
+  ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
   toggleApproval,
+  setTxLoading,
   destroy,
   theme,
   isDesktop
   // checkServer
 }) => {
   // const [isLoading, setIsLoading] = useState(false);
-  const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const apyImage =
@@ -116,7 +115,7 @@ const TableCard = ({
 
   const approveContract = async (type, isApproved, e) => {
     try {
-      if (isApproveLoading) e.stopPropogation();
+      if (txOngoing) e.stopPropogation();
       const ready = await readyToTransact(wallet, onboard);
       if (!ready) return;
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
@@ -126,21 +125,23 @@ const TableCard = ({
         .approve(contractAddress, amount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          setApproveLoading(true);
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
+          setTxLoading(true);
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txCancel', () => setTxLoading(false));
+            emitter.on('txFailed', () => setTxLoading(false));
+          }
         })
         .on('confirmation', (count) => {
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
             toggleApproval(tokenAddress, contractAddress, !isApproved);
-            setApproveLoading(false);
+            setTxLoading(false);
             destroy('tranche');
           }
         });
@@ -320,7 +321,6 @@ const TableCard = ({
               trancheRate={trancheRate}
               buyerCoinAddress={buyerCoinAddress}
               trancheTokenAddress={trancheTokenAddress}
-              isApproveLoading={isApproveLoading}
               isDepositApproved={isDepositApproved}
               setDepositApproved={setDepositApproved}
               isWithdrawApproved={isWithdrawApproved}
@@ -423,7 +423,6 @@ const TableCard = ({
               trancheRate={trancheRate}
               buyerCoinAddress={buyerCoinAddress}
               trancheTokenAddress={trancheTokenAddress}
-              isApproveLoading={isApproveLoading}
               isDepositApproved={isDepositApproved}
               setDepositApproved={setDepositApproved}
               isWithdrawApproved={isWithdrawApproved}
@@ -447,7 +446,8 @@ TableCard.propTypes = {
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
   trancheCardToggle: PropTypes.func.isRequired,
-  toggleApproval: PropTypes.func.isRequired
+  toggleApproval: PropTypes.func.isRequired,
+  setTxLoading: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -464,6 +464,7 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   checkServer,
   trancheCardToggle,
+  setTxLoading,
   toggleApproval,
   destroy
 })(TableCard);

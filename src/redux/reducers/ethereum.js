@@ -27,7 +27,7 @@ import {
 } from 'config/constants';
 
 const CompTokens = CompTrancheTokens.concat(TrancheBuyerCoinAddresses);
-const AaveTokens = AaveTrancheTokens.concat(PolygonBuyerCoinAddresses)
+const AaveTokens = AaveTrancheTokens.concat(PolygonBuyerCoinAddresses);
 let compAllowance = {};
 let aaveAllowance = {};
 CompTokens.map((tokenAddress) => (compAllowance[tokenAddress.toLowerCase()] = false));
@@ -74,7 +74,7 @@ export default function (state = initialState, action) {
     case SET_WEB3:
       return { ...state, web3: payload };
     case SET_BLOCKEXPLORER_URL:
-      return { ...state, blockExplorerUrl: payload }
+      return { ...state, blockExplorerUrl: payload };
     case SET_CURRENT_BLOCK:
       return { ...state, currentBlock: payload };
     case SET_TRANSACTION_LOADING:

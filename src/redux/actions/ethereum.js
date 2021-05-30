@@ -45,7 +45,7 @@ export const setAddress = (address) => (dispatch) => {
 export const setNetwork = (network) => async (dispatch) => {
   const state = store.getState();
   const { path, ethereum } = state;
-  const { address } = ethereum;
+  const { address, notify } = ethereum;
   dispatch({
     type: SET_NETWORK,
     payload: network
@@ -53,6 +53,7 @@ export const setNetwork = (network) => async (dispatch) => {
   window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
 
   if (network === networkId) {
+    address && notify.account(address);
     store.dispatch(trancheMarketsToggle('compound'));
     if (path === 'stake' && address) {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
@@ -61,6 +62,7 @@ export const setNetwork = (network) => async (dispatch) => {
     }
   }
   if (network === maticNetworkId) {
+    address && notify.unsubscribe(address)
     store.dispatch(trancheMarketsToggle('aavePolygon'));
   }
 };
@@ -70,6 +72,19 @@ export const setBalance = (balance) => (dispatch) => {
     type: SET_BALANCE,
     payload: balance
   });
+};
+
+export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
+  let web3 = new Web3(wallet.provider);
+  dispatch({
+    type: SET_WALLET,
+    payload: wallet
+  });
+  dispatch({
+    type: SET_WEB3,
+    payload: web3
+  });
+  window.localStorage.setItem('selectedWallet', wallet.name);
 };
 
 export const setBlockExplorerUrl = (url) => (dispatch) => {
@@ -201,19 +216,6 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
   } catch (error) {
     console.error(error);
   }
-};
-
-export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
-  let web3 = new Web3(wallet.provider);
-  dispatch({
-    type: SET_WALLET,
-    payload: wallet
-  });
-  dispatch({
-    type: SET_WEB3,
-    payload: web3
-  });
-  window.localStorage.setItem('selectedWallet', wallet.name);
 };
 
 export const setCurrentBlock = (blockNumber) => (dispatch) => {

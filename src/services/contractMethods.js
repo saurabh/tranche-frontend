@@ -1,17 +1,10 @@
 import moment from 'moment';
-import {
-  JLoanSetup,
-  JLoanHelperSetup,
-  JPriceOracleSetup,
-  JCompoundSetup,
-  StakingSetup,
-  YieldFarmSetup,
-  ERC20Setup
-} from 'utils/contractConstructor';
+import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals, ETHorMaticCheck } from 'config';
 import { setTxLoading } from 'redux/actions/ethereum';
+import { networkId } from 'config';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -173,7 +166,7 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   try {
     const state = store.getState();
-    const { web3, address, notify } = state.ethereum;
+    const { web3, address, notify, network } = state.ethereum;
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
@@ -184,15 +177,20 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          }
+        })
+        .on('confirmation', (count) => {
+          count === 1 && store.dispatch(setTxLoading(false));
         });
     } else {
       await JCompound.methods
@@ -200,15 +198,20 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          }
+        })
+        .on('confirmation', (count) => {
+          count === 1 && store.dispatch(setTxLoading(false));
         });
     }
   } catch (error) {
@@ -219,7 +222,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
 export const sellTrancheTokens = async (contractAddress, trancheId, trancheType) => {
   try {
     const state = store.getState();
-    const { web3, address, notify } = state.ethereum;
+    const { web3, address, notify, network } = state.ethereum;
     let { withdrawAmount } = state.form.tranche.values;
     withdrawAmount = toWei(withdrawAmount);
     const JCompound = JCompoundSetup(web3, contractAddress);
@@ -229,15 +232,20 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          }
+        })
+        .on('confirmation', (count) => {
+          count === 1 && store.dispatch(setTxLoading(false));
         });
     } else {
       await JCompound.methods
@@ -245,15 +253,20 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .send({ from: address })
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          }
+        })
+        .on('confirmation', (count) => {
+          count === 1 && store.dispatch(setTxLoading(false));
         });
     }
   } catch (error) {
