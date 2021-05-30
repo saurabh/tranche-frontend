@@ -85,17 +85,20 @@ let TableMoreRow = ({
   });
 
   useEffect(() => {
-    if (buyerCoinAddress === zeroAddress) {
-      setIsEth(true);
-      setDepositApproved(true);
-      setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
-      change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
-    } else {
-      setIsEth(false);
-      setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
-      setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
-      change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
-      change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+    if (trancheAllowance[contractAddress]) {
+      if (buyerCoinAddress === zeroAddress) {
+        setIsEth(true);
+        setDepositApproved(true);
+        setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+        change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+      } else {
+        console.log(trancheAllowance[contractAddress])
+        setIsEth(false);
+        setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
+        setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+        change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
+        change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
@@ -236,7 +239,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : false}>{i18n.t('tranche.trancheData.max')}</h2>
+                  <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -297,7 +300,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : false}>{i18n.t('tranche.trancheData.max')}</h2>
+                  <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -374,7 +377,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : false}>{i18n.t('tranche.trancheData.max')}</h2>
+                    <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
@@ -448,7 +451,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : false}>{i18n.t('tranche.trancheData.max')}</h2>
+                    <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
