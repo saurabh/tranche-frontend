@@ -36,10 +36,10 @@ const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { addre
   useEffect(() => {
     if (network === networkId) {
       ETHContracts.subscribe();
-      // MaticContracts.unsubscribe();
+      MaticContracts.unsubscribe();
     }
     if (network === maticNetworkId) {
-      // MaticContracts.subscribe();
+      MaticContracts.subscribe();
       ETHContracts.unsubscribe();
     }
   }, [network, address, path]);

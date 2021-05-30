@@ -9,8 +9,8 @@ import {
   apiUri,
   StakingAddresses,
   YieldAddresses,
-  JCompoundAddress
-  // JAaveAddress
+  JCompoundAddress,
+  JAaveAddress
 } from 'config/constants';
 import maticWeb3 from 'utils/maticWeb3';
 const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked } = apiUri;
@@ -144,7 +144,7 @@ export const MaticContracts = {
         address &&
         maticWeb3.webSocket.eth
           .subscribe('logs', {
-            address: JAave
+            address: JAaveAddress
           })
           .on('data', async (log) => {
             console.log(log);
