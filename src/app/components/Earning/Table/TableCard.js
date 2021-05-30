@@ -8,12 +8,7 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } 
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
-import {
-  addrShortener,
-  readyToTransact,
-  roundNumber,
-  safeMultiply
-} from 'utils';
+import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
 import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -103,11 +98,11 @@ const TableCard = ({
       : '';
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
-  cryptoType === ('ETH' || 'MATIC')
-    ? balance && balance !== -1 && fromWei(balance)
-    : searchArr(cryptoType)
-    ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
-    : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
+    cryptoType === 'ETH' || cryptoType === 'MATIC'
+      ? balance && balance !== -1 && fromWei(balance)
+      : searchArr(cryptoType)
+      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
   const onboard = initOnboard({
     address: setAddress,

@@ -92,7 +92,6 @@ let TableMoreRow = ({
         setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
         change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
       } else {
-        console.log(trancheAllowance[contractAddress])
         setIsEth(false);
         setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
         setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
