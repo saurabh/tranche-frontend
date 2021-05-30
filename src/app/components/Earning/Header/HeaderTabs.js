@@ -6,11 +6,17 @@ import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack }
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
-import { HowToLink } from '../../Stake/Table/styles/TableComponents';
-export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
+import {
+  HowToLink
+} from '../../Stake/Table/styles/TableComponents';
+import useAnalytics from 'services/analytics';
+
+export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const Tracker = useAnalytics("ExternalLinks");
+
   const { trancheMarket } = data;
 
   const openModal = () => {
@@ -23,16 +29,10 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   return (
     <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle}>
       <div>
-        <h2>{i18n.t('tranche.trancheData.TrancheMarkets')}</h2>
-        <HowToLink
-          href='https://docs.tranche.finance/tranchefinance/'
-          target='_blank'
-          rel='noopener noreferrer'
-          color={ModeThemes[theme].HowToText}
-          background={ModeThemes[theme].HowTo}
-          shadow={ModeThemes[theme].HowToShadow}
-          border={ModeThemes[theme].HowToBorder}
-        >
+        <h2>
+        {i18n.t('tranche.trancheData.TrancheMarkets')}
+        </h2>
+        <HowToLink href="https://docs.tranche.finance/tranchefinance/" onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>

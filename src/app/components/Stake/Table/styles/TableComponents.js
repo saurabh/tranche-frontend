@@ -1664,7 +1664,7 @@ const TableMoreTitleWrapper = styled.div`
 `
 const TableMobileContent = styled.div`
   width: 83%;
-  height: 92px;
+  height: 105px;
   padding: 16px 12px;
   display: flex;
   flex-direction: column;
