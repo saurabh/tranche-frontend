@@ -143,28 +143,9 @@ export const pairData = [
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
   }
-  // {
-  //   key: 'SLICE',
-  //   text: 'SLICE',
-  //   value: 1,
-  //   collateral: 'SLICE',
-  //   img: SLICEicon,
-  //   colIcon: SLICEicon
-  //   // collateralTokenSetup: SLICESetup,
-  //   // lendTokenSetup: SLICESetup
-  // }
-  // {
-  //   key: 'USDC',
-  //   text: 'USDC',
-  //   value: 1,
-  //   collateral: 'SLICE',
-  //   img: USDCicon,
-  //   colIcon: SLICEicon,
-  //   collateralTokenSetup: SLICESetup,
-  //   lendTokenSetup: USDCSetup
-  // }
 ];
 
+export const ETHorMaticCheck = ['ETH', 'MATIC'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 export const apiUri = {

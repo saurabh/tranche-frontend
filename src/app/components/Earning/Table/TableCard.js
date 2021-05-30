@@ -10,7 +10,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 import { ModeThemes } from 'config/constants';
@@ -87,12 +87,21 @@ const TableCard = ({
   const [isApproveLoading, setApproveLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
-  const Tracker = useAnalytics("ButtonClicks");
+  const apyImage =
+    apyStatus && apyStatus === 'fixed'
+      ? theme === 'light'
+        ? LockLight
+        : Lock
+      : apyStatus === 'increase'
+      ? Up
+      : apyStatus === 'decrease'
+      ? Down
+      : '';
+  const Tracker = useAnalytics('ButtonClicks');
 
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
-    cryptoType === 'ETH' || cryptoType === 'MATIC'
+    ETHorMaticCheck.indexOf(cryptoType) !== -1
       ? balance && balance !== -1 && fromWei(balance)
       : searchArr(cryptoType)
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
@@ -146,7 +155,7 @@ const TableCard = ({
       const ready = await readyToTransact(wallet, onboard);
       if (!ready) return;
       buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
-      buy ? Tracker("Deposit", "User address: " + address) : Tracker("Withdraw", "User address: " + address) ;
+      buy ? Tracker('Deposit', 'User address: ' + address) : Tracker('Withdraw', 'User address: ' + address);
     } catch (error) {
       console.error(error);
     }

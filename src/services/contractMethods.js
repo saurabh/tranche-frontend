@@ -12,6 +12,7 @@ import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals } from 'config';
 import { setTxLoading } from 'redux/actions/ethereum';
+import { ETHorMaticCheck } from 'config';
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -177,7 +178,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
-    let depositAmountInEth = cryptoType === 'ETH' ? depositAmount : 0;
+    let depositAmountInEth = ETHorMaticCheck(cryptoType) !== -1 ? depositAmount : 0;
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
