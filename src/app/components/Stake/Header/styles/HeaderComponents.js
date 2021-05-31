@@ -49,7 +49,7 @@ const HeaderTitle = styled.div`
     align-items: center;
     color: #FFFFFF;
     @media (max-width: 767px){
-      font-size: 20px;
+      font-size: 15px;
     }
   }
 `;

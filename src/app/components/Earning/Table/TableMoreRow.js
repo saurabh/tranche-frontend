@@ -65,13 +65,13 @@ let TableMoreRow = ({
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [TooltipToggle, setTooltipToggle] = useState('');
 
   let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
   const updateMedia = () => {
-    setDesktop(window.innerWidth > 1200);
+    setDesktop(window.innerWidth > 992);
   };
 
   const tooltipToggle = (val) => {

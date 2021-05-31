@@ -553,7 +553,7 @@ const TableContentCardWrapperMobile = styled.div`
   border-radius: 5px;
   margin: 12px 0;
   ${({ tranche }) => tranche && `
-    min-height: 110px;
+    min-height: 120px;
     height: auto;
   `}
 `
@@ -1944,6 +1944,11 @@ const HowToLink = styled.a`
   :hover{
     color: ${props => props.color}; 
     filter: brightness(1.3);
+  }
+  
+  @media (max-width: 992px){
+    padding: 6px 20px;
+    font-size: 8px;
   }
 
 `

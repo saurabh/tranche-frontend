@@ -48,7 +48,7 @@ const HeaderTitle = styled.div`
     line-height: 27px;
     color: ${props => props.color};    
     @media (max-width: 767px){
-      font-size: 20px;
+      font-size: 15px;
     }
   }
 `;
@@ -594,8 +594,8 @@ const MarketsTabsWrapper = styled.div`
     font-size: 24px;
     line-height: 29px;
     color: ${props => props.color};
-    @media (max-width: 992px) {
-      font-size: 20px;
+    @media (max-width: 767px){
+      font-size: 15px;
     }
   }
 `
