@@ -316,11 +316,11 @@ const TableCard = ({
                   <FirstColTitle color={ModeThemes[theme].tableText}>
                     <h2>{type && type}</h2>
                     <StakeBtns>
-                      <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
-                        +
-                      </StakeBtn>
                       <StakeBtn background='#6E41CF' onClick={() => openModal(false)}>
                         -
+                      </StakeBtn>
+                      <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
+                        +
                       </StakeBtn>
                     </StakeBtns>
                   </FirstColTitle>

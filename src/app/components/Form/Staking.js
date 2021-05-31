@@ -25,6 +25,9 @@ import {
   SelectedStakingImg,
   SelectedStakingContent
 } from './styles/FormComponents';
+import {
+  LoanDetailsMobile
+} from '../Modals/styles/ModalsComponents';
 import i18n from '../locale/i18n';
 import { ModeThemes } from 'config';
 
@@ -55,6 +58,9 @@ let StakingForm = ({
   setHasAllowance,
   approveLoading,
   path,
+  tokenType,
+  totalStaked,
+  stakedShare,
   // Functions
   stakingApproveContract,
   adjustStake,
@@ -111,7 +117,7 @@ let StakingForm = ({
   return (
     <ModalAdjustForm stake>
       <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
-        <FormInputsWrapper trade={true}>
+        <FormInputsWrapper trade={true} stake>
           <SelectedStakingWrapper ModalText={ModeThemes[theme].ModalText}>
             <h2>{i18n.t('stake.modal.selectedStaking')}</h2>
             <SelectedStaking color={ModeThemes[theme].SelectedStaking}>
@@ -222,6 +228,19 @@ let StakingForm = ({
             </ModalFormButton>
           </BtnLoanModal>
         </ModalFormSubmit>
+        <LoanDetailsMobile  ModalText={ModeThemes[theme].ModalText}>
+          <h2>
+            {tokenType === "SLICE" ? i18n.t('stake.modal.userSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.userSLICELP') : ""} — {roundNumber(userStaked)}
+            <span></span>
+          </h2>
+          <h2>
+            {tokenType === "SLICE" ? i18n.t('stake.modal.totalSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.totalSLICELP') : ""} — {roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}
+            <span></span>
+          </h2>
+          <h2>
+            {i18n.t('stake.modal.yourShare')} — {roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0}%
+          </h2>
+        </LoanDetailsMobile>
       </Form>
     </ModalAdjustForm>
   );

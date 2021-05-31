@@ -74,8 +74,8 @@ function Navbar({ path, theme }) {
             {/* <h2>0xB51F1234DA3124124468</h2> */}
             <div>
               <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer">DOCUMENTATION</a>
-              <a href="/privacy">PRIVACY</a>
-              <a href="/terms">TERMS</a>
+              <a href="/privacy"  target="_blank" rel="noopener noreferrer">PRIVACY</a>
+              <a href="/terms"  target="_blank" rel="noopener noreferrer">TERMS</a>
               <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">SUPPORT</a>
             </div>
           </NavBarMobileContent>
@@ -86,7 +86,7 @@ function Navbar({ path, theme }) {
             <button onClick={() => setRatesToggle(false)}><img src={BackArrow} alt="back" /></button>
             <RatesWrapper>
               <RatesBoxWrapper
-                className='ratesBoxWrapper'
+                className='ratesBoxWrapper' 
                 mobile
               >
                 {/* <RatesRowWrapper border={false}>

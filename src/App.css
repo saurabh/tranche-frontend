@@ -1172,7 +1172,7 @@ table, th, td {
 
   .table-card-more{
     /*padding: 30px 12px 30px 12px;*/
-    padding: 0 39px 0 47px;
+    /* padding: 0 39px 0 47px; */
   }
   .table-more-row-content{
     width: auto;
@@ -1230,7 +1230,7 @@ table, th, td {
     margin: 0 0 0 20px;
   }
   .ReactModal__Content--after-open{
-    transform: scale(1) translateY(50%) !important;
+    transform: scale(1) translateY(0) !important;
   }
   .footerWrapper{
     flex-direction: column;

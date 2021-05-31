@@ -17,7 +17,6 @@ import {
   LoanDetailsRow,
   LoanDetailsRowTitle,
   LoanDetailsRowValue,
-  LoanDetailsMobile,
   SliceNotFound,
   SliceNotFoundBtn,
   ModalUserActions,
@@ -171,8 +170,8 @@ const StakingModal = ({
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground}>
-            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}>
+          <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground} stake>
+            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText} stakeModal>
               <h2>{modalType ? i18n.t('stake.modal.increaseStake') : i18n.t('stake.modal.decreaseStake')}</h2>
               <button onClick={() => closeModal()}>
                 <img src={theme === "light" ? CloseModal : CloseModalWhite} alt='' />
@@ -190,6 +189,9 @@ const StakingModal = ({
               contractAddress={contractAddress}
               approveLoading={approveLoading}
               isLPToken={isLPToken}
+              tokenType={tokenType}
+              totalStaked={totalStaked}
+              stakedShare={stakedShare}
               // Functions
               stakingApproveContract={stakingApproveContract}
               adjustStake={adjustStake}
@@ -197,14 +199,6 @@ const StakingModal = ({
               path={path}
             />
           </ModalUserActions>
-          
-
-          <LoanDetailsMobile>
-            <h2>
-              {/* SLICE LOCKED — {totalStaked} */}
-              <span></span>
-            </h2>
-          </LoanDetailsMobile>
         </ModalActionsContent>
       </Modal>
     );
@@ -323,8 +317,63 @@ const StakingModal = ({
                       </ClaimModalRow>
                     ))}
                 </ClaimModalHalfContent>
+
+                <ClaimModalHalfContent mobile color={ModeThemes[theme].ModalText}>
+                  <ClaimModalRow head>
+                    <ClaimModalCol head>
+                      <h2>{i18n.t('stake.modal.pair')}</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol head>
+                      <h2>{i18n.t('stake.modal.totalLocked')}</h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        <span>
+                          {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
+                        </span>
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE-ETH LP</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        <span>
+                          {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
+                        </span>
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE-DAI LP</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        <span>
+                          {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
+                        </span>
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+                </ClaimModalHalfContent>
+
               </ClaimModalHalfContentWrapper>
             </ClaimModalHalfWrapper>
+            
           </ModalUserActions>
         </ModalActionsContent>
       </Modal>

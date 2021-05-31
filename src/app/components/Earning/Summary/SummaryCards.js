@@ -238,21 +238,21 @@ const SummaryCards = ({
               summaryModal={''}
               color='#2E65F3'
             />
+            <SummaryCard
+              title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
+              value={'Card'}
+              isLoading={false}
+              path={currentPath}
+              type={''}
+              details={''}
+              openModal={(bool = null, num = 3) => openModal(bool, num)}
+              closeModal={closeModal}
+              modalType={false}
+              summaryModal={''}
+              color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
+              stakeCard={true}
+            />
           </Carousel>
-          <SummaryCard
-            title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
-            value={'Card'}
-            isLoading={false}
-            path={currentPath}
-            type={''}
-            details={''}
-            openModal={(bool = null, num = 3) => openModal(bool, num)}
-            closeModal={closeModal}
-            modalType={false}
-            summaryModal={''}
-            color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
-            stakeCard={true}
-          />
         </SummaryCardsWrapper>
       )}
     </div>

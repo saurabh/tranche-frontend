@@ -42,8 +42,19 @@ ${({ stake }) => stake && `
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
+  @media (max-width: 633px){
+    display: none;
+  }
 `}
+${({ stakeModal }) => stakeModal && `
+    @media (max-width: 633px){
+      width: 100%;
+    }
+  `}
 ${({ stake, font, left }) => (stake && left) && `
   h2{
     color: #FFFFFF;
@@ -53,6 +64,9 @@ ${({ stake, font, left }) => (stake && left) && `
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
 `}
 ${({ claim, ModalHeader }) => claim && `
@@ -65,6 +79,9 @@ ${({ claim, ModalHeader }) => claim && `
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
 `}
 ${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
@@ -72,10 +89,16 @@ ${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
   h2{
     color: ${ModalHeader};
   }
+  @media (max-width: 633px){
+    width: 100%;
+  }
   button{
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
 `}
 
@@ -443,9 +466,15 @@ const ModalActionDetails = styled.div`
 
 const ModalUserActions = styled.div`
   width: 100%;
-  background: ${props => props.ModalBackground}
+  background: ${props => props.ModalBackground};
   ${({ form }) => form && `
     display: flex;
+  `}
+  ${({ stake }) => stake && `
+    @media (max-width: 633px){
+      height: 100vh;
+      overflow: hidden;
+    }
   `}
 
 `
@@ -595,7 +624,7 @@ const LoanDetailsMobile = styled.div`
     text-align: center;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #4F4F4F;
+    color: ${props => props.ModalText};
     max-width: 200px;
     margin: 7px auto;
     span{
@@ -776,9 +805,29 @@ const ClaimModalHalfContentWrapper = styled.div`
   min-height: 554px;
   height: 100%;
   padding: 40px;
+  @media (max-width: 992px){
+    padding: 0 40px 40px 40px;
+    margin: -90px 0 0 0;
+  }
+  
 `;
 const ClaimModalHalfContent = styled.div`
   margin: 100px 0;
+  ${({ mobile, color }) => mobile && `
+    display: none;
+    & > div{
+      border-bottom: 1px solid #F0F0F6;
+      div{
+        h2{
+          color: ${color} !important;
+        }
+      }
+    }
+    @media (max-width: 992px){
+      display: block;
+    }
+  `}
+  
 `;
 const ClaimModalRow = styled.div`
   display: flex;
