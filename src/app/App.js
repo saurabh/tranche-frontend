@@ -13,7 +13,7 @@ import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes }
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
-import Trade from 'app/pages/Trade';
+import Trade from 'app/pages/Earn';
 import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';

@@ -7,14 +7,12 @@ import SummaryCards from '../components/Earning/Summary/SummaryCards';
 import Table from '../components/Earning/Table/Table';
 import { PagesData, GoogleAnalyticsTrackingID } from 'config/constants';
 
-
-
-function Trade({ethereum: { address }}) {
+function Earn({ ethereum: { address } }) {
   useEffect(() => {
     ReactGA.initialize(GoogleAnalyticsTrackingID, { gaOptions: { userId: address } });
-  },[address])
+  }, [address]);
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname); 
+    ReactGA.pageview(window.location.pathname);
   });
   return (
     <Layout>
@@ -28,4 +26,4 @@ const mapStateToProps = (state) => ({
   ethereum: state.ethereum
 });
 
-export default connect(mapStateToProps, null)(withRouter(Trade));
+export default connect(mapStateToProps, null)(withRouter(Earn));
