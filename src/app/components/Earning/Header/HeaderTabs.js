@@ -51,7 +51,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => (trancheMarket !== 'aavePolygon' || true) && openModal()}
+          onClick={() => (trancheMarket !== 'aavePolygon') && openModal()}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}

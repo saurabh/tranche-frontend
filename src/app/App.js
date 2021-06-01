@@ -20,8 +20,8 @@ import NetworkDetector from './components/NetworkDetector';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
-const baseRouteUrl = '/:locale(zh|kr|en)?';
 
+const baseRouteUrl = '/:locale(zh|kr|en)?';
 const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { address, network }, checkServerStatus, theme }) => {
   const [showModal, setShowModal] = useState(true);
 

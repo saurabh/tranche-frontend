@@ -13,6 +13,8 @@ import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils
 import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
+import { useNotification } from "../../Notifications/NotificationProvider";
+
 import {
   TableContentCard,
   TableContentCardWrapper,
@@ -44,6 +46,7 @@ import {
   TableCardImgWrapper
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
+import { maticNetworkId } from 'config';
 // import i18n from 'app/components/locale/i18n';
 
 const TableCard = ({
@@ -86,6 +89,8 @@ const TableCard = ({
   // const [isLoading, setIsLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
+  const dispatch = useNotification();
+
   const apyImage =
     apyStatus && apyStatus === 'fixed'
       ? theme === 'light'
@@ -136,6 +141,14 @@ const TableCard = ({
             emitter.on('txCancel', () => setTxLoading(false));
             emitter.on('txFailed', () => setTxLoading(false));
           }
+          else if(network === maticNetworkId){
+            dispatch({
+              action: "ADD_NOTIFICATION",
+              type: "PENDING",
+              message: txMessage(hash),
+              title: "pending transaction"
+            })
+          }
         })
         .on('confirmation', (count) => {
           if (count === 1) {
@@ -143,6 +156,14 @@ const TableCard = ({
             toggleApproval(tokenAddress, contractAddress, !isApproved);
             setTxLoading(false);
             destroy('tranche');
+            if(network === maticNetworkId){
+              dispatch({
+                action: "ADD_NOTIFICATION",
+                type: "SUCCESS",
+                message: "Your transaction has succeeded",
+                title: "successful transaction"
+              })
+            }
           }
         });
     } catch (error) {
