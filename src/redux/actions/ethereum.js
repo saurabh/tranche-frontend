@@ -46,7 +46,7 @@ export const setAddress = (address) => (dispatch) => {
 export const setNetwork = (network) => async (dispatch) => {
   const state = store.getState();
   const { path, ethereum } = state;
-  const { address, notify } = ethereum;
+  const { address } = ethereum;
   dispatch({
     type: SET_NETWORK,
     payload: network
