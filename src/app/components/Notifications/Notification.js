@@ -21,10 +21,7 @@ const Notification = props => {
     handleResetTimer();
     setExit(true);
     setTimeout(() => {
-      props.dispatch({
-        type: "REMOVE_NOTIFICATION",
-        id: props.id
-      })
+      props.removeNotification();
     }, 400)
   };
   useEffect(() => {
@@ -37,7 +34,7 @@ const Notification = props => {
       }, 3000)
     }
     // eslint-disable-next-line
-  }, []);
+  }, [props.type]);
 
   return (
     <div

@@ -13,7 +13,7 @@ import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils
 import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
-import { useNotification } from "../../Notifications/NotificationProvider";
+import { addNotification } from "redux/actions/NotificationToggle";
 
 import {
   TableContentCard,
@@ -77,6 +77,7 @@ const TableCard = ({
   setAddress,
   setNetwork,
   setBalance,
+  addNotification,
   setWalletAndWeb3,
   setTokenBalances,
   ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
@@ -90,7 +91,7 @@ const TableCard = ({
   // const [isLoading, setIsLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
-  const dispatch = useNotification();
+  // const dispatch = useNotification();
 
   const apyImage =
     apyStatus && apyStatus === 'fixed'
@@ -143,8 +144,7 @@ const TableCard = ({
             emitter.on('txFailed', () => setTxLoading(false));
           }
           else if(network === maticNetworkId){
-            dispatch({
-              action: "ADD_NOTIFICATION",
+            addNotification({
               type: "PENDING",
               message: txMessage(hash),
               title: "pending transaction"
@@ -158,8 +158,7 @@ const TableCard = ({
             setTxLoading(false);
             destroy('tranche');
             if(network === maticNetworkId){
-              dispatch({
-                action: "ADD_NOTIFICATION",
+              addNotification({
                 type: "SUCCESS",
                 message: "Your transaction has succeeded",
                 title: "successful transaction"
@@ -485,6 +484,7 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  addNotification,
   setTokenBalances,
   checkServer,
   trancheCardToggle,

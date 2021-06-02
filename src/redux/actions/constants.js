@@ -54,3 +54,8 @@ export const CHANGE_PATH = 'CHANGE_PATH';
 
 //theme
 export const CHANGE_THEME = 'CHANGE_THEME';
+
+//Notify
+export const ADD_NOTIFICATION  = 'ADD_NOTIFICATION';
+export const REMOVE_NOTIFICATION  = 'REMOVE_NOTIFICATION';
+ 

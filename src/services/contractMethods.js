@@ -4,8 +4,7 @@ import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals, ETHorMaticCheck, networkId, maticNetworkId  } from 'config';
 import { setTxLoading } from 'redux/actions/ethereum';
-import { useNotification } from "app/components/Notifications/NotificationProvider";
-
+import { addNotification } from 'redux/actions/NotificationToggle';
 const state = store.getState();
 const { web3 } = state.ethereum;
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
@@ -171,7 +170,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
-    // const dispatch = useNotification();
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
@@ -189,24 +187,22 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           } else if(network === maticNetworkId) {
-            // dispatch({
-            //   action: "ADD_NOTIFICATION",
-            //   type: "PENDING",
-            //   message: txMessage(hash),
-            //   title: "pending transaction"
-            // })
+            store.dispatch(addNotification({
+              type: "PENDING",
+              message: txMessage(hash),
+              title: "pending transaction"
+            }))
           }
         })
         .on('confirmation', (count) => {
           count === 1 && store.dispatch(setTxLoading(false));
-          // if(network === maticNetworkId){
-          //   dispatch({
-          //     action: "ADD_NOTIFICATION",
-          //     type: "SUCCESS",
-          //     message: "Your transaction has succeeded",
-          //     title: "successful transaction"
-          //   })
-          // }
+          if(network === maticNetworkId){
+            store.dispatch(addNotification({
+              type: "SUCCESS",
+              message: "Your transaction has succeeded",
+              title: "successful transaction"
+            }))
+          }
         });
     } else {
       await JCompound.methods
@@ -225,24 +221,22 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           } else if(network === maticNetworkId) {
-            // dispatch({
-            //   action: "ADD_NOTIFICATION",
-            //   type: "PENDING",
-            //   message: txMessage(hash),
-            //   title: "pending transaction"
-            // })
+            store.dispatch(addNotification({
+              type: "PENDING",
+              message: txMessage(hash),
+              title: "pending transaction"
+            }))
           }
         })
         .on('confirmation', (count) => {
           count === 1 && store.dispatch(setTxLoading(false));
-          // if(network === maticNetworkId){
-          //   dispatch({
-          //     action: "ADD_NOTIFICATION",
-          //     type: "SUCCESS",
-          //     message: "Your transaction has succeeded",
-          //     title: "successful transaction"
-          //   })
-          // }
+          if(network === maticNetworkId){
+            store.dispatch(addNotification({
+              type: "SUCCESS",
+              message: "Your transaction has succeeded",
+              title: "successful transaction"
+            }))
+          }
         });
     }
   } catch (error) {

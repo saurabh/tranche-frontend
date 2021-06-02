@@ -17,6 +17,7 @@ import Trade from 'app/pages/Earn';
 import Stake from 'app/pages/Stake';
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
+import NotificationProvider from './components/Notifications/NotificationProvider';
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
@@ -53,6 +54,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { addre
       <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
         <Banner />
+        <NotificationProvider />
         <Router>
           <Switch location={window.location}>
             <Redirect exact from={baseRouteUrl + '/'} to='/tranche' />
