@@ -2,9 +2,9 @@ import moment from 'moment';
 import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
-import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals, ETHorMaticCheck } from 'config';
+import { pairData, LoanContractAddress, factoryFees, epochDuration, txMessage, tokenDecimals, ETHorMaticCheck, networkId, maticNetworkId  } from 'config';
 import { setTxLoading } from 'redux/actions/ethereum';
-import { networkId } from 'config';
+import { useNotification } from "app/components/Notifications/NotificationProvider";
 
 const state = store.getState();
 const { web3 } = state.ethereum;
@@ -171,6 +171,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
+    // const dispatch = useNotification();
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
@@ -187,10 +188,25 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          } else if(network === maticNetworkId) {
+            // dispatch({
+            //   action: "ADD_NOTIFICATION",
+            //   type: "PENDING",
+            //   message: txMessage(hash),
+            //   title: "pending transaction"
+            // })
           }
         })
         .on('confirmation', (count) => {
           count === 1 && store.dispatch(setTxLoading(false));
+          // if(network === maticNetworkId){
+          //   dispatch({
+          //     action: "ADD_NOTIFICATION",
+          //     type: "SUCCESS",
+          //     message: "Your transaction has succeeded",
+          //     title: "successful transaction"
+          //   })
+          // }
         });
     } else {
       await JCompound.methods
@@ -208,10 +224,25 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          } else if(network === maticNetworkId) {
+            // dispatch({
+            //   action: "ADD_NOTIFICATION",
+            //   type: "PENDING",
+            //   message: txMessage(hash),
+            //   title: "pending transaction"
+            // })
           }
         })
         .on('confirmation', (count) => {
           count === 1 && store.dispatch(setTxLoading(false));
+          // if(network === maticNetworkId){
+          //   dispatch({
+          //     action: "ADD_NOTIFICATION",
+          //     type: "SUCCESS",
+          //     message: "Your transaction has succeeded",
+          //     title: "successful transaction"
+          //   })
+          // }
         });
     }
   } catch (error) {
@@ -226,6 +257,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
     let { withdrawAmount } = state.form.tranche.values;
     withdrawAmount = toWei(withdrawAmount);
     const JCompound = JCompoundSetup(web3, contractAddress);
+    // const dispatch = useNotification();
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .redeemTrancheAToken(trancheId, withdrawAmount)
@@ -242,10 +274,25 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          } else if(network === maticNetworkId) {
+            // dispatch({
+            //   action: "ADD_NOTIFICATION",
+            //   type: "PENDING",
+            //   message: txMessage(hash),
+            //   title: "pending transaction"
+            // })
           }
         })
         .on('confirmation', (count) => {
           count === 1 && store.dispatch(setTxLoading(false));
+          // if(network === maticNetworkId){
+          //   dispatch({
+          //     action: "ADD_NOTIFICATION",
+          //     type: "SUCCESS",
+          //     message: "Your transaction has succeeded",
+          //     title: "successful transaction"
+          //   })
+          // }
         });
     } else {
       await JCompound.methods
@@ -263,10 +310,25 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          } else if(network === maticNetworkId) {
+            // dispatch({
+            //   action: "ADD_NOTIFICATION",
+            //   type: "PENDING",
+            //   message: txMessage(hash),
+            //   title: "pending transaction"
+            // })
           }
         })
         .on('confirmation', (count) => {
           count === 1 && store.dispatch(setTxLoading(false));
+          // if(network === maticNetworkId){
+          //   dispatch({
+          //     action: "ADD_NOTIFICATION",
+          //     type: "SUCCESS",
+          //     message: "Your transaction has succeeded",
+          //     title: "successful transaction"
+          //   })
+          // }
         });
     }
   } catch (error) {

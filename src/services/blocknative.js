@@ -42,7 +42,8 @@ export function initNotify() {
   if (!notify) {
     notify = Notify({
       dappId,
-      networkId
+      networkId,
+      darkMode: true
     });
   }
   return notify;

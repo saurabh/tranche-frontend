@@ -4,7 +4,7 @@ import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
 import useAnalytics from 'services/analytics';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
@@ -78,6 +78,7 @@ const TableCard = ({
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  setTokenBalances,
   ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
   toggleApproval,
   setTxLoading,
@@ -191,7 +192,7 @@ const TableCard = ({
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      // setIsLoading(true);
+      address && setTokenBalances(address)
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
@@ -466,6 +467,7 @@ TableCard.propTypes = {
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
+  setTokenBalances: PropTypes.func.isRequired,
   trancheCardToggle: PropTypes.func.isRequired,
   toggleApproval: PropTypes.func.isRequired,
   setTxLoading: PropTypes.func.isRequired
@@ -483,6 +485,7 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  setTokenBalances,
   checkServer,
   trancheCardToggle,
   setTxLoading,

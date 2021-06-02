@@ -4,6 +4,7 @@ import { web3 } from 'utils/getWeb3';
 // import maticWeb3 from 'utils/maticWeb3';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
+import { setTokenBalances } from 'redux/actions/ethereum';
 import {
   serverUrl,
   apiUri,
@@ -27,7 +28,6 @@ export const ETHContracts = {
       const { path, ethereum, data } = state;
       const { address } = ethereum;
       const { skip, limit, filter } = data;
-
       JCompound =
         path === 'tranche' &&
         address &&
@@ -47,7 +47,7 @@ export const ETHContracts = {
                     limit,
                     filter: {
                       address: address ? address : undefined,
-                      type: filter //ETH/JNT keep these in constant file
+                      type: 'ethereum'
                     }
                   },
                   tranchesList
@@ -66,6 +66,7 @@ export const ETHContracts = {
               };
               getSliceStats();
               getTvl();
+              store.dispatch(setTokenBalances(address));
             }
           });
       Staking =
@@ -84,7 +85,7 @@ export const ETHContracts = {
                   limit,
                   filter: {
                     address: address ? address : undefined,
-                    type: filter //ETH/JNT keep these in constant file
+                    type: filter
                   }
                 },
                 stakingList
@@ -93,6 +94,7 @@ export const ETHContracts = {
             const res = await axios(`${serverUrl + stakingSummary + address}`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));
+            store.dispatch(setTokenBalances(address));
           });
       YieldFarm =
         path === 'stake' &&
@@ -106,6 +108,7 @@ export const ETHContracts = {
             const res = await axios(`${serverUrl + stakingSummary + address}`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));
+            store.dispatch(setTokenBalances(address));
           });
     } catch (error) {
       console.error(error);
@@ -114,8 +117,8 @@ export const ETHContracts = {
   unsubscribe: () => {
     try {
       JCompound &&
-        JCompound.unsubscribe(function (error, success) {
-          if (success) console.log('Successfully unsubscribed!');
+        JCompound.unsubscribe((error) => {
+          if (error) console.error(error);
         });
       Staking &&
         Staking.unsubscribe((error) => {
@@ -137,7 +140,7 @@ export const MaticContracts = {
       const state = store.getState();
       const { path, ethereum, data } = state;
       const { address } = ethereum;
-      const { skip, limit, filter } = data;
+      const { skip, limit } = data;
 
       JAave =
         path === 'tranche' &&
@@ -158,7 +161,7 @@ export const MaticContracts = {
                     limit,
                     filter: {
                       address: address ? address : undefined,
-                      type: filter //ETH/JNT keep these in constant file
+                      type: 'polygon'
                     }
                   },
                   tranchesList
@@ -177,6 +180,7 @@ export const MaticContracts = {
               };
               getSliceStats();
               getTvl();
+              store.dispatch(setTokenBalances(address));
             }
           });
     } catch (error) {
@@ -186,8 +190,8 @@ export const MaticContracts = {
   unsubscribe: () => {
     try {
       JAave &&
-        JAave.unsubscribe(function (error, success) {
-          if (success) console.log('Successfully unsubscribed!');
+        JAave.unsubscribe((error) => {
+          if (error) console.error(error);
         });
     } catch (error) {
       console.error(error);
