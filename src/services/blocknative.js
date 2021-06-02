@@ -1,8 +1,7 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
 import store from 'redux/store';
-import { setTxLoading } from 'redux/actions/ethereum';
-import { networkId, alchemyHttpUrl as rpcUrl, infuraKey, blocknativeKey as dappId, txMessage } from 'config';
+import { networkId, alchemyHttpUrl as rpcUrl, infuraKey, blocknativeKey as dappId } from 'config';
 
 let onboard = undefined;
 let notify = undefined;
@@ -48,35 +47,4 @@ export function initNotify() {
     });
   }
   return notify;
-}
-
-export function notifyEmitter(hash) {
-  try {
-    const state = store.getState();
-    const { notify, network } = state.ethereum;
-    if (network === networkId) {
-      const { emitter } = notify.hash(hash);
-      emitter.on('txRequest', console.log);
-      emitter.on('txRepeat', console.log);
-      emitter.on('txAwaitingApproval', console.log);
-      emitter.on('txConfirmReminder', console.log);
-      emitter.on('txSendFail', console.log);
-      emitter.on('txError', console.log);
-      emitter.on('txUnderPriced', console.log);
-      emitter.on('txSent', console.log);
-      emitter.on('txPool', console.log);
-      emitter.on('txSpeedUp', console.log);
-      emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-      emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-      emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
-      emitter.on('txPool', (transaction) => {
-        return {
-          message: txMessage(transaction.hash)
-        };
-      });
-      // emitter.on('txRequest', store.dispatch(setTxLoading(true)))
-    }
-  } catch (error) {
-    console.error(error);
-  }
 }

@@ -13,15 +13,13 @@ import {
   TrancheBuyerCoinAddresses,
   JAaveAddress,
   AaveTrancheTokens,
-  PolygonBuyerCoinAddresses,
-  // txMessage
+  PolygonBuyerCoinAddresses
 } from 'config';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
-  // SET_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK,
@@ -54,21 +52,6 @@ export const setNetwork = (network) => async (dispatch) => {
   window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
 
   if (network === networkId) {
-    // let localAddress = window.localStorage.getItem('address');
-    // if (localAddress) {
-    //   const { emitter } = notify.account(localAddress);
-    //   emitter.on('txSent', console.log);
-    //   emitter.on('txSpeedUp', console.log);
-    //   emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-    //   emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-    //   emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
-    //   emitter.on('txPool', (transaction) => {
-    //     return {
-    //       message: txMessage(transaction.hash)
-    //     };
-    //   });
-    // }
-    // address && notify.account(address);
     store.dispatch(trancheMarketsToggle('compound'));
     if (path === 'stake' && address) {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
@@ -77,7 +60,6 @@ export const setNetwork = (network) => async (dispatch) => {
     }
   }
   if (network === maticNetworkId) {
-    // address && notify.unsubscribe(address)
     store.dispatch(trancheMarketsToggle('aavePolygon'));
   }
 };

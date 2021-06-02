@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
 import store from '../redux/store';
-import { notifyEmitter } from 'services/blocknative';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -156,6 +155,8 @@ export const getShareholderShares = async (loanId, address) => {
     console.error(error);
   }
 };
+
+// Tranches
 
 export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userAddress) => {
   try {
@@ -483,13 +484,23 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
 export const massHarvest = async (yieldfarmAddress) => {
   try {
     const state = store.getState();
-    const { web3, address } = state.ethereum;
+    const { web3, address, network, notify } = state.ethereum;
     const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
     await YieldFarm.methods
       .massHarvest()
       .send({ from: address })
       .on('transactionHash', (hash) => {
-        notifyEmitter(hash);
+        if (network === networkId) {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+        }
       });
   } catch (error) {
     console.error(error);
