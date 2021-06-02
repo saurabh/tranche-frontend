@@ -209,15 +209,16 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
           }
         })
         .on('confirmation', (count) => {
-          count === 1 && store.dispatch(setTxLoading(false));
-          if (network === maticNetworkId) {
-            store.dispatch(
-              addNotification({
-                type: 'SUCCESS',
-                message: 'Your transaction has succeeded',
-                title: 'successful transaction'
-              })
-            );
+          if (count === 1) {
+            store.dispatch(setTxLoading(false));
+            network === maticNetworkId &&
+              store.dispatch(
+                addNotification({
+                  type: 'SUCCESS',
+                  message: 'Your transaction has succeeded',
+                  title: 'successful transaction'
+                })
+              );
           }
         });
     } else {
@@ -247,15 +248,16 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
           }
         })
         .on('confirmation', (count) => {
-          count === 1 && store.dispatch(setTxLoading(false));
-          if (network === maticNetworkId) {
-            store.dispatch(
-              addNotification({
-                type: 'SUCCESS',
-                message: 'Your transaction has succeeded',
-                title: 'successful transaction'
-              })
-            );
+          if (count === 1) {
+            store.dispatch(setTxLoading(false));
+            network === maticNetworkId &&
+              store.dispatch(
+                addNotification({
+                  type: 'SUCCESS',
+                  message: 'Your transaction has succeeded',
+                  title: 'successful transaction'
+                })
+              );
           }
         });
     }
@@ -298,15 +300,16 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
           }
         })
         .on('confirmation', (count) => {
-          count === 1 && store.dispatch(setTxLoading(false));
-          if (network === maticNetworkId) {
-            store.dispatch(
-              addNotification({
-                type: 'SUCCESS',
-                message: 'Your transaction has succeeded',
-                title: 'successful transaction'
-              })
-            );
+          if (count === 1) {
+            store.dispatch(setTxLoading(false));
+            network === maticNetworkId &&
+              store.dispatch(
+                addNotification({
+                  type: 'SUCCESS',
+                  message: 'Your transaction has succeeded',
+                  title: 'successful transaction'
+                })
+              );
           }
         });
     } else {
@@ -336,15 +339,16 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
           }
         })
         .on('confirmation', (count) => {
-          count === 1 && store.dispatch(setTxLoading(false));
-          if (network === maticNetworkId) {
-            store.dispatch(
-              addNotification({
-                type: 'SUCCESS',
-                message: 'Your transaction has succeeded',
-                title: 'successful transaction'
-              })
-            );
+          if (count === 1) {
+            store.dispatch(setTxLoading(false));
+            network === maticNetworkId &&
+              store.dispatch(
+                addNotification({
+                  type: 'SUCCESS',
+                  message: 'Your transaction has succeeded',
+                  title: 'successful transaction'
+                })
+              );
           }
         });
     }

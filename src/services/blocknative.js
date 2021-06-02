@@ -55,7 +55,6 @@ export function notifyEmitter(hash) {
     const state = store.getState();
     const { notify, network } = state.ethereum;
     if (network === networkId) {
-      console.log('network check');
       const { emitter } = notify.hash(hash);
       emitter.on('txRequest', console.log);
       emitter.on('txRepeat', console.log);
