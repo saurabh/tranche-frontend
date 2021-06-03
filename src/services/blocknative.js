@@ -1,21 +1,21 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
-import {
-  networkId,
-  alchemyHttpUrl as rpcUrl,
-  infuraKey,
-  blocknativeKey as dappId
-} from 'config/constants';
+import store from 'redux/store';
+import { networkId, alchemyHttpUrl as rpcUrl, infuraKey, blocknativeKey as dappId } from 'config';
 
 let onboard = undefined;
 let notify = undefined;
 
 export function initOnboard(subscriptions) {
   if (!onboard) {
+    const state = store.getState();
+    const { theme } = state;
     onboard = Onboard({
       subscriptions,
       hideBranding: true,
       networkId,
+      networkName: 'Polygon',
+      darkMode: theme === 'dark' ? true : theme === 'light' ? false : null,
       walletSelect: {
         wallets: [
           { walletName: 'metamask', preferred: true },
@@ -23,9 +23,7 @@ export function initOnboard(subscriptions) {
           { walletName: 'coinbase', preferred: true },
           { walletName: 'status', preferred: true },
           { walletName: 'trust', rpcUrl, preferred: true },
-          { walletName: 'ledger', rpcUrl, preferred: true },
-          { walletName: 'torus', preferred: true },
-          { walletName: 'authereum', preferred: true }
+          { walletName: 'torus', preferred: true }
         ]
       },
       walletCheck: [
@@ -44,7 +42,8 @@ export function initNotify() {
   if (!notify) {
     notify = Notify({
       dappId,
-      networkId
+      networkId,
+      darkMode: true
     });
   }
   return notify;

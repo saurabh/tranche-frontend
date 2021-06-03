@@ -1,145 +1,91 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
-import { apiUri, pairData } from 'config/constants';
-import { useOuterClick } from 'services/useOuterClick';
-import { getRequest } from 'services/axios';
-import { roundNumber, safeDivide } from 'utils/helperFunctions';
-import { ETH, DaiLogo } from 'assets';
-import { NavLink } from 'react-router-dom';
-import i18n from "../../locale/i18n";
-
+import i18n from '../../locale/i18n';
+import { trancheMarketsToggle } from 'redux/actions/tableData';
+import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack } from 'assets';
+import TrancheModal from '../../Modals/TrancheModal';
+import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
+import { ModeThemes } from 'config';
 import {
-  HeaderTabsWrapper,
-  HeaderTabsBtnsLinks,
-  RatesWrapper,
-  RatesBoxWrapper,
-  RatesRowWrapper,
-  RatesRowContent,
-  RatesValue,
-  RatesValueImg,
-  RatesValueText,
-  RatesRowDash,
-} from './styles/HeaderComponents';
+  HowToLink
+} from '../../Stake/Table/styles/TableComponents';
+import useAnalytics from 'services/analytics';
+
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-const HeaderTabs = ({ path }) => {
-  // const [pair1Value, setPair1Value] = useState(0);
-  const [ratesVisability, setRatesVisability] = useState(false);
-  const [pair0Value, setPair0Value] = useState(0);
-  // const [pair1Value, setPair1Value] = useState(0);
-  
-  const innerRef = useOuterClick((e) => {
-    setRatesVisability(false);
-  });
-  const getPriceFeed = async () => {
-    const { priceFeed: priceUrl } = apiUri;
-    setRatesVisability(!ratesVisability);
-    try {
-      const { data: result } = await getRequest(priceUrl, {}, null);
-      result.result.forEach(pair => {
-        let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
-        price = roundNumber(price);
-        if (pair.pairId === pairData[0].value) setPair0Value(price)
-        // if (pair.pairId === pairData[1].value) setPair1Value(price)
-      })
-    } catch (error) {
-      console.error(error);
-    }
+const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const Tracker = useAnalytics("ExternalLinks");
+
+  const { trancheMarket } = data;
+
+  const openModal = () => {
+    setModalIsOpen(true);
   };
-  
-  
-  
+  const closeModal = () => {
+    setModalIsOpen(false);
+    // onClick={() => trancheMarketsToggle("aavePolygon")}>
+  };
   return (
-    <HeaderTabsWrapper path={path} desktop>
-      <HeaderTabsBtnsLinks>
-          <NavLink
-            to={baseUrl + '/stake'}
-            activeStyle={{
-              opacity: 1
-            }}
-            exact
-          >
-            {i18n.t('stake.tabs.dashboard')}
-          </NavLink>
-          <div ref={innerRef}>
-            <button onClick={() => getPriceFeed()}>
-            {i18n.t('stake.tabs.rates')}
-            </button>
-            <RatesWrapper>
-              <RatesBoxWrapper
-                className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}
-              >
-              <RatesRowWrapper border={false}>
-                <RatesRowContent>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={ETH} alt='ETH' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>1 ETH</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                  <RatesRowDash>
-                    <h2>—</h2>
-                  </RatesRowDash>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={DaiLogo} alt='DAI' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>{pair0Value} DAI</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                </RatesRowContent>
-              </RatesRowWrapper>
-            {/* 
-              <RatesRowWrapper>
-                <RatesRowContent>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={SLICE} alt='SLICE' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>1 SLICE</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                  <RatesRowDash>
-                    <h2>—</h2>
-                  </RatesRowDash>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={USDC} alt='USDC' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>{pair1Value} USDC</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                </RatesRowContent>
-              </RatesRowWrapper> */}
-          </RatesBoxWrapper>
-        </RatesWrapper>
-          </div>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docs.tranche.finance/tranchefinance/"
-          >
-            {i18n.t('stake.tabs.howTo')}
+    <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle}>
+      <div>
+        <h2>
+        {i18n.t('tranche.trancheData.TrancheMarkets')}
+        </h2>
+        <HowToLink href="https://docs.tranche.finance/tranchefinance/" onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+          {i18n.t('footer.docs')}
+        </HowToLink>
+      </div>
+      <MarketsTabs>
+        <MarketTab
+          market='compound'
+          current={trancheMarket === 'compound'}
+          onClick={() => trancheMarketsToggle('compound')}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+        >
+          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' />
+        </MarketTab>
+        <MarketTab
+          market='aavePolygon'
+          current={trancheMarket === 'aavePolygon'}
+          onClick={() => (trancheMarket !== 'aavePolygon') && openModal()}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+        >
+          <h2>
+              <img src={AaveBtn} alt='' /> Market
+          </h2>{' '}
+          <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+        </MarketTab>
+      </MarketsTabs>
+      {trancheMarket === 'aavePolygon' && (
+        <BridgeTokensWrapper>
+          <p>
+            To use polygon markets, you will need use the Matic bridge to move your tokens from the Ethereum mainnet to the polygon side chain. After
+            you move your assets to the polygon side chain, you can buy different instruments on Tranche, trade on the Quickswap DEX, and explore
+            other applications on the Polygon network.
+          </p>
+          <a href='https://wallet.matic.network/login/' target='_blank' rel='noopener noreferrer'>
+            <button>Bridge Tokens</button>
           </a>
-      </HeaderTabsBtnsLinks>
-      
-    </HeaderTabsWrapper>
+        </BridgeTokensWrapper>
+      )}
+      <TrancheModal modalIsOpen={modalIsOpen} closeModal={() => closeModal()} />
+    </MarketsTabsWrapper>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    ethereum: state.ethereum,
     data: state.data,
-    path: state.path,
-    trade: state.trade
+    theme: state.theme
   };
 };
 
-export default connect(mapStateToProps, { changeOwnAllFilter, ownAllToggle })(HeaderTabs);
+export default connect(mapStateToProps, { trancheMarketsToggle })(HeaderTabs);

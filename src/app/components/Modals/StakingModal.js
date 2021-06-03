@@ -17,7 +17,6 @@ import {
   LoanDetailsRow,
   LoanDetailsRowTitle,
   LoanDetailsRowValue,
-  LoanDetailsMobile,
   SliceNotFound,
   SliceNotFoundBtn,
   ModalUserActions,
@@ -95,10 +94,8 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   path,
   ethereum: { address },
-  summaryData: { slice, lp, lpList, stakableAssets, accruedRewards },
+  summaryData: { slice, lp, stakableAssets, accruedRewards },
   // State Values
-  summaryModal,
-  stakingList,
   noBalance,
   modalIsOpen,
   modalType,
@@ -135,11 +132,6 @@ const StakingModal = ({
 
     modalIsOpen && type !== 'reward' && tokenAddress && getStakingDetails();
   }, [modalIsOpen, type, tokenAddress, stakingAddress, address]);
-
-  const modalClose = () => {
-    closeModal();
-  };
-
   const stakingModal = () => {
     return (
       <Modal
@@ -150,12 +142,12 @@ const StakingModal = ({
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
       >
-        <ModalHeader stake>
+        <ModalHeader stake font={i18n.language === "kr" || i18n.language === "zh" ? "12px" : "17px"} left>
           <h2>
             {modalType === true
-              ? `Stake ${type} tokens` 
+              ? (`${type === "SLICE" ? i18n.t('stake.modal.stakeSliceTokens') : type === "SLICE/ETH LP" ? i18n.t('stake.modal.stakeSliceETHLPTokens') : type === "SLICE/DAI LP" ? i18n.t('stake.modal.stakeSliceDAILPTokens') : ""}`)
               : modalType === false
-              ? `Withdraw ${type} tokens` 
+              ? (`${type === "SLICE" ? i18n.t('stake.modal.withdrawSlice') : type === "SLICE/ETH LP" ? i18n.t('stake.modal.withdrawSliceETHLP') : type === "SLICE/DAI LP" ? i18n.t('stake.modal.withdrawSliceDAILP') : ""}`)
               : 'Claim rewards'}
           </h2>
         </ModalHeader>
@@ -163,25 +155,25 @@ const StakingModal = ({
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} stake>
             <ModalActionDetailsContent stake={true} trade={true}>
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>USER {tokenType} LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>{tokenType === "SLICE" ? i18n.t('stake.modal.userSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.userSLICELP') : ""}</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{roundNumber(userStaked)}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>TOTAL {tokenType} LOCKED</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>{tokenType === "SLICE" ? i18n.t('stake.modal.totalSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.totalSLICELP') : ""}</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}</LoanDetailsRowValue>
               </LoanDetailsRow>
 
               <LoanDetailsRow trade={true}>
-                <LoanDetailsRowTitle stake>YOUR SHARE</LoanDetailsRowTitle>
+                <LoanDetailsRowTitle stake>{i18n.t('stake.modal.yourShare')}</LoanDetailsRowTitle>
                 <LoanDetailsRowValue stake>{roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0}%</LoanDetailsRowValue>
               </LoanDetailsRow>
             </ModalActionDetailsContent>
           </ModalActionDetails>
-          <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground}>
-            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}>
-              <h2>{modalType ? 'Increase' : 'Decrease'} Stake</h2>
-              <button onClick={() => modalClose()}>
+          <ModalUserActions ModalBackground={ModeThemes[theme].ModalBackground} stake>
+            <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText} stakeModal>
+              <h2>{modalType ? i18n.t('stake.modal.increaseStake') : i18n.t('stake.modal.decreaseStake')}</h2>
+              <button onClick={() => closeModal()}>
                 <img src={theme === "light" ? CloseModal : CloseModalWhite} alt='' />
               </button>
             </ModalHeader>
@@ -197,6 +189,9 @@ const StakingModal = ({
               contractAddress={contractAddress}
               approveLoading={approveLoading}
               isLPToken={isLPToken}
+              tokenType={tokenType}
+              totalStaked={totalStaked}
+              stakedShare={stakedShare}
               // Functions
               stakingApproveContract={stakingApproveContract}
               adjustStake={adjustStake}
@@ -204,14 +199,6 @@ const StakingModal = ({
               path={path}
             />
           </ModalUserActions>
-          
-
-          <LoanDetailsMobile>
-            <h2>
-              {/* SLICE LOCKED — {totalStaked} */}
-              <span></span>
-            </h2>
-          </LoanDetailsMobile>
         </ModalActionsContent>
       </Modal>
     );
@@ -227,7 +214,7 @@ const StakingModal = ({
         contentLabel='Adjust'
       >
         <ModalHeader stake claim>
-          <h2>Your Stakes</h2>
+          <h2>{i18n.t('stake.modal.yourStakes')}</h2>
         </ModalHeader>
         <ModalActionsContent stakingMobile>
           <ModalActionDetails color={modalType === true ? '#4441CF' : modalType === false ? '#6E41CF' : '#369987'} claimModal stake>
@@ -236,10 +223,10 @@ const StakingModal = ({
                 <ClaimModalHalfContent>
                   <ClaimModalRow head>
                     <ClaimModalCol head>
-                      <h2>PAIR</h2>
+                      <h2>{i18n.t('stake.modal.pair')}</h2>
                     </ClaimModalCol>
                     <ClaimModalCol head>
-                      <h2>Total Locked</h2>
+                      <h2>{i18n.t('stake.modal.totalLocked')}</h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
 
@@ -250,7 +237,9 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
+                        <span>
+                          {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
+                        </span>
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -262,7 +251,9 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
+                        <span>
+                          {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
+                        </span>
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -274,7 +265,9 @@ const StakingModal = ({
                     <ClaimModalCol>
                       <h2>
                         <img src={Lock} alt='lock' />
-                        {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
+                        <span>
+                          {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
+                        </span>
                       </h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
@@ -285,8 +278,8 @@ const StakingModal = ({
 
           <ModalUserActions claimModal ModalBackground={ModeThemes[theme].ModalBackground}>
             <ModalHeader rightStakeModal claim ModalHeader={ModeThemes[theme].ModalText}> 
-              <h2>Available Rewards</h2>
-              <button onClick={() => modalClose()}>
+              <h2>{i18n.t('stake.modal.availableRewards')}</h2>
+              <button onClick={() => closeModal()}>
                 <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
               </button>
             </ModalHeader>
@@ -295,14 +288,14 @@ const StakingModal = ({
               <ClaimModalHalfContentWrapper>
                 <ClaimModalHalfContent>
                   <ClaimModalRow head right>
-                    <ClaimModalCol head right pair>
-                      <h2>PAIR</h2>
+                    <ClaimModalCol head right pair color={ModeThemes[theme].ClaimHead}>
+                      <h2>{i18n.t('stake.modal.pair')}</h2>
                     </ClaimModalCol>
-                    <ClaimModalCol head right rewards>
-                      <h2>Rewards</h2>
+                    <ClaimModalCol head right rewards color={ModeThemes[theme].ClaimHead}>
+                      <h2>{i18n.t('stake.modal.rewards')}</h2>
                     </ClaimModalCol>
-                    <ClaimModalCol head right claim>
-                      <h2>Claim</h2>
+                    <ClaimModalCol head right claim color={ModeThemes[theme].ClaimHead}>
+                      <h2>{i18n.t('stake.modal.claim')}</h2>
                     </ClaimModalCol>
                   </ClaimModalRow>
                   {stakableAssets &&
@@ -318,14 +311,69 @@ const StakingModal = ({
                         {/* <ClaimModalCol disabled={accruedRewards[item.address] && accruedRewards[item.address] === '0'} value right claim btn> */}
                         <ClaimModalCol value right claim btn>
                           <button onClick={() => massHarvest(item.yieldAddress)}>
-                            <h2>Claim</h2>
+                            <h2>{i18n.t('stake.modal.claim')}</h2>
                           </button>
                         </ClaimModalCol>
                       </ClaimModalRow>
                     ))}
                 </ClaimModalHalfContent>
+
+                <ClaimModalHalfContent mobile color={ModeThemes[theme].ModalText}>
+                  <ClaimModalRow head>
+                    <ClaimModalCol head>
+                      <h2>{i18n.t('stake.modal.pair')}</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol head>
+                      <h2>{i18n.t('stake.modal.totalLocked')}</h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        <span>
+                          {roundNumber(slice.balance) !== 'NaN' ? roundNumber(slice.balance) : 0}
+                        </span>
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE-ETH LP</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        <span>
+                          {roundNumber(lp.balance1) !== 'NaN' ? roundNumber(lp.balance1) : 0}
+                        </span>
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+
+                  <ClaimModalRow>
+                    <ClaimModalCol>
+                      <h2>SLICE-DAI LP</h2>
+                    </ClaimModalCol>
+                    <ClaimModalCol>
+                      <h2>
+                        <img src={Lock} alt='lock' />
+                        <span>
+                          {roundNumber(lp.balance2) !== 'NaN' ? roundNumber(lp.balance2) : 0}
+                        </span>
+                      </h2>
+                    </ClaimModalCol>
+                  </ClaimModalRow>
+                </ClaimModalHalfContent>
+
               </ClaimModalHalfContentWrapper>
             </ClaimModalHalfWrapper>
+            
           </ModalUserActions>
         </ModalActionsContent>
       </Modal>
@@ -342,7 +390,7 @@ const StakingModal = ({
         contentLabel='Adjust'
       >
         <ModalHeader notFound ModalBackground={ModeThemes[theme].ModalBackground}>
-          <button onClick={() => modalClose()}>
+          <button onClick={() => closeModal()}>
             <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
           </button>
         </ModalHeader>

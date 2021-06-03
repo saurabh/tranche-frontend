@@ -8,6 +8,7 @@ import { CheckboxWrapper, CheckboxContent } from '../Stake/Table/styles/TableCom
 import {
   ModeThemes
 } from 'config/constants';
+import i18n from '../locale/i18n';
 
 function Footer({ changeTheme, theme }) {
   const [languageMenu, setLanguageMenu] = useState(false);
@@ -21,7 +22,7 @@ function Footer({ changeTheme, theme }) {
   let currentPath = parsedPathWindow[parsedPathWindow.length - 1];
   let currentLng = parsedPathWindow[parsedPathWindow.length - 2];
   useEffect(() =>{
-    setCurrentLanguage(currentLng === 'en' ? "English" : currentLng === 'zh' ? "Chinese" : currentLng === 'kr' ? "Korean" : "English")
+    setCurrentLanguage(currentLng === 'en' ? "English" : currentLng === 'zh' ? "中文" : currentLng === 'kr' ? "한국어" : "English")
   }, [currentLng])
   const newPath = (lng) =>{
     return `${"/" + lng + "/" + currentPath}`;
@@ -32,12 +33,12 @@ function Footer({ changeTheme, theme }) {
         <div className="footerWrapper">
           <FooterLeft>
             <LanguageContainer>
-              <h2>Language</h2>
+              <h2>{i18n.t('footer.language')}</h2>
               <LanguageContent menu={languageMenu} ref={innerRef} color={ModeThemes[theme].languageToggleBackground} textColor={ModeThemes[theme].languageToggleText}>
                 <div>
                   <a href={newPath("en")}>English</a>
-                  <a href={newPath("zh")}>Chinese</a>
-                  <a href={newPath("kr")}>Korean</a>
+                  <a href={newPath("zh")}>中文</a>
+                  <a href={newPath("kr")}>한국어</a>
                 </div>
                 <div onClick={() => setLanguageMenu(!languageMenu)}>
                   <h2>{currentLanguage}</h2>
@@ -46,26 +47,27 @@ function Footer({ changeTheme, theme }) {
               </LanguageContent>
             </LanguageContainer>
             <CheckboxWrapper themeToggle>
-              <h2>Theme</h2>
+              <h2>{i18n.t('footer.theme')}</h2>
               <CheckboxContent themeToggle>
                 <input
                   type='checkbox'
                   name='ThemeToggle'
                   id='ThemeToggle'
                   checked={theme === "dark"}
+                  readOnly
                 />
                 <label htmlFor='ThemeToggle' onClick={() => changeTheme()}></label>
               </CheckboxContent>
-              <h2>{theme}</h2>
+              <h2>{i18n.t(`footer.${theme}`)}</h2>
             </CheckboxWrapper>
           </FooterLeft>
           <FooterLinks className="footerLinks" color={ModeThemes[theme].footerLinks}>
-            <a href="/privacy" target="_blank">Privacy</a> 
-            <a href="/terms" target="_blank">Terms</a>
-            <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">Support</a>
-            <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer">Documentation</a>
+            <a href="/privacy" target="_blank">{i18n.t('footer.privacy')}</a> 
+            <a href="/terms" target="_blank">{i18n.t('footer.terms')}</a>
+            <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">{i18n.t('footer.support')}</a>
+            <a href="https://docs.tranche.finance/tranchefinance/" target="_blank" rel="noopener noreferrer">{i18n.t('footer.docs')}</a>
             <a href="https://github.com/tranche-jibrel" target="_blank" rel="noopener noreferrer">Github</a>
-            <a href="https://app.tranche.finance/lend" target="_blank" rel="noopener noreferrer">Old App</a>
+            <a href="https://app.tranche.finance/lend" target="_blank" rel="noopener noreferrer">{i18n.t('footer.oldApp')}</a>
           </FooterLinks>
         </div>
       </div>

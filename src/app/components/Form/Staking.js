@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import { required, number, roundNumber, isGreaterThan } from 'utils';
 import { fromWei } from 'services/contractMethods';
-import { selectUp, selectDown, TrancheImg, TrancheImgColored } from 'assets';
+import { TrancheImg, TrancheImgColored } from 'assets';
 import { BtnLoanModal, BtnLoadingIcon } from '../Modals/styles/ModalsComponents';
 import {
   // ModalFormGrp,
@@ -16,7 +16,6 @@ import {
   ModalFormButton,
   NewLoanInputWrapper,
   NewLoanFormInput,
-  SelectChevron,
   LoanCustomSelect,
   SelectCurrencyView,
   ApproveBtnWrapper,
@@ -26,8 +25,10 @@ import {
   SelectedStakingImg,
   SelectedStakingContent
 } from './styles/FormComponents';
+import {
+  LoanDetailsMobile
+} from '../Modals/styles/ModalsComponents';
 import i18n from '../locale/i18n';
-import { etherScanUrl } from 'config';
 import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -57,12 +58,15 @@ let StakingForm = ({
   setHasAllowance,
   approveLoading,
   path,
+  tokenType,
+  totalStaked,
+  stakedShare,
   // Functions
   stakingApproveContract,
   adjustStake,
   contractAddress,
   // Redux
-  ethereum: { tokenBalance },
+  ethereum: { tokenBalance, blockExplorerUrl },
   summaryData: { slice, lpList },
   type,
   theme
@@ -113,16 +117,19 @@ let StakingForm = ({
   return (
     <ModalAdjustForm stake>
       <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
-        <FormInputsWrapper trade={true}>
+        <FormInputsWrapper trade={true} stake>
           <SelectedStakingWrapper ModalText={ModeThemes[theme].ModalText}>
-            <h2>Selected Staking Pool</h2>
+            <h2>{i18n.t('stake.modal.selectedStaking')}</h2>
             <SelectedStaking color={ModeThemes[theme].SelectedStaking}>
               <SelectedStakingImg>
                 <img src={TrancheImg} alt='tranche' />
               </SelectedStakingImg>
-              <SelectedStakingContent SelectedStakingText={ModeThemes[theme].SelectedStakingText} SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}>
-                <h2>{type} STAKING POOL</h2>
-                <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+              <SelectedStakingContent
+                SelectedStakingText={ModeThemes[theme].SelectedStakingText}
+                SelectedStakingLink={ModeThemes[theme].SelectedStakingLink}
+              >
+                <h2>{type}</h2>
+                <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                   {contractAddress}
                 </a>
               </SelectedStakingContent>
@@ -138,7 +145,13 @@ let StakingForm = ({
                       : i18n.t('stake.modal.withdrawFormTitle')
                     : 'Amount of ' + tokenName + ' to ' + (modalType ? 'stake' : 'withdraw')}
                 </ModalFormLabel>
-                <FieldWrapper modalType={true} staking={true} StakingInputText={ModeThemes[theme].StakingInputText}  ModalText={ModeThemes[theme].ModalText}>
+                <FieldWrapper
+                  modalType={true}
+                  staking={true}
+                  StakingInputText={ModeThemes[theme].StakingInputText}
+                  StakingMax={ModeThemes[theme].StakingMax}
+                  ModalText={ModeThemes[theme].ModalText}
+                >
                   <Field
                     component={InputField}
                     onChange={(e, newValue) => handleInputChange(newValue)}
@@ -149,7 +162,7 @@ let StakingForm = ({
                     step='0.0001'
                     id='amount'
                   />
-                  <button onClick={(e) => setMaxAmount(e)}>MAX</button>
+                  <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button>
                 </FieldWrapper>
               </NewLoanInputWrapper>
               <LoanCustomSelect>
@@ -160,26 +173,7 @@ let StakingForm = ({
                     <img src={TrancheImgColored} alt='tranche' />
                     <h2>{isLPToken ? dropdownName : 'SLICE'}</h2>
                   </div>
-                  <SelectChevron>
-                    <img src={selectUp} alt='' />
-                    <img src={selectDown} alt='' />
-                  </SelectChevron>
                 </SelectCurrencyView>
-                {/* {isLPToken && LPSelect ? (
-                  <SelectCurrencyOptions>
-                    {lpList.map((lp, index) => {
-                      return (
-                        <SelectCurrencyOption key={index}>
-                          <button onClick={(e) => handleLPSelect(e, index, lp.address, lp.stakingAddress)}>
-                            <img src={lp.img} alt='' /> {lp.name.split(' ')[0]}
-                          </button>
-                        </SelectCurrencyOption>
-                      );
-                    })}
-                  </SelectCurrencyOptions>
-                ) : (
-                  ''
-                )} */}
               </LoanCustomSelect>
             </NewLoanFormInput>
             <h2>
@@ -234,6 +228,19 @@ let StakingForm = ({
             </ModalFormButton>
           </BtnLoanModal>
         </ModalFormSubmit>
+        <LoanDetailsMobile  ModalText={ModeThemes[theme].ModalText}>
+          <h2>
+            {tokenType === "SLICE" ? i18n.t('stake.modal.userSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.userSLICELP') : ""} — {roundNumber(userStaked)}
+            <span></span>
+          </h2>
+          <h2>
+            {tokenType === "SLICE" ? i18n.t('stake.modal.totalSLICE') : tokenType === "LP Tokens" ? i18n.t('stake.modal.totalSLICELP') : ""} — {roundNumber(totalStaked) !== 'NaN' ? roundNumber(totalStaked) : 0}
+            <span></span>
+          </h2>
+          <h2>
+            {i18n.t('stake.modal.yourShare')} — {roundNumber(stakedShare, 2) !== 'NaN' ? roundNumber(stakedShare, 2) : 0}%
+          </h2>
+        </LoanDetailsMobile>
       </Form>
     </ModalAdjustForm>
   );

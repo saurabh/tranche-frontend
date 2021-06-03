@@ -42,6 +42,31 @@ ${({ stake }) => stake && `
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
+  } 
+  @media (max-width: 633px){
+    display: none;
+  }
+`}
+${({ stakeModal }) => stakeModal && `
+    @media (max-width: 633px){
+      width: 100%;
+    }
+  `}
+${({ stake, font, left }) => (stake && left) && `
+  h2{
+    color: #FFFFFF;
+    font-size: ${font};
+  }
+  button{
+    position: absolute;
+    right: 0;
+    padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
 `}
 ${({ claim, ModalHeader }) => claim && `
@@ -54,6 +79,9 @@ ${({ claim, ModalHeader }) => claim && `
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
 `}
 ${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
@@ -61,10 +89,16 @@ ${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
   h2{
     color: ${ModalHeader};
   }
+  @media (max-width: 633px){
+    width: 100%;
+  }
   button{
     position: absolute;
     right: 0;
     padding: 0 35px;
+    @media (max-width: 633px){
+      padding: 0 50px !important;
+    }
   } 
 `}
 
@@ -432,9 +466,15 @@ const ModalActionDetails = styled.div`
 
 const ModalUserActions = styled.div`
   width: 100%;
-  background: ${props => props.ModalBackground}
+  background: ${props => props.ModalBackground};
   ${({ form }) => form && `
     display: flex;
+  `}
+  ${({ stake }) => stake && `
+    @media (max-width: 633px){
+      height: 100vh;
+      overflow: hidden;
+    }
   `}
 
 `
@@ -584,7 +624,7 @@ const LoanDetailsMobile = styled.div`
     text-align: center;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #4F4F4F;
+    color: ${props => props.ModalText};
     max-width: 200px;
     margin: 7px auto;
     span{
@@ -633,7 +673,7 @@ const StakingModalWrapper = styled.div`
 `;
 
 const SliceNotFound = styled.div`
-  min-height: 199px; 
+  min-height: 200px;
   background: ${props => props.ModalBackground};
   height: auto;
   display: flex;
@@ -683,6 +723,77 @@ const SliceNotFoundBtn = styled.div`
   ]
   }
 `;
+const ModalMarketWrapper = styled.div`
+  min-height: 342px;
+  background: ${props => props.ModalBackground};
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  & > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  & > div p{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    margin: 12px 0 0 0;
+    text-align: center;
+    color: ${props => props.ModalText};
+    padding: 0 23px;
+    width: 100%;
+  }
+  & > div a{
+    background: ${props => props.linkBackground};
+    border-radius: 80.8581px;
+    padding: 12px 26px;
+    margin: 15px 0 0 0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10.5116px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: ${props => props.linkColor};
+  }
+`;
+
+const ModalMarketWrapperBtn = styled.div`
+  background: #F7F7FF;
+  min-height: 67px;
+  height: 100%;
+  padding: 0 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${props => props.ModalBackground};
+  button{
+    min-height: 33px;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+    color: #FFFFFF;
+    background: ${props => props.color};
+    border-radius: 4px;
+    width: 100%;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+`;
 
 const ClaimModalHalfWrapper = styled.div`
   width: 100%;
@@ -694,9 +805,29 @@ const ClaimModalHalfContentWrapper = styled.div`
   min-height: 554px;
   height: 100%;
   padding: 40px;
+  @media (max-width: 992px){
+    padding: 0 40px 40px 40px;
+    margin: -90px 0 0 0;
+  }
+  
 `;
 const ClaimModalHalfContent = styled.div`
   margin: 100px 0;
+  ${({ mobile, color }) => mobile && `
+    display: none;
+    & > div{
+      border-bottom: 1px solid #F0F0F6;
+      div{
+        h2{
+          color: ${color} !important;
+        }
+      }
+    }
+    @media (max-width: 992px){
+      display: block;
+    }
+  `}
+  
 `;
 const ClaimModalRow = styled.div`
   display: flex;
@@ -720,8 +851,14 @@ const ClaimModalCol = styled.div`
     font-size: 12px;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    span{
+      margin: 3px 0 0 0;
+    }
     img{
       margin-right: 4px;
+      width: 12px;
     }
   }
   ${({ head }) => head && `
@@ -731,11 +868,11 @@ const ClaimModalCol = styled.div`
       color: rgba(255, 255, 255, 0.6);
     }
   `}
-  ${({ right }) => right && `
+  ${({ right, color }) => right && `
     h2{
       font-weight: 600;
       font-size: 9.40209px;
-      color: rgba(36, 39, 50, 0.6);
+      color: ${color} !important;
     }
   `}
   ${({ pair }) => pair && `
@@ -744,12 +881,14 @@ const ClaimModalCol = styled.div`
   ${({ rewards, ModalText }) => rewards && `
     width: 30%;
     h2{
-      color: ${ModalText} !important
+      color: ${ModalText} !important;
     }
   `}
   ${({ claim }) => claim && `
     width: 40%;
     text-align: center;
+    display: flex;
+    justify-content: center;
   `}
 
   ${({ value }) => value && `
@@ -841,5 +980,7 @@ export {
     ClaimModalHalfContentWrapper,
     ClaimModalHalfContent,
     ClaimModalRow,
-    ClaimModalCol
+    ClaimModalCol,
+    ModalMarketWrapperBtn,
+    ModalMarketWrapper
 };

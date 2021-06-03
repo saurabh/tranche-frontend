@@ -1,7 +1,20 @@
 import Web3 from 'web3';
+import axios from 'axios';
 import store from '../store';
 import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
-import { ERC20Tokens, TrancheTokenAddresses, JCompoundAddress, TrancheBuyerCoinAddresses } from 'config/constants';
+import {
+  networkId,
+  maticNetworkId,
+  serverUrl,
+  apiUri,
+  ERC20Tokens,
+  JCompoundAddress,
+  CompTrancheTokens,
+  TrancheBuyerCoinAddresses,
+  JAaveAddress,
+  AaveTrancheTokens,
+  PolygonBuyerCoinAddresses
+} from 'config';
 import {
   SET_ADDRESS,
   SET_NETWORK,
@@ -11,8 +24,12 @@ import {
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE
+  SET_TRANCHE_ALLOWANCE,
+  SET_BLOCKEXPLORER_URL
 } from './constants';
+import { summaryFetchSuccess } from './summaryData';
+import { trancheMarketsToggle } from './tableData';
+const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
   if (address) {
@@ -24,17 +41,53 @@ export const setAddress = (address) => (dispatch) => {
   }
 };
 
-export const setNetwork = (network) => (dispatch) => {
+export const setNetwork = (network) => async (dispatch) => {
+  const state = store.getState();
+  const { path, ethereum } = state;
+  const { address } = ethereum;
   dispatch({
     type: SET_NETWORK,
     payload: network
   });
+  window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
+
+  if (network === networkId) {
+    store.dispatch(trancheMarketsToggle('compound'));
+    if (path === 'stake' && address) {
+      const res = await axios(`${serverUrl + stakingSummary + address}`);
+      const { result } = res.data;
+      store.dispatch(summaryFetchSuccess(result));
+    }
+  }
+  if (network === maticNetworkId) {
+    store.dispatch(trancheMarketsToggle('aavePolygon'));
+  }
 };
 
 export const setBalance = (balance) => (dispatch) => {
   dispatch({
     type: SET_BALANCE,
     payload: balance
+  });
+};
+
+export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
+  let web3 = new Web3(wallet.provider);
+  dispatch({
+    type: SET_WALLET,
+    payload: wallet
+  });
+  dispatch({
+    type: SET_WEB3,
+    payload: web3
+  });
+  window.localStorage.setItem('selectedWallet', wallet.name);
+};
+
+export const setBlockExplorerUrl = (url) => (dispatch) => {
+  dispatch({
+    type: SET_BLOCKEXPLORER_URL,
+    payload: url
   });
 };
 
@@ -56,99 +109,110 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
-    const Tokens = ERC20Tokens.concat(TrancheTokenAddresses);
     const state = store.getState();
-    const { web3 } = state.ethereum;
-    const batch = new web3.BatchRequest();
-    Tokens.map((tokenAddress) => {
-      let token = ERC20Setup(web3, tokenAddress);
-      batch.add(
-        token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
-          if (err) {
-            console.error(err);
-          } else {
-            dispatch({
-              type: SET_TOKEN_BALANCE,
-              payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
-            });
-          }
-        })
-      );
-      return batch;
-    });
-    batch.execute();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const toggleApproval = (tokenAddress, bool) => async dispatch => {
-  dispatch({
-    type: SET_TRANCHE_ALLOWANCE,
-    payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
-  });
-}
-
-export const checkTrancheAllowances = (address) => async (dispatch) => {
-  try {
-    const Tokens = TrancheTokenAddresses.concat(TrancheBuyerCoinAddresses);
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const batch = new web3.BatchRequest();
-    let tokenBalance = {};
-    Tokens.map((tokenAddress) => {
-      let token = ERC20Setup(web3, tokenAddress);
-      batch.add(
-        token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
-          if (err) {
-            console.error(err);
-          } else {
-            tokenBalance[tokenAddress] = res;
-          }
-        })
-      );
-      return batch;
-    });
-    Tokens.map((tokenAddress) => {
-      let token = ERC20Setup(web3, tokenAddress);
-      batch.add(
-        token.methods.allowance(address, JCompoundAddress).call.request({ from: address }, (err, res) => {
-          if (err) {
-            console.error(err);
-          } else {
-            if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {
-              dispatch({
-                type: SET_TRANCHE_ALLOWANCE,
-                payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: true }
-              });
+    let { web3, network, maticWeb3 } = state.ethereum;
+    web3 = network === maticNetworkId ? maticWeb3.http : web3;
+    const Tokens =
+      network === networkId
+        ? ERC20Tokens.concat(CompTrancheTokens)
+        : network === maticNetworkId
+        ? PolygonBuyerCoinAddresses.concat(AaveTrancheTokens)
+        : [];
+    if (network === networkId || network === maticNetworkId) {
+      const batch = new web3.BatchRequest();
+      // const tokenBalance = {};
+      Tokens.map((tokenAddress) => {
+        let token = ERC20Setup(web3, tokenAddress);
+        batch.add(
+          token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+            if (err) {
+              console.log('balanceCheck error');
+              console.log(tokenAddress);
+              console.error(err);
             } else {
               dispatch({
-                type: SET_TRANCHE_ALLOWANCE,
-                payload: { tokenAddress: tokenAddress.toLowerCase(), isApproved: false }
+                type: SET_TOKEN_BALANCE,
+                payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
               });
             }
-          }
-        })
-      );
-      return batch;
-    });
-    batch.execute();
+          })
+        );
+        return batch;
+      });
+      batch.execute();
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
-export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
-  let web3 = new Web3(wallet.provider);
+export const toggleApproval = (tokenAddress, contractAddress, bool) => async (dispatch) => {
   dispatch({
-    type: SET_WALLET,
-    payload: wallet
+    type: SET_TRANCHE_ALLOWANCE,
+    payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
   });
-  dispatch({
-    type: SET_WEB3,
-    payload: web3
-  });
-  window.localStorage.setItem('selectedWallet', wallet.name);
+};
+
+export const checkTrancheAllowances = (address, contractAddress) => async (dispatch) => {
+  try {
+    const state = store.getState();
+    let { web3, network, maticWeb3 } = state.ethereum;
+    if ((network === networkId && contractAddress === JAaveAddress) || (network === maticNetworkId && contractAddress === JCompoundAddress)) return;
+    web3 = network === maticNetworkId ? maticWeb3.http : web3;
+    const Tokens =
+      network === networkId
+        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : network === maticNetworkId
+        ? AaveTrancheTokens.concat(PolygonBuyerCoinAddresses)
+        : [];
+    if (network === networkId || network === maticNetworkId) {
+      const batch = new web3.BatchRequest();
+      let tokenBalance = {};
+      Tokens.map((tokenAddress) => {
+        let token = ERC20Setup(web3, tokenAddress);
+        batch.add(
+          token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+            if (err) {
+              console.log('allowanceCheck balance error');
+              console.log(contractAddress, tokenAddress);
+              console.error(err);
+            } else {
+              tokenBalance[tokenAddress] = res;
+            }
+          })
+        );
+        return batch;
+      });
+      Tokens.map((tokenAddress) => {
+        let token = ERC20Setup(web3, tokenAddress);
+        batch.add(
+          token.methods.allowance(address, contractAddress).call.request({ from: address }, (err, res) => {
+            if (err) {
+              console.log('allowanceCheck allowance error');
+              console.log(contractAddress, tokenAddress);
+              console.error(err);
+            } else {
+              if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {
+                dispatch({
+                  type: SET_TRANCHE_ALLOWANCE,
+                  payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: true }
+                });
+              } else {
+                dispatch({
+                  type: SET_TRANCHE_ALLOWANCE,
+                  payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: false }
+                });
+              }
+            }
+          })
+        );
+        return batch;
+      });
+      batch.execute();
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const setCurrentBlock = (blockNumber) => (dispatch) => {

@@ -16,14 +16,17 @@ import {
     TableSubTitle,
     TableColMobile,
     TableHeadWrapperMobile,
-    TableHeadTitleMobile
+    TableHeadTitleMobile,
+    TooltipWrapper
 } from '../../Stake/Table/styles/TableComponents';
 import i18n from "app/components/locale/i18n";
+import { ModeThemes } from "config";
 
 
-const TableHead = ({ changeSorting, path, color }) => {
+const TableHead = ({ changeSorting, path, color, theme }) => {
 
     const [order, setOrder] = useState("asc")
+    const [TooltipToggle, setTooltipToggle] = useState("")
     const [menu, toggleMenu] = useState(false);
     const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
 
@@ -43,6 +46,9 @@ const TableHead = ({ changeSorting, path, color }) => {
     const toggleSelectMarkets = () => {
         toggleMenu(!menu);
     }
+    const tooltipToggle = (val) => {
+        setTooltipToggle(val);
+    }
     const updateMedia = () => {
         setDesktop(window.innerWidth > 1200);
     };
@@ -56,24 +62,48 @@ const TableHead = ({ changeSorting, path, color }) => {
     const TableHeadDesktop = () => {
         return (
             <TableHeadWrapper path={path}>
-                <TableHeadTitle platform defaultCursor={true} color={color}>
-                    <h2>{i18n.t('tranche.table.tableHead.platform')}</h2>
+                <TableHeadTitle platform defaultCursor={true} color={color} tranche>
+                    <h2 onMouseOver={() => tooltipToggle("platform")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.table.tableHead.platform')}</h2>
+                    <TooltipWrapper tooltip={TooltipToggle === "platform"} platform color={ModeThemes[theme].Tooltip} language={i18n.language}>
+                        <div>
+                            <h2>{i18n.t('toolTips.table.platform')}</h2>
+                        </div>
+                    </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle instrument defaultCursor={true} color={color}>
-                    <h2>{i18n.t('tranche.table.tableHead.instrument')}</h2>
+                <TableHeadTitle apy color={color} tranche>
+                    <h2 onMouseOver={() => tooltipToggle("apy")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.table.tableHead.apy')}</h2>
+                    <TooltipWrapper  tooltip={TooltipToggle === "apy"} apy color={ModeThemes[theme].Tooltip} language={i18n.language}>
+                        <div>
+                            <h2>{i18n.t('toolTips.table.netApy')}</h2>
+                        </div>
+                    </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle apy color={color}>
-                    <h2>{i18n.t('tranche.table.tableHead.apy')}</h2>
+                <TableHeadTitle totalValue color={color} tranche>
+                    <h2 onMouseOver={() => tooltipToggle("totalValue")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.table.tableHead.totalDeposits')}</h2>
+                    <TooltipWrapper tooltip={TooltipToggle === "totalValue"} totalValue color={ModeThemes[theme].Tooltip} language={i18n.language}>
+                        <div>
+                            <h2>{i18n.t('toolTips.table.totalDeposits')}</h2>
+                        </div>
+                    </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle totalValue color={color}>
-                    <h2>TOTAL DEPOSITS</h2>
+                <TableHeadTitle subscription color={color} tranche>
+                    <h2 onMouseOver={() => tooltipToggle("deposit")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.table.tableHead.myDeposits')}</h2>
+                    <TooltipWrapper tooltip={TooltipToggle === "deposit"} deposit color={ModeThemes[theme].Tooltip} language={i18n.language}>
+                        <div>
+                            <h2>{i18n.t('toolTips.table.myDeposits')}</h2>
+                        </div>
+                    </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle subscription color={color}>
-                    <h2>MY DEPOSITS</h2>
+                <TableHeadTitle status color={color} tranche>
+                    <h2 onMouseOver={() => tooltipToggle("available")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.table.tableHead.available')}</h2>
+                    <TooltipWrapper tooltip={TooltipToggle === "available"} available color={ModeThemes[theme].Tooltip} language={i18n.language}>
+                        <div>
+                            <h2>{i18n.t('toolTips.table.available')}</h2>
+                        </div>
+                    </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle status color={color}>
-                    <h2>AVAILABLE TO DEPOSIT</h2>
-                </TableHeadTitle>
+
+               
                 <TableHeadTitle trancheTableBtns color={color}>
 
                 </TableHeadTitle>
@@ -141,7 +171,8 @@ const TableHead = ({ changeSorting, path, color }) => {
 }
 const mapStateToProps = (state) => {
     return {
-      path: state.path
+      path: state.path,
+      theme: state.theme
     };
   };
   

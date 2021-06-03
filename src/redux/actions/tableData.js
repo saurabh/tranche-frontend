@@ -1,6 +1,17 @@
-import { apiUri } from 'config/constants';
-import { postRequest } from 'services/axios';
+import store from '../store';
+import {
+  networkId,
+  maticNetworkId,
+  apiUri,
+  SLICEAddress,
+  LP1TokenAddress,
+  LP2TokenAddress,
+  etherScanUrl,
+  maticBlockExplorerUrl
+} from 'config/constants';
+import { postRequest, initOnboard } from 'services';
 import { checkServer } from './checkServer';
+import { setBlockExplorerUrl } from './ethereum';
 import {
   LOANS_IS_LOADING,
   LOANS_SUCCESS,
@@ -17,7 +28,8 @@ import {
   STAKING_SUCCESS,
   STAKING_COUNT,
   OWN_ALL_TOGGLE,
-  TRANCHE_CARD_TOGGLE
+  TRANCHE_CARD_TOGGLE,
+  TRANCHE_MARKETS
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -78,9 +90,14 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
+  const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
+  const orderedList = [];
+  orderedList.push(searchArr(SLICEAddress));
+  orderedList.push(searchArr(LP1TokenAddress));
+  orderedList.push(searchArr(LP2TokenAddress));
   dispatch({
     type: STAKING_SUCCESS,
-    payload: list
+    payload: orderedList
   });
 };
 
@@ -102,14 +119,14 @@ export const changeSorting = (sort) => {
   return {
     type: CHANGE_SORTING,
     payload: sort
-  }
+  };
 };
 
 export const ownAllToggle = (type) => (dispatch) => {
-    dispatch({
-      type: OWN_ALL_TOGGLE,
-      payload: type
-    });
+  dispatch({
+    type: OWN_ALL_TOGGLE,
+    payload: type
+  });
 };
 
 export const changeOwnAllFilter = (filterType) => (dispatch) => {
@@ -133,23 +150,39 @@ export const paginationCurrent = (current) => (dispatch) => {
   });
 };
 
+export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  const onboard = initOnboard();
+  if (trancheMarket === 'compound') {
+    onboard.config({ networkId });
+    store.dispatch(changeFilter('ethereum'));
+    store.dispatch(setBlockExplorerUrl(etherScanUrl));
+  } else if (trancheMarket === 'aavePolygon') {
+    onboard.config({ networkId: maticNetworkId });
+    store.dispatch(changeFilter('polygon'));
+    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
+  }
+  store.dispatch(trancheCardToggle({ status: false, id: null }));
+  dispatch({
+    type: TRANCHE_MARKETS,
+    payload: trancheMarket
+  });
+};
+
 export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
     const { data: result } = await postRequest(endpoint, { data }, null, true);
     dispatch(checkServer(true));
-    if(result.status){
-      if(endpoint === loanListUrl){
+    if (result.status) {
+      if (endpoint === loanListUrl) {
         dispatch(loansIsLoading(false));
         dispatch(loansFetchSuccess(result.result.list));
         dispatch(loansSetCount(result.result.count));
-      }
-      else if(endpoint === tranchesListUrl){
+      } else if (endpoint === tranchesListUrl) {
         dispatch(tranchesIsLoading(false));
         dispatch(tranchesFetchSuccess(result.result.list));
         dispatch(tranchesSetCount(result.result.count));
-      }
-      else if(endpoint === stakingListUrl){
+      } else if (endpoint === stakingListUrl) {
         dispatch(stakingIsLoading(false));
         dispatch(stakingFetchSuccess(result.result.list));
         dispatch(stakingSetCount(result.result.count));

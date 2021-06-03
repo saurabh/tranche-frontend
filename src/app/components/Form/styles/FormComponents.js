@@ -149,14 +149,14 @@ const FormInputsWrapper = styled.div`
   justify-content: space-around;    
   @media (max-width: 633px){
     transform: none;
-    max-height: none;
+    max-height:  ${props => props.stake ? "" : "none"};;
   }
   h2:first-child{
     @media (max-width: 633px){
       font-style: normal;
       font-weight: normal;
       font-size: 11px;
-      text-align: center;
+      text-align: left;
       color: #B9B9B9;
     }
   }
@@ -361,6 +361,11 @@ const ModalAdjustForm = styled.div`
   }
   ${({ stake }) => stake && `
     flex-direction: column;
+    @media (max-width: 633px){
+      & > form{
+        display: block;
+      }
+    }
   `}
 `
 
@@ -369,7 +374,7 @@ const SelectCurrencyView = styled.div`
   & > div{
     width: 100px;
     height: 19px;
-    border-left: 2px solid #F1F1F1;
+    border-left: 2px solid #CFCFE5;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -654,13 +659,14 @@ const FieldWrapper = styled.div`
     font-size: 10px;
     font-weight: bold;
     cursor: pointer;
+    text-transform: uppercase;
     padding: 6px 8px;
     // color: rgb(57,41,90, 0.3);
     color: #B3B3B3;
     background: #F1F1F1;
-    ${({ staking, StakingInputText }) => staking && `
-      background: rgba(57,41,90,0.3);
-      color: ${StakingInputText}
+    ${({ staking, StakingInputText, StakingMax }) => staking && `
+      background: ${StakingMax};
+      color: ${StakingInputText};
     `}
     
   }
@@ -709,6 +715,9 @@ const SelectedStakingContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.SelectedStakingText};
+    @media (max-width: 633px){
+      text-align: left !important;
+    }
   }
   a{
     font-style: normal;

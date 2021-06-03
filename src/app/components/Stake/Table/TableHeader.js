@@ -13,16 +13,21 @@ import {
     CreateLoanBtn,
     TableMarketsSortingDropdown,
     TableMarketsSortingDropdownContent,
-    TableMarketSortingBtn
+    TableMarketSortingBtn,
+    HowToLink
 } from './styles/TableComponents';
 import {
     ModeThemes
 } from 'config/constants';
 import i18n from "app/components/locale/i18n";
+import useAnalytics from 'services/analytics';
+
 
 const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
+    const Tracker = useAnalytics("ExternalLinks");
+
     const innerRef = useOuterClick(e => {
         toggleMenu(false);
     });
@@ -40,7 +45,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
     return (
         <TableContainerHeader>
             <TableHeaderTitles>
-                <TableTitle color={ModeThemes[theme].HeaderTitle}>
+                <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto>
                 {   path === "lend" ?
                     <h2>Earning Assets</h2> :
                     path === "borrow" ?
@@ -49,6 +54,13 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                     <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
                     <h2>{i18n.t('tranche.table.tableHeader.title')}</h2>
                 }
+                {
+                    path === "stake" || path === "tranche" ?
+                    <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+                        {i18n.t('footer.docs')}
+                    </HowToLink> : ""
+                }
+                
                 </TableTitle>
                 {
                     path !== "stake" && path !== "tranche" ?
@@ -58,10 +70,7 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                     path === "tranche" ?
                     <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
                     <h2>{i18n.t('tranche.table.tableHeader.subtitle')}</h2>
-                    </TableSubTitle> :
-                    <TableSubTitle color={ModeThemes[theme].HeaderSubtitle}>
-                        <h2>{i18n.t('stake.table.tableHeader.subtitle')}</h2>
-                    </TableSubTitle> 
+                    </TableSubTitle> : ""
                 }
 
                 {   menu ?

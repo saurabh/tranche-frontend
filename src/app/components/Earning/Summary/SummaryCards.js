@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
 import { SummaryCardsWrapper } from './styles/SummaryComponents';
+import { TableTitle } from '../../Stake/Table/styles/TableComponents';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import axios from 'axios';
-import { apiUri, serverUrl } from 'config/constants';
+import { apiUri, ModeThemes, serverUrl } from 'config/constants';
 import PropTypes from 'prop-types';
 
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
@@ -40,7 +41,8 @@ const SummaryCards = ({
   summaryData: { slice, lp, lpList, sliceStats, tvl },
   summaryFetchSuccess,
   setSliceStats,
-  setTvl
+  setTvl,
+  theme
 }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
@@ -79,6 +81,9 @@ const SummaryCards = ({
 
   return (
     <div>
+      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
+        <h2>{i18n.t('tranche.trancheData.TrancheStats')}</h2>
+      </TableTitle>
       {!isDesktop && currentPath === 'stake' && (
         <SummaryCardsWrapper className='container content-container'>
           <button onClick={() => openModal(undefined, 0)}>
@@ -137,7 +142,7 @@ const SummaryCards = ({
               currentPath === 'stake'
                 ? i18n.t('stake.summary.sliceRewards.title')
                 : currentPath === 'tranche'
-                ? 'SLICE 24H Volume'
+                ? i18n.t('tranche.summary.sliceVolume.title')
                 : 'Collateralization Ratio'
             }
             value={sliceStats ? sliceStats.volume : 0}
@@ -180,7 +185,7 @@ const SummaryCards = ({
                   : 'Decentralized Loans'
               }
               tokenAddress={slice.address}
-              value={tvl.total}
+              value={tvl && tvl.total}
               path={currentPath}
               type={'tvl'}
               details={''}
@@ -202,7 +207,7 @@ const SummaryCards = ({
               }
               tokenAddress={lp.address}
               lpList={lpList}
-              value={sliceStats.price}
+              value={sliceStats && sliceStats.price}
               path={currentPath}
               type={'price'}
               details={''}
@@ -222,7 +227,7 @@ const SummaryCards = ({
                   ? 'SLICE 24H Volume'
                   : 'Collateralization Ratio'
               }
-              value={sliceStats.volume}
+              value={sliceStats && sliceStats.volume}
               isLoading={false}
               path={currentPath}
               type={'volume'}
@@ -233,21 +238,21 @@ const SummaryCards = ({
               summaryModal={''}
               color='#2E65F3'
             />
+            <SummaryCard
+              title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
+              value={'Card'}
+              isLoading={false}
+              path={currentPath}
+              type={''}
+              details={''}
+              openModal={(bool = null, num = 3) => openModal(bool, num)}
+              closeModal={closeModal}
+              modalType={false}
+              summaryModal={''}
+              color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
+              stakeCard={true}
+            />
           </Carousel>
-          <SummaryCard
-            title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
-            value={'Card'}
-            isLoading={false}
-            path={currentPath}
-            type={''}
-            details={''}
-            openModal={(bool = null, num = 3) => openModal(bool, num)}
-            closeModal={closeModal}
-            modalType={false}
-            summaryModal={''}
-            color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
-            stakeCard={true}
-          />
         </SummaryCardsWrapper>
       )}
     </div>
@@ -268,7 +273,8 @@ const mapStateToProps = (state) => {
   return {
     path: state.path,
     ethereum: state.ethereum,
-    summaryData: state.summaryData
+    summaryData: state.summaryData,
+    theme: state.theme
   };
 };
 
