@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
 import useAnalytics from 'services/analytics';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
+import { addNotification } from 'redux/actions/NotificationToggle';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
 import { statuses, ApproveBigNumber, txMessage } from 'config';
@@ -53,6 +54,7 @@ const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
   setTokenBalance,
   ethereum: { tokenBalance, address, wallet, web3, notify, blockExplorerUrl },
+  addNotification,
   summaryData: { slice, lp, lpList },
   theme,
   isDesktop
@@ -66,8 +68,7 @@ const TableCard = ({
   const [balance, setBalance] = useState(0);
   const [isLPToken, setLPToken] = useState(false);
   const [stakingAddress, setStakingAddress] = useState(null);
-  const Tracker = useAnalytics("ButtonClicks");
-
+  const Tracker = useAnalytics('ButtonClicks');
 
   const onboard = initOnboard({
     address: setAddress,
@@ -141,6 +142,11 @@ const TableCard = ({
   const stakingApproveContract = async (stakingAddress, tokenAddress) => {
     try {
       const token = ERC20Setup(web3, tokenAddress);
+      addNotification({
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      });
       await token.methods
         .approve(stakingAddress, toWei(ApproveBigNumber))
         .send({ from: address })
@@ -161,6 +167,12 @@ const TableCard = ({
           setApproveLoading(false);
         });
     } catch (error) {
+      error.code === 4001 &&
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        });
       console.error(error);
     }
   };
@@ -169,7 +181,7 @@ const TableCard = ({
     try {
       e.preventDefault();
       modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
-      modalType? Tracker("addStake", "User address: " + address) : Tracker("withdrawStake", "User address: " + address) ;
+      modalType ? Tracker('addStake', 'User address: ' + address) : Tracker('withdrawStake', 'User address: ' + address);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -386,7 +398,8 @@ TableCard.propTypes = {
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired
+  setWalletAndWeb3: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -402,7 +415,7 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   setTokenBalance,
+  addNotification,
   checkServer
 })(TableCard);
