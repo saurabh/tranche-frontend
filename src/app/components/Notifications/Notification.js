@@ -28,7 +28,7 @@ const Notification = props => {
     handleStartTimer();
   }, []);
   useEffect(() => {
-    if(props.type === "SUCCESS"){
+    if(props.type === "SUCCESS" || props.type === "WAITING"){
       setTimeout(() =>{
         handleCloseNotification();
       }, 3000)

@@ -5,15 +5,15 @@ import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
-import useAnalytics from 'services/analytics';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
+import { addNotification } from 'redux/actions/NotificationToggle';
+import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId } from 'config';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId, maticNetworkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
-import { addNotification } from "redux/actions/NotificationToggle";
 
 import {
   TableContentCard,
@@ -46,7 +46,6 @@ import {
   TableCardImgWrapper
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
-import { maticNetworkId } from 'config';
 // import i18n from 'app/components/locale/i18n';
 
 const TableCard = ({
@@ -127,6 +126,11 @@ const TableCard = ({
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
       const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
       const token = ERC20Setup(web3, tokenAddress);
+      addNotification({
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      });
       await token.methods
         .approve(contractAddress, amount)
         .send({ from: address })
@@ -141,13 +145,12 @@ const TableCard = ({
             });
             emitter.on('txCancel', () => setTxLoading(false));
             emitter.on('txFailed', () => setTxLoading(false));
-          }
-          else if(network === maticNetworkId){
+          } else if (network === maticNetworkId) {
             addNotification({
-              type: "PENDING",
+              type: 'PENDING',
               message: txMessage(hash),
-              title: "pending transaction"
-            })
+              title: 'pending transaction'
+            });
           }
         })
         .on('confirmation', (count) => {
@@ -156,16 +159,22 @@ const TableCard = ({
             toggleApproval(tokenAddress, contractAddress, !isApproved);
             setTxLoading(false);
             destroy('tranche');
-            if(network === maticNetworkId){
+            if (network === maticNetworkId) {
               addNotification({
-                type: "SUCCESS",
-                message: "Your transaction has succeeded",
-                title: "successful transaction"
-              })
+                type: 'SUCCESS',
+                message: 'Your transaction has succeeded',
+                title: 'successful transaction'
+              });
             }
           }
         });
     } catch (error) {
+      error.code === 4001 &&
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        });
       return error;
     }
   };

@@ -182,6 +182,13 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
+    store.dispatch(
+      addNotification({
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
@@ -263,6 +270,14 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         });
     }
   } catch (error) {
+    error.code === 4001 &&
+      store.dispatch(
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        })
+      );
     console.error(error);
   }
 };
@@ -274,6 +289,13 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
     let { withdrawAmount } = state.form.tranche.values;
     withdrawAmount = toWei(withdrawAmount);
     const JCompound = JCompoundSetup(web3, contractAddress);
+    store.dispatch(
+      addNotification({
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .redeemTrancheAToken(trancheId, withdrawAmount)
@@ -354,6 +376,14 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         });
     }
   } catch (error) {
+    error.code === 4001 &&
+      store.dispatch(
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        })
+      );
     console.error(error);
   }
 };
@@ -477,6 +507,14 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
         }
       });
   } catch (error) {
+    error.code === 4001 &&
+      store.dispatch(
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        })
+      );
     console.error(error);
   }
 };
@@ -503,6 +541,14 @@ export const massHarvest = async (yieldfarmAddress) => {
         }
       });
   } catch (error) {
+    error.code === 4001 &&
+      store.dispatch(
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        })
+      );
     console.error(error);
   }
 };
