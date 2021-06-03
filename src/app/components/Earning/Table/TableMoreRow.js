@@ -20,6 +20,7 @@ import {
   TableMoreLeftTopSection,
   TableMoreLeftBottomSection,
   TooltipWrapper
+
 } from '../../Stake/Table/styles/TableComponents';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
@@ -124,7 +125,6 @@ let TableMoreRow = ({
         : setWithdrawBalanceCheck('');
     }
   };
-
   return (
     <TableMoreRowWrapper>
       <TableMoreRowContent>

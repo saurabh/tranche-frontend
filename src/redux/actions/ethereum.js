@@ -107,6 +107,7 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
   }
 };
 
+
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
     const state = store.getState();

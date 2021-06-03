@@ -41,6 +41,7 @@ const initialState = {
   maticWeb3,
   notify: initNotify(),
   txOngoing: false,
+  tokenBalanceLoading: true,
   trancheAllowance: {
     [JCompoundAddress]: compAllowance,
     [JAaveAddress]: aaveAllowance

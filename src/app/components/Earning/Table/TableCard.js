@@ -104,7 +104,6 @@ const TableCard = ({
       ? Down
       : '';
   const Tracker = useAnalytics('ButtonClicks');
-
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
     ETHorMaticCheck.indexOf(cryptoType) !== -1
@@ -191,7 +190,9 @@ const TableCard = ({
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      address && setTokenBalances(address)
+      setTimeout(() =>{
+        address && setTokenBalances(address)
+      }, 500)
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
