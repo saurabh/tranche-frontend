@@ -44,7 +44,7 @@ const Notification = props => {
         {props.type === "SUCCESS" ? <svg viewBox="0 0 185 168" xmlns="http://www.w3.org/2000/svg" id="el_3OA8Szq_A" className="svelte-ta62lj">
           <path d="m176.126953 63.8789062-94.4130858 95.4130858-72.87402345-72.8740232
             27.93945315-27.9394532 44.9345703 44.9345704 94.4130858-94.413086" strokeLinecap="round" strokeLinejoin="round" id="el_RzYtw9rUyN"></path>
-        </svg> : props.type === "PENDING" ?
+        </svg> : (props.type === "PENDING" || props.type === "WAITING") ?
         <svg viewBox="0 0 190 190" xmlns="http://www.w3.org/2000/svg" id="el_XWLVvD_rP" className="svelte-ta62lj">
             <g fillRule="evenodd" id="el_Uh6HOhkAVi">
               <circle cx="88" cy="88" r="88" id="el_PHAWgO26lN"></circle>
@@ -57,12 +57,28 @@ const Notification = props => {
                   </g>
               </g>
             </g>
-        </svg> : ""}
+        </svg> : props.type === "REJECTED" ? 
+        <svg viewBox="0 0 178 178" xmlns="http://www.w3.org/2000/svg" id="el_bYTVKD04y" className="svelte-ta62lj">
+            <g fillRule="evenodd" id="el_doMgf96Cxx">
+              <path d="m96.9442719 17.8885438 71.8196601 143.6393202c2.469893
+                  4.939785.467649 10.946515-4.472136 13.416408-1.388554.694277-2.919685
+                  1.055728-4.472136 1.055728h-143.6393201c-5.5228475
+                  0-10.00000001-4.477153-10.00000001-10 0-1.552451.36145092-3.083582
+                  1.05572809-4.472136l71.81966012-143.6393202c2.4698925-4.939785
+                  8.4766229-6.9420284 13.4164079-4.4721359 1.935274.967637 3.5044989
+                  2.5368619 4.4721359 4.4721359z" strokeLinejoin="round" id="el_5BNAI_PBsn"></path>
+              <g id="el_q_eIK0z3HI_an_045tZJOHl" data-animator-group="true" data-animator-type="2">
+                  <circle cx="88.5" cy="144.5" r="7.5" id="el_q_eIK0z3HI"></circle>
+              </g>
+              <path d="m88.5 112.413086v-39.413086" strokeLinecap="round" strokeLinejoin="round" id="el_IAuv9ut-2-"></path>
+            </g>
+        </svg>
+        : ""}
       </div>
       <div id="NotifyText">
         <p>{Parser(props.message)}</p>
         <span>
-         {new Date().toLocaleTimeString([], {timeStyle: 'short'})} {props.type === "PENDING" ? <span>- <svg width="15px" height="16px" viewBox="0 0 15 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="svelte-1c9mzro">
+         {new Date().toLocaleTimeString([], {timeStyle: 'short'})} {(props.type === "PENDING" || props.type === "WAITING")? <span>- <svg width="15px" height="16px" viewBox="0 0 15 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="svelte-1c9mzro">
                        <g id="Notify-Style-Concepts" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                           <path d="M7.06681227,1.92484595 C10.9634297,1.92484595 14.1336806,5.03922755
                              14.1336806,8.86724251 C14.1336806,12.6953675 10.9634297,15.8096941

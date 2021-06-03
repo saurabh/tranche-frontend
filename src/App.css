@@ -1847,3 +1847,223 @@ table, th, td {
   -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
   animation-timing-function: cubic-bezier(0, 0, 1, 1);
   }
+  @-webkit-keyframes kf_el_IAuv9ut-2-_an_xlDuvYsRc {
+    50% {
+    opacity: 0;
+    }
+    66.67% {
+    opacity: 1;
+    }
+    0% {
+    opacity: 0;
+    }
+    100% {
+    opacity: 1;
+    }
+    }
+    @keyframes kf_el_IAuv9ut-2-_an_xlDuvYsRc {
+    50% {
+    opacity: 0;
+    }
+    66.67% {
+    opacity: 1;
+    }
+    0% {
+    opacity: 0;
+    }
+    100% {
+    opacity: 1;
+    }
+    }
+    @-webkit-keyframes kf_el_IAuv9ut-2-_an_29XE36SGo1 {
+    50% {
+    stroke-dasharray: 39.41;
+    }
+    0% {
+    stroke-dasharray: 39.41;
+    }
+    100% {
+    stroke-dasharray: 39.41;
+    }
+    }
+    @keyframes kf_el_IAuv9ut-2-_an_29XE36SGo1 {
+    50% {
+    stroke-dasharray: 39.41;
+    }
+    0% {
+    stroke-dasharray: 39.41;
+    }
+    100% {
+    stroke-dasharray: 39.41;
+    }
+    }
+    @-webkit-keyframes kf_el_IAuv9ut-2-_an_xo_EIWruT {
+    50% {
+    stroke-dashoffset: 39.41;
+    }
+    100% {
+    stroke-dashoffset: 0;
+    }
+    0% {
+    stroke-dashoffset: 39.41;
+    }
+    }
+    @keyframes kf_el_IAuv9ut-2-_an_xo_EIWruT {
+    50% {
+    stroke-dashoffset: 39.41;
+    }
+    100% {
+    stroke-dashoffset: 0;
+    }
+    0% {
+    stroke-dashoffset: 39.41;
+    }
+    }
+    @-webkit-keyframes kf_el_q_eIK0z3HI_an_045tZJOHl {
+    50% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(0, 0) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(0, 0)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    83.33% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(0, 0) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(0, 0)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    100% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(1, 1) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(1, 1)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    0% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(0, 0) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(0, 0)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    }
+    @keyframes kf_el_q_eIK0z3HI_an_045tZJOHl {
+    50% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(0, 0) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(0, 0)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    83.33% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(0, 0) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(0, 0)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    100% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(1, 1) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(1, 1)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    0% {
+    -webkit-transform: translate(88.50000762939453px, 144.5px)
+    scale(0, 0) translate(-88.50000762939453px, -144.5px);
+    transform: translate(88.50000762939453px, 144.5px) scale(0, 0)
+    translate(-88.50000762939453px, -144.5px);
+    }
+    }
+    @-webkit-keyframes kf_el_5BNAI_PBsn_an_aToWhdlG8F {
+    50% {
+    stroke-dasharray: 527.67;
+    }
+    0% {
+    stroke-dasharray: 527.67;
+    }
+    100% {
+    stroke-dasharray: 527.67;
+    }
+    }
+    @keyframes kf_el_5BNAI_PBsn_an_aToWhdlG8F {
+    50% {
+    stroke-dasharray: 527.67;
+    }
+    0% {
+    stroke-dasharray: 527.67;
+    }
+    100% {
+    stroke-dasharray: 527.67;
+    }
+    }
+    @-webkit-keyframes kf_el_5BNAI_PBsn_an_tQV_CQebU {
+    50% {
+    stroke-dashoffset: 527.67;
+    }
+    100% {
+    stroke-dashoffset: 0;
+    }
+    0% {
+    stroke-dashoffset: 527.67;
+    }
+    }
+    @keyframes kf_el_5BNAI_PBsn_an_tQV_CQebU {
+    50% {
+    stroke-dashoffset: 527.67;
+    }
+    100% {
+    stroke-dashoffset: 0;
+    }
+    0% {
+    stroke-dashoffset: 527.67;
+    }
+    }
+    #el_bYTVKD04y * {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 1);
+    }
+    #el_doMgf96Cxx {
+    fill: none;
+    -webkit-transform: translate(1px, -5px);
+    transform: translate(1px, -5px);
+    }
+    #el_5BNAI_PBsn {
+    stroke: #ff0039;
+    stroke-width: 14;
+    -webkit-animation-fill-mode: forwards, forwards;
+    animation-fill-mode: forwards, forwards;
+    -webkit-animation-name: kf_el_5BNAI_PBsn_an_tQV_CQebU,
+    kf_el_5BNAI_PBsn_an_aToWhdlG8F;
+    animation-name: kf_el_5BNAI_PBsn_an_tQV_CQebU,
+    kf_el_5BNAI_PBsn_an_aToWhdlG8F;
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1),
+    cubic-bezier(0, 0, 1, 1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 1),
+    cubic-bezier(0, 0, 1, 1);
+    }
+    #el_q_eIK0z3HI {
+    fill: #ff0042;
+    }
+    #el_IAuv9ut-2- {
+    stroke: #ff0042;
+    stroke-width: 14;
+    -webkit-animation-fill-mode: forwards, forwards, forwards;
+    animation-fill-mode: forwards, forwards, forwards;
+    -webkit-animation-name: kf_el_IAuv9ut-2-_an_xo_EIWruT,
+    kf_el_IAuv9ut-2-_an_29XE36SGo1, kf_el_IAuv9ut-2-_an_xlDuvYsRc;
+    animation-name: kf_el_IAuv9ut-2-_an_xo_EIWruT,
+    kf_el_IAuv9ut-2-_an_29XE36SGo1, kf_el_IAuv9ut-2-_an_xlDuvYsRc;
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1),
+    cubic-bezier(0, 0, 1, 1), cubic-bezier(0, 0, 1, 1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 1),
+    cubic-bezier(0, 0, 1, 1), cubic-bezier(0, 0, 1, 1);
+    }
+    #el_q_eIK0z3HI_an_045tZJOHl {
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-name: kf_el_q_eIK0z3HI_an_045tZJOHl;
+    animation-name: kf_el_q_eIK0z3HI_an_045tZJOHl;
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 1);
+    }
