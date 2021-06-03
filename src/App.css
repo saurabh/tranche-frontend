@@ -1511,6 +1511,7 @@ table, th, td {
 .ReactModal__Content{
   transform: scale(0.5) translateY(50%);
   transition: all 300ms ease-in-out;
+  background: none !important;
 }
 
 .ReactModal__Content--after-open{

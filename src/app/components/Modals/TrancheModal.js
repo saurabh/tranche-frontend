@@ -79,7 +79,7 @@ const StakingModal = ({
                     Polygon Markets are AAVE’s first implementation on the Polygon network, a layer 2 solution that highly improves the scalability of the Ethereum network in terms of cost and speed. To access Polygon markets, you will need to move your assets to the Polygon side chain using the Polygon Bridge. After that, your transactions will cost near 0 and settle instantly.
                 </p>
                 <a
-                    href='/'
+                    href='https://docs.tranche.finance/tranchefinance/tranche-app/tranche-on-polygon'
                     target='_blank'
                     rel='noopener noreferrer'
                 >
