@@ -1232,6 +1232,11 @@ table, th, td {
   .ReactModal__Content--after-open{
     transform: scale(1) translateY(0) !important;
   }
+  .TrancheMarketsModal .ReactModal__Content--after-open{
+    transform: scale(1) translateY(-50%) !important;
+    top: 50% !important;
+    height: 100% !important;
+  }
   .footerWrapper{
     flex-direction: column;
     padding: 12px 0;

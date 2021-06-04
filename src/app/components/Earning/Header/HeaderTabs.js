@@ -27,7 +27,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
     // onClick={() => trancheMarketsToggle("aavePolygon")}>
   };
   return (
-    <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle}>
+    <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle} className="TrancheMarkets"> 
       <div>
         <h2>
         {i18n.t('tranche.trancheData.TrancheMarkets')}

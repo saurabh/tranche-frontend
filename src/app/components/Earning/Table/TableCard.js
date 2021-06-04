@@ -411,7 +411,7 @@ const TableCard = ({
 
             <TableMobileContentRow>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>annual yield (apy)</h2>
+                <h2>NET APY</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
                   {roundNumber(apy, 2)}%{/* <img src={Info} alt='infoImage' /> */}
