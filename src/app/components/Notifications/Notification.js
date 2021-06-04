@@ -4,14 +4,21 @@ import Parser from 'html-react-parser';
 const Notification = props => {
   const [exit, setExit] = useState(false);
   const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
   const secondsRef = useRef();
 
   const handleStartTimer = () => {
-    const secondsFunction = () => {
-      setSeconds(prevSeconds => prevSeconds + 1)
+    const timerFunction = () => {
+      setSeconds(prev => prev + 1);
     }
-    secondsRef.current = setInterval(() => secondsFunction(), 1000)
+    secondsRef.current = setInterval(() => timerFunction(), 1000)
   };
+
+  useEffect(() =>{
+    if(seconds >= 60 && seconds % 60 === 0){
+      setMinutes(parseInt(seconds/60));
+    }
+  }, [seconds, setMinutes])
 
   const handleResetTimer = () => {
     clearInterval(secondsRef.current);
@@ -28,7 +35,7 @@ const Notification = props => {
     handleStartTimer();
   }, []);
   useEffect(() => {
-    if(props.type === "SUCCESS" || props.type === "WAITING"){
+    if(props.type === "SUCCESS"){
       setTimeout(() =>{
         handleCloseNotification();
       }, 3000)
@@ -93,7 +100,7 @@ const Notification = props => {
                              L8.61626343,1.22124533e-14 L8.61626343,1.6696743 L5.53007392,1.6696743
                              L5.53007392,1.22124533e-14 Z" id="transaction-timer" fill="#AEAEAE" fillRule="nonzero"></path>
                        </g>
-                    </svg> {seconds} sec</span> : ""}
+                    </svg> {seconds > 60 ? minutes : seconds} {seconds > 60 ? 'min' : 'sec'}</span> : ""}
 
         </span>
       </div>

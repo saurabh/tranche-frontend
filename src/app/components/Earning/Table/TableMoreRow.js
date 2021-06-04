@@ -153,7 +153,7 @@ let TableMoreRow = ({
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
-            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder} last>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2 onMouseOver={() => tooltipToggle('PRICE')} onMouseLeave={() => tooltipToggle('')}>
                   {i18n.t('tranche.trancheData.price')}

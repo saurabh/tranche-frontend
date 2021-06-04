@@ -1345,6 +1345,9 @@ const TableMoreLeftSection = styled.div`
   ${({color }) => color && `
     border-right: 2px solid ${color};
   `}
+  ${({ last }) => last && `
+    border: none;
+  `}
 `
 const TableMoreLeftSectionContent = styled.div`
   display: flex;
