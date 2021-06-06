@@ -237,7 +237,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
+                  {!isEth && <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>}
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
