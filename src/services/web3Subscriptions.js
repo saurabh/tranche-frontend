@@ -5,14 +5,7 @@ import { web3 } from 'utils/getWeb3';
 import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { setTokenBalances } from 'redux/actions/ethereum';
-import {
-  serverUrl,
-  apiUri,
-  StakingAddresses,
-  YieldAddresses,
-  JCompoundAddress,
-  JAaveAddress
-} from 'config/constants';
+import { serverUrl, apiUri, StakingAddresses, YieldAddresses, JCompoundAddress, JAaveAddress } from 'config/constants';
 import maticWeb3 from 'utils/maticWeb3';
 const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked } = apiUri;
 
@@ -27,7 +20,7 @@ export const ETHContracts = {
       const state = store.getState();
       const { path, ethereum, data } = state;
       const { address } = ethereum;
-      const { skip, limit, filter } = data;
+      
       JCompound =
         path === 'tranche' &&
         address &&
@@ -40,6 +33,10 @@ export const ETHContracts = {
             let userAddress = address.split('0x')[1];
             await timeout(5000);
             if (log.data.includes(userAddress)) {
+              const state = store.getState();
+              const { data } = state;
+              const { skip, limit, filter } = data;
+              console.log(filter);
               await store.dispatch(
                 fetchTableData(
                   {
@@ -47,7 +44,7 @@ export const ETHContracts = {
                     limit,
                     filter: {
                       address: address ? address : undefined,
-                      type: 'ethereum'
+                      type: filter
                     }
                   },
                   tranchesList
@@ -78,6 +75,7 @@ export const ETHContracts = {
           })
           .on('data', async () => {
             await timeout(5000);
+            const { skip, limit, filter } = data;
             await store.dispatch(
               fetchTableData(
                 {
@@ -138,9 +136,8 @@ export const MaticContracts = {
   subscribe: () => {
     try {
       const state = store.getState();
-      const { path, ethereum, data } = state;
+      const { path, ethereum } = state;
       const { address } = ethereum;
-      const { skip, limit } = data;
 
       JAave =
         path === 'tranche' &&
@@ -154,6 +151,10 @@ export const MaticContracts = {
             let userAddress = address.split('0x')[1];
             await timeout(5000);
             if (log.data.includes(userAddress)) {
+              const state = store.getState();
+              const { data } = state;
+              const { skip, limit, filter } = data;
+              console.log(filter);
               await store.dispatch(
                 fetchTableData(
                   {
@@ -161,7 +162,7 @@ export const MaticContracts = {
                     limit,
                     filter: {
                       address: address ? address : undefined,
-                      type: 'polygon'
+                      type: filter
                     }
                   },
                   tranchesList
