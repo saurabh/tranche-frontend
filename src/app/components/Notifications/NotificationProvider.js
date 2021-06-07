@@ -4,13 +4,13 @@ import Notification from "./Notification";
 import { removeNotification } from 'redux/actions/NotificationToggle';
 
 const NotificationProvider = ({ NotificationToggle, removeNotification }) => {
-
   return(
     <div>
       <div className="NotifyWrapper">
-        {NotificationToggle.map((note, index) => {
-          return <Notification removeNotification={removeNotification} key={index} {...note} />
-        })}
+        {
+          NotificationToggle[0] &&
+          <Notification removeNotification={removeNotification} /> 
+        }
       </div>
     </div>
   )
