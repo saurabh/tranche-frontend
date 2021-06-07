@@ -1,126 +1,68 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { ModeThemes } from 'config';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
-import { apiUri, pairData, ModeThemes } from 'config/constants';
-import { useOuterClick } from 'services/useOuterClick';
-import { getRequest } from 'services/axios';
-import { roundNumber, safeDivide } from 'utils/helperFunctions';
-import { ETH, DaiLogo } from 'assets';
-import { NavLink } from 'react-router-dom';
 import i18n from '../../locale/i18n';
-
+import useAnalytics from 'services/analytics';
 import {
-  HeaderTabsWrapper,
-  HeaderTabsBtnsLinks,
-  RatesWrapper,
-  RatesBoxWrapper,
-  RatesRowWrapper,
-  RatesRowContent,
-  RatesValue,
-  RatesValueImg,
-  RatesValueText,
-  RatesRowDash
+  StakeHeaderWrapper,
+  StakeSummaryCard,
+  WithdrawStakeCard,
+  StackSummaryCol,
+  WithdrawStakeCardText,
+  WithdrawStakeCardBtns
 } from './styles/HeaderComponents';
+import {
+  TableTitle,
+  HowToLink
+} from '../Table/styles/TableComponents';
+import ProgressBar from '../ProgressBar/ProgressBar';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ path, theme }) => {
-  // const [pair1Value, setPair1Value] = useState(0);
-  const [ratesVisability, setRatesVisability] = useState(false);
-  const [pair0Value, setPair0Value] = useState(0);
-  // const [pair1Value, setPair1Value] = useState(0);
-
-  const innerRef = useOuterClick((e) => {
-    setRatesVisability(false);
-  });
-  const getPriceFeed = async () => {
-    const { priceFeed: priceUrl } = apiUri;
-    setRatesVisability(!ratesVisability);
-    try {
-      const { data: result } = await getRequest(priceUrl, {}, null);
-      result.result.forEach((pair) => {
-        let price = safeDivide(pair.pairValue, 10 ** pair.pairDecimals);
-        price = roundNumber(price);
-        if (pair.pairId === pairData[0].value) setPair0Value(price);
-        // if (pair.pairId === pairData[1].value) setPair1Value(price)
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+const HeaderTabs = ({ theme }) => {
+  const Tracker = useAnalytics("ExternalLinks");
+  
   return (
-    <HeaderTabsWrapper path={path} desktop>
-      <HeaderTabsBtnsLinks color={ModeThemes[theme]} colorBorder={ModeThemes[theme].NavbarBorder}>
-        <NavLink
-          to={baseUrl + '/stake'}
-          activeStyle={{
-            opacity: 1,
-            background: ModeThemes[theme].NavbarBackground,
-            boxShadow: ModeThemes[theme].NavbarShadow
-          }}
-          exact
-        >
-          {i18n.t('stake.tabs.dashboard')}
-        </NavLink>
-        <div ref={innerRef}>
-          <button onClick={() => getPriceFeed()}>{i18n.t('stake.tabs.rates')}</button>
-          <RatesWrapper>
-            <RatesBoxWrapper className={'ratesBoxWrapper ' + (!ratesVisability ? 'ratesBoxWrapperDisplay' : '')}>
-              <RatesRowWrapper border={false}>
-                <RatesRowContent>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={ETH} alt='ETH' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>1 ETH</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                  <RatesRowDash>
-                    <h2>—</h2>
-                  </RatesRowDash>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={DaiLogo} alt='DAI' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>{pair0Value} DAI</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                </RatesRowContent>
-              </RatesRowWrapper>
-              {/* 
-              <RatesRowWrapper>
-                <RatesRowContent>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={SLICE} alt='SLICE' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>1 SLICE</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                  <RatesRowDash>
-                    <h2>—</h2>
-                  </RatesRowDash>
-                  <RatesValue>
-                    <RatesValueImg>
-                      <img src={USDC} alt='USDC' />
-                    </RatesValueImg>
-                    <RatesValueText>
-                      <h2>{pair1Value} USDC</h2>
-                    </RatesValueText>
-                  </RatesValue>
-                </RatesRowContent>
-              </RatesRowWrapper> */}
-            </RatesBoxWrapper>
-          </RatesWrapper>
-        </div>
-        <a href="https://docs.tranche.finance/tranchefinance/tranche-app/staking" target="_blank" rel="noopener noreferrer">
-          {i18n.t('stake.tabs.howTo')}
-        </a>
-      </HeaderTabsBtnsLinks>
-    </HeaderTabsWrapper>
+    <StakeHeaderWrapper>
+      <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
+          <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
+        <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+            {i18n.t('footer.docs')}
+        </HowToLink>  
+      </TableTitle>
+      <StakeSummaryCard>
+        <StackSummaryCol>
+          <h2>Accrued Rewards</h2>
+          <h2>100 SLICE</h2>
+          <h2>Current Value is $70</h2>
+          <ProgressBar progress="50" />
+          <h2>6 Days until next distribution</h2>
+        </StackSummaryCol>
+        <StackSummaryCol>
+          <h2>Total Staked SLICE Tokens</h2>
+          <h2>102.00</h2>
+          <h2>14,140.12 SLICE Available</h2>
+        </StackSummaryCol>
+        <StackSummaryCol>
+          <h2>Total Staked SLICE LP Tokens</h2>
+          <h2>00.00</h2>
+          <h2>14,140.12 SLICE-LP Available</h2>
+        </StackSummaryCol>
+        <StackSummaryCol claim>
+          <button>Claim</button>
+        </StackSummaryCol>
+      </StakeSummaryCard>
+      <WithdrawStakeCard>
+        <WithdrawStakeCardText>
+          <h2>WITHDRAW YOUR SLICE TOKENS</h2>
+          <p>Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE Staking pools, please withdraw your current SLICE tokens and rewards in order to use them in SLICE staking pools.</p>
+        </WithdrawStakeCardText>
+        <WithdrawStakeCardBtns>
+          <button>Withdraw REWARDS</button>
+          <button>Withdraw STAKE</button>
+        </WithdrawStakeCardBtns>
+      </WithdrawStakeCard>
+    </StakeHeaderWrapper>
   );
 };
 

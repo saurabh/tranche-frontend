@@ -324,6 +324,9 @@ const TableTitle = styled.div`
         color: ${props => props.color};
     }
     margin: ${props => props.summary ? "33px 0 29px 0" : ""};
+    ${({ stake }) => stake && `
+     margin: 40px 0;
+    `}
 `;
 const TableSubTitle = styled.div`
     & > h2{
@@ -1953,6 +1956,7 @@ const HowToLink = styled.a`
     padding: 6px 20px;
     font-size: 8px;
   }
+
 
 `
 

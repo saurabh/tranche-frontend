@@ -3,7 +3,8 @@ import Create from "assets/images/svg/create.svg";
 import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
 import { changeFilter } from 'redux/actions/tableData';
-import { useOuterClick } from 'services/useOuterClick'
+import { useOuterClick } from 'services/useOuterClick';
+import useAnalytics from 'services/analytics';
 import { ETH } from 'config/constants';
 import {
     TableContainerHeader,
@@ -14,19 +15,19 @@ import {
     TableMarketsSortingDropdown,
     TableMarketsSortingDropdownContent,
     TableMarketSortingBtn,
-    HowToLink
+    // HowToLink
 } from './styles/TableComponents';
 import {
     ModeThemes
 } from 'config/constants';
 import i18n from "app/components/locale/i18n";
-import useAnalytics from 'services/analytics';
 
 
-const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
+const TableHeader = ({ HandleNewLoan, path, changeFilter, theme }) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
     const Tracker = useAnalytics("ExternalLinks");
+
 
     const innerRef = useOuterClick(e => {
         toggleMenu(false);
@@ -44,24 +45,13 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
 
     return (
         <TableContainerHeader>
+            <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
+                <h2>SLICE Staking Pools</h2> :
+                {/* <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+                    {i18n.t('footer.docs')}
+                </HowToLink>   */}
+            </TableTitle>
             <TableHeaderTitles>
-                <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto>
-                {   path === "lend" ?
-                    <h2>Earning Assets</h2> :
-                    path === "borrow" ?
-                    <h2>Open Loans</h2> : 
-                    path === "stake" ?
-                    <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
-                    <h2>{i18n.t('tranche.table.tableHeader.title')}</h2>
-                }
-                {
-                    path === "stake" || path === "tranche" ?
-                    <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
-                        {i18n.t('footer.docs')}
-                    </HowToLink> : ""
-                }
-                
-                </TableTitle>
                 {
                     path !== "stake" && path !== "tranche" ?
                     <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} color={ModeThemes[theme].HeaderSubtitle}>

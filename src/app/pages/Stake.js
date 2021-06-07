@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Layout } from 'app/components/Stake/Layout';
 import { PagesData, GoogleAnalyticsTrackingID } from 'config/constants';
 import Table from '../components/Stake/Table/Table';
-import SummaryCards from 'app/components/Stake/Summary/SummaryCards';
 
 
 
@@ -18,7 +17,6 @@ function Stake({ ethereum: { address } }) {
   })
   return (
     <Layout>
-      <SummaryCards />
       <Table pageType={PagesData.borrow.pageType} />
     </Layout>
   );
