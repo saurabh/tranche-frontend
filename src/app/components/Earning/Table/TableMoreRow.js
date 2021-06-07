@@ -25,7 +25,7 @@ import {
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
-import { ModeThemes, zeroAddress } from 'config';
+import { ModeThemes, ETHorMaticCheck } from 'config';
 import i18n from '../../locale/i18n';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -86,7 +86,7 @@ let TableMoreRow = ({
 
   useEffect(() => {
     if (trancheAllowance[contractAddress]) {
-      if (buyerCoinAddress === zeroAddress) {
+      if (ETHorMaticCheck.indexOf(cryptoType) !== -1) {
         setIsEth(true);
         setDepositApproved(true);
         setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
@@ -100,7 +100,7 @@ let TableMoreRow = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
+  }, [cryptoType, buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
 
   const setMaxAmount = useCallback(
     (e, type) => {
@@ -198,7 +198,7 @@ let TableMoreRow = ({
             >
               {txOngoing && (
                 <div>
-                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
+                  {/* <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} /> */}
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -255,7 +255,7 @@ let TableMoreRow = ({
             >
               {txOngoing && (
                 <div>
-                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
+                  {/* <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} /> */}
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
