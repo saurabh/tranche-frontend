@@ -67,6 +67,7 @@ const StakingModal = ({
         closeTimeoutMS={200}
         shouldCloseOnOverlayClick={false}
         contentLabel='Adjust'
+        portalClassName="TrancheMarketsModal"
       >
         <ModalHeader notFound ModalBackground={ModeThemes[theme].ModalBackground}>
           <button onClick={() => closeModal()}>

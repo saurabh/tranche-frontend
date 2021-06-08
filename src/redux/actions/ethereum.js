@@ -5,6 +5,7 @@ import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
 import {
   networkId,
   maticNetworkId,
+  maticAddress,
   serverUrl,
   apiUri,
   ERC20Tokens,
@@ -65,10 +66,18 @@ export const setNetwork = (network) => async (dispatch) => {
 };
 
 export const setBalance = (balance) => (dispatch) => {
+  const state = store.getState();
+  const { network } = state.ethereum;
   dispatch({
     type: SET_BALANCE,
     payload: balance
   });
+  if (network === maticNetworkId) {
+    dispatch({
+      type: SET_TOKEN_BALANCE,
+      payload: { tokenAddress: maticAddress, tokenBalance: balance }
+    });
+  }
 };
 
 export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
@@ -107,6 +116,7 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
   }
 };
 
+
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
     const state = store.getState();
@@ -126,8 +136,6 @@ export const setTokenBalances = (address) => async (dispatch) => {
         batch.add(
           token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
             if (err) {
-              console.log('balanceCheck error');
-              console.log(tokenAddress);
               console.error(err);
             } else {
               dispatch({
@@ -173,8 +181,6 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
         batch.add(
           token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
             if (err) {
-              console.log('allowanceCheck balance error');
-              console.log(contractAddress, tokenAddress);
               console.error(err);
             } else {
               tokenBalance[tokenAddress] = res;
@@ -188,8 +194,6 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
         batch.add(
           token.methods.allowance(address, contractAddress).call.request({ from: address }, (err, res) => {
             if (err) {
-              console.log('allowanceCheck allowance error');
-              console.log(contractAddress, tokenAddress);
               console.error(err);
             } else {
               if ((isGreaterThan(res, tokenBalance[tokenAddress]) || isEqualTo(res, tokenBalance[tokenAddress])) && res !== '0') {

@@ -909,7 +909,7 @@ const FirstColTitle = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color};
@@ -994,7 +994,7 @@ const SecondColContent = styled.div`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 25px;
+    left: 15px;
   }
   & > div{
     position: absolute;
@@ -1344,6 +1344,9 @@ const TableMoreLeftSection = styled.div`
   height: 100px;
   ${({color }) => color && `
     border-right: 2px solid ${color};
+  `}
+  ${({ last }) => last && `
+    border: none;
   `}
 `
 const TableMoreLeftSectionContent = styled.div`

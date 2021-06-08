@@ -11,7 +11,7 @@ import { addNotification } from 'redux/actions/NotificationToggle';
 import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId, maticNetworkId } from 'config';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ModeThemes, networkId, maticNetworkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -103,10 +103,9 @@ const TableCard = ({
       ? Down
       : '';
   const Tracker = useAnalytics('ButtonClicks');
-
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
-    ETHorMaticCheck.indexOf(cryptoType) !== -1
+    cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
       : searchArr(cryptoType)
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
@@ -200,7 +199,9 @@ const TableCard = ({
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      address && setTokenBalances(address);
+      setTimeout(() =>{
+        address && setTokenBalances(address)
+      }, 500)
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
@@ -410,7 +411,7 @@ const TableCard = ({
 
             <TableMobileContentRow>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>annual yield (apy)</h2>
+                <h2>NET APY</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
                   {roundNumber(apy, 2)}%{/* <img src={Info} alt='infoImage' /> */}
