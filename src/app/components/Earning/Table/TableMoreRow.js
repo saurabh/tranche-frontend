@@ -198,7 +198,7 @@ let TableMoreRow = ({
             >
               {txOngoing && (
                 <div>
-                  {/* <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} /> */}
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -255,7 +255,7 @@ let TableMoreRow = ({
             >
               {txOngoing && (
                 <div>
-                  {/* <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} /> */}
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
