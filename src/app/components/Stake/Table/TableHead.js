@@ -23,7 +23,7 @@ import i18n from "app/components/locale/i18n";
 import { ModeThemes } from "config";
 
 
-const TableHead = ({changeSorting, path, color, theme}) => {
+const TableHead = ({changeSorting, path, color, theme, title}) => {
 
     const [order, setOrder] = useState("asc")
     const [menu, toggleMenu] = useState(false);
@@ -63,7 +63,7 @@ const TableHead = ({changeSorting, path, color, theme}) => {
         return (
             <TableHeadWrapper path={path}>
                 <TableHeadTitle defaultCursor={true} stakingPool color={color} stakingPoolStake>
-                    <h2 onMouseOver={() => tooltipToggle("stakingPool")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') :  "INSTRUMENT"}</h2>
+                    <h2 onMouseOver={() => tooltipToggle("stakingPool")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('stake.table.tableHead.stakingPool') : "Liquidity Provider Pool") :  "INSTRUMENT"}</h2>
                     <TooltipWrapper tooltip={TooltipToggle === "stakingPool"} stakingPool color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>
                             <h2>{i18n.t('toolTips.table.stakingPool')}</h2>
@@ -71,10 +71,10 @@ const TableHead = ({changeSorting, path, color, theme}) => {
                     </TooltipWrapper>
                 </TableHeadTitle>
                 <TableHeadTitle color={color} statusStake>
-                    <h2 onMouseOver={() => tooltipToggle("status")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow" || path === "stake") ? i18n.t('stake.table.tableHead.status') : "BOND APY"}</h2>
+                    <h2 onMouseOver={() => tooltipToggle("status")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow" || path === "stake") ? (title ===  "SLICE Staking Pools" ? "Lockup" : ""): "BOND APY"}</h2>
                     <TooltipWrapper tooltip={TooltipToggle === "status"} status color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>
-                            <h2>{i18n.t('toolTips.table.status')}</h2>
+                            <h2>{"SLICE Staking Pools"}</h2>
                         </div>
                     </TooltipWrapper>
                 </TableHeadTitle>
@@ -87,10 +87,10 @@ const TableHead = ({changeSorting, path, color, theme}) => {
                     </TooltipWrapper>
                 </TableHeadTitle>
                 <TableHeadTitle color={color} reward>
-                    <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN/BLOCK"}</h2>
+                    <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? (title ===  "SLICE Staking Pools" ? "POOL CAPACIY" : i18n.t('stake.table.tableHead.reward')) : "RETURN/BLOCK"}</h2>
                     <TooltipWrapper tooltip={TooltipToggle === "reward"} reward color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>
-                            <h2>{i18n.t('toolTips.table.reward')}</h2>
+                            <h2>{i18n.t('toolTips.table.reward') }</h2>
                         </div>
                     </TooltipWrapper>
                 </TableHeadTitle> 

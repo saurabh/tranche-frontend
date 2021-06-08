@@ -66,7 +66,8 @@ const Table = ({
   paginationOffset,
   paginationCurrent,
   ownAllToggle,
-  theme
+  theme,
+  title
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
@@ -156,9 +157,9 @@ const Table = ({
           </div>
         </TableWrapper>
         <TableWrapper desktop>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
+          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} title={title}/>
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead} />
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} title={title} color={ModeThemes[theme].TableHead} />
             <div className='table-content'>
               {isLoading ? (
                 <div>
@@ -207,7 +208,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop} />)
+                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} title={title} isDesktop={isDesktop} />)
               )}
             </div>
           </div>

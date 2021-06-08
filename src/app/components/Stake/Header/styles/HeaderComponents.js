@@ -169,6 +169,7 @@ const WithdrawStakeCardBtns = styled.div`
     font-family: 'Inter', sans-serif;
     font-weight: bold;
     padding: 0 15px;
+    outline: none;
     font-size: 13px;
     line-height: 16px;
     cursor: pointer;

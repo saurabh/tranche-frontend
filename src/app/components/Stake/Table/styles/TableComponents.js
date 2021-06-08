@@ -1167,6 +1167,9 @@ const StatusTextWrapper = styled.h2`
   ${({ table }) => table === 'stake' && `
     font-weight: 600;
     font-size: 14px !important;
+    background: rgba(105, 103, 156, 0.4)  !important;;
+    border-radius: 10px  !important;
+    color: #FFFFFF !important;
   `}
 `
 const TableSixthCol = styled.div`
@@ -1229,6 +1232,22 @@ const StakeBtn = styled.button`
     font-size: 12px;
   } 
 `
+const StakeBtnSlice = styled.button`
+  outline: none;
+  border: none;
+  width: 96.32px;
+  height: 34.19px;
+  background: #4441CF;
+  border-radius: 50px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
+  text-transform: uppercase;
+  // margin-right: 20px;
+  color: #FFFFFF;
+`
+
 const StakeBtns = styled.div`
   display: flex;
 `
@@ -2053,5 +2072,6 @@ export {
   StakeBtns,
   TooltipWrapper,
   HowToLink,
-  LoadingContent
+  LoadingContent,
+  StakeBtnSlice
 };

@@ -23,7 +23,7 @@ import {
 import i18n from "app/components/locale/i18n";
 
 
-const TableHeader = ({ HandleNewLoan, path, changeFilter, theme }) => {
+const TableHeader = ({ HandleNewLoan, path, changeFilter, theme , title}) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
     const Tracker = useAnalytics("ExternalLinks");
@@ -46,7 +46,7 @@ const TableHeader = ({ HandleNewLoan, path, changeFilter, theme }) => {
     return (
         <TableContainerHeader>
             <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
-                <h2>SLICE Staking Pools</h2> :
+                <h2>{title}</h2> :
                 {/* <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
                     {i18n.t('footer.docs')}
                 </HowToLink>   */}

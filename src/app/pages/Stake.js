@@ -17,7 +17,8 @@ function Stake({ ethereum: { address } }) {
   })
   return (
     <Layout>
-      <Table pageType={PagesData.borrow.pageType} />
+      <Table pageType={PagesData.borrow.pageType} title="SLICE Staking Pools"/>
+      <Table pageType={PagesData.borrow.pageType} title="Liquidity Provider Pools"/>
     </Layout>
   );
 }

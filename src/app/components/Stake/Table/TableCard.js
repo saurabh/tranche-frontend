@@ -44,7 +44,8 @@ import {
   TableMobileContent,
   TableMobileContentRow,
   TableMobileContentCol,
-  TableCardImgWrapper
+  TableCardImgWrapper,
+  StakeBtnSlice
   // TableMobilCardBtn
 } from './styles/TableComponents';
 import i18n from 'app/components/locale/i18n';
@@ -57,7 +58,8 @@ const TableCard = ({
   addNotification,
   summaryData: { slice, lp, lpList },
   theme,
-  isDesktop
+  isDesktop,
+  title
   // checkServer
 }) => {
   const [ModalIsOpen, setModalOpen] = useState(false);
@@ -232,14 +234,19 @@ const TableCard = ({
 
           <TableFifthCol className='table-col' stake stakeStatus>
             <FifthColContent>
-              <StatusTextWrapper
+              {
+                title === "SLICE Staking Pools" && 
+                <StatusTextWrapper
                 className='status-text-wrapper'
                 color={ModeThemes[theme].activeStatusText}
                 backgroundColor={ModeThemes[theme].activeStatus}
                 table='stake'
-              >
-                {isActive ? i18n.t('stake.table.statuses.active') : ''}
-              </StatusTextWrapper>
+                >
+                {/* {isActive ? i18n.t('stake.table.statuses.active') : ''} */}
+                1 year
+                </StatusTextWrapper>
+              }
+             
             </FifthColContent>
           </TableFifthCol>
 
@@ -274,14 +281,22 @@ const TableCard = ({
             <h2>{''}</h2>
           </TableSixthCol>
 
-          <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
-            <StakeBtn background='#6E41CF' onClick={() => openModal(false)}>
-              -
-            </StakeBtn>
-            <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
-              +
-            </StakeBtn>
-          </TableSeventhCol>
+          { title === "SLICE Staking Pools" ? 
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
+              <StakeBtnSlice>
+                Stake
+              </StakeBtnSlice>
+            </TableSeventhCol> :
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
+              <StakeBtn background='#6E41CF' onClick={() => openModal(false)}>
+                -
+              </StakeBtn>
+              <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
+                +
+              </StakeBtn>
+            </TableSeventhCol>
+            
+          }
         </TableContentCard>
 
         <StakingModal
