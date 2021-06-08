@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, ETHCARD } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -125,8 +125,8 @@ export const trancheIcons = {
   BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
-  aamMATIC: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  bamMATIC: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
+  bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   aamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
