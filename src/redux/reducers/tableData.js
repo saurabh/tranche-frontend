@@ -18,6 +18,9 @@ import {
   TRANCHE_MARKETS
 } from '../actions/constants';
 
+let localNetwork = window.localStorage.getItem('network');
+let filter = localNetwork ? localNetwork : null;
+
 const initialState = {
   loansList: [],
   tranchesList: [],
@@ -27,7 +30,7 @@ const initialState = {
   skip: 0,
   current: 1,
   limit: 50,
-  filter: null,
+  filter,
   sort: null,
   filterType: 'all',
   tradeType: 'allTranches',

@@ -197,7 +197,7 @@
       "status": "Current status of the pool",
       "totalStaked": "The amount staked in each pool.",
       "reward": "The reward amount per epoch duration, which is currently one week.",
-      "apy": "The annualized return of return on your staked assets.",
+      "apy": "The annualized rate of return on your staked assets.",
       "yourStake": "The amount that you deposited. ",
       "manageStake": "Deposit or withdraw your staked assets.",
       "platform": "Instruments represent different assets derived from yield generating assets from major protocols, press on the instrument to learn more.",
@@ -205,7 +205,7 @@
       "totalDeposits": "Total deposits accross all users into each specific Tranche.",
       "myDeposits": "Your holdings in the USD value at any given point, including accrued interest.",
       "available": "Your holdings of the currency that you may deposit into this Tranche.",
-      "totalAmount": "The total amount of staked or deposited assets in USD on the Tranche Protocol."
+      "totalAmount": "The total amount of staked and deposited assets in USD on the Tranche Protocol."
     }
   },
   "footer": {

@@ -71,12 +71,12 @@ const Table = ({
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
   const pageCount = 5;
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
   const updateMedia = () => {
-    setDesktop(window.innerWidth > 1200);
+    setDesktop(window.innerWidth > 992);
   };
 
   useEffect(() => {

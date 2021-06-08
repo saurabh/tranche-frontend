@@ -6,7 +6,7 @@ import summaryData from './summaryData';
 import path from './TogglePath';
 import checkServerStatus from './checkServer';
 import theme from './theme';
-
+import NotificationToggle from './NotificationToggle';
 import { reducer as form } from 'redux-form';
 
 export default combineReducers({
@@ -17,5 +17,6 @@ export default combineReducers({
   checkServerStatus,
   form,
   summaryData,
-  theme
+  theme,
+  NotificationToggle
 });

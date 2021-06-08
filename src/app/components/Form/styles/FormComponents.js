@@ -149,14 +149,14 @@ const FormInputsWrapper = styled.div`
   justify-content: space-around;    
   @media (max-width: 633px){
     transform: none;
-    max-height: none;
+    max-height:  ${props => props.stake ? "" : "none"};;
   }
   h2:first-child{
     @media (max-width: 633px){
       font-style: normal;
       font-weight: normal;
       font-size: 11px;
-      text-align: center;
+      text-align: left;
       color: #B9B9B9;
     }
   }
@@ -361,6 +361,11 @@ const ModalAdjustForm = styled.div`
   }
   ${({ stake }) => stake && `
     flex-direction: column;
+    @media (max-width: 633px){
+      & > form{
+        display: block;
+      }
+    }
   `}
 `
 
@@ -710,6 +715,9 @@ const SelectedStakingContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.SelectedStakingText};
+    @media (max-width: 633px){
+      text-align: left !important;
+    }
   }
   a{
     font-style: normal;

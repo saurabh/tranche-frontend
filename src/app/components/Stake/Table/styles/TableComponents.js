@@ -553,7 +553,7 @@ const TableContentCardWrapperMobile = styled.div`
   border-radius: 5px;
   margin: 12px 0;
   ${({ tranche }) => tranche && `
-    min-height: 110px;
+    min-height: 120px;
     height: auto;
   `}
 `
@@ -909,7 +909,7 @@ const FirstColTitle = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color};
@@ -994,7 +994,7 @@ const SecondColContent = styled.div`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 25px;
+    left: 15px;
   }
   & > div{
     position: absolute;
@@ -1345,6 +1345,9 @@ const TableMoreLeftSection = styled.div`
   ${({color }) => color && `
     border-right: 2px solid ${color};
   `}
+  ${({ last }) => last && `
+    border: none;
+  `}
 `
 const TableMoreLeftSectionContent = styled.div`
   display: flex;
@@ -1664,7 +1667,7 @@ const TableMoreTitleWrapper = styled.div`
 `
 const TableMobileContent = styled.div`
   width: 83%;
-  height: 92px;
+  height: 105px;
   padding: 16px 12px;
   display: flex;
   flex-direction: column;
@@ -1944,6 +1947,11 @@ const HowToLink = styled.a`
   :hover{
     color: ${props => props.color}; 
     filter: brightness(1.3);
+  }
+  
+  @media (max-width: 992px){
+    padding: 6px 20px;
+    font-size: 8px;
   }
 
 `

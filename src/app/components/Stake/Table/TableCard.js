@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances, setTokenBalance } from 'redux/actions/ethereum';
+import useAnalytics from 'services/analytics';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
+import { addNotification } from 'redux/actions/NotificationToggle';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
-import { etherScanUrl, statuses, ApproveBigNumber, txMessage } from 'config';
+import { statuses, ApproveBigNumber, txMessage } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 import { ModeThemes } from 'config/constants';
 
@@ -51,8 +53,9 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
   setTokenBalance,
-  ethereum: { tokenBalance, address, wallet, web3, notify },
-  summaryData: { slice, withdrawn, lp, lpList },
+  ethereum: { tokenBalance, address, wallet, web3, notify, blockExplorerUrl },
+  addNotification,
+  summaryData: { slice, lp, lpList },
   theme,
   isDesktop
   // checkServer
@@ -65,6 +68,7 @@ const TableCard = ({
   const [balance, setBalance] = useState(0);
   const [isLPToken, setLPToken] = useState(false);
   const [stakingAddress, setStakingAddress] = useState(null);
+  const Tracker = useAnalytics('ButtonClicks');
 
   const onboard = initOnboard({
     address: setAddress,
@@ -115,8 +119,6 @@ const TableCard = ({
 
   let moreCardToggle = false;
 
-  
-
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
   };
@@ -125,7 +127,7 @@ const TableCard = ({
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
-    setTokenBalance(tokenAddress, address)
+    setTokenBalance(tokenAddress, address);
     if (type) {
       let result = await stakingAllowanceCheck(tokenAddress, stakingAddress, address);
       setHasAllowance(result);
@@ -140,6 +142,11 @@ const TableCard = ({
   const stakingApproveContract = async (stakingAddress, tokenAddress) => {
     try {
       const token = ERC20Setup(web3, tokenAddress);
+      addNotification({
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      });
       await token.methods
         .approve(stakingAddress, toWei(ApproveBigNumber))
         .send({ from: address })
@@ -160,6 +167,12 @@ const TableCard = ({
           setApproveLoading(false);
         });
     } catch (error) {
+      error.code === 4001 &&
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        });
       console.error(error);
     }
   };
@@ -168,6 +181,7 @@ const TableCard = ({
     try {
       e.preventDefault();
       modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
+      modalType ? Tracker('addStake', 'User address: ' + address) : Tracker('withdrawStake', 'User address: ' + address);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -208,7 +222,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -314,17 +328,17 @@ const TableCard = ({
                   <FirstColTitle color={ModeThemes[theme].tableText}>
                     <h2>{type && type}</h2>
                     <StakeBtns>
-                      <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
-                        +
-                      </StakeBtn>
                       <StakeBtn background='#6E41CF' onClick={() => openModal(false)}>
                         -
+                      </StakeBtn>
+                      <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
+                        +
                       </StakeBtn>
                     </StakeBtns>
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
@@ -384,7 +398,8 @@ TableCard.propTypes = {
   setAddress: PropTypes.func.isRequired,
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired
+  setWalletAndWeb3: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -400,7 +415,7 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
-  setTokenBalances,
   setTokenBalance,
+  addNotification,
   checkServer
 })(TableCard);

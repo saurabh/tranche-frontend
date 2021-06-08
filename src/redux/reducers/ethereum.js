@@ -8,39 +8,43 @@ import {
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE
+  SET_TRANCHE_ALLOWANCE,
+  SET_BLOCKEXPLORER_URL
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
+import maticWeb3 from 'utils/maticWeb3';
 import {
   SLICEAddress,
   LP1TokenAddress,
   LP2TokenAddress,
   JCompoundAddress,
   CompTrancheTokens,
-  // JAaveAddress,
-  // AaveTrancheTokens,
   TrancheBuyerCoinAddresses,
-  zeroAddress
+  JAaveAddress,
+  AaveTrancheTokens,
+  PolygonBuyerCoinAddresses
 } from 'config/constants';
 
 const CompTokens = CompTrancheTokens.concat(TrancheBuyerCoinAddresses);
-// const AaveTokens = AaveTrancheTokens.concat(TrancheBuyerCoinAddresses);
-let compAllowance = { [zeroAddress]: true };
-// let aaveAllowance = {};
+const AaveTokens = AaveTrancheTokens.concat(PolygonBuyerCoinAddresses);
+let compAllowance = {};
+let aaveAllowance = {};
 CompTokens.map((tokenAddress) => (compAllowance[tokenAddress.toLowerCase()] = false));
-// AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
+AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
 
 const initialState = {
   balance: -1,
   tokenBalance: { [SLICEAddress]: '0', [LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
   address: undefined,
   web3,
+  maticWeb3,
   notify: initNotify(),
   txOngoing: false,
+  tokenBalanceLoading: true,
   trancheAllowance: {
     [JCompoundAddress]: compAllowance,
-    // [JAaveAddress]: aaveAllowance
+    [JAaveAddress]: aaveAllowance
   }
 };
 
@@ -70,6 +74,8 @@ export default function (state = initialState, action) {
       return { ...state, wallet: payload };
     case SET_WEB3:
       return { ...state, web3: payload };
+    case SET_BLOCKEXPLORER_URL:
+      return { ...state, blockExplorerUrl: payload };
     case SET_CURRENT_BLOCK:
       return { ...state, currentBlock: payload };
     case SET_TRANSACTION_LOADING:

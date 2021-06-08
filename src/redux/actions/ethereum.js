@@ -4,28 +4,32 @@ import store from '../store';
 import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
 import {
   networkId,
+  maticNetworkId,
+  maticAddress,
   serverUrl,
   apiUri,
   ERC20Tokens,
   JCompoundAddress,
   CompTrancheTokens,
-  // JAaveAddress,
-  // AaveTrancheTokens,
-  TrancheBuyerCoinAddresses
-} from 'config/constants';
+  TrancheBuyerCoinAddresses,
+  JAaveAddress,
+  AaveTrancheTokens,
+  PolygonBuyerCoinAddresses
+} from 'config';
 import {
   SET_ADDRESS,
   SET_NETWORK,
   SET_BALANCE,
   SET_TOKEN_BALANCE,
-  // SET_TOKEN_BALANCES,
   SET_WALLET,
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE
+  SET_TRANCHE_ALLOWANCE,
+  SET_BLOCKEXPLORER_URL
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
+import { trancheMarketsToggle } from './tableData';
 const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
@@ -46,21 +50,53 @@ export const setNetwork = (network) => async (dispatch) => {
     type: SET_NETWORK,
     payload: network
   });
-  if (network === networkId && address) {
-    store.dispatch(setTokenBalances(address));
-    store.dispatch(checkTrancheAllowances(address, JCompoundAddress));
-    if (path === 'stake') {
+  window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
+
+  if (network === networkId) {
+    store.dispatch(trancheMarketsToggle('compound'));
+    if (path === 'stake' && address) {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
       store.dispatch(summaryFetchSuccess(result));
     }
   }
+  if (network === maticNetworkId) {
+    store.dispatch(trancheMarketsToggle('aavePolygon'));
+  }
 };
 
 export const setBalance = (balance) => (dispatch) => {
+  const state = store.getState();
+  const { network } = state.ethereum;
   dispatch({
     type: SET_BALANCE,
     payload: balance
+  });
+  if (network === maticNetworkId) {
+    dispatch({
+      type: SET_TOKEN_BALANCE,
+      payload: { tokenAddress: maticAddress, tokenBalance: balance }
+    });
+  }
+};
+
+export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
+  let web3 = new Web3(wallet.provider);
+  dispatch({
+    type: SET_WALLET,
+    payload: wallet
+  });
+  dispatch({
+    type: SET_WEB3,
+    payload: web3
+  });
+  window.localStorage.setItem('selectedWallet', wallet.name);
+};
+
+export const setBlockExplorerUrl = (url) => (dispatch) => {
+  dispatch({
+    type: SET_BLOCKEXPLORER_URL,
+    payload: url
   });
 };
 
@@ -80,12 +116,19 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
   }
 };
 
+
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
-    const Tokens = ERC20Tokens.concat(CompTrancheTokens);
     const state = store.getState();
-    const { web3, network } = state.ethereum;
-    if (network === networkId) {
+    let { web3, network, maticWeb3 } = state.ethereum;
+    web3 = network === maticNetworkId ? maticWeb3.http : web3;
+    const Tokens =
+      network === networkId
+        ? ERC20Tokens.concat(CompTrancheTokens)
+        : network === maticNetworkId
+        ? PolygonBuyerCoinAddresses.concat(AaveTrancheTokens)
+        : [];
+    if (network === networkId || network === maticNetworkId) {
       const batch = new web3.BatchRequest();
       // const tokenBalance = {};
       Tokens.map((tokenAddress) => {
@@ -95,9 +138,6 @@ export const setTokenBalances = (address) => async (dispatch) => {
             if (err) {
               console.error(err);
             } else {
-              // if (tokenAddress === '0xeA6ba879Ffc4337430B238C39Cb32e8E1FF63A1b') {
-              //   console.log(res);
-              // }
               dispatch({
                 type: SET_TOKEN_BALANCE,
                 payload: { tokenAddress: tokenAddress.toLowerCase(), tokenBalance: res }
@@ -108,10 +148,6 @@ export const setTokenBalances = (address) => async (dispatch) => {
         return batch;
       });
       batch.execute();
-      // dispatch({
-      //   type: SET_TOKEN_BALANCES,
-      //   payload: tokenBalance
-      // });
     }
   } catch (error) {
     console.error(error);
@@ -127,15 +163,17 @@ export const toggleApproval = (tokenAddress, contractAddress, bool) => async (di
 
 export const checkTrancheAllowances = (address, contractAddress) => async (dispatch) => {
   try {
-    const Tokens =
-      contractAddress === JCompoundAddress
-        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
-        // : contractAddress === JAaveAddress
-        // ? AaveTrancheTokens.concat(TrancheBuyerCoinAddresses)
-        : [];
     const state = store.getState();
-    const { web3, network } = state.ethereum;
-    if (network === networkId) {
+    let { web3, network, maticWeb3 } = state.ethereum;
+    if ((network === networkId && contractAddress === JAaveAddress) || (network === maticNetworkId && contractAddress === JCompoundAddress)) return;
+    web3 = network === maticNetworkId ? maticWeb3.http : web3;
+    const Tokens =
+      network === networkId
+        ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
+        : network === maticNetworkId
+        ? AaveTrancheTokens.concat(PolygonBuyerCoinAddresses)
+        : [];
+    if (network === networkId || network === maticNetworkId) {
       const batch = new web3.BatchRequest();
       let tokenBalance = {};
       Tokens.map((tokenAddress) => {
@@ -179,19 +217,6 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
   } catch (error) {
     console.error(error);
   }
-};
-
-export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
-  let web3 = new Web3(wallet.provider);
-  dispatch({
-    type: SET_WALLET,
-    payload: wallet
-  });
-  dispatch({
-    type: SET_WEB3,
-    payload: web3
-  });
-  window.localStorage.setItem('selectedWallet', wallet.name);
 };
 
 export const setCurrentBlock = (blockNumber) => (dispatch) => {

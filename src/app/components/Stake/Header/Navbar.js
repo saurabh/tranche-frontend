@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
-import { ModeThemes, dashboardUrl  } from 'config/constants';
+import { ModeThemes } from 'config/constants';
 import { BackArrow, Logo } from 'assets';
 // import { getRequest } from 'services/axios';
 // import { roundNumber, safeDivide } from 'utils/helperFunctions';
@@ -166,13 +166,12 @@ function Navbar({ path, theme }) {
              {i18n.t('navbar.tranche')}
             </NavLink>
             <a
-              href={dashboardUrl}
+              href="https://snapshot.org/#/tranche.eth"
               activeStyle={{
                 opacity: 1,
                 background: ModeThemes[theme].NavbarBackground,
                 boxShadow: ModeThemes[theme].NavbarShadow
               }}
-              className="navLinkDisabled"
             >
             {i18n.t('navbar.vote')}
 

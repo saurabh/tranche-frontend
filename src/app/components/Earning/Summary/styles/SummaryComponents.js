@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 
-
-
-
 const SummaryCardWrapperContent = styled.div`
     //change
     width: 21.6666667%;
@@ -20,7 +17,6 @@ const SummaryCardWrapperContent = styled.div`
     ${({ stakeCard }) => stakeCard && `
         width: 30% !important;
         @media (max-width: 992px){
-            margin: 15px 0;
             width: 90% !important;
             // display: none !important;
         }
@@ -73,7 +69,12 @@ const SummaryCardContainer = styled.div`
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        @media (max-width: 992px){
+            flex-direction: column;
+            align-items: baseline;
+        }
     `}
+    
 `;
 const SummaryCardTitle = styled.h2`
     font-family: 'Inter', sans-serif;
@@ -97,6 +98,9 @@ const SummaryCardValue = styled.h2`
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
+    @media (max-width: 992px){
+        font-size: 25px;
+    }
     color: #FFFFFF;
 `;
 const SummaryCardDetails = styled.h2`
@@ -232,7 +236,7 @@ const StakeCardText = styled.div`
             font-size: 20px;
 
             @media (max-width: 992px) {
-                font-size: 15px;            
+                font-size: 14px;            
             }
 
         }
@@ -240,7 +244,7 @@ const StakeCardText = styled.div`
             font-size: 14px;
             font-weight: 500;
             @media (max-width: 992px) {
-                font-size: 14px;
+                font-size: 10px;
             }
         }
 `;
@@ -253,17 +257,22 @@ const StakeCardBtn = styled.div`
             border-radius: 10px;
             font-style: normal;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 13px;            
             text-align: center;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             padding: 7px 27px;
             outline: none;
             transition: 300ms;
+            margin: 5px 0;
             cursor: pointer;
             color: #1D19E1;
+            @media (max-width: 992px){
+                font-size: 10px;
+            }
             a{
                 color: #1D19E1;
+                
             }
             :hover{
                 filter: drop-shadow(0px 3px 2px rgba(0,0,0,0.3));
