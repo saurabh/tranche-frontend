@@ -30,13 +30,13 @@ const Notification = props => {
   };
 
   const handleCloseNotification = () => {
-    if (!props.notification.type === 'PENDING') {
+    // if (!props.notification.type === 'PENDING') {
       handleResetTimer();
       setExit(true);
       setTimeout(() => {
         props.removeNotification();
       }, 400)
-    }
+    // }
   };
   const clearLogger = (val) => {
     return new Promise(resolve => resolve(clearTimeout(val)));
