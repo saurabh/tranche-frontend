@@ -344,7 +344,8 @@ export const ModeThemes = {
     HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
     LoadingColorOne: '#eee',
     LoadingColorTwo: '#f7f7f7',
-    cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent'
+    cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent',
+    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)'
   },
   dark: {
     body: '#100F36',
@@ -399,6 +400,7 @@ export const ModeThemes = {
     HowToShadow: 'none',
     LoadingColorOne: 'rgba(255,255,255,0.07)',
     LoadingColorTwo: '#363661',
-    cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent'
+    cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent',
+    btnShadow: ''
   }
 };

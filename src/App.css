@@ -30,7 +30,7 @@ html{
   transform: translateY(-5px) rotate(-45deg);
 }
 #logo-wrapper img{
-  height: 25px;
+  height: 30px;
   pointer-events: none;
 }
 #other-tabs-container{
@@ -1228,6 +1228,9 @@ table, th, td {
     width: auto;
     text-align: center;
     margin: 0 0 0 20px;
+  }
+  #logo-wrapper img{
+    height: 25px;
   }
   .ReactModal__Content--after-open{
     transform: scale(1) translateY(0) !important;
