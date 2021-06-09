@@ -1,21 +1,19 @@
-import React from "react";
+import React from 'react';
 import { connect } from 'react-redux';
-import Notification from "./Notification";
+import Notification from './Notification';
 import { removeNotification } from 'redux/actions/NotificationToggle';
 
 const NotificationProvider = ({ NotificationToggle, removeNotification }) => {
-
-  return(
+  return (
     <div>
-      <div className="NotifyWrapper">
-        {NotificationToggle.map((note, index) => {
-          return <Notification removeNotification={removeNotification} key={index} {...note} />
+      <div className='NotifyWrapper'>
+        {NotificationToggle.map((notification) => {
+          return <Notification notification={notification} removeNotification={removeNotification} />
         })}
       </div>
     </div>
-  )
+  );
 };
-
 
 const mapStateToProps = (state) => ({
   NotificationToggle: state.NotificationToggle

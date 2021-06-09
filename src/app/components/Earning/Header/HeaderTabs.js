@@ -15,12 +15,19 @@ export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalOpened, setModalOpened] = useState(false);
   const Tracker = useAnalytics("ExternalLinks");
 
   const { trancheMarket } = data;
 
   const openModal = () => {
-    setModalIsOpen(true);
+    setModalOpened(true);
+    if(!modalOpened){
+      setModalIsOpen(true);
+    }
+    else{
+      trancheMarketsToggle("aavePolygon")
+    }
   };
   const closeModal = () => {
     setModalIsOpen(false);
@@ -45,6 +52,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
           border={ModeThemes[theme].TrancheBtnBorder}
           color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
         >
           <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' />
         </MarketTab>
@@ -57,6 +66,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
           border={ModeThemes[theme].TrancheBtnBorder}
           color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
         >
           <h2>
               <img src={AaveBtn} alt='' /> Market

@@ -30,7 +30,7 @@ html{
   transform: translateY(-5px) rotate(-45deg);
 }
 #logo-wrapper img{
-  height: 25px;
+  height: 30px;
   pointer-events: none;
 }
 #other-tabs-container{
@@ -1229,6 +1229,9 @@ table, th, td {
     text-align: center;
     margin: 0 0 0 20px;
   }
+  #logo-wrapper img{
+    height: 25px;
+  }
   .ReactModal__Content--after-open{
     transform: scale(1) translateY(0) !important;
   }
@@ -1584,7 +1587,7 @@ table, th, td {
   animation: SlideLeft 0.4s;
   animation-fill-mode: forwards;
   width: 300px;
-  background: #3b4550;
+  background: #263442;
   padding: 0.75em 2em 0.75em 0.75em;
   box-sizing: border-box;
   color: #FFFFFF;

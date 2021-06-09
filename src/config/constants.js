@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, ETHCARD } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -33,6 +33,7 @@ export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
+export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
@@ -124,8 +125,8 @@ export const trancheIcons = {
   BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
-  aamMATIC: { protocolIcon: AAVE, assetIcon: ETHCARD },
-  bamMATIC: { protocolIcon: AAVE, assetIcon: ETHCARD },
+  aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
+  bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   aamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
@@ -343,7 +344,8 @@ export const ModeThemes = {
     HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
     LoadingColorOne: '#eee',
     LoadingColorTwo: '#f7f7f7',
-    cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent'
+    cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent',
+    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)'
   },
   dark: {
     body: '#100F36',
@@ -398,6 +400,7 @@ export const ModeThemes = {
     HowToShadow: 'none',
     LoadingColorOne: 'rgba(255,255,255,0.07)',
     LoadingColorTwo: '#363661',
-    cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent'
+    cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent',
+    btnShadow: ''
   }
 };

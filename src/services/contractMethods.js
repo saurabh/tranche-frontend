@@ -194,7 +194,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .buyTrancheAToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
-          store.dispatch(setTxLoading(true));
           if (network === networkId) {
             // notifyEmitter(hash);
             const { emitter } = notify.hash(hash);
@@ -203,9 +202,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
                 message: txMessage(transaction.hash)
               };
             });
-            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           } else if (network === maticNetworkId) {
             store.dispatch(
               addNotification({
@@ -234,7 +230,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .buyTrancheBToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
         .on('transactionHash', (hash) => {
-          store.dispatch(setTxLoading(true));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -242,9 +237,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
                 message: txMessage(transaction.hash)
               };
             });
-            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           } else if (network === maticNetworkId) {
             store.dispatch(
               addNotification({
@@ -301,7 +293,6 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .redeemTrancheAToken(trancheId, withdrawAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          store.dispatch(setTxLoading(true));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -309,9 +300,6 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
                 message: txMessage(transaction.hash)
               };
             });
-            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           } else if (network === maticNetworkId) {
             store.dispatch(
               addNotification({
@@ -340,7 +328,6 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .redeemTrancheBToken(trancheId, withdrawAmount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          store.dispatch(setTxLoading(true));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -348,9 +335,6 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
                 message: txMessage(transaction.hash)
               };
             });
-            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           } else if (network === maticNetworkId) {
             store.dispatch(
               addNotification({
@@ -464,7 +448,6 @@ export const addStake = async (stakingAddress, tokenAddress) => {
       .deposit(tokenAddress, amount)
       .send({ from: address })
       .on('transactionHash', (hash) => {
-        store.dispatch(setTxLoading(true));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
@@ -493,7 +476,6 @@ export const withdrawStake = async (stakingAddress, tokenAddress) => {
       .withdraw(tokenAddress, amount)
       .send({ from: address })
       .on('transactionHash', (hash) => {
-        store.dispatch(setTxLoading(true));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {

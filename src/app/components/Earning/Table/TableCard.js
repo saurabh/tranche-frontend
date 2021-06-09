@@ -11,7 +11,7 @@ import { addNotification } from 'redux/actions/NotificationToggle';
 import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ETHorMaticCheck, ModeThemes, networkId, maticNetworkId } from 'config';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ModeThemes, networkId, maticNetworkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -105,7 +105,7 @@ const TableCard = ({
   const Tracker = useAnalytics('ButtonClicks');
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
-    ETHorMaticCheck.indexOf(cryptoType) !== -1
+    cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
       : searchArr(cryptoType)
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
