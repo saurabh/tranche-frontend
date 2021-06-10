@@ -2,25 +2,19 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
-import ReactLoading from 'react-loading';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
+import { addNotification } from 'redux/actions/NotificationToggle';
+import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
-import {
-  addrShortener,
-  readyToTransact,
-  roundNumber,
-  safeMultiply
-  // gweiOrEther,
-  // roundBasedOnUnit
-} from 'utils';
-import { etherScanUrl, statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals } from 'config';
+import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ModeThemes, networkId, maticNetworkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
-import { ModeThemes } from 'config/constants';
+
 import {
   TableContentCard,
   TableContentCardWrapper,
@@ -76,25 +70,39 @@ const TableCard = ({
     dividendType,
     protocolAPY,
     trancheToken,
-    trancheRate  
+    trancheRate
   },
   path,
   setAddress,
   setNetwork,
   setBalance,
+  addNotification,
   setWalletAndWeb3,
-  ethereum: { tokenBalance, balance, address, wallet, web3, notify },
+  setTokenBalances,
+  ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
   toggleApproval,
+  setTxLoading,
   destroy,
   theme,
   isDesktop
   // checkServer
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isApproveLoading, setApproveLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isDepositApproved, setDepositApproved] = useState(false);
   const [isWithdrawApproved, setWithdrawApproved] = useState(false);
-  const apyImage = apyStatus && apyStatus === 'fixed' ? (theme === "light" ? LockLight : Lock) : apyStatus === 'increase' ? Up : apyStatus === 'decrease' ? Down : '';
+  // const dispatch = useNotification();
+
+  const apyImage =
+    apyStatus && apyStatus === 'fixed'
+      ? theme === 'light'
+        ? LockLight
+        : Lock
+      : apyStatus === 'increase'
+      ? Up
+      : apyStatus === 'decrease'
+      ? Down
+      : '';
+  const Tracker = useAnalytics('ButtonClicks');
   const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
   let buyerTokenBalance =
     cryptoType === 'ETH'
@@ -102,8 +110,6 @@ const TableCard = ({
       : searchArr(cryptoType)
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
-
-  
 
   const onboard = initOnboard({
     address: setAddress,
@@ -114,41 +120,72 @@ const TableCard = ({
 
   const approveContract = async (type, isApproved, e) => {
     try {
-      if (isApproveLoading) e.stopPropogation();
+      if (txOngoing) e.stopPropogation();
+      const ready = await readyToTransact(wallet, onboard);
+      if (!ready) return;
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
       const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
       const token = ERC20Setup(web3, tokenAddress);
+      addNotification({
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      });
       await token.methods
         .approve(contractAddress, amount)
         .send({ from: address })
         .on('transactionHash', (hash) => {
-          setApproveLoading(true);
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txCancel', () => setApproveLoading(false));
-          emitter.on('txFailed', () => setApproveLoading(false));
+          setTxLoading(true);
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txCancel', () => setTxLoading(false));
+            emitter.on('txFailed', () => setTxLoading(false));
+          } else if (network === maticNetworkId) {
+            addNotification({
+              type: 'PENDING',
+              message: txMessage(hash),
+              title: 'pending transaction'
+            });
+          }
         })
         .on('confirmation', (count) => {
           if (count === 1) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-            toggleApproval(tokenAddress, contractAddress, !isApproved)
-            setApproveLoading(false);
+            toggleApproval(tokenAddress, contractAddress, !isApproved);
+            setTxLoading(false);
             destroy('tranche');
+            if (network === maticNetworkId) {
+              addNotification({
+                type: 'SUCCESS',
+                message: 'Your transaction has succeeded',
+                title: 'successful transaction'
+              });
+            }
           }
         });
     } catch (error) {
+      error.code === 4001 &&
+        addNotification({
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        });
       return error;
     }
   };
 
-  const buySellTrancheTokens = (e, buy) => {
+  const buySellTrancheTokens = async (e, buy) => {
     try {
       e.preventDefault();
+      const ready = await readyToTransact(wallet, onboard);
+      if (!ready) return;
       buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
+      buy ? Tracker('Deposit', 'User address: ' + address) : Tracker('Withdraw', 'User address: ' + address);
     } catch (error) {
       console.error(error);
     }
@@ -159,17 +196,16 @@ const TableCard = ({
   };
 
   const cardToggle = async () => {
-    const ready = await readyToTransact(wallet, onboard);
-    if (!ready) return;
-    address = !address ? onboard.getState().address : address;
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      setIsLoading(true);
+      setTimeout(() =>{
+        address && setTokenBalances(address)
+      }, 500)
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   const checkLoan = false;
@@ -180,6 +216,8 @@ const TableCard = ({
         color={ModeThemes[theme].TableCard}
         borderColor={ModeThemes[theme].TableCardBorderColor}
         shadow={ModeThemes[theme].tableCardShadow}
+        cardShadow={ModeThemes[theme].cardShadow}
+        tranche
       >
         <TableContentCard
           pointer={true}
@@ -203,9 +241,9 @@ const TableCard = ({
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
-                <img src={trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
                 <span>
-                  <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
                 </span>
               </TableCardImg>
               <FirstColContent instrument>
@@ -214,7 +252,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(trancheTokenAddress)}</h2>
-                  <a href={etherScanUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -294,41 +332,35 @@ const TableCard = ({
             </AdustBtnWrapper>
           </TableSixthCol>
         </TableContentCard>
-        {isLoading ? (
+
+        <TableCardMore
+          className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
+          color={ModeThemes[theme].borderColor}
+          border={trancheCard.status && id === trancheCard.id}
+        >
           <TableCardMoreContent>
-            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
+            <TableMoreRow
+              name={name}
+              type={type}
+              apy={apy}
+              contractAddress={contractAddress}
+              cryptoType={cryptoType}
+              dividendType={dividendType}
+              protocolAPY={protocolAPY}
+              buyerTokenBalance={buyerTokenBalance}
+              trancheToken={trancheToken}
+              trancheRate={trancheRate}
+              buyerCoinAddress={buyerCoinAddress}
+              trancheTokenAddress={trancheTokenAddress}
+              isDepositApproved={isDepositApproved}
+              setDepositApproved={setDepositApproved}
+              isWithdrawApproved={isWithdrawApproved}
+              setWithdrawApproved={setWithdrawApproved}
+              approveContract={approveContract}
+              buySellTrancheTokens={buySellTrancheTokens}
+            />
           </TableCardMoreContent>
-        ) : (
-          <TableCardMore
-            className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
-            color={ModeThemes[theme].borderColor}
-            border={trancheCard.status && id === trancheCard.id}
-          >
-            <TableCardMoreContent>
-              <TableMoreRow
-                name={name}
-                type={type}
-                apy={apy}
-                contractAddress={contractAddress}
-                cryptoType={cryptoType}
-                dividendType={dividendType}
-                protocolAPY={protocolAPY}
-                buyerTokenBalance={buyerTokenBalance}
-                trancheToken={trancheToken}
-                trancheRate={trancheRate}
-                buyerCoinAddress={buyerCoinAddress}
-                trancheTokenAddress={trancheTokenAddress}
-                isApproveLoading={isApproveLoading}
-                isDepositApproved={isDepositApproved}
-                setDepositApproved={setDepositApproved}
-                isWithdrawApproved={isWithdrawApproved}
-                setWithdrawApproved={setWithdrawApproved}
-                approveContract={approveContract}
-                buySellTrancheTokens={buySellTrancheTokens}
-              />
-            </TableCardMoreContent>
-          </TableCardMore>
-        )}
+        </TableCardMore>
       </TableContentCardWrapper>
     );
   };
@@ -348,9 +380,9 @@ const TableCard = ({
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
-              <img src={trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+              <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
               <span>
-                <img src={trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
               </span>
             </TableCardImg>
           </TableCardImgWrapper>
@@ -369,7 +401,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(trancheTokenAddress)}</h2>
-                    <a href={etherScanUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
@@ -379,7 +411,7 @@ const TableCard = ({
 
             <TableMobileContentRow>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>annual yield (apy)</h2>
+                <h2>NET APY</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
                   {roundNumber(apy, 2)}%{/* <img src={Info} alt='infoImage' /> */}
@@ -402,41 +434,35 @@ const TableCard = ({
             </TableMobileContentRow>
           </TableMobileContent>
         </TableContentCardMobile>
-        {isLoading ? (
+
+        <TableCardMore
+          className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
+          color={ModeThemes[theme].backgroundBorder}
+          border={trancheCard.status && id === trancheCard.id}
+        >
           <TableCardMoreContent>
-            <ReactLoading className='TableMoreLoading' type={'bubbles'} color='rgba(56,56,56,0.3)' />
+            <TableMoreRow
+              name={name}
+              type={type}
+              apy={apy}
+              contractAddress={contractAddress}
+              cryptoType={cryptoType}
+              dividendType={dividendType}
+              protocolAPY={protocolAPY}
+              buyerTokenBalance={buyerTokenBalance}
+              trancheToken={trancheToken}
+              trancheRate={trancheRate}
+              buyerCoinAddress={buyerCoinAddress}
+              trancheTokenAddress={trancheTokenAddress}
+              isDepositApproved={isDepositApproved}
+              setDepositApproved={setDepositApproved}
+              isWithdrawApproved={isWithdrawApproved}
+              setWithdrawApproved={setWithdrawApproved}
+              approveContract={approveContract}
+              buySellTrancheTokens={buySellTrancheTokens}
+            />
           </TableCardMoreContent>
-        ) : (
-          <TableCardMore
-            className={'table-card-more ' + (trancheCard.status && id === trancheCard.id ? 'table-more-card-toggle' : '')}
-            color={ModeThemes[theme].backgroundBorder}
-            border={trancheCard.status && id === trancheCard.id}
-          >
-            <TableCardMoreContent>
-              <TableMoreRow
-                name={name}
-                type={type}
-                apy={apy}
-                contractAddress={contractAddress}
-                cryptoType={cryptoType}
-                dividendType={dividendType}
-                protocolAPY={protocolAPY}
-                buyerTokenBalance={buyerTokenBalance}
-                trancheToken={trancheToken}
-                trancheRate={trancheRate}
-                buyerCoinAddress={buyerCoinAddress}
-                trancheTokenAddress={trancheTokenAddress}
-                isApproveLoading={isApproveLoading}
-                isDepositApproved={isDepositApproved}
-                setDepositApproved={setDepositApproved}
-                isWithdrawApproved={isWithdrawApproved}
-                setWithdrawApproved={setWithdrawApproved}
-                approveContract={approveContract}
-                buySellTrancheTokens={buySellTrancheTokens}
-              />
-            </TableCardMoreContent>
-          </TableCardMore>
-        )}
+        </TableCardMore>
       </TableContentCardWrapperMobile>
     );
   };
@@ -450,8 +476,10 @@ TableCard.propTypes = {
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
+  setTokenBalances: PropTypes.func.isRequired,
   trancheCardToggle: PropTypes.func.isRequired,
   toggleApproval: PropTypes.func.isRequired,
+  setTxLoading: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -466,8 +494,11 @@ export default connect(mapStateToProps, {
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  addNotification,
+  setTokenBalances,
   checkServer,
   trancheCardToggle,
+  setTxLoading,
   toggleApproval,
   destroy
 })(TableCard);

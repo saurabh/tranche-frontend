@@ -1,36 +1,43 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, USDCWhite, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, DAITrancheTable } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
 export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
+export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
+export const maticNetworkId = 137;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
+export const maticBlockExplorerUrl = process.env.REACT_APP_MATIC_BLOCK_EXPLORER_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
+export const maticHttpUrl = process.env.REACT_APP_MATIC_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
+export const maticWebSocketsUrl = process.env.REACT_APP_MATIC_WEBSOCKETS_URL;
 export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
-export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
-// Tranche
-export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
-export const ProtocolAddress = process.env.REACT_APP_PROTOCOL_ADDRESS;
+// Ethereum Tranches
 export const JCompoundAddress = process.env.REACT_APP_COMPOUND_TRANCHE_ADDRESS.toLowerCase();
+export const TrancheBuyerCoinAddresses = process.env.REACT_APP_BUYER_COIN_ADDRESS.split(',');
 export const CompTrancheTokens = process.env.REACT_APP_COMP_TRANCHE_TOKENS.split(',');
+// Polygon Tranches
 export const JAaveAddress = process.env.REACT_APP_AAVE_TRANCHE_ADDRESS.toLowerCase();
+export const PolygonBuyerCoinAddresses = process.env.REACT_APP_MATIC_BUYER_COIN_ADDRESS.split(',');
 export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
+//Google Analytics
+export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
+export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
-export const USDTAddress = process.env.REACT_APP_USDT_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
@@ -112,16 +119,18 @@ export const PagesData = {
 };
 
 export const trancheIcons = {
-  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAITrancheTable },
-  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCWhite },
-  AADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  BADAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  AAETH: { protocolIcon: AAVE, assetIcon: ETHicon },
-  BAETH: { protocolIcon: AAVE, assetIcon: ETHicon }
+  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
+  bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
+  aamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)
@@ -135,28 +144,9 @@ export const pairData = [
     colIcon: ETHicon,
     lendTokenSetup: DAISetup
   }
-  // {
-  //   key: 'SLICE',
-  //   text: 'SLICE',
-  //   value: 1,
-  //   collateral: 'SLICE',
-  //   img: SLICEicon,
-  //   colIcon: SLICEicon
-  //   // collateralTokenSetup: SLICESetup,
-  //   // lendTokenSetup: SLICESetup
-  // }
-  // {
-  //   key: 'USDC',
-  //   text: 'USDC',
-  //   value: 1,
-  //   collateral: 'SLICE',
-  //   img: USDCicon,
-  //   colIcon: SLICEicon,
-  //   collateralTokenSetup: SLICESetup,
-  //   lendTokenSetup: USDCSetup
-  // }
 ];
 
+export const ETHorMaticCheck = ['ETH', 'MATIC'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 export const apiUri = {
@@ -353,7 +343,9 @@ export const ModeThemes = {
     HowToBorder: '0.872727px solid #E9E9FC',
     HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
     LoadingColorOne: '#eee',
-    LoadingColorTwo: '#f7f7f7'
+    LoadingColorTwo: '#f7f7f7',
+    cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent',
+    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)'
   },
   dark: {
     body: '#100F36',
@@ -407,6 +399,8 @@ export const ModeThemes = {
     HowToBorder: 'none',
     HowToShadow: 'none',
     LoadingColorOne: 'rgba(255,255,255,0.07)',
-    LoadingColorTwo: '#363661'
+    LoadingColorTwo: '#363661',
+    cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent',
+    btnShadow: ''
   }
 };

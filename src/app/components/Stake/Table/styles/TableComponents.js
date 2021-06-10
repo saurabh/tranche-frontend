@@ -11,6 +11,13 @@ const TableContentCardWrapper = styled.div`
   box-shadow: ${props => props.shadow};
   border-radius: 5px;
   margin: 12px 0;
+  transition: 300ms;
+  ${({ tranche, cardShadow }) => tranche && `
+    :hover{
+      box-shadow: ${cardShadow};   
+    }
+  `}
+  
 `;
 const TableContentCard = styled.div`
   display: flex;
@@ -546,7 +553,7 @@ const TableContentCardWrapperMobile = styled.div`
   border-radius: 5px;
   margin: 12px 0;
   ${({ tranche }) => tranche && `
-    min-height: 110px;
+    min-height: 120px;
     height: auto;
   `}
 `
@@ -792,6 +799,7 @@ const TableCardImg = styled.div`
   display: flex;
   position: relative;
   align-items: center;
+  margin-top: -9px;
   img{
     border-radius: 50%;
     height: 37px;
@@ -800,7 +808,6 @@ const TableCardImg = styled.div`
     position: absolute;
     width: 16px;
     height: 16px;
-    background: ${props => props.background ? props.background : ''};
     border-radius: 4px;
     display: flex;
     justify-content: center;
@@ -811,7 +818,7 @@ const TableCardImg = styled.div`
       left: 29px;
     }
     img{
-      height: 9px;
+      height: 36px;
     }
   }
   
@@ -889,7 +896,7 @@ const FirstColContent = styled.div`
   margin-left: 12px;
 
   ${({ instrument }) => instrument && `
-    margin-left: 25px;
+    margin: 4px 0 0 45px;
   `}
   @media (max-width: 992px){
     width: 100%;
@@ -902,7 +909,7 @@ const FirstColTitle = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color};
@@ -978,6 +985,7 @@ const SecondColContent = styled.div`
   h2{
     text-align: center !important;
     font-size: 17px !important;
+    font-family: 'Inter', sans-serif;
     color: ${props => props.color};
   }
   
@@ -986,7 +994,7 @@ const SecondColContent = styled.div`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 25px;
+    left: 15px;
   }
   & > div{
     position: absolute;
@@ -1123,7 +1131,7 @@ const FifthColContent = styled.div`
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 14px !important;
+    font-size: 17px !important;
     letter-spacing: 0.05em;
     text-align: center !important;
     color: ${props => props.color};
@@ -1182,6 +1190,7 @@ const TableSixthCol = styled.div`
   }
   h2{
     text-align: center !important;
+    font-family: 'Inter', sans-serif;
     font-size: 17px !important;
     color: ${props => props.color};
   }
@@ -1208,6 +1217,9 @@ const StakeBtn = styled.button`
     opacity: 0.5;
     cursor: default;
   `}
+  :hover{
+    filter: brightness(1.2);
+  }
   @media (max-width: 992px){
     width: 25px;
     height: 25px;
@@ -1333,6 +1345,9 @@ const TableMoreLeftSection = styled.div`
   ${({color }) => color && `
     border-right: 2px solid ${color};
   `}
+  ${({ last }) => last && `
+    border: none;
+  `}
 `
 const TableMoreLeftSectionContent = styled.div`
   display: flex;
@@ -1363,6 +1378,12 @@ const TableMoreLeftSectionContent = styled.div`
       font-size: 12px;
     }
   }
+  
+  ${({ dividend }) => dividend && `
+    & > h2:nth-of-type(1){
+      text-transform: initial;
+    }
+  `}
 `
 
 
@@ -1646,7 +1667,7 @@ const TableMoreTitleWrapper = styled.div`
 `
 const TableMobileContent = styled.div`
   width: 83%;
-  height: 92px;
+  height: 105px;
   padding: 16px 12px;
   display: flex;
   flex-direction: column;
@@ -1922,8 +1943,15 @@ const HowToLink = styled.a`
   border-radius: 110.967px;
   padding: 11px 22px;
   margin-left: 20px;
+  transition: 200ms;
   :hover{
     color: ${props => props.color}; 
+    filter: brightness(1.3);
+  }
+  
+  @media (max-width: 992px){
+    padding: 6px 20px;
+    font-size: 8px;
   }
 
 `

@@ -1,6 +1,17 @@
-import { apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress } from 'config/constants';
-import { postRequest } from 'services/axios';
+import store from '../store';
+import {
+  networkId,
+  maticNetworkId,
+  apiUri,
+  SLICEAddress,
+  LP1TokenAddress,
+  LP2TokenAddress,
+  etherScanUrl,
+  maticBlockExplorerUrl
+} from 'config/constants';
+import { postRequest, initOnboard } from 'services';
 import { checkServer } from './checkServer';
+import { setBlockExplorerUrl } from './ethereum';
 import {
   LOANS_IS_LOADING,
   LOANS_SUCCESS,
@@ -138,7 +149,19 @@ export const paginationCurrent = (current) => (dispatch) => {
     payload: current
   });
 };
+
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  const onboard = initOnboard();
+  if (trancheMarket === 'compound') {
+    onboard.config({ networkId });
+    store.dispatch(changeFilter('ethereum'));
+    store.dispatch(setBlockExplorerUrl(etherScanUrl));
+  } else if (trancheMarket === 'aavePolygon') {
+    onboard.config({ networkId: maticNetworkId });
+    store.dispatch(changeFilter('polygon'));
+    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
+  }
+  store.dispatch(trancheCardToggle({ status: false, id: null }));
   dispatch({
     type: TRANCHE_MARKETS,
     payload: trancheMarket

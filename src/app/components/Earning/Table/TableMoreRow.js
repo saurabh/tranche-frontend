@@ -20,11 +20,12 @@ import {
   TableMoreLeftTopSection,
   TableMoreLeftBottomSection,
   TooltipWrapper
+
 } from '../../Stake/Table/styles/TableComponents';
 import { BtnArrow } from 'assets';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
-import { ModeThemes, zeroAddress } from 'config';
+import { ModeThemes, ETHorMaticCheck } from 'config';
 import i18n from '../../locale/i18n';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => (
@@ -51,7 +52,6 @@ let TableMoreRow = ({
   trancheRate,
   buyerCoinAddress,
   trancheTokenAddress,
-  isApproveLoading,
   isDepositApproved,
   isWithdrawApproved,
   setDepositApproved,
@@ -66,21 +66,18 @@ let TableMoreRow = ({
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
-  const [TooltipToggle, setTooltipToggle] = useState("");
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const [TooltipToggle, setTooltipToggle] = useState('');
 
-  let trancheTokenBalance =
-    cryptoType === 'USDC'
-      ? tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress], 'Mwei')
-      : tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
+  let trancheTokenBalance = tokenBalance[trancheTokenAddress] && fromWei(tokenBalance[trancheTokenAddress]);
 
   const updateMedia = () => {
-    setDesktop(window.innerWidth > 1200);
+    setDesktop(window.innerWidth > 992);
   };
 
   const tooltipToggle = (val) => {
     setTooltipToggle(val);
-  }
+  };
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
@@ -88,18 +85,22 @@ let TableMoreRow = ({
   });
 
   useEffect(() => {
-    if (buyerCoinAddress === zeroAddress) {
-      setIsEth(true);
-      setDepositApproved(true);
-    }
     if (trancheAllowance[contractAddress]) {
-      setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
-      setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
-      change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
-      change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+      if (ETHorMaticCheck.indexOf(cryptoType) !== -1) {
+        setIsEth(true);
+        setDepositApproved(true);
+        setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+        change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+      } else {
+        setIsEth(false);
+        setDepositApproved(trancheAllowance[contractAddress][buyerCoinAddress]);
+        setWithdrawApproved(trancheAllowance[contractAddress][trancheTokenAddress]);
+        change('depositIsApproved', trancheAllowance[contractAddress][buyerCoinAddress]);
+        change('withdrawIsApproved', trancheAllowance[contractAddress][trancheTokenAddress]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
+  }, [cryptoType, buyerCoinAddress, trancheTokenAddress, trancheAllowance, setDepositApproved, setWithdrawApproved]);
 
   const setMaxAmount = useCallback(
     (e, type) => {
@@ -109,7 +110,7 @@ let TableMoreRow = ({
         isEqualTo(buyerTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
       } else {
         change('withdrawAmount', trancheTokenBalance);
-        isEqualTo(trancheTokenBalance, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+        isEqualTo(trancheTokenBalance, 0) ? setWithdrawBalanceCheck('InputStylingError') : setWithdrawBalanceCheck('');
       }
     },
     [buyerTokenBalance, trancheTokenBalance, change]
@@ -124,18 +125,17 @@ let TableMoreRow = ({
         : setWithdrawBalanceCheck('');
     }
   };
-
   return (
     <TableMoreRowWrapper>
       <TableMoreRowContent>
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
-              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2>{dividendType} {i18n.t('tranche.trancheData.APY')}</h2>
+              <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText} dividend>
                 <h2>
-                  {protocolAPY ? roundNumber(protocolAPY, 2) : 0}%
+                  {dividendType} {i18n.t('tranche.trancheData.APY')}
                 </h2>
+                <h2>{protocolAPY ? roundNumber(protocolAPY, 2) : 0}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -153,15 +153,17 @@ let TableMoreRow = ({
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
-            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
+            <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder} last>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
-                <h2 onMouseOver={() => tooltipToggle("PRICE")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('tranche.trancheData.price')}</h2>
+                <h2 onMouseOver={() => tooltipToggle('PRICE')} onMouseLeave={() => tooltipToggle('')}>
+                  {i18n.t('tranche.trancheData.price')}
+                </h2>
                 <h2>
                   {roundNumber(trancheRate)} {cryptoType}
                 </h2>
-                <TooltipWrapper tooltip={TooltipToggle === "PRICE"} row color={ModeThemes[theme].Tooltip}>
+                <TooltipWrapper tooltip={TooltipToggle === 'PRICE'} row color={ModeThemes[theme].Tooltip}>
                   <div>
-                      <h2>The value of each instrument token.</h2>
+                    <h2>The value of each instrument token.</h2>
                   </div>
                 </TooltipWrapper>
               </TableMoreLeftSectionContent>
@@ -171,8 +173,16 @@ let TableMoreRow = ({
             <h2>{type === 'TRANCHE_A' ? i18n.t('tranche.trancheData.fixedRate') : i18n.t('tranche.trancheData.variableRate')}</h2>
             <p>
               {type === 'TRANCHE_A'
-                ? `${name} is the senior tranche of the ${dividendType} token. This tranche yields a fixed rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`
-                : `${name} is the junior tranche of the ${dividendType} token. This tranche yields a variable rate of ${apy}%, in addition to SLICE rewards as shown in Net APY.`}
+                ? `${name} ${i18n.t('tranche.trancheData.isTheSenior')} ${
+                    dividendType
+                  }  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheFixed')} ${roundNumber(apy, 2)}%, ${i18n.t(
+                    'tranche.trancheData.inAddition'
+                  )}`
+                : `${name} ${i18n.t('tranche.trancheData.isTheJunior')}  ${
+                    dividendType
+                  }  ${i18n.t('tranche.trancheData.token')}. ${i18n.t('tranche.trancheData.thisTrancheVariable')} ${roundNumber(apy, 2)}%, ${i18n.t(
+                    'tranche.trancheData.inAddition'
+                  )}`}
             </p>
           </TableMoreLeftBottomSection>
         </TableMoreRowContentLeft>
@@ -183,29 +193,29 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading}
+              loading={txOngoing}
               disabled={!isDepositApproved}
             >
-              {isApproveLoading && (
+              {txOngoing && (
                 <div>
-                <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
+                  <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )}
               <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
                 <h2>{i18n.t('tranche.trancheData.deposit')}</h2>
                 <CheckboxWrapper hidden={isEth}>
                   <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                  <CheckboxContent disabled={txOngoing}>
                     <Field
                       component='input'
                       type='checkbox'
                       name='depositIsApproved'
                       id='depositIsApproved'
                       checked={isDepositApproved}
-                      disabled={isApproveLoading || txOngoing}
+                      disabled={txOngoing}
                     />
                     <label
-                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                      onClick={txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
                       htmlFor='depositIsApproved'
                     ></label>
                   </CheckboxContent>
@@ -227,7 +237,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={(e) => setMaxAmount(e, true)}>{i18n.t('tranche.trancheData.max')}</h2>
+                  {!isEth && <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>}
                 </FormContent>
                 <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -240,10 +250,10 @@ let TableMoreRow = ({
               color={ModeThemes[theme].dropDownBorder}
               disabledBackground={ModeThemes[theme].inputDisabledBackground}
               btn={ModeThemes[theme].backgroundBorder}
-              loading={isApproveLoading}
+              loading={txOngoing}
               disabled={!isWithdrawApproved}
             >
-              {isApproveLoading && (
+              {txOngoing && (
                 <div>
                   <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
@@ -252,17 +262,17 @@ let TableMoreRow = ({
                 <h2>{i18n.t('tranche.trancheData.withdraw')}</h2>
                 <CheckboxWrapper>
                   <h2>{isWithdrawApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
-                  <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                  <CheckboxContent disabled={txOngoing}>
                     <Field
                       component='input'
                       type='checkbox'
                       name='withdrawIsApproved'
                       id='withdrawIsApproved'
                       checked={isWithdrawApproved}
-                      disabled={isApproveLoading || txOngoing}
+                      disabled={txOngoing}
                     />
                     <label
-                      onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
+                      onClick={txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
                       htmlFor='withdrawIsApproved'
                     ></label>
                   </CheckboxContent>
@@ -288,7 +298,7 @@ let TableMoreRow = ({
                     type='number'
                     step='0.001'
                   />
-                  <h2 onClick={(e) => setMaxAmount(e, false)}>{i18n.t('tranche.trancheData.max')}</h2>
+                  <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                   <img src={BtnArrow} alt='arrow' />
@@ -304,12 +314,12 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading}
+                loading={txOngoing}
                 disabled={!isDepositApproved}
               >
-                {isApproveLoading && (
+                {txOngoing && (
                   <div>
-                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -322,23 +332,23 @@ let TableMoreRow = ({
                       onClick={() => setFormType('withdraw')}
                       color={ModeThemes[theme].dropDownText}
                     >
-                      {i18n.t('tranche.trancheData.withdraw') }
+                      {i18n.t('tranche.trancheData.withdraw')}
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
                   <CheckboxWrapper hidden={isEth}>
                     <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
 
-                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                    <CheckboxContent disabled={txOngoing}>
                       <Field
                         component='input'
                         type='checkbox'
                         name='depositIsApproved'
                         id='depositIsApproved'
                         checked={isDepositApproved}
-                        disabled={isApproveLoading || txOngoing}
+                        disabled={txOngoing}
                       />
                       <label
-                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
+                        onClick={txOngoing ? () => {} : (e) => approveContract(true, isDepositApproved, e)}
                         htmlFor='depositIsApproved'
                       ></label>
                     </CheckboxContent>
@@ -365,7 +375,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={(e) => setMaxAmount(e, true)}>{i18n.t('tranche.trancheData.max')}</h2>
+                    <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />
@@ -379,12 +389,12 @@ let TableMoreRow = ({
                 color={ModeThemes[theme].dropDownBorder}
                 disabledBackground={ModeThemes[theme].inputDisabledBackground}
                 btn={ModeThemes[theme].backgroundBorder}
-                loading={isApproveLoading}
+                loading={txOngoing}
                 disabled={!isWithdrawApproved}
               >
-                {isApproveLoading && (
+                {txOngoing && (
                   <div>
-                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner}/>
+                    <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
                 )}
                 <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
@@ -403,17 +413,17 @@ let TableMoreRow = ({
                   <CheckboxWrapper>
                     <h2>{isWithdrawApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
 
-                    <CheckboxContent disabled={isApproveLoading || txOngoing}>
+                    <CheckboxContent disabled={txOngoing}>
                       <Field
                         component='input'
                         type='checkbox'
                         name='withdrawIsApproved'
                         id='withdrawIsApproved'
                         checked={isWithdrawApproved}
-                        disabled={isApproveLoading || txOngoing}
+                        disabled={txOngoing}
                       />
                       <label
-                        onClick={isApproveLoading || txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
+                        onClick={txOngoing ? () => {} : (e) => approveContract(false, isWithdrawApproved, e)}
                         htmlFor='withdrawIsApproved'
                       ></label>
                     </CheckboxContent>
@@ -439,7 +449,7 @@ let TableMoreRow = ({
                       type='number'
                       step='0.001'
                     />
-                    <h2 onClick={(e) => setMaxAmount(e, false)}>{i18n.t('tranche.trancheData.max')}</h2>
+                    <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
                     <img src={BtnArrow} alt='arrow' />

@@ -20,10 +20,14 @@ import {
     ModeThemes
 } from 'config/constants';
 import i18n from "app/components/locale/i18n";
+import useAnalytics from 'services/analytics';
+
 
 const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
+    const Tracker = useAnalytics("ExternalLinks");
+
     const innerRef = useOuterClick(e => {
         toggleMenu(false);
     });
@@ -52,8 +56,8 @@ const TableHeader = ({ HandleNewLoan, path, filter, changeFilter, theme }) => {
                 }
                 {
                     path === "stake" || path === "tranche" ?
-                    <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking" target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
-                        HOW-TO
+                    <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+                        {i18n.t('footer.docs')}
                     </HowToLink> : ""
                 }
                 

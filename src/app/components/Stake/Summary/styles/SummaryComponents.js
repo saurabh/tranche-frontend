@@ -146,6 +146,11 @@ const SummaryClaimBtn = styled.div`
             letter-spacing: 0.05em;
             text-transform: uppercase;    
             outline: none;
+            transition: 300ms;
+            :hover{
+                filter: drop-shadow(0px 3px 2px rgba(0,0,0,0.3));
+                transform: translateY(-2px);
+            }
        }
     `}
     ${({ stakingMobile }) => stakingMobile && `

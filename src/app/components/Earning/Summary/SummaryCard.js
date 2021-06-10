@@ -19,6 +19,8 @@ import i18n from '../../locale/i18n';
 import { TooltipWrapper } from 'app/components/Stake/Table/styles/TableComponents';
 import { InfoWhite } from 'assets';
 import { ModeThemes } from 'config';
+import useAnalytics from 'services/analytics';
+
 
 const SummaryCard = ({
   title,
@@ -31,6 +33,7 @@ const SummaryCard = ({
   theme
 }) => {
   const [TooltipToggle, setTooltipToggle] = useState("");
+  const Tracker = useAnalytics("ExternalLinks");
 
   const tooltipToggle = (val) => {
     setTooltipToggle(val);
@@ -51,7 +54,7 @@ const SummaryCard = ({
                       <TooltipWrapper tooltip={TooltipToggle === "valueLocked"} summary color={ModeThemes[theme].Tooltip}> 
                         <div>
                             <h2>
-                              The total amount of staked or deposited assets in USD on the Tranche Protocol.
+                              {i18n.t('toolTips.table.totalAmount')}
                             </h2>
                         </div>
                       </TooltipWrapper>
@@ -101,7 +104,7 @@ const SummaryCard = ({
                   <h2>{i18n.t('tranche.summary.stakeLive.details')}</h2>
                 </StakeCardText>
                 <StakeCardBtn>
-                  <button><a href="/stake">STAKE</a></button>
+                  <button><a href="/stake" onClick={(e) => Tracker("Stake", "https://app.tranche.com/stake")}>{i18n.t('stake.modal.stake')}</a></button>
                 </StakeCardBtn>
               </SummaryCardContainer>
             ) : (
