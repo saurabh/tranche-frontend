@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Notification from './Notification';
-import { removeNotification } from 'redux/actions/NotificationToggle';
+import { removeNotification } from 'redux/actions/ethereum';
 
-const NotificationProvider = ({ NotificationToggle, removeNotification }) => {
+const NotificationProvider = ({ Notifications, removeNotification }) => {
   return (
     <div>
       <div className='NotifyWrapper'>
-        {NotificationToggle.map((notification) => {
-          return <Notification notification={notification} removeNotification={removeNotification} />
+        {Notifications.map((notification, i) => {
+          return <Notification key={i} notification={notification} removeNotification={removeNotification} />
         })}
       </div>
     </div>
@@ -16,7 +16,7 @@ const NotificationProvider = ({ NotificationToggle, removeNotification }) => {
 };
 
 const mapStateToProps = (state) => ({
-  NotificationToggle: state.NotificationToggle
+  Notifications: state.ethereum.notifications
 });
 
 export default connect(mapStateToProps, {

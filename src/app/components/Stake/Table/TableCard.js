@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
 import useAnalytics from 'services/analytics';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
-import { addNotification } from 'redux/actions/NotificationToggle';
+import { addNotification } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
 import { statuses, ApproveBigNumber, txMessage } from 'config';

@@ -7,7 +7,7 @@ import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/co
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
-import { addNotification } from 'redux/actions/NotificationToggle';
+import { addNotification } from 'redux/actions/ethereum';
 import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
@@ -154,7 +154,7 @@ const TableCard = ({
           }
         })
         .on('confirmation', (count) => {
-          if (count === 1) {
+          if (count === 0) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
             toggleApproval(tokenAddress, contractAddress, !isApproved);
             setTxLoading(false);
