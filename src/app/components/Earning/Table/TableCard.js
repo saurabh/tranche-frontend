@@ -12,11 +12,12 @@ import {
   toggleApproval,
   setTxLoading,
   setTokenBalances,
+  addNotification,
+  updateNotification,
   setNotificationCount
 } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
-import { addNotification } from 'redux/actions/ethereum';
 import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
