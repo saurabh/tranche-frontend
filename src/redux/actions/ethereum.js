@@ -120,7 +120,6 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
   }
 };
 
-
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
     const state = store.getState();
@@ -239,34 +238,35 @@ export const setTxLoading = (bool) => (dispatch) => {
 
 export const setNotificationCount = (count) => (dispatch) => {
   dispatch({
-      type: UPDATE_NOTIFICATION_COUNT,
-      payload: count
-  })
-}
+    type: UPDATE_NOTIFICATION_COUNT,
+    payload: count
+  });
+};
 
 export const addNotification = (notification) => (dispatch) => {
   dispatch({
-      type: ADD_NOTIFICATION,
-      payload: notification
-  })
-}
+    type: ADD_NOTIFICATION,
+    payload: notification
+  });
+};
 
 export const updateNotification = (notification) => (dispatch) => {
   const state = store.getState();
   let { notifications } = state.ethereum;
-  notifications.find(element => element.id === notification.id) ? 
-    dispatch({
+  notifications.find((element) => element.id === notification.id)
+    ? dispatch({
         type: UPDATE_NOTIFICATION,
         payload: notification
-    }) : dispatch({
-      type: ADD_NOTIFICATION,
-      payload: notification
-    })
-}
+      })
+    : dispatch({
+        type: ADD_NOTIFICATION,
+        payload: notification
+      });
+};
 
 export const removeNotification = (id) => (dispatch) => {
   dispatch({
-      type: REMOVE_NOTIFICATION,
-      payload: id
-  })
-}
+    type: REMOVE_NOTIFICATION,
+    payload: id
+  });
+};

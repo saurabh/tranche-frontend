@@ -87,17 +87,17 @@ export default function (state = initialState, action) {
     case SET_TRANSACTION_LOADING:
       return { ...state, txOngoing: payload };
     case UPDATE_NOTIFICATION_COUNT:
-      return {...state, notificationCount: payload};
+      return { ...state, notificationCount: payload };
     case ADD_NOTIFICATION:
-      return {...state, notifications: [...state.notifications, payload]};
+      return { ...state, notifications: [...state.notifications, payload] };
     case UPDATE_NOTIFICATION: {
-      const newNotifications = [...state.notifications]
+      const newNotifications = [...state.notifications];
       newNotifications[payload.id] = payload;
-      return {...state, notifications: newNotifications };
+      return { ...state, notifications: newNotifications };
     }
     case REMOVE_NOTIFICATION: {
-      state.notifications.splice(payload.id, 1)
-      return {...state, notifications: [...state.notifications]};
+      state.notifications.splice(payload.id, 1);
+      return { ...state, notifications: [...state.notifications] };
     }
     default:
       return state;
