@@ -30,6 +30,7 @@ const Notification = ({ notification: {id, type, message}, removeNotification })
   const handleCloseNotification = () => {
       handleResetTimer();
       setExit(true);
+      console.log(type, id);
       setTimeout(() => {
         removeNotification(id);
       }, 400)
