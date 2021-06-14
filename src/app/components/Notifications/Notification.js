@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from 'react-redux';
 import Parser from 'html-react-parser';
 
-const Notification = ({ notification: {id, type, message}, removeNotification }) => {
+const Notification = ({ notification, removeNotification }) => {
+  const {type, message} = notification;
   const [exit, setExit] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -31,7 +32,7 @@ const Notification = ({ notification: {id, type, message}, removeNotification })
       handleResetTimer();
       setExit(true);
       setTimeout(() => {
-        removeNotification(id);
+        removeNotification(notification);
       }, 400)
   };
 

@@ -264,9 +264,12 @@ export const updateNotification = (notification) => (dispatch) => {
       });
 };
 
-export const removeNotification = (id) => (dispatch) => {
+export const removeNotification = (notification) => (dispatch) => {
+  const state = store.getState();
+  let { notifications } = state.ethereum;
+  const index = notifications.indexOf(notification);
   dispatch({
     type: REMOVE_NOTIFICATION,
-    payload: id
+    payload: index
   });
 };
