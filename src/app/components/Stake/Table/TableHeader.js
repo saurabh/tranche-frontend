@@ -4,7 +4,7 @@ import ChevronDown from "assets/images/svg/chevronDown.svg";
 import { connect } from 'react-redux';
 import { changeFilter } from 'redux/actions/tableData';
 import { useOuterClick } from 'services/useOuterClick';
-import useAnalytics from 'services/analytics';
+// import useAnalytics from 'services/analytics';
 import { ETH } from 'config/constants';
 import {
     TableContainerHeader,
@@ -26,7 +26,7 @@ import i18n from "app/components/locale/i18n";
 const TableHeader = ({ HandleNewLoan, path, changeFilter, theme , title}) => {
     const [menu, toggleMenu] = useState(false);
     const [filterValue, setFilter] = useState(null);
-    const Tracker = useAnalytics("ExternalLinks");
+    // const Tracker = useAnalytics("ExternalLinks");
 
 
     const innerRef = useOuterClick(e => {
@@ -46,7 +46,7 @@ const TableHeader = ({ HandleNewLoan, path, changeFilter, theme , title}) => {
     return (
         <TableContainerHeader>
             <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
-                <h2>{title}</h2> :
+                <h2>{title}</h2>
                 {/* <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
                     {i18n.t('footer.docs')}
                 </HowToLink>   */}

@@ -229,6 +229,7 @@ const TableHeadTitle = styled.div`
         margin: 0 auto;
       }
     `}
+    
     ${({ trancheTableBtns }) => trancheTableBtns && `
       width: 5%;
       text-align: center;
@@ -243,6 +244,9 @@ const TableHeadTitle = styled.div`
         text-align: center;
         margin: 0 auto;
       }
+    `}
+    ${({ statusStake, sliceStaking }) => (statusStake && sliceStaking) && `
+      width: 10%;
     `}
     ${({ reward }) => reward && `
       width: 14%;
@@ -279,6 +283,10 @@ const TableHeadTitle = styled.div`
         margin: 0 auto;
       }
     `}
+    ${({ btnsStake, sliceStaking }) => (btnsStake && sliceStaking) && `
+      width: 15%;
+    `}
+    
     ${({ tranche, color }) => tranche && `
       & > h2{
         border-bottom: 2px dashed ${color};
@@ -1125,6 +1133,9 @@ const TableFifthCol = styled.div`
   ${({ stakeStatus }) => stakeStatus && `
     width: 15% !important;
   `}
+  ${({ sliceStaking }) => sliceStaking && `
+    width: 10% !important;
+  `}
 
   position: relative;
 `
@@ -1164,12 +1175,12 @@ const StatusTextWrapper = styled.h2`
     background: transparent;
     border: ${color ? "1px solid " + color : ""};
   `}
-  ${({ table }) => table === 'stake' && `
+  ${({ table, docsLockupBackground, docsLockupText }) => table === 'stake' && `
     font-weight: 600;
     font-size: 14px !important;
-    background: rgba(105, 103, 156, 0.4)  !important;;
     border-radius: 10px  !important;
-    color: #FFFFFF !important;
+    color: ${docsLockupText} !important; 
+    background: ${docsLockupBackground} !important; 
   `}
 `
 const TableSixthCol = styled.div`
@@ -1203,6 +1214,9 @@ const TableSixthCol = styled.div`
 `
 const TableSeventhCol = styled.div`
   width: 10% !important;
+  ${({ sliceStaking }) => sliceStaking && `
+    width: 15% !important;
+  `}
 `
 const StakeBtn = styled.button`
   border: none;

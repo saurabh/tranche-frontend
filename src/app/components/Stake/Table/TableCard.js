@@ -48,7 +48,6 @@ import {
   StakeBtnSlice
   // TableMobilCardBtn
 } from './styles/TableComponents';
-import i18n from 'app/components/locale/i18n';
 import { initOnboard } from 'services/blocknative';
 
 const TableCard = ({
@@ -63,7 +62,7 @@ const TableCard = ({
   // checkServer
 }) => {
   const [ModalIsOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(true);
+  const [modalType, setModalType] = useState('');
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [tokenAddress, setTokenAddress] = useState(null);
@@ -232,7 +231,7 @@ const TableCard = ({
             </TableFirstColWrapper>
           </TableFirstCol>
 
-          <TableFifthCol className='table-col' stake stakeStatus>
+          <TableFifthCol className='table-col' stake stakeStatus sliceStaking={title === "SLICE Staking Pools"}>
             <FifthColContent>
               {
                 title === "SLICE Staking Pools" && 
@@ -241,6 +240,8 @@ const TableCard = ({
                 color={ModeThemes[theme].activeStatusText}
                 backgroundColor={ModeThemes[theme].activeStatus}
                 table='stake'
+                docsLockupText={ModeThemes[theme].docsLockupText}
+                docsLockupBackground={ModeThemes[theme].docsLockupBackground}
                 >
                 {/* {isActive ? i18n.t('stake.table.statuses.active') : ''} */}
                 1 year
@@ -282,16 +283,16 @@ const TableCard = ({
           </TableSixthCol>
 
           { title === "SLICE Staking Pools" ? 
-            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
-              <StakeBtnSlice>
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
+              <StakeBtnSlice onClick={() => openModal('staking')}>
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
-              <StakeBtn background='#6E41CF' onClick={() => openModal(false)}>
+              <StakeBtn background='#6E41CF' onClick={() => openModal('liqStake')}>
                 -
               </StakeBtn>
-              <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
+              <StakeBtn background='#4441CF' onClick={() => openModal('liqWithdraw')}>
                 +
               </StakeBtn>
             </TableSeventhCol>
@@ -343,10 +344,10 @@ const TableCard = ({
                   <FirstColTitle color={ModeThemes[theme].tableText}>
                     <h2>{type && type}</h2>
                     <StakeBtns>
-                      <StakeBtn background='#6E41CF' onClick={() => openModal(false)}>
+                      <StakeBtn background='#6E41CF' onClick={() => openModal('')}>
                         -
                       </StakeBtn>
-                      <StakeBtn background='#4441CF' onClick={() => openModal(true)}>
+                      <StakeBtn background='#4441CF' onClick={() => openModal('')}>
                         +
                       </StakeBtn>
                     </StakeBtns>

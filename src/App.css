@@ -1201,14 +1201,7 @@ table, th, td {
 .FormDetails{
   display: none !important;
 }
-@media (max-width: 633px){
-  .FormDetails{
-    display: block !important;
-  }
-  .ModalFormInput,  .ModalFormInputAPY, .ModalFormInputNewLoan{
-    border-radius: 7px;
-  }
-}
+
 @media (max-width: 767px){
   
   #other-tabs-container{
@@ -1220,6 +1213,47 @@ table, th, td {
     padding-left: 15px;
     margin-right: auto; 
     margin-left: auto; 
+  }
+
+}
+
+
+@media (max-width: 633px){
+  .ReactModal__Content{
+    position: absolute !important;
+    transform: scale(0.5) translateY(50%);
+  }
+  .stakeModal .ReactModal__Content{
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+}
+@media (max-width: 663px){
+  .stakeModal .ReactModal__Content{
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+  .migrateStake .ReactModal__Content{
+    max-width: inherit !important;
+  }
+}
+@media (max-width: 633px){
+  .FormDetails{
+    display: block !important;
+  }
+  .ModalFormInput,  .ModalFormInputAPY, .ModalFormInputNewLoan{
+    border-radius: 7px;
+  }
+  .notFound .ReactModal__Content{
+    max-height: 246px !important;
+    max-width: 100% !important;
+    min-height: min-content !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
   }
 }
 @media (max-width: 992px){
@@ -1349,13 +1383,6 @@ table, th, td {
 
 
 
-@media (max-width: 633px){
-  .ReactModal__Content{
-    position: absolute !important;
-    transform: scale(0.5) translateY(50%);
-  }
-}
-
 
 
 
@@ -1474,7 +1501,15 @@ table, th, td {
   animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+input[type=number] {
+  -moz-appearance: textfield;
+}
 @-webkit-keyframes clockwise {
   0% { -webkit-transform: rotate(0deg) }
   100% { -webkit-transform: rotate(360deg) }

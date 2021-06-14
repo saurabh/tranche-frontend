@@ -70,7 +70,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                         </div>
                     </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle color={color} statusStake>
+                <TableHeadTitle color={color} statusStake sliceStaking={title === "SLICE Staking Pools"}>
                     <h2 onMouseOver={() => tooltipToggle("status")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow" || path === "stake") ? (title ===  "SLICE Staking Pools" ? "Lockup" : ""): "BOND APY"}</h2>
                     <TooltipWrapper tooltip={TooltipToggle === "status"} status color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>
@@ -110,7 +110,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                         </div>
                     </TooltipWrapper>
                 </TableHeadTitle>
-                <TableHeadTitle color={color} btnsStake>
+                <TableHeadTitle color={color} btnsStake sliceStaking={title === "SLICE Staking Pools"}>
                     <h2 onMouseOver={() => tooltipToggle("manageStake")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('stake.table.tableHead.manageStake')}</h2>
                     <TooltipWrapper tooltip={TooltipToggle === "manageStake"} manageStake color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>

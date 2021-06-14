@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ModeThemes } from 'config';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
+// import { initOnboard } from 'services/blocknative';
+// import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import i18n from '../../locale/i18n';
+// import { readyToTransact } from 'utils/helperFunctions';
+import StakingModal from '../../Modals/StakingModal';
 import useAnalytics from 'services/analytics';
 import {
   StakeHeaderWrapper,
@@ -10,7 +14,8 @@ import {
   WithdrawStakeCard,
   StackSummaryCol,
   WithdrawStakeCardText,
-  WithdrawStakeCardBtns
+  WithdrawStakeCardBtns,
+  StakeSummaryCardWrapper
 } from './styles/HeaderComponents';
 import {
   TableTitle,
@@ -19,8 +24,16 @@ import {
 import ProgressBar from '../ProgressBar/ProgressBar';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ theme }) => {
+const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, closeModal, modalType, ModalIsOpen }) => {
   const Tracker = useAnalytics("ExternalLinks");
+  // const [ModalIsOpen, setModalOpen] = useState(false);
+  // const [modalType, setModalType] = useState('');
+  // const onboard = initOnboard({
+  //   address: setAddress,
+  //   network: setNetwork,
+  //   balance: setBalance,
+  //   wallet: setWalletAndWeb3
+  // });
   
   return (
     <StakeHeaderWrapper>
@@ -30,38 +43,53 @@ const HeaderTabs = ({ theme }) => {
             {i18n.t('footer.docs')}
         </HowToLink>  
       </TableTitle>
-      <StakeSummaryCard>
-        <StackSummaryCol>
-          <h2>Accrued Rewards</h2>
-          <h2>100 SLICE</h2>
-          <h2>Current Value is $70</h2>
-          <ProgressBar progress="50" />
-          <h2>6 Days until next distribution</h2>
-        </StackSummaryCol>
-        <StackSummaryCol>
-          <h2>Total Staked SLICE Tokens</h2>
-          <h2>102.00</h2>
-          <h2>14,140.12 SLICE Available</h2>
-        </StackSummaryCol>
-        <StackSummaryCol>
-          <h2>Total Staked SLICE LP Tokens</h2>
-          <h2>00.00</h2>
-          <h2>14,140.12 SLICE-LP Available</h2>
-        </StackSummaryCol>
-        <StackSummaryCol claim>
-          <button>Claim</button>
-        </StackSummaryCol>
-      </StakeSummaryCard>
+      <StakeSummaryCardWrapper>     
+        <StakeSummaryCard color="#4441CF">
+          <StackSummaryCol stake>
+            <h2>SLICE Staking Pools Stakes</h2>
+            <h2>102.00</h2>
+            <h2>Current Value is $0</h2>
+            <span></span>
+            <h2>14,140.12 SLICE Available</h2>
+          </StackSummaryCol>
+          <StackSummaryCol stake> 
+            <h2>Total Liquidity Provider Pools Stakes</h2>
+            <h2>102.00</h2>
+            <h2>Current Value is $0</h2>
+            <span></span>
+            <h2>14,140.12 SLICE Available</h2>
+          </StackSummaryCol>
+        </StakeSummaryCard>
+        <StakeSummaryCard color="#369987" claim>
+          <StackSummaryCol>
+            <h2>Accrued Rewards</h2>
+            <h2>100 SLICE</h2>
+            <h2>Current Value is $70</h2>
+            <ProgressBar progress="50" widthBar="90" colorOne="rgba(255,255,255,0.5)" colorTwo="#FFFFFF"/>
+            <h2>6 Days until next distribution</h2>
+          </StackSummaryCol>
+          <button onClick={() => openModal('claim')}>Claim</button>
+        </StakeSummaryCard>
+      </StakeSummaryCardWrapper>
       <WithdrawStakeCard>
         <WithdrawStakeCardText>
           <h2>WITHDRAW YOUR SLICE TOKENS</h2>
           <p>Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE Staking pools, please withdraw your current SLICE tokens and rewards in order to use them in SLICE staking pools.</p>
         </WithdrawStakeCardText>
         <WithdrawStakeCardBtns>
-          <button>Withdraw REWARDS</button>
-          <button>Withdraw STAKE</button>
+          <button onClick={() => openModal('withdrawStake')}>Withdraw REWARDS</button>
+          <button onClick={() => openModal('withdrawRewards')}>Withdraw STAKE</button>
         </WithdrawStakeCardBtns>
       </WithdrawStakeCard>
+      <StakingModal
+        // State Values
+        modalIsOpen={ModalIsOpen}
+        modalType={modalType}
+        // Functions
+        closeModal={() => closeModal()}
+        openModal={() => openModal('')}
+        // Functions
+      />
     </StakeHeaderWrapper>
   );
 };

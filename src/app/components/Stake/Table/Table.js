@@ -57,6 +57,7 @@ const style = {
 };
 
 const Table = ({
+  openModal, closeModal, modalType, ModalIsOpen,
   HandleNewLoan,
   fetchTableData,
   changeOwnAllFilter,
@@ -152,7 +153,7 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
@@ -208,7 +209,7 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} title={title} isDesktop={isDesktop} />)
+                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} title={title} isDesktop={isDesktop} />)
               )}
             </div>
           </div>

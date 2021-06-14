@@ -3,23 +3,23 @@ import styled from 'styled-components';
 
 const ProgressBarContainer = styled.div`
     height: 5px;
-    width: 90%;
-    background-color: rgba(255,255,255,0.5);
+    width: ${props => props.widthBar}%;    
+    background-color: ${props => props.colorOne};
     border-radius: 100px;
 `;
 const Progress = styled.div`
     height: 100%;
     width: ${props => props.progress}%;
-    background-color: #FFFFFF;
+    background-color: ${props => props.colorTwo};
     transition: width 1s ease-in-out;
     border-radius: inherit;
     text-align: right;
 `;
-const ProgressBar = ({ progress }) => {
+const ProgressBar = ({ progress, widthBar, colorOne, colorTwo }) => {
 
   return (
-    <ProgressBarContainer>
-      <Progress progress={progress}>
+    <ProgressBarContainer widthBar={widthBar} colorOne={colorOne}>
+      <Progress progress={progress} colorTwo={colorTwo}>
       </Progress>
     </ProgressBarContainer>
   );

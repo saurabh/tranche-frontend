@@ -13,7 +13,7 @@ import i18n from "../../locale/i18n";
 import HeaderTabs from 'app/components/Stake/Header/HeaderTabs';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-function Header({updateDate, theme}) {
+function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpen}) {
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
@@ -36,7 +36,7 @@ function Header({updateDate, theme}) {
   return (
     <div className='content-container container'>
       <Navbar path={parsedPath[parsedPath.length - 1]} theme={theme}/>
-      <HeaderTabs />
+      <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
       {
         path === "stake" &&
         ""

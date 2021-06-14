@@ -945,42 +945,629 @@ const ClaimModalCol = styled.div`
   `}
   
 `;
+const StakingModalContentWrapper = styled.div`
+  width: ${props => props.migrateStake ? "373px" : "731px"};
+  height: ${props => props.height};
+  background: ${props => props.backgroundColor};
+  @media (max-width: 663px){
+    width: 100%;
+    height: 100vh;
+    border-radius: 12px;
+    position: absolute;
+    top: 50%;
+    overflow: scroll;
+    transform: translateY(-50%);
+  }
+  ${({ migrateStake }) => migrateStake && `
+    @media (max-width: 663px){
+      height: auto;
+    }
+  `}
+`;
+const StakingModalContent = styled.div`
+  width: 100%;
+  padding: 33px;
+  height: ${props => props.height};
+  & > p{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: ${props => props.textColor};
+    opacity: 0.8;
+    margin: 16px 0 12px 0;
+  }
+  @media (max-width: 663px){
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+  ${({ migrateStake }) => migrateStake && `
+    @media (max-width: 663px){
+      height: auto;
+    }
+  `}
+`;
+
+const StakingModalClose = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  button{
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  
+`;
+const ClaimModalHeader = styled.div`
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 18px;
+    color: #898FA4; 
+  }
+  h2:nth-child(2){
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+    margin: 9px 0 0 0;
+    span{
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      color: #898FA4;
+    }
+  }
+`;
+const ClaimModalTableWrapper = styled.div`
+  margin: 27px 0 0 0;   
+`;
+const ClaimModalTableTitle = styled.div`
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+`;
+const ClaimModalTableSubTitle = styled.div`
+    margin: 5px 0 10px 0;
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 17px;
+      color: #898FA4;
+    }
+`;
+const ClaimModalTableHead = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 11px;
+  margin: 18px 0 0 0;
+  border-bottom: 0.940209px solid ${props => props.BorderStake};
+`;
+const ClaimModalTableCol = styled.div`
+  ${({ head, TableHeadText }) => head && `
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 9.40209px;
+      text-transform: uppercase;
+      color: ${TableHeadText};
+    }
+  `}
+  ${({ col, textColor }) => col && `
+    display: flex;
+    align-items: center;
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 10px;
+      // color: #FFFFFF;
+      color: ${textColor};
+      font-family: Inter;
+      text-transform: uppercase;
+    }
+    div{
+      display: flex;
+      img{
+        width: 22px;
+        :last-child{
+          margin-left: -5px;
+          z-index: 1;
+        }
+      }
+    }
+  `}
+  ${({ col, sliceliquidityFirstLast, rewards}) => ((col && sliceliquidityFirstLast) || (col && rewards)) && `
+    display: flex;
+    align-items: center;
+    h2{
+      font-weight: bold;
+      margin-left: 12px;
+      img{
+        height: 10px;
+        margin-right: 2px;
+      }
+    }
+  `}
+  
+  ${({ sliceliquidityFirstLast }) => sliceliquidityFirstLast && `
+      width: 20%;
+  `}
+  ${({ sliceCol }) => sliceCol && `
+      width: 15%;
+  `}
+  ${({ liquidityCol }) => liquidityCol && `
+      width: 20%;
+  `}
+  
+  ${({ staked }) => staked && `
+    h2{
+      display: flex;
+      align-items: center;
+      img{
+        height: 10px;
+        margin-right: 5px;
+      }
+    }
+  `}
+  
+  ${({ manage }) => manage && `
+      h2{
+        text-align: center;
+      }
+  `}
+
+  
+  
+`;
+const ClaimModalTableRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 0.940209px solid ${props => props.BorderStake};
+`;
+const ClaimModalTableBtn = styled.button`
+  width: 72.55px;
+  height: 25.72px;    
+  background: #369987;
+  box-shadow: 0px 1.71442px 3.42883px rgba(0, 0, 0, 0.15);
+  border-radius: 23.1446px;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 9.42929px;
+  line-height: 11px;
+  text-align: center;
+  color: #FFFFFF;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0 auto;
+
+  // background: #CECECE;
+  // background: #C22D2D;
+  // color: #666666;
+`;
+const StakingModalContentSideWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  @media (max-width: 663px){
+    flex-direction: column;
+  }
+`;
+const StakingModalContentSide = styled.div`
+  width: 50%;
+  height: 100%;
+  position: relative;
+  @media (max-width: 663px){
+    width: 100%;
+  }
+`;
+const BreakLink = styled.div`
+  padding: 0 19px;    
+  span{
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    background: rgba(249, 249, 251, 0.1);
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+  @media (max-width: 663px){
+    display: none;
+  }
+`;
+const StakingModalContentSideTitle = styled.div`
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 17px;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+`;
+const StakingModalContentSideHeader = styled.div`
+  width: 100%;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  margin: 14px 0 12px 0;
+  background: ${props => props.BoxColor};
+  border-radius: 4.33px;
+  padding: 0 12px;
+`;
+const StakingModalContentSideHeaderBoxWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const StakingModalContentSideHeaderBox = styled.div`
+  width: 48%;
+  height: 60px;
+  background: ${props => props.BoxColor};
+  border-radius: 4.33px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 9.1px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 2px auto;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 9.8px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 2px auto;
+    color: ${props => props.BoxColorText};
+  }
+
+  ${({ stake }) => stake && `
+    width: 23%;
+  `}
+
+  
+
+
+  
+`;
+const StakingModalContentSideHeaderImg = styled.div`
+  display: flex;
+  img{
+    height: 19px;
+    :last-child{
+      margin-left: -5px;
+      z-index: 1;
+    }
+  }
+`;
+const StakingModalContentSideHeaderText = styled.div`
+  margin-left: 8px;
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 9.33278px;
+    line-height: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 2px 0;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 7.77732px;
+    line-height: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 4px 0;
+    color: ${props => props.boxText};
+  }
+`;
+const StakeModalPoolTable = styled.div`
+  margin: 24px 0 0 0;
+`;
+const StakeModalPoolTableTitle = styled.div`
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+`;
+const StakeModalPoolTableHead = styled.div`
+  padding: 15px 0 12px 0;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StakeModalPoolTableRow = styled.div`
+  border-top: 0.940209px solid ${props => props.BorderStake};
+  padding: 19px 0;
+  display: flex;
+  justify-content: space-between;
+`;
+const StakeModalPoolTableCol = styled.div`
+
+  ${({ head, TableHeadText }) => head && `
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 9.40209px;
+      text-transform: uppercase;
+      color: ${TableHeadText};
+    }
+  `}
+  ${({ col, textColor }) => col && `
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 10px;
+      text-transform: uppercase;
+      // color: #FFFFFF;
+      color: ${textColor};
+    }
+  `}
+  ${({ stake }) => stake && `
+    width:  33.3333333%;
+    h2{
+      display: flex;
+      align-items: center;
+      img{
+        height: 10px;
+        margin-right: 5px;
+      }
+    }
+  `}
+
+ 
+`; 
+
+const StakeModalNavigationWrapper = styled.div`
+  height: 32px;
+  max-width: 164px;
+  background: ${props => props.stakeModalBoxBackground};
+  border: 1px solid ${props => props.StakeModalNavigationBorder};
+  border-radius: 159px; 
+  margin: 18px 0 21px 0;
+`;
+const StakeModalNavigationBtn = styled.button`
+  width: 50%;
+  height: 100%;
+  background: transparent;
+  opacity: 0.5;
+  ${({ active, stakeModalBoxShadow, stakeModalBoxBackground }) => active && `
+    background: ${stakeModalBoxBackground};
+    box-shadow: ${stakeModalBoxShadow};
+    opacity: 1;
+  `}
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 9.65602px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: ${props => props.StakeModalNavigationText};
+  cursor: pointer;
+  border-radius: 159px;
+  border: none;
+  outline: none;
+`;
+const StakeModalFormWrapper = styled.div`
+    & > h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      // color: #FFFFFF;
+      color: ${props => props.textColor};
+    }
+    form{
+      & > h2{
+        margin: 12px 0;
+      }
+      h2{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 11px;
+        color: ${props => props.inputText};
+      }
+    }
+    ${({ stake }) => stake && `
+      margin: 25px 0 0 0;
+    `}
+    ${({ migrateStake }) => migrateStake && `
+      margin: 0;
+      & > h2{
+        margin: 0 0 10px 0;
+      }
+    `}
+`;
+const StakeModalFormInputWrapper = styled.div`
+  position: relative;
+  div{
+    display: flex;
+    align-items: center;
+    border-left: 2.16725px solid ${props => props.borderColor};
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    img{
+      width: 18.5px;
+      margin: 0 9px 0 15px;
+    }
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: normal;
+      font-size: 13.0035px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;        
+      // color: #FFFFFF;
+      color: ${props => props.textColor};
+    }
+  }
+`
+const StakeModalFormInput = styled.input`
+  width: 100%;
+  height: 34.68px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.92283px solid rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
+  border-radius: 3.69132px;
+  font-family: 'Inter', sans-serif;
+  padding: 10px 100px 10px 16px;  
+  font-weight: 500;
+  font-size: 11px;
+  outline: none;
+  line-height: 13px;
+  // color: #FFFFFF;
+  color: ${props => props.textColor};
+  ${({ migrateStake }) => migrateStake && `
+    background: ${props=>props.MigrateInput};
+    border: 0.92283px solid ${props => props.inputColor};
+  `}
+`;
+const StakeModalFormBtn = styled.button`
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  color: #FFFFFF;
+  width: 100%;
+  height: 38px;
+  background: #6E41CF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 27px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  ${({ stake }) => stake && `
+    background: #4441CF;
+  `}
+
+  ${({ migrateStake }) => migrateStake && `
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 66px);
+    margin: 33px 0;
+  `}
+  @media (max-width: 663px){
+    position: relative;
+    width: 100%;
+    margin: 15px 0;
+  }
+  
+`;
+const EstimatedText = styled.div`
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: ${props => props.EstimatedTextColor};
+    margin: 17px 0 11px 0;
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+`;
+
 
 export {
-    ModalHeader, 
-    ModalContent,
-    ModalContentDetails,
-    BtnGrpLoanModal, 
-    ModalButton, 
-    ConfirmAlertWrapper, 
-    ConfirmAlertBtnWrapper, 
-    ModalAdjustForm, 
-    ModalFormWrapper, 
-    ModalFormGrp,
-    BtnLoanModal,
-    ModalActionDetails,
-    ModalActionsContent,
-    ModalUserActions,
-    BtnGrpLoanModalWrapper,
-    ModalActionDetailsContent,
-    LoanDetailsRow,
-    LoanDetailsRowTitle,
-    LoanDetailsRowValue,
-    ModalErrorWrapper,
-    ModalTextConfirm,
-    ModalTextConfirmBtn,
-    ModalTextConfirmBtnWrapper,
-    BtnLoadingIcon,
-    LoanDetailsMobile,
-    StakingModalRow,
-    StakingModalWrapper,
-    SliceNotFound,
-    SliceNotFoundBtn,
-    ClaimModalHalfWrapper,
-    ClaimModalHalfContentWrapper,
-    ClaimModalHalfContent,
-    ClaimModalRow,
-    ClaimModalCol,
-    ModalMarketWrapperBtn,
-    ModalMarketWrapper
+  ModalHeader, 
+  ModalContent,
+  ModalContentDetails,
+  BtnGrpLoanModal, 
+  ModalButton, 
+  ConfirmAlertWrapper, 
+  ConfirmAlertBtnWrapper, 
+  ModalAdjustForm, 
+  ModalFormWrapper, 
+  ModalFormGrp,
+  BtnLoanModal,
+  ModalActionDetails,
+  ModalActionsContent,
+  ModalUserActions,
+  BtnGrpLoanModalWrapper,
+  ModalActionDetailsContent,
+  LoanDetailsRow,
+  LoanDetailsRowTitle,
+  LoanDetailsRowValue,
+  ModalErrorWrapper,
+  ModalTextConfirm,
+  ModalTextConfirmBtn,
+  ModalTextConfirmBtnWrapper,
+  BtnLoadingIcon,
+  LoanDetailsMobile,
+  StakingModalRow,
+  StakingModalWrapper,
+  SliceNotFound,
+  SliceNotFoundBtn,
+  ClaimModalHalfWrapper,
+  ClaimModalHalfContentWrapper,
+  ClaimModalHalfContent,
+  ClaimModalRow,
+  ClaimModalCol,
+  ModalMarketWrapperBtn,
+  ModalMarketWrapper,
+  StakingModalContentWrapper,
+  StakingModalContent,
+  StakingModalClose,
+  ClaimModalHeader,
+  ClaimModalTableWrapper,
+  ClaimModalTableTitle,
+  ClaimModalTableSubTitle,
+  ClaimModalTableHead,
+  ClaimModalTableRow,
+  ClaimModalTableCol,
+  ClaimModalTableBtn,
+  StakingModalContentSideWrapper,
+  StakingModalContentSide,
+  BreakLink,
+  StakingModalContentSideTitle,
+  StakingModalContentSideHeader,
+  StakingModalContentSideHeaderBoxWrapper,
+  StakingModalContentSideHeaderBox,
+  StakingModalContentSideHeaderImg,
+  StakingModalContentSideHeaderText,
+  StakeModalPoolTable,
+  StakeModalPoolTableTitle,
+  StakeModalPoolTableHead,
+  StakeModalPoolTableRow,
+  StakeModalPoolTableCol,
+  StakeModalNavigationWrapper,
+  StakeModalNavigationBtn,
+  StakeModalFormWrapper,
+  StakeModalFormInputWrapper,
+  StakeModalFormInput,
+  StakeModalFormBtn,
+  EstimatedText
 };
