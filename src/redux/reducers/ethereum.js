@@ -96,7 +96,11 @@ export default function (state = initialState, action) {
       return { ...state, notifications: newNotifications };
     }
     case REMOVE_NOTIFICATION: {
+      console.log(payload.id)
+      console.log(state.notifications)
       state.notifications.splice(payload.id, 1);
+      console.log('splicedArray' + state.notifications.splice(payload.id, 1);)
+      console.log('originalArray' + state.notifications)
       return { ...state, notifications: [...state.notifications] };
     }
     default:
