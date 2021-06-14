@@ -42,10 +42,13 @@ export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCa
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
 export const ApproveBigNumber = '100000000000000';
+export const stakingDurations = process.env.REACT_APP_STAKING_LOCKUP_DURATION.split(',');
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
   { key: 'USDT', decimals: 6 }
 ];
+export const ETHorMaticCheck = ['ETH', 'MATIC'];
+export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
@@ -145,9 +148,6 @@ export const pairData = [
     lendTokenSetup: DAISetup
   }
 ];
-
-export const ETHorMaticCheck = ['ETH', 'MATIC'];
-export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 export const apiUri = {
   priceFeed: 'pairs',

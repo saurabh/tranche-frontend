@@ -6,6 +6,7 @@ import {
   TRANCHES_SUCCESS,
   TRANCHES_COUNT,
   STAKING_IS_LOADING,
+  LPLIST_SUCCESS,
   STAKING_SUCCESS,
   STAKING_COUNT,
   CHANGE_FILTER,
@@ -15,7 +16,7 @@ import {
   CHANGE_SORTING,
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
-  TRANCHE_MARKETS
+  TRANCHE_MARKETS,
 } from '../actions/constants';
 
 let localNetwork = window.localStorage.getItem('network');
@@ -35,7 +36,7 @@ const initialState = {
   filterType: 'all',
   tradeType: 'allTranches',
   trancheCard: { status: false, id: null },
-  trancheMarket: "compound"
+  trancheMarket: 'compound'
 };
 
 export default function (state = initialState, action) {
@@ -58,8 +59,10 @@ export default function (state = initialState, action) {
       return { ...state, trancheCard: payload };
     case STAKING_IS_LOADING:
       return { ...state, isLoading: payload };
-    case STAKING_SUCCESS:
+    case LPLIST_SUCCESS:
       return { ...state, stakingList: payload };
+    case STAKING_SUCCESS:
+      return { ...state, sliceStakingList: payload };
     case STAKING_COUNT:
       return { ...state, count: payload };
     case PAGINATION_SKIP:

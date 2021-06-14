@@ -7,7 +7,8 @@ import {
   LP1TokenAddress,
   LP2TokenAddress,
   etherScanUrl,
-  maticBlockExplorerUrl
+  maticBlockExplorerUrl,
+  stakingDurations
 } from 'config/constants';
 import { postRequest, initOnboard } from 'services';
 import { checkServer } from './checkServer';
@@ -25,11 +26,12 @@ import {
   TRANCHES_SUCCESS,
   TRANCHES_COUNT,
   STAKING_IS_LOADING,
-  STAKING_SUCCESS,
+  LPLIST_SUCCESS,
   STAKING_COUNT,
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
-  TRANCHE_MARKETS
+  TRANCHE_MARKETS,
+  STAKING_SUCCESS
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -91,16 +93,26 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
   const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
-  const orderedList = [];
-  orderedList.push(searchArr(SLICEAddress));
-  orderedList.push(searchArr(LP1TokenAddress));
-  orderedList.push(searchArr(LP2TokenAddress));
+  const filterArrByDuration = (duration) => list.find((i) => i.duration && i.duration === duration);
+  const sliceList = [];
+  const lpList = [];
+  if (searchArr(SLICEAddress)) {
+    sliceList.push(filterArrByDuration(Number(stakingDurations[0])));
+    sliceList.push(filterArrByDuration(Number(stakingDurations[1])));
+    sliceList.push(filterArrByDuration(Number(stakingDurations[2])));
+  }
+  lpList.push(searchArr(SLICEAddress));
+  lpList.push(searchArr(LP1TokenAddress));
+  lpList.push(searchArr(LP2TokenAddress));
+  dispatch({
+    type: LPLIST_SUCCESS,
+    payload: lpList
+  });
   dispatch({
     type: STAKING_SUCCESS,
-    payload: orderedList
+    payload: sliceList
   });
 };
-
 export const stakingSetCount = (count) => (dispatch) => {
   dispatch({
     type: STAKING_COUNT,
