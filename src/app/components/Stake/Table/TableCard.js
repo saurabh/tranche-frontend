@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
 import useAnalytics from 'services/analytics';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
-import { addNotification } from 'redux/actions/NotificationToggle';
+import { addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
-import { statuses, ApproveBigNumber, txMessage } from 'config';
+import { statuses, ApproveBigNumber, txMessage, etherScanUrl } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 import { ModeThemes } from 'config/constants';
 
@@ -53,8 +53,10 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
   setTokenBalance,
-  ethereum: { tokenBalance, address, wallet, web3, notify, blockExplorerUrl },
+  ethereum: { tokenBalance, address, wallet, web3, notify },
   addNotification,
+  updateNotification,
+  setNotificationCount,
   summaryData: { slice, lp, lpList },
   theme,
   isDesktop,
@@ -141,9 +143,12 @@ const TableCard = ({
   };
 
   const stakingApproveContract = async (stakingAddress, tokenAddress) => {
+    let id = notificationCount;
+    setNotificationCount(notificationCount + 1);
     try {
       const token = ERC20Setup(web3, tokenAddress);
       addNotification({
+        id,
         type: 'WAITING',
         message: 'Your transaction is waiting for you to confirm',
         title: 'awaiting confirmation'
@@ -169,7 +174,8 @@ const TableCard = ({
         });
     } catch (error) {
       error.code === 4001 &&
-        addNotification({
+        updateNotification({
+          id,
           type: 'REJECTED',
           message: 'You rejected the transaction',
           title: 'Transaction rejected'
@@ -223,7 +229,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -354,7 +360,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
@@ -433,5 +439,7 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   setTokenBalance,
   addNotification,
+  updateNotification,
+  setNotificationCount,
   checkServer
 })(TableCard);

@@ -26,7 +26,11 @@ import {
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
   SET_TRANCHE_ALLOWANCE,
-  SET_BLOCKEXPLORER_URL
+  SET_BLOCKEXPLORER_URL,
+  ADD_NOTIFICATION,
+  UPDATE_NOTIFICATION,
+  UPDATE_NOTIFICATION_COUNT,
+  REMOVE_NOTIFICATION
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
 import { trancheMarketsToggle } from './tableData';
@@ -115,7 +119,6 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
     console.error(error);
   }
 };
-
 
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
@@ -230,5 +233,43 @@ export const setTxLoading = (bool) => (dispatch) => {
   dispatch({
     type: SET_TRANSACTION_LOADING,
     payload: bool
+  });
+};
+
+export const setNotificationCount = (count) => (dispatch) => {
+  dispatch({
+    type: UPDATE_NOTIFICATION_COUNT,
+    payload: count
+  });
+};
+
+export const addNotification = (notification) => (dispatch) => {
+  dispatch({
+    type: ADD_NOTIFICATION,
+    payload: notification
+  });
+};
+
+export const updateNotification = (notification) => (dispatch) => {
+  const state = store.getState();
+  let { notifications } = state.ethereum;
+  notifications.find((element) => element.id === notification.id)
+    ? dispatch({
+        type: UPDATE_NOTIFICATION,
+        payload: notification
+      })
+    : dispatch({
+        type: ADD_NOTIFICATION,
+        payload: notification
+      });
+};
+
+export const removeNotification = (notification) => (dispatch) => {
+  const state = store.getState();
+  let { notifications } = state.ethereum;
+  const index = notifications.indexOf(notification);
+  dispatch({
+    type: REMOVE_NOTIFICATION,
+    payload: index
   });
 };
