@@ -53,7 +53,7 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
   setTokenBalance,
-  ethereum: { tokenBalance, address, wallet, web3, notify },
+  ethereum: { tokenBalance, address, wallet, web3, notify, notificationCount },
   addNotification,
   updateNotification,
   setNotificationCount,
