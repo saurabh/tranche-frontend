@@ -77,8 +77,7 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, 
           <p>Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE Staking pools, please withdraw your current SLICE tokens and rewards in order to use them in SLICE staking pools.</p>
         </WithdrawStakeCardText>
         <WithdrawStakeCardBtns>
-          <button onClick={() => openModal('withdrawStake')}>Withdraw REWARDS</button>
-          <button onClick={() => openModal('withdrawRewards')}>Withdraw STAKE</button>
+          <button onClick={() => openModal('withdrawTokens')}>Withdraw Tokens</button>
         </WithdrawStakeCardBtns>
       </WithdrawStakeCard>
       <StakingModal

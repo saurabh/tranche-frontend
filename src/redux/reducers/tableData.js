@@ -26,6 +26,7 @@ const initialState = {
   loansList: [],
   tranchesList: [],
   stakingList: [],
+  sliceStakingList: [],
   count: 0,
   isLoading: false,
   skip: 0,

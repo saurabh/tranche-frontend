@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, ETHCARD } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -134,6 +134,11 @@ export const trancheIcons = {
   bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
   bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
+};
+export const LiquidityIcons = {
+  "SLICE": TrancheStake,
+  "SLICE/ETH LP": ETHCARD,
+  "SLICE/DAI LP": DAICARD
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)

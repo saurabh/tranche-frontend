@@ -158,7 +158,7 @@ const WithdrawStakeCard = styled.div`
   }
 `
 const WithdrawStakeCardText = styled.div`
-  width: 64%;
+  width: 80%; 
   h2, p{
     font-family: 'Inter', sans-serif;
   }
@@ -183,7 +183,7 @@ const WithdrawStakeCardText = styled.div`
   }
 `
 const WithdrawStakeCardBtns = styled.div`
-  width: 36%;
+  width: 20%;
   display: flex;
   align-items: center;
   justify-content: flex-end;

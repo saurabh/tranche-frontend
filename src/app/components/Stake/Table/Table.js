@@ -153,7 +153,9 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (title === "SLICE Staking Pools") ?
+              (data.sliceStakingList.length > 0 && data.sliceStakingList[0])  && data.sliceStakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
@@ -209,8 +211,9 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} title={title} isDesktop={isDesktop} />)
-              )}
+              (title === "SLICE Staking Pools") ?
+              (data.sliceStakingList.length > 0 && data.sliceStakingList[0])  && data.sliceStakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)              )}
             </div>
           </div>
         </TableWrapper>

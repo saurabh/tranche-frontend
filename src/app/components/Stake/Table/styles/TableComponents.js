@@ -810,10 +810,17 @@ const TableCardImg = styled.div`
   display: flex;
   position: relative;
   align-items: center;
-  margin-top: -9px;
+  margin-top: -4px;  
   img{
     border-radius: 50%;
     height: 37px;
+  }
+  img:nth-child(1){
+    z-index: 1;
+  }
+
+  img:nth-child(2){
+    margin-left: -10px;
   }
   span{
     position: absolute;

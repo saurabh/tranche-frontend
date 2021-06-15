@@ -8,10 +8,10 @@ import { addNotification } from 'redux/actions/NotificationToggle';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
 import { statuses, ApproveBigNumber, txMessage } from 'config';
-import { LinkArrow, TrancheImg } from 'assets';
-import { ModeThemes } from 'config/constants';
-
-import { toWei, fromWei, stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
+import { LinkArrow, TrancheStake } from 'assets';
+import { LiquidityIcons, ModeThemes } from 'config/constants';
+import { StakingAddresses } from 'config';
+import { toWei, fromWei, stakingAllowanceCheck, addStake, withdrawStake, epochTimeRemaining } from 'services/contractMethods';
 import StakingModal from '../../Modals/StakingModal';
 
 import {
@@ -81,6 +81,14 @@ const TableCard = ({
   const setBalanceCB = useCallback((balance) => {
     setBalance(roundNumber(balance, undefined, 'down'));
   }, []);
+  useEffect(() => {
+    const setEpochTime = async () => {
+        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+        console.log(result)
+    };
+
+    setEpochTime();
+  }, [type]);
 
   useEffect(() => {
     type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP' ? setLPToken(true) : setLPToken(false);
@@ -215,7 +223,11 @@ const TableCard = ({
           <TableFirstCol className='table-col'>
             <TableFirstColWrapper>
               <TableCardImg tranche={true}>
-                <img src={TrancheImg} alt='Tranche' />
+              
+                <img src={TrancheStake} alt='Tranche' />
+                { (title === "Liquidity Provider Pools") &&
+                  <img src={LiquidityIcons[type && type]} alt='Tranche' />
+                }
               </TableCardImg>
               <FirstColContent>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
@@ -289,10 +301,10 @@ const TableCard = ({
               </StakeBtnSlice>
             </TableSeventhCol> :
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
-              <StakeBtn background='#6E41CF' onClick={() => openModal('liqStake')}>
+              <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
                 -
               </StakeBtn>
-              <StakeBtn background='#4441CF' onClick={() => openModal('liqWithdraw')}>
+              <StakeBtn background='#4441CF' onClick={() => openModal('liqStake')}>
                 +
               </StakeBtn>
             </TableSeventhCol>
@@ -333,7 +345,7 @@ const TableCard = ({
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
-              <img src={TrancheImg} alt='Tranche' />
+              <img src={TrancheStake} alt='Tranche' />
             </TableCardImg>
           </TableCardImgWrapper>
 

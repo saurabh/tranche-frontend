@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -56,7 +56,8 @@ const NotFoundStyles = {
     top: '0',
     left: '0',
     right: '0',
-    bottom: '0'
+    bottom: '0',
+    zIndex: '1000'
   },
   content: {
     position: 'relative',
@@ -84,7 +85,9 @@ const MigrateStake = {
     top: '0',
     left: '0',
     right: '0',
-    bottom: '0'
+    bottom: '0',
+    zIndex: '1000'
+
   },
   content: {
     position: 'relative',
@@ -112,7 +115,8 @@ const FirstCustomStyles = {
     top: '0',
     left: '0',
     right: '0',
-    bottom: '0'
+    bottom: '0',
+    zIndex: '1000'
   },
   content: {
     position: 'relative',
@@ -140,7 +144,8 @@ const stakingModalStyles = {
     top: '0',
     left: '0',
     right: '0',
-    bottom: '0'
+    bottom: '0',
+    zIndex: '1000'
   },
   content: {
     position: 'relative',
@@ -174,6 +179,12 @@ const StakingModal = ({
  
   // API Values,
 }) => {
+
+  const [modalTypeVar, setModalTypeVar] = useState("");
+
+  useEffect(() =>{
+    setModalTypeVar(modalType);
+  }, [modalType])
 
   const claimModal = () => {
     return (
@@ -661,8 +672,8 @@ const StakingModal = ({
                   <h2>Manage</h2>
                 </StakingModalContentSideTitle>
                 <StakeModalNavigationWrapper stakeModalBoxBackground={ModeThemes[theme].stakeBoxBackground} StakeModalNavigationBorder={ModeThemes[theme].StakeModalNavigationBorder}>
-                  <StakeModalNavigationBtn stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow} stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground} StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText}>Stake</StakeModalNavigationBtn>
-                  <StakeModalNavigationBtn  stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow} stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground}  StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText} active>Withdraw</StakeModalNavigationBtn>
+                  <StakeModalNavigationBtn stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow} stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground} StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText} onClick={() => setModalTypeVar("liqStake")} active={modalTypeVar === "liqStake"}>Stake</StakeModalNavigationBtn>
+                  <StakeModalNavigationBtn  stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow} stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground}  StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText} onClick={() => setModalTypeVar("liqWithdraw")} active={modalTypeVar === "liqWithdraw"}>Withdraw</StakeModalNavigationBtn>
                 </StakeModalNavigationWrapper>
 
                 <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}> 
@@ -758,11 +769,11 @@ const StakingModal = ({
               <button onClick={closeModal}><img src={theme === "light" ? CloseModal : CloseModalWhite} alt="close"/></button>
             </StakingModalClose>
               <StakingModalContentSideTitle textColor={ModeThemes[theme].ModalText}>
-                <h2>Withdraw Current Stake</h2>
+                <h2>Withdraw Current Tokens</h2>
               </StakingModalContentSideTitle>
-              <p>Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE Staking pools, please withdraw your current SLICE tokens in order to use them in SLICE staking pools.</p>
+              <p>Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE Staking pools, please withdraw your current SLICE tokens and rewards in order to use them in SLICE staking pools.</p>
               <StakeModalFormWrapper migrateStake stake textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
-                  <h2>Amount of SLICE to stake: </h2>
+                  <h2>You are withdrawing: </h2>
                   <form>
                     <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
                       <StakeModalFormInput MigrateInput={ModeThemes[theme].MigrateInput} migrateStake textColor={ModeThemes[theme].ModalText} type="number" inputColor={ModeThemes[theme].BorderStake}/>
@@ -791,8 +802,8 @@ const StakingModal = ({
   return (
     modalType === "claim" ? claimModal() :
     modalType === "staking" ? stakingModal() :
-    (modalType === "liqStake" || modalType === "liqWithdraw") ? liquidityModal() : 
-    (modalType === "withdrawStake" || modalType === "withdrawRewards") ? migrateStake() :
+    (modalTypeVar === "liqStake" || modalTypeVar === "liqWithdraw") ? liquidityModal() : 
+    modalType === "withdrawTokens" ? migrateStake() :
     notFound()
   );
 };
