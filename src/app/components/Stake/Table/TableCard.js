@@ -7,7 +7,7 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance }
 import { addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
-import { statuses, ApproveBigNumber, txMessage } from 'config';
+import { statuses, ApproveBigNumber, txMessage, etherScanUrl } from 'config';
 import { LinkArrow, TrancheImg } from 'assets';
 import { ModeThemes } from 'config/constants';
 
@@ -53,7 +53,7 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
   setTokenBalance,
-  ethereum: { tokenBalance, address, wallet, web3, notify, blockExplorerUrl, notificationCount },
+  ethereum: { tokenBalance, address, wallet, web3, notify },
   addNotification,
   updateNotification,
   setNotificationCount,
@@ -228,7 +228,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -344,7 +344,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
