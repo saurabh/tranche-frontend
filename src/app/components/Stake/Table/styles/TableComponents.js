@@ -1175,7 +1175,8 @@ const StatusTextWrapper = styled.h2`
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""} !important; 
   text-transform: uppercase;
   font-size: 12px;
-  width: 102px;
+  // width: 102px;
+  width: auto;
   padding: 12px 0px;
   position: relative;
   ${({ table, color }) => table === 'tranche' && `

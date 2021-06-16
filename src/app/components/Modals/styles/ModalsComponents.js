@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 const ModalHeader = styled.div` 
 position: absolute;
 z-index: 1;
@@ -1257,10 +1256,11 @@ const StakingModalContentSideHeaderBox = styled.div`
 const StakingModalContentSideHeaderImg = styled.div`
   display: flex;
   img{
-    height: 19px;
+    height: ${props => props.stake ? "24px" : "19px"};
+    z-index: 1;
     :last-child{
       margin-left: -5px;
-      z-index: 1;
+      z-index: 0;    
     }
   }
 `;
@@ -1355,6 +1355,23 @@ const StakeModalNavigationWrapper = styled.div`
   border: 1px solid ${props => props.StakeModalNavigationBorder};
   border-radius: 159px; 
   margin: 18px 0 21px 0;
+  position: relative;
+  span{
+    width: 50%;
+    height: 100%;
+    background:  ${props => props.stakeModalBoxBackground};
+    border-radius: 159px;
+    position: absolute;
+    opacity: 1;
+    transition: 300ms;
+    ${({ modalTypeVar }) =>  modalTypeVar === "liqStake" && `
+      left: 0;
+    `}
+    ${({ modalTypeVar }) =>  modalTypeVar === "liqWithdraw" && `
+      left: 100%;
+      transform: translateX(-100%);
+    `}
+  }
 `;
 const StakeModalNavigationBtn = styled.button`
   width: 50%;
@@ -1362,8 +1379,8 @@ const StakeModalNavigationBtn = styled.button`
   background: transparent;
   opacity: 0.5;
   ${({ active, stakeModalBoxShadow, stakeModalBoxBackground }) => active && `
-    background: ${stakeModalBoxBackground};
-    box-shadow: ${stakeModalBoxShadow};
+    // background: ${stakeModalBoxBackground};
+    // box-shadow: ${stakeModalBoxShadow};
     opacity: 1;
   `}
   font-family: 'Inter', sans-serif;

@@ -49,9 +49,10 @@ import {
   // TableMobilCardBtn
 } from './styles/TableComponents';
 import { initOnboard } from 'services/blocknative';
+import moment  from 'moment';
 
 const TableCard = ({
-  staking: { contractAddress, isActive, reward, staked, type, apy, subscription },
+  staking: { contractAddress, isActive, reward, staked, type, apy, subscription, duration },
   setTokenBalance,
   ethereum: { tokenBalance, address, wallet, web3, notify, blockExplorerUrl },
   addNotification,
@@ -84,11 +85,23 @@ const TableCard = ({
   useEffect(() => {
     const setEpochTime = async () => {
         const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-        console.log(result)
     };
 
     setEpochTime();
   }, [type]);
+
+
+  const formatTime = () =>{
+    let format = (val) => moment().add(duration, 'minutes').diff(moment(), val)
+    let years =  format('years');
+    let months =  format('months');
+    let weeks =  format('weeks');
+    let days =  format('days');
+    let hours =  format('hours');
+    let mintues =  format('mintues');
+
+    return years !== 0 ? years + ' years' : months !== 0 ? months + ' months' : weeks !== 0 ? weeks + ' weeks' : days !== 0 ? days + ' days' : hours !== 0 ? hours + ' hours' : mintues !== 0 ? mintues + ' mintues' : ""
+  }
 
   useEffect(() => {
     type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP' ? setLPToken(true) : setLPToken(false);
@@ -256,7 +269,7 @@ const TableCard = ({
                 docsLockupBackground={ModeThemes[theme].docsLockupBackground}
                 >
                 {/* {isActive ? i18n.t('stake.table.statuses.active') : ''} */}
-                1 year
+                {formatTime()}
                 </StatusTextWrapper>
               }
              
@@ -300,6 +313,12 @@ const TableCard = ({
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
+            title !== "SLICE Staking Pools" && (type && type === 'SLICE') ?
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
+              <StakeBtn background='#6E41CF' onClick={() => openModal('withdrawTokens')}>
+                -
+              </StakeBtn>
+            </TableSeventhCol> : 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
               <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
                 -
@@ -320,6 +339,9 @@ const TableCard = ({
           stakingAddress={stakingAddress}
           noBalance={Number(balance) === 0}
           contractAddress={contractAddress}
+          title={title}
+          apy={apy}
+          rewards={reward}
           // Functions
           closeModal={() => closeModal()}
           hasAllowance={hasAllowance}
@@ -401,6 +423,8 @@ const TableCard = ({
           tokenAddress={tokenAddress}
           stakingAddress={stakingAddress}
           noBalance={Number(balance) === 0}
+          title={title}
+          apy={apy}
           contractAddress={contractAddress}
           // Functions
           closeModal={() => closeModal()}

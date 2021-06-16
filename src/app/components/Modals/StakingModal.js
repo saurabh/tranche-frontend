@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon } from 'assets';
+import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon, TrancheStake } from 'assets';
+import { roundNumber} from 'utils';
+
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   StakingModalContentWrapper,
@@ -45,6 +47,7 @@ import {
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
 import { ModeThemes } from 'config';
 import i18n from '../locale/i18n';
+import { LiquidityIcons } from 'config';
 
 
 const NotFoundStyles = {
@@ -173,6 +176,10 @@ const StakingModal = ({
   theme,
   type,
   modalType,
+  contractAddress,
+  title,
+  rewards,
+  apy,
 
   // Functions
   closeModal,
@@ -436,27 +443,26 @@ const StakingModal = ({
                 </StakingModalContentSideTitle>
 
                 <StakingModalContentSideHeader BoxColor={ModeThemes[theme].BoxColor}>
-                  <StakingModalContentSideHeaderImg>
-                    <img src={ETHCARD} alt="img" />
-                    <img src={ETHCARD} alt="img" />
+                  <StakingModalContentSideHeaderImg stake>
+                      <img src={TrancheStake} alt="img" />
                   </StakingModalContentSideHeaderImg>
                   <StakingModalContentSideHeaderText boxText={ModeThemes[theme].boxText} textColor={ModeThemes[theme].ModalText}>
-                    <h2>Slice/ETH LP</h2>
-                    <h2>0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd</h2>
+                    <h2>{type} STAKING POOL</h2>
+                    <h2>{contractAddress}</h2>
                   </StakingModalContentSideHeaderText>
                 </StakingModalContentSideHeader>
                 <StakingModalContentSideHeaderBoxWrapper>
                   <StakingModalContentSideHeaderBox stake BoxColor={ModeThemes[theme].BoxColor} textColor={ModeThemes[theme].ModalText} BoxColorText={ModeThemes[theme].BoxColorText}>
-                      <h2>APY</h2>
-                      <h2>14%</h2>
+                      <h2>Lockup</h2>
+                      <h2>1 year</h2>
                   </StakingModalContentSideHeaderBox>
                   <StakingModalContentSideHeaderBox stake BoxColor={ModeThemes[theme].BoxColor} textColor={ModeThemes[theme].ModalText} BoxColorText={ModeThemes[theme].BoxColorText}>
                       <h2>APY</h2>
-                      <h2>14%</h2>
+                      <h2>{roundNumber(apy, false)}%</h2>
                   </StakingModalContentSideHeaderBox>
                   <StakingModalContentSideHeaderBox BoxColor={ModeThemes[theme].BoxColor} textColor={ModeThemes[theme].ModalText} BoxColorText={ModeThemes[theme].BoxColorText}>
-                      <h2>APY</h2>
-                      <h2>14%</h2>
+                      <h2>Pool Capacity</h2>
+                      <h2>{roundNumber(rewards, false)} SLICE</h2>
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 
@@ -467,7 +473,7 @@ const StakingModal = ({
                   </StakeModalPoolTableTitle>
                   <StakeModalPoolTableHead>
                     <StakeModalPoolTableCol head stake TableHeadText={ModeThemes[theme].TableHeadText}> 
-                        <h2>STAKED AMOUNT</h2>
+                      <h2>Deposit date</h2>
                     </StakeModalPoolTableCol>
                     <StakeModalPoolTableCol head stake TableHeadText={ModeThemes[theme].TableHeadText}>
                         <h2>End date</h2>
@@ -591,22 +597,24 @@ const StakingModal = ({
 
                 <StakingModalContentSideHeader BoxColor={ModeThemes[theme].BoxColor}>
                   <StakingModalContentSideHeaderImg>
-                    <img src={ETHCARD} alt="img" />
-                    <img src={ETHCARD} alt="img" />
+                    <img src={TrancheStake} alt="img" />
+                    { (title === "Liquidity Provider Pools") &&
+                      <img src={LiquidityIcons[type && type]} alt='Tranche' />
+                    }
                   </StakingModalContentSideHeaderImg>
                   <StakingModalContentSideHeaderText textColor={ModeThemes[theme].ModalText} boxText={ModeThemes[theme].boxText}>
-                    <h2>Slice/ETH LP</h2>
-                    <h2>0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd</h2>
+                    <h2>{type}</h2>
+                    <h2>{contractAddress}</h2>
                   </StakingModalContentSideHeaderText>
                 </StakingModalContentSideHeader>
                 <StakingModalContentSideHeaderBoxWrapper>
                   <StakingModalContentSideHeaderBox textColor={ModeThemes[theme].ModalText} BoxColor={ModeThemes[theme].BoxColor} BoxColorText={ModeThemes[theme].BoxColorText}>
                       <h2>APY</h2>
-                      <h2>14%</h2>
+                      <h2>{roundNumber(apy, false)}%</h2>
                   </StakingModalContentSideHeaderBox>
                   <StakingModalContentSideHeaderBox textColor={ModeThemes[theme].ModalText} BoxColor={ModeThemes[theme].BoxColor} BoxColorText={ModeThemes[theme].BoxColorText}>
-                      <h2>APY</h2>
-                      <h2>14%</h2>
+                      <h2>EPOCH REWARDS</h2>
+                      <h2>{roundNumber(rewards, false)} SLICE</h2>
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 
@@ -617,10 +625,10 @@ const StakingModal = ({
                   </StakeModalPoolTableTitle>
                   <StakeModalPoolTableHead>
                     <StakeModalPoolTableCol head TableHeadText={ModeThemes[theme].TableHeadText}>
-                        <h2>STAKED AMOUNT</h2>
+                        <h2>Deposit date</h2>
                     </StakeModalPoolTableCol>
                     <StakeModalPoolTableCol head TableHeadText={ModeThemes[theme].TableHeadText}>
-                        <h2>Deposit date</h2>
+                        <h2>STAKED AMOUNT</h2>
                     </StakeModalPoolTableCol>
                   </StakeModalPoolTableHead>
                 </StakeModalPoolTable>
@@ -671,15 +679,16 @@ const StakingModal = ({
                 <StakingModalContentSideTitle textColor={ModeThemes[theme].ModalText}>
                   <h2>Manage</h2>
                 </StakingModalContentSideTitle>
-                <StakeModalNavigationWrapper stakeModalBoxBackground={ModeThemes[theme].stakeBoxBackground} StakeModalNavigationBorder={ModeThemes[theme].StakeModalNavigationBorder}>
+                <StakeModalNavigationWrapper modalTypeVar={modalTypeVar} stakeModalBoxBackground={ModeThemes[theme].stakeBoxBackground} StakeModalNavigationBorder={ModeThemes[theme].StakeModalNavigationBorder}>
                   <StakeModalNavigationBtn stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow} stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground} StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText} onClick={() => setModalTypeVar("liqStake")} active={modalTypeVar === "liqStake"}>Stake</StakeModalNavigationBtn>
                   <StakeModalNavigationBtn  stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow} stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground}  StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText} onClick={() => setModalTypeVar("liqWithdraw")} active={modalTypeVar === "liqWithdraw"}>Withdraw</StakeModalNavigationBtn>
+                  <span></span>
                 </StakeModalNavigationWrapper>
 
                 <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}> 
-                  <h2>Amount of SLICE to Withdraw: </h2>
+                  <h2>Amount of SLICE to {modalTypeVar === "liqStake" ? "Stake" : "Withdraw"}: </h2>
                   <form>
-                    <h2>You have 1,012,000 SLICE available to withdraw</h2>
+                    <h2>You have 1,012,000 SLICE available to {modalTypeVar === "liqStake" ? "stake" : "withdraw"}</h2>
                     <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
                       <StakeModalFormInput type="number" inputColor={ModeThemes[theme].BorderStake}/>
                       <div>
@@ -689,9 +698,9 @@ const StakingModal = ({
                     </StakeModalFormInputWrapper>
                     <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
                       <h2>Estimated Rewards</h2>
-                      <h2>You will get 1000 SLICE per week </h2>
+                      <h2>You will get 1000 SLICE per week</h2>
                     </EstimatedText>
-                    <StakeModalFormBtn type="submit">Withdraw</StakeModalFormBtn>
+                    <StakeModalFormBtn type="submit" stake={modalTypeVar === "liqStake" }>{modalTypeVar === "liqStake" ? "Stake" : "Withdraw"}</StakeModalFormBtn>
                   </form>
                 </StakeModalFormWrapper>
               </StakingModalContentSide>
@@ -787,10 +796,6 @@ const StakingModal = ({
                 </StakeModalFormWrapper>
             </StakingModalContent>
         </StakingModalContentWrapper>
-                
-
-
-        
       </Modal>
     );
   };
