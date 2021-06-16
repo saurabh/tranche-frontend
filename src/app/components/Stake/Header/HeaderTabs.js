@@ -61,7 +61,6 @@ const HeaderTabs = ({
     const getStakingData = async () => {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
-      console.log(result);
       summaryFetchSuccess(result);
     };
     if (network === networkId && currentPath === 'stake' && address) {
