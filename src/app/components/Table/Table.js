@@ -80,8 +80,7 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-          type: filter
+          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined
         }
       }, loanListUrl);
     } else {
@@ -90,8 +89,7 @@ const Table = ({
         limit,
         filter: {
           borrowerAddress: path === 'borrow' && filterType === 'own' ? address : undefined,
-          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined,
-          type: filter
+          lenderAddress: path === 'lend' && filterType === 'own' ? address : undefined
         }
       }, loanListUrl);
     }
