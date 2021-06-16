@@ -15,13 +15,13 @@ import {
   StackSummaryCol,
   WithdrawStakeCardText,
   WithdrawStakeCardBtns,
-  StakeSummaryCardWrapper
+  StakeSummaryCardWrapper,
+  Countdown
 } from './styles/HeaderComponents';
 import {
   TableTitle,
   HowToLink
 } from '../Table/styles/TableComponents';
-import ProgressBar from '../ProgressBar/ProgressBar';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, closeModal, modalType, ModalIsOpen }) => {
@@ -48,27 +48,36 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, 
           <StackSummaryCol stake>
             <h2>SLICE Staking Pools Stakes</h2>
             <h2>102.00</h2>
-            <h2>Current Value is $0</h2>
-            <span></span>
             <h2>14,140.12 SLICE Available</h2>
+            <span></span>
+            <h2>Current Value $70</h2>
           </StackSummaryCol>
           <StackSummaryCol stake> 
             <h2>Total Liquidity Provider Pools Stakes</h2>
             <h2>102.00</h2>
-            <h2>Current Value is $0</h2>
-            <span></span>
             <h2>14,140.12 SLICE Available</h2>
+            <span></span>
+            <h2>Current Value $70</h2>
           </StackSummaryCol>
         </StakeSummaryCard>
         <StakeSummaryCard color="#369987" claim>
-          <StackSummaryCol>
+          <StackSummaryCol claim>
             <h2>Accrued Rewards</h2>
             <h2>100 SLICE</h2>
-            <h2>Current Value is $70</h2>
-            <ProgressBar progress="50" widthBar="90" colorOne="rgba(255,255,255,0.5)" colorTwo="#FFFFFF"/>
-            <h2>6 Days until next distribution</h2>
+            <h2>99.51 SLICE Available</h2>
+            <span></span>
+            <h2>Current Value $70</h2>
           </StackSummaryCol>
-          <button onClick={() => openModal('claim')}>Claim</button>
+          <StackSummaryCol claimBtn>
+            <h2>Next Liqudity Provider Pool Distribution in</h2>
+            <Countdown>
+              <h2>2<span>days</span></h2>
+              <h2>3<span>hours</span></h2>
+              <h2>1<span>minutes</span></h2>
+              <h2>12<span>seconds</span></h2>
+            </Countdown>
+            <button onClick={() => openModal('claim')}>CLAIM Rewards</button>
+          </StackSummaryCol>
         </StakeSummaryCard>
       </StakeSummaryCardWrapper>
       <WithdrawStakeCard>

@@ -75,10 +75,10 @@ const StakeSummaryCard = styled.div`
     align-items: center;
   }
   ${({ claim }) => claim && `
-    justify-content: center;
-    padding: 20px 53px 20px 35px;
+    justify-content: space-between;
+    padding: 20px;
     button{
-      width: 117px;
+      width: 302px;
       height: 46px;
       background: rgba(255, 255, 255, 0.2);
       border: 2px solid rgba(255, 255, 255, 0.3);
@@ -98,7 +98,7 @@ const StakeSummaryCard = styled.div`
   }
 `
 const StackSummaryCol = styled.div`
-  width: ${props => props.stake ? "49" : "100"}%;  
+  width: ${props => props.stake ? "49" : props.claim ? "46" : "54"}%;  
   min-height: 115px;
   display: flex;
   flex-direction: column;
@@ -124,17 +124,27 @@ const StackSummaryCol = styled.div`
     margin: 0 0 9px 0;
   }
   & > h2:nth-child(5){
-    font-weight: 600;
-    font-size: 12px;
+    font-weight: 500;
+    font-size: 14px;
     line-height: 15px;
     color: rgba(255, 255, 255, 0.8); 
     margin: 9px 0 0 0;
   }
-  span{
-    width: 80%;
+  & > span{
+    width: 100%;
+    max-width: 213px;
     height: 2px;
     background: rgba(255, 255, 255, 0.4);
   }
+  ${({ claimBtn }) => claimBtn && `
+    align-items: center;
+    & > h2:nth-child(1){
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  `}
   @media (max-width: 767px){
     width: 100% !important;
     margin: 15px 0;
@@ -757,6 +767,23 @@ const StakeSummaryCardWrapper = styled.div`
     flex-direction: column;
   }
 `
+const Countdown = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  h2{
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #FFFFFF;
+    span{
+      font-weight: 500;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-left: 3px;
+    }
+  }
+`
 
 
 export {
@@ -798,5 +825,6 @@ export {
   StackSummaryCol,
   WithdrawStakeCardText,
   WithdrawStakeCardBtns,
-  StakeSummaryCardWrapper
+  StakeSummaryCardWrapper,
+  Countdown
 };

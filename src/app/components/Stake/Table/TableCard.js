@@ -86,7 +86,7 @@ const TableCard = ({
   }, []);
   useEffect(() => {
     const setEpochTime = async () => {
-        const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+        // const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
     };
 
     setEpochTime();
