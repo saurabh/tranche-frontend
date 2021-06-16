@@ -22,7 +22,6 @@ import {
   Countdown
 } from './styles/HeaderComponents';
 import { TableTitle, HowToLink } from '../Table/styles/TableComponents';
-import ProgressBar from '../ProgressBar/ProgressBar';
 import { fromWei } from 'services';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
@@ -102,13 +101,40 @@ const HeaderTabs = ({
             <h2>Current Value ${lp.balanceUSD ? roundNumber(lp.balanceUSD) : '0'}</h2>
           </StackSummaryCol>
         </StakeSummaryCard>
-        <StakeSummaryCard color='#369987' claim>
+        {/* <StakeSummaryCard color='#369987' claim>
           <StackSummaryCol>
             <h2>Accrued Rewards</h2>
             <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
             <h2>Current Value is $Soon™</h2>
             <ProgressBar progress='50' widthBar='90' colorOne='rgba(255,255,255,0.5)' colorTwo='#FFFFFF' />
             <h2>6 Days until next distribution</h2>
+          </StackSummaryCol>
+        </StakeSummaryCard> */}
+        <StakeSummaryCard color='#369987' claim>
+          <StackSummaryCol claim>
+            <h2>Accrued Rewards</h2>
+            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
+            <h2>{sliceBalance} SLICE Available</h2>
+            <span></span>
+            <h2>Current Value is $Soon™</h2>
+          </StackSummaryCol>
+          <StackSummaryCol claimBtn>
+            <h2>Next Liqudity Provider Pool Distribution in</h2>
+            <Countdown>
+              <h2>
+                2<span>days</span>
+              </h2>
+              <h2>
+                3<span>hours</span>
+              </h2>
+              <h2>
+                1<span>minutes</span>
+              </h2>
+              <h2>
+                12<span>seconds</span>
+              </h2>
+            </Countdown>
+            <button onClick={() => openModal('claim')}>CLAIM Rewards</button>
           </StackSummaryCol>
         </StakeSummaryCard>
       </StakeSummaryCardWrapper>
