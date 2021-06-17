@@ -490,39 +490,41 @@ export const addStake = async (stakingAddress, tokenAddress) => {
   }
 };
 
-export const withdrawStake = async (stakingAddress, tokenAddress) => {
+export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = false) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
-    let { amount } = state.form.stake.values;
+    let amount = maxAmount ? await getUserStaked(stakingAddress, tokenAddress) : state.form.stake.values.amount;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    amount = toWei(amount.toString());
-    store.dispatch(
-      addNotification({
-        id,
-        type: 'WAITING',
-        message: 'Your transaction is waiting for you to confirm',
-        title: 'awaiting confirmation'
-      })
-    );
-    await StakingContract.methods
-      .withdraw(tokenAddress, amount)
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        if (network === networkId) {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
-        }
-      });
+    if (!maxAmount) amount = toWei(amount.toString());
+    if (amount !== '0') {
+      store.dispatch(
+        addNotification({
+          id,
+          type: 'WAITING',
+          message: 'Your transaction is waiting for you to confirm',
+          title: 'awaiting confirmation'
+        })
+      );
+      await StakingContract.methods
+        .withdraw(tokenAddress, amount)
+        .send({ from: address })
+        .on('transactionHash', (hash) => {
+          if (network === networkId) {
+            const { emitter } = notify.hash(hash);
+            emitter.on('txPool', (transaction) => {
+              return {
+                message: txMessage(transaction.hash)
+              };
+            });
+            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          }
+        });
+    } else return;
   } catch (error) {
     error.code === 4001 &&
       store.dispatch(
@@ -578,6 +580,15 @@ export const massHarvest = async (yieldfarmAddress) => {
           title: 'Transaction rejected'
         })
       );
+    console.error(error);
+  }
+};
+
+export const withdrawStakeAndRewards = async (stakingAddress, tokenAddress, yieldfarmAddress) => {
+  try {
+    await withdrawStake(stakingAddress, tokenAddress, true);
+    await massHarvest(yieldfarmAddress);
+  } catch (error) {
     console.error(error);
   }
 };
