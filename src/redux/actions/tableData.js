@@ -92,7 +92,7 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
-  const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
+  const searchArr = (tokenAddress) => list.filter(i => i.duration === undefined).find((i) => i.tokenAddress === tokenAddress);
   const filterArrByDuration = (duration) => list.find((i) => i.duration && i.duration === duration);
   const sliceList = [];
   const lpList = [];
