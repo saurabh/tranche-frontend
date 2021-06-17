@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { ModeThemes, serverUrl, apiUri, networkId } from 'config';
+import { ModeThemes, serverUrl, apiUri, networkId, StakingAddresses } from 'config';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
-import { epochTimeRemaining } from 'services/contractMethods';
-import { StakingAddresses } from 'config';
-
+import { epochTimeRemaining, fromWei } from 'services/contractMethods';
 // import { initOnboard } from 'services/blocknative';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 // import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
@@ -24,20 +22,25 @@ import {
   StakeSummaryCardWrapper,
   Countdown
 } from './styles/HeaderComponents';
-import {
-  TableTitle,
-  HowToLink
-} from '../Table/styles/TableComponents';
+import { TableTitle, HowToLink } from '../Table/styles/TableComponents';
 import moment from 'moment';
-import { fromWei } from 'services';
 const { stakingSummary } = apiUri;
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance }, summaryData: { slice, lp, lpList, totalAccruedRewards }, openModal, closeModal, modalType, ModalIsOpen }) => {
-  const Tracker = useAnalytics("ExternalLinks");
+const HeaderTabs = ({
+  theme,
+  ethereum: { wallet, address, network, tokenBalance },
+  summaryData: { slice, lp, lpList, totalAccruedRewards },
+  summaryFetchSuccess,
+  openModal,
+  closeModal,
+  modalType,
+  ModalIsOpen
+}) => {
+  const Tracker = useAnalytics('ExternalLinks');
   const [progress, setProgress] = useState(0);
-  const [timerData, setTimerData] = useState({days: 0, hours: 0, minutes: 0, seconds: 0});
+  const [timerData, setTimerData] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
@@ -59,24 +62,23 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance 
     const setEpochTime = async () => {
       const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
       let dateTime = result;
-      const interval = setInterval(() =>{
-        if(dateTime > 0){
+      const interval = setInterval(() => {
+        if (dateTime > 0) {
           dateTime -= 1;
-        }
-        else{
+        } else {
           const setTime = async () => {
             const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
             dateTime = result;
-          }
+          };
           setTime();
         }
-        setProgress(100 - ((100 * dateTime) / 604800));
-        let current = moment.unix(moment().unix())
-        let date = moment.unix(moment().unix()+dateTime)
+        setProgress(100 - (100 * dateTime) / 604800);
+        let current = moment.unix(moment().unix());
+        let date = moment.unix(moment().unix() + dateTime);
         let time = date - current;
         let duration = moment.duration(time);
-        let days    = duration.days();
-        let hours   = duration.hours();
+        let days = duration.days();
+        let hours = duration.hours();
         let minutes = duration.minutes();
         let seconds = duration.seconds();
         let final = {
@@ -84,14 +86,15 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance 
           hours,
           minutes,
           seconds
-        }
-        setTimerData(final)
-      }, 1000)
+        };
+        setTimerData(final);
+      }, 1000);
 
       return () => clearInterval(interval);
     };
     setEpochTime();
   }, []);
+
   useEffect(() => {
     const getStakingData = async () => {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
@@ -102,7 +105,7 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance 
       getStakingData();
     }
   }, [currentPath, network, address, summaryFetchSuccess]);
-  
+
   return (
     <StakeHeaderWrapper>
       <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
@@ -121,7 +124,7 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance 
         </HowToLink>
       </TableTitle>
       <StakeSummaryCardWrapper>
-        <StakeSummaryCard color="#4441CF">
+        <StakeSummaryCard color='#4441CF'>
           <StackSummaryCol stake>
             <h2>SLICE Staking Pools Stakes</h2>
             <h2>{slice.balance ? roundNumber(slice.balance) : '0'}</h2>
@@ -157,10 +160,22 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance 
           <StackSummaryCol claimBtn>
             <h2>Next Liqudity Provider Pool Distribution in</h2>
             <Countdown>
-              <h2>{timerData && timerData.days}<span>days</span></h2>
-              <h2>{timerData && timerData.hours}<span>hours</span></h2>
-              <h2>{timerData && timerData.minutes}<span>minutes</span></h2>
-              <h2>{timerData && timerData.seconds}<span>seconds</span></h2>
+              <h2>
+                {timerData && timerData.days}
+                <span>days</span>
+              </h2>
+              <h2>
+                {timerData && timerData.hours}
+                <span>hours</span>
+              </h2>
+              <h2>
+                {timerData && timerData.minutes}
+                <span>minutes</span>
+              </h2>
+              <h2>
+                {timerData && timerData.seconds}
+                <span>seconds</span>
+              </h2>
             </Countdown>
             <button onClick={() => openModal('claim')}>CLAIM Rewards</button>
           </StackSummaryCol>

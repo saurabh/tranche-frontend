@@ -6,27 +6,24 @@ import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack }
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
-import {
-  HowToLink
-} from '../../Stake/Table/styles/TableComponents';
+import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 import useAnalytics from 'services/analytics';
 
-export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
+export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
-  const Tracker = useAnalytics("ExternalLinks");
+  const Tracker = useAnalytics('ExternalLinks');
 
   const { trancheMarket } = data;
 
   const openModal = () => {
     setModalOpened(true);
-    if(!modalOpened){
+    if (!modalOpened) {
       setModalIsOpen(true);
-    }
-    else{
-      trancheMarketsToggle("aavePolygon")
+    } else {
+      trancheMarketsToggle('aavePolygon');
     }
   };
   const closeModal = () => {
@@ -34,12 +31,19 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
     // onClick={() => trancheMarketsToggle("aavePolygon")}>
   };
   return (
-    <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle} className="TrancheMarkets"> 
+    <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle} className='TrancheMarkets'>
       <div>
-        <h2>
-        {i18n.t('tranche.trancheData.TrancheMarkets')}
-        </h2>
-        <HowToLink href="https://docs.tranche.finance/tranchefinance/" onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
+        <h2>{i18n.t('tranche.trancheData.TrancheMarkets')}</h2>
+        <HowToLink
+          href='https://docs.tranche.finance/tranchefinance/'
+          onClick={(e) => Tracker('Documentation', 'https://docs.tranche.finance/tranchefinance/')}
+          target='_blank'
+          rel='noopener noreferrer'
+          color={ModeThemes[theme].HowToText}
+          background={ModeThemes[theme].HowTo}
+          shadow={ModeThemes[theme].HowToShadow}
+          border={ModeThemes[theme].HowToBorder}
+        >
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>
@@ -60,7 +64,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => (trancheMarket !== 'aavePolygon') && openModal()}
+          onClick={() => trancheMarket !== 'aavePolygon' && openModal()}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -70,7 +74,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
           btnShadow={ModeThemes[theme].btnShadow}
         >
           <h2>
-              <img src={AaveBtn} alt='' /> Market
+            <img src={AaveBtn} alt='' /> Market
           </h2>{' '}
           <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
@@ -78,8 +82,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
       {trancheMarket === 'aavePolygon' && (
         <BridgeTokensWrapper>
           <p>
-            To use polygon markets, you will need use the Matic bridge to move your tokens from the Ethereum mainnet to the polygon side chain. After
-            you move your assets to the polygon side chain, you can buy different instruments on Tranche, trade on the Quickswap DEX, and explore
+            To use Polygon markets, you will need to use the Polygon bridge to move your tokens from the Ethereum mainnet to the Polygon side chain.
+            After moving your assets to the Polygon side chain, you can buy different instruments on Tranche, trade on the Quickswap DEX, and explore
             other applications on the Polygon network.
           </p>
           <a href='https://wallet.matic.network/login/' target='_blank' rel='noopener noreferrer'>
