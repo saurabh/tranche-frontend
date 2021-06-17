@@ -783,6 +783,18 @@ const Countdown = styled.div`
       margin-left: 3px;
     }
   }
+  ${({ modal, textColor }) => modal && `
+    width: 50%;
+    @media (max-width: 663px){
+      width: 100%;
+    }
+    h2{
+      color: ${textColor};
+      span{
+        color: #898FA4;
+      }
+    }
+  `}
 `
 
 

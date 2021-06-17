@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ModeThemes } from 'config';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
+import { epochTimeRemaining } from 'services/contractMethods';
+import { StakingAddresses } from 'config';
+
 // import { initOnboard } from 'services/blocknative';
 // import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import i18n from '../../locale/i18n';
@@ -22,11 +25,13 @@ import {
   TableTitle,
   HowToLink
 } from '../Table/styles/TableComponents';
+import moment from 'moment';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, closeModal, modalType, ModalIsOpen }) => {
   const Tracker = useAnalytics("ExternalLinks");
-  // const [ModalIsOpen, setModalOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [timerData, setTimerData] = useState({});
   // const [modalType, setModalType] = useState('');
   // const onboard = initOnboard({
   //   address: setAddress,
@@ -34,6 +39,44 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, 
   //   balance: setBalance,
   //   wallet: setWalletAndWeb3
   // });
+
+  useEffect(() => {
+    const setEpochTime = async () => {
+      const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+      let dateTime = result;
+      const interval = setInterval(() =>{
+        if(dateTime > 0){
+          dateTime -= 1;
+        }
+        else{
+          const setTime = async () => {
+            const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+            dateTime = result;
+          }
+          setTime();
+        }
+        setProgress(100 - ((100 * dateTime) / 604800));
+        let current = moment.unix(moment().unix())
+        let date = moment.unix(moment().unix()+dateTime)
+        let time = date - current;
+        let duration = moment.duration(time);
+        let days    = duration.days();
+        let hours   = duration.hours();
+        let minutes = duration.minutes();
+        let seconds = duration.seconds();
+        let final = {
+          days,
+          hours,
+          minutes,
+          seconds
+        }
+        setTimerData(final)
+      }, 1000)
+
+      return () => clearInterval(interval);
+    };
+    setEpochTime();
+  }, []);
   
   return (
     <StakeHeaderWrapper>
@@ -43,7 +86,7 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, 
             {i18n.t('footer.docs')}
         </HowToLink>  
       </TableTitle>
-      <StakeSummaryCardWrapper>     
+      <StakeSummaryCardWrapper>
         <StakeSummaryCard color="#4441CF">
           <StackSummaryCol stake>
             <h2>SLICE Staking Pools Stakes</h2>
@@ -71,10 +114,10 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, 
           <StackSummaryCol claimBtn>
             <h2>Next Liqudity Provider Pool Distribution in</h2>
             <Countdown>
-              <h2>2<span>days</span></h2>
-              <h2>3<span>hours</span></h2>
-              <h2>1<span>minutes</span></h2>
-              <h2>12<span>seconds</span></h2>
+              <h2>{timerData && timerData.days}<span>days</span></h2>
+              <h2>{timerData && timerData.hours}<span>hours</span></h2>
+              <h2>{timerData && timerData.minutes}<span>minutes</span></h2>
+              <h2>{timerData && timerData.seconds}<span>seconds</span></h2>
             </Countdown>
             <button onClick={() => openModal('claim')}>CLAIM Rewards</button>
           </StackSummaryCol>
@@ -93,6 +136,8 @@ const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, openModal, 
         // State Values
         modalIsOpen={ModalIsOpen}
         modalType={modalType}
+        progress={progress}
+        timerData={timerData}
         // Functions
         closeModal={() => closeModal()}
         openModal={() => openModal('')}

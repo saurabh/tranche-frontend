@@ -44,6 +44,9 @@ import {
   SliceNotFoundBtn,
   ModalHeader
 } from './styles/ModalsComponents';
+import {
+  Countdown
+} from '../Stake/Header/styles/HeaderComponents';
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
 import { ModeThemes } from 'config';
 import i18n from '../locale/i18n';
@@ -176,9 +179,11 @@ const StakingModal = ({
   theme,
   type,
   modalType,
+  progress,
   contractAddress,
   title,
   rewards,
+  timerData,
   apy,
 
   // Functions
@@ -334,10 +339,16 @@ const StakingModal = ({
                 <h2>Liquidity Provider Pools</h2>
               </ClaimModalTableTitle>
               <ClaimModalTableSubTitle textColor={ModeThemes[theme].ModalText}>
-                <h2>6 Days until next distribution</h2>
+                <h2>Next Liqudity Provider Pool Distribution</h2>
+                <Countdown modal>
+                  <h2>{timerData && timerData.days}<span>days</span></h2>
+                  <h2>{timerData && timerData.hours}<span>hours</span></h2>
+                  <h2>{timerData && timerData.minutes}<span>minutes</span></h2>
+                  <h2>{timerData && timerData.seconds}<span>seconds</span></h2>
+                </Countdown>
               </ClaimModalTableSubTitle>
 
-              <ProgressBar progress="50" width="100" colorOne="rgba(160, 160, 160, 0.15)" colorTwo="#369987"/>
+              <ProgressBar progress={progress} width="100" colorOne="rgba(160, 160, 160, 0.15)" colorTwo="#369987"/>
 
 
               <ClaimModalTableHead BorderStake={ModeThemes[theme].BorderStake}>

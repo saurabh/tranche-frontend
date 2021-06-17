@@ -1041,12 +1041,21 @@ const ClaimModalTableTitle = styled.div`
 `;
 const ClaimModalTableSubTitle = styled.div`
     margin: 5px 0 10px 0;
+    display: flex;
+    justify-content: space-between;
     h2{
       font-family: 'Inter', sans-serif;
       font-weight: bold;
       font-size: 14px;
+      width: 45%;
       line-height: 17px;
       color: #898FA4;
+    }
+    @media (max-width: 663px){
+      h2{
+        width: 100%;
+      }
+      flex-direction: column;
     }
 `;
 const ClaimModalTableHead = styled.div`

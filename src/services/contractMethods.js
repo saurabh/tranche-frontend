@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
@@ -424,15 +423,7 @@ export const epochTimeRemaining = async (stakingAddress) => {
     const Staking = StakingSetup(web3, stakingAddress);
     let result = await Staking.methods.currentEpochMultiplier().call();
     result = (result / 10 ** 18) * epochDuration;
-    let timeRemaining = moment
-      .duration(result, 'seconds')
-      .humanize()
-      .split(' ')
-      .map((word) => {
-        return word[0].toUpperCase() + word.substring(1);
-      })
-      .join(' ');
-    return timeRemaining;
+    return result;
   } catch (error) {
     console.error(error);
     return 0;
