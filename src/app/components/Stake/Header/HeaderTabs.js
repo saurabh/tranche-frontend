@@ -34,14 +34,13 @@ const { stakingSummary } = apiUri;
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ theme, ethereum: { wallet, address, network }, summaryData: { slice, lp, lpList, totalAccruedRewards }, openModal, closeModal, modalType, ModalIsOpen }) => {
+const HeaderTabs = ({ theme, ethereum: { wallet, address, network, tokenBalance }, summaryData: { slice, lp, lpList, totalAccruedRewards }, openModal, closeModal, modalType, ModalIsOpen }) => {
   const Tracker = useAnalytics("ExternalLinks");
   const [progress, setProgress] = useState(0);
-  const [timerData, setTimerData] = useState({});
+  const [timerData, setTimerData] = useState({days: 0, hours: 0, minutes: 0, seconds: 0});
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
-  const Tracker = useAnalytics('ExternalLinks');
   const sliceBalance = tokenBalance[slice.address] ? roundNumber(fromWei(tokenBalance[slice.address])) : '0';
   const lpBalance =
     lpList &&
