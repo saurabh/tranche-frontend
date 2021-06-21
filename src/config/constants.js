@@ -130,8 +130,8 @@ export const trancheIcons = {
   BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
-  aamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
+  bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
   bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
 };
@@ -359,15 +359,27 @@ export const ModeThemes = {
     StakeModalNavigationBorder: "#E9E9FC",
     stakeModalBoxShadow: "0px 2.14578px 2.14578px rgba(189, 189, 189, 0.07)",
     stakeModalBorderCurrent: "0.536446px solid #E9E9FC",
-    stakeModalBoxBackground: "#FFFFFF",
-    stakeBoxBackground: "#F9F9FE",
+    stakeModalBoxBackground: "#F9F9FE",
+    stakeBoxBackground: "#FFFFFF",
     MigrateInput: "#F5F0FF",
     LoadingColorOne: '#eee',
     LoadingColorTwo: '#f7f7f7',
     docsLockupText: "#4441CF",
     docsLockupBackground: "rgba(68, 65, 207, 0.1)",
     cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent',
-    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)'
+    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)',
+    MigrateProgressTextActive: "#39295A",
+    MigrateProgressTextPending: "#9F9DE6",
+    MigrateProgressLine: "#D4D4D4",
+    MigrateStepBorder: "rgba(0, 0, 0, 0.2)",
+    MigrateStepTextPending: "rgba(0, 0, 0, 0.5)",
+    MigrateStepText: "#FFFFFF",
+    MigrateStepBackground: "#FFFFFF",
+    MigrateContentTitle: "#393F56",
+    MigrateClaimCardBackground: "rgba(138, 94, 234, 0.05)",
+    MigrateClaimCardTitle: "rgba(124, 133, 155, 0.8)",
+    MigrateClaimCardValue: "#393F56",
+    CongratsText: "rgba(57, 63, 86, 0.8)"
   },
   dark: {
     body: '#100F36',
@@ -440,6 +452,18 @@ export const ModeThemes = {
     LoadingColorOne: 'rgba(255,255,255,0.07)',
     LoadingColorTwo: '#363661',
     cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent',
-    btnShadow: ''
+    btnShadow: '',
+    MigrateProgressTextActive: "#FFFFFF",
+    MigrateProgressTextPending: "rgba(255, 255, 255, 0.5)",
+    MigrateProgressLine: "rgba(255, 255, 255, 0.5)",
+    MigrateStepBorder: "rgba(255, 255, 255, 0.2)",
+    MigrateStepTextPending: "rgba(255, 255, 255, 0.5)",
+    MigrateStepText: "#FFFFFF",
+    MigrateStepBackground: "#2A2254",
+    MigrateContentTitle: "#FFFFFF",
+    MigrateClaimCardBackground: "rgba(255, 255, 255, 0.04)",
+    MigrateClaimCardTitle: "rgba(255,255,255,0.5)",
+    MigrateClaimCardValue: "#FFFFFF",
+    CongratsText: "rgba(255, 255, 255, 0.8)"
   }
 };

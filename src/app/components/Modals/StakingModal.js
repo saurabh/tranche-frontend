@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon, TrancheStake } from 'assets';
+import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon, TrancheStake, Migrated } from 'assets';
 import { roundNumber } from 'utils';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -43,7 +43,29 @@ import {
   EstimatedText,
   SliceNotFound,
   SliceNotFoundBtn,
-  ModalHeader
+  ModalHeader,
+  StakingModalHeader,
+  StepProgressBarWrapper,
+  ProgressBarStep,
+  ProgressBarLineWrapper,
+  ProgressBarDashedLine,
+  ProgressBarLine,
+  InputTag,
+  StakingMigrateModalContent,
+  RewardsAmountWrapper,
+  RewardsAmountCardsWrapper,
+  RewardsAmountCard,
+  StakeNewWrapper,
+  StakeNewTable,
+  StakeNewCol,
+  StakeNewTableHead,
+  StakeNewTableCards,
+  StakeNewTableCard,
+  StakeNewColFirst,
+  StakeNewColImg,
+  StakeNewColText,
+  SliceMigratedWrapper,
+  SliceMigratedText
 } from './styles/ModalsComponents';
 import { Countdown } from '../Stake/Header/styles/HeaderComponents';
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
@@ -94,9 +116,9 @@ const MigrateStake = {
   },
   content: {
     position: 'relative',
-    maxWidth: '373px',
+    maxWidth: '473px',
     width: '100%',
-    minHeight: '373px',
+    minHeight: '457px',
     //height: '326px',
     height: 'auto',
     border: 'none',
@@ -190,10 +212,18 @@ const StakingModal = ({
   // API Values,
 }) => {
   const [modalTypeVar, setModalTypeVar] = useState('');
+  const [currentStep, setCurrentStep] = useState('claim');
 
   useEffect(() => {
     setModalTypeVar(modalType);
   }, [modalType]);
+
+  const closeModalMigrate = () =>{
+    setTimeout(() => {
+      setCurrentStep("claim");
+    }, 300)
+    closeModal();
+  }
 
   const claimModal = () => {
     return (
@@ -576,10 +606,10 @@ const StakingModal = ({
                     <h2>You have 1,012,000 SLICE available to stake</h2>
                     <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
                       <StakeModalFormInput type='number' inputColor={ModeThemes[theme].BorderStake} />
-                      <div>
+                      <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
                         <img src={TrancheIcon} alt='' />
                         <h2>Slice</h2>
-                      </div>
+                      </InputTag>
                     </StakeModalFormInputWrapper>
                     <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
                       <h2>Estimated Rewards</h2>
@@ -704,15 +734,19 @@ const StakingModal = ({
                 </StakingModalContentSideTitle>
                 <StakeModalNavigationWrapper
                   modalTypeVar={modalTypeVar}
-                  stakeModalBoxBackground={ModeThemes[theme].stakeBoxBackground}
+                  stakeBoxBackground={ModeThemes[theme].stakeBoxBackground}
+                  stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground}
                   StakeModalNavigationBorder={ModeThemes[theme].StakeModalNavigationBorder}
+                  theme={theme}
                 >
+                  <span></span>
                   <StakeModalNavigationBtn
                     stakeModalBoxShadow={ModeThemes[theme].stakeModalBoxShadow}
                     stakeModalBoxBackground={ModeThemes[theme].stakeModalBoxBackground}
                     StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText}
                     onClick={() => setModalTypeVar('liqStake')}
                     active={modalTypeVar === 'liqStake'}
+                    Stake
                   >
                     Stake
                   </StakeModalNavigationBtn>
@@ -722,10 +756,10 @@ const StakingModal = ({
                     StakeModalNavigationText={ModeThemes[theme].StakeModalNavigationText}
                     onClick={() => setModalTypeVar('liqWithdraw')}
                     active={modalTypeVar === 'liqWithdraw'}
+                    Withdraw
                   >
                     Withdraw
                   </StakeModalNavigationBtn>
-                  <span></span>
                 </StakeModalNavigationWrapper>
 
                 <StakingForm modalTypeVar={modalTypeVar} type={type} tokenAddress={tokenAddress} stakingAddress={stakingAddress} />
@@ -815,46 +849,220 @@ const StakingModal = ({
         contentLabel='Adjust'
         portalClassName='migrateStake'
       >
-        <StakingModalContentWrapper height='373px' backgroundColor={ModeThemes[theme].ModalBackground} migrateStake>
-          <StakingModalContent height='373px' textColor={ModeThemes[theme].ModalText} migrateStake>
-            <StakingModalClose>
-              <button onClick={closeModal}>
-                <img src={theme === 'light' ? CloseModal : CloseModalWhite} alt='close' />
-              </button>
-            </StakingModalClose>
-            <StakingModalContentSideTitle textColor={ModeThemes[theme].ModalText}>
-              <h2>Withdraw Current Tokens</h2>
-            </StakingModalContentSideTitle>
-            <p>
-              Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE
-              Staking pools, please withdraw your current SLICE tokens and rewards in order to use them in SLICE staking pools.
-            </p>
-            <StakeModalFormWrapper migrateStake stake textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
-              <h2>You are withdrawing: </h2>
-              <form>
-                <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
-                  <StakeModalFormInput
-                    MigrateInput={ModeThemes[theme].MigrateInput}
-                    migrateStake
-                    textColor={ModeThemes[theme].ModalText}
-                    type='number'
-                    inputColor={ModeThemes[theme].BorderStake}
-                  />
-                  <div>
-                    <img src={TrancheIcon} alt='' />
-                    <h2>Slice</h2>
-                  </div>
-                </StakeModalFormInputWrapper>
-                <StakeModalFormBtn migrateStake type='submit'>
-                  Withdraw
-                </StakeModalFormBtn>
-              </form>
-            </StakeModalFormWrapper>
+        <StakingModalContentWrapper height='457px' backgroundColor={ModeThemes[theme].ModalBackground} migrateStake>
+          <StakingModalContent height='457px' textColor={ModeThemes[theme].ModalText} migrateStake>
+            <StakingModalHeader>
+              <StakingModalContentSideTitle textColor={ModeThemes[theme].ModalText} migrate>
+                <h2>Migrate Tokens</h2>
+                <StakingModalClose migrate>
+                  <button onClick={closeModalMigrate}>
+                    <img src={theme === 'light' ? CloseModal : CloseModalWhite} alt='close' />
+                  </button>
+                </StakingModalClose>
+              </StakingModalContentSideTitle>
+
+              <StepProgressBarWrapper Claim>
+                <ProgressBarStep 
+                MigrateProgressTextActive={ModeThemes[theme].MigrateProgressTextActive}
+                MigrateProgressTextPending={ModeThemes[theme].MigrateProgressTextPending}
+                MigrateStepBorder={ModeThemes[theme].MigrateStepBorder}
+                MigrateStepTextPending={ModeThemes[theme].MigrateStepTextPending}
+                MigrateStepText={ModeThemes[theme].MigrateStepText}
+                active done={currentStep==="withdraw" || currentStep==="stake" || currentStep==="done"}>
+                  <span>1</span>
+                  <h2>Claim</h2>
+                </ProgressBarStep>
+
+
+                <ProgressBarLineWrapper lineOne>
+                  <ProgressBarDashedLine
+                  MigrateProgressLine={ModeThemes[theme].MigrateProgressLine}
+                   done={currentStep==="withdraw" || currentStep==="stake" || currentStep==="done"}></ProgressBarDashedLine>
+                  <ProgressBarLine 
+                  MigrateProgressLine={ModeThemes[theme].MigrateProgressLine}
+
+                  done={currentStep==="withdraw" || currentStep==="stake" || currentStep==="done"}></ProgressBarLine>
+                </ProgressBarLineWrapper>
+
+                <ProgressBarStep 
+                MigrateProgressTextActive={ModeThemes[theme].MigrateProgressTextActive}
+                MigrateProgressTextPending={ModeThemes[theme].MigrateProgressTextPending}
+                MigrateStepBorder={ModeThemes[theme].MigrateStepBorder}
+                MigrateStepTextPending={ModeThemes[theme].MigrateStepTextPending}
+                MigrateStepText={ModeThemes[theme].MigrateStepText}
+                
+                Withdraw active={currentStep==="withdraw"} done={currentStep==="stake" || currentStep==="done"}>
+                  <span>2</span>
+                  <h2>Withdraw</h2>
+                </ProgressBarStep>
+
+                <ProgressBarLineWrapper lineTwo>
+                  <ProgressBarDashedLine 
+                  MigrateProgressLine={ModeThemes[theme].MigrateProgressLine}
+                  
+                  done={currentStep==="stake" || currentStep==="done"}></ProgressBarDashedLine>
+                  <ProgressBarLine 
+                  MigrateProgressLine={ModeThemes[theme].MigrateProgressLine}
+
+                  done={currentStep==="stake" || currentStep==="done"}></ProgressBarLine>
+                </ProgressBarLineWrapper>
+
+                <ProgressBarStep 
+                MigrateProgressTextActive={ModeThemes[theme].MigrateProgressTextActive}
+                MigrateProgressTextPending={ModeThemes[theme].MigrateProgressTextPending}
+                MigrateStepBorder={ModeThemes[theme].MigrateStepBorder}
+                MigrateStepTextPending={ModeThemes[theme].MigrateStepTextPending}
+                MigrateStepText={ModeThemes[theme].MigrateStepText}
+                
+                Stake active={currentStep==="stake"} done={currentStep==="done"}>
+                  <span>3</span>
+                  <h2>Stake</h2>
+                </ProgressBarStep>
+              </StepProgressBarWrapper>
+            </StakingModalHeader>
+
+            {
+              currentStep === "claim" ?
+              migrateClaim() :
+              currentStep === "withdraw" ?
+              migrateWithdraw() :
+              currentStep === "stake" ?
+              migrateStakeSkip() :
+              currentStep === "done" ?
+              migrateDone() : ""
+            }
+
+            
           </StakingModalContent>
         </StakingModalContentWrapper>
       </Modal>
     );
   };
+
+
+  const migrateClaim = () =>{
+    return(
+      <StakingMigrateModalContent>
+
+              <RewardsAmountWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>  
+                <h2>Claim Your Rewards from SLICE Pools</h2>
+                <RewardsAmountCardsWrapper>
+                  <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
+                    <h2>Total Amount of SLICE Staked:</h2>
+                    <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+                  </RewardsAmountCard>
+        
+                  <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
+                    <h2>Amount of SLICE Rewards to Claim:</h2>
+                    <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+                  </RewardsAmountCard>
+                </RewardsAmountCardsWrapper>
+              </RewardsAmountWrapper>   
+
+              <StakeModalFormBtn step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
+                Claim
+              </StakeModalFormBtn>
+            </StakingMigrateModalContent>
+    )
+  }
+  const migrateWithdraw = () =>{
+    return(
+      <StakingMigrateModalContent>
+
+        <RewardsAmountWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>  
+          <h2>Withdraw SLICE from SLICE Pools</h2>
+          <RewardsAmountCardsWrapper>
+            <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
+              <h2>Total Amount of SLICE Available to Withdraw:</h2>
+              <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+            </RewardsAmountCard>
+          </RewardsAmountCardsWrapper>
+        </RewardsAmountWrapper>   
+
+        <StakeModalFormBtn step={currentStep} migrateStake onClick={() => setCurrentStep('stake')}>
+          Withdraw
+        </StakeModalFormBtn>
+      </StakingMigrateModalContent>
+    )
+  }
+
+  const migrateStakeSkip = () =>{
+    return(
+      <StakingMigrateModalContent>
+
+        <StakeNewWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>
+          <h2>Stake Into a New Pool</h2>
+
+          <StakeNewTable>
+            <StakeNewTableHead>
+              <StakeNewCol head pool color={ModeThemes[theme].TableHead} ><h2>staking pool</h2></StakeNewCol>
+              <StakeNewCol head lockup color={ModeThemes[theme].TableHead} ><h2>lockup</h2></StakeNewCol>
+              <StakeNewCol head apy color={ModeThemes[theme].TableHead} ><h2>apy</h2></StakeNewCol>
+              <StakeNewCol head stake color={ModeThemes[theme].TableHead} ><h2>stake</h2></StakeNewCol>
+            </StakeNewTableHead>
+            <StakeNewTableCards>
+              <StakeNewTableCard
+                color={ModeThemes[theme].TableCard}
+                borderColor={ModeThemes[theme].TableCardBorderColor}
+              >
+                <StakeNewCol pool>
+
+                  <StakeNewColFirst>
+                    <StakeNewColImg>
+                      <img src={TrancheStake} alt=""/>
+                    </StakeNewColImg>
+                    <StakeNewColText color={ModeThemes[theme].tableText}>
+                      <h2>DIAMOND HANDS</h2>
+                      <h2>0xb51....468</h2>
+                    </StakeNewColText>
+                  </StakeNewColFirst>
+
+                </StakeNewCol>
+
+                <StakeNewCol lockupValue lockup
+                  docsLockupText={ModeThemes[theme].docsLockupText}
+                  docsLockupBackground={ModeThemes[theme].docsLockupBackground}
+                >
+                  <h2><span>1 year</span></h2>
+                </StakeNewCol>
+
+                <StakeNewCol apyValue apy color={ModeThemes[theme].tableText}>
+                  <h2>40%</h2>
+                </StakeNewCol>
+
+                <StakeNewCol stake stakeValue>
+                  <button>stake</button>
+                </StakeNewCol>
+
+
+              </StakeNewTableCard>
+            </StakeNewTableCards>
+            </StakeNewTable>
+        </StakeNewWrapper>
+
+        <StakeModalFormBtn step={currentStep} migrateStake onClick={() => setCurrentStep('done')}>
+          Skip For Now
+        </StakeModalFormBtn>
+      </StakingMigrateModalContent>
+    )
+  }
+
+  const migrateDone = () =>{
+    return(
+      <StakingMigrateModalContent>
+        <SliceMigratedWrapper>
+          <img src={Migrated} alt="" />
+          <SliceMigratedText MigrateContentTitle={ModeThemes[theme].MigrateContentTitle} CongratsText={ModeThemes[theme].CongratsText}>
+            <h2>Congratulations</h2>
+            <h2>Your SLICE tokens were migrated </h2>
+          </SliceMigratedText>
+        </SliceMigratedWrapper>
+        <StakeModalFormBtn step={currentStep} migrateStake onClick={() => closeModalMigrate()}>
+          Close
+        </StakeModalFormBtn>
+      </StakingMigrateModalContent>
+    )
+  }
 
   return modalType === 'claim'
     ? claimModal()

@@ -11,7 +11,8 @@ import {
   StakeModalFormBtn,
   StakeModalFormInputWrapper,
   StakeModalFormInput,
-  EstimatedText
+  EstimatedText,
+  InputTag
 } from '../Modals/styles/ModalsComponents';
 import i18n from '../locale/i18n';
 import { ModeThemes } from 'config';
@@ -23,9 +24,9 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => {
   return (
     <div>
       {touched && error ? (
-        <StakeModalFormInput inputColor={ModeThemes[theme].BorderStake} {...input} type={type} className={`${className} InputStylingError`} />
+        <StakeModalFormInput inputColor={ModeThemes[theme].BorderStake} textColor={ModeThemes[theme].ModalText} {...input} type={type} className={`${className} InputStylingError`} />
       ) : (
-        <StakeModalFormInput inputColor={ModeThemes[theme].BorderStake} {...input} type={type} className={`${className} InputStyling`} />
+        <StakeModalFormInput inputColor={ModeThemes[theme].BorderStake} textColor={ModeThemes[theme].ModalText} {...input} type={type} className={`${className} InputStyling`} />
       )}
       {touched && error && <span></span>}
     </div>
@@ -135,10 +136,10 @@ let StakingForm = ({
             id='amount'
           />
           {/* <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button> */}
-          <div>
+          <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
             <img src={TrancheIcon} alt='' />
             <h2>{dropdownName}</h2>
-          </div>
+          </InputTag>
         </StakeModalFormInputWrapper>
         <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
           <h2>Estimated Rewards</h2>

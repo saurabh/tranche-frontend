@@ -945,7 +945,7 @@ const ClaimModalCol = styled.div`
   
 `;
 const StakingModalContentWrapper = styled.div`
-  width: ${props => props.migrateStake ? "373px" : "731px"};
+  width: ${props => props.migrateStake ? "473px" : "731px"};
   height: ${props => props.height};
   background: ${props => props.backgroundColor};
   @media (max-width: 663px){
@@ -982,6 +982,9 @@ const StakingModalContent = styled.div`
     height: 100vh;
   }
   ${({ migrateStake }) => migrateStake && `
+    top: unset;
+    padding: 0;
+    // padding: 25px 33px;
     @media (max-width: 663px){
       height: auto;
     }
@@ -998,6 +1001,9 @@ const StakingModalClose = styled.div`
     outline: none;
     cursor: pointer;
   }
+  ${({ migrate }) => migrate && `
+    top: unset;
+  `}
   
 `;
 const ClaimModalHeader = styled.div`
@@ -1208,6 +1214,11 @@ const StakingModalContentSideTitle = styled.div`
     // color: #FFFFFF;
     color: ${props => props.textColor};
   }
+  ${({ migrate }) => migrate && `
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `}
 `;
 const StakingModalContentSideHeader = styled.div`
   width: 100%;
@@ -1368,7 +1379,7 @@ const StakeModalNavigationWrapper = styled.div`
   span{
     width: 50%;
     height: 100%;
-    background:  ${props => props.stakeModalBoxBackground};
+    background:  ${props => props.stakeBoxBackground};
     border-radius: 159px;
     position: absolute;
     opacity: 1;
@@ -1379,6 +1390,12 @@ const StakeModalNavigationWrapper = styled.div`
     ${({ modalTypeVar }) =>  modalTypeVar === "liqWithdraw" && `
       left: 100%;
       transform: translateX(-100%);
+    `}
+    ${({ modalTypeVar, theme }) =>  (modalTypeVar === "liqStake" && theme === "light") && `
+      border-right: 0.536446px solid #E9E9FC;
+    `}
+    ${({ modalTypeVar, theme }) =>  (modalTypeVar === "liqWithdraw" && theme === "light") && `
+      border-left: 0.536446px solid #E9E9FC;
     `}
   }
 `;
@@ -1394,6 +1411,7 @@ const StakeModalNavigationBtn = styled.button`
   `}
   font-family: 'Inter', sans-serif;
   font-weight: 600;
+  position: absolute;
   font-size: 9.65602px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1402,6 +1420,12 @@ const StakeModalNavigationBtn = styled.button`
   border-radius: 159px;
   border: none;
   outline: none;
+  ${({ Stake }) => Stake && `
+    left: 0;
+  `}
+  ${({ Withdraw }) => Withdraw && `
+    right: 0;
+  `}
 `;
 const StakeModalFormWrapper = styled.div`
     & > h2{
@@ -1434,28 +1458,6 @@ const StakeModalFormWrapper = styled.div`
 `;
 const StakeModalFormInputWrapper = styled.div`
   position: relative;
-  div{
-    display: flex;
-    align-items: center;
-    border-left: 2.16725px solid ${props => props.borderColor};
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 15px;
-    img{
-      width: 18.5px;
-      margin: 0 9px 0 15px;
-    }
-    h2{
-      font-family: 'Inter', sans-serif;
-      font-weight: normal;
-      font-size: 13.0035px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;        
-      // color: #FFFFFF;
-      color: ${props => props.textColor};
-    }
-  }
 `
 const StakeModalFormInput = styled.input`
   width: 100%;
@@ -1465,7 +1467,7 @@ const StakeModalFormInput = styled.input`
   box-sizing: border-box;
   border-radius: 3.69132px;
   font-family: 'Inter', sans-serif;
-  padding: 10px 100px 10px 16px;  
+  padding: 10px 120px 10px 16px;  
   font-weight: 500;
   font-size: 11px;
   outline: none;
@@ -1500,7 +1502,10 @@ const StakeModalFormBtn = styled.button`
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 66px);
-    margin: 33px 0;
+    margin: 33px 0 25px 0;
+  `}
+  ${({ step }) => step && `
+    background: ${step === "stake" ? "#43406C" : step === "done" ? "#369987" : "#6E41CF"};
   `}
   @media (max-width: 663px){
     position: relative;
@@ -1523,6 +1528,342 @@ const EstimatedText = styled.div`
     font-size: 11px;
     // color: #FFFFFF;
     color: ${props => props.textColor};
+  }
+`;
+const StakingModalHeader = styled.div`
+  height: 104px;
+  padding: 25px 33px 20px 33px;
+  background: rgba(255,255,255, 0.02);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+
+`;
+const StepProgressBarWrapper = styled.div`
+  margin: 15px 0 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+const ProgressBarStep = styled.div`
+  display: flex;
+  align-items: center;  
+  width: ${props => props.Withdraw ? "23.3333333%" : "17.333333%"};
+  justify-content: ${props => props.Stake ? "flex-end" : "flex-start"};
+  
+  span{
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    background: ${props => props.MigrateStepBackground};
+    border: 1px solid ${props => props.MigrateStepBorder};
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 10.3529px;
+    color: ${props => props.MigrateStepTextPending};
+    
+    ${({ active }) => active && `
+      background: #6E41CF;
+      border: 1px solid #6E41CF;
+      color: #FFFFFF;
+    `}
+    ${({ done }) => done && `
+      background: #369987;
+      border: 1px solid #369987;
+      color: #FFFFFF;
+    `}    
+  }
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 13.1765px;
+    margin-left: 9px;
+    color: ${props => props.MigrateProgressTextPending};
+    ${({ active, done, MigrateProgressTextActive }) => (active || done) && `
+      color: ${MigrateProgressTextActive};
+    `}
+  }
+`;
+const ProgressBarLineWrapper = styled.div`
+  width: 15%;
+  height: 1px;
+  margin-top: 2px;
+`;
+const ProgressBarDashedLine = styled.div`
+  border: 0 none;
+  border-top: 1px dashed ${props => props.MigrateProgressLine};
+  background: none;
+  height:0;
+  ${({ done }) => done && `
+    display: none;
+  `}
+`;
+const ProgressBarLine = styled.div`
+  height: 100%;
+  width: 0;
+  transition: 300ms;
+  background: ${props => props.MigrateProgressLine};
+  ${({ done }) => done && `
+    width: 100%;
+  `}
+`;
+
+
+const InputTag = styled.div`
+  display: flex;
+  align-items: center;
+  border-left: 2.16725px solid ${props => props.borderColor};
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 15px;
+  img{
+    width: 18.5px;
+    margin: 0 9px 0 15px;
+  }
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 13.0035px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;        
+    // color: #FFFFFF;
+    color: ${props => props.textColor};
+  }
+`;
+const StakingMigrateModalContent = styled.div`
+  padding: 25px 33px 20px 33px;
+`;
+const RewardsAmountWrapper = styled.div`
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 0 15px 0;
+    color: ${props => props.MigrateContentTitle};
+  }
+`;
+
+const RewardsAmountCardsWrapper = styled.div`
+  
+`;
+const RewardsAmountCard = styled.div`
+  background: ${props => props.MigrateClaimCardBackground};
+  border-radius: 10px;
+  padding: 8px 20px;
+  margin: 9px 0;
+  height: 74px;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: ${props => props.MigrateClaimCardValue};
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    span{
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      font-size: 13px;
+      font-weight: 400;
+      img{
+        margin: 0 4px;
+        width: 18.4px;
+      }
+    }
+  }
+  & > h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: ${props => props.MigrateClaimCardTitle};
+  }
+`;
+const StakeNewWrapper = styled.div`
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 0 15px 0;
+    color: ${props => props.MigrateContentTitle};
+  }
+`;
+
+const StakeNewTable = styled.div`
+  
+`;
+const StakeNewCol = styled.div`
+  ${({ pool }) => pool && `
+    width: 40%;
+  `}
+  ${({ lockup }) => lockup && `
+    width: 20.6666667%;
+    h2{
+      text-align: center;
+    }
+  `}
+  ${({ apy }) => apy && `
+    width: 13.6666667%;
+    h2{
+      text-align: center;
+    }
+  `}
+  ${({ stake }) => stake && `
+    width: 25.6666667%;
+    h2{
+      text-align: center;
+    }
+  `}
+  ${({ head, color }) => head && `
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 9px;
+      line-height: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: ${color};
+    }
+  `}
+  ${({ lockupValue, docsLockupText, docsLockupBackground }) => lockupValue && `
+    display: flex;
+    justify-content: center;
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 8px;
+      background: ${docsLockupBackground};
+      border-radius: 6.38182px;
+      text-align: center;
+      text-transform: uppercase;
+      color: ${docsLockupText};
+      height: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span{
+        padding: 0 12px;
+      }
+    }
+  `}
+  ${({ apyValue, color }) => apyValue && `
+    display: flex;
+    justify-content: center;
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 10.8491px;
+      line-height: 13px;
+      text-align: right;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+       color: ${color};
+    }
+  `}
+  ${({ stakeValue }) => stakeValue && `
+    display: flex;
+    justify-content: center;
+    button{
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 9.57273px;
+      line-height: 12px;
+      text-align: center;
+      text-transform: uppercase;
+      background: #4441CF;
+      border-radius: 31.9091px;
+      border: none;
+      cursor: pointer;
+      width: 61px;
+      height: 21px;
+      color: #FFFFFF;
+    }
+
+  `}
+  
+
+  
+
+  
+`;
+
+const StakeNewTableHead = styled.div`
+  margin: 0 0 10px 0;
+  display: flex;
+`;
+const StakeNewTableCards = styled.div`
+  
+`;
+const StakeNewTableCard = styled.div`
+  width: 100%;
+  height: 57px;
+  margin: 0 0 7px 0;
+  background: ${props => props.color};
+  border: 0.638182px solid ${props => props.borderColor};
+  box-sizing: border-box;
+  border-radius: 3.19091px;
+  display: flex;
+  align-items: center;
+`;
+const StakeNewColFirst = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const StakeNewColImg = styled.div`
+  display: flex;
+  img{
+    width: 27px;
+    margin: 0 17px;
+  }
+`;
+const StakeNewColText = styled.div`
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 9.57273px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${props => props.color};
+    margin: 1px 0;
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 7.65818px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #838186;
+    margin: 1px 0;
+  }
+`;
+const SliceMigratedWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 45px 0 0 0; 
+  img{
+    max-width: 86px;
+    width: 100%;
+  }
+`;
+const SliceMigratedText = styled.div`
+  h2:first-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    color: ${props => props.MigrateContentTitle};
+    margin: 20px auto 12px auto;
+  }
+  h2:last-child{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    color: ${props => props.CongratsText};
   }
 `;
 
@@ -1595,5 +1936,27 @@ export {
   StakeModalFormInputWrapper,
   StakeModalFormInput,
   StakeModalFormBtn,
-  EstimatedText
+  EstimatedText,
+  StakingModalHeader,
+  StepProgressBarWrapper,
+  ProgressBarStep,
+  ProgressBarLineWrapper,
+  ProgressBarDashedLine,
+  ProgressBarLine,
+  InputTag,
+  StakingMigrateModalContent,
+  RewardsAmountWrapper,
+  RewardsAmountCardsWrapper,
+  RewardsAmountCard,
+  StakeNewWrapper,
+  StakeNewTable,
+  StakeNewCol,
+  StakeNewTableHead,
+  StakeNewTableCards,
+  StakeNewTableCard,
+  StakeNewColFirst,
+  StakeNewColImg,
+  StakeNewColText,
+  SliceMigratedWrapper,
+  SliceMigratedText
 };
