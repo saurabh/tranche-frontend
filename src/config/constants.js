@@ -167,7 +167,8 @@ export const apiUri = {
   sliceSummary: 'slice/summary',
   tranchesList: 'earn',
   totalValueLocked: 'earn/summary/total',
-  graphUri: 'earn/graph/apy?'
+  graphUri: 'earn/graph/apy?',
+  userStakingList: 'staking/list'
 };
 
 // Filters
