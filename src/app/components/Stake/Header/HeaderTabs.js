@@ -133,7 +133,7 @@ const HeaderTabs = ({
             <h2>Current Value ${slice.balanceUSD ? roundNumber(slice.balanceUSD) : '0'}</h2>
           </StackSummaryCol>
           <StackSummaryCol stake>
-            <h2>Total Liquidity Provider Pools Stakes</h2>
+            <h2>Liquidity Provider Pools Stakes</h2>
             <h2>{lp.balance ? roundNumber(lp.balance) : '0'}</h2>
             <h2>{lpBalance ? roundNumber(lpBalance.toString()) : '0'} LP Tokens Available</h2>
             <span></span>
