@@ -7,6 +7,7 @@ import { apiUri } from 'config/constants';
 import _ from 'lodash';
 import {
   fetchTableData,
+  fetchUserStakingList,
   changeFilter,
   paginationOffset,
   paginationCurrent,
@@ -32,7 +33,7 @@ import {
   LoadingContent
 } from './styles/TableComponents';
 import { EmptyBox } from 'assets';
-const { stakingList: stakingListUrl } = apiUri;
+const { stakingList: stakingListUrl, userStakingList: userStakingListUrl } = apiUri;
 
 const style = {
   pageItem: {
@@ -60,6 +61,7 @@ const Table = ({
   openModal, closeModal, modalType, ModalIsOpen,
   HandleNewLoan,
   fetchTableData,
+  fetchUserStakingList,
   changeOwnAllFilter,
   path,
   data,
@@ -139,6 +141,14 @@ const Table = ({
   const handleSorting = () => {
     stakingListing();
   };
+  useEffect(() => {
+    const getStakingData = async () => {
+      fetchUserStakingList(`${ userStakingListUrl }/${ localAddress }`);
+    };
+    if (currentPath === 'stake' && localAddress) {
+      getStakingData();
+    }
+  }, [currentPath, fetchUserStakingList, localAddress]);
 
 
   return (
@@ -318,6 +328,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   fetchTableData,
+  fetchUserStakingList,
   changePath,
   changeFilter,
   paginationOffset,

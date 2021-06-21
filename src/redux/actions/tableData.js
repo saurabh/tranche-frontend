@@ -10,7 +10,7 @@ import {
   maticBlockExplorerUrl,
   stakingDurations
 } from 'config/constants';
-import { postRequest, initOnboard } from 'services';
+import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
 import { setBlockExplorerUrl } from './ethereum';
 import {
@@ -31,7 +31,9 @@ import {
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
   TRANCHE_MARKETS,
-  STAKING_SUCCESS
+  STAKING_SUCCESS,
+  USER_STAKING_LIST_IS_LOADING,
+  USER_STAKING_LIST_SUCCESS
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -180,6 +182,30 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   });
 };
 
+
+const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
+  console.log(userStakingList);
+  const sliceStakes = userStakingList.find(l => l.tokenAddress === SLICEAddress);
+  const slice = sliceStakes ? sliceStakes.stakes : [];
+  const lp1Stakes = userStakingList.find(l => l.tokenAddress === LP1TokenAddress);
+  const lp2Stakes = userStakingList.find(l => l.tokenAddress === LP2TokenAddress);
+  const lp = lp1Stakes ? lp1Stakes.stakes : [];
+  if (lp2Stakes) {
+    lp.push(lp2Stakes.stakes || []);
+  }
+  console.log(slice, lp);
+  dispatch({
+    type: USER_STAKING_LIST_SUCCESS,
+    payload: {slice, lp}
+  });
+}
+
+const userStakingListIsLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: USER_STAKING_LIST_IS_LOADING,
+    payload: bool
+  });
+};
 export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
@@ -207,3 +233,17 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
     dispatch(checkServer(false));
   }
 };
+
+export const fetchUserStakingList = (endpoint) => async (dispatch) => {
+  try {
+    dispatch(userStakingListIsLoading(true));
+    const { data: result } = await getRequest(endpoint, {}, null);
+    if (result.status) {
+      dispatch(userStakingListIsLoading(false));
+      dispatch(fetchUserStakingListSuccess(result.result.list));
+    }
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+} 

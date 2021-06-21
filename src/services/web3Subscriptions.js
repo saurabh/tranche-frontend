@@ -2,12 +2,12 @@ import axios from 'axios';
 import store from 'redux/store';
 import { web3 } from 'utils/getWeb3';
 // import maticWeb3 from 'utils/maticWeb3';
-import { fetchTableData, trancheCardToggle } from 'redux/actions/tableData';
+import { fetchTableData, trancheCardToggle, fetchUserStakingList } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { setTokenBalances } from 'redux/actions/ethereum';
 import { serverUrl, apiUri, StakingAddresses, YieldAddresses, JCompoundAddress, JAaveAddress } from 'config/constants';
 import maticWeb3 from 'utils/maticWeb3';
-const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked } = apiUri;
+const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked, userStakingList } = apiUri;
 
 const timeout = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -89,7 +89,12 @@ export const ETHContracts = {
                 stakingList
               )
             );
-            const res = await axios(`${serverUrl + stakingSummary + address}`);
+            await store.dispatch(
+              fetchUserStakingList(
+                userStakingList
+              )
+            )
+            const res = await axios(`${ serverUrl + stakingSummary + address }`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));
             store.dispatch(setTokenBalances(address));
