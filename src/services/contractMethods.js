@@ -1,4 +1,4 @@
-import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
+import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, LockupSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { web3 } from 'utils/getWeb3';
@@ -443,14 +443,15 @@ export const getAccruedStakingRewards = async (yieldfarmAddress, address) => {
   }
 };
 
-export const addStake = async (stakingAddress, tokenAddress) => {
+export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
     let { amount } = state.form.stake.values;
-    const StakingContract = StakingSetup(web3, stakingAddress);
+    console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones')
+    const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress): StakingSetup(web3, stakingAddress);
     amount = toWei(amount.toString());
     store.dispatch(
       addNotification({
@@ -460,8 +461,8 @@ export const addStake = async (stakingAddress, tokenAddress) => {
         title: 'awaiting confirmation'
       })
     );
-    await StakingContract.methods
-      .deposit(tokenAddress, amount)
+    const DepositMethod = durationIndex || durationIndex === 0 ? StakingContract.methods.stake(amount, durationIndex) : StakingContract.methods.deposit(tokenAddress, amount);
+    DepositMethod
       .send({ from: address })
       .on('transactionHash', (hash) => {
         if (network === networkId) {

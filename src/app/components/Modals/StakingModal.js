@@ -202,11 +202,15 @@ const StakingModal = ({
   contractAddress,
   tokenAddress,
   stakingAddress,
+  hasAllowance,
+  approveLoading,
   title,
   rewards,
   timerData,
   apy,
   // Functions
+  stakingApproveContract,
+  adjustStake,
   closeModal
 
   // API Values,
@@ -600,26 +604,15 @@ const StakingModal = ({
                   <h2>Manage</h2>
                 </StakingModalContentSideTitle>
 
-                <StakeModalFormWrapper stake textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
-                  <h2>Amount of SLICE to stake: </h2>
-                  <form>
-                    <h2>You have 1,012,000 SLICE available to stake</h2>
-                    <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
-                      <StakeModalFormInput type='number' inputColor={ModeThemes[theme].BorderStake} />
-                      <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
-                        <img src={TrancheIcon} alt='' />
-                        <h2>Slice</h2>
-                      </InputTag>
-                    </StakeModalFormInputWrapper>
-                    <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
-                      <h2>Estimated Rewards</h2>
-                      <h2>You will get 1000 SLICE at the end of lockup</h2>
-                    </EstimatedText>
-                    <StakeModalFormBtn type='submit' stake>
-                      Stake
-                    </StakeModalFormBtn>
-                  </form>
-                </StakeModalFormWrapper>
+                <StakingForm 
+                  modalTypeVar={modalTypeVar} 
+                  type={type} tokenAddress={tokenAddress}
+                  stakingAddress={stakingAddress}
+                  hasAllowance={hasAllowance}
+                  approveLoading={approveLoading}
+                  stakingApproveContract={stakingApproveContract}
+                  adjustStake={adjustStake}
+                />
               </StakingModalContentSide>
             </StakingModalContentSideWrapper>
           </StakingModalContent>
@@ -762,27 +755,15 @@ const StakingModal = ({
                   </StakeModalNavigationBtn>
                 </StakeModalNavigationWrapper>
 
-                <StakingForm modalTypeVar={modalTypeVar} type={type} tokenAddress={tokenAddress} stakingAddress={stakingAddress} />
-                {/* <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
-                  <h2>Amount of SLICE to {modalTypeVar === 'liqStake' ? 'Stake' : 'Withdraw'}: </h2>
-                  <form>
-                    <h2>You have 1,012,000 SLICE available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
-                    <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
-                      <StakeModalFormInput type='number' inputColor={ModeThemes[theme].BorderStake} />
-                      <div>
-                        <img src={TrancheIcon} alt='' />
-                        <h2>Slice</h2>
-                      </div>
-                    </StakeModalFormInputWrapper>
-                    <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
-                      <h2>Estimated Rewards</h2>
-                      <h2>You will get 1000 SLICE per week</h2>
-                    </EstimatedText>
-                    <StakeModalFormBtn type='submit' stake={modalTypeVar === 'liqStake'}>
-                      {modalTypeVar === 'liqStake' ? 'Stake' : 'Withdraw'}
-                    </StakeModalFormBtn>
-                  </form>
-                </StakeModalFormWrapper> */}
+                <StakingForm 
+                  modalTypeVar={modalTypeVar} 
+                  type={type} tokenAddress={tokenAddress}
+                  stakingAddress={stakingAddress}
+                  hasAllowance={hasAllowance}
+                  approveLoading={approveLoading}
+                  stakingApproveContract={stakingApproveContract}
+                  adjustStake={adjustStake}
+                />
               </StakingModalContentSide>
             </StakingModalContentSideWrapper>
           </StakingModalContent>
