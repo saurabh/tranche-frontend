@@ -102,8 +102,9 @@ export const stakingFetchSuccess = (list) => (dispatch) => {
     sliceList.push(filterArrByDuration(Number(stakingDurations[0])));
     sliceList.push(filterArrByDuration(Number(stakingDurations[1])));
     sliceList.push(filterArrByDuration(Number(stakingDurations[2])));
+    // sliceList.push(searchArr(SLICEAddress))
   }
-  lpList.push(searchArr(SLICEAddress));
+  lpList.push(searchArr(SLICEAddress))
   lpList.push(searchArr(LP1TokenAddress));
   lpList.push(searchArr(LP2TokenAddress));
   dispatch({

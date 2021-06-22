@@ -98,7 +98,6 @@ const Table = ({
               limit,
               filter: {
                 address: localAddress ? localAddress : undefined,
-                type: filter //ETH/JNT keep these in constant file
               }
             },
             stakingListUrl
@@ -110,7 +109,6 @@ const Table = ({
               limit,
               filter: {
                 address: localAddress ? localAddress : undefined,
-                type: filter //ETH/JNT keep these in constant file
               }
             },
             stakingListUrl
@@ -120,7 +118,7 @@ const Table = ({
       3000,
       { leading: true }
     ),
-    [fetchTableData, filter, skip, limit, sort, tradeType, localAddress]
+    [fetchTableData, skip, limit, sort, tradeType, localAddress]
   );
 
   useEffect(() => {
@@ -141,6 +139,7 @@ const Table = ({
   const handleSorting = () => {
     stakingListing();
   };
+
   useEffect(() => {
     const getStakingData = async () => {
       fetchUserStakingList(`${ userStakingListUrl }/${ localAddress }`);

@@ -52,7 +52,7 @@ import { initOnboard } from 'services/blocknative';
 import moment  from 'moment';
 
 const TableCard = ({
-  staking: { contractAddress, isActive, reward, staked, type, apy, subscription, duration },
+  staking: { contractAddress, isActive, reward, staked, type, apy, subscription, duration, durationIndex },
   setTokenBalance,
   ethereum: { tokenBalance, address, wallet, web3, notify, notificationCount },
   addNotification,
@@ -70,7 +70,6 @@ const TableCard = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [tokenAddress, setTokenAddress] = useState(null);
   const [balance, setBalance] = useState(0);
-  const [isLPToken, setLPToken] = useState(false);
   const [stakingAddress, setStakingAddress] = useState(null);
   const Tracker = useAnalytics('ButtonClicks');
 
@@ -106,10 +105,6 @@ const TableCard = ({
   }
 
   useEffect(() => {
-    type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP' ? setLPToken(true) : setLPToken(false);
-  }, [type]);
-
-  useEffect(() => {
     const setBalance = async () => {
       if (tokenBalance) {
         if (type === 'SLICE' && slice.address) setBalanceCB(fromWei(tokenBalance[slice.address]));
@@ -131,15 +126,15 @@ const TableCard = ({
   useEffect(() => {
     if (type === 'SLICE') {
       setTokenAddress(slice.address);
-      setStakingAddress(slice.stakingAddress);
+      setStakingAddress(contractAddress);
     } else if (type === 'SLICE/ETH LP') {
       setTokenAddress(lpList && lpList[0].address);
-      setStakingAddress(lpList && lpList[0].stakingAddress);
+      setStakingAddress(contractAddress);
     } else if (type === 'SLICE/DAI LP') {
       setTokenAddress(lpList && lpList[1].address);
-      setStakingAddress(lpList && lpList[1].stakingAddress);
+      setStakingAddress(contractAddress);
     }
-  }, [type, slice, lpList]);
+  }, [type, slice, lpList, contractAddress]);
 
   let moreCardToggle = false;
 
@@ -152,13 +147,15 @@ const TableCard = ({
     if (!ready) return;
     address = !address ? onboard.getState().address : address;
     setTokenBalance(tokenAddress, address);
-    if (type) {
+    if (type === 'staking' || type === 'liqStake') {
       let result = await stakingAllowanceCheck(tokenAddress, stakingAddress, address);
       setHasAllowance(result);
     } else setHasAllowance(true);
+    // if (type === 'staking') setDuration(duration);
     setModalType(type);
     setModalOpen(true);
   };
+
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -179,7 +176,6 @@ const TableCard = ({
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
-          console.log('true');
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             return {
@@ -208,8 +204,14 @@ const TableCard = ({
   const adjustStake = (e, stakingAddress, tokenAddress) => {
     try {
       e.preventDefault();
-      modalType ? addStake(stakingAddress, tokenAddress) : withdrawStake(stakingAddress, tokenAddress);
-      modalType ? Tracker('addStake', 'User address: ' + address) : Tracker('withdrawStake', 'User address: ' + address);
+      modalType === 'liqStake' || modalType === 'staking' 
+        ? addStake(stakingAddress, tokenAddress, durationIndex) 
+        : withdrawStake(stakingAddress, tokenAddress);
+      modalType === 'liqStake'
+        ? Tracker('addStake', 'User address: ' + address)
+        : modalType === 'staking' 
+        ? Tracker('addLockup', 'User address: ' + address)
+        : Tracker('withdrawStake', 'User address: ' + address);
       closeModal();
     } catch (error) {
       console.error(error);
@@ -319,12 +321,12 @@ const TableCard = ({
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
-            title !== "SLICE Staking Pools" && (type && type === 'SLICE') ?
-            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
-              <StakeBtn background='#6E41CF' onClick={() => openModal('withdrawTokens')}>
-                -
-              </StakeBtn>
-            </TableSeventhCol> : 
+            // title !== "SLICE Staking Pools" && (type && type === 'SLICE') ?
+            // <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
+            //   <StakeBtn background='#6E41CF' onClick={() => openModal('withdrawTokens')}>
+            //     -
+            //   </StakeBtn>
+            // </TableSeventhCol> : 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
               <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
                 -
@@ -353,7 +355,6 @@ const TableCard = ({
           hasAllowance={hasAllowance}
           setHasAllowance={setHasAllowance}
           approveLoading={approveLoading}
-          isLPToken={isLPToken}
           // Functions
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}
@@ -450,7 +451,6 @@ const TableCard = ({
           hasAllowance={hasAllowance}
           setHasAllowance={setHasAllowance}
           approveLoading={approveLoading}
-          isLPToken={isLPToken}
           // Functions
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}

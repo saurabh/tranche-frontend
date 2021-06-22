@@ -12,15 +12,16 @@ import {
   StakeModalFormInputWrapper,
   StakeModalFormInput,
   EstimatedText,
-  InputTag
+  InputTag,
+  BtnLoadingIcon
 } from '../Modals/styles/ModalsComponents';
+import { ApproveBtnWrapper, ModalFormButton } from './styles/FormComponents';
 import i18n from '../locale/i18n';
 import { ModeThemes } from 'config';
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => {
   const state = store.getState();
   const { theme } = state;
-  console.log(theme)
   return (
     <div>
       {touched && error ? (
@@ -41,11 +42,9 @@ let StakingForm = ({
   formValues,
   // State Values
   modalTypeVar,
-  modalType,
   userStaked,
   tokenAddress,
   stakingAddress,
-  isLPToken,
   hasAllowance,
   setHasAllowance,
   approveLoading,
@@ -66,40 +65,25 @@ let StakingForm = ({
   const [balance, setBalance] = useState(0);
   const [balanceCheck, setBalanceCheck] = useState('');
   // const [LPSelect, toggleLP] = useState(false);
-  const [selectedLPName, setSelectedLPName] = useState(0);
+  const [tokenName, setTokenName] = useState(0);
   const [dropdownName, setDropdownName] = useState([]);
   const [amount, setAmount] = useState(0);
-  const tokenName = isLPToken ? selectedLPName : 'SLICE';
 
   useEffect(() => {
-    let balance = tokenBalance[tokenAddress];
-    balance && setBalance(fromWei(balance.toString()));
-    console.log(type);
+    let balance = tokenBalance[tokenAddress] ? tokenBalance[tokenAddress] : '0';
+    setBalance(fromWei(balance));
     if (type !== 'SLICE') {
       setDropdownName(type.split(' ')[0]);
-      setSelectedLPName(type);
+      setTokenName(type.concat(' Tokens'));
     } else {
       setDropdownName(type);
-      setSelectedLPName(type);
+      setTokenName(type);
     }
   }, [type, tokenAddress, tokenBalance]);
 
-  useEffect(() => {
-    if (isLPToken && lpList) {
-      let lpObj = lpList.filter((i) => i.name === type)[0];
-      setDropdownName(lpObj.name.split(' ')[0]);
-      setSelectedLPName(lpObj.name);
-      let balance = tokenBalance[lpObj.address];
-      balance && setBalance(fromWei(balance.toString()));
-    } else {
-      let balance = tokenBalance[slice.address];
-      balance && setBalance(fromWei(balance.toString()));
-    }
-  }, [tokenBalance, isLPToken, slice, lpList, type]);
-
   const handleInputChange = (newValue) => {
     setAmount(newValue);
-    modalType
+    modalTypeVar === 'liqStake'
       ? isGreaterThan(newValue, balance)
         ? setBalanceCheck('InputStylingError')
         : setBalanceCheck('')
@@ -111,19 +95,19 @@ let StakingForm = ({
   const setMaxAmount = useCallback(
     (e) => {
       e.preventDefault();
-      let num = modalType ? balance : userStaked;
+      let num = modalTypeVar === 'liqStake' ? balance : userStaked;
       change('amount', num);
       setAmount(Number(num));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance, userStaked, modalType]
+    [balance, userStaked, modalTypeVar]
   );
 
   return (
     <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
-      <h2>Amount of SLICE to {modalTypeVar === 'liqStake' ? 'Stake' : 'Withdraw'}: </h2>
+      <h2>Amount of {tokenName} to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'Stake' : 'Withdraw'}: </h2>
       <Form onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
-        <h2>You have 1,012,000 SLICE available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
+        <h2>You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : 0} {tokenName} available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
         <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
           <Field
             component={InputField}
@@ -141,12 +125,43 @@ let StakingForm = ({
             <h2>{dropdownName}</h2>
           </InputTag>
         </StakeModalFormInputWrapper>
-        <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
-          <h2>Estimated Rewards</h2>
+        {modalTypeVar === 'staking' && <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
+          <h2>{i18n.t('Estimated')}</h2>
           <h2>You will get 1000 SLICE per week</h2>
-        </EstimatedText>
-        <StakeModalFormBtn type='submit' stake={modalTypeVar === 'liqStake'}>
-          {modalTypeVar === 'liqStake' ? 'Stake' : 'Withdraw'}
+        </EstimatedText>}
+        <ApproveBtnWrapper>
+          {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') && (
+            <ModalFormButton
+              type='button'
+              loading={approveLoading ? 'true' : ''}
+              approved={hasAllowance}
+              onClick={() => stakingApproveContract(stakingAddress, tokenAddress, formValues.amount)}
+              backgroundColor={path === 'stake' ? '#4441CF' : ''}
+            >
+              {!hasAllowance && !approveLoading ? (
+                <h2>Approve</h2>
+              ) : !hasAllowance && approveLoading ? (
+                <div className='btnLoadingIconWrapper'>
+                  <div className='btnLoadingIconCut'>
+                    <BtnLoadingIcon loadingColor={path === 'stake' ? '#4441CF' : '#936CE6'}></BtnLoadingIcon>
+                  </div>
+                </div>
+              ) : hasAllowance && !approveLoading ? (
+                <h2>
+                  <span></span> Approved
+                </h2>
+              ) : (
+                ''
+              )}
+            </ModalFormButton>
+          )}
+        </ApproveBtnWrapper>
+        <StakeModalFormBtn 
+          type='submit' 
+          stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'} 
+          disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
+        >
+          {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw'}
         </StakeModalFormBtn>
       </Form>
     </StakeModalFormWrapper>
