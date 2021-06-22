@@ -126,18 +126,18 @@ const HeaderTabs = ({
       <StakeSummaryCardWrapper>
         <StakeSummaryCard color='#4441CF'>
           <StackSummaryCol stake>
-            <h2>SLICE Staking Pools Stakes</h2>
+            <h2>{i18n.t('slicePoolsStakes')}</h2> 
             <h2>{slice.balance ? roundNumber(slice.balance) : '0'}</h2>
             <h2>{sliceBalance} SLICE Available</h2>
             <span></span>
-            <h2>Current Value ${slice.balanceUSD ? roundNumber(slice.balanceUSD) : '0'}</h2>
+            <h2>{i18n.t('currentVal')} ${slice.balanceUSD ? roundNumber(slice.balanceUSD) : '0'}</h2>
           </StackSummaryCol>
           <StackSummaryCol stake>
-            <h2>Liquidity Provider Pools Stakes</h2>
+            <h2>{i18n.t('liqPoolsStakes')}</h2>
             <h2>{lp.balance ? roundNumber(lp.balance) : '0'}</h2>
-            <h2>{lpBalance ? roundNumber(lpBalance.toString()) : '0'} LP Tokens Available</h2>
+            <h2>{lpBalance ? roundNumber(lpBalance.toString()) : '0'} {i18n.t('lpTokens')}</h2>
             <span></span>
-            <h2>Current Value ${lp.balanceUSD ? roundNumber(lp.balanceUSD) : '0'}</h2>
+            <h2>{i18n.t('currentVal')} ${lp.balanceUSD ? roundNumber(lp.balanceUSD) : '0'}</h2>
           </StackSummaryCol>
         </StakeSummaryCard>
         {/* <StakeSummaryCard color='#369987' claim>
@@ -151,22 +151,22 @@ const HeaderTabs = ({
         </StakeSummaryCard> */}
         <StakeSummaryCard color='#369987' claim>
           <StackSummaryCol claim>
-            <h2>Accrued Rewards</h2>
+            <h2>{i18n.t('Accrued')}</h2>
             <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
             <h2>{sliceBalance} SLICE Available</h2>
             <span></span>
-            <h2>Current Value is $Soon™</h2>
+            <h2>{i18n.t('currentVal')} $Soon™</h2>
           </StackSummaryCol>
           <StackSummaryCol claimBtn>
-            <h2>Next Liqudity Provider Pool Distribution in</h2>
+            <h2>{i18n.t('nextLiqIn')}</h2>
             <Countdown>
               <h2>
                 {timerData && timerData.days}
-                <span>days</span>
+                <span>{i18n.t('days')}</span>
               </h2>
               <h2>
                 {timerData && timerData.hours}
-                <span>hours</span>
+                <span>{i18n.t('hours')}</span>
               </h2>
               <h2>
                 {timerData && timerData.minutes}
@@ -177,22 +177,21 @@ const HeaderTabs = ({
                 <span>seconds</span>
               </h2>
             </Countdown>
-            <button onClick={() => openModal('claim')}>CLAIM Rewards</button>
+            <button onClick={() => openModal('claim')}>{i18n.t('claimRewards')}</button>
           </StackSummaryCol>
         </StakeSummaryCard>
       </StakeSummaryCardWrapper>
       <WithdrawStakeCard>
         <WithdrawStakeCardText>
-          <h2>WITHDRAW YOUR SLICE TOKENS</h2>
+          <h2>{i18n.t('migrateYour')}</h2>
           <p>
-            Tranche is migrating to new staking contracts which will require you to withdraw your tokens. In order to continue staking in SLICE
-            Staking pools, please withdraw your current SLICE tokens and rewards in order to use them in SLICE staking pools.
+            {i18n.t('migrationText')}
           </p>
         </WithdrawStakeCardText>
         <WithdrawStakeCardBtns>
           <button onClick={() => openModal("withdrawTokens")}
           // withdrawStakeAndRewards(slice.stakingAddress, slice.address, slice.yieldAddress)
-          >Withdraw Tokens</button>
+          >{i18n.t('migrateTokens')}</button>
         </WithdrawStakeCardBtns>
       </WithdrawStakeCard>
       <StakingModal

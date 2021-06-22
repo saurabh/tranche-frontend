@@ -46,7 +46,7 @@ const TableHeader = ({ HandleNewLoan, path, changeFilter, theme , title}) => {
     return (
         <TableContainerHeader>
             <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
-                <h2>{title}</h2>
+                <h2>{title === "Liquidity Provider Pools" ? i18n.t('LiqPools') : i18n.t('slicePools')}</h2>
                 {/* <HowToLink href="https://docs.tranche.finance/tranchefinance/tranche-app/staking"  onClick={(e) => Tracker("Documentation", "https://docs.tranche.finance/tranchefinance/tranche-app/staking")} target="_blank" rel="noopener noreferrer" color={ModeThemes[theme].HowToText} background={ModeThemes[theme].HowTo} shadow={ModeThemes[theme].HowToShadow} border={ModeThemes[theme].HowToBorder}>
                     {i18n.t('footer.docs')}
                 </HowToLink>   */}
