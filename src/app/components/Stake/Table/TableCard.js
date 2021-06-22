@@ -370,10 +370,14 @@ const TableCard = ({
             <TableCardImg
               tranche={true}
               background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
+              stake={title === "Liquidity Provider Pools"}
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
               <img src={TrancheStake} alt='Tranche' />
+                { (title === "Liquidity Provider Pools") &&
+                  <img src={LiquidityIcons[type && type]} alt='Tranche' />
+                }
             </TableCardImg>
           </TableCardImgWrapper>
 
@@ -383,14 +387,23 @@ const TableCard = ({
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText}>
                     <h2>{type && type}</h2>
-                    <StakeBtns>
-                      <StakeBtn background='#6E41CF' onClick={() => openModal('')}>
-                        -
-                      </StakeBtn>
-                      <StakeBtn background='#4441CF' onClick={() => openModal('')}>
-                        +
-                      </StakeBtn>
-                    </StakeBtns>
+                    { title === "SLICE Staking Pools" ? 
+                      <StakeBtns>
+                        <StakeBtnSlice onClick={() => openModal('staking')}>
+                          Stake
+                        </StakeBtnSlice>
+                      </StakeBtns>
+                      : 
+                      <StakeBtns>
+                        <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
+                          -
+                        </StakeBtn>
+                        <StakeBtn background='#4441CF' onClick={() => openModal('liqStake')}>
+                          +
+                        </StakeBtn>
+                      </StakeBtns>
+                    }
+                    
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
@@ -408,7 +421,7 @@ const TableCard = ({
                 <h2>{roundNumber(staked)}</h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
-                <h2>EPOCH REWARDS</h2>
+                <h2>{ title === "SLICE Staking Pools" ? "POOL CAPACITY" : "EPOCH REWARDS"}</h2>
                 <h2>{roundNumber(reward)} SLICE</h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>

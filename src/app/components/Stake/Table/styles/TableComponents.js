@@ -841,6 +841,7 @@ const TableCardImg = styled.div`
   }
   
   
+  
   ${({ tranche, color, type }) => tranche && type === "A" && `
     ::after{
       content: "A";
@@ -873,6 +874,15 @@ const TableCardImg = styled.div`
       justify-content: center;
       align-items: center;
     border-radius: 4px;
+    }
+  `}
+  ${({ stake }) => stake && `
+    @media (max-width: 767px){
+      flex-direction: column;
+      img:nth-child(2){
+        margin-left: 0;
+        margin-top: -12px;
+      }
     }
   `}
 `
@@ -1268,6 +1278,11 @@ const StakeBtnSlice = styled.button`
   text-transform: uppercase;
   // margin-right: 20px;
   color: #FFFFFF;
+  @media (max-width: 767px){
+    font-size: 12px;
+    width: 73.32px;
+    height: 25.19px;
+  } 
 `
 
 const StakeBtns = styled.div`
@@ -1844,7 +1859,7 @@ const TooltipWrapper = styled.div`
   ${({ status, language }) => status && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% - 47px)" : language === "kr" ? "calc(100% - 65px)" : "calc(100% - 65px)" };
+    left: ${language === "en" ? "calc(100% - 20px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 40px)" };
   `}
   ${({ staked, language }) => staked && `
     top: calc(100% - 23px);
@@ -1866,10 +1881,10 @@ const TooltipWrapper = styled.div`
     bottom: unset;
     left: ${language === "en" ? "calc(100% - 12px)" : language === "kr" ? "calc(100% - 25px)" : "calc(100% - 25px)" };
   `}
-  ${({ manageStake, language }) => manageStake && `
+  ${({ manageStake, language, sliceStaking }) => manageStake && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% + 9px)" : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
+    left: ${language === "en" ? (sliceStaking ? "calc(100% - 20px)" : "calc(100% + 10px)") : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
   `}
   ${({ summary }) => summary && `
     transform: translateX(25px);

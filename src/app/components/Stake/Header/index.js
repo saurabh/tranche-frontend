@@ -36,7 +36,6 @@ function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpe
   return (
     <div className='content-container container'>
       <Navbar path={parsedPath[parsedPath.length - 1]} theme={theme}/>
-      <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
       {
         path === "stake" &&
         ""
@@ -79,6 +78,8 @@ function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpe
           </a>
         </NavbarLinks>
           }
+        <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
+
       {/* <HeaderWrapper>
             <HeaderContent path={path}>
               {  (path === "privacy" || path === "terms") ? 

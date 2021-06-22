@@ -254,7 +254,7 @@ const StakingModal = ({
               </ClaimModalTableTitle>
 
               <ClaimModalTableHead BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol pair head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText}>
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText}>
@@ -275,7 +275,7 @@ const StakingModal = ({
               </ClaimModalTableHead>
 
               <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                   <div>
                     <img src={ETHCARD} alt='img' />
                     <img src={ETHCARD} alt='img' />
@@ -304,7 +304,7 @@ const StakingModal = ({
               </ClaimModalTableRow>
 
               <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                   <div>
                     <img src={ETHCARD} alt='img' />
                     <img src={ETHCARD} alt='img' />
@@ -333,7 +333,7 @@ const StakingModal = ({
               </ClaimModalTableRow>
 
               <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                <ClaimModalTableCol col pair sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                   <div>
                     <img src={ETHCARD} alt='img' />
                     <img src={ETHCARD} alt='img' />
@@ -390,7 +390,7 @@ const StakingModal = ({
               <ProgressBar progress={progress} width='100' colorOne='rgba(160, 160, 160, 0.15)' colorTwo='#369987' />
 
               <ClaimModalTableHead BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol pair head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText}>
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
@@ -408,7 +408,7 @@ const StakingModal = ({
               </ClaimModalTableHead>
 
               <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                   <div>
                     <img src={ETHCARD} alt='img' />
                     <img src={ETHCARD} alt='img' />
@@ -434,7 +434,7 @@ const StakingModal = ({
               </ClaimModalTableRow>
 
               <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                   <div>
                     <img src={ETHCARD} alt='img' />
                     <img src={ETHCARD} alt='img' />

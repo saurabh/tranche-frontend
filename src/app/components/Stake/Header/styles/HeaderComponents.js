@@ -93,7 +93,7 @@ const StakeSummaryCard = styled.div`
       color: #FFFFFF;
     }
   `}
-  @media (max-width: 767px){
+  @media (max-width: 1199px){
     width: 100%;
   }
 `
@@ -763,7 +763,7 @@ const NavbarIconContent = styled.div`
 const StakeSummaryCardWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  @media (max-width: 767px){
+  @media (max-width: 1199px){
     flex-direction: column;
   }
 `

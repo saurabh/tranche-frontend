@@ -1061,6 +1061,9 @@ const ClaimModalTableSubTitle = styled.div`
       h2{
         width: 100%;
       }
+      & > h2{
+        margin: 12px auto;
+      }
       flex-direction: column;
     }
 `;
@@ -1146,6 +1149,24 @@ const ClaimModalTableCol = styled.div`
   `}
 
   
+  ${({ pair }) => pair && `
+    & > div{
+      @media (max-width: 663px){
+        display: none;
+      }
+    }
+    h2{
+      @media (max-width: 663px){
+        margin-left: 0;
+      }
+    }
+  `}
+
+  h2{
+    @media (max-width: 663px){
+      font-size: 7px;
+    }
+  }  
   
 `;
 const ClaimModalTableRow = styled.div`
