@@ -27,7 +27,9 @@ export const PolygonBuyerCoinAddresses = process.env.REACT_APP_MATIC_BUYER_COIN_
 export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
+export const LockupAddress = process.env.REACT_APP_STAKING_LOCKUP_ADDRESS;
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
+export const lockupDurations = process.env.REACT_APP_STAKING_LOCKUP_DURATION.split(',');
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 //Google Analytics
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
@@ -42,7 +44,6 @@ export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCa
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
 
 export const ApproveBigNumber = '100000000000000';
-export const stakingDurations = process.env.REACT_APP_STAKING_LOCKUP_DURATION.split(',');
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
   { key: 'USDT', decimals: 6 }

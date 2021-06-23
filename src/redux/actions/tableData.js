@@ -8,7 +8,7 @@ import {
   LP2TokenAddress,
   etherScanUrl,
   maticBlockExplorerUrl,
-  stakingDurations
+  lockupDurations
 } from 'config/constants';
 import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
@@ -99,9 +99,9 @@ export const stakingFetchSuccess = (list) => (dispatch) => {
   const sliceList = [];
   const lpList = [];
   if (searchArr(SLICEAddress)) {
-    sliceList.push(filterArrByDuration(Number(stakingDurations[0])));
-    sliceList.push(filterArrByDuration(Number(stakingDurations[1])));
-    sliceList.push(filterArrByDuration(Number(stakingDurations[2])));
+    sliceList.push(filterArrByDuration(Number(lockupDurations[0])));
+    sliceList.push(filterArrByDuration(Number(lockupDurations[1])));
+    sliceList.push(filterArrByDuration(Number(lockupDurations[2])));
     // sliceList.push(searchArr(SLICEAddress))
   }
   lpList.push(searchArr(SLICEAddress))
