@@ -185,16 +185,14 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
 
 
 const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
-  console.log(userStakingList);
   const sliceStakes = userStakingList.find(l => l.tokenAddress === SLICEAddress);
-  const slice = sliceStakes ? sliceStakes.stakes : [];
+  const slice = (sliceStakes ? sliceStakes.stakes : []).filter(s => s.duration!== undefined);
   const lp1Stakes = userStakingList.find(l => l.tokenAddress === LP1TokenAddress);
   const lp2Stakes = userStakingList.find(l => l.tokenAddress === LP2TokenAddress);
   const lp = lp1Stakes ? lp1Stakes.stakes : [];
   if (lp2Stakes) {
     lp.push(lp2Stakes.stakes || []);
   }
-  console.log(slice, lp);
   dispatch({
     type: USER_STAKING_LIST_SUCCESS,
     payload: {slice, lp}

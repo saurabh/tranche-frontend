@@ -350,6 +350,7 @@ const TableCard = ({
           title={title}
           apy={apy}
           rewards={reward}
+          durationIndex={durationIndex}
           // Functions
           closeModal={() => closeModal()}
           hasAllowance={hasAllowance}
@@ -446,6 +447,7 @@ const TableCard = ({
           title={title}
           apy={apy}
           contractAddress={contractAddress}
+          durationIndex={durationIndex}
           // Functions
           closeModal={() => closeModal()}
           hasAllowance={hasAllowance}
