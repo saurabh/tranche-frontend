@@ -89,11 +89,6 @@ export const ETHContracts = {
                 stakingList
               )
             );
-            // await store.dispatch(
-            //   fetchUserStakingList(
-            //     userStakingList
-            //   )
-            // )
             const res = await axios(`${ serverUrl + stakingSummary + address }`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));
@@ -136,11 +131,7 @@ export const ETHContracts = {
                 stakingList
               )
             );
-            await store.dispatch(
-              fetchUserStakingList(
-                userStakingList
-              )
-            )
+            await store.dispatch(fetchUserStakingList(`${ userStakingList }/${ address }`))
             const res = await axios(`${serverUrl + stakingSummary + address}`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));

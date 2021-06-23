@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon, TrancheStake, Migrated } from 'assets';
+import { CloseModal, CloseModalWhite, Lock, LockLight, TrancheStake, Migrated } from 'assets';
 import { roundNumber } from 'utils';
 import * as moment from 'moment';
 import {
   SLICEAddress
 } from 'config/constants';
-import { getUserStaked } from 'services/contractMethods';
+import { getUserStaked, claimRewards } from 'services/contractMethods';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
@@ -42,11 +42,7 @@ import {
   StakeModalPoolTableCol,
   StakeModalNavigationWrapper,
   StakeModalNavigationBtn,
-  StakeModalFormWrapper,
   StakeModalFormBtn,
-  StakeModalFormInputWrapper,
-  StakeModalFormInput,
-  EstimatedText,
   SliceNotFound,
   SliceNotFoundBtn,
   ModalHeader,
@@ -56,7 +52,6 @@ import {
   ProgressBarLineWrapper,
   ProgressBarDashedLine,
   ProgressBarLine,
-  InputTag,
   StakingMigrateModalContent,
   RewardsAmountWrapper,
   RewardsAmountCardsWrapper,
@@ -203,6 +198,9 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   // Redux
   ethereum: { address },
+  stakingList,
+  sliceStakingList,
+  summaryData: { accruedRewards },
   theme,
   // State Values
   modalIsOpen,
@@ -220,7 +218,6 @@ const StakingModal = ({
   duration,
   hasAllowance,
   approveLoading,
-  sliceStakingList,
   // Functions
   stakingApproveContract,
   adjustStake,
@@ -232,31 +229,37 @@ const StakingModal = ({
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
+  const [userStakes, setUserStakes] = useState([]);
+  const { slice, lp } = userStakingList;
   
-  const poolDurationMapping = sliceStakingList.reduce((acc, cur) => {
-    const { duration, poolName } = cur;
-    if (duration)
-    {
-      acc[ duration ] = poolName;
+  const fullStakingList = sliceStakingList.concat(stakingList);
+  const apiMapping = fullStakingList.reduce((acc, cur) => {
+    const { duration, poolName, contractAddress, yieldAddress, type } = cur;
+    if (duration) {
+      acc[duration] = poolName;
+    } else if (type !== 'SLICE') {
+      acc[contractAddress] = { type, yieldAddress };
     }
     return acc;
   }, {});
-  const { slice, lp } = userStakingList;
 
-  let stakes = [];
-  if (modalType === 'claim') {
+  useEffect(() => {
+    let stakes = [];
     const withDuration = slice.filter(s => s.duration);
     const withoutDuration = slice.filter(s => !s.duration);
-    stakes = withDuration.concat(withoutDuration);
-  } else if(modalType === 'claim'){
-    if (tokenAddress === SLICEAddress) {
-      stakes = slice;
+    
+    if (modalType === 'claim') {
+      stakes = withDuration.concat(withoutDuration).concat(lp);
     } else {
-      const lpStake = lp.find(o => o.tokenAddress === tokenAddress);
-      stakes = lpStake ? [ lpStake ] : [];
+      if (tokenAddress === SLICEAddress) {
+        stakes = duration ? withDuration : withoutDuration;
+      } else {
+        const lpStake = lp.find(o => o.tokenAddress === tokenAddress);
+        stakes = lpStake ? [ lpStake ] : [];
+      }
     }
-  }
-
+    setUserStakes(stakes)
+  }, [modalType, duration, lp, slice, tokenAddress]);
 
   useEffect(() => {
     setModalTypeVar(modalType);
@@ -331,15 +334,14 @@ const StakingModal = ({
                 </ClaimModalTableCol>
               </ClaimModalTableHead>
               {
-                stakes.map((stake, index) => {
+                userStakes.filter(stake => stake.tokenAddress === SLICEAddress).map((stake, index) => {
                   return (
                     <ClaimModalTableRow key={index} BorderStake={ModeThemes[theme].BorderStake}>
                       <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                         <div>
-                          <img src={ETHCARD} alt='img' />
-                          <img src={ETHCARD} alt='img' />
+                          <img src={TrancheStake} alt='Tranche' />
                         </div>
-                        <h2>{stake.duration ? poolDurationMapping[stake.duration] : 'Slice'}</h2>
+                        <h2>{stake.duration ? apiMapping[stake.duration] : 'Slice'}</h2>
                       </ClaimModalTableCol>
 
                       <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
@@ -358,9 +360,7 @@ const StakingModal = ({
                       </ClaimModalTableCol>
 
                       <ClaimModalTableCol col sliceliquidityFirstLast>
-                        <ClaimModalTableBtn onClick={(e) => {
-                          console.log(e);
-                        }} disabled={stake.duration && (stake.endTime > moment().unix())}>{stake.duration ? 'Claim' : 'Migrate'}
+                        <ClaimModalTableBtn onClick={() => stake.duration ? claimRewards(stake.contractAddress, stake.stakingCounter) : claimRewards(stake.contractAddress, undefined)} disabled={stake.duration && (stake.endTime > moment().unix())}>{stake.duration ? 'Claim' : 'Migrate'}
                         </ClaimModalTableBtn>
                       </ClaimModalTableCol>
                     </ClaimModalTableRow>
@@ -403,9 +403,6 @@ const StakingModal = ({
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
-                  <h2>Deposit Date</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
                   <h2>Total Staked</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
@@ -416,57 +413,32 @@ const StakingModal = ({
                 </ClaimModalTableCol>
               </ClaimModalTableHead>
 
-              <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
-                  <div>
-                    <img src={ETHCARD} alt='img' />
-                    <img src={ETHCARD} alt='img' />
-                  </div>
-                  <h2>SLICE-ETH LP</h2>
-                </ClaimModalTableCol>
+              {userStakes.filter(stake => stake.tokenAddress !== SLICEAddress).map((stake, index) => {
+                return (
+                  <ClaimModalTableRow key={index} BorderStake={ModeThemes[theme].BorderStake}>
+                    <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                      <div>
+                        <img src={TrancheStake} alt='Tranche' />
+                        <img src={LiquidityIcons[apiMapping[stake.contractAddress].type]} alt='Tranche' />
+                      </div>
+                      <h2>{apiMapping[stake.contractAddress].type.split(' ')[0]}</h2>
+                    </ClaimModalTableCol>
 
-                <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2021</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText}>
-                  <h2>
-                    <img src={Lock} alt='lock' /> 120.00
-                  </h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>0 SLICE</h2>
-                </ClaimModalTableCol>
+                    <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText}>
+                      <h2>
+                        <img src={Lock} alt='lock' /> {stake.deposit && roundNumber(stake.deposit)}
+                      </h2>
+                    </ClaimModalTableCol>
+                    <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
+                      <h2>{accruedRewards ? roundNumber(accruedRewards[stake.tokenAddress]) : '0'} SLICE</h2>
+                    </ClaimModalTableCol>
 
-                <ClaimModalTableCol col sliceliquidityFirstLast>
-                  <ClaimModalTableBtn>Claim</ClaimModalTableBtn>
-                </ClaimModalTableCol>
-              </ClaimModalTableRow>
-
-              <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
-                  <div>
-                    <img src={ETHCARD} alt='img' />
-                    <img src={ETHCARD} alt='img' />
-                  </div>
-                  <h2>SLICE-ETH LP</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2021</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText}>
-                  <h2>
-                    <img src={Lock} alt='lock' /> 120.00
-                  </h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>0 SLICE</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceliquidityFirstLast>
-                  <ClaimModalTableBtn>Claim</ClaimModalTableBtn>
-                </ClaimModalTableCol>
-              </ClaimModalTableRow>
+                    <ClaimModalTableCol col sliceliquidityFirstLast>
+                      <ClaimModalTableBtn onClick={() => claimRewards(stake.contractAddress, undefined)}>Claim</ClaimModalTableBtn>
+                    </ClaimModalTableCol>
+                  </ClaimModalTableRow>
+                )
+              }) }
             </ClaimModalTableWrapper>
           </StakingModalContent>
         </StakingModalContentWrapper>
@@ -554,7 +526,7 @@ const StakingModal = ({
                   </StakeModalPoolTableHead>
                 </StakeModalPoolTable>
                 {
-                  stakes.filter(s => {
+                  userStakes.filter(s => {
                     return s.contractAddress === contractAddress
                       && s.tokenAddress === tokenAddress
                       && (tokenAddress !== SLICEAddress || !s.duration || s.durationIndex === durationIndex)

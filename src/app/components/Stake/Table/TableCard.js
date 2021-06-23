@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
@@ -6,12 +6,12 @@ import useAnalytics from 'services/analytics';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
+import { addrShortener, roundNumber, readyToTransact, ERC20Setup } from 'utils';
 import { statuses, ApproveBigNumber, txMessage, etherScanUrl } from 'config';
 import { LinkArrow, TrancheStake } from 'assets';
 import { ModeThemes, LiquidityIcons } from 'config/constants';
 
-import { toWei, fromWei, stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
+import { toWei, stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
 import StakingModal from '../../Modals/StakingModal';
 
 import {
