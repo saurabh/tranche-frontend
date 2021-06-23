@@ -5,14 +5,14 @@ import { web3 } from 'utils/getWeb3';
 import { fetchTableData, trancheCardToggle, fetchUserStakingList } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { setTokenBalances } from 'redux/actions/ethereum';
-import { serverUrl, apiUri, StakingAddresses, YieldAddresses, JCompoundAddress, JAaveAddress } from 'config/constants';
+import { serverUrl, apiUri, StakingAddresses, YieldAddresses, LockupAddress, JCompoundAddress, JAaveAddress } from 'config/constants';
 import maticWeb3 from 'utils/maticWeb3';
 const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked, userStakingList } = apiUri;
 
 const timeout = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-let JCompound, Staking, YieldFarm, JAave;
+let JCompound, Staking, YieldFarm, JAave, Lockup;
 
 export const ETHContracts = {
   subscribe: () => {
@@ -89,11 +89,11 @@ export const ETHContracts = {
                 stakingList
               )
             );
-            await store.dispatch(
-              fetchUserStakingList(
-                userStakingList
-              )
-            )
+            // await store.dispatch(
+            //   fetchUserStakingList(
+            //     userStakingList
+            //   )
+            // )
             const res = await axios(`${ serverUrl + stakingSummary + address }`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));
@@ -108,6 +108,39 @@ export const ETHContracts = {
           })
           .on('data', async () => {
             await timeout(5000);
+            const res = await axios(`${serverUrl + stakingSummary + address}`);
+            const { result } = res.data;
+            store.dispatch(summaryFetchSuccess(result));
+            store.dispatch(setTokenBalances(address));
+          });
+      Lockup =
+        path === 'stake' &&
+        address &&
+        web3.eth
+          .subscribe('logs', {
+            address: LockupAddress
+          })
+          .on('data', async () => {
+            await timeout(5000);
+            const { skip, limit, filter } = data;
+            await store.dispatch(
+              fetchTableData(
+                {
+                  skip,
+                  limit,
+                  filter: {
+                    address: address ? address : undefined,
+                    type: filter
+                  }
+                },
+                stakingList
+              )
+            );
+            await store.dispatch(
+              fetchUserStakingList(
+                userStakingList
+              )
+            )
             const res = await axios(`${serverUrl + stakingSummary + address}`);
             const { result } = res.data;
             store.dispatch(summaryFetchSuccess(result));
@@ -129,6 +162,10 @@ export const ETHContracts = {
         });
       YieldFarm &&
         YieldFarm.unsubscribe((error) => {
+          if (error) console.error(error);
+        });
+      Lockup &&
+        Lockup.unsubscribe((error) => {
           if (error) console.error(error);
         });
     } catch (error) {
