@@ -220,6 +220,7 @@ const StakingModal = ({
   duration,
   hasAllowance,
   approveLoading,
+  sliceStakingList,
   // Functions
   stakingApproveContract,
   adjustStake,
@@ -232,7 +233,29 @@ const StakingModal = ({
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
   
+  const poolDurationMapping = sliceStakingList.reduce((acc, cur) => {
+    const { duration, poolName } = cur;
+    if (duration)
+    {
+      acc[ duration ] = poolName;
+    }
+    return acc;
+  }, {});
   const { slice, lp } = userStakingList;
+
+  let stakes = [];
+  if (modalType === 'claim') {
+    const withDuration = slice.filter(s => s.duration);
+    const withoutDuration = slice.filter(s => !s.duration);
+    stakes = withDuration.concat(withoutDuration);
+  } else if(modalType === 'claim'){
+    if (tokenAddress === SLICEAddress) {
+      stakes = slice;
+    } else {
+      const lpStake = lp.find(o => o.tokenAddress === tokenAddress);
+      stakes = lpStake ? [ lpStake ] : [];
+    }
+  }
 
 
   useEffect(() => {
@@ -308,7 +331,7 @@ const StakingModal = ({
                 </ClaimModalTableCol>
               </ClaimModalTableHead>
               {
-                slice.map((stake, index) => {
+                stakes.map((stake, index) => {
                   return (
                     <ClaimModalTableRow key={index} BorderStake={ModeThemes[theme].BorderStake}>
                       <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
@@ -316,14 +339,14 @@ const StakingModal = ({
                           <img src={ETHCARD} alt='img' />
                           <img src={ETHCARD} alt='img' />
                         </div>
-                        <h2>Slice</h2>
+                        <h2>{stake.duration ? poolDurationMapping[stake.duration] : 'Slice'}</h2>
                       </ClaimModalTableCol>
 
                       <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                        <h2>{ moment.unix(stake.startTime).format('MMM DD YYYY')}</h2>
+                        <h2>{ stake.startTime ? moment.unix(stake.startTime).format('MMM DD YYYY'): 'N/A'}</h2>
                       </ClaimModalTableCol>
                       <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                        <h2>{ moment.unix(stake.endTime).format('MMM DD YYYY')}</h2>
+                        <h2>{ stake.endTime ? moment.unix(stake.endTime).format('MMM DD YYYY'): 'N/A'}</h2>
                       </ClaimModalTableCol>
                       <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText}>
                         <h2>
@@ -531,18 +554,18 @@ const StakingModal = ({
                   </StakeModalPoolTableHead>
                 </StakeModalPoolTable>
                 {
-                  slice.filter(s => {
+                  stakes.filter(s => {
                     return s.contractAddress === contractAddress
                       && s.tokenAddress === tokenAddress
-                      && s.durationIndex === durationIndex
+                      && (tokenAddress !== SLICEAddress || !s.duration || s.durationIndex === durationIndex)
                   }).map(s => {
                     return (
                       <StakeModalPoolTableRow BorderStake={ModeThemes[ theme ].BorderStake}>
                       <StakeModalPoolTableCol col stake textColor={ModeThemes[theme].ModalText}>
-                        <h2>{ moment.unix(s.startTime).format('MMM DD YYYY')}</h2>
+                        <h2>{ s.startTime ? moment.unix(s.startTime).format('MMM DD YYYY') : 'N/A'}</h2>
                       </StakeModalPoolTableCol>
                       <StakeModalPoolTableCol col stake textColor={ModeThemes[theme].ModalText}>
-                        <h2>{ moment.unix(s.endTime).format('MMM DD YYYY')}</h2>
+                        <h2>{ s.endTime ? moment.unix(s.endTime).format('MMM DD YYYY') : 'N/A'}</h2>
                       </StakeModalPoolTableCol>
                       <StakeModalPoolTableCol col stake textColor={ModeThemes[theme].ModalText}>
                         <h2>
@@ -1030,6 +1053,7 @@ const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   summaryData: state.summaryData,
   stakingList: state.data.stakingList,
+  sliceStakingList: state.data.sliceStakingList,
   userStakingList: state.data.userStakingList,
   path: state.path,
   theme: state.theme
