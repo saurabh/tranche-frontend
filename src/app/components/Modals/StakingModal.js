@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
@@ -10,6 +11,7 @@ import * as moment from 'moment';
 import {
   SLICEAddress
 } from 'config/constants';
+import { getUserStaked } from 'services/contractMethods';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
@@ -73,9 +75,11 @@ import {
 } from './styles/ModalsComponents';
 import { Countdown } from '../Stake/Header/styles/HeaderComponents';
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
-import { ModeThemes } from 'config';
+import { ModeThemes, serverUrl, apiUri } from 'config';
 import i18n from '../locale/i18n';
 import { LiquidityIcons } from 'config';
+
+const { stakingSummaryDetail } = apiUri;
 
 const NotFoundStyles = {
   overlay: {
@@ -197,39 +201,38 @@ const stakingModalStyles = {
 Modal.setAppElement('#root');
 
 const StakingModal = ({
+  // Redux
+  ethereum: { address },
+  theme,
   // State Values
   modalIsOpen,
-  theme,
   type,
   modalType,
-  progress,
   contractAddress,
   tokenAddress,
-  stakingAddress,
-  hasAllowance,
-  approveLoading,
   title,
   rewards,
   timerData,
   apy,
   userStakingList,
   durationIndex,
+  progress,
+  duration,
+  hasAllowance,
+  approveLoading,
   // Functions
   stakingApproveContract,
   adjustStake,
   closeModal
-
   // API Values,
 }) => {
   const [modalTypeVar, setModalTypeVar] = useState('');
-  const [ currentStep, setCurrentStep ] = useState('claim');
+  const [currentStep, setCurrentStep] = useState('claim');
+  const [totalStaked, setTotalStaked] = useState(0);
+  const [userStaked, setUserStaked] = useState(0);
+  const [stakedShare, setStakedShare] = useState(0);
   
   const { slice, lp } = userStakingList;
-
-  const stakes = [];
-  if (tokenAddress === SLICEAddress) {
-    
-  }
 
 
   useEffect(() => {
@@ -242,6 +245,20 @@ const StakingModal = ({
     }, 300)
     closeModal();
   }
+
+  useEffect(() => {
+    const getStakingDetails = async () => {
+      const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
+      const { result } = res.data;
+      setTotalStaked(result.staked);
+      let userStaked = await getUserStaked(contractAddress, tokenAddress);
+      setUserStaked(userStaked);
+      setStakedShare((parseFloat(result.userStaked) / result.staked) * 100);
+    };
+
+    modalIsOpen && !duration && tokenAddress && getStakingDetails();
+  }, [modalIsOpen, type, duration, tokenAddress, contractAddress, address]);
+
   const claimModal = () => {
     return (
       <Modal
@@ -551,7 +568,7 @@ const StakingModal = ({
                 <StakingForm 
                   modalTypeVar={modalTypeVar} 
                   type={type} tokenAddress={tokenAddress}
-                  stakingAddress={stakingAddress}
+                  contractAddress={contractAddress}
                   hasAllowance={hasAllowance}
                   approveLoading={approveLoading}
                   stakingApproveContract={stakingApproveContract}
@@ -701,9 +718,11 @@ const StakingModal = ({
 
                 <StakingForm 
                   modalTypeVar={modalTypeVar} 
-                  type={type} tokenAddress={tokenAddress}
-                  stakingAddress={stakingAddress}
+                  type={type} 
+                  tokenAddress={tokenAddress}
+                  contractAddress={contractAddress}
                   hasAllowance={hasAllowance}
+                  userStaked={userStaked}
                   approveLoading={approveLoading}
                   stakingApproveContract={stakingApproveContract}
                   adjustStake={adjustStake}

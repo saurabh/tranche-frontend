@@ -102,9 +102,9 @@ export const stakingFetchSuccess = (list) => (dispatch) => {
     sliceList.push(filterArrByDuration(Number(lockupDurations[0])));
     sliceList.push(filterArrByDuration(Number(lockupDurations[1])));
     sliceList.push(filterArrByDuration(Number(lockupDurations[2])));
-    // sliceList.push(searchArr(SLICEAddress))
+    sliceList.push(searchArr(SLICEAddress))
   }
-  lpList.push(searchArr(SLICEAddress))
+  // lpList.push(searchArr(SLICEAddress))
   lpList.push(searchArr(LP1TokenAddress));
   lpList.push(searchArr(LP2TokenAddress));
   dispatch({
@@ -186,13 +186,14 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
 
 const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
   const sliceStakes = userStakingList.find(l => l.tokenAddress === SLICEAddress);
-  const slice = (sliceStakes ? sliceStakes.stakes : []).filter(s => s.duration!== undefined);
+  const slice = (sliceStakes ? sliceStakes.stakes : []);
   const lp1Stakes = userStakingList.find(l => l.tokenAddress === LP1TokenAddress);
   const lp2Stakes = userStakingList.find(l => l.tokenAddress === LP2TokenAddress);
   const lp = lp1Stakes ? lp1Stakes.stakes : [];
   if (lp2Stakes) {
-    lp.push(lp2Stakes.stakes || []);
+    lp.push(...(lp2Stakes.stakes || []));
   }
+
   dispatch({
     type: USER_STAKING_LIST_SUCCESS,
     payload: {slice, lp}

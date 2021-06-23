@@ -44,7 +44,7 @@ let StakingForm = ({
   modalTypeVar,
   userStaked,
   tokenAddress,
-  stakingAddress,
+  contractAddress,
   hasAllowance,
   setHasAllowance,
   approveLoading,
@@ -55,7 +55,6 @@ let StakingForm = ({
   // Functions
   stakingApproveContract,
   adjustStake,
-  contractAddress,
   // Redux
   ethereum: { tokenBalance, blockExplorerUrl },
   summaryData: { slice, lpList },
@@ -106,8 +105,8 @@ let StakingForm = ({
   return (
     <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
       <h2>Amount of {tokenName} to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'Stake' : 'Withdraw'}: </h2>
-      <Form onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
-        <h2>You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : 0} {tokenName} available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
+      <Form onSubmit={(e) => adjustStake(e, contractAddress, tokenAddress)}>
+        <h2>You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : roundNumber(userStaked)} {tokenName} available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
         <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
           <Field
             component={InputField}
@@ -135,7 +134,7 @@ let StakingForm = ({
               type='button'
               loading={approveLoading ? 'true' : ''}
               approved={hasAllowance}
-              onClick={() => stakingApproveContract(stakingAddress, tokenAddress, formValues.amount)}
+              onClick={() => stakingApproveContract(contractAddress, tokenAddress, formValues.amount)}
               backgroundColor={path === 'stake' ? '#4441CF' : ''}
             >
               {!hasAllowance && !approveLoading ? (
@@ -166,7 +165,7 @@ let StakingForm = ({
       </Form>
     </StakeModalFormWrapper>
     // <ModalAdjustForm stake>
-    //   <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
+    //   <Form component={ModalFormWrapper} onSubmit={(e) => adjustStake(e, contractAddress, tokenAddress)}>
     //     <FormInputsWrapper trade={true} stake>
     //       <SelectedStakingWrapper ModalText={ModeThemes[theme].ModalText}>
     //         <h2>{i18n.t('stake.modal.selectedStaking')}</h2>
@@ -246,7 +245,7 @@ let StakingForm = ({
     //               type='button'
     //               loading={approveLoading ? 'true' : ''}
     //               approved={hasAllowance}
-    //               onClick={() => stakingApproveContract(stakingAddress, tokenAddress, formValues.amount)}
+    //               onClick={() => stakingApproveContract(contractAddress, tokenAddress, formValues.amount)}
     //               backgroundColor={path === 'stake' ? '#4441CF' : ''}
     //             >
     //               {!hasAllowance && !approveLoading ? (
