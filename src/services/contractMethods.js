@@ -462,7 +462,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
       })
     );
     const DepositMethod = durationIndex || durationIndex === 0 ? StakingContract.methods.stake(amount, durationIndex) : StakingContract.methods.deposit(tokenAddress, amount);
-    DepositMethod
+    await DepositMethod
       .send({ from: address })
       .on('transactionHash', (hash) => {
         if (network === networkId) {
@@ -540,13 +540,14 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
   }
 };
 
-export const massHarvest = async (yieldfarmAddress) => {
+export const claimRewards = async (contractAddress, stakingCounter) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
-    const YieldFarm = YieldFarmSetup(web3, yieldfarmAddress);
+    console.log(stakingCounter || stakingCounter === 0 ? 'lockup' : 'yieldfarm')
+    const RewardsContract = stakingCounter || stakingCounter === 0 ? LockupSetup(web3, contractAddress) : YieldFarmSetup(web3, contractAddress);
     store.dispatch(
       addNotification({
         id,
@@ -555,8 +556,8 @@ export const massHarvest = async (yieldfarmAddress) => {
         title: 'awaiting confirmation'
       })
     );
-    await YieldFarm.methods
-      .massHarvest()
+    const contractMethod = stakingCounter || stakingCounter === 0 ? RewardsContract.methods.claim(stakingCounter) : RewardsContract.methods.massHarvest()
+    await contractMethod
       .send({ from: address })
       .on('transactionHash', (hash) => {
         if (network === networkId) {
@@ -581,15 +582,6 @@ export const massHarvest = async (yieldfarmAddress) => {
           title: 'Transaction rejected'
         })
       );
-    console.error(error);
-  }
-};
-
-export const withdrawStakeAndRewards = async (stakingAddress, tokenAddress, yieldfarmAddress) => {
-  try {
-    await withdrawStake(stakingAddress, tokenAddress, true);
-    await massHarvest(yieldfarmAddress);
-  } catch (error) {
     console.error(error);
   }
 };

@@ -10,7 +10,6 @@ import { summaryFetchSuccess } from 'redux/actions/summaryData';
 import i18n from '../../locale/i18n';
 import { roundNumber, safeAdd } from 'utils/helperFunctions';
 import StakingModal from '../../Modals/StakingModal';
-// import { withdrawStakeAndRewards } from 'services/contractMethods';
 import useAnalytics from 'services/analytics';
 import {
   StakeHeaderWrapper,

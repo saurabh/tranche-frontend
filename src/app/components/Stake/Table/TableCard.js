@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
@@ -6,12 +6,12 @@ import useAnalytics from 'services/analytics';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
 import { addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
-import { addrShortener, roundNumber, readyToTransact, ERC20Setup, safeAdd } from 'utils';
+import { addrShortener, roundNumber, readyToTransact, ERC20Setup } from 'utils';
 import { statuses, ApproveBigNumber, txMessage, etherScanUrl } from 'config';
 import { LinkArrow, TrancheStake } from 'assets';
 import { ModeThemes, LiquidityIcons } from 'config/constants';
 
-import { toWei, fromWei, stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
+import { toWei, stakingAllowanceCheck, addStake, withdrawStake } from 'services/contractMethods';
 import StakingModal from '../../Modals/StakingModal';
 
 import {
@@ -52,7 +52,7 @@ import { initOnboard } from 'services/blocknative';
 import moment  from 'moment';
 
 const TableCard = ({
-  staking: { contractAddress, isActive, reward, staked, type, apy, subscription, duration, durationIndex },
+  staking: { contractAddress, reward, staked, type, poolName, apy, subscription, duration, durationIndex },
   setTokenBalance,
   ethereum: { tokenBalance, address, wallet, web3, notify, notificationCount },
   addNotification,
@@ -69,8 +69,7 @@ const TableCard = ({
   const [hasAllowance, setHasAllowance] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [tokenAddress, setTokenAddress] = useState(null);
-  const [balance, setBalance] = useState(0);
-  const [stakingAddress, setStakingAddress] = useState(null);
+  // const [balance, setBalance] = useState(0);
   const Tracker = useAnalytics('ButtonClicks');
 
   const onboard = initOnboard({
@@ -80,9 +79,9 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const setBalanceCB = useCallback((balance) => {
-    setBalance(roundNumber(balance, undefined, 'down'));
-  }, []);
+  // const setBalanceCB = useCallback((balance) => {
+  //   setBalance(roundNumber(balance, undefined, 'down'));
+  // }, []);
   useEffect(() => {
     const setEpochTime = async () => {
         // const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
@@ -93,46 +92,43 @@ const TableCard = ({
 
 
   const formatTime = () =>{
-    let format = (val) => moment().add(duration, 'minutes').diff(moment(), val)
+    let format = (val) => moment().add(duration, 'seconds').diff(moment(), val);
     let years =  format('years');
     let months =  format('months');
     let weeks =  format('weeks');
     let days =  format('days');
     let hours =  format('hours');
-    let mintues =  format('mintues');
+    let minutes =  format('minutes');
 
-    return years !== 0 ? years + ' years' : months !== 0 ? months + ' months' : weeks !== 0 ? weeks + ' weeks' : days !== 0 ? days + ' days' : hours !== 0 ? hours + ' hours' : mintues !== 0 ? mintues + ' mintues' : ""
+    return years !== 0 ? years + ' years' : months !== 0 ? months + ' months' : weeks !== 0 ? weeks + ' weeks' : days !== 0 ? days + ' days' : hours !== 0 ? hours + ' hours' : minutes !== 0 ? minutes + ' minutes' : ""
   }
 
-  useEffect(() => {
-    const setBalance = async () => {
-      if (tokenBalance) {
-        if (type === 'SLICE' && slice.address) setBalanceCB(fromWei(tokenBalance[slice.address]));
-        if ((type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') && lpList) {
-          let lpBalance = 0;
-          lpList.forEach((lp) => {
-            if (tokenBalance[lp.address]) {
-              lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
-            }
-          });
-          setBalanceCB(lpBalance);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const setBalance = async () => {
+  //     if (tokenBalance) {
+  //       if (type === 'SLICE' && slice.address) setBalanceCB(fromWei(tokenBalance[slice.address]));
+  //       if ((type === 'SLICE/DAI LP' || type === 'SLICE/ETH LP') && lpList) {
+  //         let lpBalance = 0;
+  //         lpList.forEach((lp) => {
+  //           if (tokenBalance[lp.address]) {
+  //             lpBalance = safeAdd(lpBalance, fromWei(tokenBalance[lp.address]));
+  //           }
+  //         });
+  //         setBalanceCB(lpBalance);
+  //       }
+  //     }
+  //   };
 
-    setBalance();
-  }, [type, slice, lp, tokenBalance, tokenAddress, lpList, setBalanceCB]);
+  //   setBalance();
+  // }, [type, slice, lp, tokenBalance, tokenAddress, lpList, setBalanceCB]);
 
   useEffect(() => {
     if (type === 'SLICE') {
       setTokenAddress(slice.address);
-      setStakingAddress(contractAddress);
     } else if (type === 'SLICE/ETH LP') {
       setTokenAddress(lpList && lpList[0].address);
-      setStakingAddress(contractAddress);
     } else if (type === 'SLICE/DAI LP') {
       setTokenAddress(lpList && lpList[1].address);
-      setStakingAddress(contractAddress);
     }
   }, [type, slice, lpList, contractAddress]);
 
@@ -148,7 +144,7 @@ const TableCard = ({
     address = !address ? onboard.getState().address : address;
     setTokenBalance(tokenAddress, address);
     if (type === 'staking' || type === 'liqStake') {
-      let result = await stakingAllowanceCheck(tokenAddress, stakingAddress, address);
+      let result = await stakingAllowanceCheck(tokenAddress, contractAddress, address);
       setHasAllowance(result);
     } else setHasAllowance(true);
     // if (type === 'staking') setDuration(duration);
@@ -160,7 +156,7 @@ const TableCard = ({
     setModalOpen(false);
   };
 
-  const stakingApproveContract = async (stakingAddress, tokenAddress) => {
+  const stakingApproveContract = async (contractAddress, tokenAddress) => {
     let id = notificationCount;
     setNotificationCount(notificationCount + 1);
     try {
@@ -172,7 +168,7 @@ const TableCard = ({
         title: 'awaiting confirmation'
       });
       await token.methods
-        .approve(stakingAddress, toWei(ApproveBigNumber))
+        .approve(contractAddress, toWei(ApproveBigNumber))
         .send({ from: address })
         .on('transactionHash', (hash) => {
           setApproveLoading(true);
@@ -201,12 +197,12 @@ const TableCard = ({
     }
   };
 
-  const adjustStake = (e, stakingAddress, tokenAddress) => {
+  const adjustStake = (e, contractAddress, tokenAddress) => {
     try {
       e.preventDefault();
       modalType === 'liqStake' || modalType === 'staking' 
-        ? addStake(stakingAddress, tokenAddress, durationIndex) 
-        : withdrawStake(stakingAddress, tokenAddress);
+        ? addStake(contractAddress, tokenAddress, durationIndex) 
+        : withdrawStake(contractAddress, tokenAddress);
       modalType === 'liqStake'
         ? Tracker('addStake', 'User address: ' + address)
         : modalType === 'staking' 
@@ -252,7 +248,7 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
-                  <h2>{type && type}</h2>
+                  {title === "SLICE Staking Pools" && duration ? <h2>{poolName && poolName}</h2> : <h2><h2>{type && type}</h2></h2>}
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
@@ -267,20 +263,32 @@ const TableCard = ({
           <TableFifthCol className='table-col' stake stakeStatus sliceStaking={title === "SLICE Staking Pools"}>
             <FifthColContent>
               {
-                title === "SLICE Staking Pools" && 
-                <StatusTextWrapper
-                className='status-text-wrapper'
-                color={ModeThemes[theme].activeStatusText}
-                backgroundColor={ModeThemes[theme].activeStatus}
-                table='stake'
-                docsLockupText={ModeThemes[theme].docsLockupText}
-                docsLockupBackground={ModeThemes[theme].docsLockupBackground}
-                >
-                {/* {isActive ? i18n.t('stake.table.statuses.active') : ''} */}
-                {formatTime()}
-                </StatusTextWrapper>
+                title === "SLICE Staking Pools" && duration &&
+                  <StatusTextWrapper
+                  className='status-text-wrapper'
+                  color={ModeThemes[theme].activeStatusText}
+                  backgroundColor={ModeThemes[theme].activeStatus}
+                  table='stake'
+                  docsLockupText={ModeThemes[theme].docsLockupText}
+                  docsLockupBackground={ModeThemes[theme].docsLockupBackground}
+                  >
+                  {/* {isActive ? i18n.t('stake.table.statuses.active') : ''} */}
+                  {formatTime()}
+                  </StatusTextWrapper>
               }
-             
+             {
+                title === "SLICE Staking Pools" && !duration &&
+                  <StatusTextWrapper
+                  className='status-text-wrapper'
+                  color={ModeThemes[theme].activeStatusText}
+                  backgroundColor={ModeThemes[theme].activeStatus}
+                  table='stake'
+                  docsLockupText={ModeThemes[theme].docsLockupText}
+                  docsLockupBackground={ModeThemes[theme].docsLockupBackground}
+                  >
+                    CLOSED
+                  </StatusTextWrapper>
+              }
             </FifthColContent>
           </TableFifthCol>
 
@@ -315,18 +323,12 @@ const TableCard = ({
             <h2>{''}</h2>
           </TableSixthCol>
 
-          { title === "SLICE Staking Pools" ? 
+          { title === "SLICE Staking Pools" && duration ? 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
               <StakeBtnSlice onClick={() => openModal('staking')}>
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
-            // title !== "SLICE Staking Pools" && (type && type === 'SLICE') ?
-            // <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
-            //   <StakeBtn background='#6E41CF' onClick={() => openModal('withdrawTokens')}>
-            //     -
-            //   </StakeBtn>
-            // </TableSeventhCol> : 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
               <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
                 -
@@ -342,23 +344,22 @@ const TableCard = ({
         <StakingModal
           // State Values
           modalIsOpen={ModalIsOpen}
+          type={type}
           modalType={modalType}
-          tokenAddress={tokenAddress}
-          stakingAddress={stakingAddress}
-          noBalance={Number(balance) === 0}
           contractAddress={contractAddress}
+          tokenAddress={tokenAddress}
           title={title}
-          apy={apy}
           rewards={reward}
-          // Functions
-          closeModal={() => closeModal()}
+          apy={apy}
+          duration={duration}
+          durationIndex={durationIndex}
           hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
           approveLoading={approveLoading}
           // Functions
+          setHasAllowance={setHasAllowance}
+          closeModal={() => closeModal()}
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}
-          type={type}
         />
       </TableContentCardWrapper>
     );
@@ -437,24 +438,23 @@ const TableCard = ({
           </TableMobileContent>
         </TableContentCardMobile>
         <StakingModal
-          // State Values
           modalIsOpen={ModalIsOpen}
+          type={type}
           modalType={modalType}
-          tokenAddress={tokenAddress}
-          stakingAddress={stakingAddress}
-          noBalance={Number(balance) === 0}
-          title={title}
-          apy={apy}
           contractAddress={contractAddress}
-          // Functions
-          closeModal={() => closeModal()}
+          tokenAddress={tokenAddress}
+          title={title}
+          rewards={reward}
+          apy={apy}
+          duration={duration}
+          durationIndex={durationIndex}
           hasAllowance={hasAllowance}
-          setHasAllowance={setHasAllowance}
           approveLoading={approveLoading}
           // Functions
+          setHasAllowance={setHasAllowance}
+          closeModal={() => closeModal()}
           stakingApproveContract={stakingApproveContract}
           adjustStake={adjustStake}
-          type={type}
         />
       </TableContentCardWrapperMobile>
     );
