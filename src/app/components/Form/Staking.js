@@ -135,13 +135,8 @@ let StakingForm = ({
               type='button'
               loading={approveLoading ? 'true' : ''}
               approved={hasAllowance}
-<<<<<<< HEAD
-              onClick={() => stakingApproveContract(stakingAddress, tokenAddress, formValues.amount)}
-              backgroundColor={path === 'stake' ? '#369987' : ''}
-=======
               onClick={() => stakingApproveContract(contractAddress, tokenAddress, formValues.amount)}
-              backgroundColor={path === 'stake' ? '#4441CF' : ''}
->>>>>>> ba458858b65743176698edee02b10224f87f6cb2
+              backgroundColor={path === 'stake' ? '#369987' : ''}
             >
               {!hasAllowance && !approveLoading ? (
                 <h2>Approve Staking</h2>
@@ -164,6 +159,7 @@ let StakingForm = ({
             type='submit' 
             stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'} 
             migrate={migrate}
+            migrateStep={migrate}
             disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
           >
             {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw'}

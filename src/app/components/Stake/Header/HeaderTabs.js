@@ -61,35 +61,35 @@ const HeaderTabs = ({
     const setEpochTime = async () => {
       const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
       let dateTime = result;
-      // const interval = setInterval(() => {
-      //   if (dateTime > 0) {
-      //     dateTime -= 1;
-      //   } else {
-      //     const setTime = async () => {
-      //       const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-      //       dateTime = result;
-      //     };
-      //     setTime();
-      //   }
-      //   setProgress(100 - (100 * dateTime) / 604800);
-      //   let current = moment.unix(moment().unix());
-      //   let date = moment.unix(moment().unix() + dateTime);
-      //   let time = date - current;
-      //   let duration = moment.duration(time);
-      //   let days = duration.days();
-      //   let hours = duration.hours();
-      //   let minutes = duration.minutes();
-      //   let seconds = duration.seconds();
-      //   let final = {
-      //     days,
-      //     hours,
-      //     minutes,
-      //     seconds
-      //   };
-      //   setTimerData(final);
-      // }, 1000);
+      const interval = setInterval(() => {
+        if (dateTime > 0) {
+          dateTime -= 1;
+        } else {
+          const setTime = async () => {
+            const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+            dateTime = result;
+          };
+          setTime();
+        }
+        setProgress(100 - (100 * dateTime) / 604800);
+        let current = moment.unix(moment().unix());
+        let date = moment.unix(moment().unix() + dateTime);
+        let time = date - current;
+        let duration = moment.duration(time);
+        let days = duration.days();
+        let hours = duration.hours();
+        let minutes = duration.minutes();
+        let seconds = duration.seconds();
+        let final = {
+          days,
+          hours,
+          minutes,
+          seconds
+        };
+        setTimerData(final);
+      }, 1000);
 
-      // return () => clearInterval(interval);
+      return () => clearInterval(interval);
     };
     setEpochTime();
   }, []);

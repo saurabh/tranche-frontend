@@ -1569,6 +1569,10 @@ const StakeModalFormBtn = styled.button`
   ${({ migrate }) => migrate && `
     right: 33px;
   `}
+  ${({ migrateStep }) => migrateStep && `
+    width: 192px !important;
+  `}
+  
 
   @media (max-width: 663px){
     position: relative;

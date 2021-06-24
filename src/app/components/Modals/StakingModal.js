@@ -5,10 +5,9 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon, TrancheStake, Migrated } from 'assets';
+import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheStake, Migrated } from 'assets';
 import { addrShortener, roundNumber } from 'utils';
 import { getUserStaked, claimRewards } from 'services/contractMethods';
-import * as moment from 'moment';
 import {
   SLICEAddress
 } from 'config/constants';
@@ -238,8 +237,12 @@ const StakingModal = ({
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
   const [userStakes, setUserStakes] = useState([]);
+  const [migrateLoading, setMigrateLoading] = useState(false);
   const { slice, lp } = userStakingList;
   
+  const stakeStepStakingList = sliceStakingList.filter((obj) => {
+    return obj.poolName !== undefined;
+  });
   const fullStakingList = sliceStakingList.concat(stakingList);
   const apiMapping = fullStakingList.reduce((acc, cur) => {
     const { duration, poolName, contractAddress, yieldAddress, type } = cur;
@@ -250,7 +253,6 @@ const StakingModal = ({
     }
     return acc;
   }, {});
-
   useEffect(() => {
     let stakes = [];
     const withDuration = slice.filter(s => s.duration);
@@ -1007,11 +1009,11 @@ const StakingModal = ({
             </RewardsAmountCard>
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   
-
+      {!migrateLoading ?
         <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
-        {i18n.t('claim')}
-        </StakeModalFormBtn>
-        {/* <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
+              {i18n.t('claim')}
+        </StakeModalFormBtn> :
+        <StakeModalFormBtn migrate step={currentStep} migrateStake>
           <LoadingButton>
             {
               [...Array(4).keys()].map((idx) =>{
@@ -1019,7 +1021,9 @@ const StakingModal = ({
               })
             }
           </LoadingButton>
-        </StakeModalFormBtn> */}
+        </StakeModalFormBtn>
+      }
+        
         
       </StakingMigrateModalContent>
     )
@@ -1038,9 +1042,21 @@ const StakingModal = ({
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   
 
+        {!migrateLoading ?
+
         <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('stake')}>
           Withdraw
+        </StakeModalFormBtn> : 
+        <StakeModalFormBtn migrate step={currentStep} migrateStake>
+          <LoadingButton>
+            {
+              [...Array(4).keys()].map((idx) =>{
+                return <LoadingButtonCircle i={idx+1}></LoadingButtonCircle>
+              })
+            }
+          </LoadingButton>
         </StakeModalFormBtn>
+        }
       </StakingMigrateModalContent>
     )
   }
@@ -1063,7 +1079,7 @@ const StakingModal = ({
               </StakeNewTableHead>
               <StakeNewTableCards>
                 {
-                  (data.sliceStakingList.length > 0 && data.sliceStakingList[0]) && data.sliceStakingList.map((staking, i) => 
+                  stakeStepStakingList.map((staking, i) => 
                   <StakeNewTableCard
                     color={ModeThemes[theme].TableCard}
                     borderColor={ModeThemes[theme].TableCardBorderColor}
@@ -1076,7 +1092,7 @@ const StakingModal = ({
                           <img src={TrancheStake} alt=""/>
                         </StakeNewColImg>
                         <StakeNewColText color={ModeThemes[theme].tableText}>
-                          <h2>{staking.type}</h2>
+                          <h2>{staking.poolName}</h2>
                           <h2>{addrShortener(staking.contractAddress)}</h2>
                         </StakeNewColText>
                       </StakeNewColFirst>
@@ -1128,7 +1144,7 @@ const StakingModal = ({
               <img src={TrancheStake} alt='img' />
             </StakingModalContentSideHeaderImg>
             <StakingModalContentSideHeaderText boxText={ModeThemes[theme].boxText} textColor={ModeThemes[theme].ModalText}>
-              <h2>{data.sliceStakingList[id].type} STAKING POOL</h2>
+              <h2>{data.sliceStakingList[id].poolName} STAKING POOL</h2>
               <h2>{data.sliceStakingList[id].contractAddress}</h2>
             </StakingModalContentSideHeaderText>
             <StakingModalChangeBtn onClick={() => setObjId(null)}>
@@ -1167,7 +1183,7 @@ const StakingModal = ({
           <StakingForm 
             modalTypeVar="staking" 
             type={data.sliceStakingList[id].type} tokenAddress={data.sliceStakingList[id].tokenAddress}
-            stakingAddress={stakingAddress}
+            contractAddress={contractAddress}
             hasAllowance={hasAllowance}
             approveLoading={approveLoading}
             stakingApproveContract={stakingApproveContract}
