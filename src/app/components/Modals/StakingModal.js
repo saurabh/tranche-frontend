@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheIcon, TrancheStake, Migrated } from 'assets';
-import { roundNumber } from 'utils';
+import { addrShortener, roundNumber } from 'utils';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
@@ -65,13 +65,18 @@ import {
   StakeNewColImg,
   StakeNewColText,
   SliceMigratedWrapper,
-  SliceMigratedText
+  SliceMigratedText,
+  LoadingButton,
+  LoadingButtonCircle,
+  StakingModalChangeBtn,
+  StakingMigrateModalContentWrapper
 } from './styles/ModalsComponents';
 import { Countdown } from '../Stake/Header/styles/HeaderComponents';
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
 import { ModeThemes } from 'config';
 import i18n from '../locale/i18n';
 import { LiquidityIcons } from 'config';
+import moment from 'moment';
 
 const NotFoundStyles = {
   overlay: {
@@ -207,6 +212,7 @@ const StakingModal = ({
   title,
   rewards,
   timerData,
+  data,
   apy,
   // Functions
   stakingApproveContract,
@@ -216,7 +222,21 @@ const StakingModal = ({
   // API Values,
 }) => {
   const [modalTypeVar, setModalTypeVar] = useState('');
+  const [objId, setObjId] = useState(null);
   const [currentStep, setCurrentStep] = useState('claim');
+
+  const formatTime = (value) =>{
+    let format = (val) => moment().add(value, 'minutes').diff(moment(), val)
+    let years =  format('years');
+    let months =  format('months');
+    let weeks =  format('weeks');
+    let days =  format('days');
+    let hours =  format('hours');
+    let mintues =  format('mintues');
+
+    return years !== 0 ? years + ' years' : months !== 0 ? months + ' months' : weeks !== 0 ? weeks + ' weeks' : days !== 0 ? days + ' days' : hours !== 0 ? hours + ' hours' : mintues !== 0 ? mintues + ' mintues' : ""
+  }
+  
 
   useEffect(() => {
     setModalTypeVar(modalType);
@@ -925,25 +945,35 @@ const StakingModal = ({
     return(
       <StakingMigrateModalContent>
 
-              <RewardsAmountWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>  
-                <h2>{i18n.t('claimSlicePools')}</h2>
-                <RewardsAmountCardsWrapper>
-                  <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
-                    <h2>{i18n.t('AmountRewards')}</h2>
-                    <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
-                  </RewardsAmountCard>
-        
-                  <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
-                    <h2>{i18n.t('AmountRewards')}</h2>
-                    <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
-                  </RewardsAmountCard>
-                </RewardsAmountCardsWrapper>
-              </RewardsAmountWrapper>   
+        <RewardsAmountWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>  
+          <h2>{i18n.t('claimSlicePools')}</h2>
+          <RewardsAmountCardsWrapper>
+            <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
+              <h2>{i18n.t('AmountRewards')}</h2>
+              <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+            </RewardsAmountCard>
+  
+            <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
+              <h2>{i18n.t('AmountRewards')}</h2>
+              <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+            </RewardsAmountCard>
+          </RewardsAmountCardsWrapper>
+        </RewardsAmountWrapper>   
 
-              <StakeModalFormBtn step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
-              {i18n.t('claim')}
-              </StakeModalFormBtn>
-            </StakingMigrateModalContent>
+        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
+        {i18n.t('claim')}
+        </StakeModalFormBtn>
+        {/* <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
+          <LoadingButton>
+            {
+              [...Array(4).keys()].map((idx) =>{
+                return <LoadingButtonCircle i={idx+1}></LoadingButtonCircle>
+              })
+            }
+          </LoadingButton>
+        </StakeModalFormBtn> */}
+        
+      </StakingMigrateModalContent>
     )
   }
   const migrateWithdraw = () =>{
@@ -960,7 +990,7 @@ const StakingModal = ({
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   
 
-        <StakeModalFormBtn step={currentStep} migrateStake onClick={() => setCurrentStep('stake')}>
+        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('stake')}>
           Withdraw
         </StakeModalFormBtn>
       </StakingMigrateModalContent>
@@ -969,61 +999,138 @@ const StakingModal = ({
 
   const migrateStakeSkip = () =>{
     return(
+      <StakingMigrateModalContentWrapper>
+        { objId === null ?
+        <StakingMigrateModalContent>
+
+          <StakeNewWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>
+            <h2>{i18n.t('stakeNew')}</h2>
+
+            <StakeNewTable>
+              <StakeNewTableHead>
+                <StakeNewCol head pool color={ModeThemes[theme].TableHead} ><h2>{i18n.t('stakingPool')}</h2></StakeNewCol>
+                <StakeNewCol head lockup color={ModeThemes[theme].TableHead} ><h2>{i18n.t('lockup')}</h2></StakeNewCol>
+                <StakeNewCol head apy color={ModeThemes[theme].TableHead} ><h2>apy</h2></StakeNewCol>
+                <StakeNewCol head stake color={ModeThemes[theme].TableHead} ><h2>stake</h2></StakeNewCol>
+              </StakeNewTableHead>
+              <StakeNewTableCards>
+                {
+                  (data.sliceStakingList.length > 0 && data.sliceStakingList[0]) && data.sliceStakingList.map((staking, i) => 
+                  <StakeNewTableCard
+                    color={ModeThemes[theme].TableCard}
+                    borderColor={ModeThemes[theme].TableCardBorderColor}
+                    key={i}
+                  >
+                    <StakeNewCol pool>
+
+                      <StakeNewColFirst>
+                        <StakeNewColImg>
+                          <img src={TrancheStake} alt=""/>
+                        </StakeNewColImg>
+                        <StakeNewColText color={ModeThemes[theme].tableText}>
+                          <h2>{staking.type}</h2>
+                          <h2>{addrShortener(staking.contractAddress)}</h2>
+                        </StakeNewColText>
+                      </StakeNewColFirst>
+
+                    </StakeNewCol>
+
+                    <StakeNewCol lockupValue lockup
+                      docsLockupText={ModeThemes[theme].docsLockupText}
+                      docsLockupBackground={ModeThemes[theme].docsLockupBackground}
+                    >
+                      <h2><span>{formatTime(staking.duration)}</span></h2>
+                    </StakeNewCol>
+
+                    <StakeNewCol apyValue apy color={ModeThemes[theme].tableText}>
+                      <h2>{staking.apy}%</h2>
+                    </StakeNewCol>
+
+                    <StakeNewCol stake stakeValue>
+                      <button onClick={() => setObjId(i)}>stake</button>
+                    </StakeNewCol>
+
+
+                  </StakeNewTableCard>
+                  )
+                }
+
+                
+              </StakeNewTableCards>
+              </StakeNewTable>
+          </StakeNewWrapper>
+
+          <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('done')}>
+            {i18n.t('skipFor')}
+          </StakeModalFormBtn>
+        </StakingMigrateModalContent> :
+        
+        <MigrateForm id={objId} />
+        }
+
+      </StakingMigrateModalContentWrapper>
+    )
+  }
+  const MigrateForm = ({ id }) =>{
+    return(
       <StakingMigrateModalContent>
+        <SliceMigratedWrapper migrate>
+          <StakingModalContentSideHeader BoxColor={ModeThemes[theme].BoxColor}>
+            <StakingModalContentSideHeaderImg stake>
+              <img src={TrancheStake} alt='img' />
+            </StakingModalContentSideHeaderImg>
+            <StakingModalContentSideHeaderText boxText={ModeThemes[theme].boxText} textColor={ModeThemes[theme].ModalText}>
+              <h2>{data.sliceStakingList[id].type} STAKING POOL</h2>
+              <h2>{data.sliceStakingList[id].contractAddress}</h2>
+            </StakingModalContentSideHeaderText>
+            <StakingModalChangeBtn onClick={() => setObjId(null)}>
+              Change
+            </StakingModalChangeBtn>
+          </StakingModalContentSideHeader>
+          <StakingModalContentSideHeaderBoxWrapper migrate>
+            <StakingModalContentSideHeaderBox
+              stake
+              BoxColor={ModeThemes[theme].BoxColor}
+              textColor={ModeThemes[theme].ModalText}
+              BoxColorText={ModeThemes[theme].BoxColorText}
+            >
+              <h2>{i18n.t('lockup')}</h2>
+              <h2>{formatTime(data.sliceStakingList[id].duration)}</h2>
+            </StakingModalContentSideHeaderBox>
+            <StakingModalContentSideHeaderBox
+              stake
+              BoxColor={ModeThemes[theme].BoxColor}
+              textColor={ModeThemes[theme].ModalText}
+              BoxColorText={ModeThemes[theme].BoxColorText}
+            >
+              <h2>APY</h2>
+              <h2>{roundNumber(data.sliceStakingList[id].apy, false)}%</h2>
+            </StakingModalContentSideHeaderBox>
+            <StakingModalContentSideHeaderBox
+              BoxColor={ModeThemes[theme].BoxColor}
+              textColor={ModeThemes[theme].ModalText}
+              BoxColorText={ModeThemes[theme].BoxColorText}
+            >
+              <h2>Pool Capacity</h2>
+              <h2>{roundNumber(data.sliceStakingList[id].reward, false)} SLICE</h2>
+            </StakingModalContentSideHeaderBox>
+          </StakingModalContentSideHeaderBoxWrapper>
 
-        <StakeNewWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>
-          <h2>{i18n.t('stakeNew')}</h2>
-
-          <StakeNewTable>
-            <StakeNewTableHead>
-              <StakeNewCol head pool color={ModeThemes[theme].TableHead} ><h2>{i18n.t('stakingPool')}</h2></StakeNewCol>
-              <StakeNewCol head lockup color={ModeThemes[theme].TableHead} ><h2>{i18n.t('lockup')}</h2></StakeNewCol>
-              <StakeNewCol head apy color={ModeThemes[theme].TableHead} ><h2>apy</h2></StakeNewCol>
-              <StakeNewCol head stake color={ModeThemes[theme].TableHead} ><h2>stake</h2></StakeNewCol>
-            </StakeNewTableHead>
-            <StakeNewTableCards>
-              <StakeNewTableCard
-                color={ModeThemes[theme].TableCard}
-                borderColor={ModeThemes[theme].TableCardBorderColor}
-              >
-                <StakeNewCol pool>
-
-                  <StakeNewColFirst>
-                    <StakeNewColImg>
-                      <img src={TrancheStake} alt=""/>
-                    </StakeNewColImg>
-                    <StakeNewColText color={ModeThemes[theme].tableText}>
-                      <h2>DIAMOND HANDS</h2>
-                      <h2>0xb51....468</h2>
-                    </StakeNewColText>
-                  </StakeNewColFirst>
-
-                </StakeNewCol>
-
-                <StakeNewCol lockupValue lockup
-                  docsLockupText={ModeThemes[theme].docsLockupText}
-                  docsLockupBackground={ModeThemes[theme].docsLockupBackground}
-                >
-                  <h2><span>1 year</span></h2>
-                </StakeNewCol>
-
-                <StakeNewCol apyValue apy color={ModeThemes[theme].tableText}>
-                  <h2>40%</h2>
-                </StakeNewCol>
-
-                <StakeNewCol stake stakeValue>
-                  <button>stake</button>
-                </StakeNewCol>
-
-
-              </StakeNewTableCard>
-            </StakeNewTableCards>
-            </StakeNewTable>
-        </StakeNewWrapper>
-
-        <StakeModalFormBtn step={currentStep} migrateStake onClick={() => setCurrentStep('done')}>
-          {i18n.t('skipFor')}
-        </StakeModalFormBtn>
+          <StakingForm 
+            modalTypeVar="staking" 
+            type={data.sliceStakingList[id].type} tokenAddress={data.sliceStakingList[id].tokenAddress}
+            stakingAddress={stakingAddress}
+            hasAllowance={hasAllowance}
+            approveLoading={approveLoading}
+            stakingApproveContract={stakingApproveContract}
+            adjustStake={adjustStake}
+            migrate={true}
+          />
+          
+        </SliceMigratedWrapper>
+        {/* <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => closeModalMigrate()}>
+        {i18n.t('close')}
+        </StakeModalFormBtn> */}
       </StakingMigrateModalContent>
     )
   }
@@ -1038,7 +1145,7 @@ const StakingModal = ({
             <h2>{i18n.t('tokenMigrated')}</h2>
           </SliceMigratedText>
         </SliceMigratedWrapper>
-        <StakeModalFormBtn step={currentStep} migrateStake onClick={() => closeModalMigrate()}>
+        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => closeModalMigrate()}>
         {i18n.t('close')}
         </StakeModalFormBtn>
       </StakingMigrateModalContent>
@@ -1068,6 +1175,7 @@ const mapStateToProps = (state) => ({
   summaryData: state.summaryData,
   stakingList: state.data.stakingList,
   path: state.path,
+  data: state.data,
   theme: state.theme
 });
 

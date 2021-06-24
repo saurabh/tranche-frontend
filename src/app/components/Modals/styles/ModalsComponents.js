@@ -1,5 +1,17 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
+const bounce = keyframes`
+	0%, 50%, 100%{
+		transform: scale(0.8);
+	}
+	25% {
+		transform: scale(0.6);
+	}
+	75% {
+		transform: scale(1);
+	}
+}
+`
 const ModalHeader = styled.div` 
 position: absolute;
 z-index: 1;
@@ -1250,10 +1262,14 @@ const StakingModalContentSideHeader = styled.div`
   background: ${props => props.BoxColor};
   border-radius: 4.33px;
   padding: 0 12px;
+  position: relative;
 `;
 const StakingModalContentSideHeaderBoxWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  ${({ migrate }) => migrate && `
+    width: 100%;
+  `}
 `
 
 const StakingModalContentSideHeaderBox = styled.div`
@@ -1468,12 +1484,25 @@ const StakeModalFormWrapper = styled.div`
       }
     }
     ${({ stake }) => stake && `
-      margin: 25px 0 0 0;
+      margin: 13px 0 0 0;
+      width: 100%;
     `}
     ${({ migrateStake }) => migrateStake && `
       margin: 0;
       & > h2{
         margin: 0 0 10px 0;
+      }
+      form{
+        & > h2{
+          margin: 5px 0;
+        }
+      }
+    `}
+    ${({ migrate }) => migrate && `
+      form{
+        & > h2{
+          margin: 5px 0;
+        }
       }
     `}
 `;
@@ -1517,6 +1546,10 @@ const StakeModalFormBtn = styled.button`
   bottom: 0;
   ${({ stake }) => stake && `
     background: #4441CF;
+    right: 0;
+  `}
+  ${({ stake, migrate }) => (!stake && !migrate) && `
+    right: 0;
   `}
 
   ${({ migrateStake }) => migrateStake && `
@@ -1528,6 +1561,15 @@ const StakeModalFormBtn = styled.button`
   ${({ step }) => step && `
     background: ${step === "stake" ? "#43406C" : step === "done" ? "#369987" : "#6E41CF"};
   `}
+  ${({ disabled }) => disabled && `
+    background: rgba(204, 204, 205, 0.15);
+    pointer-events: none;
+  `}
+
+  ${({ migrate }) => migrate && `
+    right: 33px;
+  `}
+
   @media (max-width: 663px){
     position: relative;
     width: 100%;
@@ -1550,6 +1592,18 @@ const EstimatedText = styled.div`
     // color: #FFFFFF;
     color: ${props => props.textColor};
   }
+  ${({ migrate, textColor, EstimatedTextColor }) => migrate && `
+    display: flex;
+    align-items: center;
+    h2:first-child{
+      margin: 5px 0;
+      color: ${textColor};
+    }
+    h2:last-child{
+      margin: 0 5px;
+      color: ${EstimatedTextColor};
+    }
+  `}
 `;
 const StakingModalHeader = styled.div`
   height: 104px;
@@ -1630,8 +1684,6 @@ const ProgressBarLine = styled.div`
     width: 100%;
   `}
 `;
-
-
 const InputTag = styled.div`
   display: flex;
   align-items: center;
@@ -1641,7 +1693,7 @@ const InputTag = styled.div`
   transform: translateY(-50%);
   right: 15px;
   img{
-    width: 18.5px;
+    width: 18.5px !important;
     margin: 0 9px 0 15px;
   }
   h2{
@@ -1869,6 +1921,9 @@ const SliceMigratedWrapper = styled.div`
     max-width: 86px;
     width: 100%;
   }
+  ${({ migrate }) => migrate && `
+    margin: 0;
+  `}
 `;
 const SliceMigratedText = styled.div`
   h2:first-child{
@@ -1887,7 +1942,37 @@ const SliceMigratedText = styled.div`
     color: ${props => props.CongratsText};
   }
 `;
-
+const LoadingButton = styled.div`
+  display: flex;
+  justify-content: center;
+  opacity: 0.7;
+`;
+const LoadingButtonCircle = styled.div`
+  background-color: #FFFFFF;
+  width: 12px;
+	height: 12px;
+	border-radius: 100%;
+	margin: 4px;
+	animation: ${bounce} 1s ${props => props.i*0.2}s linear infinite;
+`;
+const StakingModalChangeBtn = styled.button`
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 9px;
+  color: #FFFFFF;
+  background: #4441CF;
+  border-radius: 100px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  height: 21px;
+  width: 58px;
+`;
+const StakingMigrateModalContentWrapper = styled.div`
+  
+`;
 
 export {
   ModalHeader, 
@@ -1979,5 +2064,9 @@ export {
   StakeNewColImg,
   StakeNewColText,
   SliceMigratedWrapper,
-  SliceMigratedText
+  SliceMigratedText,
+  LoadingButton,
+  LoadingButtonCircle,
+  StakingModalChangeBtn,
+  StakingMigrateModalContentWrapper
 };

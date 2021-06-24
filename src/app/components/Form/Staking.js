@@ -4,7 +4,7 @@ import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import store from 'redux/store';
 import { required, number, roundNumber, isGreaterThan } from 'utils';
 import { fromWei } from 'services/contractMethods';
-import { TrancheIcon } from 'assets';
+import { CheckBtn, TrancheIcon } from 'assets';
 // import { FieldWrapper } from './styles/FormComponents';
 import {
   StakeModalFormWrapper,
@@ -60,7 +60,8 @@ let StakingForm = ({
   ethereum: { tokenBalance, blockExplorerUrl },
   summaryData: { slice, lpList },
   type,
-  theme
+  theme,
+  migrate
 }) => {
   const [balance, setBalance] = useState(0);
   const [balanceCheck, setBalanceCheck] = useState('');
@@ -104,7 +105,7 @@ let StakingForm = ({
   );
 
   return (
-    <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText}>
+    <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText} stake migrate={migrate}>
       <h2>Amount of {tokenName} to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'Stake' : 'Withdraw'}: </h2>
       <Form onSubmit={(e) => adjustStake(e, stakingAddress, tokenAddress)}>
         <h2>You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : 0} {tokenName} available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
@@ -125,44 +126,46 @@ let StakingForm = ({
             <h2>{dropdownName}</h2>
           </InputTag>
         </StakeModalFormInputWrapper>
-        {modalTypeVar === 'staking' && <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor}>
+        {modalTypeVar === 'staking' && <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor} migrate={migrate}>
           <h2>{i18n.t('Estimated')}</h2>
           <h2>You will get 1000 SLICE per week</h2>
         </EstimatedText>}
-        <ApproveBtnWrapper>
+        <ApproveBtnWrapper migrate={migrate}>
           {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') && (
             <ModalFormButton
               type='button'
               loading={approveLoading ? 'true' : ''}
               approved={hasAllowance}
               onClick={() => stakingApproveContract(stakingAddress, tokenAddress, formValues.amount)}
-              backgroundColor={path === 'stake' ? '#4441CF' : ''}
+              backgroundColor={path === 'stake' ? '#369987' : ''}
             >
               {!hasAllowance && !approveLoading ? (
-                <h2>Approve</h2>
+                <h2>Approve Staking</h2>
               ) : !hasAllowance && approveLoading ? (
                 <div className='btnLoadingIconWrapper'>
                   <div className='btnLoadingIconCut'>
-                    <BtnLoadingIcon loadingColor={path === 'stake' ? '#4441CF' : '#936CE6'}></BtnLoadingIcon>
+                    <BtnLoadingIcon loadingColor={path === 'stake' ? '#555555' : '#555555'}></BtnLoadingIcon>
                   </div>
                 </div>
               ) : hasAllowance && !approveLoading ? (
                 <h2>
-                  <span></span> Approved
+                  <img src={CheckBtn} alt=""/> Staking Approved
                 </h2>
               ) : (
                 ''
               )}
             </ModalFormButton>
           )}
+          <StakeModalFormBtn 
+            type='submit' 
+            stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'} 
+            migrate={migrate}
+            disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
+          >
+            {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw'}
+          </StakeModalFormBtn>
         </ApproveBtnWrapper>
-        <StakeModalFormBtn 
-          type='submit' 
-          stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'} 
-          disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
-        >
-          {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw'}
-        </StakeModalFormBtn>
+        
       </Form>
     </StakeModalFormWrapper>
     // <ModalAdjustForm stake>
