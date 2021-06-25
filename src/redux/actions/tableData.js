@@ -95,16 +95,9 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
   const searchArr = (tokenAddress) => list.filter(i => i.duration === undefined).find((i) => i.tokenAddress === tokenAddress);
-  const filterArrByDuration = (duration) => list.find((i) => i.duration && i.duration === duration);
-  const sliceList = [];
+  const sliceList = list.filter((i) => i.duration);
+  sliceList.push(searchArr(SLICEAddress))
   const lpList = [];
-  if (searchArr(SLICEAddress)) {
-    sliceList.push(filterArrByDuration(Number(lockupDurations[0])));
-    sliceList.push(filterArrByDuration(Number(lockupDurations[1])));
-    sliceList.push(filterArrByDuration(Number(lockupDurations[2])));
-    sliceList.push(searchArr(SLICEAddress))
-  }
-  // lpList.push(searchArr(SLICEAddress))
   lpList.push(searchArr(LP1TokenAddress));
   lpList.push(searchArr(LP2TokenAddress));
   dispatch({
