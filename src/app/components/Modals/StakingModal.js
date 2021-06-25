@@ -227,7 +227,8 @@ const StakingModal = ({
   // Functions
   stakingApproveContract,
   adjustStake,
-  closeModal
+  closeModal,
+  lockup
   // API Values,
 }) => {
   const [modalTypeVar, setModalTypeVar] = useState('');
@@ -240,8 +241,8 @@ const StakingModal = ({
   const [migrateLoading, setMigrateLoading] = useState(false);
   const { slice, lp } = userStakingList;
   
-  const stakeStepStakingList = sliceStakingList.filter((obj) => {
-    return obj.poolName !== undefined;
+  const stakeStepStakingList = sliceStakingList && sliceStakingList.filter((obj) => {
+    return obj && obj.poolName !== undefined;
   });
   const fullStakingList = sliceStakingList.concat(stakingList);
   const apiMapping = fullStakingList.reduce((acc, cur) => {
@@ -600,7 +601,7 @@ const StakingModal = ({
                     BoxColorText={ModeThemes[theme].BoxColorText}
                   >
                     <h2>{i18n.t('lockup')}</h2>
-                    <h2>1 year</h2>
+                    <h2>{lockup()}</h2>
                   </StakingModalContentSideHeaderBox>
                   <StakingModalContentSideHeaderBox
                     stake

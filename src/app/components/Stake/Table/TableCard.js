@@ -352,6 +352,7 @@ const TableCard = ({
           rewards={reward}
           apy={apy}
           duration={duration}
+          lockup={() => formatTime()}
           durationIndex={durationIndex}
           hasAllowance={hasAllowance}
           approveLoading={approveLoading}
