@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal, CloseModalWhite, ETHCARD, Lock, LockLight, TrancheStake, Migrated } from 'assets';
+import { CloseModal, CloseModalWhite, Lock, LockLight, TrancheStake, Migrated } from 'assets';
 import { addrShortener, roundNumber } from 'utils';
 import { getUserStaked, claimRewards } from 'services/contractMethods';
 import {
@@ -246,11 +246,11 @@ const StakingModal = ({
   });
   const fullStakingList = sliceStakingList.concat(stakingList);
   const apiMapping = fullStakingList.reduce((acc, cur) => {
-    const { duration, poolName, contractAddress, yieldAddress, type } = cur;
+    const { duration, poolName, contractAddress, type } = cur;
     if (duration) {
       acc[duration] = poolName;
     } else if (type !== 'SLICE') {
-      acc[contractAddress] = { type, yieldAddress };
+      acc[contractAddress] = type;
     }
     return acc;
   }, {});
@@ -260,7 +260,7 @@ const StakingModal = ({
     const withoutDuration = slice.filter(s => !s.duration);
     
     if (modalType === 'claim') {
-      stakes = withDuration.concat(withoutDuration).concat(lp);
+      stakes = withDuration.concat(withoutDuration);
     } else {
       if (tokenAddress === SLICEAddress) {
         stakes = duration ? withDuration : withoutDuration;
@@ -392,93 +392,6 @@ const StakingModal = ({
                   )
                 })
               }
-
-              <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
-                  <div>
-                    <img src={ETHCARD} alt='img' />
-                    <img src={ETHCARD} alt='img' />
-                  </div>
-                  <h2>Slice</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2021</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2022</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText}>
-                  <h2>
-                    <img src={Lock} alt='lock' /> 120.00
-                  </h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>0 SLICE</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceliquidityFirstLast>
-                  <ClaimModalTableBtn>{i18n.t('claim')}</ClaimModalTableBtn>
-                </ClaimModalTableCol>
-              </ClaimModalTableRow>
-
-              <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
-                  <div>
-                    <img src={ETHCARD} alt='img' />
-                    <img src={ETHCARD} alt='img' />
-                  </div>
-                  <h2>Slice</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2021</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2022</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText}>
-                  <h2>
-                    <img src={Lock} alt='lock' /> 120.00
-                  </h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>0 SLICE</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceliquidityFirstLast>
-                  <ClaimModalTableBtn>{i18n.t('claim')}</ClaimModalTableBtn>
-                </ClaimModalTableCol>
-              </ClaimModalTableRow>
-
-              <ClaimModalTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol col pair sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
-                  <div>
-                    <img src={ETHCARD} alt='img' />
-                    <img src={ETHCARD} alt='img' />
-                  </div>
-                  <h2>Slice</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2021</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>MAY 1 2022</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText}>
-                  <h2>
-                    <img src={Lock} alt='lock' /> 120.00
-                  </h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
-                  <h2>0 SLICE</h2>
-                </ClaimModalTableCol>
-
-                <ClaimModalTableCol col sliceliquidityFirstLast>
-                  <ClaimModalTableBtn>{i18n.t('claim')}</ClaimModalTableBtn>
-                </ClaimModalTableCol>
-              </ClaimModalTableRow>
             </ClaimModalTableWrapper>
             <ClaimModalTableWrapper>
               <ClaimModalTableTitle textColor={ModeThemes[theme].ModalText}>
@@ -513,9 +426,6 @@ const StakingModal = ({
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
-                  <h2>{i18n.t('depositDate')}</h2>
-                </ClaimModalTableCol>
-                <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
                   <h2>Total Staked</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
@@ -526,28 +436,28 @@ const StakingModal = ({
                 </ClaimModalTableCol>
               </ClaimModalTableHead>
 
-              {userStakes.filter(stake => stake.tokenAddress !== SLICEAddress).map((stake, index) => {
+              {stakingList.map((lp, index) => {
                 return (
                   <ClaimModalTableRow key={index} BorderStake={ModeThemes[theme].BorderStake}>
                     <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
                       <div>
                         <img src={TrancheStake} alt='Tranche' />
-                        <img src={LiquidityIcons[apiMapping[stake.contractAddress].type]} alt='Tranche' />
+                        <img src={LiquidityIcons[apiMapping[lp.contractAddress]]} alt='Tranche' />
                       </div>
-                      <h2>{apiMapping[stake.contractAddress].type.split(' ')[0]}</h2>
+                      <h2>{apiMapping[lp.contractAddress].split(' ')[0]}</h2>
                     </ClaimModalTableCol>
 
                     <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText}>
                       <h2>
-                        <img src={Lock} alt='lock' /> {stake.deposit && roundNumber(stake.deposit)}
+                        <img src={Lock} alt='lock' /> {lp.staked && roundNumber(lp.staked)}
                       </h2>
                     </ClaimModalTableCol>
                     <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
-                      <h2>{accruedRewards ? roundNumber(accruedRewards[stake.tokenAddress]) : '0'} SLICE</h2>
+                      <h2>{accruedRewards ? roundNumber(accruedRewards[lp.tokenAddress]) : '0'} SLICE</h2>
                     </ClaimModalTableCol>
 
                     <ClaimModalTableCol col sliceliquidityFirstLast>
-                      <ClaimModalTableBtn onClick={() => claimRewards(stake.contractAddress, undefined)}>Claim</ClaimModalTableBtn>
+                      <ClaimModalTableBtn onClick={() => claimRewards(lp.yieldAddress, undefined)}>Claim</ClaimModalTableBtn>
                     </ClaimModalTableCol>
                   </ClaimModalTableRow>
                 )
