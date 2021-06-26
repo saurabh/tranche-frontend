@@ -329,6 +329,16 @@ const TableCard = ({
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
+            
+            title === "SLICE Staking Pools" && !duration ? 
+            
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
+              <StakeBtnSlice onClick={() => openModal('staking')} withdraw>
+                withdraw
+              </StakeBtnSlice>
+            </TableSeventhCol> 
+            
+            :
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
               <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
                 -
@@ -337,7 +347,6 @@ const TableCard = ({
                 +
               </StakeBtn>
             </TableSeventhCol>
-            
           }
         </TableContentCard>
 

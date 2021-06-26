@@ -971,7 +971,6 @@ const StakingModalContentWrapper = styled.div`
   }
   ${({ migrateStake }) => migrateStake && `
     @media (max-width: 663px){
-      height: auto;
     }
   `}
 `;
@@ -998,7 +997,6 @@ const StakingModalContent = styled.div`
     padding: 0;
     // padding: 25px 33px;
     @media (max-width: 663px){
-      height: auto;
     }
   `}
 `;

@@ -1278,6 +1278,10 @@ const StakeBtnSlice = styled.button`
   text-transform: uppercase;
   // margin-right: 20px;
   color: #FFFFFF;
+  ${({ withdraw }) => withdraw && `
+    background: #6E41CF;    
+    font-size: 12px;
+  `}
   @media (max-width: 767px){
     font-size: 12px;
     width: 73.32px;

@@ -747,6 +747,15 @@ const ApproveBtnWrapper = styled.div`
     button:first-child{
       left: 33px;
     }
+    @media (max-width: 473px){
+      flex-direction: column;
+      button{
+        position: relative;
+        margin: 12px auto;
+        left: 0 !important;
+        right: 0 !important;
+      }
+    }
   `}
 `
 
