@@ -1283,7 +1283,7 @@ const StakeBtnSlice = styled.button`
     font-size: 12px;
   `}
   @media (max-width: 767px){
-    font-size: 12px;
+    font-size: 10px;
     width: 73.32px;
     height: 25.19px;
   } 
