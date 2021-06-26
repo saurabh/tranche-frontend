@@ -333,7 +333,7 @@ const TableCard = ({
             title === "SLICE Staking Pools" && !duration ? 
             
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
-              <StakeBtnSlice onClick={() => openModal('staking')} withdraw>
+              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw>
                 withdraw
               </StakeBtnSlice>
             </TableSeventhCol> 
