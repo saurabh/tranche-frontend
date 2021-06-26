@@ -996,8 +996,6 @@ const StakingModalContent = styled.div`
     top: unset;
     padding: 0;
     // padding: 25px 33px;
-    @media (max-width: 663px){
-    }
   `}
 `;
 
