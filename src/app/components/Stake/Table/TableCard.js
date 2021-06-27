@@ -332,11 +332,19 @@ const TableCard = ({
             
             title === "SLICE Staking Pools" && !duration ? 
             
-            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
-              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw>
-                withdraw
-              </StakeBtnSlice>
-            </TableSeventhCol> 
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
+              <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>
+                -
+              </StakeBtn>
+              <StakeBtn background='#4441CF' onClick={() => openModal('liqStake')}>
+                +
+              </StakeBtn>
+            </TableSeventhCol>
+            // <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
+            //   <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw>
+            //     withdraw
+            //   </StakeBtnSlice>
+            // </TableSeventhCol> 
             
             :
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
@@ -405,14 +413,13 @@ const TableCard = ({
                           Stake
                         </StakeBtnSlice>
                       </StakeBtns>
-                      : 
-                      title === "SLICE Staking Pools" && !duration ? 
-            
-                      <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw>
-                          withdraw
-                        </StakeBtnSlice>
-                      </StakeBtns> 
+                      // : 
+                      // title === "SLICE Staking Pools" && !duration ? 
+                      // <StakeBtns>
+                      //   <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw>
+                      //     withdraw
+                      //   </StakeBtnSlice>
+                      // </StakeBtns> 
                       :
                       <StakeBtns>
                         <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')}>

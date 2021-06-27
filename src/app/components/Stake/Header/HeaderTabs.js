@@ -201,7 +201,7 @@ const HeaderTabs = ({
         timerData={timerData}
         // Functions
         closeModal={() => closeModal()}
-        openModal={() => openModal('')}
+        openModal={(type = '') => openModal(type)}
         // Functions
       />
     </StakeHeaderWrapper>

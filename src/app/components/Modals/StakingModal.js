@@ -225,6 +225,7 @@ const StakingModal = ({
   hasAllowance,
   approveLoading,
   // Functions
+  openModal,
   stakingApproveContract,
   adjustStake,
   closeModal,
@@ -246,6 +247,7 @@ const StakingModal = ({
   });
   const fullStakingList = sliceStakingList.concat(stakingList);
   const apiMapping = fullStakingList.reduce((acc, cur) => {
+    if (!cur) return acc;
     const { duration, poolName, contractAddress, type } = cur;
     if (duration) {
       acc[duration] = poolName;
@@ -257,7 +259,7 @@ const StakingModal = ({
   useEffect(() => {
     let stakes = [];
     const withDuration = slice.filter(s => s.duration);
-    const withoutDuration = slice.filter(s => !s.duration);
+    const withoutDuration = sliceStakingList.filter(s => !s.duration);
     
     if (modalType === 'claim') {
       stakes = withDuration.concat(withoutDuration);
@@ -270,7 +272,7 @@ const StakingModal = ({
       }
     }
     setUserStakes(stakes)
-  }, [modalType, duration, lp, slice, tokenAddress]);
+  }, [modalType, duration, lp, slice, sliceStakingList, tokenAddress]);
 
   const formatTime = (value) =>{
     let format = (val) => moment().add(value, 'minutes').diff(moment(), val)
@@ -376,7 +378,7 @@ const StakingModal = ({
                       </ClaimModalTableCol>
                       <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText}>
                         <h2>
-                          <img src={Lock} alt='lock' /> {roundNumber(stake.deposit)}
+                          <img src={Lock} alt='lock' /> {stake.duration ? roundNumber(stake.deposit) : roundNumber(stake.staked)}
                         </h2>
                       </ClaimModalTableCol>
                       <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
@@ -384,7 +386,7 @@ const StakingModal = ({
                       </ClaimModalTableCol>
 
                       <ClaimModalTableCol col sliceliquidityFirstLast>
-                        <ClaimModalTableBtn onClick={() => stake.duration ? claimRewards(stake.contractAddress, stake.stakingCounter) : claimRewards(stake.contractAddress, undefined)} disabled={stake.duration && (stake.endTime > moment().unix())}>{stake.duration ? 'Claim' : 'Migrate'}
+                        <ClaimModalTableBtn onClick={() => stake.duration ? claimRewards(stake.contractAddress, stake.stakingCounter) : openModal('withdrawTokens')} disabled={stake.duration && (stake.endTime > moment().unix())}>{stake.duration ? 'Claim' : 'Migrate'}
                         </ClaimModalTableBtn>
                       </ClaimModalTableCol>
                     </ClaimModalTableRow>
