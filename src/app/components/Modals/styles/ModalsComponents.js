@@ -1042,6 +1042,23 @@ const ClaimModalHeader = styled.div`
 `;
 const ClaimModalTableWrapper = styled.div`
   margin: 27px 0 0 0;   
+  max-height: 250px;
+  overflow-y: ${props => props.scroll ? "scroll" : ""};
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rbga(227,227,227,3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #C2C2C2;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C0C0C0;
+  }
 `;
 const ClaimModalTableTitle = styled.div`
   h2{
@@ -1092,7 +1109,7 @@ const ClaimModalTableCol = styled.div`
       color: ${TableHeadText};
     }
   `}
-  ${({ col, textColor }) => col && `
+  ${({ col, textColor, slice }) => col && `
     display: flex;
     align-items: center;
     h2{
@@ -1110,7 +1127,7 @@ const ClaimModalTableCol = styled.div`
       img{
         width: 22px;
         :last-child{
-          margin-left: -5px;
+          margin-left: ${(slice) ? "" : "-5px"};
           z-index: 1;
         }
       }
@@ -1160,12 +1177,12 @@ const ClaimModalTableCol = styled.div`
   ${({ pair }) => pair && `
     & > div{
       @media (max-width: 663px){
-        display: none;
+        // display: none;
       }
     }
     h2{
       @media (max-width: 663px){
-        margin-left: 0;
+        // margin-left: 0;
       }
     }
   `}
@@ -1175,6 +1192,23 @@ const ClaimModalTableCol = styled.div`
       font-size: 7px;
     }
   }  
+  ${({ mobileHide }) => mobileHide && `
+    @media (max-width: 663px){
+      display: none;
+    }
+  `}
+  ${({ mobile }) => mobile && `
+    @media (max-width: 663px){
+      width: 25%;
+      justify-content: center;
+      text-align: center;
+    }
+  `}
+  ${({ mobilePair }) => mobilePair && `
+    @media (max-width: 663px){
+      width: 30%;
+    }
+  `}
   
 `;
 const ClaimModalTableRow = styled.div`
@@ -1626,7 +1660,7 @@ const ProgressBarStep = styled.div`
   justify-content: ${props => props.Stake ? "flex-end" : "flex-start"};
   
   span{
-    width: 22px;
+    min-width: 22px;
     height: 22px;
     border-radius: 50%;
     display: flex;

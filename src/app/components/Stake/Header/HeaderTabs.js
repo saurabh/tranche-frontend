@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { ModeThemes, serverUrl, apiUri, networkId, StakingAddresses } from 'config';
+import { ModeThemes, serverUrl, apiUri, networkId } from 'config';
 import { changeOwnAllFilter, ownAllToggle } from 'redux/actions/tableData';
-import { epochTimeRemaining, fromWei } from 'services/contractMethods';
+import { fromWei } from 'services/contractMethods';
 // import { initOnboard } from 'services/blocknative';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 // import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
@@ -19,10 +19,9 @@ import {
   WithdrawStakeCardText,
   WithdrawStakeCardBtns,
   StakeSummaryCardWrapper,
-  Countdown
 } from './styles/HeaderComponents';
 import { TableTitle, HowToLink } from '../Table/styles/TableComponents';
-import moment from 'moment';
+import CountdownWrapper from '../ProgressBar/Countdown';
 const { stakingSummary } = apiUri;
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
@@ -57,42 +56,42 @@ const HeaderTabs = ({
   //   wallet: setWalletAndWeb3
   // });
 
-  useEffect(() => {
-    const setEpochTime = async () => {
-      const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-      let dateTime = result;
-      const interval = setInterval(() => {
-        if (dateTime > 0) {
-          dateTime -= 1;
-        } else {
-          const setTime = async () => {
-            const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-            dateTime = result;
-          };
-          setTime();
-        }
-        setProgress(100 - (100 * dateTime) / 604800);
-        let current = moment.unix(moment().unix());
-        let date = moment.unix(moment().unix() + dateTime);
-        let time = date - current;
-        let duration = moment.duration(time);
-        let days = duration.days();
-        let hours = duration.hours();
-        let minutes = duration.minutes();
-        let seconds = duration.seconds();
-        let final = {
-          days,
-          hours,
-          minutes,
-          seconds
-        };
-        setTimerData(final);
-      }, 1000);
+  // useEffect(() => {
+  //   const setEpochTime = async () => {
+  //     const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+  //     let dateTime = result;
+  //     const interval = setInterval(() => {
+  //       if (dateTime > 0) {
+  //         dateTime -= 1;
+  //       } else {
+  //         const setTime = async () => {
+  //           const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+  //           dateTime = result;
+  //         };
+  //         setTime();
+  //       }
+  //       setProgress(100 - (100 * dateTime) / 604800);
+  //       let current = moment.unix(moment().unix());
+  //       let date = moment.unix(moment().unix() + dateTime);
+  //       let time = date - current;
+  //       let duration = moment.duration(time);
+  //       let days = duration.days();
+  //       let hours = duration.hours();
+  //       let minutes = duration.minutes();
+  //       let seconds = duration.seconds();
+  //       let final = {
+  //         days,
+  //         hours,
+  //         minutes,
+  //         seconds
+  //       };
+  //       setTimerData(final);
+  //     }, 1000);
 
-      return () => clearInterval(interval);
-    };
-    setEpochTime();
-  }, []);
+  //     return () => clearInterval(interval);
+  //   };
+  //   setEpochTime();
+  // }, []);
 
   useEffect(() => {
     const getStakingData = async () => {
@@ -122,6 +121,20 @@ const HeaderTabs = ({
           {i18n.t('footer.docs')}
         </HowToLink>
       </TableTitle>
+      
+      <WithdrawStakeCard>
+        <WithdrawStakeCardText>
+          <h2>{i18n.t('migrateYour')}</h2>
+          <p>
+            {i18n.t('migrationText')}
+          </p>
+        </WithdrawStakeCardText>
+        <WithdrawStakeCardBtns>
+          <button onClick={() => openModal("withdrawTokens")}
+          // withdrawStakeAndRewards(slice.stakingAddress, slice.address, slice.yieldAddress)
+          >{i18n.t('migrateTokens')}</button>
+        </WithdrawStakeCardBtns>
+      </WithdrawStakeCard>
       <StakeSummaryCardWrapper>
         <StakeSummaryCard color='#4441CF'>
           <StackSummaryCol stake>
@@ -158,41 +171,11 @@ const HeaderTabs = ({
           </StackSummaryCol>
           <StackSummaryCol claimBtn>
             <h2>{i18n.t('nextLiqIn')}</h2>
-            <Countdown>
-              <h2>
-                {timerData && timerData.days}
-                <span>{i18n.t('days')}</span>
-              </h2>
-              <h2>
-                {timerData && timerData.hours}
-                <span>{i18n.t('hours')}</span>
-              </h2>
-              <h2>
-                {timerData && timerData.minutes}
-                <span>minutes</span>
-              </h2>
-              <h2>
-                {timerData && timerData.seconds}
-                <span>seconds</span>
-              </h2>
-            </Countdown>
+            <CountdownWrapper theme={theme}/>
             <button onClick={() => openModal('claim')}>{i18n.t('claimRewards')}</button>
           </StackSummaryCol>
         </StakeSummaryCard>
       </StakeSummaryCardWrapper>
-      <WithdrawStakeCard>
-        <WithdrawStakeCardText>
-          <h2>{i18n.t('migrateYour')}</h2>
-          <p>
-            {i18n.t('migrationText')}
-          </p>
-        </WithdrawStakeCardText>
-        <WithdrawStakeCardBtns>
-          <button onClick={() => openModal("withdrawTokens")}
-          // withdrawStakeAndRewards(slice.stakingAddress, slice.address, slice.yieldAddress)
-          >{i18n.t('migrateTokens')}</button>
-        </WithdrawStakeCardBtns>
-      </WithdrawStakeCard>
       <StakingModal
         // State Values
         modalIsOpen={ModalIsOpen}

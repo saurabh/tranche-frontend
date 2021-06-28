@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from "react";
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import {
+    Countdown
+} from '../Header/styles/HeaderComponents';
 import { StakingAddresses } from 'config';
 
 import { epochTimeRemaining } from 'services/contractMethods';
+import i18n from '../../locale/i18n';
 import moment from 'moment';
+import { ModeThemes } from "config";
 
-const ProgressBarContainer = styled.div`
-    height: 5px;
-    width: ${props => props.widthBar}%;    
-    background-color: ${props => props.colorOne};
-    border-radius: 100px;
-`;
-const Progress = styled.div`
-    height: 100%;
-    width: ${props => props.progress}%;
-    background-color: ${props => props.colorTwo};
-    transition: width 1s ease-in-out;
-    border-radius: inherit;
-    text-align: right;
-`;
-const ProgressBar = ({ widthBar, colorOne, colorTwo }) => {
-  const [progress, setProgress] = useState(0);
+const CountdownWrapper = ({ modal, theme }) => {
+  const [timerData, setTimerData] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   useEffect(() => {
     const setEpochTime = async () => {
       const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
@@ -35,7 +25,6 @@ const ProgressBar = ({ widthBar, colorOne, colorTwo }) => {
           };
           setTime();
         }
-        setProgress(100 - (100 * dateTime) / 604800);
         let current = moment.unix(moment().unix());
         let date = moment.unix(moment().unix() + dateTime);
         let time = date - current;
@@ -50,6 +39,7 @@ const ProgressBar = ({ widthBar, colorOne, colorTwo }) => {
           minutes,
           seconds
         };
+        setTimerData(final);
       }, 1000);
 
       return () => clearInterval(interval);
@@ -57,11 +47,25 @@ const ProgressBar = ({ widthBar, colorOne, colorTwo }) => {
     setEpochTime();
   }, []);
   return (
-    <ProgressBarContainer widthBar={widthBar} colorOne={colorOne}>
-      <Progress progress={progress} colorTwo={colorTwo}>
-      </Progress>
-    </ProgressBarContainer>
+    <Countdown modal={modal} textColor={ModeThemes[theme].ModalText}>
+        <h2>
+        {timerData && timerData.days}
+        <span>{i18n.t('days')}</span>
+        </h2>
+        <h2>
+        {timerData && timerData.hours}
+        <span>{i18n.t('hours')}</span>
+        </h2>
+        <h2>
+        {timerData && timerData.minutes}
+        <span>minutes</span>
+        </h2>
+        <h2>
+        {timerData && timerData.seconds}
+        <span>seconds</span>
+        </h2>
+    </Countdown>
   );
 };
 
-export default ProgressBar;
+export default CountdownWrapper;

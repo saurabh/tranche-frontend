@@ -72,12 +72,12 @@ import {
   StakingModalChangeBtn,
   StakingMigrateModalContentWrapper
 } from './styles/ModalsComponents';
-import { Countdown } from '../Stake/Header/styles/HeaderComponents';
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
 import { ModeThemes, serverUrl, apiUri } from 'config';
 import i18n from '../locale/i18n';
 import { LiquidityIcons } from 'config';
 import moment from 'moment';
+import CountdownWrapper from '../Stake/ProgressBar/Countdown';
 
 const { stakingSummaryDetail } = apiUri;
 
@@ -334,25 +334,27 @@ const StakingModal = ({
                 100 SLICE <span>(Current Value is $70)</span>
               </h2>
             </ClaimModalHeader>
-            <ClaimModalTableWrapper>
+            <ClaimModalTableWrapper
+             scroll={userStakes.filter(stake => stake.tokenAddress === SLICEAddress).length >= 3}
+            >
               <ClaimModalTableTitle textColor={ModeThemes[theme].ModalText}>
                 <h2>SLICE Pools</h2>
               </ClaimModalTableTitle>
 
               <ClaimModalTableHead BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol pair head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol pair head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText} mobilePair>
                   <h2>{i18n.t('pair')}</h2>
                 </ClaimModalTableCol>
-                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText} mobileHide>
                   <h2>{i18n.t('depositDate')}</h2>
                 </ClaimModalTableCol>
-                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText} mobileHide>
                   <h2>{i18n.t('endDate')}</h2>
                 </ClaimModalTableCol>
-                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
                   <h2>Total Locked</h2>
                 </ClaimModalTableCol>
-                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol head sliceCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
                   <h2>Rewards</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head sliceliquidityFirstLast manage TableHeadText={ModeThemes[theme].TableHeadText}>
@@ -363,25 +365,25 @@ const StakingModal = ({
                 userStakes.filter(stake => stake.tokenAddress === SLICEAddress).map((stake, index) => {
                   return (
                     <ClaimModalTableRow key={index} BorderStake={ModeThemes[theme].BorderStake}>
-                      <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                      <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText} mobilePair scroll={userStakes.filter(stake => stake.tokenAddress === SLICEAddress).length >= 3} slice>  
                         <div>
                           <img src={TrancheStake} alt='Tranche' />
                         </div>
                         <h2>{stake.duration ? apiMapping[stake.duration] : 'Slice'}</h2>
                       </ClaimModalTableCol>
 
-                      <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
+                      <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText} mobileHide>
                         <h2>{ stake.startTime ? moment.unix(stake.startTime).format('MMM DD YYYY'): 'N/A'}</h2>
                       </ClaimModalTableCol>
-                      <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
+                      <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText} mobileHide>
                         <h2>{ stake.endTime ? moment.unix(stake.endTime).format('MMM DD YYYY'): 'N/A'}</h2>
                       </ClaimModalTableCol>
-                      <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText}>
+                      <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText} mobile>
                         <h2>
                           <img src={Lock} alt='lock' /> {stake.duration ? roundNumber(stake.deposit) : roundNumber(stake.staked)}
                         </h2>
                       </ClaimModalTableCol>
-                      <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText}>
+                      <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText} mobile>
                         <h2>{roundNumber(stake.reward)} SLICE</h2>
                       </ClaimModalTableCol>
 
@@ -394,6 +396,7 @@ const StakingModal = ({
                   )
                 })
               }
+              
             </ClaimModalTableWrapper>
             <ClaimModalTableWrapper>
               <ClaimModalTableTitle textColor={ModeThemes[theme].ModalText}>
@@ -401,36 +404,19 @@ const StakingModal = ({
               </ClaimModalTableTitle>
               <ClaimModalTableSubTitle textColor={ModeThemes[theme].ModalText}>
                 <h2>Next Liqudity Provider Pool Distribution</h2>
-                <Countdown modal>
-                  <h2>
-                    {timerData && timerData.days}
-                    <span>days</span>
-                  </h2>
-                  <h2>
-                    {timerData && timerData.hours}
-                    <span>hours</span>
-                  </h2>
-                  <h2>
-                    {timerData && timerData.minutes}
-                    <span>minutes</span>
-                  </h2>
-                  <h2>
-                    {timerData && timerData.seconds}
-                    <span>seconds</span>
-                  </h2>
-                </Countdown>
+                <CountdownWrapper modal theme={theme} />
               </ClaimModalTableSubTitle>
 
-              <ProgressBar progress={progress} width='100' colorOne='rgba(160, 160, 160, 0.15)' colorTwo='#369987' />
+              <ProgressBar width='100' colorOne='rgba(160, 160, 160, 0.15)' colorTwo='#369987' />
 
               <ClaimModalTableHead BorderStake={ModeThemes[theme].BorderStake}>
-                <ClaimModalTableCol pair head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol pair head sliceliquidityFirstLast TableHeadText={ModeThemes[theme].TableHeadText} mobilePair>
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
-                <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
                   <h2>Total Staked</h2>
                 </ClaimModalTableCol>
-                <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText}>
+                <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
                   <h2>Rewards</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head sliceliquidityFirstLast manage TableHeadText={ModeThemes[theme].TableHeadText}>
@@ -441,7 +427,7 @@ const StakingModal = ({
               {stakingList.map((lp, index) => {
                 return (
                   <ClaimModalTableRow key={index} BorderStake={ModeThemes[theme].BorderStake}>
-                    <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText}>
+                    <ClaimModalTableCol pair col sliceliquidityFirstLast textColor={ModeThemes[theme].ModalText} mobilePair> 
                       <div>
                         <img src={TrancheStake} alt='Tranche' />
                         <img src={LiquidityIcons[apiMapping[lp.contractAddress]]} alt='Tranche' />
@@ -449,12 +435,12 @@ const StakingModal = ({
                       <h2>{apiMapping[lp.contractAddress].split(' ')[0]}</h2>
                     </ClaimModalTableCol>
 
-                    <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText}>
+                    <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText} mobile>
                       <h2>
                         <img src={Lock} alt='lock' /> {lp.staked && roundNumber(lp.staked)}
                       </h2>
                     </ClaimModalTableCol>
-                    <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText}>
+                    <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText} mobile> 
                       <h2>{accruedRewards ? roundNumber(accruedRewards[lp.tokenAddress]) : '0'} SLICE</h2>
                     </ClaimModalTableCol>
 
