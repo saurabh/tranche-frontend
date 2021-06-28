@@ -10,9 +10,10 @@ import {
   ModeThemes
 } from 'config/constants';
 import i18n from "../../locale/i18n";
+import HeaderTabs from 'app/components/Stake/Header/HeaderTabs';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-function Header({updateDate, theme}) {
+function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpen}) {
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
@@ -77,6 +78,8 @@ function Header({updateDate, theme}) {
           </a>
         </NavbarLinks>
           }
+        <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
+
       {/* <HeaderWrapper>
             <HeaderContent path={path}>
               {  (path === "privacy" || path === "terms") ? 

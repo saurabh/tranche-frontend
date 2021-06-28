@@ -229,6 +229,7 @@ const TableHeadTitle = styled.div`
         margin: 0 auto;
       }
     `}
+    
     ${({ trancheTableBtns }) => trancheTableBtns && `
       width: 5%;
       text-align: center;
@@ -243,6 +244,9 @@ const TableHeadTitle = styled.div`
         text-align: center;
         margin: 0 auto;
       }
+    `}
+    ${({ statusStake, sliceStaking }) => (statusStake && sliceStaking) && `
+      width: 10%;
     `}
     ${({ reward }) => reward && `
       width: 14%;
@@ -279,6 +283,10 @@ const TableHeadTitle = styled.div`
         margin: 0 auto;
       }
     `}
+    ${({ btnsStake, sliceStaking }) => (btnsStake && sliceStaking) && `
+      width: 15%;
+    `}
+    
     ${({ tranche, color }) => tranche && `
       & > h2{
         border-bottom: 2px dashed ${color};
@@ -324,6 +332,9 @@ const TableTitle = styled.div`
         color: ${props => props.color};
     }
     margin: ${props => props.summary ? "33px 0 29px 0" : ""};
+    ${({ stake }) => stake && `
+     margin: 40px 0;
+    `}
 `;
 const TableSubTitle = styled.div`
     & > h2{
@@ -799,10 +810,17 @@ const TableCardImg = styled.div`
   display: flex;
   position: relative;
   align-items: center;
-  margin-top: -9px;
+  margin-top: -4px;  
   img{
     border-radius: 50%;
     height: 37px;
+  }
+  img:nth-child(1){
+    z-index: 1;
+  }
+
+  img:nth-child(2){
+    margin-left: -10px;
   }
   span{
     position: absolute;
@@ -821,6 +839,7 @@ const TableCardImg = styled.div`
       height: 36px;
     }
   }
+  
   
   
   ${({ tranche, color, type }) => tranche && type === "A" && `
@@ -855,6 +874,15 @@ const TableCardImg = styled.div`
       justify-content: center;
       align-items: center;
     border-radius: 4px;
+    }
+  `}
+  ${({ stake }) => stake && `
+    @media (max-width: 767px){
+      flex-direction: column;
+      img:nth-child(2){
+        margin-left: 0;
+        margin-top: -12px;
+      }
     }
   `}
 `
@@ -1122,6 +1150,9 @@ const TableFifthCol = styled.div`
   ${({ stakeStatus }) => stakeStatus && `
     width: 15% !important;
   `}
+  ${({ sliceStaking }) => sliceStaking && `
+    width: 10% !important;
+  `}
 
   position: relative;
 `
@@ -1154,16 +1185,20 @@ const StatusTextWrapper = styled.h2`
   background: ${props => props.backgroundColor ? props.backgroundColor  : ""} !important; 
   text-transform: uppercase;
   font-size: 12px;
-  width: 102px;
+  // width: 102px;
+  width: auto;
   padding: 12px 0px;
   position: relative;
   ${({ table, color }) => table === 'tranche' && `
     background: transparent;
     border: ${color ? "1px solid " + color : ""};
   `}
-  ${({ table }) => table === 'stake' && `
+  ${({ table, docsLockupBackground, docsLockupText }) => table === 'stake' && `
     font-weight: 600;
     font-size: 14px !important;
+    border-radius: 10px  !important;
+    color: ${docsLockupText} !important; 
+    background: ${docsLockupBackground} !important; 
   `}
 `
 const TableSixthCol = styled.div`
@@ -1197,6 +1232,9 @@ const TableSixthCol = styled.div`
 `
 const TableSeventhCol = styled.div`
   width: 10% !important;
+  ${({ sliceStaking }) => sliceStaking && `
+    width: 15% !important;
+  `}
 `
 const StakeBtn = styled.button`
   border: none;
@@ -1226,6 +1264,31 @@ const StakeBtn = styled.button`
     font-size: 12px;
   } 
 `
+const StakeBtnSlice = styled.button`
+  outline: none;
+  border: none;
+  width: 96.32px;
+  height: 34.19px;
+  background: #4441CF;
+  border-radius: 50px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
+  text-transform: uppercase;
+  // margin-right: 20px;
+  color: #FFFFFF;
+  ${({ withdraw }) => withdraw && `
+    background: #6E41CF;    
+    font-size: 12px;
+  `}
+  @media (max-width: 767px){
+    font-size: 10px;
+    width: 73.32px;
+    height: 25.19px;
+  } 
+`
+
 const StakeBtns = styled.div`
   display: flex;
 `
@@ -1800,7 +1863,7 @@ const TooltipWrapper = styled.div`
   ${({ status, language }) => status && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% - 47px)" : language === "kr" ? "calc(100% - 65px)" : "calc(100% - 65px)" };
+    left: ${language === "en" ? "calc(100% - 20px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 40px)" };
   `}
   ${({ staked, language }) => staked && `
     top: calc(100% - 23px);
@@ -1822,10 +1885,10 @@ const TooltipWrapper = styled.div`
     bottom: unset;
     left: ${language === "en" ? "calc(100% - 12px)" : language === "kr" ? "calc(100% - 25px)" : "calc(100% - 25px)" };
   `}
-  ${({ manageStake, language }) => manageStake && `
+  ${({ manageStake, language, sliceStaking }) => manageStake && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% + 9px)" : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
+    left: ${language === "en" ? (sliceStaking ? "calc(100% - 20px)" : "calc(100% + 10px)") : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
   `}
   ${({ summary }) => summary && `
     transform: translateX(25px);
@@ -1954,6 +2017,7 @@ const HowToLink = styled.a`
     font-size: 8px;
   }
 
+
 `
 
 const LoadingContent = styled.div`
@@ -2049,5 +2113,6 @@ export {
   StakeBtns,
   TooltipWrapper,
   HowToLink,
-  LoadingContent
+  LoadingContent,
+  StakeBtnSlice
 };

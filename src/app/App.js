@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { ThemeProvider } from 'styled-components';
-import Banner from 'app/components/Banner/Banner';
+// import Banner from 'app/components/Banner/Banner';
 import ErrorModal from 'app/components/Modals/Error';
 
 import { setTokenBalances, checkTrancheAllowances } from 'redux/actions/ethereum';
@@ -53,7 +53,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { addre
     return (
       <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
-        <Banner />
+        {/* <Banner /> */}
         <NotificationProvider />
         <Router>
           <Switch location={window.location}>

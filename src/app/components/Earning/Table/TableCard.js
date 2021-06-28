@@ -4,10 +4,20 @@ import { destroy } from 'redux-form';
 import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, buyTrancheTokens, sellTrancheTokens, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
+import {
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
+  toggleApproval,
+  setTxLoading,
+  setTokenBalances,
+  addNotification,
+  updateNotification,
+  setNotificationCount
+} from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
-import { addNotification } from 'redux/actions/NotificationToggle';
 import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
@@ -77,9 +87,11 @@ const TableCard = ({
   setNetwork,
   setBalance,
   addNotification,
+  updateNotification,
+  setNotificationCount,
   setWalletAndWeb3,
   setTokenBalances,
-  ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
+  ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing, notificationCount },
   toggleApproval,
   setTxLoading,
   destroy,
@@ -119,14 +131,17 @@ const TableCard = ({
   });
 
   const approveContract = async (type, isApproved, e) => {
+    if (txOngoing) e.stopPropogation();
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    let id = notificationCount;
+    setNotificationCount(notificationCount + 1);
     try {
-      if (txOngoing) e.stopPropogation();
-      const ready = await readyToTransact(wallet, onboard);
-      if (!ready) return;
       const amount = isApproved ? 0 : toWei(ApproveBigNumber);
       const tokenAddress = type ? buyerCoinAddress : trancheTokenAddress;
       const token = ERC20Setup(web3, tokenAddress);
       addNotification({
+        id,
         type: 'WAITING',
         message: 'Your transaction is waiting for you to confirm',
         title: 'awaiting confirmation'
@@ -146,7 +161,8 @@ const TableCard = ({
             emitter.on('txCancel', () => setTxLoading(false));
             emitter.on('txFailed', () => setTxLoading(false));
           } else if (network === maticNetworkId) {
-            addNotification({
+            updateNotification({
+              id,
               type: 'PENDING',
               message: txMessage(hash),
               title: 'pending transaction'
@@ -154,13 +170,14 @@ const TableCard = ({
           }
         })
         .on('confirmation', (count) => {
-          if (count === 1) {
+          if (count === 0) {
             type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
             toggleApproval(tokenAddress, contractAddress, !isApproved);
             setTxLoading(false);
             destroy('tranche');
             if (network === maticNetworkId) {
-              addNotification({
+              updateNotification({
+                id,
                 type: 'SUCCESS',
                 message: 'Your transaction has succeeded',
                 title: 'successful transaction'
@@ -170,7 +187,8 @@ const TableCard = ({
         });
     } catch (error) {
       error.code === 4001 &&
-        addNotification({
+        updateNotification({
+          id,
           type: 'REJECTED',
           message: 'You rejected the transaction',
           title: 'Transaction rejected'
@@ -199,9 +217,9 @@ const TableCard = ({
     if (trancheCard.status && id === trancheCard.id) {
       trancheCardToggle({ status: false, id });
     } else if ((trancheCard.status && id !== trancheCard.id) || !trancheCard.status) {
-      setTimeout(() =>{
-        address && setTokenBalances(address)
-      }, 500)
+      setTimeout(() => {
+        address && setTokenBalances(address);
+      }, 500);
       destroy('tranche');
       trancheCardToggle({ status: true, id });
     }
@@ -495,6 +513,8 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   addNotification,
+  updateNotification,
+  setNotificationCount,
   setTokenBalances,
   checkServer,
   trancheCardToggle,

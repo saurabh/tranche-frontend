@@ -673,12 +673,17 @@ const MarketTab = styled.button`
       }  
     }
 
-  `}
-
-
- 
-
-    
+  `} 
+  ${({ theme }) => theme === "light" && `
+      opacity: 0.5;
+      :hover{
+        opacity: 0.8;
+      }
+  `} 
+  ${({ current, theme, btnShadow}) => (current && theme === "light") && `
+      box-shadow: ${btnShadow} !important;
+      opacity: 1;
+  `} 
 `
 const BridgeTokensWrapper = styled.div`
   display: flex;

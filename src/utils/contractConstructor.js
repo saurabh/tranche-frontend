@@ -5,6 +5,7 @@ import { abi as JLoanABI } from 'build/contracts/JLoan.json';
 import { abi as JCompoundABI } from 'build/contracts/JCompound.json';
 import { abi as JAaveABI } from 'build/contracts/JAave.json';
 import { abi as StakingABI } from 'build/contracts/StakingMilestones.json';
+import { abi as LockupABI } from 'build/contracts/StakingWithLockup.json';
 import { abi as YieldFarmABI } from 'build/contracts/YieldFarm.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
 import {
@@ -40,6 +41,10 @@ export function JPriceOracleSetup(web3) {
 
 export function StakingSetup(web3, StakingAddress) {
   return new web3.eth.Contract(StakingABI, StakingAddress);
+}
+
+export function LockupSetup(web3, StakingAddress) {
+  return new web3.eth.Contract(LockupABI, StakingAddress);
 }
 
 export function YieldFarmSetup(web3, YieldFarmAddress) {

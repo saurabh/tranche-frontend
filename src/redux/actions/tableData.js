@@ -7,9 +7,10 @@ import {
   LP1TokenAddress,
   LP2TokenAddress,
   etherScanUrl,
-  maticBlockExplorerUrl
+  maticBlockExplorerUrl,
+  lockupDurations
 } from 'config/constants';
-import { postRequest, initOnboard } from 'services';
+import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
 import { setBlockExplorerUrl } from './ethereum';
 import {
@@ -25,11 +26,14 @@ import {
   TRANCHES_SUCCESS,
   TRANCHES_COUNT,
   STAKING_IS_LOADING,
-  STAKING_SUCCESS,
+  LPLIST_SUCCESS,
   STAKING_COUNT,
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
-  TRANCHE_MARKETS
+  TRANCHE_MARKETS,
+  STAKING_SUCCESS,
+  USER_STAKING_LIST_IS_LOADING,
+  USER_STAKING_LIST_SUCCESS
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -90,17 +94,21 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
-  const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
-  const orderedList = [];
-  orderedList.push(searchArr(SLICEAddress));
-  orderedList.push(searchArr(LP1TokenAddress));
-  orderedList.push(searchArr(LP2TokenAddress));
+  const searchArr = (tokenAddress) => list.filter(i => i.duration === undefined).find((i) => i.tokenAddress === tokenAddress);
+  const sliceList = list.filter((i) => i.duration);
+  sliceList.push(searchArr(SLICEAddress))
+  const lpList = [];
+  lpList.push(searchArr(LP1TokenAddress));
+  lpList.push(searchArr(LP2TokenAddress));
+  dispatch({
+    type: LPLIST_SUCCESS,
+    payload: lpList
+  });
   dispatch({
     type: STAKING_SUCCESS,
-    payload: orderedList
+    payload: sliceList
   });
 };
-
 export const stakingSetCount = (count) => (dispatch) => {
   dispatch({
     type: STAKING_COUNT,
@@ -168,6 +176,29 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   });
 };
 
+
+const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
+  const sliceStakes = userStakingList.find(l => l.tokenAddress === SLICEAddress);
+  const slice = (sliceStakes ? sliceStakes.stakes : []);
+  const lp1Stakes = userStakingList.find(l => l.tokenAddress === LP1TokenAddress);
+  const lp2Stakes = userStakingList.find(l => l.tokenAddress === LP2TokenAddress);
+  const lp = lp1Stakes ? lp1Stakes.stakes : [];
+  if (lp2Stakes) {
+    lp.push(...(lp2Stakes.stakes || []));
+  }
+
+  dispatch({
+    type: USER_STAKING_LIST_SUCCESS,
+    payload: {slice, lp}
+  });
+}
+
+const userStakingListIsLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: USER_STAKING_LIST_IS_LOADING,
+    payload: bool
+  });
+};
 export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
@@ -195,3 +226,17 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
     dispatch(checkServer(false));
   }
 };
+
+export const fetchUserStakingList = (endpoint) => async (dispatch) => {
+  try {
+    dispatch(userStakingListIsLoading(true));
+    const { data: result } = await getRequest(endpoint, {}, null);
+    if (result.status) {
+      dispatch(userStakingListIsLoading(false));
+      dispatch(fetchUserStakingListSuccess(result.result.list));
+    }
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+} 
