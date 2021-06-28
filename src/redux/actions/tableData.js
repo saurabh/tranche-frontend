@@ -33,7 +33,8 @@ import {
   TRANCHE_MARKETS,
   STAKING_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
-  USER_STAKING_LIST_SUCCESS
+  USER_STAKING_LIST_SUCCESS,
+  SET_MIGRATE_STEP
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -240,3 +241,11 @@ export const fetchUserStakingList = (endpoint) => async (dispatch) => {
     console.log(error);
   }
 } 
+
+export const setMigrateStep = (string) => (dispatch) => {
+  if (string === 'done') window.localStorage.setItem('migrateStep', string);
+  dispatch({
+    type: SET_MIGRATE_STEP,
+    payload: string
+  });
+}

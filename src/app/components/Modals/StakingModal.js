@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { ModeThemes, serverUrl, apiUri, SLICEAddress, LiquidityIcons, ApproveBigNumber, txMessage } from 'config';
+import { toWei, getUserStaked, claimRewards, addStake, withdrawStake, stakingAllowanceCheck} from 'services/contractMethods';
+import useAnalytics from 'services/analytics';
+import { setNotificationCount, addNotification, updateNotification } from 'redux/actions/ethereum';
+import { setMigrateStep } from 'redux/actions/tableData';
 import { CloseModal, CloseModalWhite, Lock, LockLight, TrancheStake, Migrated } from 'assets';
-import { addrShortener, roundNumber } from 'utils';
-import { getUserStaked, claimRewards } from 'services/contractMethods';
-import {
-  SLICEAddress
-} from 'config/constants';
-
+import { addrShortener, roundNumber, formatTime, ERC20Setup, isEqualTo } from 'utils';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { Countdown } from '../Stake/Header/styles/HeaderComponents';
+import i18n from '../locale/i18n';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
@@ -73,10 +76,6 @@ import {
   StakingMigrateModalContentWrapper
 } from './styles/ModalsComponents';
 import ProgressBar from '../Stake/ProgressBar/ProgressBar';
-import { ModeThemes, serverUrl, apiUri } from 'config';
-import i18n from '../locale/i18n';
-import { LiquidityIcons } from 'config';
-import moment from 'moment';
 import CountdownWrapper from '../Stake/ProgressBar/Countdown';
 
 const { stakingSummaryDetail } = apiUri;
@@ -203,10 +202,10 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   // Redux
   ethereum: { address },
-  stakingList,
-  sliceStakingList,
+  data: { stakingList, sliceStakingList, userStakingList, currentStep },
   summaryData: { accruedRewards },
   theme,
+  setMigrateStep,
   // State Values
   modalIsOpen,
   type,
@@ -216,25 +215,21 @@ const StakingModal = ({
   title,
   rewards,
   timerData,
-  data,
   apy,
-  userStakingList,
   durationIndex,
   progress,
   duration,
-  hasAllowance,
-  approveLoading,
   // Functions
   openModal,
-  stakingApproveContract,
-  adjustStake,
-  closeModal,
-  lockup
+  closeModal
   // API Values,
 }) => {
+  const Tracker = useAnalytics('ButtonClicks');
+  const migrateStep = window.localStorage.getItem('migrateStep');
   const [modalTypeVar, setModalTypeVar] = useState('');
   const [objId, setObjId] = useState(null);
-  const [currentStep, setCurrentStep] = useState('claim');
+  const [newSlice, setNewSlice] = useState([]);
+  const [oldSlice, setOldSlice] = useState([]);
   const [totalStaked, setTotalStaked] = useState(0);
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
@@ -242,9 +237,6 @@ const StakingModal = ({
   const [migrateLoading, setMigrateLoading] = useState(false);
   const { slice, lp } = userStakingList;
   
-  const stakeStepStakingList = sliceStakingList && sliceStakingList.filter((obj) => {
-    return obj && obj.poolName !== undefined;
-  });
   const fullStakingList = sliceStakingList.concat(stakingList);
   const apiMapping = fullStakingList.reduce((acc, cur) => {
     if (!cur) return acc;
@@ -256,11 +248,14 @@ const StakingModal = ({
     }
     return acc;
   }, {});
+
   useEffect(() => {
     let stakes = [];
     const withDuration = slice.filter(s => s.duration);
     const withoutDuration = sliceStakingList.filter(s => !s.duration);
-    
+    setNewSlice(sliceStakingList.filter(s => s.duration));
+    setOldSlice(withoutDuration);
+
     if (modalType === 'claim') {
       stakes = withDuration.concat(withoutDuration);
     } else {
@@ -274,29 +269,16 @@ const StakingModal = ({
     setUserStakes(stakes)
   }, [modalType, duration, lp, slice, sliceStakingList, tokenAddress]);
 
-  const formatTime = (value) =>{
-    let format = (val) => moment().add(value, 'minutes').diff(moment(), val)
-    let years =  format('years');
-    let months =  format('months');
-    let weeks =  format('weeks');
-    let days =  format('days');
-    let hours =  format('hours');
-    let mintues =  format('mintues');
-
-    return years !== 0 ? years + ' years' : months !== 0 ? months + ' months' : weeks !== 0 ? weeks + ' weeks' : days !== 0 ? days + ' days' : hours !== 0 ? hours + ' hours' : mintues !== 0 ? mintues + ' mintues' : ""
-  }
-  
-
   useEffect(() => {
     setModalTypeVar(modalType);
   }, [modalType]);
 
-  const closeModalMigrate = () =>{
-    setTimeout(() => {
-      setCurrentStep("claim");
-    }, 300)
-    closeModal();
-  }
+  useEffect(() => {
+    if (address && migrateStep !== 'done') {
+      if (accruedRewards && isEqualTo(accruedRewards[SLICEAddress], 0)) setMigrateStep('withdraw');
+      if (sliceStakingList[sliceStakingList.length - 1] && isEqualTo(sliceStakingList[sliceStakingList.length - 1].subscription, 0)) setMigrateStep('stake')
+    }
+  }, [address, migrateStep, accruedRewards, sliceStakingList, setMigrateStep])
 
   useEffect(() => {
     const getStakingDetails = async () => {
@@ -310,6 +292,44 @@ const StakingModal = ({
 
     modalIsOpen && !duration && tokenAddress && getStakingDetails();
   }, [modalIsOpen, type, duration, tokenAddress, contractAddress, address]);
+
+  const adjustStake = async (e, contractAddress, tokenAddress, durationIndex = false, migrate) => {
+    try {
+      e.preventDefault();
+      migrate && setMigrateLoading(true)
+      if (modalType !== 'liqWithdraw') {
+        if (migrate) {
+          await addStake(contractAddress, tokenAddress, durationIndex);
+          setMigrateLoading(false);
+        } 
+        addStake(contractAddress, tokenAddress, durationIndex)
+      } else {
+        withdrawStake(contractAddress, tokenAddress);
+      }
+
+      modalType === 'liqStake'
+        ? Tracker('addStake', 'User address: ' + address)
+        : modalType === 'staking' 
+        ? Tracker('addLockup', 'User address: ' + address)
+        : Tracker('withdrawStake', 'User address: ' + address);
+      migrate ? setMigrateStep('done') : closeModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const claimAndProgress = async (claimType) => {
+    try {
+      setMigrateLoading(true)
+      if (claimType === 'rewards') await claimRewards(oldSlice[0].yieldAddress, undefined, true);
+      if (claimType === 'oldStake') await withdrawStake(oldSlice[0].contractAddress, oldSlice[0].tokenAddress, true, true);
+      setMigrateLoading(false)
+
+      if (claimType === 'skip') setMigrateStep('done');
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const claimModal = () => {
     return (
@@ -380,11 +400,11 @@ const StakingModal = ({
                       </ClaimModalTableCol>
                       <ClaimModalTableCol col sliceCol staked textColor={ModeThemes[theme].ModalText} mobile>
                         <h2>
-                          <img src={Lock} alt='lock' /> {stake.duration ? roundNumber(stake.deposit) : roundNumber(stake.staked)}
+                          <img src={Lock} alt='lock' /> {stake.duration ? roundNumber(stake.deposit) : roundNumber(sliceStakingList[sliceStakingList.length - 1].subscription)}
                         </h2>
                       </ClaimModalTableCol>
                       <ClaimModalTableCol col sliceCol textColor={ModeThemes[theme].ModalText} mobile>
-                        <h2>{roundNumber(stake.reward)} SLICE</h2>
+                        <h2>{stake.duration ? roundNumber(stake.reward) : accruedRewards ? roundNumber(accruedRewards[stake.tokenAddress]) : 0} SLICE</h2>
                       </ClaimModalTableCol>
 
                       <ClaimModalTableCol col sliceliquidityFirstLast>
@@ -437,7 +457,7 @@ const StakingModal = ({
 
                     <ClaimModalTableCol col liquidityCol staked textColor={ModeThemes[theme].ModalText} mobile>
                       <h2>
-                        <img src={Lock} alt='lock' /> {lp.staked && roundNumber(lp.staked)}
+                        <img src={Lock} alt='lock' /> {roundNumber(lp.subscription)}
                       </h2>
                     </ClaimModalTableCol>
                     <ClaimModalTableCol col liquidityCol textColor={ModeThemes[theme].ModalText} mobile> 
@@ -499,7 +519,7 @@ const StakingModal = ({
                     BoxColorText={ModeThemes[theme].BoxColorText}
                   >
                     <h2>{i18n.t('lockup')}</h2>
-                    <h2>{lockup()}</h2>
+                    <h2>{formatTime(duration)}</h2>
                   </StakingModalContentSideHeaderBox>
                   <StakingModalContentSideHeaderBox
                     stake
@@ -573,11 +593,11 @@ const StakingModal = ({
 
                 <StakingForm 
                   modalTypeVar={modalTypeVar} 
-                  type={type} tokenAddress={tokenAddress}
+                  type={type} 
+                  tokenAddress={tokenAddress}
                   contractAddress={contractAddress}
-                  hasAllowance={hasAllowance}
-                  approveLoading={approveLoading}
-                  stakingApproveContract={stakingApproveContract}
+                  durationIndex={durationIndex}
+                  userStaked={userStaked}
                   adjustStake={adjustStake}
                 />
               </StakingModalContentSide>
@@ -727,10 +747,7 @@ const StakingModal = ({
                   type={type} 
                   tokenAddress={tokenAddress}
                   contractAddress={contractAddress}
-                  hasAllowance={hasAllowance}
                   userStaked={userStaked}
-                  approveLoading={approveLoading}
-                  stakingApproveContract={stakingApproveContract}
                   adjustStake={adjustStake}
                 />
               </StakingModalContentSide>
@@ -805,7 +822,7 @@ const StakingModal = ({
               <StakingModalContentSideTitle textColor={ModeThemes[theme].ModalText} migrate>
                 <h2>Migrate Tokens</h2>
                 <StakingModalClose migrate>
-                  <button onClick={closeModalMigrate}>
+                  <button onClick={closeModal}>
                     <img src={theme === 'light' ? CloseModal : CloseModalWhite} alt='close' />
                   </button>
                 </StakingModalClose>
@@ -889,7 +906,6 @@ const StakingModal = ({
     );
   };
 
-
   const migrateClaim = () =>{
     return(
       <StakingMigrateModalContent>
@@ -899,17 +915,12 @@ const StakingModal = ({
           <RewardsAmountCardsWrapper>
             <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
               <h2>{i18n.t('AmountRewards')}</h2>
-              <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
-            </RewardsAmountCard>
-  
-            <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
-              <h2>{i18n.t('AmountRewards')}</h2>
-              <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+              <h2>{accruedRewards ? accruedRewards[oldSlice[0].tokenAddress] : 0}<span><img src={TrancheStake} alt=""/>Slice</span></h2>
             </RewardsAmountCard>
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   
       {!migrateLoading ?
-        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('withdraw')}>
+        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => claimAndProgress('rewards')}>
               {i18n.t('claim')}
         </StakeModalFormBtn> :
         <StakeModalFormBtn migrate step={currentStep} migrateStake>
@@ -936,14 +947,14 @@ const StakingModal = ({
           <RewardsAmountCardsWrapper>
             <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
               <h2>{i18n.t('TotalSliceWithdraw')}</h2>
-              <h2>1000<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+              <h2>{oldSlice[0].subscription}<span><img src={TrancheStake} alt=""/>Slice</span></h2>
             </RewardsAmountCard>
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   
 
         {!migrateLoading ?
 
-        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('stake')}>
+        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => claimAndProgress('oldStake')}>
           Withdraw
         </StakeModalFormBtn> : 
         <StakeModalFormBtn migrate step={currentStep} migrateStake>
@@ -978,7 +989,7 @@ const StakingModal = ({
               </StakeNewTableHead>
               <StakeNewTableCards>
                 {
-                  stakeStepStakingList.map((staking, i) => 
+                  newSlice.map((stakingPool, i) => 
                   <StakeNewTableCard
                     color={ModeThemes[theme].TableCard}
                     borderColor={ModeThemes[theme].TableCardBorderColor}
@@ -991,8 +1002,8 @@ const StakingModal = ({
                           <img src={TrancheStake} alt=""/>
                         </StakeNewColImg>
                         <StakeNewColText color={ModeThemes[theme].tableText}>
-                          <h2>{staking.poolName}</h2>
-                          <h2>{addrShortener(staking.contractAddress)}</h2>
+                          <h2>{stakingPool.poolName}</h2>
+                          <h2>{addrShortener(stakingPool.contractAddress)}</h2>
                         </StakeNewColText>
                       </StakeNewColFirst>
 
@@ -1002,11 +1013,11 @@ const StakingModal = ({
                       docsLockupText={ModeThemes[theme].docsLockupText}
                       docsLockupBackground={ModeThemes[theme].docsLockupBackground}
                     >
-                      <h2><span>{formatTime(staking.duration)}</span></h2>
+                      <h2><span>{formatTime(stakingPool.duration)}</span></h2>
                     </StakeNewCol>
 
                     <StakeNewCol apyValue apy color={ModeThemes[theme].tableText}>
-                      <h2>{staking.apy}%</h2>
+                      <h2>{stakingPool.apy}%</h2>
                     </StakeNewCol>
 
                     <StakeNewCol stake stakeValue>
@@ -1023,7 +1034,7 @@ const StakingModal = ({
               </StakeNewTable>
           </StakeNewWrapper>
 
-          <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => setCurrentStep('done')}>
+          <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => claimAndProgress('skip')}>
             {i18n.t('skipFor')}
           </StakeModalFormBtn>
         </StakingMigrateModalContent> :
@@ -1043,8 +1054,8 @@ const StakingModal = ({
               <img src={TrancheStake} alt='img' />
             </StakingModalContentSideHeaderImg>
             <StakingModalContentSideHeaderText boxText={ModeThemes[theme].boxText} textColor={ModeThemes[theme].ModalText}>
-              <h2>{data.sliceStakingList[id].poolName} STAKING POOL</h2>
-              <h2>{data.sliceStakingList[id].contractAddress}</h2>
+              <h2>{sliceStakingList[id].poolName} STAKING POOL</h2>
+              <h2>{sliceStakingList[id].contractAddress}</h2>
             </StakingModalContentSideHeaderText>
             <StakingModalChangeBtn onClick={() => setObjId(null)}>
               Change
@@ -1058,7 +1069,7 @@ const StakingModal = ({
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
               <h2>{i18n.t('lockup')}</h2>
-              <h2>{formatTime(data.sliceStakingList[id].duration)}</h2>
+              <h2>{formatTime(sliceStakingList[id].duration)}</h2>
             </StakingModalContentSideHeaderBox>
             <StakingModalContentSideHeaderBox
               stake
@@ -1067,7 +1078,7 @@ const StakingModal = ({
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
               <h2>APY</h2>
-              <h2>{roundNumber(data.sliceStakingList[id].apy, false)}%</h2>
+              <h2>{roundNumber(sliceStakingList[id].apy, false)}%</h2>
             </StakingModalContentSideHeaderBox>
             <StakingModalContentSideHeaderBox
               BoxColor={ModeThemes[theme].BoxColor}
@@ -1075,25 +1086,23 @@ const StakingModal = ({
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
               <h2>Pool Capacity</h2>
-              <h2>{roundNumber(data.sliceStakingList[id].reward, false)} SLICE</h2>
+              <h2>{roundNumber(sliceStakingList[id].reward, false)} SLICE</h2>
             </StakingModalContentSideHeaderBox>
           </StakingModalContentSideHeaderBoxWrapper>
 
           <StakingForm 
             modalTypeVar="staking" 
-            type={data.sliceStakingList[id].type} tokenAddress={data.sliceStakingList[id].tokenAddress}
-            contractAddress={contractAddress}
-            hasAllowance={hasAllowance}
-            approveLoading={approveLoading}
-            stakingApproveContract={stakingApproveContract}
+            type={sliceStakingList[id].type} 
+            tokenAddress={sliceStakingList[id].tokenAddress}
+            contractAddress={sliceStakingList[id].contractAddress}
+            durationIndex={sliceStakingList[id].durationIndex}
+            userStaked={userStaked}
             adjustStake={adjustStake}
             migrate={true}
+            migrateLoading={migrateLoading}
           />
           
         </SliceMigratedWrapper>
-        {/* <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => closeModalMigrate()}>
-        {i18n.t('close')}
-        </StakeModalFormBtn> */}
       </StakingMigrateModalContent>
     )
   }
@@ -1108,7 +1117,7 @@ const StakingModal = ({
             <h2>{i18n.t('tokenMigrated')}</h2>
           </SliceMigratedText>
         </SliceMigratedWrapper>
-        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => closeModalMigrate()}>
+        <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => closeModal()}>
         {i18n.t('close')}
         </StakeModalFormBtn>
       </StakingMigrateModalContent>
@@ -1129,19 +1138,17 @@ const StakingModal = ({
 StakingModal.propTypes = {
   ethereum: PropTypes.object.isRequired,
   summaryData: PropTypes.object.isRequired,
-  stakingList: PropTypes.array.isRequired,
-  path: PropTypes.string.isRequired
+  data: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  theme: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
   ethereum: state.ethereum,
   summaryData: state.summaryData,
-  stakingList: state.data.stakingList,
-  sliceStakingList: state.data.sliceStakingList,
-  userStakingList: state.data.userStakingList,
-  path: state.path,
   data: state.data,
+  path: state.path,
   theme: state.theme
 });
 
-export default connect(mapStateToProps, {})(StakingModal);
+export default connect(mapStateToProps, { setMigrateStep })(StakingModal);

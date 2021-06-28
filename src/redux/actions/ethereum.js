@@ -34,6 +34,11 @@ import {
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
 import { trancheMarketsToggle } from './tableData';
+import { StakingAddresses } from 'config';
+import { LockupAddress } from 'config';
+import { SLICEAddress } from 'config';
+import { LP1TokenAddress } from 'config';
+import { LP2TokenAddress } from 'config';
 const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
@@ -221,6 +226,101 @@ export const checkTrancheAllowances = (address, contractAddress) => async (dispa
     console.error(error);
   }
 };
+
+export const checkStakingAllowances = (address) => (dispatch) => {
+  try {
+    const state = store.getState();
+    let { web3 } = state.ethereum;
+
+    const sliceStakingContracts = [StakingAddresses[0], LockupAddress];
+    const Tokens = [SLICEAddress, LP1TokenAddress, LP2TokenAddress];
+    let tokenBalance = {};
+
+    const batch = new web3.BatchRequest();
+    Tokens.map((tokenAddress) => {
+      let token = ERC20Setup(web3, tokenAddress);
+      batch.add(
+        token.methods.balanceOf(address).call.request({ from: address }, (err, res) => {
+          if (err) {
+            console.error(err);
+          } else {
+            tokenBalance[tokenAddress] = res;
+          }
+        })
+      );
+      return batch;
+    });
+
+    let SLICE = ERC20Setup(web3, SLICEAddress);
+    let LP1 = ERC20Setup(web3, LP1TokenAddress);
+    let LP2 = ERC20Setup(web3, LP2TokenAddress);
+    
+    sliceStakingContracts.map((contractAddress) => {
+      batch.add(
+        SLICE.methods.allowance(address, contractAddress).call.request({ from: address }, (err, res) => {
+          if (err) {
+            console.error(err);
+          } else {
+            if ((isGreaterThan(res, tokenBalance[SLICEAddress]) || isEqualTo(res, tokenBalance[SLICEAddress])) && res !== '0') {
+              dispatch({
+                type: SET_TRANCHE_ALLOWANCE,
+                payload: { contractAddress: contractAddress.toLowerCase(), tokenAddress: SLICEAddress.toLowerCase(), isApproved: true }
+              });
+            } else {
+              dispatch({
+                type: SET_TRANCHE_ALLOWANCE,
+                payload: { contractAddress: contractAddress.toLowerCase(), tokenAddress: SLICEAddress.toLowerCase(), isApproved: false }
+              });
+            }
+          }
+        })
+      );
+      return batch;
+    })
+    batch.add(
+      LP1.methods.allowance(address, StakingAddresses[1]).call.request({ from: address }, (err, res) => {
+        if (err) {
+          console.error(err);
+        } else {
+          if ((isGreaterThan(res, tokenBalance[LP1TokenAddress]) || isEqualTo(res, tokenBalance[LP1TokenAddress])) && res !== '0') {
+            dispatch({
+              type: SET_TRANCHE_ALLOWANCE,
+              payload: { contractAddress: StakingAddresses[1].toLowerCase(), tokenAddress: LP1TokenAddress.toLowerCase(), isApproved: true }
+            });
+          } else {
+            dispatch({
+              type: SET_TRANCHE_ALLOWANCE,
+              payload: { contractAddress: StakingAddresses[1].toLowerCase(), tokenAddress: LP1TokenAddress.toLowerCase(), isApproved: false }
+            });
+          }
+        }
+      })
+      );
+    batch.add(
+      LP2.methods.allowance(address, StakingAddresses[2]).call.request({ from: address }, (err, res) => {
+        if (err) {
+          console.error(err);
+        } else {
+          if ((isGreaterThan(res, tokenBalance[LP2TokenAddress]) || isEqualTo(res, tokenBalance[LP2TokenAddress])) && res !== '0') {
+            dispatch({
+              type: SET_TRANCHE_ALLOWANCE,
+              payload: { contractAddress: StakingAddresses[2].toLowerCase(), tokenAddress: LP2TokenAddress.toLowerCase(), isApproved: true }
+            });
+          } else {
+            dispatch({
+              type: SET_TRANCHE_ALLOWANCE,
+              payload: { contractAddress: StakingAddresses[2].toLowerCase(), tokenAddress: LP2TokenAddress.toLowerCase(), isApproved: false }
+            });
+          }
+        }
+      })
+    );
+
+    batch.execute();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export const setCurrentBlock = (blockNumber) => (dispatch) => {
   dispatch({

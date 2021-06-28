@@ -1,5 +1,6 @@
 import ReactHtmlParser from 'react-html-parser';
 import BigNumber from 'bignumber.js';
+import moment  from 'moment';
 import { gweiVariants } from 'config/constants';
 
 export const readyToTransact = async (wallet, onboard) => {
@@ -26,6 +27,22 @@ export const valShortner = (val) => {
     return val;
   }
 };
+
+const singularOrPlural = (num, string) => {
+  return num === 1 ? num + string : num + string + 's';
+}
+
+export const formatTime = (value) =>{
+  let format = (val) => moment().add(value, 'seconds').diff(moment(), val);
+  let years =  format('years');
+  let months =  format('months');
+  let weeks =  format('weeks');
+  let days =  format('days');
+  let hours =  format('hours');
+  let minutes =  format('minutes');
+
+  return years !== 0 ? singularOrPlural(years, ' year') : months !== 0 ? singularOrPlural(months, ' month') : weeks !== 0 ? singularOrPlural(weeks, ' week') : days !== 0 ? singularOrPlural(days, ' day') : hours !== 0 ? singularOrPlural(hours, ' hour') : minutes !== 0 ? singularOrPlural(minutes, ' minute') : ""
+}
 
 export const round = (type, input, roundTo) => {
   try {

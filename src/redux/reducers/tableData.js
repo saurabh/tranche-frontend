@@ -18,7 +18,8 @@ import {
   TRANCHE_CARD_TOGGLE,
   TRANCHE_MARKETS,
   USER_STAKING_LIST_SUCCESS,
-  USER_STAKING_LIST_IS_LOADING
+  USER_STAKING_LIST_IS_LOADING,
+  SET_MIGRATE_STEP
 } from '../actions/constants';
 
 let localNetwork = window.localStorage.getItem('network');
@@ -40,6 +41,7 @@ const initialState = {
   tradeType: 'allTranches',
   trancheCard: { status: false, id: null },
   trancheMarket: 'compound',
+  currentStep: 'stake',
   userStakingList: {
     slice: [],
     lp: []
@@ -91,6 +93,8 @@ export default function (state = initialState, action) {
       return { ...state, userStakingList: payload };
     case USER_STAKING_LIST_IS_LOADING:
       return { ...state, isUserStakingListLoading: payload };
+    case SET_MIGRATE_STEP:
+      return {...state, currentStep: payload}
     default:
       return state;
   }
