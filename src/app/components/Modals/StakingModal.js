@@ -5,15 +5,13 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import StakingForm from '../Form/Staking';
-import { ModeThemes, serverUrl, apiUri, SLICEAddress, LiquidityIcons, ApproveBigNumber, txMessage } from 'config';
-import { toWei, getUserStaked, claimRewards, addStake, withdrawStake, stakingAllowanceCheck} from 'services/contractMethods';
+import { ModeThemes, serverUrl, apiUri, SLICEAddress, LiquidityIcons } from 'config';
+import { getUserStaked, claimRewards, addStake, withdrawStake } from 'services/contractMethods';
 import useAnalytics from 'services/analytics';
-import { setNotificationCount, addNotification, updateNotification } from 'redux/actions/ethereum';
 import { setMigrateStep } from 'redux/actions/tableData';
 import { CloseModal, CloseModalWhite, Lock, LockLight, TrancheStake, Migrated } from 'assets';
-import { addrShortener, roundNumber, formatTime, ERC20Setup, isEqualTo } from 'utils';
+import { addrShortener, roundNumber, formatTime, isEqualTo } from 'utils';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { Countdown } from '../Stake/Header/styles/HeaderComponents';
 import i18n from '../locale/i18n';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
