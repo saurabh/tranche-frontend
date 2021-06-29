@@ -211,6 +211,7 @@ const StakingModal = ({
   contractAddress,
   tokenAddress,
   title,
+  reward,
   remainingCap,
   timerData,
   apy,
@@ -657,7 +658,7 @@ const StakingModal = ({
                     BoxColorText={ModeThemes[theme].BoxColorText}
                   >
                     <h2>EPOCH REWARDS</h2>
-                    <h2>{roundNumber(remainingCap, false)} SLICE</h2>
+                    <h2>{roundNumber(reward, false)} SLICE</h2>
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 

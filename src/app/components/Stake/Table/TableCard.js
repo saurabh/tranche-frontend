@@ -49,7 +49,7 @@ import {
 import { initOnboard } from 'services/blocknative';
 
 const TableCard = ({
-  staking: { contractAddress, staked, type, poolName, apy, subscription, duration, durationIndex, remainingCap },
+  staking: { contractAddress, staked, reward, type, poolName, apy, subscription, duration, durationIndex, remainingCap },
   setTokenBalance,
   ethereum: { address, wallet },
   summaryData: { slice, lpList },
@@ -213,7 +213,8 @@ const TableCard = ({
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <h2>{remainingCap ? roundNumber(remainingCap) + ' SLICE' : 'N/A'}</h2>
+              {title === "SLICE Staking Pools" && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
+              {title === "SLICE Staking Pools" && !duration ? <h2>N/A</h2> : <h2>{roundNumber(reward)}</h2> }
               <h2>{''}</h2>
             </FourthColContent>
           </TableFourthCol>
@@ -270,6 +271,7 @@ const TableCard = ({
           contractAddress={contractAddress}
           tokenAddress={tokenAddress}
           title={title}
+          reward={reward}
           remainingCap={remainingCap}
           apy={apy}
           duration={duration}
@@ -367,6 +369,7 @@ const TableCard = ({
           contractAddress={contractAddress}
           tokenAddress={tokenAddress}
           title={title}
+          reward={reward}
           remainingCap={remainingCap}
           apy={apy}
           duration={duration}
