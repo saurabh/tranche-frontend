@@ -152,17 +152,17 @@ let StakingForm = ({
               )}
             </ModalFormButton>
           )}
-          {!migrateLoading ?
+          
              <StakeModalFormBtn 
-             type='submit' 
-             stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'} 
-             migrate={migrate}
-             migrateStep={migrate}
-             disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
-           >
-             {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw'}
-           </StakeModalFormBtn> :
-            <StakeModalFormBtn migrate migrateStake>
+              type='submit' 
+              stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'} 
+              migrate={migrate}
+              migrateStep={migrate}
+              disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
+              migrateLoading={migrateLoading}
+            >
+             {
+             !migrateLoading ? ((modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw') :
               <LoadingButton>
                 {
                   [...Array(4).keys()].map((idx) =>{
@@ -170,8 +170,8 @@ let StakingForm = ({
                   })
                 }
               </LoadingButton>
-            </StakeModalFormBtn>
-          }
+             }
+           </StakeModalFormBtn>
         </ApproveBtnWrapper>
         
       </Form>

@@ -68,13 +68,13 @@ const TableWrapper = styled.div`
   // overflow: hidden;
   ${({ mobile }) => mobile && `
     display: none;
-    @media (max-width: 1200px){
+    @media (max-width: 992px){
       display: block;
     }
   `}
   ${({ desktop }) => desktop && `
     display: none;
-    @media (min-width: 1200px){
+    @media (min-width: 992px){
       display: block;
     }
   `}
@@ -181,7 +181,7 @@ const TableHeadTitle = styled.div`
           margin-left: 73px;
         }
     }
-    @media (max-width: 1200px){
+    @media (max-width: 992px){
       display: none !important;
     }
     ${({ stakingPool }) => stakingPool && `
@@ -1179,6 +1179,14 @@ const FifthColContent = styled.div`
     text-align: center;
     color: #CCCCCD;
   }
+  @media (max-width: 1200px){
+    h2:first-child{
+      font-size: 12px !important;
+    }
+    h2:last-child{
+      font-size: 12px !important;
+    }
+  }
 `
 const StatusTextWrapper = styled.h2`
   color: ${props => props.color ? props.color : ""} !important; 
@@ -1251,8 +1259,8 @@ const StakeBtn = styled.button`
   color: #FFFFFF;
   background: ${props => props.background};
   ${({ disabled }) => disabled && `
+    background: rgba(204, 204, 205, 0.15);
     pointer-events: none;
-    opacity: 0.5;
     cursor: default;
   `}
   :hover{
@@ -1281,6 +1289,10 @@ const StakeBtnSlice = styled.button`
   ${({ withdraw }) => withdraw && `
     background: #6E41CF;    
     font-size: 12px;
+  `}
+  ${({ disabled }) => disabled && `
+    background: rgba(204, 204, 205, 0.15);
+    pointer-events: none;
   `}
   @media (max-width: 767px){
     font-size: 10px;

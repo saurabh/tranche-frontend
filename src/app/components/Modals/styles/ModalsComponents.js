@@ -1602,7 +1602,10 @@ const StakeModalFormBtn = styled.button`
   ${({ migrateStep }) => migrateStep && `
     width: 192px !important;
   `}
-  
+  ${({ migrateLoading }) => migrateLoading && `
+    background: #4441CF;
+
+  `}  
 
   @media (max-width: 663px){
     position: relative;
@@ -1951,7 +1954,7 @@ const SliceMigratedWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 45px 0 0 0; 
-  img{
+  & > img{
     max-width: 86px;
     width: 100%;
   }
