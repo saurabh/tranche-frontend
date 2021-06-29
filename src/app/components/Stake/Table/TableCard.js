@@ -214,7 +214,8 @@ const TableCard = ({
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               {title === "SLICE Staking Pools" && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
-              {title === "SLICE Staking Pools" && !duration ? <h2>N/A</h2> : <h2>{roundNumber(reward)}</h2> }
+              {title === "SLICE Staking Pools" && !duration && <h2>N/A</h2>}
+              {title === "Liquidity Provider Pools" && <h2>{roundNumber(reward)}</h2>}
               <h2>{''}</h2>
             </FourthColContent>
           </TableFourthCol>

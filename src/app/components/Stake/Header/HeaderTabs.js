@@ -30,6 +30,7 @@ const HeaderTabs = ({
   theme,
   ethereum: { wallet, address, network, tokenBalance },
   summaryData: { slice, lp, lpList, totalAccruedRewards },
+  data: { userStakingList: { slice: sliceStakes } },
   summaryFetchSuccess,
   openModal,
   closeModal,
@@ -48,6 +49,8 @@ const HeaderTabs = ({
     lpList.reduce((accumulator, lp) => {
       return safeAdd(accumulator, fromWei(tokenBalance[lp.address]));
     }, '0');
+  const newSliceRewards = sliceStakes.filter(s => s.duration).reduce((acc, cur) => acc + cur.reward, 0)
+
   // const [modalType, setModalType] = useState('');
   // const onboard = initOnboard({
   //   address: setAddress,
@@ -131,7 +134,6 @@ const HeaderTabs = ({
         </WithdrawStakeCardText>
         <WithdrawStakeCardBtns>
           <button onClick={() => openModal("withdrawTokens")}
-          // withdrawStakeAndRewards(slice.stakingAddress, slice.address, slice.yieldAddress)
           >{i18n.t('migrateTokens')}</button>
         </WithdrawStakeCardBtns>
       </WithdrawStakeCard>
@@ -152,22 +154,13 @@ const HeaderTabs = ({
             <h2>{i18n.t('currentVal')} ${lp.balanceUSD ? roundNumber(lp.balanceUSD) : '0'}</h2>
           </StackSummaryCol>
         </StakeSummaryCard>
-        {/* <StakeSummaryCard color='#369987' claim>
-          <StackSummaryCol>
-            <h2>Accrued Rewards</h2>
-            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
-            <h2>Current Value is $Soon™</h2>
-            <ProgressBar progress='50' widthBar='90' colorOne='rgba(255,255,255,0.5)' colorTwo='#FFFFFF' />
-            <h2>6 Days until next distribution</h2>
-          </StackSummaryCol>
-        </StakeSummaryCard> */}
         <StakeSummaryCard color='#369987' claim>
           <StackSummaryCol claim>
             <h2>{i18n.t('Accrued')}</h2>
-            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
+            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN' ? roundNumber(totalAccruedRewards + newSliceRewards) : '0'} SLICE</h2>
             <h2>{sliceBalance} SLICE Available</h2>
             <span></span>
-            <h2>{i18n.t('currentVal')} $Soon™</h2>
+            <h2>{i18n.t('currentVal')} $Need from API</h2>
           </StackSummaryCol>
           <StackSummaryCol claimBtn>
             <h2>{i18n.t('nextLiqIn')}</h2>

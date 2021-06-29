@@ -201,7 +201,7 @@ const StakingModal = ({
   // Redux
   ethereum: { address },
   data: { stakingList, sliceStakingList, userStakingList, currentStep },
-  summaryData: { accruedRewards },
+  summaryData: { accruedRewards, totalAccruedRewards },
   theme,
   setMigrateStep,
   // State Values
@@ -213,10 +213,8 @@ const StakingModal = ({
   title,
   reward,
   remainingCap,
-  timerData,
   apy,
   durationIndex,
-  progress,
   duration,
   // Functions
   openModal,
@@ -235,6 +233,7 @@ const StakingModal = ({
   const [userStakes, setUserStakes] = useState([]);
   const [migrateLoading, setMigrateLoading] = useState(false);
   const { slice, lp } = userStakingList;
+  const newSliceRewards = slice.filter(s => s.duration).reduce((acc, cur) => acc + cur.reward, 0)
   
   const fullStakingList = sliceStakingList.concat(stakingList);
   const apiMapping = fullStakingList.reduce((acc, cur) => {
@@ -351,7 +350,7 @@ const StakingModal = ({
             <ClaimModalHeader textColor={ModeThemes[theme].ModalText}>
               <h2>Total Accrued Rewards</h2>
               <h2>
-                100 SLICE <span>(Current Value is $70)</span>
+                {totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN' ? roundNumber(totalAccruedRewards + newSliceRewards) : '0'} SLICE <span>(Current Value is $Need from API)</span>
               </h2>
             </ClaimModalHeader>
             <ClaimModalTableWrapper
@@ -668,38 +667,26 @@ const StakingModal = ({
                   </StakeModalPoolTableTitle>
                   <StakeModalPoolTableHead>
                     <StakeModalPoolTableCol head TableHeadText={ModeThemes[theme].TableHeadText}>
-                      <h2>{i18n.t('depositDate')}</h2>
+                      <h2>STAKED AMOUNT</h2>
                     </StakeModalPoolTableCol>
                     <StakeModalPoolTableCol head TableHeadText={ModeThemes[theme].TableHeadText}>
-                      <h2>STAKED AMOUNT</h2>
+                      <h2>TOTAL STAKED</h2>
+                    </StakeModalPoolTableCol>
+                    <StakeModalPoolTableCol head TableHeadText={ModeThemes[theme].TableHeadText}>
+                      <h2>YOUR SHARE</h2>
                     </StakeModalPoolTableCol>
                   </StakeModalPoolTableHead>
                 </StakeModalPoolTable>
 
                 <StakeModalPoolTableRow BorderStake={ModeThemes[theme].BorderStake}>
                   <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>MAY 30 2021</h2>
+                    <h2>{roundNumber(userStaked)}</h2>
                   </StakeModalPoolTableCol>
                   <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>1030 SLICE</h2>
-                  </StakeModalPoolTableCol>
-                </StakeModalPoolTableRow>
-
-                <StakeModalPoolTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                  <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>MAY 30 2021</h2>
+                    <h2>{roundNumber(totalStaked)}</h2>
                   </StakeModalPoolTableCol>
                   <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>1030 SLICE</h2>
-                  </StakeModalPoolTableCol>
-                </StakeModalPoolTableRow>
-
-                <StakeModalPoolTableRow BorderStake={ModeThemes[theme].BorderStake}>
-                  <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>MAY 30 2021</h2>
-                  </StakeModalPoolTableCol>
-                  <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>1030 SLICE</h2>
+                    <h2>{roundNumber(stakedShare, 2)}</h2>
                   </StakeModalPoolTableCol>
                 </StakeModalPoolTableRow>
               </StakingModalContentSide>
@@ -915,7 +902,7 @@ const StakingModal = ({
           <RewardsAmountCardsWrapper>
             <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
               <h2>{i18n.t('AmountRewards')}</h2>
-              <h2>{accruedRewards ? accruedRewards[oldSlice[0].tokenAddress] : 0}<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+              <h2>{accruedRewards ? roundNumber(accruedRewards[oldSlice[0].tokenAddress]) : 0}<span><img src={TrancheStake} alt=""/>Slice</span></h2>
             </RewardsAmountCard>
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   
@@ -947,7 +934,7 @@ const StakingModal = ({
           <RewardsAmountCardsWrapper>
             <RewardsAmountCard MigrateClaimCardBackground={ModeThemes[theme].MigrateClaimCardBackground} MigrateClaimCardTitle={ModeThemes[theme].MigrateClaimCardTitle} MigrateClaimCardValue={ModeThemes[theme].MigrateClaimCardValue}>
               <h2>{i18n.t('TotalSliceWithdraw')}</h2>
-              <h2>{oldSlice[0].subscription}<span><img src={TrancheStake} alt=""/>Slice</span></h2>
+              <h2>{roundNumber(oldSlice[0].subscription)}<span><img src={TrancheStake} alt=""/>Slice</span></h2>
             </RewardsAmountCard>
           </RewardsAmountCardsWrapper>
         </RewardsAmountWrapper>   

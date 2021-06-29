@@ -41,7 +41,7 @@ const initialState = {
   tradeType: 'allTranches',
   trancheCard: { status: false, id: null },
   trancheMarket: 'compound',
-  currentStep: 'stake',
+  currentStep: 'claim',
   userStakingList: {
     slice: [],
     lp: []
