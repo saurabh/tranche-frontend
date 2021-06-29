@@ -28,7 +28,7 @@ const TableHead = ({ changeSorting, path, color, theme }) => {
     const [order, setOrder] = useState("asc")
     const [TooltipToggle, setTooltipToggle] = useState("")
     const [menu, toggleMenu] = useState(false);
-    const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+    const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
 
     const innerRef = useOuterClick(e => {
@@ -50,7 +50,7 @@ const TableHead = ({ changeSorting, path, color, theme }) => {
         setTooltipToggle(val);
     }
     const updateMedia = () => {
-        setDesktop(window.innerWidth > 1200);
+        setDesktop(window.innerWidth > 992);
     };
 
     useEffect(() => {
