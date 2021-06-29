@@ -213,7 +213,7 @@ const TableCard = ({
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <h2>{roundNumber(remainingCap)} SLICE</h2>
+              <h2>{remainingCap ? roundNumber(remainingCap) + ' SLICE' : 'N/A'}</h2>
               <h2>{''}</h2>
             </FourthColContent>
           </TableFourthCol>
@@ -347,7 +347,7 @@ const TableCard = ({
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
                 <h2>{ title === "SLICE Staking Pools" ? "REMAINING CAPACITY" : "EPOCH REWARDS"}</h2>
-                <h2>{roundNumber(remainingCap)} SLICE</h2>
+                <h2>{remainingCap ? roundNumber(remainingCap) + ' SLICE' : 'N/A'}</h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
                 <h2>APY</h2>
