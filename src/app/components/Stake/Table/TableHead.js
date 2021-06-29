@@ -96,7 +96,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     }
                 </TableHeadTitle>
                 <TableHeadTitle color={color} reward>
-                    <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('poolCap') : i18n.t('stake.table.tableHead.reward')) : "RETURN/BLOCK"}</h2>
+                    <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('remainingCap') : i18n.t('stake.table.tableHead.reward')) : "RETURN/BLOCK"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
                     <TooltipWrapper tooltip={TooltipToggle === "reward"} reward color={ModeThemes[theme].Tooltip} language={i18n.language}>

@@ -211,7 +211,7 @@ const StakingModal = ({
   contractAddress,
   tokenAddress,
   title,
-  rewards,
+  remainingCap,
   timerData,
   apy,
   durationIndex,
@@ -533,8 +533,8 @@ const StakingModal = ({
                     textColor={ModeThemes[theme].ModalText}
                     BoxColorText={ModeThemes[theme].BoxColorText}
                   >
-                    <h2>Pool Capacity</h2>
-                    <h2>{roundNumber(rewards, false)} SLICE</h2>
+                    <h2>Remaining Capacity</h2>
+                    <h2>{roundNumber(remainingCap, false)} SLICE</h2>
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 
@@ -656,7 +656,7 @@ const StakingModal = ({
                     BoxColorText={ModeThemes[theme].BoxColorText}
                   >
                     <h2>EPOCH REWARDS</h2>
-                    <h2>{roundNumber(rewards, false)} SLICE</h2>
+                    <h2>{roundNumber(remainingCap, false)} SLICE</h2>
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 
@@ -1083,7 +1083,7 @@ const StakingModal = ({
               textColor={ModeThemes[theme].ModalText}
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
-              <h2>Pool Capacity</h2>
+              <h2>Remaining Capacity</h2>
               <h2>{roundNumber(sliceStakingList[id].reward, false)} SLICE</h2>
             </StakingModalContentSideHeaderBox>
           </StakingModalContentSideHeaderBoxWrapper>

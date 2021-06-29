@@ -49,7 +49,7 @@ import {
 import { initOnboard } from 'services/blocknative';
 
 const TableCard = ({
-  staking: { contractAddress, reward, staked, type, poolName, apy, subscription, duration, durationIndex },
+  staking: { contractAddress, staked, type, poolName, apy, subscription, duration, durationIndex, remainingCap },
   setTokenBalance,
   ethereum: { address, wallet },
   summaryData: { slice, lpList },
@@ -213,7 +213,7 @@ const TableCard = ({
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <h2>{roundNumber(reward)} SLICE</h2>
+              <h2>{roundNumber(remainingCap)} SLICE</h2>
               <h2>{''}</h2>
             </FourthColContent>
           </TableFourthCol>
@@ -270,7 +270,7 @@ const TableCard = ({
           contractAddress={contractAddress}
           tokenAddress={tokenAddress}
           title={title}
-          rewards={reward}
+          remainingCap={remainingCap}
           apy={apy}
           duration={duration}
           durationIndex={durationIndex}
@@ -346,8 +346,8 @@ const TableCard = ({
                 <h2>{roundNumber(staked)}</h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
-                <h2>{ title === "SLICE Staking Pools" ? "POOL CAPACITY" : "EPOCH REWARDS"}</h2>
-                <h2>{roundNumber(reward)} SLICE</h2>
+                <h2>{ title === "SLICE Staking Pools" ? "REMAINING CAPACITY" : "EPOCH REWARDS"}</h2>
+                <h2>{roundNumber(remainingCap)} SLICE</h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
                 <h2>APY</h2>
@@ -367,7 +367,7 @@ const TableCard = ({
           contractAddress={contractAddress}
           tokenAddress={tokenAddress}
           title={title}
-          rewards={reward}
+          remainingCap={remainingCap}
           apy={apy}
           duration={duration}
           durationIndex={durationIndex}

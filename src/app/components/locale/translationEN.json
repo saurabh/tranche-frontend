@@ -230,7 +230,7 @@
   "everyPoolHas": "Every pool has a different lock up duration",
   "lockup": "Lockup",
   "totalTimeYour": "The total time your tokens will remain locked in the contract.",
-  "poolCap": "Pool capacity",
+  "remainingCap": "Remaining capacity",
   "totalAmountOf": "The total amount of tokens that can be locked at a certain time. ",
   "diamondHands": "Diamond Hands",
   "paperHands": "Paper Hands",
