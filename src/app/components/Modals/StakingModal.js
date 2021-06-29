@@ -272,11 +272,14 @@ const StakingModal = ({
   }, [modalType]);
 
   useEffect(() => {
-    if (address && migrateStep !== 'done') {
+    if (modalType === 'withdrawTokens' && address) {
+    // if (address && migrateStep !== 'done') {
+      console.log('rewardsCheck' + accruedRewards && isEqualTo(accruedRewards[SLICEAddress], 0))
+      console.log('stakeBalanceCheck' + sliceStakingList[sliceStakingList.length - 1] && isEqualTo(sliceStakingList[sliceStakingList.length - 1].subscription, 0))
       if (accruedRewards && isEqualTo(accruedRewards[SLICEAddress], 0)) setMigrateStep('withdraw');
       if (sliceStakingList[sliceStakingList.length - 1] && isEqualTo(sliceStakingList[sliceStakingList.length - 1].subscription, 0)) setMigrateStep('stake')
     }
-  }, [address, migrateStep, accruedRewards, sliceStakingList, setMigrateStep])
+  }, [modalType, address, migrateStep, accruedRewards, sliceStakingList, setMigrateStep])
 
   useEffect(() => {
     const getStakingDetails = async () => {
