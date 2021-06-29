@@ -19,7 +19,8 @@ import {
   TRANCHE_MARKETS,
   USER_STAKING_LIST_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
-  SET_MIGRATE_STEP
+  SET_MIGRATE_STEP,
+  SET_MIGRATED
 } from '../actions/constants';
 
 let localNetwork = window.localStorage.getItem('network');
@@ -41,7 +42,7 @@ const initialState = {
   tradeType: 'allTranches',
   trancheCard: { status: false, id: null },
   trancheMarket: 'compound',
-  currentStep: 'claim',
+  currentStep: 'stake',
   userStakingList: {
     slice: [],
     lp: []
@@ -95,6 +96,8 @@ export default function (state = initialState, action) {
       return { ...state, isUserStakingListLoading: payload };
     case SET_MIGRATE_STEP:
       return {...state, currentStep: payload}
+    case SET_MIGRATED:
+      return {...state, hasMigrated: payload}
     default:
       return state;
   }

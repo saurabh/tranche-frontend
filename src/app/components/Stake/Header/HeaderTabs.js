@@ -30,7 +30,7 @@ const HeaderTabs = ({
   theme,
   ethereum: { wallet, address, network, tokenBalance },
   summaryData: { slice, lp, lpList, totalAccruedRewards },
-  data: { userStakingList: { slice: sliceStakes } },
+  data: { userStakingList: { slice: sliceStakes }, hasMigrated },
   summaryFetchSuccess,
   openModal,
   closeModal,
@@ -51,50 +51,6 @@ const HeaderTabs = ({
     }, '0');
   const newSliceRewards = sliceStakes.filter(s => s.duration).reduce((acc, cur) => acc + cur.reward, 0)
 
-  // const [modalType, setModalType] = useState('');
-  // const onboard = initOnboard({
-  //   address: setAddress,
-  //   network: setNetwork,
-  //   balance: setBalance,
-  //   wallet: setWalletAndWeb3
-  // });
-
-  // useEffect(() => {
-  //   const setEpochTime = async () => {
-  //     const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-  //     let dateTime = result;
-  //     const interval = setInterval(() => {
-  //       if (dateTime > 0) {
-  //         dateTime -= 1;
-  //       } else {
-  //         const setTime = async () => {
-  //           const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-  //           dateTime = result;
-  //         };
-  //         setTime();
-  //       }
-  //       setProgress(100 - (100 * dateTime) / 604800);
-  //       let current = moment.unix(moment().unix());
-  //       let date = moment.unix(moment().unix() + dateTime);
-  //       let time = date - current;
-  //       let duration = moment.duration(time);
-  //       let days = duration.days();
-  //       let hours = duration.hours();
-  //       let minutes = duration.minutes();
-  //       let seconds = duration.seconds();
-  //       let final = {
-  //         days,
-  //         hours,
-  //         minutes,
-  //         seconds
-  //       };
-  //       setTimerData(final);
-  //     }, 1000);
-
-  //     return () => clearInterval(interval);
-  //   };
-  //   setEpochTime();
-  // }, []);
 
   useEffect(() => {
     const getStakingData = async () => {
@@ -125,7 +81,7 @@ const HeaderTabs = ({
         </HowToLink>
       </TableTitle>
       
-      <WithdrawStakeCard>
+      {!hasMigrated && <WithdrawStakeCard>
         <WithdrawStakeCardText>
           <h2>{i18n.t('migrateYour')}</h2>
           <p>
@@ -136,7 +92,7 @@ const HeaderTabs = ({
           <button onClick={() => openModal("withdrawTokens")}
           >{i18n.t('migrateTokens')}</button>
         </WithdrawStakeCardBtns>
-      </WithdrawStakeCard>
+      </WithdrawStakeCard>}
       <StakeSummaryCardWrapper>
         <StakeSummaryCard color='#4441CF'>
           <StackSummaryCol stake>

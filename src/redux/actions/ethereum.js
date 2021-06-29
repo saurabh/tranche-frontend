@@ -33,7 +33,7 @@ import {
   REMOVE_NOTIFICATION
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
-import { trancheMarketsToggle } from './tableData';
+import { setHasMigrated, trancheMarketsToggle } from './tableData';
 import { StakingAddresses } from 'config';
 import { LockupAddress } from 'config';
 import { SLICEAddress } from 'config';
@@ -42,6 +42,8 @@ import { LP2TokenAddress } from 'config';
 const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
+  const migrateAddress = JSON.parse(window.localStorage.getItem('migrateAddress'));
+  migrateAddress && migrateAddress[address.toLowerCase()] ? store.dispatch(setHasMigrated(true)) : store.dispatch(setHasMigrated(false));
   if (address) {
     dispatch({
       type: SET_ADDRESS,

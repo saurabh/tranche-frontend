@@ -200,7 +200,7 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   // Redux
   ethereum: { address },
-  data: { stakingList, sliceStakingList, userStakingList, currentStep },
+  data: { stakingList, sliceStakingList, userStakingList, currentStep, hasMigrated },
   summaryData: { accruedRewards, totalAccruedRewards },
   theme,
   setMigrateStep,
@@ -222,7 +222,6 @@ const StakingModal = ({
   // API Values,
 }) => {
   const Tracker = useAnalytics('ButtonClicks');
-  const migrateStep = window.localStorage.getItem('migrateStep');
   const [modalTypeVar, setModalTypeVar] = useState('');
   const [objId, setObjId] = useState(null);
   const [newSlice, setNewSlice] = useState([]);
@@ -255,7 +254,7 @@ const StakingModal = ({
     setOldSlice(withoutDuration);
 
     if (modalType === 'claim') {
-      stakes = withDuration.concat(withoutDuration);
+      stakes = hasMigrated ? withDuration : withDuration.concat(withoutDuration);
     } else {
       if (tokenAddress === SLICEAddress) {
         stakes = duration ? withDuration : withoutDuration;
@@ -275,9 +274,8 @@ const StakingModal = ({
     if (modalType === 'withdrawTokens' && address) {
       if (accruedRewards && isEqualTo(accruedRewards[SLICEAddress], 0)) setMigrateStep('withdraw');
       if (sliceStakingList[sliceStakingList.length - 1] && isEqualTo(sliceStakingList[sliceStakingList.length - 1].subscription, 0)) setMigrateStep('stake');
-      if (migrateStep === 'done') setMigrateStep('done');
     }
-  }, [modalType, address, migrateStep, accruedRewards, sliceStakingList, setMigrateStep])
+  }, [modalType, address, accruedRewards, sliceStakingList, setMigrateStep])
 
   useEffect(() => {
     const getStakingDetails = async () => {

@@ -34,7 +34,8 @@ import {
   STAKING_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
   USER_STAKING_LIST_SUCCESS,
-  SET_MIGRATE_STEP
+  SET_MIGRATE_STEP,
+  SET_MIGRATED
 } from './constants';
 const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
 
@@ -243,9 +244,25 @@ export const fetchUserStakingList = (endpoint) => async (dispatch) => {
 } 
 
 export const setMigrateStep = (string) => (dispatch) => {
-  if (string === 'done') window.localStorage.setItem('migrateStep', string);
+  const state = store.getState();
+  const { address } = state.ethereum;
+  if (string === 'done') {
+    const migrateAddress = JSON.parse(window.localStorage.getItem('migrateAddress'));
+    window.localStorage.setItem(`migrateAddress`, JSON.stringify({...migrateAddress, [address]: true}))
+    dispatch({
+      type: SET_MIGRATED,
+      payload: true
+    });
+  }
   dispatch({
     type: SET_MIGRATE_STEP,
     payload: string
+  });
+}
+
+export const setHasMigrated = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_MIGRATED,
+    payload: bool
   });
 }

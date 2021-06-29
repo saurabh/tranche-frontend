@@ -33,6 +33,7 @@ import {
   LoadingContent
 } from './styles/TableComponents';
 import { EmptyBox } from 'assets';
+import { isEqualTo } from 'utils';
 const { stakingList: stakingListUrl, userStakingList: userStakingListUrl } = apiUri;
 
 const style = {
@@ -74,14 +75,19 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
+  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType, sliceStakingList, hasMigrated } = data;
   const pageCount = 5;
+  const [stakingList, setStakingList] = useState([]);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
-  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
+
+  useEffect(() => {
+    hasMigrated ? setStakingList(sliceStakingList.slice(0, 3)) : setStakingList(sliceStakingList);
+  }, [hasMigrated, sliceStakingList]);
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
@@ -165,7 +171,7 @@ const Table = ({
               </div>
             ) : (
               (title === "SLICE Staking Pools") ?
-              (data.sliceStakingList.length > 0 && data.sliceStakingList[0])  && data.sliceStakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
               : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
@@ -223,7 +229,7 @@ const Table = ({
                 </TableContentCard>
               ) : (
               (title === "SLICE Staking Pools") ?
-              (data.sliceStakingList.length > 0 && data.sliceStakingList[0])  && data.sliceStakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
               : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)              )}
             </div>
           </div>

@@ -61,7 +61,6 @@ const TableCard = ({
   const [ModalIsOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
   const [tokenAddress, setTokenAddress] = useState(null);
-  // const [balance, setBalance] = useState(0);
 
   const onboard = initOnboard({
     address: setAddress,
@@ -70,9 +69,6 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  // const setBalanceCB = useCallback((balance) => {
-  //   setBalance(roundNumber(balance, undefined, 'down'));
-  // }, []);
   useEffect(() => {
     const setEpochTime = async () => {
         // const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
@@ -109,23 +105,6 @@ const TableCard = ({
   const closeModal = () => {
     setModalOpen(false);
   };
-
-  // const adjustStake = (e, contractAddress, tokenAddress) => {
-  //   try {
-  //     e.preventDefault();
-  //     modalType === 'liqStake' || modalType === 'staking' 
-  //       ? addStake(contractAddress, tokenAddress, durationIndex) 
-  //       : withdrawStake(contractAddress, tokenAddress);
-  //     modalType === 'liqStake'
-  //       ? Tracker('addStake', 'User address: ' + address)
-  //       : modalType === 'staking' 
-  //       ? Tracker('addLockup', 'User address: ' + address)
-  //       : Tracker('withdrawStake', 'User address: ' + address);
-  //     closeModal();
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const checkLoan = false;
 
