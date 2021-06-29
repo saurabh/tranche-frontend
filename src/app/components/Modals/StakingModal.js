@@ -273,9 +273,9 @@ const StakingModal = ({
 
   useEffect(() => {
     if (modalType === 'withdrawTokens' && address) {
-    // if (address && migrateStep !== 'done') {
       if (accruedRewards[SLICEAddress] && isEqualTo(accruedRewards[SLICEAddress], 0)) setMigrateStep('withdraw');
-      if (sliceStakingList[sliceStakingList.length - 1] && isEqualTo(sliceStakingList[sliceStakingList.length - 1].subscription, 0)) setMigrateStep('stake')
+      if (sliceStakingList[sliceStakingList.length - 1] && isEqualTo(sliceStakingList[sliceStakingList.length - 1].subscription, 0)) setMigrateStep('stake');
+      if (migrateStep === 'done') setMigrateStep('done');
     }
   }, [modalType, address, migrateStep, accruedRewards, sliceStakingList, setMigrateStep])
 
