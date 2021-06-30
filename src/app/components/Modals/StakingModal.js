@@ -293,6 +293,7 @@ const StakingModal = ({
   const adjustStake = async (e, contractAddress, tokenAddress, durationIndex = false, migrate) => {
     try {
       e.preventDefault();
+      console.log(contractAddress, tokenAddress, durationIndex, migrate)
       migrate && setMigrateLoading(true)
       if (modalType !== 'liqWithdraw') {
         if (migrate) {
@@ -600,7 +601,7 @@ const StakingModal = ({
                   contractAddress={contractAddress}
                   durationIndex={durationIndex}
                   userStaked={userStaked}
-                  adjustStake={() => adjustStake()}
+                  adjustStake={adjustStake}
                 />
               </StakingModalContentSide>
             </StakingModalContentSideWrapper>
@@ -739,7 +740,7 @@ const StakingModal = ({
                   tokenAddress={tokenAddress}
                   contractAddress={contractAddress}
                   userStaked={userStaked}
-                  adjustStake={() => adjustStake()}
+                  adjustStake={adjustStake}
                 />
               </StakingModalContentSide>
             </StakingModalContentSideWrapper>
@@ -1088,7 +1089,7 @@ const StakingModal = ({
             contractAddress={sliceStakingList[id].contractAddress}
             durationIndex={sliceStakingList[id].durationIndex}
             userStaked={userStaked}
-            adjustStake={() => adjustStake()}
+            adjustStake={adjustStake}
             migrate={true}
             migrateLoading={migrateLoading}
           />
