@@ -1234,6 +1234,11 @@ const ClaimModalTableBtn = styled.button`
   cursor: pointer;
   margin: 0 auto;
 
+  ${({ disabled, disabledBtnColor }) => disabled && `
+    background: ${disabledBtnColor};
+    pointer-events: none;
+  `}
+
   // background: #CECECE;
   // background: #C22D2D;
   // color: #666666;
@@ -1377,6 +1382,23 @@ const StakingModalContentSideHeaderText = styled.div`
 `;
 const StakeModalPoolTable = styled.div`
   margin: 24px 0 0 0;
+  max-height: 200px;
+  overflow-y: ${props => props.scroll ? "scroll" : ""};
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rbga(227,227,227,3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #C2C2C2;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C0C0C0;
+  }
 `;
 const StakeModalPoolTableTitle = styled.div`
   h2{
@@ -1538,6 +1560,11 @@ const StakeModalFormWrapper = styled.div`
 `;
 const StakeModalFormInputWrapper = styled.div`
   position: relative;
+  div{
+    input{
+      border: 0.92283px solid ${props => props.borderColor};
+    }
+  }
 `
 const StakeModalFormInput = styled.input`
   width: 100%;
@@ -1563,6 +1590,9 @@ const StakeModalFormBtn = styled.button`
   font-family: 'Inter', sans-serif;
   font-weight: bold;
   font-size: 12px;
+  h2{
+    color: #FFFFFF !important;
+  }
   color: #FFFFFF;
   width: 100%;
   height: 38px;
@@ -1591,8 +1621,8 @@ const StakeModalFormBtn = styled.button`
   ${({ step }) => step && `
     background: ${step === "stake" ? "#43406C" : step === "done" ? "#369987" : "#6E41CF"};
   `}
-  ${({ disabled }) => disabled && `
-    background: rgba(204, 204, 205, 0.15);
+  ${({ disabled, disabledBtnColor }) => disabled && `
+    background: ${disabledBtnColor};
     pointer-events: none;
   `}
 
@@ -1945,7 +1975,7 @@ const StakeNewColText = styled.div`
     font-size: 7.65818px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #838186;
+    color: #FFFFFF;
     margin: 1px 0;
   }
 `;

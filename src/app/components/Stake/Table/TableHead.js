@@ -98,7 +98,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     title === "SLICE Staking Pools" &&
                     <TooltipWrapper tooltip={TooltipToggle === "reward"} reward color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>
-                            <h2>The total amount of tokens that can be locked at a certain time</h2>
+                            <h2>{i18n.t('remainingCapTooltip')}</h2>
                         </div>
                     </TooltipWrapper>
                     }

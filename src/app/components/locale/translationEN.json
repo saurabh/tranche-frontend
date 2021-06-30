@@ -231,6 +231,7 @@
   "lockup": "Lockup",
   "totalTimeYour": "The total time your tokens will remain locked in the contract.",
   "remainingCap": "Remaining capacity",
+  "remainingCapTooltip": "The maximum amount of SLICE that you can stake.",
   "totalAmountOf": "The total amount of tokens that can be locked at a certain time. ",
   "diamondHands": "Diamond Hands",
   "paperHands": "Paper Hands",
