@@ -749,16 +749,34 @@ const ApproveBtnWrapper = styled.div`
     button:first-child{
       left: 33px;
     }
-    @media (max-width: 473px){
-      flex-direction: column;
-      button{
-        position: relative;
-        margin: 12px auto;
-        left: 0 !important;
-        right: 0 !important;
-      }
-    }
   `}
+  @media (max-width: 473px){
+    flex-direction: column;
+    height: 100px;
+    position: relative;
+    margin: 12px 0;
+    button{
+      position: relative;
+      margin: 12px auto;
+      left: 0 !important;
+      right: 0 !important;
+    }
+  }
+  @media (max-height: 375px){
+    height: 100px;
+    position: relative;
+    margin: 33px 0;
+    display: flex;
+    align-items: flex-end;
+    button{
+      position: relative;
+      margin: 0 auto;
+      left: 0 !important;
+      right: 0 !important;
+    }
+  }
+
+  320
 `
 
 export {

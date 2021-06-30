@@ -81,7 +81,7 @@ const HeaderTabs = ({
         </HowToLink>
       </TableTitle>
       
-      {!hasMigrated && <WithdrawStakeCard>
+      {<WithdrawStakeCard>
         <WithdrawStakeCardText>
           <h2>{i18n.t('migrateYour')}</h2>
           <p>

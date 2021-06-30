@@ -990,7 +990,13 @@ const StakingModalContent = styled.div`
   @media (max-width: 663px){
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-height: 375px){
+    position: relative;
+    width: 100%;
+    overflow-y: scroll;
   }
   ${({ migrateStake }) => migrateStake && `
     top: unset;
@@ -1379,6 +1385,15 @@ const StakingModalContentSideHeaderText = styled.div`
     margin: 4px 0;
     color: ${props => props.boxText};
   }
+
+  @media (max-width: 663px){
+    h2:first-child{
+      font-size: 10px;
+    }
+    h2:last-child{
+      font-size: 5px;
+    }
+  }
 `;
 const StakeModalPoolTable = styled.div`
   margin: 24px 0 0 0;
@@ -1732,6 +1747,9 @@ const ProgressBarLineWrapper = styled.div`
   width: 15%;
   height: 1px;
   margin-top: 2px;
+  @media (max-width: 663px){
+    display: none;    
+  }
 `;
 const ProgressBarDashedLine = styled.div`
   border: 0 none;
@@ -2036,6 +2054,12 @@ const StakingModalChangeBtn = styled.button`
   right: 26px;
   height: 21px;
   width: 58px;
+  @media (max-width: 633px){
+    font-size: 8px;
+    height: 19px;
+    width: 46px;
+  }
+  
 `;
 const StakingMigrateModalContentWrapper = styled.div`
   

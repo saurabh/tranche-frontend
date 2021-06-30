@@ -88,7 +88,7 @@ const NotFoundStyles = {
     left: '0',
     right: '0',
     bottom: '0',
-    zIndex: '1000'
+    zIndex: '3000'
   },
   content: {
     position: 'relative',
@@ -117,7 +117,7 @@ const MigrateStake = {
     left: '0',
     right: '0',
     bottom: '0',
-    zIndex: '1000'
+    zIndex: '3000'
   },
   content: {
     position: 'relative',
@@ -146,7 +146,7 @@ const FirstCustomStyles = {
     left: '0',
     right: '0',
     bottom: '0',
-    zIndex: '1000'
+    zIndex: '3000'
   },
   content: {
     position: 'relative',
@@ -175,7 +175,7 @@ const stakingModalStyles = {
     left: '0',
     right: '0',
     bottom: '0',
-    zIndex: '1000'
+    zIndex: '3000'
   },
   content: {
     position: 'relative',

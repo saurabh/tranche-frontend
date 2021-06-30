@@ -2110,3 +2110,7 @@ input[type=number] {
     -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
     animation-timing-function: cubic-bezier(0, 0, 1, 1);
     }
+
+    .bn-onboard-modal{
+      z-index: 3000 !important;
+    }
