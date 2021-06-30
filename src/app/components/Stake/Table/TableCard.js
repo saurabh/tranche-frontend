@@ -329,7 +329,9 @@ const TableCard = ({
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
                 <h2>{ title === "SLICE Staking Pools" ? "REMAINING CAPACITY" : "EPOCH REWARDS"}</h2>
-                <h2>{remainingCap ? roundNumber(remainingCap) + ' SLICE' : 'N/A'}</h2>
+                {title === "SLICE Staking Pools" && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
+                {title === "SLICE Staking Pools" && !duration && <h2>N/A</h2>}
+                {title === "Liquidity Provider Pools" && <h2>{roundNumber(reward)}</h2>}
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
                 <h2>APY</h2>
