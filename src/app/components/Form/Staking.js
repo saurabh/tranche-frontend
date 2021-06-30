@@ -160,6 +160,7 @@ let StakingForm = ({
               migrateStep={migrate}
               disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
               migrateLoading={migrateLoading}
+              disabledBtnColor={ModeThemes[theme].disabledBtnColor}
             >
              {
              !migrateLoading ? ((modalTypeVar === 'liqStake' || modalTypeVar === 'staking') ? 'Stake' : 'Withdraw') :

@@ -405,7 +405,7 @@ const StakingModal = ({
                       </ClaimModalTableCol>
 
                       <ClaimModalTableCol col sliceliquidityFirstLast>
-                        <ClaimModalTableBtn onClick={() => stake.duration ? claimRewards(stake.contractAddress, stake.stakingCounter) : openModal('withdrawTokens')} disabled={stake.duration && (stake.endTime > moment().unix())}>{stake.duration ? 'Claim' : 'Migrate'}
+                        <ClaimModalTableBtn disabledBtnColor={ModeThemes[theme].disabledBtnColor} onClick={() => stake.duration ? claimRewards(stake.contractAddress, stake.stakingCounter) : openModal('withdrawTokens')} disabled={stake.duration && (stake.endTime > moment().unix())}>{stake.duration ? 'Claim' : 'Migrate'}
                         </ClaimModalTableBtn>
                       </ClaimModalTableCol>
                     </ClaimModalTableRow>
@@ -537,7 +537,11 @@ const StakingModal = ({
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 
-                <StakeModalPoolTable>
+                <StakeModalPoolTable scroll={userStakes.filter(s => {
+                    return s.contractAddress === contractAddress
+                      && s.tokenAddress === tokenAddress
+                      && (tokenAddress !== SLICEAddress || !s.duration || s.durationIndex === durationIndex)
+                  }).length >= 3}>
                   <StakeModalPoolTableTitle textColor={ModeThemes[theme].ModalText}>
                     <h2>{i18n.t('yourStakes')}</h2>
                   </StakeModalPoolTableTitle>
@@ -552,7 +556,7 @@ const StakingModal = ({
                       <h2>total locked</h2>
                     </StakeModalPoolTableCol>
                   </StakeModalPoolTableHead>
-                </StakeModalPoolTable>
+                
                 {
                   userStakes.filter(s => {
                     return s.contractAddress === contractAddress
@@ -577,6 +581,7 @@ const StakingModal = ({
                     )
                   })
                 }
+                </StakeModalPoolTable>
               </StakingModalContentSide>
 
               <BreakLink>
@@ -659,7 +664,7 @@ const StakingModal = ({
                   </StakingModalContentSideHeaderBox>
                 </StakingModalContentSideHeaderBoxWrapper>
 
-                <StakeModalPoolTable>
+                <StakeModalPoolTable scroll={false}>
                   <StakeModalPoolTableTitle textColor={ModeThemes[theme].ModalText}>
                     <h2>{i18n.t('yourStakes')}</h2>
                   </StakeModalPoolTableTitle>
@@ -674,7 +679,6 @@ const StakingModal = ({
                       <h2>YOUR SHARE</h2>
                     </StakeModalPoolTableCol>
                   </StakeModalPoolTableHead>
-                </StakeModalPoolTable>
 
                 <StakeModalPoolTableRow BorderStake={ModeThemes[theme].BorderStake}>
                   <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
@@ -687,6 +691,8 @@ const StakingModal = ({
                     <h2>{roundNumber(stakedShare, 2)}</h2>
                   </StakeModalPoolTableCol>
                 </StakeModalPoolTableRow>
+                </StakeModalPoolTable>
+
               </StakingModalContentSide>
 
               <BreakLink>

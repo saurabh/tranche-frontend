@@ -1295,6 +1295,7 @@ const StakeBtnSlice = styled.button`
   ${({ disabled }) => disabled && `
     background: rgba(204, 204, 205, 0.15);
     pointer-events: none;
+    font-size: 12px;
   `}
   @media (max-width: 767px){
     font-size: 10px;
@@ -1887,7 +1888,7 @@ const TooltipWrapper = styled.div`
   ${({ reward, language }) => reward && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% - 5px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 30px)" };
+    left: ${language === "en" ? "calc(100% + 5px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 30px)" };
   `}
   ${({ APY, language}) => APY && `
     top: calc(100% - 23px);

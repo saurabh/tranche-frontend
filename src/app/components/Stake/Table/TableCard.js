@@ -219,7 +219,7 @@ const TableCard = ({
 
           { title === "SLICE Staking Pools" && duration ? 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
-              <StakeBtnSlice onClick={() => openModal('staking')} disabled={false}>
+              <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0}>
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
@@ -289,8 +289,8 @@ const TableCard = ({
                     <h2>{(title === "SLICE Staking Pools" && duration) ? poolName && poolName : type && type}</h2>
                     { title === "SLICE Staking Pools" && duration ? 
                       <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('staking')} disabled={false}>
-                          Stake
+                        <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0}>
+                        {remainingCap === 0 ? 'Capped' : 'Stake'}
                         </StakeBtnSlice>
                       </StakeBtns>
                       : 

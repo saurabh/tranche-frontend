@@ -177,7 +177,7 @@ const ModalFormButton = styled.button`
   font-weight: bold !important;  
   font-size: 12px;
   align-self: flex-end;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   cursor: pointer;
   border: none;
   box-sizing: border-box;
@@ -200,6 +200,7 @@ const ModalFormButton = styled.button`
   }
   h2{
     font-size: 12px;
+    color: #FFFFFF !important;
     font-weight: bold !important;  
   }
 
@@ -274,6 +275,7 @@ const ModalFormButton = styled.button`
   ${({ loading }) => loading === 'true' && `
     width: 192px !important;
   `}
+
   
 
 `
@@ -579,7 +581,7 @@ const ModalFormGrpNewLoan = styled.div`
       margin: 100px auto 0 auto;
       text-align: center;
       letter-spacing: 0.15em;
-      color: #838186;
+      color: #FFFFFF;
     }
   `}
   ${({ stake, StakingInputText }) => stake && `
