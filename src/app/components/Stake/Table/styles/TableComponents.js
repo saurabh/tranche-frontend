@@ -1158,11 +1158,13 @@ const TableFifthCol = styled.div`
 `
 const FifthColContent = styled.div`
   position: relative;
+  width: 90%;
+  margin: 0 auto;
   h2:first-child{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 17px !important;
+    font-size: 15px !important;
     letter-spacing: 0.05em;
     text-align: center !important;
     color: ${props => props.color};
