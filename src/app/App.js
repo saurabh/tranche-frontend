@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components';
 import ErrorModal from 'app/components/Modals/Error';
 
 import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances } from 'redux/actions/ethereum';
+import { fetchExchangeRates } from 'redux/actions/tableData';
 import { ETHContracts, MaticContracts } from 'services/web3Subscriptions';
 import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes } from 'config/constants';
 // Routes
@@ -23,8 +24,12 @@ import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
 const baseRouteUrl = '/:locale(zh|kr|en)?';
-const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances, path, ethereum: { address, network }, checkServerStatus, theme }) => {
+const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances, fetchExchangeRates, path, ethereum: { address, network }, checkServerStatus, theme }) => {
   const [showModal, setShowModal] = useState(true);
+
+  useEffect(() => {
+    fetchExchangeRates()
+  }, [fetchExchangeRates]);
 
   useEffect(() => {
     if (address) {
@@ -94,5 +99,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   setTokenBalances,
   checkTrancheAllowances,
-  checkStakingAllowances
+  checkStakingAllowances,
+  fetchExchangeRates
 })(NetworkDetector(App));

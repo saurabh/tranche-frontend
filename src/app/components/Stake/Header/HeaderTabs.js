@@ -8,7 +8,7 @@ import { fromWei } from 'services/contractMethods';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 // import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import i18n from '../../locale/i18n';
-import { roundNumber, safeAdd } from 'utils/helperFunctions';
+import { roundNumber, safeAdd, safeMultiply } from 'utils/helperFunctions';
 import StakingModal from '../../Modals/StakingModal';
 import useAnalytics from 'services/analytics';
 import {
@@ -30,7 +30,7 @@ const HeaderTabs = ({
   theme,
   ethereum: { wallet, address, network, tokenBalance },
   summaryData: { slice, lp, lpList, totalAccruedRewards },
-  data: { userStakingList: { slice: sliceStakes }, hasMigrated },
+  data: { userStakingList: { slice: sliceStakes }, hasMigrated, exchangeRates },
   summaryFetchSuccess,
   openModal,
   closeModal,
@@ -116,7 +116,7 @@ const HeaderTabs = ({
             <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN' ? roundNumber(totalAccruedRewards + newSliceRewards) : '0'} SLICE</h2>
             <h2>{sliceBalance} SLICE Available</h2>
             <span></span>
-            <h2>{i18n.t('currentVal')} $Need from API</h2>
+            <h2>{i18n.t('currentVal')} ${exchangeRates && roundNumber(safeMultiply(totalAccruedRewards + newSliceRewards, exchangeRates.SLICE)) !== 'NaN' ? roundNumber(safeMultiply(totalAccruedRewards + newSliceRewards, exchangeRates.SLICE)) : 0}</h2>
           </StackSummaryCol>
           <StackSummaryCol claimBtn>
             <h2>{i18n.t('nextLiqIn')}</h2>

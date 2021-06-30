@@ -7,8 +7,7 @@ import {
   LP1TokenAddress,
   LP2TokenAddress,
   etherScanUrl,
-  maticBlockExplorerUrl,
-  lockupDurations
+  maticBlockExplorerUrl
 } from 'config/constants';
 import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
@@ -35,9 +34,18 @@ import {
   USER_STAKING_LIST_IS_LOADING,
   USER_STAKING_LIST_SUCCESS,
   SET_MIGRATE_STEP,
-  SET_MIGRATED
+  SET_MIGRATED,
+  SET_EXCHANGE_RATES
 } from './constants';
-const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
+const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl, exchangeRates } = apiUri;
+
+export const fetchExchangeRates = () => async (dispatch) => {
+  const { data: result } = await getRequest(exchangeRates, {}, null);
+  dispatch({
+    type: SET_EXCHANGE_RATES,
+    payload: result.result
+  });
+}
 
 export const loansIsLoading = (bool) => (dispatch) => {
   dispatch({

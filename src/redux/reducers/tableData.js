@@ -20,7 +20,8 @@ import {
   USER_STAKING_LIST_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
   SET_MIGRATE_STEP,
-  SET_MIGRATED
+  SET_MIGRATED,
+  SET_EXCHANGE_RATES
 } from '../actions/constants';
 
 let localNetwork = window.localStorage.getItem('network');
@@ -95,9 +96,11 @@ export default function (state = initialState, action) {
     case USER_STAKING_LIST_IS_LOADING:
       return { ...state, isUserStakingListLoading: payload };
     case SET_MIGRATE_STEP:
-      return {...state, currentStep: payload}
+      return {...state, currentStep: payload};
     case SET_MIGRATED:
-      return {...state, hasMigrated: payload}
+      return {...state, hasMigrated: payload};
+    case SET_EXCHANGE_RATES:
+      return {...state, exchangeRates: payload};
     default:
       return state;
   }

@@ -10,7 +10,7 @@ import { getUserStaked, claimRewards, addStake, withdrawStake } from 'services/c
 import useAnalytics from 'services/analytics';
 import { setMigrateStep } from 'redux/actions/tableData';
 import { CloseModal, CloseModalWhite, Lock, LockLight, TrancheStake, Migrated } from 'assets';
-import { addrShortener, roundNumber, formatTime, isEqualTo } from 'utils';
+import { addrShortener, roundNumber, formatTime, isEqualTo, safeMultiply } from 'utils';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import i18n from '../locale/i18n';
 
@@ -200,7 +200,7 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   // Redux
   ethereum: { address },
-  data: { stakingList, sliceStakingList, userStakingList, currentStep, hasMigrated },
+  data: { stakingList, sliceStakingList, userStakingList, currentStep, hasMigrated, exchangeRates },
   summaryData: { accruedRewards, totalAccruedRewards },
   theme,
   setMigrateStep,
@@ -349,7 +349,7 @@ const StakingModal = ({
             <ClaimModalHeader textColor={ModeThemes[theme].ModalText}>
               <h2>Total Accrued Rewards</h2>
               <h2>
-                {totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN' ? roundNumber(totalAccruedRewards + newSliceRewards) : '0'} SLICE <span>(Current Value is $Need from API)</span>
+                {totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN' ? roundNumber(totalAccruedRewards + newSliceRewards) : '0'} SLICE <span>(Current Value is ${exchangeRates && roundNumber(safeMultiply(totalAccruedRewards + newSliceRewards, exchangeRates.SLICE)) !== 'NaN' ? roundNumber(safeMultiply(totalAccruedRewards + newSliceRewards, exchangeRates.SLICE)) : 0})</span>
               </h2>
             </ClaimModalHeader>
             <ClaimModalTableWrapper

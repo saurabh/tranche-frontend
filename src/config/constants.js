@@ -156,6 +156,7 @@ export const pairData = [
 ];
 
 export const apiUri = {
+  exchangeRates: 'common/exchange-rates',
   priceFeed: 'pairs',
   loanList: 'loans',
   transaction: 'loans/transaction',
