@@ -24,6 +24,7 @@ export const SET_SLICE_STATS = 'SET_SLICE_STATS';
 export const SET_TVL = 'SET_TVL';
 
 // Data
+export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
 export const LOANS_IS_LOADING = 'LOANS_IS_LOADING';
 export const LOANS_SUCCESS = 'LOANS_SUCCESS';
 export const LOANS_COUNT = 'LOANS_COUNT';
