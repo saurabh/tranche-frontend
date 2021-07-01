@@ -30,6 +30,7 @@ export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',')
 export const LockupAddress = process.env.REACT_APP_STAKING_LOCKUP_ADDRESS;
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
 export const lockupDurations = process.env.REACT_APP_STAKING_LOCKUP_DURATION.split(',');
+export const lockupStakingOccurrences = process.env.REACT_APP_STAKING_LOCKUP_OCCURRENCES.split(',').map(o => +o);
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 //Google Analytics
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';

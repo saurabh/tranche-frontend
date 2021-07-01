@@ -264,7 +264,7 @@ const StakingModal = ({
       }
     }
     setUserStakes(stakes)
-  }, [modalType, duration, lp, slice, sliceStakingList, tokenAddress]);
+  }, [modalType, duration, lp, slice, sliceStakingList, tokenAddress, hasMigrated]);
 
   useEffect(() => {
     setModalTypeVar(modalType);
@@ -600,6 +600,8 @@ const StakingModal = ({
                   tokenAddress={tokenAddress}
                   contractAddress={contractAddress}
                   durationIndex={durationIndex}
+                  apy={apy}
+                  duration={duration}
                   userStaked={userStaked}
                   adjustStake={adjustStake}
                 />
@@ -1087,7 +1089,9 @@ const StakingModal = ({
             type={sliceStakingList[id].type} 
             tokenAddress={sliceStakingList[id].tokenAddress}
             contractAddress={sliceStakingList[id].contractAddress}
-            durationIndex={sliceStakingList[id].durationIndex}
+            durationIndex={sliceStakingList[ id ].durationIndex}
+            apy={sliceStakingList[ id ].apy}
+            duration={sliceStakingList[ id ].duration}
             userStaked={userStaked}
             adjustStake={adjustStake}
             migrate={true}
