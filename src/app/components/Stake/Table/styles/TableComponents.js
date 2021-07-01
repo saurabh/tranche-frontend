@@ -68,13 +68,13 @@ const TableWrapper = styled.div`
   // overflow: hidden;
   ${({ mobile }) => mobile && `
     display: none;
-    @media (max-width: 1200px){
+    @media (max-width: 992px){
       display: block;
     }
   `}
   ${({ desktop }) => desktop && `
     display: none;
-    @media (min-width: 1200px){
+    @media (min-width: 992px){
       display: block;
     }
   `}
@@ -181,7 +181,7 @@ const TableHeadTitle = styled.div`
           margin-left: 73px;
         }
     }
-    @media (max-width: 1200px){
+    @media (max-width: 992px){
       display: none !important;
     }
     ${({ stakingPool }) => stakingPool && `
@@ -1158,11 +1158,13 @@ const TableFifthCol = styled.div`
 `
 const FifthColContent = styled.div`
   position: relative;
+  width: 90%;
+  margin: 0 auto;
   h2:first-child{
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 17px !important;
+    font-size: 15px !important;
     letter-spacing: 0.05em;
     text-align: center !important;
     color: ${props => props.color};
@@ -1178,6 +1180,14 @@ const FifthColContent = styled.div`
     text-transform: uppercase;
     text-align: center;
     color: #CCCCCD;
+  }
+  @media (max-width: 1200px){
+    h2:first-child{
+      font-size: 12px !important;
+    }
+    h2:last-child{
+      font-size: 12px !important;
+    }
   }
 `
 const StatusTextWrapper = styled.h2`
@@ -1251,8 +1261,8 @@ const StakeBtn = styled.button`
   color: #FFFFFF;
   background: ${props => props.background};
   ${({ disabled }) => disabled && `
+    background: rgba(204, 204, 205, 0.15);
     pointer-events: none;
-    opacity: 0.5;
     cursor: default;
   `}
   :hover{
@@ -1280,6 +1290,11 @@ const StakeBtnSlice = styled.button`
   color: #FFFFFF;
   ${({ withdraw }) => withdraw && `
     background: #6E41CF;    
+    font-size: 12px;
+  `}
+  ${({ disabled }) => disabled && `
+    background: rgba(204, 204, 205, 0.15);
+    pointer-events: none;
     font-size: 12px;
   `}
   @media (max-width: 767px){
@@ -1873,7 +1888,7 @@ const TooltipWrapper = styled.div`
   ${({ reward, language }) => reward && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% - 5px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 30px)" };
+    left: ${language === "en" ? "calc(100% + 5px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 30px)" };
   `}
   ${({ APY, language}) => APY && `
     top: calc(100% - 23px);

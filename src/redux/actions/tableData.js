@@ -7,8 +7,7 @@ import {
   LP1TokenAddress,
   LP2TokenAddress,
   etherScanUrl,
-  maticBlockExplorerUrl,
-  lockupDurations
+  maticBlockExplorerUrl
 } from 'config/constants';
 import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
@@ -33,9 +32,20 @@ import {
   TRANCHE_MARKETS,
   STAKING_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
-  USER_STAKING_LIST_SUCCESS
+  USER_STAKING_LIST_SUCCESS,
+  SET_MIGRATE_STEP,
+  SET_MIGRATED,
+  SET_EXCHANGE_RATES
 } from './constants';
-const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
+const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl, exchangeRates } = apiUri;
+
+export const fetchExchangeRates = () => async (dispatch) => {
+  const { data: result } = await getRequest(exchangeRates, {}, null);
+  dispatch({
+    type: SET_EXCHANGE_RATES,
+    payload: result.result
+  });
+}
 
 export const loansIsLoading = (bool) => (dispatch) => {
   dispatch({
@@ -240,3 +250,27 @@ export const fetchUserStakingList = (endpoint) => async (dispatch) => {
     console.log(error);
   }
 } 
+
+export const setMigrateStep = (string) => (dispatch) => {
+  const state = store.getState();
+  const { address } = state.ethereum;
+  if (string === 'done') {
+    const migrateAddress = JSON.parse(window.localStorage.getItem('migrateAddress'));
+    window.localStorage.setItem(`migrateAddress`, JSON.stringify({...migrateAddress, [address]: true}))
+    dispatch({
+      type: SET_MIGRATED,
+      payload: true
+    });
+  }
+  dispatch({
+    type: SET_MIGRATE_STEP,
+    payload: string
+  });
+}
+
+export const setHasMigrated = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_MIGRATED,
+    payload: bool
+  });
+}

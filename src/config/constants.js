@@ -156,6 +156,7 @@ export const pairData = [
 ];
 
 export const apiUri = {
+  exchangeRates: 'common/exchange-rates',
   priceFeed: 'pairs',
   loanList: 'loans',
   transaction: 'loans/transaction',
@@ -374,6 +375,7 @@ export const ModeThemes = {
     MigrateProgressTextPending: "#9F9DE6",
     MigrateProgressLine: "#D4D4D4",
     MigrateStepBorder: "rgba(0, 0, 0, 0.2)",
+    disabledBtnColor: "rgba(204,204,205,1)",
     MigrateStepTextPending: "rgba(0, 0, 0, 0.5)",
     MigrateStepText: "#FFFFFF",
     MigrateStepBackground: "#FFFFFF",
@@ -389,6 +391,7 @@ export const ModeThemes = {
     HeaderTitle: '#FFFFFF',
     StakeModalNavigationText: "#C2C4DA",
     docsLockupText: "#FFFFFF",
+    disabledBtnColor: "rgba(204,204,205,0.15)",
     docsLockupBackground: "rgba(105,103,156,0.4)",
     HeaderSubtitle: '#C2C4DA',
     TableHeadText: "rgba(255, 255, 255, 0.6)",

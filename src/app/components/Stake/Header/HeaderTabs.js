@@ -8,7 +8,7 @@ import { fromWei } from 'services/contractMethods';
 import { summaryFetchSuccess } from 'redux/actions/summaryData';
 // import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import i18n from '../../locale/i18n';
-import { roundNumber, safeAdd } from 'utils/helperFunctions';
+import { roundNumber, safeAdd, safeMultiply } from 'utils/helperFunctions';
 import StakingModal from '../../Modals/StakingModal';
 import useAnalytics from 'services/analytics';
 import {
@@ -30,6 +30,7 @@ const HeaderTabs = ({
   theme,
   ethereum: { wallet, address, network, tokenBalance },
   summaryData: { slice, lp, lpList, totalAccruedRewards },
+  data: { userStakingList: { slice: sliceStakes }, hasMigrated, exchangeRates },
   summaryFetchSuccess,
   openModal,
   closeModal,
@@ -48,50 +49,8 @@ const HeaderTabs = ({
     lpList.reduce((accumulator, lp) => {
       return safeAdd(accumulator, fromWei(tokenBalance[lp.address]));
     }, '0');
-  // const [modalType, setModalType] = useState('');
-  // const onboard = initOnboard({
-  //   address: setAddress,
-  //   network: setNetwork,
-  //   balance: setBalance,
-  //   wallet: setWalletAndWeb3
-  // });
+  const newSliceRewards = sliceStakes.filter(s => s.duration).reduce((acc, cur) => acc + cur.reward, 0)
 
-  // useEffect(() => {
-  //   const setEpochTime = async () => {
-  //     const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-  //     let dateTime = result;
-  //     const interval = setInterval(() => {
-  //       if (dateTime > 0) {
-  //         dateTime -= 1;
-  //       } else {
-  //         const setTime = async () => {
-  //           const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
-  //           dateTime = result;
-  //         };
-  //         setTime();
-  //       }
-  //       setProgress(100 - (100 * dateTime) / 604800);
-  //       let current = moment.unix(moment().unix());
-  //       let date = moment.unix(moment().unix() + dateTime);
-  //       let time = date - current;
-  //       let duration = moment.duration(time);
-  //       let days = duration.days();
-  //       let hours = duration.hours();
-  //       let minutes = duration.minutes();
-  //       let seconds = duration.seconds();
-  //       let final = {
-  //         days,
-  //         hours,
-  //         minutes,
-  //         seconds
-  //       };
-  //       setTimerData(final);
-  //     }, 1000);
-
-  //     return () => clearInterval(interval);
-  //   };
-  //   setEpochTime();
-  // }, []);
 
   useEffect(() => {
     const getStakingData = async () => {
@@ -122,7 +81,7 @@ const HeaderTabs = ({
         </HowToLink>
       </TableTitle>
       
-      <WithdrawStakeCard>
+      {<WithdrawStakeCard>
         <WithdrawStakeCardText>
           <h2>{i18n.t('migrateYour')}</h2>
           <p>
@@ -131,10 +90,9 @@ const HeaderTabs = ({
         </WithdrawStakeCardText>
         <WithdrawStakeCardBtns>
           <button onClick={() => openModal("withdrawTokens")}
-          // withdrawStakeAndRewards(slice.stakingAddress, slice.address, slice.yieldAddress)
           >{i18n.t('migrateTokens')}</button>
         </WithdrawStakeCardBtns>
-      </WithdrawStakeCard>
+      </WithdrawStakeCard>}
       <StakeSummaryCardWrapper>
         <StakeSummaryCard color='#4441CF'>
           <StackSummaryCol stake>
@@ -152,22 +110,13 @@ const HeaderTabs = ({
             <h2>{i18n.t('currentVal')} ${lp.balanceUSD ? roundNumber(lp.balanceUSD) : '0'}</h2>
           </StackSummaryCol>
         </StakeSummaryCard>
-        {/* <StakeSummaryCard color='#369987' claim>
-          <StackSummaryCol>
-            <h2>Accrued Rewards</h2>
-            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
-            <h2>Current Value is $Soon™</h2>
-            <ProgressBar progress='50' widthBar='90' colorOne='rgba(255,255,255,0.5)' colorTwo='#FFFFFF' />
-            <h2>6 Days until next distribution</h2>
-          </StackSummaryCol>
-        </StakeSummaryCard> */}
         <StakeSummaryCard color='#369987' claim>
           <StackSummaryCol claim>
             <h2>{i18n.t('Accrued')}</h2>
-            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards, 2) !== 'NaN' ? roundNumber(totalAccruedRewards, 2) : '0'} SLICE</h2>
+            <h2>{totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN' ? roundNumber(totalAccruedRewards + newSliceRewards) : '0'} SLICE</h2>
             <h2>{sliceBalance} SLICE Available</h2>
             <span></span>
-            <h2>{i18n.t('currentVal')} $Soon™</h2>
+            <h2>{i18n.t('currentVal')} ${exchangeRates && roundNumber(safeMultiply(totalAccruedRewards + newSliceRewards, exchangeRates.SLICE)) !== 'NaN' ? roundNumber(safeMultiply(totalAccruedRewards + newSliceRewards, exchangeRates.SLICE)) : 0}</h2>
           </StackSummaryCol>
           <StackSummaryCol claimBtn>
             <h2>{i18n.t('nextLiqIn')}</h2>

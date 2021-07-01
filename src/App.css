@@ -1610,7 +1610,7 @@ input[type=number] {
   bottom: 10px;
   right: 30px;
   width: 300px;
-  z-index: 1000;
+  z-index: 4000;
 }
 
 .NotifyItem{
@@ -2109,4 +2109,8 @@ input[type=number] {
     animation-name: kf_el_q_eIK0z3HI_an_045tZJOHl;
     -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
     animation-timing-function: cubic-bezier(0, 0, 1, 1);
+    }
+
+    .bn-onboard-modal{
+      z-index: 3000 !important;
     }

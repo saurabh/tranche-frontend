@@ -990,7 +990,13 @@ const StakingModalContent = styled.div`
   @media (max-width: 663px){
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-height: 375px){
+    position: relative;
+    width: 100%;
+    overflow-y: scroll;
   }
   ${({ migrateStake }) => migrateStake && `
     top: unset;
@@ -1234,6 +1240,11 @@ const ClaimModalTableBtn = styled.button`
   cursor: pointer;
   margin: 0 auto;
 
+  ${({ disabled, disabledBtnColor }) => disabled && `
+    background: ${disabledBtnColor};
+    pointer-events: none;
+  `}
+
   // background: #CECECE;
   // background: #C22D2D;
   // color: #666666;
@@ -1374,9 +1385,35 @@ const StakingModalContentSideHeaderText = styled.div`
     margin: 4px 0;
     color: ${props => props.boxText};
   }
+
+  @media (max-width: 663px){
+    h2:first-child{
+      font-size: 10px;
+    }
+    h2:last-child{
+      font-size: 5px;
+    }
+  }
 `;
 const StakeModalPoolTable = styled.div`
   margin: 24px 0 0 0;
+  max-height: 200px;
+  overflow-y: ${props => props.scroll ? "scroll" : ""};
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rbga(227,227,227,3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #C2C2C2;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C0C0C0;
+  }
 `;
 const StakeModalPoolTableTitle = styled.div`
   h2{
@@ -1538,6 +1575,11 @@ const StakeModalFormWrapper = styled.div`
 `;
 const StakeModalFormInputWrapper = styled.div`
   position: relative;
+  div{
+    input{
+      border: 0.92283px solid ${props => props.borderColor};
+    }
+  }
 `
 const StakeModalFormInput = styled.input`
   width: 100%;
@@ -1563,6 +1605,9 @@ const StakeModalFormBtn = styled.button`
   font-family: 'Inter', sans-serif;
   font-weight: bold;
   font-size: 12px;
+  h2{
+    color: #FFFFFF !important;
+  }
   color: #FFFFFF;
   width: 100%;
   height: 38px;
@@ -1591,8 +1636,8 @@ const StakeModalFormBtn = styled.button`
   ${({ step }) => step && `
     background: ${step === "stake" ? "#43406C" : step === "done" ? "#369987" : "#6E41CF"};
   `}
-  ${({ disabled }) => disabled && `
-    background: rgba(204, 204, 205, 0.15);
+  ${({ disabled, disabledBtnColor }) => disabled && `
+    background: ${disabledBtnColor};
     pointer-events: none;
   `}
 
@@ -1602,7 +1647,10 @@ const StakeModalFormBtn = styled.button`
   ${({ migrateStep }) => migrateStep && `
     width: 192px !important;
   `}
-  
+  ${({ migrateLoading }) => migrateLoading && `
+    background: #4441CF;
+
+  `}  
 
   @media (max-width: 663px){
     position: relative;
@@ -1699,6 +1747,9 @@ const ProgressBarLineWrapper = styled.div`
   width: 15%;
   height: 1px;
   margin-top: 2px;
+  @media (max-width: 663px){
+    display: none;    
+  }
 `;
 const ProgressBarDashedLine = styled.div`
   border: 0 none;
@@ -1942,7 +1993,7 @@ const StakeNewColText = styled.div`
     font-size: 7.65818px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #838186;
+    color: #FFFFFF;
     margin: 1px 0;
   }
 `;
@@ -1951,7 +2002,7 @@ const SliceMigratedWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 45px 0 0 0; 
-  img{
+  & > img{
     max-width: 86px;
     width: 100%;
   }
@@ -2003,6 +2054,12 @@ const StakingModalChangeBtn = styled.button`
   right: 26px;
   height: 21px;
   width: 58px;
+  @media (max-width: 633px){
+    font-size: 8px;
+    height: 19px;
+    width: 46px;
+  }
+  
 `;
 const StakingMigrateModalContentWrapper = styled.div`
   

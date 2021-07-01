@@ -14,9 +14,6 @@ import {
     TableMarketsSortingDropdownContent,
     TableMarketSortingBtn,
     TableSubTitle,
-    TableColMobile,
-    TableHeadWrapperMobile,
-    TableHeadTitleMobile,
     TooltipWrapper
 } from './styles/TableComponents';
 import i18n from "app/components/locale/i18n";
@@ -28,7 +25,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
     const [order, setOrder] = useState("asc")
     const [menu, toggleMenu] = useState(false);
     const [TooltipToggle, setTooltipToggle] = useState("");
-    const [isDesktop, setDesktop] = useState(window.innerWidth > 1200);
+    const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
 
     const innerRef = useOuterClick(e => {
@@ -50,7 +47,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
         setTooltipToggle(val);
     }
     const updateMedia = () => {
-        setDesktop(window.innerWidth > 1200);
+        setDesktop(window.innerWidth > 992);
     };
 
     useEffect(() => {
@@ -96,12 +93,12 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     }
                 </TableHeadTitle>
                 <TableHeadTitle color={color} reward>
-                    <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('poolCap') : i18n.t('stake.table.tableHead.reward')) : "RETURN/BLOCK"}</h2>
+                    <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('remainingCap') : i18n.t('stake.table.tableHead.reward')) : "RETURN/BLOCK"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
                     <TooltipWrapper tooltip={TooltipToggle === "reward"} reward color={ModeThemes[theme].Tooltip} language={i18n.language}>
                         <div>
-                            <h2>The total amount of tokens that can be locked at a certain time</h2>
+                            <h2>{i18n.t('remainingCapTooltip')}</h2>
                         </div>
                     </TooltipWrapper>
                     }
@@ -141,66 +138,10 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     
                 </TableHeadTitle>
 
-
-                <SortingMenu>
-                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} sorting={true}>
-                        <h2>Sort <img src={ChevronDown} alt="img"/> </h2>
-                    </TableSubTitle>
-                    { menu ?
-
-                    <TableMarketsSortingDropdown sorting={true}>
-                            <TableMarketsSortingDropdownContent>
-                                <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
-                                    Amount
-                                </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
-                                    Ratio
-                                </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => sortLoans("interestPaid")}>
-                                    Rate/Payout
-                                </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => sortLoans("displayPriority")}>
-                                    Status
-                                </TableMarketSortingBtn>
-                            </TableMarketsSortingDropdownContent>
-                        </TableMarketsSortingDropdown>  : ""
-                    }
-                </SortingMenu>
             </TableHeadWrapper>  
         );
     }
-    const TableHeadMobile = () => {
-        return (
-            <TableHeadWrapperMobile path={path}>
-                <TableColMobile address>
-                    <TableHeadTitleMobile defaultCursor={true} address stakingPool color={color}>
-                        <h2>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? i18n.t('stake.table.tableHead.stakingPool') : "INSTRUMENT"}</h2>
-                    </TableHeadTitleMobile>
-                </TableColMobile>
-                <TableColMobile>
-                    <TableHeadTitleMobile color={color}>
-                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "amount")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "SIZE"}</h2>
-                    </TableHeadTitleMobile>
-                </TableColMobile>
-                <TableColMobile>
-                    <TableHeadTitleMobile color={color}>
-                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "rpbRate")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? i18n.t('stake.table.tableHead.reward') : "RETURN"}</h2>
-                    </TableHeadTitleMobile>
-                </TableColMobile>
-                <TableColMobile>
-                    <TableHeadTitleMobile color={color}>
-                        <h2 onClick={() => sortLoans(path !== "tranche" ? "remainingLoan" : "subscriber")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "APY"  : "SUBSCRIPTION"}</h2>
-                    </TableHeadTitleMobile>
-                </TableColMobile>
-                <TableColMobile btn>
-                    <TableHeadTitleMobile>
-
-                    </TableHeadTitleMobile>
-                </TableColMobile>
-            </TableHeadWrapperMobile>  
-        );
-    }
-    return isDesktop ? TableHeadDesktop() : TableHeadMobile();
+    return TableHeadDesktop();
 
     
 }

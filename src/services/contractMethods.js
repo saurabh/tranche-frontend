@@ -8,12 +8,14 @@ import {
   factoryFees,
   epochDuration,
   txMessage,
+  ApproveBigNumber,
   tokenDecimals,
   ETHorMaticCheck,
   networkId,
   maticNetworkId
 } from 'config';
-import { setTxLoading, addNotification, setNotificationCount, updateNotification } from 'redux/actions/ethereum';
+import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
+import { setMigrateStep } from 'redux/actions/tableData';
 
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
@@ -404,6 +406,50 @@ export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userA
   }
 };
 
+export const stakingApproveContract = async (e, contractAddress, tokenAddress, isApproved) => {
+  const state = store.getState();
+  const { web3, address, notify, notificationCount, txOngoing } = state.ethereum;
+  if (txOngoing) e.stopPropogation();
+  let id = notificationCount;
+  setNotificationCount(notificationCount + 1);
+  try {
+    const token = ERC20Setup(web3, tokenAddress);
+    addNotification({
+      id,
+      type: 'WAITING',
+      message: 'Your transaction is waiting for you to confirm',
+      title: 'awaiting confirmation'
+    });
+    await token.methods
+      .approve(contractAddress, toWei(ApproveBigNumber))
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        store.dispatch(setTxLoading(true));
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+        emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+        emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+      })
+      .on('confirmation', () => {
+        store.dispatch(toggleApproval(tokenAddress, contractAddress, !isApproved));
+        store.dispatch(setTxLoading(false));
+      });
+  } catch (error) {
+    error.code === 4001 &&
+      updateNotification({
+        id,
+        type: 'REJECTED',
+        message: 'You rejected the transaction',
+        title: 'Transaction rejected'
+      });
+    console.error(error);
+  }
+};
+
 export const getUserStaked = async (stakingAddress, tokenAddress) => {
   try {
     const state = store.getState();
@@ -491,7 +537,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
   }
 };
 
-export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = false) => {
+export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = false, migrate = false) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
@@ -499,7 +545,7 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
   try {
     let amount = maxAmount ? await getUserStaked(stakingAddress, tokenAddress) : state.form.stake.values.amount;
     const StakingContract = StakingSetup(web3, stakingAddress);
-    if (!maxAmount) amount = toWei(amount.toString());
+    amount = toWei(amount.toString());
     if (amount !== '0') {
       store.dispatch(
         addNotification({
@@ -520,7 +566,10 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
                 message: txMessage(transaction.hash)
               };
             });
-            emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+            emitter.on('txConfirmed', () => {
+              migrate && store.dispatch(setMigrateStep('stake'))
+              store.dispatch(setTxLoading(false))
+            });
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
           }
@@ -536,11 +585,11 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
           title: 'Transaction rejected'
         })
       );
-    console.error(error);
+    console.log(error);
   }
 };
 
-export const claimRewards = async (contractAddress, stakingCounter) => {
+export const claimRewards = async (contractAddress, stakingCounter, migrate = false) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
@@ -567,7 +616,10 @@ export const claimRewards = async (contractAddress, stakingCounter) => {
               message: txMessage(transaction.hash)
             };
           });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txConfirmed', () => {
+            migrate && store.dispatch(setMigrateStep('withdraw'))
+            store.dispatch(setTxLoading(false))
+          });
           emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
           emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
         }
@@ -582,6 +634,6 @@ export const claimRewards = async (contractAddress, stakingCounter) => {
           title: 'Transaction rejected'
         })
       );
-    console.error(error);
+    return error
   }
 };
