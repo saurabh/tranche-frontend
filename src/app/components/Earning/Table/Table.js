@@ -143,7 +143,7 @@ const Table = ({
 
   return (
     <div className='container content-container'>
-      <div className='TableContentWrapper'>
+      <div>
         <TableWrapper mobile>
           <HeaderTabs />
           <div className='table-content'>

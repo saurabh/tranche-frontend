@@ -6,7 +6,7 @@ const initialState = {
   withdrawn: { balance: 0 },
   lpList: undefined,
   stakableAssets: [],
-  accruedRewards: {},
+  accruedRewards: undefined,
   totalAccruedRewards: 0,
   sliceStats: {},
   tvl: {}

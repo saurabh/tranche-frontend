@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { ThemeProvider } from 'styled-components';
-import Banner from 'app/components/Banner/Banner';
+// import Banner from 'app/components/Banner/Banner';
 import ErrorModal from 'app/components/Modals/Error';
 
-import { setTokenBalances, checkTrancheAllowances } from 'redux/actions/ethereum';
+import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances } from 'redux/actions/ethereum';
+import { fetchExchangeRates } from 'redux/actions/tableData';
 import { ETHContracts, MaticContracts } from 'services/web3Subscriptions';
 import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes } from 'config/constants';
 // Routes
@@ -23,16 +24,23 @@ import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
 const baseRouteUrl = '/:locale(zh|kr|en)?';
-const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { address, network }, checkServerStatus, theme }) => {
+const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances, fetchExchangeRates, path, ethereum: { address, network }, checkServerStatus, theme }) => {
   const [showModal, setShowModal] = useState(true);
+
+  useEffect(() => {
+    fetchExchangeRates()
+  }, [fetchExchangeRates]);
 
   useEffect(() => {
     if (address) {
       setTokenBalances(address);
-      if (network === networkId) checkTrancheAllowances(address, JCompoundAddress);
+      if (network === networkId) {
+        checkTrancheAllowances(address, JCompoundAddress);
+        checkStakingAllowances(address);
+      }
       if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
     }
-  }, [address, network, setTokenBalances, checkTrancheAllowances]);
+  }, [address, network, setTokenBalances, checkTrancheAllowances, checkStakingAllowances]);
 
   useEffect(() => {
     if (network === networkId) {
@@ -53,7 +61,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { addre
     return (
       <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
-        <Banner />
+        {/* <Banner /> */}
         <NotificationProvider />
         <Router>
           <Switch location={window.location}>
@@ -76,7 +84,8 @@ const App = ({ setTokenBalances, checkTrancheAllowances, path, ethereum: { addre
 App.propTypes = {
   ethereum: PropTypes.object.isRequired,
   setTokenBalances: PropTypes.func.isRequired,
-  checkTrancheAllowances: PropTypes.func.isRequired
+  checkTrancheAllowances: PropTypes.func.isRequired,
+  checkStakingAllowances: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -89,5 +98,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   setTokenBalances,
-  checkTrancheAllowances
+  checkTrancheAllowances,
+  checkStakingAllowances,
+  fetchExchangeRates
 })(NetworkDetector(App));

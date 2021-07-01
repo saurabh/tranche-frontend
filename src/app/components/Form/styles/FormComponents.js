@@ -168,20 +168,19 @@ const FormInputsWrapper = styled.div`
   }
 `
 const ModalFormButton = styled.button`
-  width: 164px;
+  width: 192px;
   height: 38px;  
-  background: ${props => props.backgroundColor ? props.backgroundColor  : "#936CE6"};
+  font-family: 'Inter', sans-serif;
+  background: ${props => props.backgroundColor ? props.backgroundColor  : "#369987"};
   border-radius: 27px;
   font-style: normal;
-  font-weight: normal;
+  font-weight: bold !important;  
   font-size: 12px;
   align-self: flex-end;
-  letter-spacing: 0.15em;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   cursor: pointer;
   border: none;
   box-sizing: border-box;
-  text-transform: uppercase;
   transition: 500ms;
   position: relative;
   overflow: hidden;
@@ -201,7 +200,8 @@ const ModalFormButton = styled.button`
   }
   h2{
     font-size: 12px;
-    font-weight: normal;
+    color: #FFFFFF !important;
+    font-weight: bold !important;  
   }
 
   :hover{
@@ -223,6 +223,7 @@ const ModalFormButton = styled.button`
     cursor: unset !important;
     // border: 1px solid #936CE6 !important;
     border: 1px solid ${backgroundColor ? backgroundColor : "#936CE6"} !important;
+    width: 192px !important;
     pointer-events: none !important;
     box-shadow: none !important;
   `}
@@ -236,29 +237,28 @@ const ModalFormButton = styled.button`
     }
   `}
   ${({ approved }) => approved && `
+    width: auto !important;
+    padding: 12px 38px;
     h2{
-      color: #2ECC71 !important;
+      color: #555555 !important;
     }
     background: transparent !important;
     cursor: unset !important;
     box-shadow: none !important;
-    border: 1px solid #2ECC71 !important;
-    color: #2ECC71 !important;
+    border: 1px solid #555555 !important;
+    color: #555555 !important;
     pointer-events: none !important;
     h2{
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
+      font-weight: bold !important;
     }
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     margin-right: 12px;
-    span{
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #2ECC71;
+    img{
       display: block;
       margin-right: 9px;
     }
@@ -270,8 +270,12 @@ const ModalFormButton = styled.button`
     color: rgba(35, 69, 102, 0.7);
   `}
   ${({ stake }) => stake && `
-    width: 133px;
+    width: 107px;
   `}
+  ${({ loading }) => loading === 'true' && `
+    width: 192px !important;
+  `}
+
   
 
 `
@@ -577,7 +581,7 @@ const ModalFormGrpNewLoan = styled.div`
       margin: 100px auto 0 auto;
       text-align: center;
       letter-spacing: 0.15em;
-      color: #838186;
+      color: #FFFFFF;
     }
   `}
   ${({ stake, StakingInputText }) => stake && `
@@ -612,13 +616,7 @@ const ModalFormGrpNewLoan = styled.div`
   `}
 `
 
-const ApproveBtnWrapper = styled.div`
-  display: flex;
-  margin-right: 12px;
-  button{
-    width: 133px !important;
-  }
-`
+
 const FieldWrapper = styled.div`
   position: relative;
   ${({ staking, modalType }) => staking && !modalType && `
@@ -728,6 +726,57 @@ const SelectedStakingContent = styled.div`
     text-transform: uppercase;
     color: ${props => props.SelectedStakingLink};
   }
+`
+const ApproveBtnWrapper = styled.div`
+  display: flex;
+  margin-right: 12px;
+  button{
+    width: 192px;
+    position: absolute;
+    bottom: 0;
+  }
+  button:last-child{
+    width: 107px;
+  }
+  ${({ migrate }) => migrate && `
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    button:first-child{
+      left: 33px;
+    }
+  `}
+  @media (max-width: 473px){
+    flex-direction: column;
+    height: 100px;
+    position: relative;
+    margin: 12px 0;
+    button{
+      position: relative;
+      margin: 12px auto;
+      left: 0 !important;
+      right: 0 !important;
+    }
+  }
+  @media (max-height: 375px){
+    height: 100px;
+    position: relative;
+    margin: 33px 0;
+    display: flex;
+    align-items: flex-end;
+    button{
+      position: relative;
+      margin: 0 auto;
+      left: 0 !important;
+      right: 0 !important;
+    }
+  }
+
+  320
 `
 
 export {

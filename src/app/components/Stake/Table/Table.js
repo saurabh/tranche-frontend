@@ -7,6 +7,7 @@ import { apiUri } from 'config/constants';
 import _ from 'lodash';
 import {
   fetchTableData,
+  fetchUserStakingList,
   changeFilter,
   paginationOffset,
   paginationCurrent,
@@ -32,7 +33,8 @@ import {
   LoadingContent
 } from './styles/TableComponents';
 import { EmptyBox } from 'assets';
-const { stakingList: stakingListUrl } = apiUri;
+import { isEqualTo } from 'utils';
+const { stakingList: stakingListUrl, userStakingList: userStakingListUrl } = apiUri;
 
 const style = {
   pageItem: {
@@ -57,8 +59,11 @@ const style = {
 };
 
 const Table = ({
+  ethereum: { address },
+  openModal, closeModal, modalType, ModalIsOpen,
   HandleNewLoan,
   fetchTableData,
+  fetchUserStakingList,
   changeOwnAllFilter,
   path,
   data,
@@ -66,18 +71,24 @@ const Table = ({
   paginationOffset,
   paginationCurrent,
   ownAllToggle,
-  theme
+  theme,
+  title
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
+  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType, sliceStakingList, hasMigrated } = data;
   const pageCount = 5;
+  const [stakingList, setStakingList] = useState([]);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
-  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType } = data;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
+
+  useEffect(() => {
+    hasMigrated ? setStakingList(sliceStakingList.slice(0, 3)) : setStakingList(sliceStakingList);
+  }, [hasMigrated, sliceStakingList]);
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
@@ -94,7 +105,6 @@ const Table = ({
               limit,
               filter: {
                 address: localAddress ? localAddress : undefined,
-                type: filter //ETH/JNT keep these in constant file
               }
             },
             stakingListUrl
@@ -106,7 +116,6 @@ const Table = ({
               limit,
               filter: {
                 address: localAddress ? localAddress : undefined,
-                type: filter //ETH/JNT keep these in constant file
               }
             },
             stakingListUrl
@@ -116,7 +125,7 @@ const Table = ({
       3000,
       { leading: true }
     ),
-    [fetchTableData, filter, skip, limit, sort, tradeType, localAddress]
+    [fetchTableData, skip, limit, sort, tradeType, localAddress]
   );
 
   useEffect(() => {
@@ -138,11 +147,22 @@ const Table = ({
     stakingListing();
   };
 
+  useEffect(() => {
+    const getStakingData = async () => {
+      fetchUserStakingList(`${ userStakingListUrl }/${ address }`);
+    };
+    if (currentPath === 'stake' && address) {
+      getStakingData();
+    }
+  }, [currentPath, fetchUserStakingList, address]);
+
 
   return (
     <div className='container content-container'>
-      <div className='TableContentWrapper'>
+      <div>
         <TableWrapper mobile>
+        <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} title={title}/>
+
           <div className='table-content'>
             {isLoading ? (
               <div>
@@ -151,14 +171,16 @@ const Table = ({
                 </TableContentCard>
               </div>
             ) : (
-              (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (title === "SLICE Staking Pools") ?
+              (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
         <TableWrapper desktop>
-          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} />
+          <TableHeader HandleNewLoan={HandleNewLoan} path={path} filter={filter} title={title}/>
           <div className='table-container'>
-            <TableHead handleSorting={(name, type) => handleSorting(name, type)} color={ModeThemes[theme].TableHead} />
+            <TableHead handleSorting={(name, type) => handleSorting(name, type)} title={title} color={ModeThemes[theme].TableHead} />
             <div className='table-content'>
               {isLoading ? (
                 <div>
@@ -207,8 +229,9 @@ const Table = ({
                   </CallToActionTradeWrapper>
                 </TableContentCard>
               ) : (
-                (data.stakingList.length > 0 && data.stakingList[0]) && data.stakingList.map((staking, i) => <TableCard key={i} staking={staking} path={path} isDesktop={isDesktop} />)
-              )}
+              (title === "SLICE Staking Pools") ?
+              (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)              )}
             </div>
           </div>
         </TableWrapper>
@@ -307,12 +330,14 @@ const mapStateToProps = (state) => {
   return {
     data: state.data,
     path: state.path,
-    theme: state.theme
+    theme: state.theme,
+    ethereum: state.ethereum
   };
 };
 
 export default connect(mapStateToProps, {
   fetchTableData,
+  fetchUserStakingList,
   changePath,
   changeFilter,
   paginationOffset,
