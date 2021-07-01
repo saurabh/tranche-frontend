@@ -264,7 +264,7 @@ const StakingModal = ({
       }
     }
     setUserStakes(stakes)
-  }, [modalType, duration, lp, slice, sliceStakingList, tokenAddress]);
+  }, [modalType, duration, lp, slice, sliceStakingList, tokenAddress, hasMigrated]);
 
   useEffect(() => {
     setModalTypeVar(modalType);
@@ -600,6 +600,8 @@ const StakingModal = ({
                   tokenAddress={tokenAddress}
                   contractAddress={contractAddress}
                   durationIndex={durationIndex}
+                  apy={apy}
+                  duration={duration}
                   userStaked={userStaked}
                   adjustStake={adjustStake}
                 />
@@ -1046,8 +1048,8 @@ const StakingModal = ({
               <img src={TrancheStake} alt='img' />
             </StakingModalContentSideHeaderImg>
             <StakingModalContentSideHeaderText boxText={ModeThemes[theme].boxText} textColor={ModeThemes[theme].ModalText}>
-              <h2>{sliceStakingList[id].poolName} STAKING POOL</h2>
-              <h2>{sliceStakingList[id].contractAddress}</h2>
+              <h2>{newSlice[id].poolName} STAKING POOL</h2>
+              <h2>{newSlice[id].contractAddress}</h2>
             </StakingModalContentSideHeaderText>
             <StakingModalChangeBtn onClick={() => setObjId(null)}>
               Change
@@ -1061,7 +1063,7 @@ const StakingModal = ({
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
               <h2>{i18n.t('lockup')}</h2>
-              <h2>{formatTime(sliceStakingList[id].duration)}</h2>
+              <h2>{formatTime(newSlice[id].duration)}</h2>
             </StakingModalContentSideHeaderBox>
             <StakingModalContentSideHeaderBox
               stake
@@ -1070,7 +1072,7 @@ const StakingModal = ({
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
               <h2>APY</h2>
-              <h2>{roundNumber(sliceStakingList[id].apy, false)}%</h2>
+              <h2>{roundNumber(newSlice[id].apy, false)}%</h2>
             </StakingModalContentSideHeaderBox>
             <StakingModalContentSideHeaderBox
               BoxColor={ModeThemes[theme].BoxColor}
@@ -1078,16 +1080,18 @@ const StakingModal = ({
               BoxColorText={ModeThemes[theme].BoxColorText}
             >
               <h2>Remaining Capacity</h2>
-              <h2>{roundNumber(sliceStakingList[id].reward, false)} SLICE</h2>
+              <h2>{roundNumber(newSlice[id].reward, false)} SLICE</h2>
             </StakingModalContentSideHeaderBox>
           </StakingModalContentSideHeaderBoxWrapper>
 
           <StakingForm 
             modalTypeVar="staking" 
-            type={sliceStakingList[id].type} 
-            tokenAddress={sliceStakingList[id].tokenAddress}
-            contractAddress={sliceStakingList[id].contractAddress}
-            durationIndex={sliceStakingList[id].durationIndex}
+            type={newSlice[id].type} 
+            tokenAddress={newSlice[id].tokenAddress}
+            contractAddress={newSlice[id].contractAddress}
+            durationIndex={newSlice[ id ].durationIndex}
+            apy={newSlice[ id ].apy}
+            duration={newSlice[ id ].duration}
             userStaked={userStaked}
             adjustStake={adjustStake}
             migrate={true}

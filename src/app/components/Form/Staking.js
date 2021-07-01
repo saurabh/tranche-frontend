@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import store from 'redux/store';
-import { required, number, roundNumber, isGreaterThan } from 'utils';
+import { required, number, roundNumber, isGreaterThan, safeDivide, safeAdd, formatTime } from 'utils';
 import { fromWei, stakingApproveContract } from 'services/contractMethods';
 import { CheckBtn, TrancheStake } from 'assets';
 // import { FieldWrapper } from './styles/FormComponents';
@@ -20,6 +20,7 @@ import {
 import { ApproveBtnWrapper, ModalFormButton } from './styles/FormComponents';
 import i18n from '../locale/i18n';
 import { ModeThemes } from 'config';
+import { lockupStakingOccurrences } from '../../../config/constants'
 
 const InputField = ({ input, type, className, meta: { touched, error } }) => {
   const state = store.getState();
@@ -48,6 +49,8 @@ let StakingForm = ({
   tokenAddress,
   contractAddress,
   durationIndex,
+  apy,
+  duration,
   path,
   // Functions
   adjustStake,
@@ -58,7 +61,8 @@ let StakingForm = ({
   migrate,
   migrateLoading
 }) => {
-  const [balance, setBalance] = useState(0);
+  const [ balance, setBalance ] = useState(0);
+  const [ totalReward, setRewards ] = useState(0);
   const [balanceCheck, setBalanceCheck] = useState('');
   // const [LPSelect, toggleLP] = useState(false);
   const [tokenName, setTokenName] = useState(0);
@@ -78,6 +82,21 @@ let StakingForm = ({
     }
   }, [type, tokenAddress, tokenBalance]);
 
+
+  useEffect(() => {
+    if (!+amount)
+    {
+      setRewards(0);
+    } else
+    {
+      const reward = safeDivide(
+        +amount * +apy,
+        100 * lockupStakingOccurrences[ durationIndex ]
+      );
+      setRewards(roundNumber(safeAdd(+amount, reward)));
+    }
+  }, [ amount, apy, durationIndex ]);
+
   const handleInputChange = (newValue) => {
     setAmount(newValue);
     modalTypeVar === 'liqStake' || modalTypeVar === 'staking'
@@ -86,7 +105,7 @@ let StakingForm = ({
         : setBalanceCheck('')
       : isGreaterThan(newValue, userStaked)
       ? setBalanceCheck('InputStylingError')
-      : setBalanceCheck('');
+        : setBalanceCheck('');
   };
 
   const setMaxAmount = useCallback(
@@ -104,7 +123,7 @@ let StakingForm = ({
     <StakeModalFormWrapper textColor={ModeThemes[theme].ModalText} inputText={ModeThemes[theme].inputText} stake migrate={migrate}>
       <h2>Amount of {tokenName} to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'Stake' : 'Withdraw'}: </h2>
       <Form onSubmit={(e) => adjustStake(e, contractAddress, tokenAddress, durationIndex, migrate)}>
-        <h2>You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : roundNumber(userStaked)} {tokenName} available to {modalTypeVar === 'liqStake' ? 'stake' : 'withdraw'}</h2>
+        <h2>You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : roundNumber(userStaked)} {tokenName} available to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'stake' : 'withdraw'}</h2>
         <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
           <Field
             component={InputField}
@@ -124,7 +143,7 @@ let StakingForm = ({
         </StakeModalFormInputWrapper>
         {modalTypeVar === 'staking' && <EstimatedText textColor={ModeThemes[theme].ModalText} EstimatedTextColor={ModeThemes[theme].EstimatedColor} migrate={migrate}>
           <h2>{i18n.t('Estimated')}</h2>
-          <h2>You will get 1000 SLICE per week</h2>
+          <h2>You will get {totalReward} SLICE {modalTypeVar === 'staking'? `after ${formatTime(duration)}`:'per week'}</h2>
         </EstimatedText>}
         <ApproveBtnWrapper migrate={migrate}>
           {(modalTypeVar === 'liqStake' || modalTypeVar === 'staking') && (

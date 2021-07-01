@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance } from 'redux/actions/ethereum';
-import { addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance, addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, formatTime } from 'utils';
 import { statuses, etherScanUrl } from 'config';
@@ -219,15 +218,15 @@ const TableCard = ({
 
           { title === "SLICE Staking Pools" && duration ? 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
-              <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0}>
+              <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap <= 0}>
                 Stake
               </StakeBtnSlice>
             </TableSeventhCol> :
             
             title === "SLICE Staking Pools" && !duration ? 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
-              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={false}>
-                withdraw
+              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true}>
+                disabled
               </StakeBtnSlice>
             </TableSeventhCol> 
             
