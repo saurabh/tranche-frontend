@@ -691,7 +691,7 @@ const StakingModal = ({
                     <h2>{roundNumber(totalStaked)}</h2>
                   </StakeModalPoolTableCol>
                   <StakeModalPoolTableCol col textColor={ModeThemes[theme].ModalText}>
-                    <h2>{roundNumber(stakedShare, 2)}</h2>
+                    <h2>{roundNumber(stakedShare, 2)}%</h2>
                   </StakeModalPoolTableCol>
                 </StakeModalPoolTableRow>
                 </StakeModalPoolTable>
