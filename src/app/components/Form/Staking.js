@@ -4,7 +4,7 @@ import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import store from 'redux/store';
 import { required, number, roundNumber, isGreaterThan } from 'utils';
 import { fromWei, stakingApproveContract } from 'services/contractMethods';
-import { CheckBtn, TrancheIcon } from 'assets';
+import { CheckBtn, TrancheStake } from 'assets';
 // import { FieldWrapper } from './styles/FormComponents';
 import {
   StakeModalFormWrapper,
@@ -118,7 +118,7 @@ let StakingForm = ({
           />
           {/* <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button> */}
           <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
-            <img src={TrancheIcon} alt='' />
+            <img src={TrancheStake} alt='' />
             <h2>{dropdownName}</h2>
           </InputTag>
         </StakeModalFormInputWrapper>
