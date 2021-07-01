@@ -33,15 +33,35 @@ const singularOrPlural = (num, string) => {
 }
 
 export const formatTime = (value) =>{
-  let format = (val) => moment().add(value, 'seconds').diff(moment(), val);
-  let years =  format('years');
-  let months =  format('months');
-  let weeks =  format('weeks');
-  let days =  format('days');
-  let hours =  format('hours');
-  let minutes =  format('minutes');
-
-  return years !== 0 ? singularOrPlural(years, ' year') : months !== 0 ? singularOrPlural(months, ' month') : weeks !== 0 ? singularOrPlural(weeks, ' week') : days !== 0 ? singularOrPlural(days, ' day') : hours !== 0 ? singularOrPlural(hours, ' hour') : minutes !== 0 ? singularOrPlural(minutes, ' minute') : ""
+  // let format = (val) => moment().add(value, 'seconds').diff(moment(), val);
+  // let years =  format('years');
+  // let months =  format('months');
+  // let weeks =  format('weeks');
+  // let days =  format('days');
+  // let hours =  format('hours');
+  // let minutes = format('minutes');
+  // return years !== 0 ? singularOrPlural(years, ' year') : months !== 0 ? singularOrPlural(months, ' month') : weeks !== 0 ? singularOrPlural(weeks, ' week') : days !== 0 ? singularOrPlural(days, ' day') : hours !== 0 ? singularOrPlural(hours, ' hour') : minutes !== 0 ? singularOrPlural(minutes, ' minute') : ""
+  
+  const minutes = moment.duration(moment().add(value, 'seconds').diff(moment())).asMinutes();
+  if (minutes < 60) {
+    return singularOrPlural(minutes, ' minute');
+  }
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24)
+  {
+    return singularOrPlural(hours, ' hour');
+  }
+  const days = Math.floor(hours / 24);
+  if (days < 31)
+  {
+    return singularOrPlural(days, ' day');
+  }
+  const months = Math.floor(days / 30)
+  if (months < 12)
+  {
+    return singularOrPlural(months, ' month');
+  } 
+  return singularOrPlural(Math.floor(months / 12), ' year');
 }
 
 export const round = (type, input, roundTo) => {
