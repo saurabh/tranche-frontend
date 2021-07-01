@@ -59,6 +59,7 @@ const style = {
 };
 
 const Table = ({
+  ethereum: { address },
   openModal, closeModal, modalType, ModalIsOpen,
   HandleNewLoan,
   fetchTableData,
@@ -148,12 +149,12 @@ const Table = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      fetchUserStakingList(`${ userStakingListUrl }/${ localAddress }`);
+      fetchUserStakingList(`${ userStakingListUrl }/${ address }`);
     };
-    if (currentPath === 'stake' && localAddress) {
+    if (currentPath === 'stake' && address) {
       getStakingData();
     }
-  }, [currentPath, fetchUserStakingList, localAddress]);
+  }, [currentPath, fetchUserStakingList, address]);
 
 
   return (
@@ -329,7 +330,8 @@ const mapStateToProps = (state) => {
   return {
     data: state.data,
     path: state.path,
-    theme: state.theme
+    theme: state.theme,
+    ethereum: state.ethereum
   };
 };
 
