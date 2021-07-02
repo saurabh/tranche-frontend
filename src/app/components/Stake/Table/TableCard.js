@@ -200,7 +200,7 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' stake stakeStaked>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <h2>{roundNumber(apy, false)}%</h2>
+              <h2>{roundNumber(apy, 2)}%</h2>
               <h2>{''}</h2>
             </SecondColContent>
           </TableSecondCol>

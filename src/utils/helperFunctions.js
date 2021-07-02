@@ -81,7 +81,7 @@ export const roundNumber = (input, roundTo, type = false) => {
     if (input === 'N/A') return;
     if (typeof input === 'string') input = Number(input);
     let decimalPoints = 0;
-    if (!roundTo) {
+    if (!roundTo && input % 10 !== 0) {
       if (input >= 10000) decimalPoints = 0;
       if (input < 10000 && input >= 1000) decimalPoints = 1;
       if (input < 1000 && input >= 100) decimalPoints = 2;
