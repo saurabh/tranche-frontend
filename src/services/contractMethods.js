@@ -1,6 +1,7 @@
 import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, LockupSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
+import { analyticsTrack } from 'analytics/googleAnalytics';
 import { web3 } from 'utils/getWeb3';
 import {
   pairData,
@@ -219,6 +220,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('confirmation', (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
+            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "deposit": depositAmount+cryptoType});
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -256,6 +258,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('confirmation', (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
+            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "deposit": depositAmount+cryptoType});
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -324,7 +327,8 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         })
         .on('confirmation', (count) => {
           if (count === 0) {
-            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxLoading(false)); 
+            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "withdrawn": withdrawAmount});
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -362,6 +366,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .on('confirmation', (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
+            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "withdrawn": withdrawAmount});
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -499,6 +504,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
     console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones')
     const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress): StakingSetup(web3, stakingAddress);
     amount = toWei(amount.toString());
+    console.log(amount)
     store.dispatch(
       addNotification({
         id,
@@ -518,7 +524,10 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
               message: txMessage(transaction.hash)
             };
           });
-          emitter.on('txConfirmed', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txConfirmed', () => {
+            store.dispatch(setTxLoading(false))
+            analyticsTrack("Tracking user activity", "SLICE staking pool", {"address": address, "staked": amount});
+          });
           emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
           emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
         }
@@ -568,6 +577,7 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
             });
             emitter.on('txConfirmed', () => {
               migrate && store.dispatch(setMigrateStep('stake'))
+              analyticsTrack("Tracking user activity", "SLICE staking pool", {"address": address, "withdrawn": amount});
               store.dispatch(setTxLoading(false))
             });
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
