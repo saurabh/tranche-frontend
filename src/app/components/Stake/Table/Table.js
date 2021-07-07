@@ -76,19 +76,14 @@ const Table = ({
 }) => {
   const { pathname } = useLocation();
   let localAddress = window.localStorage.getItem('address');
-  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType, sliceStakingList, hasMigrated } = data;
+  const { filter, skip, limit, current, filterType, sort, isLoading, tradeType, sliceStakingList, stakingList } = data;
   const pageCount = 5;
-  const [stakingList, setStakingList] = useState([]);
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[parsedPath.length - 1];
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
   };
-
-  useEffect(() => {
-    hasMigrated ? setStakingList(sliceStakingList.slice(0, 3)) : setStakingList(sliceStakingList);
-  }, [hasMigrated, sliceStakingList]);
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
@@ -172,8 +167,8 @@ const Table = ({
               </div>
             ) : (
               (title === "SLICE Staking Pools") ?
-              (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
-              : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              (sliceStakingList.length > 0 && sliceStakingList[0])  && sliceStakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              : (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} openModal={openModal} title={title} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
             )}
           </div>
         </TableWrapper>
@@ -206,7 +201,7 @@ const Table = ({
                     </TableContentCard>
                   ))}
                 </div>
-              ) : !isLoading && tradeType === 'sell' && data.stakingList.length === 0 ? (
+              ) : !isLoading && tradeType === 'sell' && stakingList.length === 0 ? (
                 // </div> : (!isLoading && loans.tranchesList.length === 0 && tradeType === 'sell') ?
 
                 <TableContentCard pointer={false}>
@@ -230,8 +225,8 @@ const Table = ({
                 </TableContentCard>
               ) : (
               (title === "SLICE Staking Pools") ?
-              (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
-              : (data.stakingList.length > 0 && data.stakingList[0])  && data.stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)              )}
+              (sliceStakingList.length > 0 && sliceStakingList[0])  && sliceStakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)
+              : (stakingList.length > 0 && stakingList[0])  && stakingList.map((staking, i) => <TableCard key={i} title={title} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen} modalType={modalType} staking={staking} path={path} isDesktop={isDesktop}  />)              )}
             </div>
           </div>
         </TableWrapper>
