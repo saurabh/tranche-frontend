@@ -147,9 +147,12 @@ let StakingForm = ({
             id='amount'
           />
           {/* <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button> */}
-          <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
-            <img src={TrancheStake} alt='' />
-            <h2>{dropdownName}</h2>
+          <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor} right={dropdownName === "SLICE" ? "105px" : dropdownName === "SLICE/DAI" ? "132px" : "139px"}>
+            <button onClick={(e) => setMaxAmount(e)}>max</button>
+            <div>
+              <img src={TrancheStake} alt='' />
+              <h2>{dropdownName}</h2>
+            </div>
           </InputTag>
         </StakeModalFormInputWrapper>
         {modalTypeVar === 'staking' && (

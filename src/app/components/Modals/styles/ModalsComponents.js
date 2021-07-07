@@ -1781,26 +1781,44 @@ const ProgressBarLine = styled.div`
   `}
 `;
 const InputTag = styled.div`
-  display: flex;
-  align-items: center;
-  border-left: 2.16725px solid ${props => props.borderColor};
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 15px;
-  img{
-    width: 18.5px !important;
-    margin: 0 9px 0 15px;
+  div{
+    display: flex;
+    align-items: center;
+    border-left: 2.16725px solid ${props => props.borderColor};
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    img{
+      width: 18.5px !important;
+      margin: 0 9px 0 15px;
+    }
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: normal;
+      font-size: 13.0035px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;        
+      // color: #FFFFFF;
+      color: ${props => props.textColor};
+    }
   }
-  h2{
+  button{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: ${props => props.right};
+    background: none;
+    border: none;
     font-family: 'Inter', sans-serif;
-    font-weight: normal;
-    font-size: 13.0035px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 11px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;        
-    // color: #FFFFFF;
+    text-transform: uppercase;
     color: ${props => props.textColor};
   }
+
 `;
 const StakingMigrateModalContent = styled.div`
   padding: 25px 33px 20px 33px;
@@ -1950,8 +1968,14 @@ const StakeNewCol = styled.div`
       height: 21px;
       color: #FFFFFF;
     }
-
   `}
+  ${({ disabled }) => disabled && `
+      button{
+        background: rgba(204, 204, 205, 0.15) !important;
+        pointer-events: none !important;
+      }    
+  `}
+  
   
 
   

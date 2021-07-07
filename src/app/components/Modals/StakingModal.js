@@ -1064,8 +1064,8 @@ const StakingModal = ({
                         <h2>{stakingPool.apy}%</h2>
                       </StakeNewCol>
 
-                      <StakeNewCol stake stakeValue>
-                        <button onClick={() => setObjId(i)} disabled={stakingPool.remainingCap <= 0}>
+                      <StakeNewCol stake stakeValue disabled={stakingPool.remainingCap <= 0}>
+                        <button onClick={() => setObjId(i)}>
                           {stakingPool.remainingCap === 0 ? 'Capped' : 'Stake'}
                         </button>
                       </StakeNewCol>
