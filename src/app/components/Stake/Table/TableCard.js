@@ -219,7 +219,7 @@ const TableCard = ({
           { title === "SLICE Staking Pools" && duration ? 
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
               <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap <= 0}>
-                Stake
+               {remainingCap === 0 ? 'Capped' : 'Stake'}
               </StakeBtnSlice>
             </TableSeventhCol> :
             
