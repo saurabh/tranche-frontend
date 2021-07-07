@@ -6,18 +6,24 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/acti
 import { initOnboard } from 'services/blocknative';
 import { addrShortener } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper } from './styles/HeaderComponents';
-import { PagesData } from 'config/constants';
+import { ModeThemes, PagesData } from 'config/constants';
 import Wallet from "assets/images/svg/wallet.svg";
 import i18n from '../../locale/i18n';
+import { TrancheStake } from 'assets';
+import TrancheModal from 'app/components/Modals/TrancheModal';
 
 const ConnectWallet = ({
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
+  theme,
   ethereum: { address, balance }
 }) => {
   const { pathname } = useLocation();
+  
+  const [modalType, setModalType] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   let parsedPath = pathname.split('/');
   const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || 'borrow');
 
@@ -27,7 +33,14 @@ const ConnectWallet = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
+  const closeModal = () => {
+    setModalIsOpen(false);
+    // onClick={() => trancheMarketsToggle("aavePolygon")}>
+  };
+  const openModal = (type) => {
+    setModalIsOpen(true);
+    setModalType(type)
+  };
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem('selectedWallet');
 
@@ -50,6 +63,26 @@ const ConnectWallet = ({
   
   return (
     <NavBarRightWrapper>
+        <WalletBtn
+          background={ModeThemes[theme].ModalTrancheNavbarBtn}
+          shadow={ModeThemes[theme].ModalTrancheNavbarBtnShadow}
+          border={ModeThemes[theme].ModalTrancheNavbarBtnBorder}
+          tranche
+          onClick={() => openModal('trancheRewards')}
+        >
+          <WalletBtnIcon tranche>
+            <img src={TrancheStake} alt='tranche' />
+          </WalletBtnIcon>
+        <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
+          <h2>1005.125</h2>
+        </WalletBtnText>
+      </WalletBtn>
+
+      <TrancheModal 
+        modalIsOpen={modalIsOpen} 
+        modalType={modalType}
+        closeModal={() => closeModal()}
+      />
       {balance < 0 ? (
         <WalletBtn
           background="#4441CF"
@@ -90,7 +123,8 @@ ConnectWallet.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  ethereum: state.ethereum
+  ethereum: state.ethereum,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps, {
