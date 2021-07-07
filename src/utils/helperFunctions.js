@@ -42,7 +42,7 @@ export const formatTime = (value) =>{
   // let minutes = format('minutes');
   // return years !== 0 ? singularOrPlural(years, ' year') : months !== 0 ? singularOrPlural(months, ' month') : weeks !== 0 ? singularOrPlural(weeks, ' week') : days !== 0 ? singularOrPlural(days, ' day') : hours !== 0 ? singularOrPlural(hours, ' hour') : minutes !== 0 ? singularOrPlural(minutes, ' minute') : ""
   
-  const minutes = moment.duration(moment().add(value, 'seconds').diff(moment())).asMinutes();
+  const minutes = moment().add(value, 'seconds').diff(moment(), 'minutes');
   if (minutes < 60) {
     return singularOrPlural(minutes, ' minute');
   }
