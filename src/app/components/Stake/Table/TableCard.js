@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { postRequest } from 'services/axios';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalance, addNotification, updateNotification, setNotificationCount } from 'redux/actions/ethereum';
+import {
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
+  setTokenBalance,
+  addNotification,
+  updateNotification,
+  setNotificationCount
+} from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, formatTime } from 'utils';
 import { statuses, etherScanUrl } from 'config';
@@ -70,7 +79,7 @@ const TableCard = ({
 
   useEffect(() => {
     const setEpochTime = async () => {
-        // const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
+      // const result = await epochTimeRemaining(StakingAddresses[StakingAddresses.length - 1]);
     };
 
     setEpochTime();
@@ -131,15 +140,12 @@ const TableCard = ({
           <TableFirstCol className='table-col'>
             <TableFirstColWrapper>
               <TableCardImg tranche={true}>
-              
                 <img src={TrancheStake} alt='Tranche' />
-                { (title === "Liquidity Provider Pools") &&
-                  <img src={LiquidityIcons[type && type]} alt='Tranche' />
-                }
+                {title === 'Liquidity Provider Pools' && <img src={LiquidityIcons[type && type]} alt='Tranche' />}
               </TableCardImg>
               <FirstColContent>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
-                  {title === "SLICE Staking Pools" && duration ? <h2>{poolName && poolName}</h2> : <h2>{type && type}</h2>}
+                  {title === 'SLICE Staking Pools' && duration ? <h2>{poolName && poolName}</h2> : <h2>{type && type}</h2>}
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
@@ -151,35 +157,33 @@ const TableCard = ({
             </TableFirstColWrapper>
           </TableFirstCol>
 
-          <TableFifthCol className='table-col' stake stakeStatus sliceStaking={title === "SLICE Staking Pools"}>
+          <TableFifthCol className='table-col' stake stakeStatus sliceStaking={title === 'SLICE Staking Pools'}>
             <FifthColContent>
-              {
-                title === "SLICE Staking Pools" && duration &&
-                  <StatusTextWrapper
+              {title === 'SLICE Staking Pools' && duration && (
+                <StatusTextWrapper
                   className='status-text-wrapper'
                   color={ModeThemes[theme].activeStatusText}
                   backgroundColor={ModeThemes[theme].activeStatus}
                   table='stake'
                   docsLockupText={ModeThemes[theme].docsLockupText}
                   docsLockupBackground={ModeThemes[theme].docsLockupBackground}
-                  >
+                >
                   {/* {isActive ? i18n.t('stake.table.statuses.active') : ''} */}
                   {formatTime(duration)}
-                  </StatusTextWrapper>
-              }
-             {
-                title === "SLICE Staking Pools" && !duration &&
-                  <StatusTextWrapper
+                </StatusTextWrapper>
+              )}
+              {title === 'SLICE Staking Pools' && !duration && (
+                <StatusTextWrapper
                   className='status-text-wrapper'
                   color={ModeThemes[theme].activeStatusText}
                   backgroundColor={ModeThemes[theme].activeStatus}
                   table='stake'
                   docsLockupText={ModeThemes[theme].docsLockupText}
                   docsLockupBackground={ModeThemes[theme].docsLockupBackground}
-                  >
-                    CLOSED
-                  </StatusTextWrapper>
-              }
+                >
+                  CLOSED
+                </StatusTextWrapper>
+              )}
             </FifthColContent>
           </TableFifthCol>
 
@@ -191,9 +195,9 @@ const TableCard = ({
           </TableThirdCol>
           <TableFourthCol tranche={true} className={'table-col table-fifth-col-subscription'} stake>
             <FourthColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              {title === "SLICE Staking Pools" && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
-              {title === "SLICE Staking Pools" && !duration && <h2>N/A</h2>}
-              {title === "Liquidity Provider Pools" && <h2>{roundNumber(reward)}</h2>}
+              {title === 'SLICE Staking Pools' && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
+              {title === 'SLICE Staking Pools' && !duration && <h2>N/A</h2>}
+              {title === 'Liquidity Provider Pools' && <h2>{roundNumber(reward)}</h2>}
               <h2>{''}</h2>
             </FourthColContent>
           </TableFourthCol>
@@ -216,21 +220,31 @@ const TableCard = ({
             <h2>{''}</h2>
           </TableSixthCol>
 
-          { title === "SLICE Staking Pools" && duration ? 
-            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
+          {title === 'SLICE Staking Pools' && duration ? (
+            <TableSeventhCol
+              onClick={(e) => e.stopPropagation()}
+              className='table-sixth-col table-col'
+              stake
+              stakeCol
+              sliceStaking={title === 'SLICE Staking Pools'}
+            >
               <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap <= 0}>
-                Stake
+                {remainingCap === 0 ? 'Capped' : 'Stake'}
               </StakeBtnSlice>
-            </TableSeventhCol> :
-            
-            title === "SLICE Staking Pools" && !duration ? 
-            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol sliceStaking={title === "SLICE Staking Pools"}>
+            </TableSeventhCol>
+          ) : title === 'SLICE Staking Pools' && !duration ? (
+            <TableSeventhCol
+              onClick={(e) => e.stopPropagation()}
+              className='table-sixth-col table-col'
+              stake
+              stakeCol
+              sliceStaking={title === 'SLICE Staking Pools'}
+            >
               <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true}>
                 disabled
               </StakeBtnSlice>
-            </TableSeventhCol> 
-            
-            :
+            </TableSeventhCol>
+          ) : (
             <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
               <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')} disabled={false}>
                 -
@@ -239,7 +253,7 @@ const TableCard = ({
                 +
               </StakeBtn>
             </TableSeventhCol>
-          }
+          )}
         </TableContentCard>
 
         <StakingModal
@@ -269,14 +283,12 @@ const TableCard = ({
             <TableCardImg
               tranche={true}
               background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
-              stake={title === "Liquidity Provider Pools"}
+              stake={title === 'Liquidity Provider Pools'}
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
               <img src={TrancheStake} alt='Tranche' />
-                { (title === "Liquidity Provider Pools") &&
-                  <img src={LiquidityIcons[type && type]} alt='Tranche' />
-                }
+              {title === 'Liquidity Provider Pools' && <img src={LiquidityIcons[type && type]} alt='Tranche' />}
             </TableCardImg>
           </TableCardImgWrapper>
 
@@ -285,21 +297,20 @@ const TableCard = ({
               <TableFirstColWrapper>
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText}>
-                    <h2>{(title === "SLICE Staking Pools" && duration) ? poolName && poolName : type && type}</h2>
-                    { title === "SLICE Staking Pools" && duration ? 
+                    <h2>{title === 'SLICE Staking Pools' && duration ? poolName && poolName : type && type}</h2>
+                    {title === 'SLICE Staking Pools' && duration ? (
                       <StakeBtns>
                         <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0}>
-                        {remainingCap === 0 ? 'Capped' : 'Stake'}
+                          {remainingCap === 0 ? 'Capped' : 'Stake'}
                         </StakeBtnSlice>
                       </StakeBtns>
-                      : 
-                      title === "SLICE Staking Pools" && !duration ? 
+                    ) : title === 'SLICE Staking Pools' && !duration ? (
                       <StakeBtns>
                         <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={false}>
                           withdraw
                         </StakeBtnSlice>
-                      </StakeBtns> 
-                      :
+                      </StakeBtns>
+                    ) : (
                       <StakeBtns>
                         <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')} disabled={false}>
                           -
@@ -308,8 +319,7 @@ const TableCard = ({
                           +
                         </StakeBtn>
                       </StakeBtns>
-                    }
-                    
+                    )}
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
@@ -327,10 +337,10 @@ const TableCard = ({
                 <h2>{roundNumber(staked)}</h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
-                <h2>{ title === "SLICE Staking Pools" ? "REMAINING CAPACITY" : "EPOCH REWARDS"}</h2>
-                {title === "SLICE Staking Pools" && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
-                {title === "SLICE Staking Pools" && !duration && <h2>N/A</h2>}
-                {title === "Liquidity Provider Pools" && <h2>{roundNumber(reward)}</h2>}
+                <h2>{title === 'SLICE Staking Pools' ? 'REMAINING CAPACITY' : 'EPOCH REWARDS'}</h2>
+                {title === 'SLICE Staking Pools' && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
+                {title === 'SLICE Staking Pools' && !duration && <h2>N/A</h2>}
+                {title === 'Liquidity Provider Pools' && <h2>{roundNumber(reward)}</h2>}
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
                 <h2>APY</h2>
