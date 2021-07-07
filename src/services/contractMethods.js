@@ -521,7 +521,6 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
     console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones');
     const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress) : StakingSetup(web3, stakingAddress);
     amount = toWei(amount.toString());
-    console.log(amount);
     store.dispatch(
       addNotification({
         id,

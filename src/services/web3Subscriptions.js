@@ -20,7 +20,7 @@ export const ETHContracts = {
       const state = store.getState();
       const { path, ethereum, data } = state;
       const { address } = ethereum;
-      
+
       JCompound =
         path === 'tranche' &&
         address &&
@@ -36,7 +36,6 @@ export const ETHContracts = {
               const state = store.getState();
               const { data } = state;
               const { skip, limit, filter } = data;
-              console.log(filter);
               await store.dispatch(
                 fetchTableData(
                   {
@@ -73,26 +72,30 @@ export const ETHContracts = {
           .subscribe('logs', {
             address: StakingAddresses
           })
-          .on('data', async () => {
-            await timeout(5000);
-            const { skip, limit, filter } = data;
-            await store.dispatch(
-              fetchTableData(
-                {
-                  skip,
-                  limit,
-                  filter: {
-                    address: address ? address : undefined,
-                    type: filter
-                  }
-                },
-                stakingList
-              )
-            );
-            const res = await axios(`${ serverUrl + stakingSummary + address }`);
-            const { result } = res.data;
-            store.dispatch(summaryFetchSuccess(result));
-            store.dispatch(setTokenBalances(address));
+          .on('data', async (log) => {
+            console.log(log);
+            let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
+            if (log.topics.includes(userAddress)) {
+              await timeout(5000);
+              const { skip, limit, filter } = data;
+              await store.dispatch(
+                fetchTableData(
+                  {
+                    skip,
+                    limit,
+                    filter: {
+                      address: address ? address : undefined,
+                      type: filter
+                    }
+                  },
+                  stakingList
+                )
+              );
+              const res = await axios(`${serverUrl + stakingSummary + address}`);
+              const { result } = res.data;
+              store.dispatch(summaryFetchSuccess(result));
+              store.dispatch(setTokenBalances(address));
+            }
           });
       YieldFarm =
         path === 'stake' &&
@@ -101,12 +104,16 @@ export const ETHContracts = {
           .subscribe('logs', {
             address: YieldAddresses
           })
-          .on('data', async () => {
-            await timeout(5000);
-            const res = await axios(`${serverUrl + stakingSummary + address}`);
-            const { result } = res.data;
-            store.dispatch(summaryFetchSuccess(result));
-            store.dispatch(setTokenBalances(address));
+          .on('data', async (log) => {
+            console.log(log);
+            let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
+            if (log.topics.includes(userAddress)) {
+              await timeout(5000);
+              const res = await axios(`${serverUrl + stakingSummary + address}`);
+              const { result } = res.data;
+              store.dispatch(summaryFetchSuccess(result));
+              store.dispatch(setTokenBalances(address));
+            }
           });
       Lockup =
         path === 'stake' &&
@@ -115,27 +122,31 @@ export const ETHContracts = {
           .subscribe('logs', {
             address: LockupAddress
           })
-          .on('data', async () => {
-            await timeout(5000);
-            const { skip, limit, filter } = data;
-            await store.dispatch(
-              fetchTableData(
-                {
-                  skip,
-                  limit,
-                  filter: {
-                    address: address ? address : undefined,
-                    type: filter
-                  }
-                },
-                stakingList
-              )
-            );
-            await store.dispatch(fetchUserStakingList(`${ userStakingList }/${ address }`))
-            const res = await axios(`${serverUrl + stakingSummary + address}`);
-            const { result } = res.data;
-            store.dispatch(summaryFetchSuccess(result));
-            store.dispatch(setTokenBalances(address));
+          .on('data', async (log) => {
+            console.log(log);
+            let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
+            if (log.topics.includes(userAddress)) {
+              await timeout(5000);
+              const { skip, limit, filter } = data;
+              await store.dispatch(
+                fetchTableData(
+                  {
+                    skip,
+                    limit,
+                    filter: {
+                      address: address ? address : undefined,
+                      type: filter
+                    }
+                  },
+                  stakingList
+                )
+              );
+              await store.dispatch(fetchUserStakingList(`${userStakingList}/${address}`));
+              const res = await axios(`${serverUrl + stakingSummary + address}`);
+              const { result } = res.data;
+              store.dispatch(summaryFetchSuccess(result));
+              store.dispatch(setTokenBalances(address));
+            }
           });
     } catch (error) {
       console.error(error);
@@ -187,7 +198,6 @@ export const MaticContracts = {
               const state = store.getState();
               const { data } = state;
               const { skip, limit, filter } = data;
-              console.log(filter);
               await store.dispatch(
                 fetchTableData(
                   {

@@ -294,7 +294,6 @@ const StakingModal = ({
   const adjustStake = async (e, contractAddress, tokenAddress, durationIndex = false, migrate) => {
     try {
       e.preventDefault();
-      console.log(contractAddress, tokenAddress, durationIndex, migrate);
       migrate && setMigrateLoading(true);
       if (modalType !== 'liqWithdraw') {
         if (migrate) {

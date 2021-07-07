@@ -229,7 +229,7 @@ const TableCard = ({
               sliceStaking={title === 'SLICE Staking Pools'}
             >
               <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap <= 0}>
-               {remainingCap === 0 ? 'Capped' : 'Stake'}
+                {remainingCap === 0 ? 'Capped' : 'Stake'}
               </StakeBtnSlice>
             </TableSeventhCol>
           ) : title === 'SLICE Staking Pools' && !duration ? (
