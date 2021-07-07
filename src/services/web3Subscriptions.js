@@ -29,7 +29,6 @@ export const ETHContracts = {
             address: JCompoundAddress
           })
           .on('data', async (log) => {
-            console.log(log);
             let userAddress = address.split('0x')[1];
             await timeout(5000);
             if (log.data.includes(userAddress)) {
@@ -73,7 +72,6 @@ export const ETHContracts = {
             address: StakingAddresses
           })
           .on('data', async (log) => {
-            console.log(log);
             let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
             if (log.topics.includes(userAddress)) {
               await timeout(5000);
@@ -105,7 +103,6 @@ export const ETHContracts = {
             address: YieldAddresses
           })
           .on('data', async (log) => {
-            console.log(log);
             let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
             if (log.topics.includes(userAddress)) {
               await timeout(5000);
