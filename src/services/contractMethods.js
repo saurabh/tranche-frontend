@@ -1,4 +1,13 @@
-import { JLoanSetup, JLoanHelperSetup, JPriceOracleSetup, JCompoundSetup, StakingSetup, LockupSetup, YieldFarmSetup, ERC20Setup } from 'utils/contractConstructor';
+import {
+  JLoanSetup,
+  JLoanHelperSetup,
+  JPriceOracleSetup,
+  JCompoundSetup,
+  StakingSetup,
+  LockupSetup,
+  YieldFarmSetup,
+  ERC20Setup
+} from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { analyticsTrack } from 'analytics/googleAnalytics';
@@ -220,7 +229,11 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('confirmation', (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
-            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "deposit": depositAmount+cryptoType});
+            analyticsTrack('Tracking user activity', 'Tranche Markets', {
+              address: address,
+              trancheType: trancheType,
+              deposit: depositAmount + cryptoType
+            });
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -258,7 +271,11 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('confirmation', (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
-            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "deposit": depositAmount+cryptoType});
+            analyticsTrack('Tracking user activity', 'Tranche Markets', {
+              address: address,
+              trancheType: trancheType,
+              deposit: depositAmount + cryptoType
+            });
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -327,8 +344,8 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         })
         .on('confirmation', (count) => {
           if (count === 0) {
-            store.dispatch(setTxLoading(false)); 
-            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "withdrawn": withdrawAmount});
+            store.dispatch(setTxLoading(false));
+            analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -366,7 +383,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .on('confirmation', (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
-            analyticsTrack("Tracking user activity", "Tranche Markets", {"address": address, "trancheType": trancheType, "withdrawn": withdrawAmount});
+            analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
             network === maticNetworkId &&
               store.dispatch(
                 updateNotification({
@@ -501,10 +518,10 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
     let { amount } = state.form.stake.values;
-    console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones')
-    const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress): StakingSetup(web3, stakingAddress);
+    console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones');
+    const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress) : StakingSetup(web3, stakingAddress);
     amount = toWei(amount.toString());
-    console.log(amount)
+    console.log(amount);
     store.dispatch(
       addNotification({
         id,
@@ -513,25 +530,26 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
         title: 'awaiting confirmation'
       })
     );
-    const DepositMethod = durationIndex || durationIndex === 0 ? StakingContract.methods.stake(amount, durationIndex) : StakingContract.methods.deposit(tokenAddress, amount);
-    await DepositMethod
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        if (network === networkId) {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            store.dispatch(setTxLoading(false))
-            analyticsTrack("Tracking user activity", "SLICE staking pool", {"address": address, "staked": amount});
-          });
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
-        }
-      });
+    const DepositMethod =
+      durationIndex || durationIndex === 0
+        ? StakingContract.methods.stake(amount, durationIndex)
+        : StakingContract.methods.deposit(tokenAddress, amount);
+    await DepositMethod.send({ from: address }).on('transactionHash', (hash) => {
+      if (network === networkId) {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+        emitter.on('txConfirmed', () => {
+          store.dispatch(setTxLoading(false));
+          analyticsTrack('Tracking user activity', 'SLICE staking pool', { address: address, staked: amount });
+        });
+        emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+        emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+      }
+    });
   } catch (error) {
     error.code === 4001 &&
       store.dispatch(
@@ -576,9 +594,9 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
               };
             });
             emitter.on('txConfirmed', () => {
-              migrate && store.dispatch(setMigrateStep('stake'))
-              analyticsTrack("Tracking user activity", "SLICE staking pool", {"address": address, "withdrawn": amount});
-              store.dispatch(setTxLoading(false))
+              migrate && store.dispatch(setMigrateStep('stake'));
+              analyticsTrack('Tracking user activity', 'SLICE staking pool', { address: address, withdrawn: amount });
+              store.dispatch(setTxLoading(false));
             });
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
@@ -605,7 +623,7 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
   let id = notificationCount;
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
-    console.log(stakingCounter || stakingCounter === 0 ? 'lockup' : 'yieldfarm')
+    console.log(stakingCounter || stakingCounter === 0 ? 'lockup' : 'yieldfarm');
     const RewardsContract = stakingCounter || stakingCounter === 0 ? LockupSetup(web3, contractAddress) : YieldFarmSetup(web3, contractAddress);
     store.dispatch(
       addNotification({
@@ -615,25 +633,24 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
         title: 'awaiting confirmation'
       })
     );
-    const contractMethod = stakingCounter || stakingCounter === 0 ? RewardsContract.methods.claim(stakingCounter) : RewardsContract.methods.massHarvest()
-    await contractMethod
-      .send({ from: address })
-      .on('transactionHash', (hash) => {
-        if (network === networkId) {
-          const { emitter } = notify.hash(hash);
-          emitter.on('txPool', (transaction) => {
-            return {
-              message: txMessage(transaction.hash)
-            };
-          });
-          emitter.on('txConfirmed', () => {
-            migrate && store.dispatch(setMigrateStep('withdraw'))
-            store.dispatch(setTxLoading(false))
-          });
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
-        }
-      });
+    const contractMethod =
+      stakingCounter || stakingCounter === 0 ? RewardsContract.methods.claim(stakingCounter) : RewardsContract.methods.massHarvest();
+    await contractMethod.send({ from: address }).on('transactionHash', (hash) => {
+      if (network === networkId) {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+        emitter.on('txConfirmed', () => {
+          migrate && store.dispatch(setMigrateStep('withdraw'));
+          store.dispatch(setTxLoading(false));
+        });
+        emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+        emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+      }
+    });
   } catch (error) {
     error.code === 4001 &&
       store.dispatch(
@@ -644,6 +661,6 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
           title: 'Transaction rejected'
         })
       );
-    return error
+    return error;
   }
 };
