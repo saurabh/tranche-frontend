@@ -1589,6 +1589,7 @@ const StakeModalFormInputWrapper = styled.div`
   div{
     input{
       border: 0.92283px solid ${props => props.borderColor};
+      padding: 10px ${props => props.padding} 10px 16px !important;  
     }
   }
 `
@@ -1600,7 +1601,7 @@ const StakeModalFormInput = styled.input`
   box-sizing: border-box;
   border-radius: 3.69132px;
   font-family: 'Inter', sans-serif;
-  padding: 10px 120px 10px 16px;  
+  padding: 10px 173px 10px 16px;  
   font-weight: 500;
   font-size: 11px;
   outline: none;

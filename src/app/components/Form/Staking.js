@@ -135,7 +135,9 @@ let StakingForm = ({
           You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : roundNumber(userStaked)} {tokenName} available
           to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'stake' : 'withdraw'}
         </h2>
-        <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}>
+        <StakeModalFormInputWrapper textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor}
+          padding={dropdownName === "SLICE" ? "140px" : "173px"}      
+        >
           <Field
             component={InputField}
             onChange={(e, newValue) => handleInputChange(newValue)}
@@ -147,7 +149,9 @@ let StakingForm = ({
             id='amount'
           />
           {/* <button onClick={(e) => setMaxAmount(e)}>{i18n.t('tranche.trancheData.max')}</button> */}
-          <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor} right={dropdownName === "SLICE" ? "105px" : dropdownName === "SLICE/DAI" ? "132px" : "139px"}>
+          <InputTag textColor={ModeThemes[theme].ModalText} borderColor={ModeThemes[theme].borderInputColor} 
+            right={dropdownName === "SLICE" ? "105px" : dropdownName === "SLICE/DAI" ? "132px" : "139px"}
+          >
             <button onClick={(e) => setMaxAmount(e)}>max</button>
             <div>
               <img src={TrancheStake} alt='' />
