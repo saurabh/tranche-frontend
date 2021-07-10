@@ -1970,9 +1970,9 @@ const StakeNewCol = styled.div`
       color: #FFFFFF;
     }
   `}
-  ${({ disabled }) => disabled && `
+  ${({ disabled, disabledBtnColor }) => disabled && `
       button{
-        background: rgba(204, 204, 205, 0.15) !important;
+        background: ${disabledBtnColor} !important;
         pointer-events: none !important;
       }    
   `}
