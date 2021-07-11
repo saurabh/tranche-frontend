@@ -1292,8 +1292,8 @@ const StakeBtnSlice = styled.button`
     background: #6E41CF;    
     font-size: 12px;
   `}
-  ${({ disabled }) => disabled && `
-    background: rgba(204, 204, 205, 0.15);
+  ${({ disabled, disabledBtnColor }) => disabled && `
+    background: ${disabledBtnColor};
     pointer-events: none;
     font-size: 12px;
   `}

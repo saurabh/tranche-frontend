@@ -228,7 +228,7 @@ const TableCard = ({
               stakeCol
               sliceStaking={title === 'SLICE Staking Pools'}
             >
-              <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap <= 0}>
+              <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap <= 0} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
                 {remainingCap === 0 ? 'Capped' : 'Stake'}
               </StakeBtnSlice>
             </TableSeventhCol>
@@ -240,7 +240,7 @@ const TableCard = ({
               stakeCol
               sliceStaking={title === 'SLICE Staking Pools'}
             >
-              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true}>
+              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
                 disabled
               </StakeBtnSlice>
             </TableSeventhCol>
@@ -300,7 +300,7 @@ const TableCard = ({
                     <h2>{title === 'SLICE Staking Pools' && duration ? poolName && poolName : type && type}</h2>
                     {title === 'SLICE Staking Pools' && duration ? (
                       <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0}>
+                        <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
                           {remainingCap === 0 ? 'Capped' : 'Stake'}
                         </StakeBtnSlice>
                       </StakeBtns>
