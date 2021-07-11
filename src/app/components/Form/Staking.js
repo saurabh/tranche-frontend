@@ -199,7 +199,7 @@ let StakingForm = ({
             stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'}
             migrate={migrate}
             migrateStep={migrate}
-            disabled={!hasAllowance || amount === 0 || balanceCheck === 'InputStylingError'}
+            disabled={!hasAllowance || amount === 0 || amount === '' || balanceCheck === 'InputStylingError'}
             migrateLoading={migrateLoading}
             disabledBtnColor={ModeThemes[theme].disabledBtnColor}
           >
