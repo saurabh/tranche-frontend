@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Field, reduxForm, getFormValues, change } from 'redux-form';
 import store from 'redux/store';
-import { required, number, roundNumber, isGreaterThan, safeDivide, safeAdd, formatTime } from 'utils';
+import { required, number, roundNumber, isGreaterThan, safeDivide, safeAdd, isEqualTo, formatTime } from 'utils';
 import { fromWei, stakingApproveContract } from 'services/contractMethods';
 import { CheckBtn, TrancheStake } from 'assets';
 // import { FieldWrapper } from './styles/FormComponents';
@@ -199,7 +199,7 @@ let StakingForm = ({
             stake={modalTypeVar === 'liqStake' || modalTypeVar === 'staking'}
             migrate={migrate}
             migrateStep={migrate}
-            disabled={!hasAllowance || amount === 0 || amount === '' || balanceCheck === 'InputStylingError'}
+            disabled={!hasAllowance || isEqualTo(amount, 0) || amount === '' || balanceCheck === 'InputStylingError'}
             migrateLoading={migrateLoading}
             disabledBtnColor={ModeThemes[theme].disabledBtnColor}
           >
