@@ -1,3 +1,4 @@
+import { processNodes } from 'react-html-parser';
 import styled, { keyframes } from 'styled-components';
 
 const bounce = keyframes`
@@ -123,6 +124,15 @@ ${({ notFound, ModalBackground }) => notFound && `
   position: relative;
   padding: 0 10px;
   background: ${ModalBackground};
+`}
+${({ tranche }) => tranche && `
+  max-height: 68px;
+  display: flex;
+  justify-content: flex-end;
+  button{
+    padding: 0;
+    height: 15px;
+  }
 `}
 
 
@@ -691,6 +701,7 @@ const SliceNotFound = styled.div`
   flex-direction: column;
   justify-content: space-between;
   p{
+
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -1578,6 +1589,7 @@ const StakeModalFormInputWrapper = styled.div`
   div{
     input{
       border: 0.92283px solid ${props => props.borderColor};
+      padding: 10px ${props => props.padding} 10px 16px !important;  
     }
   }
 `
@@ -1589,7 +1601,7 @@ const StakeModalFormInput = styled.input`
   box-sizing: border-box;
   border-radius: 3.69132px;
   font-family: 'Inter', sans-serif;
-  padding: 10px 120px 10px 16px;  
+  padding: 10px 173px 10px 16px;  
   font-weight: 500;
   font-size: 11px;
   outline: none;
@@ -1770,26 +1782,44 @@ const ProgressBarLine = styled.div`
   `}
 `;
 const InputTag = styled.div`
-  display: flex;
-  align-items: center;
-  border-left: 2.16725px solid ${props => props.borderColor};
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 15px;
-  img{
-    width: 18.5px !important;
-    margin: 0 9px 0 15px;
+  div{
+    display: flex;
+    align-items: center;
+    border-left: 2.16725px solid ${props => props.borderColor};
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    img{
+      width: 18.5px !important;
+      margin: 0 9px 0 15px;
+    }
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: normal;
+      font-size: 13.0035px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;        
+      // color: #FFFFFF;
+      color: ${props => props.textColor};
+    }
   }
-  h2{
+  button{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: ${props => props.right};
+    background: none;
+    border: none;
     font-family: 'Inter', sans-serif;
-    font-weight: normal;
-    font-size: 13.0035px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 11px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;        
-    // color: #FFFFFF;
+    text-transform: uppercase;
     color: ${props => props.textColor};
   }
+
 `;
 const StakingMigrateModalContent = styled.div`
   padding: 25px 33px 20px 33px;
@@ -1939,8 +1969,14 @@ const StakeNewCol = styled.div`
       height: 21px;
       color: #FFFFFF;
     }
-
   `}
+  ${({ disabled, disabledBtnColor }) => disabled && `
+      button{
+        background: ${disabledBtnColor} !important;
+        pointer-events: none !important;
+      }    
+  `}
+  
   
 
   
@@ -2064,6 +2100,117 @@ const StakingModalChangeBtn = styled.button`
 const StakingMigrateModalContentWrapper = styled.div`
   
 `;
+const TrancheModalWrapper = styled.div`
+  height: 517px;
+  width: 100%;
+  background: ${props => props.backgroundColor};
+`;
+const TrancheModalHeader = styled.div`
+  height: 68px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1.05851px solid ${props => props.border};
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: uppercase;
+    text-align: center;
+    z-index: 2;
+    color: ${props => props.color};
+  }
+`;
+const TrancheModalContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 40px;
+`;
+const TrancheModalContentHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center; 
+  flex-direction: column;
+  margin: 32px 40px 18px 40px;
+  align-items: center;
+  text-align: center; 
+  h2{
+    font-family: 'Inter', sans-serif;
+  }
+  h2:nth-child(2){
+    font-weight: bold;
+    font-size: 18.0132px;
+    line-height: 22px;
+    text-align: center;
+    margin: 12px 0 6px 0;
+    color: ${props => props.color};
+  }
+  h2:nth-child(3){
+    font-weight: bold;
+    font-size: 13.5099px;
+    line-height: 16px;
+    text-align: center;
+    color: #898FA4;
+  }
+  img{
+    width: 65px;
+  }
+`;
+const TrancheModalContentRow = styled.div`
+  border-bottom: ${props => props.noBorder ? "" : `1.05851px solid ${props.border}`};
+  padding: 21px 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+  }
+  h2:nth-child(1){
+    font-weight: bold;
+    font-size: 11.2583px;
+    color: #898FA4;
+  }
+  h2:nth-child(2){
+    font-weight: bold;
+    font-size: 11.2583px;
+    line-height: 14px;
+    color: ${props => props.color};
+  }
+`;
+const TrancheModalFooter = styled.div`
+  padding: 0 40px;
+  button{
+    height: 41.66px;
+    width: 100%;
+    background: #4939D7;
+    border-radius: 4.50331px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 12.3841px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: #FFFFFF;
+    margin: 10px auto 16px auto;
+  }
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 12.3841px;
+    text-align: center;
+    color: ${props => props.color};
+    a{
+      color: #A98BFF;
+      font-weight: bold;
+    }
+  }
+`;
+
+
 
 export {
   ModalHeader, 
@@ -2159,5 +2306,11 @@ export {
   LoadingButton,
   LoadingButtonCircle,
   StakingModalChangeBtn,
-  StakingMigrateModalContentWrapper
+  StakingMigrateModalContentWrapper,
+  TrancheModalWrapper,
+  TrancheModalHeader,
+  TrancheModalContent,
+  TrancheModalContentHeader,
+  TrancheModalContentRow,
+  TrancheModalFooter
 };
