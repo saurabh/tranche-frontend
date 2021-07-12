@@ -1,6 +1,6 @@
 import ReactGA from "react-ga";
 
-const useAnalytics = (category = "category") => {
+export const useAnalytics = (category = "category") => {
     const trackEvent = (action = "action", label = "label") => {
         ReactGA.event({
             category,
@@ -10,5 +10,10 @@ const useAnalytics = (category = "category") => {
     };
     return trackEvent;
 };
-
-export default useAnalytics;
+export const analyticsTrack = (category = "category", action = "action", label = "label") => {
+    ReactGA.event({
+        category,
+        action,
+        label
+    });
+};

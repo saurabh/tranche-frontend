@@ -45,7 +45,7 @@ export const fetchExchangeRates = () => async (dispatch) => {
     type: SET_EXCHANGE_RATES,
     payload: result.result
   });
-}
+};
 
 export const loansIsLoading = (bool) => (dispatch) => {
   dispatch({
@@ -104,9 +104,9 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
-  const searchArr = (tokenAddress) => list.filter(i => i.duration === undefined).find((i) => i.tokenAddress === tokenAddress);
+  const searchArr = (tokenAddress) => list.filter((i) => i.duration === undefined).find((i) => i.tokenAddress === tokenAddress);
   const sliceList = list.filter((i) => i.duration);
-  sliceList.push(searchArr(SLICEAddress))
+  sliceList.push(searchArr(SLICEAddress));
   const lpList = [];
   lpList.push(searchArr(LP1TokenAddress));
   lpList.push(searchArr(LP2TokenAddress));
@@ -186,12 +186,11 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   });
 };
 
-
 const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
-  const sliceStakes = userStakingList.find(l => l.tokenAddress === SLICEAddress);
-  const slice = (sliceStakes ? sliceStakes.stakes : []);
-  const lp1Stakes = userStakingList.find(l => l.tokenAddress === LP1TokenAddress);
-  const lp2Stakes = userStakingList.find(l => l.tokenAddress === LP2TokenAddress);
+  const sliceStakes = userStakingList.find((l) => l.tokenAddress === SLICEAddress);
+  const slice = sliceStakes ? sliceStakes.stakes : [];
+  const lp1Stakes = userStakingList.find((l) => l.tokenAddress === LP1TokenAddress);
+  const lp2Stakes = userStakingList.find((l) => l.tokenAddress === LP2TokenAddress);
   const lp = lp1Stakes ? lp1Stakes.stakes : [];
   if (lp2Stakes) {
     lp.push(...(lp2Stakes.stakes || []));
@@ -199,9 +198,9 @@ const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
 
   dispatch({
     type: USER_STAKING_LIST_SUCCESS,
-    payload: {slice, lp}
+    payload: { slice, lp }
   });
-}
+};
 
 const userStakingListIsLoading = (bool) => (dispatch) => {
   dispatch({
@@ -249,14 +248,14 @@ export const fetchUserStakingList = (endpoint) => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
-} 
+};
 
 export const setMigrateStep = (string) => (dispatch) => {
   const state = store.getState();
   const { address } = state.ethereum;
   if (string === 'done') {
     const migrateAddress = JSON.parse(window.localStorage.getItem('migrateAddress'));
-    window.localStorage.setItem(`migrateAddress`, JSON.stringify({...migrateAddress, [address]: true}))
+    window.localStorage.setItem(`migrateAddress`, JSON.stringify({ ...migrateAddress, [address]: true }));
     dispatch({
       type: SET_MIGRATED,
       payload: true
@@ -266,11 +265,11 @@ export const setMigrateStep = (string) => (dispatch) => {
     type: SET_MIGRATE_STEP,
     payload: string
   });
-}
+};
 
 export const setHasMigrated = (bool) => (dispatch) => {
   dispatch({
     type: SET_MIGRATED,
     payload: bool
   });
-}
+};
