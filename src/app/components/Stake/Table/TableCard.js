@@ -306,8 +306,8 @@ const TableCard = ({
                       </StakeBtns>
                     ) : title === 'SLICE Staking Pools' && !duration ? (
                       <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={false}>
-                          withdraw
+                        <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
+                          disabled
                         </StakeBtnSlice>
                       </StakeBtns>
                     ) : (
