@@ -332,7 +332,7 @@ export const ModeThemes = {
     SelectedStaking: 'rgba(68, 65, 207, 0.05)',
     SelectedStakingText: '#39295A',
     SelectedStakingLink: '#776E8B',
-    borderInputColor: '#F1F1F1;',
+    borderInputColor: '#EAEAEA',
     StakingInputText: '#838186',
     loadingSpinner: 'rgba(124,133,155,0.8)',
     Tooltip: '#2F2F2F',
