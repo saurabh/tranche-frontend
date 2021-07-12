@@ -2034,7 +2034,7 @@ const StakeNewColText = styled.div`
     font-size: 7.65818px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #FFFFFF;
+    color: #838186;
     margin: 1px 0;
   }
 `;

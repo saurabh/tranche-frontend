@@ -443,7 +443,7 @@ const StakingModal = ({
                 <h2>Liquidity Provider Pools</h2>
               </ClaimModalTableTitle>
               <ClaimModalTableSubTitle textColor={ModeThemes[theme].ModalText}>
-                <h2>Next Liqudity Provider Pool Distribution</h2>
+                <h2>Next Liquidity Provider Pool Distribution</h2>
                 <CountdownWrapper modal theme={theme} />
               </ClaimModalTableSubTitle>
 
