@@ -107,30 +107,7 @@ const TableHead = ({ changeSorting, path, color, theme }) => {
                 <TableHeadTitle trancheTableBtns color={color}>
 
                 </TableHeadTitle>
-                <SortingMenu>
-                    <TableSubTitle ref={innerRef} onClick={() => toggleSelectMarkets()} sorting={true}>
-                        <h2>Sort <img src={ChevronDown} alt="img"/> </h2>
-                    </TableSubTitle>
-                    {   menu ?
-
-                    <TableMarketsSortingDropdown sorting={true}>
-                            <TableMarketsSortingDropdownContent>
-                                <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
-                                    Amount
-                                </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => sortLoans("remainingLoan")}>
-                                    Ratio
-                                </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => sortLoans("interestPaid")}>
-                                    Rate/Payout
-                                </TableMarketSortingBtn>
-                                <TableMarketSortingBtn onClick={() => sortLoans("displayPriority")}>
-                                    Status
-                                </TableMarketSortingBtn>
-                            </TableMarketsSortingDropdownContent>
-                        </TableMarketsSortingDropdown>  : ""
-                    }
-                </SortingMenu>
+            
             </TableHeadWrapper>  
         );
     }

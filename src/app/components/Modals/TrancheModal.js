@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { trancheMarketsToggle } from "redux/actions/tableData";
-import { CloseModal, CloseModalWhite, TrancheStake } from 'assets';
+import { CheckBtnWhite, CloseModal, CloseModalWhite, CompoundLogo, DAICARD, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected, TrancheStake } from 'assets';
 
 // import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
@@ -15,7 +15,12 @@ import {
   TrancheModalContent,
   TrancheModalContentHeader,
   TrancheModalContentRow,
-  TrancheModalFooter
+  TrancheModalFooter,
+  TrancheModalContentHeaderImg,
+  TrancheModalContentHeaderText,
+  LoadingButton,
+  LoadingButtonCircle,
+  TrancheModalContentStatus
 } from './styles/ModalsComponents';
 import { ModeThemes } from 'config';
 const TrancheMarketStyles = {
@@ -78,6 +83,67 @@ const TrancheRewardsStyles = {
     bottom: '0'
   }
 };
+const TrancheEnableModal = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '571px',
+    width: '100%',
+    minHeight: '571px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheConfirmModal = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '685px',
+    width: '100%',
+    minHeight: '571px',
+    height: '100%',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
 
 
 
@@ -93,6 +159,9 @@ const TrancheModal = ({
   modalType
   // API Values,
 }) => {
+  const [trancheModalStatus, setTrancheModalStatus] = useState('');
+  const [loading, setLoading] = useState('');
+
   const trancheMarketsToggling = () => {
     trancheMarketsToggle("aavePolygon");
     closeModal();
@@ -151,7 +220,7 @@ const TrancheModal = ({
         <TrancheModalWrapper
           backgroundColor={ModeThemes[theme].ModalBackground}
         >
-          <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+          <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder} trancheRewardsModal>
             <h2>TRANCHE REWARDS</h2>
             <ModalHeader tranche ModalBackground={ModeThemes[theme].ModalBackground}>
               <button onClick={() => closeModal()}>
@@ -160,8 +229,8 @@ const TrancheModal = ({
             </ModalHeader>
           </TrancheModalHeader>
 
-          <TrancheModalContent>
-            <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor}>
+          <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} trancheRewardsModal>
               <img src={TrancheStake} alt="img" />
               <h2>1005.125</h2>
               <h2>($865.50)</h2>
@@ -196,8 +265,282 @@ const TrancheModal = ({
       </Modal>
     );
   };
+  const TrancheEnable = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={TrancheEnableModal}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+        portalClassName="TrancheEnableModal"
+      >
 
-  return modalType === "trancheRewards" ? TrancheRewards() : TrancheMarket();
+        <TrancheModalWrapper
+          backgroundColor={ModeThemes[theme].ModalBackground}
+          TrancheEnable
+        >
+          <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}
+            TrancheEnable
+          >
+            {/* <h2>TRANCHE REWARDS</h2> */}
+            <ModalHeader tranche ModalBackground={ModeThemes[theme].ModalBackground} enableModal>
+              <button onClick={() => closeModal()}>
+                <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
+              </button>
+            </ModalHeader>
+            <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} enableModal>
+              <TrancheModalContentHeaderImg>
+              <img src={CompoundLogo} alt="img" />
+              <span>
+                <img src={DAICARD} alt="img" />                
+              </span>
+              </TrancheModalContentHeaderImg>
+              <TrancheModalContentHeaderText rateColor={ModeThemes[theme].TrancheRateTypeColor} color={ModeThemes[theme].ModalTrancheTextColor} textColor={ModeThemes[theme].textColor}>
+                <h2>Compound Dai</h2>
+                <div>
+                  <h2>ACDAI</h2>
+                  <h2>Fixed</h2>
+                </div>
+              </TrancheModalContentHeaderText>
+            </TrancheModalContentHeader>
+          </TrancheModalHeader>
+        {
+
+          trancheModalStatus === "" ?
+            <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
+              <h2>To deposit in Tranche A, you need to enable it first</h2>
+              <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>CToken APY</h2>
+                <h2>900</h2>
+              </TrancheModalContentRow>
+              <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>Tranche APY</h2>
+                <h2>105.125</h2>
+              </TrancheModalContentRow>
+              <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>SLICE APY</h2>
+                <h2>$0.865</h2>
+              </TrancheModalContentRow>
+              <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>Net APY</h2>
+                <h2>$0.865</h2>
+              </TrancheModalContentRow>
+            </TrancheModalContent> :
+          trancheModalStatus === "confirm" ?
+
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={theme === "light" ? TranchePendingLight : TranchePending} alt="img" />
+              <h2>Confirm Transaction</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> : 
+          trancheModalStatus === "pending" ?
+
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={theme === "light" ? TranchePendingLight : TranchePending} alt="img" />
+              <h2>Transaction Pending</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> :
+
+          trancheModalStatus === "success" ?
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={Migrated} alt="img" />
+              <h2>Transaction Successful</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> :
+
+          trancheModalStatus === "failed" ?
+
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={TrancheRejected} alt="img" />
+              <h2>Transaction Failed</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> : ""
+
+        }
+          
+
+          
+
+         {
+           trancheModalStatus === "" ?
+
+          <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
+            {
+              loading ? 
+              <button>
+                <LoadingButton>
+                  {[...Array(4).keys()].map((idx) => {
+                    return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
+                  })}
+                </LoadingButton>
+              </button> :
+            <button>
+              <img src={CheckBtnWhite} alt="img" /> Enable
+            </button>
+            }
+          </TrancheModalFooter> : 
+          <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
+            <a href="/" target="_blank" rel='noreferrer noopener'>
+              <img src={LinkIcon} alt="img" /> View on Etherscan
+            </a>
+          </TrancheModalFooter>
+         }
+          
+        </TrancheModalWrapper>
+
+      </Modal>
+    );
+  };
+
+  const TrancheConfirm = () => {
+    return (
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={TrancheConfirmModal}
+        closeTimeoutMS={200}
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Adjust'
+        portalClassName="TrancheConfirmModal"
+      >
+
+        <TrancheModalWrapper
+          backgroundColor={ModeThemes[theme].ModalBackground}
+          TrancheConfirm
+        >
+          <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}
+            TrancheConfirm
+          >
+            {/* <h2>TRANCHE REWARDS</h2> */}
+            <ModalHeader tranche ModalBackground={ModeThemes[theme].ModalBackground} enableModal>
+              <button onClick={() => closeModal()}>
+                <img src={theme === "light" ? CloseModal : CloseModalWhite}alt='' />
+              </button>
+            </ModalHeader>
+            <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} enableModal>
+              <TrancheModalContentHeaderImg>
+              <img src={CompoundLogo} alt="img" />
+              <span>
+                <img src={DAICARD} alt="img" />                
+              </span>
+              </TrancheModalContentHeaderImg>
+              <TrancheModalContentHeaderText rateColor={ModeThemes[theme].TrancheRateTypeColor} color={ModeThemes[theme].ModalTrancheTextColor} textColor={ModeThemes[theme].textColor}>
+                <h2>Compound Dai</h2>
+                <div>
+                  <h2>ACDAI</h2>
+                  <h2>Fixed</h2>
+                </div>
+              </TrancheModalContentHeaderText>
+            </TrancheModalContentHeader>
+          </TrancheModalHeader>
+        { 
+        trancheModalStatus === "" ?
+          <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>Deposit in Tranche A</h2>
+            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <h2>CToken APY</h2>
+              <h2>900</h2>
+            </TrancheModalContentRow>
+            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <h2>Tranche APY</h2>
+              <h2>105.125</h2>
+            </TrancheModalContentRow>
+            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <h2>SLICE APY</h2>
+              <h2>$0.865</h2>
+            </TrancheModalContentRow>
+            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <h2>Net APY</h2>
+              <h2>$0.865</h2>
+            </TrancheModalContentRow>
+            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <h2>DAI Spend</h2>
+              <h2>$0.865</h2>
+            </TrancheModalContentRow>
+            <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <h2>Your Wallet Balance</h2>
+              <h2>$0.865</h2>
+            </TrancheModalContentRow>
+          </TrancheModalContent> :
+        trancheModalStatus === "pending" ?
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={theme === "light" ? TranchePendingLight : TranchePending} alt="img" />
+              <h2>Confirm Transaction</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> :
+        trancheModalStatus === "success" ?
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={Migrated} alt="img" />
+              <h2>Transaction Successful</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> : 
+          trancheModalStatus === "failed" ?
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>To deposit in Tranche A, you need to enable it first</h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={TrancheRejected} alt="img" />
+              <h2>Transaction Failed</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent> : ""
+
+
+        }
+          
+
+         
+
+          {
+           trancheModalStatus === "" ?
+            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
+              {
+                loading ?
+                <button>
+                  <LoadingButton>
+                    {[...Array(4).keys()].map((idx) => {
+                      return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
+                    })}
+                  </LoadingButton>
+                </button> : 
+                <button>
+                  <img src={CheckBtnWhite} alt="img" /> Confirm
+                </button>
+              }
+              
+            </TrancheModalFooter> :
+
+            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
+              <a href="/" target="_blank" rel='noreferrer noopener'>
+                <img src={LinkIcon} alt="img" /> View on Etherscan
+              </a>
+            </TrancheModalFooter>
+
+          }
+          
+
+          
+
+
+        </TrancheModalWrapper>
+
+      </Modal>
+    );
+  };
+
+  return modalType === "trancheRewards" ? TrancheRewards() : modalType === "trancheEnable" ? TrancheEnable() : modalType === "trancheConfirm" ? TrancheConfirm() : TrancheMarket();
 };
 
 

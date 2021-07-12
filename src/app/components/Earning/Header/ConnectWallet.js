@@ -63,7 +63,7 @@ const ConnectWallet = ({
   
   return (
     <NavBarRightWrapper>
-        {/* <WalletBtn
+        <WalletBtn
           background={ModeThemes[theme].ModalTrancheNavbarBtn}
           shadow={ModeThemes[theme].ModalTrancheNavbarBtnShadow}
           border={ModeThemes[theme].ModalTrancheNavbarBtnBorder}
@@ -76,7 +76,7 @@ const ConnectWallet = ({
         <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
           <h2>1005.125</h2>
         </WalletBtnText>
-      </WalletBtn> */}
+      </WalletBtn>
 
       <TrancheModal 
         modalIsOpen={modalIsOpen} 

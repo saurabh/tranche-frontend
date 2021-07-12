@@ -135,6 +135,11 @@ ${({ tranche }) => tranche && `
   }
 `}
 
+${({ enableModal }) => enableModal && `
+  top: 0;
+`}
+
+
 
 
 `
@@ -2102,24 +2107,41 @@ const StakingMigrateModalContentWrapper = styled.div`
 `;
 const TrancheModalWrapper = styled.div`
   height: 517px;
+  ${({ TrancheEnable }) => TrancheEnable && `
+    height: 571px;    
+  `}
+  ${({ TrancheConfirm }) => TrancheConfirm && `
+    max-height: 685px;
+    min-height: 571px;
+  `}
   width: 100%;
   background: ${props => props.backgroundColor};
 `;
 const TrancheModalHeader = styled.div`
   height: 68px; 
+  ${({ TrancheEnable }) => TrancheEnable && `
+    height: 210px;   
+  `}
+  ${({ TrancheConfirm }) => TrancheConfirm && `
+    height: 210px; 
+  `}
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 1.05851px solid ${props => props.border};
-  h2{
-    font-family: 'Inter', sans-serif;
-    font-weight: bold;
-    font-size: 15px;
-    text-transform: uppercase;
-    text-align: center;
-    z-index: 2;
-    color: ${props => props.color};
-  }
+  ${({ trancheRewardsModal, color }) => trancheRewardsModal && `
+    h2{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 15px;
+      text-transform: uppercase;
+      text-align: center;
+      z-index: 2;
+      color: ${color};
+    }
+  `}
+
+
 `;
 const TrancheModalContent = styled.div`
   display: flex;
@@ -2127,6 +2149,20 @@ const TrancheModalContent = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 0 40px;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    color: ${props => props.color};
+    margin: 29px auto 9px auto;
+  }
+  ${({ trancheStatus }) => trancheStatus && `
+    min-height: 280px;
+    & > h2{
+      margin: -33px 0 0 0;
+    }
+  `}
 `;
 const TrancheModalContentHeader = styled.div`
   display: flex;
@@ -2136,24 +2172,29 @@ const TrancheModalContentHeader = styled.div`
   margin: 32px 40px 18px 40px;
   align-items: center;
   text-align: center; 
-  h2{
-    font-family: 'Inter', sans-serif;
-  }
-  h2:nth-child(2){
-    font-weight: bold;
-    font-size: 18.0132px;
-    line-height: 22px;
-    text-align: center;
-    margin: 12px 0 6px 0;
-    color: ${props => props.color};
-  }
-  h2:nth-child(3){
-    font-weight: bold;
-    font-size: 13.5099px;
-    line-height: 16px;
-    text-align: center;
-    color: #898FA4;
-  }
+
+  
+  ${({ trancheRewardsModal, color }) => trancheRewardsModal && `
+    h2{
+      font-family: 'Inter', sans-serif;
+    }
+    h2:nth-child(2){
+      font-weight: bold;
+      font-size: 18.0132px;
+      line-height: 22px;
+      text-align: center;
+      margin: 12px 0 6px 0;
+      color: ${color};
+    }
+    h2:nth-child(3){
+      font-weight: bold;
+      font-size: 13.5099px;
+      line-height: 16px;
+      text-align: center;
+      color: #898FA4;
+    }
+  `}
+
   img{
     width: 65px;
   }
@@ -2180,8 +2221,8 @@ const TrancheModalContentRow = styled.div`
     color: ${props => props.color};
   }
 `;
-const TrancheModalFooter = styled.div`
-  padding: 0 40px;
+const TrancheModalFooter = styled.div` 
+  padding: ${props => props.link ? "10px 40px" : "0 40px"};
   button{
     height: 41.66px;
     width: 100%;
@@ -2196,7 +2237,17 @@ const TrancheModalFooter = styled.div`
     outline: none;
     color: #FFFFFF;
     margin: 10px auto 16px auto;
+    img{
+      margin-right: 5px;
+    }
   }
+  
+
+ 
+
+  
+
+
   h2{
     font-family: 'Inter', sans-serif;
     font-weight: 500;
@@ -2208,10 +2259,104 @@ const TrancheModalFooter = styled.div`
       font-weight: bold;
     }
   }
+  ${({ TrancheEnableConfirm }) => TrancheEnableConfirm && `
+    a{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 41.66px;
+      width: 100%;
+      background: #4939D7;
+      border-radius: 4.50331px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 12.3841px;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      color: #FFFFFF;
+      margin: 10px auto 16px auto;
+      img{
+        margin-right: 5px;
+      }
+    }
+  `}
 `;
 
+const TrancheModalContentHeaderImg = styled.div`
+  position: relative;
+  & > img{
+    width: 47px;
+    margin-bottom: 15px;
+  }
+  span{
+    img{
+      width: 47px;
+      margin-left: -15px;
+      z-index: 2;
+    }
+  }
+`
 
 
+const TrancheModalContentHeaderText = styled.div`
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 18.0132px;
+    text-align: center;
+    color: ${props => props.color};
+    margin: 17px auto 12px auto;
+  }
+  div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 129px; 
+    width: 100%;
+    h2:first-child{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 13.5099px;
+      text-align: center;
+      color: ${props => props.textColor};
+      opacity: 0.5;
+    }
+    h2:last-child{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 11.4706px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      width: 75.71px;
+      height: 26px;
+      background: ${props => props.rateColor};
+      border-radius: 7.64706px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+  }
+`
+const TrancheModalContentStatus = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img{
+    margin: 45px auto 25px auto;
+  }
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 18.9804px;
+    text-align: center;
+    color: ${props => props.color};
+  }
+`
 export {
   ModalHeader, 
   ModalContent,
@@ -2312,5 +2457,8 @@ export {
   TrancheModalContent,
   TrancheModalContentHeader,
   TrancheModalContentRow,
-  TrancheModalFooter
+  TrancheModalFooter,
+  TrancheModalContentHeaderImg,
+  TrancheModalContentHeaderText,
+  TrancheModalContentStatus
 };
