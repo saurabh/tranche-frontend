@@ -25,7 +25,7 @@ import {
   maticNetworkId
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
-import { setMigrateStep } from 'redux/actions/tableData';
+import { setMigrateStep, setMigrateLoading } from 'redux/actions/tableData';
 
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
@@ -511,7 +511,7 @@ export const getAccruedStakingRewards = async (yieldfarmAddress, address) => {
   }
 };
 
-export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
+export const addStake = async (stakingAddress, tokenAddress, durationIndex, migrate) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
@@ -543,6 +543,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
         });
         emitter.on('txConfirmed', () => {
           store.dispatch(setTxLoading(false));
+          migrate && store.dispatch(setMigrateStep('done'));
           analyticsTrack('Tracking user activity', 'SLICE staking pool', { address: address, staked: amount });
         });
         emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
@@ -550,7 +551,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
       }
     });
   } catch (error) {
-    error.code === 4001 &&
+    if (error.code === 4001) {
       store.dispatch(
         updateNotification({
           id,
@@ -559,6 +560,8 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
           title: 'Transaction rejected'
         })
       );
+      store.dispatch(setMigrateLoading(false));
+    }
     console.error(error);
   }
 };
@@ -593,9 +596,9 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
               };
             });
             emitter.on('txConfirmed', () => {
+              store.dispatch(setTxLoading(false));
               migrate && store.dispatch(setMigrateStep('stake'));
               analyticsTrack('Tracking user activity', 'SLICE staking pool', { address: address, withdrawn: amount });
-              store.dispatch(setTxLoading(false));
             });
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
@@ -603,7 +606,7 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
         });
     } else return;
   } catch (error) {
-    error.code === 4001 &&
+    if (error.code === 4001) {
       store.dispatch(
         updateNotification({
           id,
@@ -612,6 +615,8 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
           title: 'Transaction rejected'
         })
       );
+      store.dispatch(setMigrateLoading(false));
+    }
     console.log(error);
   }
 };
@@ -651,7 +656,7 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
       }
     });
   } catch (error) {
-    error.code === 4001 &&
+    if (error.code === 4001) {
       store.dispatch(
         updateNotification({
           id,
@@ -660,6 +665,8 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
           title: 'Transaction rejected'
         })
       );
+      store.dispatch(setMigrateLoading(false));
+    }
     return error;
   }
 };

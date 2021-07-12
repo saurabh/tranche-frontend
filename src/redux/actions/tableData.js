@@ -34,6 +34,7 @@ import {
   USER_STAKING_LIST_IS_LOADING,
   USER_STAKING_LIST_SUCCESS,
   SET_MIGRATE_STEP,
+  SET_MIGRATE_LOADING,
   SET_MIGRATED,
   SET_EXCHANGE_RATES
 } from './constants';
@@ -264,6 +265,13 @@ export const setMigrateStep = (string) => (dispatch) => {
   dispatch({
     type: SET_MIGRATE_STEP,
     payload: string
+  });
+};
+
+export const setMigrateLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_MIGRATE_LOADING,
+    payload: bool
   });
 };
 
