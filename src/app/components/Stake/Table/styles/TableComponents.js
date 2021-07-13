@@ -2034,6 +2034,24 @@ const HowToLink = styled.a`
 
 
 `
+const TrancheRateType = styled.h2`
+  background: ${props => props.TrancheRateColor};
+  border-radius: 10px;
+  width: 99px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 215px;
+  font-family: 'Inter', sans-serif;  
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #FFFFFF;
+
+`
 
 const LoadingContent = styled.div`
   animation: gradient-slide 2.2s ease infinite;
@@ -2129,5 +2147,6 @@ export {
   TooltipWrapper,
   HowToLink,
   LoadingContent,
-  StakeBtnSlice
+  StakeBtnSlice,
+  TrancheRateType
 };

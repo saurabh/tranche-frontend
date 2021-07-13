@@ -1216,12 +1216,22 @@ table, th, td {
   }
 
 }
-
+.ReactModal__Overlay{
+  overflow-y: scroll;
+}
 
 @media (max-width: 633px){
   .ReactModal__Content{
     position: absolute !important;
     transform: scale(0.5) translateY(50%);
+  }
+  .TrancheEnableModal .ReactModal__Content{
+    max-height: unset !important;
+    max-width: unset !important;
+  }
+  .TrancheConfirmModal .ReactModal__Content{
+    max-height: unset !important;
+    max-width: unset !important;
   }
   .stakeModal .ReactModal__Content{
     width: 100% !important;

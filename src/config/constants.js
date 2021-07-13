@@ -389,6 +389,8 @@ export const ModeThemes = {
     ModalTrancheNavbarBtn: "#FFFFFF",
     MigrateClaimCardValue: "#393F56",
     ModalTrancheNavbarBtnText: "#393F56",
+    TrancheRateFixedColor: "rgba(106, 103, 255, 0.9)",
+    TrancheRateVariableColor: "rgba(118, 77, 232, 0.9)",  
     ModalTrancheTextRowBorder: "#F0F0F6",
     ModalTrancheNavbarBtnShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
     CongratsText: "rgba(57, 63, 86, 0.8)"
@@ -400,6 +402,8 @@ export const ModeThemes = {
     ModalTrancheNavbarBtnShadow: "",
     ModalTrancheTextRowBorder: "rgba(249, 249, 251, 0.1)",
     ModalTrancheNavbarBtnBorder: "",
+    TrancheRateFixedColor: "rgba(106, 103, 255, 0.4)",
+    TrancheRateVariableColor: "rgba(118, 77, 232, 0.4)",
     ModalTrancheTextColor: "#FFFFFF",
     ModalTrancheNavbarBtnText: "#FFFFFF",
     HeaderTitle: '#FFFFFF',

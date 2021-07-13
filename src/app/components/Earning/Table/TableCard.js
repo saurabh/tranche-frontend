@@ -53,7 +53,8 @@ import {
   TableMobileContent,
   TableMobileContentRow,
   TableMobileContentCol,
-  TableCardImgWrapper
+  TableCardImgWrapper,
+  TrancheRateType
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 // import i18n from 'app/components/locale/i18n';
@@ -266,15 +267,18 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
-                  <h2>{name && name}</h2>
+                  <h2>{dividendType && dividendType}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
-                  <h2>{addrShortener(trancheTokenAddress)}</h2>
+                  <h2>{type === 'TRANCHE_A' ? 'A'+dividendType : "B"+dividendType}</h2>
                   <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
               </FirstColContent>
+              <TrancheRateType TrancheRateColor={type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor}>
+                {type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}
+              </TrancheRateType>
             </TableFirstColWrapper>
           </TableFirstCol>
 
@@ -410,7 +414,7 @@ const TableCard = ({
               <TableFirstColWrapper>
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                    <h2>{name && name}</h2>
+                    <h2>{dividendType && dividendType}</h2>
                     <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
                       <button>
                         <img src={ChevronTable} alt='ChevronTable' />
@@ -418,7 +422,7 @@ const TableCard = ({
                     </AdustBtnWrapper>
                   </FirstColTitle>
                   <FirstColSubtitle>
-                    <h2>{addrShortener(trancheTokenAddress)}</h2>
+                    <h2>{type === 'TRANCHE_A' ? 'A'+dividendType : "B"+dividendType}</h2>
                     <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>

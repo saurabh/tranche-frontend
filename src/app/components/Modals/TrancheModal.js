@@ -540,7 +540,8 @@ const TrancheModal = ({
     );
   };
 
-  return modalType === "trancheRewards" ? TrancheRewards() : modalType === "trancheEnable" ? TrancheEnable() : modalType === "trancheConfirm" ? TrancheConfirm() : TrancheMarket();
+  // return modalType === "trancheRewards" ? TrancheRewards() : modalType === "trancheEnable" ? TrancheEnable() : modalType === "trancheConfirm" ? TrancheConfirm() : TrancheMarket();
+  return TrancheConfirm();
 };
 
 

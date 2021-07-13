@@ -137,6 +137,9 @@ ${({ tranche }) => tranche && `
 
 ${({ enableModal }) => enableModal && `
   top: 0;
+  @media (max-width: 633px){
+    position: absolute;
+  }
 `}
 
 
@@ -2109,10 +2112,17 @@ const TrancheModalWrapper = styled.div`
   height: 517px;
   ${({ TrancheEnable }) => TrancheEnable && `
     height: 571px;    
+    @media (max-width: 633px){
+      height: 100vh;
+    }
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
     max-height: 685px;
-    min-height: 571px;
+    min-height: 685px;
+    @media (max-width: 633px){
+      height: 100vh;
+      max-height: unset;
+    }
   `}
   width: 100%;
   background: ${props => props.backgroundColor};
