@@ -454,7 +454,7 @@ const StakingModal = ({
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
-                  <h2>Total Staked</h2>
+                  <h2>Your Stake</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
                   <h2>Rewards</h2>
