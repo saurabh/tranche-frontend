@@ -19,6 +19,10 @@ import {
   TRANCHE_MARKETS,
   USER_STAKING_LIST_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
+  SET_TX_MODAL_OPEN,
+  SET_TX_MODAL_TYPE,
+  SET_TX_MODAL,
+  SET_TX_MODAL_LOADING,
   SET_MIGRATE_STEP,
   SET_MIGRATED,
   SET_EXCHANGE_RATES
@@ -43,6 +47,10 @@ const initialState = {
   tradeType: 'allTranches',
   trancheCard: { status: false, id: null },
   trancheMarket: 'compound',
+  txModalIsOpen: false,
+  txModalType: '',
+  txModalStatus: 'notApproved',
+  txLoading: false,
   currentStep: 'claim',
   userStakingList: {
     slice: [],
@@ -95,12 +103,20 @@ export default function (state = initialState, action) {
       return { ...state, userStakingList: payload };
     case USER_STAKING_LIST_IS_LOADING:
       return { ...state, isUserStakingListLoading: payload };
+    case SET_TX_MODAL_OPEN:
+      return { ...state, txModalIsOpen: payload };
+    case SET_TX_MODAL_TYPE:
+      return { ...state, txModalType: payload };
+    case SET_TX_MODAL:
+      return { ...state, txModalStatus: payload };
+    case SET_TX_MODAL_LOADING:
+      return { ...state, txLoading: payload };
     case SET_MIGRATE_STEP:
-      return {...state, currentStep: payload};
+      return { ...state, currentStep: payload };
     case SET_MIGRATED:
-      return {...state, hasMigrated: payload};
+      return { ...state, hasMigrated: payload };
     case SET_EXCHANGE_RATES:
-      return {...state, exchangeRates: payload};
+      return { ...state, exchangeRates: payload };
     default:
       return state;
   }

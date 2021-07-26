@@ -8,7 +8,7 @@ import {
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE,
+  SET_ALLOWANCE,
   SET_BLOCKEXPLORER_URL,
   ADD_NOTIFICATION,
   UPDATE_NOTIFICATION,
@@ -68,7 +68,7 @@ export default function (state = initialState, action) {
       return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenAddress]: payload.tokenBalance } };
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
-    case SET_TRANCHE_ALLOWANCE:
+    case SET_ALLOWANCE:
       return {
         ...state,
         trancheAllowance: {

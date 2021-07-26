@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import i18n from '../../locale/i18n';
-import { trancheMarketsToggle } from 'redux/actions/tableData';
+import { trancheMarketsToggle, setTxModalOpen } from 'redux/actions/tableData';
 import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
@@ -11,25 +11,26 @@ import useAnalytics from 'services/analytics';
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, theme }) => {
   const [modalOpened, setModalOpened] = useState(false);
   const Tracker = useAnalytics('ExternalLinks');
 
-  const { trancheMarket } = data;
+  const { trancheMarket, txModalIsOpen } = data;
 
   const openModal = () => {
     setModalOpened(true);
     if (!modalOpened) {
-      setModalIsOpen(true);
+      setTxModalOpen(true);
     } else {
       trancheMarketsToggle('aavePolygon');
     }
   };
+  
   const closeModal = () => {
-    setModalIsOpen(false);
+    setTxModalOpen(false);
     // onClick={() => trancheMarketsToggle("aavePolygon")}>
   };
+
   return (
     <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle} className='TrancheMarkets'>
       <div>
@@ -91,7 +92,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, theme }) => {
           </a>
         </BridgeTokensWrapper>
       )}
-      <TrancheModal modalIsOpen={modalIsOpen} closeModal={() => closeModal()} />
+      <TrancheModal closeModal={() => closeModal()} />
     </MarketsTabsWrapper>
   );
 };
@@ -103,4 +104,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { trancheMarketsToggle })(HeaderTabs);
+export default connect(mapStateToProps, { trancheMarketsToggle, setTxModalOpen })(HeaderTabs);

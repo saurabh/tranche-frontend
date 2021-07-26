@@ -33,6 +33,10 @@ import {
   STAKING_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
   USER_STAKING_LIST_SUCCESS,
+  SET_TX_MODAL_OPEN,
+  SET_TX_MODAL_TYPE,
+  SET_TX_MODAL,
+  SET_TX_MODAL_LOADING,
   SET_MIGRATE_STEP,
   SET_MIGRATED,
   SET_EXCHANGE_RATES
@@ -270,6 +274,34 @@ export const setMigrateStep = (string) => (dispatch) => {
 export const setHasMigrated = (bool) => (dispatch) => {
   dispatch({
     type: SET_MIGRATED,
+    payload: bool
+  });
+};
+
+export const setTxModalOpen = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_OPEN,
+    payload: bool
+  });
+};
+
+export const setTxModalType = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_TYPE,
+    payload: string
+  });
+};
+
+export const setTxModalStatus = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL,
+    payload: string
+  });
+};
+
+export const setTxModalLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_LOADING,
     payload: bool
   });
 };

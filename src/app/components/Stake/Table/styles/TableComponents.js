@@ -1549,20 +1549,20 @@ const TableMoreRightSection = styled.div`
   ${({ disabled, disabledBackground, btn }) => disabled && `
     form{
       div{
-        button{
+        /* button{
           color: rgba(57, 41, 90, 0.5) !important;
           pointer-events: none !important;
-        }
+        } */
         input{
           background: ${disabledBackground} !important;  
           pointer-events: none !important;
           border-color: ${btn} !important;
         }
       }
-      & > button{
+      /* & > button{
         pointer-events: none !important;
         background: ${btn} !important;
-      }
+      } */
     }
   `}
   @media (max-width: 992px){
