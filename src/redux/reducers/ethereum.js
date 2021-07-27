@@ -13,7 +13,8 @@ import {
   ADD_NOTIFICATION,
   UPDATE_NOTIFICATION,
   UPDATE_NOTIFICATION_COUNT,
-  REMOVE_NOTIFICATION
+  REMOVE_NOTIFICATION,
+  SIR_REWARDS
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
@@ -51,7 +52,8 @@ const initialState = {
     [JAaveAddress]: aaveAllowance
   },
   notificationCount: 0,
-  notifications: []
+  notifications: [],
+  unclaimedSIRRewards: 0
 };
 
 export default function (state = initialState, action) {
@@ -98,6 +100,9 @@ export default function (state = initialState, action) {
     case REMOVE_NOTIFICATION: {
       state.notifications.splice(payload, 1);
       return { ...state, notifications: [...state.notifications] };
+    }
+    case SIR_REWARDS: {
+      return { ...state, unclaimedSIRRewards: payload };
     }
     default:
       return state;

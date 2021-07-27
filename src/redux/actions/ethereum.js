@@ -30,7 +30,8 @@ import {
   ADD_NOTIFICATION,
   UPDATE_NOTIFICATION,
   UPDATE_NOTIFICATION_COUNT,
-  REMOVE_NOTIFICATION
+  REMOVE_NOTIFICATION,
+  SIR_REWARDS
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
 import { setHasMigrated, trancheMarketsToggle } from './tableData';
@@ -39,6 +40,8 @@ import { LockupAddress } from 'config';
 import { SLICEAddress } from 'config';
 import { LP1TokenAddress } from 'config';
 import { LP2TokenAddress } from 'config';
+import { getUnclaimedRewards } from 'services';
+import { RewardDistributionAddress } from 'config';
 const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {
@@ -433,3 +436,11 @@ export const removeNotification = (notification) => (dispatch) => {
     payload: index
   });
 };
+
+export const checkSIRRewards = () => async (dispatch) => {
+  const rewards = await getUnclaimedRewards(RewardDistributionAddress);
+  dispatch({
+    type: SIR_REWARDS,
+    payload: rewards
+  })
+}

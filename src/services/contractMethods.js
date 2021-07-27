@@ -6,7 +6,8 @@ import {
   StakingSetup,
   LockupSetup,
   YieldFarmSetup,
-  ERC20Setup
+  ERC20Setup,
+  RewardDistributionSetup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
@@ -26,6 +27,7 @@ import {
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
 import { setMigrateStep } from 'redux/actions/tableData';
+import { RewardDistributionAddress } from 'config';
 
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
@@ -663,3 +665,95 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
     return error;
   }
 };
+
+export const getUnclaimedRewards = async (contractAddress) => {
+  try {
+    const state = store.getState();
+    const { web3, address } = state.ethereum;
+    const contract = await RewardDistributionSetup(web3, contractAddress);
+    const marketsCounter = await contract.methods.marketsCounter().call();
+    const marketArray = new Array(+(marketsCounter || 0)).fill(0);
+    const batch = new web3.BatchRequest();
+    const trARewardsPromise = marketArray.map((_v, marketId) => {
+      return new Promise((resolve, reject) => {
+        batch.add(contract.methods.trARewards(marketId, address).call
+          .request((err, res) => {
+            if (err)
+            {
+              reject(err);
+            }
+            resolve(res);
+          }));
+      });
+    });
+    const trBRewardsPromise = marketArray.map((_v, marketId) => {
+      return new Promise((resolve, reject) => {
+        batch.add(contract.methods.trARewards(marketId, address).call
+          .request((err, res) => {
+            if (err)
+            {
+              reject(err);
+            }
+            resolve(res);
+          }));
+      });
+    });
+    batch.execute();
+
+    const rewards = await Promise.all([ ...trARewardsPromise, ...trBRewardsPromise ]);
+
+    return rewards.reduce((acc, cur) => {
+      acc += +(cur || 0);
+      return acc;
+    }, 0);
+  } catch(e) {
+    console.log(e);
+    return 0;
+  }
+}
+
+export const claimRewardsAllMarkets = async () => {
+  const state = store.getState();
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
+  try
+  {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
+    const contract = await RewardDistributionSetup(web3, RewardDistributionAddress);
+    await contract.methods.claimRewardsAllMarkets().send({ from: address}).on('transactionHash', (hash) => {
+      if (network === networkId) {
+        const { emitter } = notify.hash(hash);
+        emitter.on('txPool', (transaction) => {
+          return {
+            message: txMessage(transaction.hash)
+          };
+        });
+        emitter.on('txConfirmed', () => {
+          store.dispatch(setTxLoading(false));
+        });
+        emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
+        emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+      }
+    });;
+  } catch (error)
+  {
+    console.log(error);
+    error.code === 4001 &&
+      store.dispatch(
+        updateNotification({
+          id,
+          type: 'REJECTED',
+          message: 'You rejected the transaction',
+          title: 'Transaction rejected'
+        })
+      );
+    return error;
+  }
+}

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { trancheMarketsToggle } from "redux/actions/tableData";
 import { CheckBtnWhite, CloseModal, CloseModalWhite, CompoundLogo, DAICARD, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected, TrancheStake } from 'assets';
+import { SLICEAddress } from '../../../config/constants'
 
 // import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
@@ -23,6 +24,8 @@ import {
   TrancheModalContentStatus
 } from './styles/ModalsComponents';
 import { ModeThemes } from 'config';
+import { roundNumber, safeMultiply } from 'utils';
+import { claimRewardsAllMarkets, fromWei } from 'services';
 const TrancheMarketStyles = {
   overlay: {
     display: 'flex',
@@ -151,8 +154,8 @@ Modal.setAppElement('#root');
 
 const TrancheModal = ({
   // Redux
-  ethereum: { txOngoing },
-  data: { txModalIsOpen, txModalType, txModalStatus, txLoading },
+  ethereum: { txOngoing, tokenBalance, unclaimedSIRRewards },
+  data: { txModalIsOpen, txModalType, txModalStatus, txLoading, exchangeRates = {}},
   // Props
   type,
   theme,
@@ -161,6 +164,22 @@ const TrancheModal = ({
   closeModal
   // API Values,
 }) => {
+  const [ totalSliceBalance, setTotalSliceBalance ] = useState(0);
+  const [ unclaimedSlice, setUnclaimedSlice ] = useState(0);
+  const [ totalSlice, setTotalSlice ] = useState(0);
+  const[totalSliceInUSD, setTotalSliceInUSD] = useState(0);
+
+  useEffect(() => {
+    setTotalSliceBalance(fromWei(tokenBalance[ SLICEAddress ]));
+  }, [ tokenBalance ]);
+  useEffect(() => {
+    setUnclaimedSlice(fromWei(`${unclaimedSIRRewards || 0}`));
+  }, [ unclaimedSIRRewards ]);
+  
+  useEffect(() => {
+    setTotalSliceInUSD(roundNumber(safeMultiply(totalSliceBalance + unclaimedSlice, exchangeRates.SLICE)));
+    setTotalSlice(roundNumber(totalSliceBalance + unclaimedSlice));
+  }, [exchangeRates.SLICE, totalSliceBalance, unclaimedSlice]);
 
   const trancheMarketsToggling = () => {
     trancheMarketsToggle("aavePolygon");
@@ -205,8 +224,11 @@ const TrancheModal = ({
       </Modal>
     );
   };
-
   const TrancheRewards = () => {
+    const onClaimReward = async () => {
+      await claimRewardsAllMarkets()
+      closeModal();
+    }
     return (
       <Modal
         isOpen={txModalIsOpen}
@@ -233,26 +255,26 @@ const TrancheModal = ({
           <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
             <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} trancheRewardsModal>
               <img src={TrancheStake} alt="img" />
-              <h2>1005.125</h2>
-              <h2>($865.50)</h2>
+              <h2>{totalSlice}</h2>
+              <h2>(${totalSliceInUSD})</h2>
             </TrancheModalContentHeader>
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Wallet Balance </h2>
-              <h2>900</h2>
+              <h2>{ roundNumber(totalSliceBalance) }</h2>
             </TrancheModalContentRow>
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Unclaimed Balance</h2>
-              <h2>105.125</h2>
+              <h2>{ roundNumber(unclaimedSlice) }</h2>
             </TrancheModalContentRow>
             <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Price</h2>
-              <h2>$0.865</h2>
+              <h2>${roundNumber(exchangeRates.SLICE, 2)}</h2>
             </TrancheModalContentRow>
           </TrancheModalContent>
 
           <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
-            <button>
-              Claim 105.125 SLICE 
+            <button onClick={ onClaimReward} disabled={txOngoing}>
+              Claim {roundNumber(unclaimedSlice)} SLICE 
             </button>
             <h2>
               Looking for Staking Rewards? <a href="/stake">Click Here</a>

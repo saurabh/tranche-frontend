@@ -5,13 +5,14 @@ import { useLocation } from 'react-router-dom';
 import { setTxModalOpen, setTxModalType } from 'redux/actions/tableData';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener } from 'utils/helperFunctions';
+import { addrShortener, roundNumber } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper } from './styles/HeaderComponents';
-import { ModeThemes, PagesData } from 'config/constants';
+import { ModeThemes, PagesData, SLICEAddress } from 'config/constants';
 import Wallet from 'assets/images/svg/wallet.svg';
 import i18n from '../../locale/i18n';
 import { TrancheStake } from 'assets';
 import TrancheModal from 'app/components/Modals/TrancheModal';
+import { fromWei } from 'services';
 
 const ConnectWallet = ({
   setAddress,
@@ -19,10 +20,24 @@ const ConnectWallet = ({
   setBalance,
   setWalletAndWeb3,
   theme,
-  ethereum: { address, balance },
+  ethereum: { address, balance, tokenBalance, unclaimedSIRRewards },
   setTxModalOpen,
   setTxModalType
 }) => {
+  const [ totalSliceBalance, setTotalSliceBalance ] = useState(0);
+  const [ unclaimedSlice, setUnclaimedSlice ] = useState(0);
+  const [ totalSlice, setTotalSlice ] = useState(0);
+  useEffect(() => {
+    setTotalSliceBalance(fromWei(tokenBalance[ SLICEAddress ]));
+  }, [ tokenBalance ]);
+  useEffect(() => {
+    setUnclaimedSlice(fromWei(`${unclaimedSIRRewards || 0}`));
+  }, [ unclaimedSIRRewards ]);
+  useEffect(() => {
+    setTotalSlice(roundNumber(totalSliceBalance + unclaimedSlice));
+  }, [ totalSliceBalance, unclaimedSlice ]);
+  
+
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
   const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || 'borrow');
@@ -75,7 +90,7 @@ const ConnectWallet = ({
           <img src={TrancheStake} alt='tranche' />
         </WalletBtnIcon>
         <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
-          <h2>1005.125</h2>
+          <h2>{totalSlice}</h2>
         </WalletBtnText>
       </WalletBtn>
 
