@@ -636,7 +636,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
     const trARewardsPromise = marketArray.map((_v, marketId) => {
       return new Promise((resolve, reject) => {
         batch.add(
-          contract.methods.trARewards(marketId, address).call.request((err, res) => {
+          contract.methods.trAEarned(marketId, address).call.request((err, res) => {
             if (err) {
               reject(err);
             }
@@ -648,7 +648,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
     const trBRewardsPromise = marketArray.map((_v, marketId) => {
       return new Promise((resolve, reject) => {
         batch.add(
-          contract.methods.trARewards(marketId, address).call.request((err, res) => {
+          contract.methods.trBEarned(marketId, address).call.request((err, res) => {
             if (err) {
               reject(err);
             }
