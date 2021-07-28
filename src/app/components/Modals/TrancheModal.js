@@ -181,8 +181,8 @@ const TrancheModal = ({
   }, [ unclaimedSIRRewards ]);
   
   useEffect(() => {
-    setTotalSliceInUSD(roundNumber(safeMultiply(totalSliceBalance + unclaimedSlice, exchangeRates.SLICE)));
-    setTotalSlice(roundNumber(totalSliceBalance + unclaimedSlice));
+    setTotalSliceInUSD(roundNumber(safeMultiply(+totalSliceBalance + +unclaimedSlice, exchangeRates.SLICE)));
+    setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
   }, [exchangeRates.SLICE, totalSliceBalance, unclaimedSlice]);
 
   const trancheMarketsToggling = () => {
