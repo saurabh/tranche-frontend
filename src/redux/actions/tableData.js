@@ -39,6 +39,7 @@ import {
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
   SET_MIGRATE_STEP,
+  SET_MIGRATE_LOADING,
   SET_MIGRATED,
   SET_EXCHANGE_RATES
 } from './constants';
@@ -269,6 +270,13 @@ export const setMigrateStep = (string) => (dispatch) => {
   dispatch({
     type: SET_MIGRATE_STEP,
     payload: string
+  });
+};
+
+export const setMigrateLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_MIGRATE_LOADING,
+    payload: bool
   });
 };
 

@@ -25,6 +25,7 @@ import {
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
   SET_MIGRATE_STEP,
+  SET_MIGRATE_LOADING,
   SET_MIGRATED,
   SET_EXCHANGE_RATES
 } from '../actions/constants';
@@ -54,6 +55,7 @@ const initialState = {
   txModalStatus: 'notApproved',
   txLoading: false,
   currentStep: 'claim',
+  migrateLoading: false,
   userStakingList: {
     slice: [],
     lp: []
@@ -117,6 +119,8 @@ export default function (state = initialState, action) {
       return { ...state, txLoading: payload };
     case SET_MIGRATE_STEP:
       return { ...state, currentStep: payload };
+    case SET_MIGRATE_LOADING:
+      return { ...state, migrateLoading: payload };
     case SET_MIGRATED:
       return { ...state, hasMigrated: payload };
     case SET_EXCHANGE_RATES:
