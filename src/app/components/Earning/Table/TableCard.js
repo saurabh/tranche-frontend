@@ -4,15 +4,7 @@ import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, fromWei } from 'services/contractMethods';
-import {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
-  toggleApproval,
-  setTxLoading,
-  setTokenBalances
-} from 'redux/actions/ethereum';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
@@ -157,7 +149,7 @@ const TableCard = ({
               setTxModalLoading(false);
               setTxModalStatus('failed');
             });
-          } 
+          }
         })
         .on('confirmation', (count) => {
           if (count === 0) {
@@ -170,7 +162,7 @@ const TableCard = ({
         });
     } catch (error) {
       setTxModalLoading(false);
-      error.code === 4001 && setTxModalStatus('reject');
+      error.code === 4001 && setTxModalStatus('failed');
       return error;
     }
   };
