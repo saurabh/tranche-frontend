@@ -35,6 +35,7 @@ import {
   USER_STAKING_LIST_SUCCESS,
   SET_TX_MODAL_OPEN,
   SET_TX_MODAL_TYPE,
+  SET_TX_MODAL_DATA,
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
   SET_MIGRATE_STEP,
@@ -289,6 +290,13 @@ export const setTxModalType = (string) => (dispatch) => {
   dispatch({
     type: SET_TX_MODAL_TYPE,
     payload: string
+  });
+};
+
+export const setTxModalData = (object) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_DATA,
+    payload: object
   });
 };
 

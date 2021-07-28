@@ -23,9 +23,9 @@ import {
 } from '../../Stake/Table/styles/TableComponents';
 import TrancheModal from '../../Modals/TrancheModal';
 import { BtnArrow } from 'assets';
-import { setTxModalOpen, setTxModalType } from 'redux/actions/tableData';
+import { setTxModalOpen, setTxModalType, setTxModalData } from 'redux/actions/tableData';
 import { fromWei } from 'services/contractMethods';
-import { roundNumber, isGreaterThan, isEqualTo } from 'utils';
+import { roundNumber, isGreaterThan, isEqualTo, isLessThan } from 'utils';
 import { ModeThemes, ETHorMaticCheck } from 'config';
 import i18n from '../../locale/i18n';
 
@@ -43,7 +43,10 @@ const InputField = ({ input, type, className, meta: { touched, error } }) => (
 let TableMoreRow = ({
   name,
   type,
+  trancheId,
+  apyStatus,
   apy,
+  sliceAPY,
   contractAddress,
   cryptoType,
   dividendType,
@@ -58,11 +61,13 @@ let TableMoreRow = ({
   setDepositApproved,
   setWithdrawApproved,
   approveContract,
-  buySellTrancheTokens,
+  // redux
   ethereum: { tokenBalance, trancheAllowance, txOngoing },
   setTxModalOpen,
   setTxModalType,
+  setTxModalData,
   change,
+  formValues,
   theme
 }) => {
   const [isEth, setIsEth] = useState(false);
@@ -81,9 +86,27 @@ let TableMoreRow = ({
     setTooltipToggle(val);
   };
 
-  const openModal = (type) => {
+  const openModal = (type, isDeposit) => {
     setTxModalType(type);
     setTxModalOpen(true);
+    setTxModalData({
+      name: name.split('-')[1].trim(),
+      contractAddress,
+      trancheId,
+      apyStatus,
+      cryptoType,
+      trancheToken,
+      dividendType,
+      apy,
+      protocolAPY,
+      sliceAPY,
+      netAPY: apy + sliceAPY,
+      isDeposit,
+      isDepositApproved,
+      isWithdrawApproved,
+      buyerCoinAddress,
+      trancheTokenAddress
+    });
   };
 
   const closeModal = () => {
@@ -129,16 +152,21 @@ let TableMoreRow = ({
 
   const handleInputChange = (newValue, type) => {
     if (type) {
-      isGreaterThan(newValue, buyerTokenBalance) || isEqualTo(newValue, 0) ? setDepositBalanceCheck('InputStylingError') : setDepositBalanceCheck('');
+      isGreaterThan(newValue, buyerTokenBalance) || isLessThan(newValue, 0)
+        ? setDepositBalanceCheck('InputStylingError')
+        : setDepositBalanceCheck('');
     } else {
-      isGreaterThan(newValue, trancheTokenBalance) || isEqualTo(newValue, 0)
+      isGreaterThan(newValue, trancheTokenBalance) || isLessThan(newValue, 0)
         ? setWithdrawBalanceCheck('InputStylingError')
         : setWithdrawBalanceCheck('');
     }
   };
+
   return (
     <TableMoreRowWrapper>
       <TableMoreRowContent>
+        <TrancheModal approveContract={approveContract} closeModal={() => closeModal()} />
+
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
@@ -160,7 +188,7 @@ let TableMoreRow = ({
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.sliceAPY')}</h2>
-                <h2>TBD</h2>
+                <h2>{roundNumber(sliceAPY, 2)}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -232,7 +260,7 @@ let TableMoreRow = ({
               <h2>
                 {i18n.t('tranche.trancheData.balance')}: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
               </h2>
-              <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
+              <Form onSubmit={(e) => e.preventDefault()}>
                 <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground}>
                   <Field
                     component={InputField}
@@ -247,12 +275,15 @@ let TableMoreRow = ({
                   {!isEth && <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>}
                 </FormContent>
                 {isDepositApproved ? (
-                  <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
+                  <button
+                    onClick={() => openModal('trancheConfirm', true)}
+                    disabled={depositBalanceCheck === 'InputStylingError' || +formValues.depositAmount <= 0}
+                  >
                     <img src={BtnArrow} alt='arrow' />
                     {i18n.t('tranche.trancheData.deposit')}
                   </button>
                 ) : (
-                  <button onClick={() => openModal('trancheEnable')}>
+                  <button onClick={() => openModal('trancheEnable', true)}>
                     <img src={BtnArrow} alt='arrow' />
                     Enable
                   </button>
@@ -292,7 +323,7 @@ let TableMoreRow = ({
               <h2>
                 {i18n.t('tranche.trancheData.balance')}: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
               </h2>
-              <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
+              <Form onSubmit={(e) => e.preventDefault()}>
                 <FormContent
                   color={ModeThemes[theme].dropDownText}
                   background={ModeThemes[theme].inputBackground}
@@ -312,12 +343,15 @@ let TableMoreRow = ({
                   <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                 </FormContent>
                 {isWithdrawApproved ? (
-                  <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
+                  <button
+                    onClick={() => openModal('trancheConfirm', false)}
+                    disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount<= 0}
+                  >
                     <img src={BtnArrow} alt='arrow' />
                     {i18n.t('tranche.trancheData.withdraw')}
                   </button>
                 ) : (
-                  <button onClick={() => openModal('trancheEnable')}>
+                  <button onClick={() => openModal('trancheEnable', false)}>
                     <img src={BtnArrow} alt='arrow' />
                     Enable
                   </button>
@@ -376,7 +410,7 @@ let TableMoreRow = ({
                 <h2>
                   {i18n.t('tranche.trancheData.balance')}: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
                 </h2>
-                <Form onSubmit={(e) => buySellTrancheTokens(e, true)}>
+                <Form onSubmit={(e) => e.preventDefault()}>
                   <FormContent
                     color={ModeThemes[theme].dropDownText}
                     background={ModeThemes[theme].inputBackground}
@@ -396,12 +430,15 @@ let TableMoreRow = ({
                     {!isEth && <h2 onClick={isDepositApproved ? (e) => setMaxAmount(e, true) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>}
                   </FormContent>
                   {isDepositApproved ? (
-                    <button type='submit' disabled={depositBalanceCheck === 'InputStylingError'}>
+                    <button
+                      onClick={() => openModal('trancheConfirm', true)}
+                      disabled={depositBalanceCheck === 'InputStylingError' || +formValues.depositAmount <= 0}
+                    >
                       <img src={BtnArrow} alt='arrow' />
                       {i18n.t('tranche.trancheData.deposit')}
                     </button>
                   ) : (
-                    <button onClick={() => openModal('trancheEnable')}>
+                    <button onClick={() => openModal('trancheEnable', true)}>
                       <img src={BtnArrow} alt='arrow' />
                       Enable
                     </button>
@@ -457,7 +494,7 @@ let TableMoreRow = ({
                 <h2>
                   {i18n.t('tranche.trancheData.balance')}: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
                 </h2>
-                <Form onSubmit={(e) => buySellTrancheTokens(e, false)}>
+                <Form onSubmit={(e) => e.preventDefault()}>
                   <FormContent
                     color={ModeThemes[theme].dropDownText}
                     background={ModeThemes[theme].inputBackground}
@@ -477,12 +514,15 @@ let TableMoreRow = ({
                     <h2 onClick={isWithdrawApproved ? (e) => setMaxAmount(e, false) : undefined}>{i18n.t('tranche.trancheData.max')}</h2>
                   </FormContent>
                   {isWithdrawApproved ? (
-                    <button type='submit' disabled={withdrawBalanceCheck === 'InputStylingError'}>
+                    <button
+                      onClick={() => openModal('trancheConfirm', false)}
+                      disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount<= 0}
+                    >
                       <img src={BtnArrow} alt='arrow' />
                       {i18n.t('tranche.trancheData.withdraw')}
                     </button>
                   ) : (
-                    <button onClick={() => openModal('trancheEnable')}>
+                    <button onClick={() => openModal('trancheEnable', false)}>
                       <img src={BtnArrow} alt='arrow' />
                       Enable
                     </button>
@@ -499,8 +539,8 @@ let TableMoreRow = ({
 
 TableMoreRow = reduxForm({
   form: 'tranche',
-  initialValues: {},
-  destroyOnUnmount: false
+  initialValues: { depositAmount: '', withdrawAmount: '' },
+  // destroyOnUnmount: false
 })(TableMoreRow);
 
 const mapStateToProps = (state) => ({
@@ -509,4 +549,4 @@ const mapStateToProps = (state) => ({
   theme: state.theme
 });
 
-export default TableMoreRow = connect(mapStateToProps, { change, setTxModalOpen, setTxModalType })(TableMoreRow);
+export default TableMoreRow = connect(mapStateToProps, { change, setTxModalOpen, setTxModalType, setTxModalData })(TableMoreRow);

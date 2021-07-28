@@ -11,7 +11,6 @@ import { ModeThemes, PagesData, SLICEAddress } from 'config/constants';
 import Wallet from 'assets/images/svg/wallet.svg';
 import i18n from '../../locale/i18n';
 import { TrancheStake } from 'assets';
-import TrancheModal from 'app/components/Modals/TrancheModal';
 import { fromWei } from 'services';
 
 const ConnectWallet = ({
@@ -53,9 +52,6 @@ const ConnectWallet = ({
     setTxModalOpen(true);
     setTxModalType('trancheRewards');
   };
-  const closeModal = () => {
-    setTxModalOpen(false);
-  };
 
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem('selectedWallet');
@@ -95,7 +91,6 @@ const ConnectWallet = ({
         </WalletBtnText>
       </WalletBtn>
 
-      <TrancheModal closeModal={() => closeModal()} />
       {balance < 0 ? (
         <WalletBtn background='#4441CF' onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>

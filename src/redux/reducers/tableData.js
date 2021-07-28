@@ -21,6 +21,7 @@ import {
   USER_STAKING_LIST_IS_LOADING,
   SET_TX_MODAL_OPEN,
   SET_TX_MODAL_TYPE,
+  SET_TX_MODAL_DATA,
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
   SET_MIGRATE_STEP,
@@ -49,6 +50,7 @@ const initialState = {
   trancheMarket: 'compound',
   txModalIsOpen: false,
   txModalType: '',
+  txModalData: {},
   txModalStatus: 'notApproved',
   txLoading: false,
   currentStep: 'claim',
@@ -107,6 +109,8 @@ export default function (state = initialState, action) {
       return { ...state, txModalIsOpen: payload };
     case SET_TX_MODAL_TYPE:
       return { ...state, txModalType: payload };
+    case SET_TX_MODAL_DATA:
+      return { ...state, txModalData: payload };
     case SET_TX_MODAL:
       return { ...state, txModalStatus: payload };
     case SET_TX_MODAL_LOADING:
