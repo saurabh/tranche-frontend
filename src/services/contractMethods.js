@@ -658,9 +658,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
       });
     });
     batch.execute();
-
     const rewards = await Promise.all([...trARewardsPromise, ...trBRewardsPromise]);
-
     return rewards.reduce((acc, cur) => {
       acc += +(cur || 0);
       return acc;

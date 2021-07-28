@@ -33,7 +33,7 @@ const ConnectWallet = ({
     setUnclaimedSlice(fromWei(`${unclaimedSIRRewards || 0}`));
   }, [ unclaimedSIRRewards ]);
   useEffect(() => {
-    setTotalSlice(roundNumber(totalSliceBalance + unclaimedSlice));
+    setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
   }, [ totalSliceBalance, unclaimedSlice ]);
   
 
