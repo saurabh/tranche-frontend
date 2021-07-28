@@ -23,7 +23,7 @@ import {
 } from '../../Stake/Table/styles/TableComponents';
 import TrancheModal from '../../Modals/TrancheModal';
 import { BtnArrow } from 'assets';
-import { setTxModalOpen, setTxModalType, setTxModalData } from 'redux/actions/tableData';
+import { setTxModalOpen, setTxModalType, setTxModalData, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
 import { fromWei } from 'services/contractMethods';
 import { roundNumber, isGreaterThan, isEqualTo, isLessThan } from 'utils';
 import { ModeThemes, ETHorMaticCheck } from 'config';
@@ -65,7 +65,9 @@ let TableMoreRow = ({
   ethereum: { tokenBalance, trancheAllowance, txOngoing },
   setTxModalOpen,
   setTxModalType,
+  setTxModalStatus,
   setTxModalData,
+  setTxModalLoading,
   change,
   formValues,
   theme
@@ -86,13 +88,14 @@ let TableMoreRow = ({
     setTooltipToggle(val);
   };
 
-  const openModal = (type, isDeposit) => {
-    setTxModalType(type);
+  const openModal = (txType, isDeposit) => {
+    setTxModalType(txType);
     setTxModalOpen(true);
     setTxModalData({
       name: name.split('-')[1].trim(),
       contractAddress,
       trancheId,
+      trancheType: type,
       apyStatus,
       cryptoType,
       trancheToken,
@@ -111,6 +114,8 @@ let TableMoreRow = ({
 
   const closeModal = () => {
     setTxModalOpen(false);
+    setTxModalStatus('initialState');
+    setTxModalLoading(false);
   };
 
   useEffect(() => {
@@ -345,7 +350,7 @@ let TableMoreRow = ({
                 {isWithdrawApproved ? (
                   <button
                     onClick={() => openModal('trancheConfirm', false)}
-                    disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount<= 0}
+                    disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount <= 0}
                   >
                     <img src={BtnArrow} alt='arrow' />
                     {i18n.t('tranche.trancheData.withdraw')}
@@ -516,7 +521,7 @@ let TableMoreRow = ({
                   {isWithdrawApproved ? (
                     <button
                       onClick={() => openModal('trancheConfirm', false)}
-                      disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount<= 0}
+                      disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount <= 0}
                     >
                       <img src={BtnArrow} alt='arrow' />
                       {i18n.t('tranche.trancheData.withdraw')}
@@ -539,7 +544,7 @@ let TableMoreRow = ({
 
 TableMoreRow = reduxForm({
   form: 'tranche',
-  initialValues: { depositAmount: '', withdrawAmount: '' },
+  initialValues: { depositAmount: '', withdrawAmount: '' }
   // destroyOnUnmount: false
 })(TableMoreRow);
 
@@ -549,4 +554,11 @@ const mapStateToProps = (state) => ({
   theme: state.theme
 });
 
-export default TableMoreRow = connect(mapStateToProps, { change, setTxModalOpen, setTxModalType, setTxModalData })(TableMoreRow);
+export default TableMoreRow = connect(mapStateToProps, {
+  change,
+  setTxModalOpen,
+  setTxModalType,
+  setTxModalStatus,
+  setTxModalData,
+  setTxModalLoading
+})(TableMoreRow);

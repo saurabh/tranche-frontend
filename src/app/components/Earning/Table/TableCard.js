@@ -125,7 +125,7 @@ const TableCard = ({
     wallet: setWalletAndWeb3
   });
 
-  const approveContract = async (type, tokenAddress, isApproved, e) => {
+  const approveContract = async (isDeposit, tokenAddress, isApproved, e) => {
     if (txOngoing) e.stopPropogation();
     // const ready = await readyToTransact(wallet, onboard);
     // if (!ready) return;
@@ -161,7 +161,7 @@ const TableCard = ({
         })
         .on('confirmation', (count) => {
           if (count === 0) {
-            type ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
+            isDeposit ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
             toggleApproval(tokenAddress, contractAddress, !isApproved);
             setTxLoading(false);
             setTxModalLoading(false);

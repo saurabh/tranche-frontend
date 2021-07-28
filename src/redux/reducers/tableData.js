@@ -52,7 +52,7 @@ const initialState = {
   txModalIsOpen: false,
   txModalType: '',
   txModalData: {},
-  txModalStatus: 'notApproved',
+  txModalStatus: 'initialState',
   txLoading: false,
   currentStep: 'claim',
   migrateLoading: false,
