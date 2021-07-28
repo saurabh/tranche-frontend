@@ -83,7 +83,7 @@ export const roundNumber = (input, roundTo, type = false) => {
     let decimalPoints = 0;
     if (!roundTo && input % 10 !== 0) {
       const value = Math.floor(input);
-      decimalPoints = Math.max(5 - `${ value === 0 ? '' : value }`.length, 0);
+      decimalPoints = input % 1 === 0 ? 0 : Math.max(5 - `${ value === 0 ? '' : value }`.length, 0);
     } else decimalPoints = roundTo;
     if (type) {
       let result = safeMultiply(input, 10 ** decimalPoints);
