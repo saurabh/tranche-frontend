@@ -273,7 +273,7 @@ const TrancheModal = ({
           </TrancheModalContent>
 
           <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
-            <button onClick={ onClaimReward} disabled={txOngoing}>
+            <button onClick={ onClaimReward} disabled={txOngoing || unclaimedSlice <= 0}>
               Claim {roundNumber(unclaimedSlice)} SLICE 
             </button>
             <h2>
