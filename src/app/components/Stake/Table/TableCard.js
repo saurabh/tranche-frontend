@@ -14,9 +14,8 @@ import {
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, formatTime } from 'utils';
-import { statuses, etherScanUrl } from 'config';
+import { statuses, ModeThemes, LiquidityIcons } from 'config';
 import { LinkArrow, TrancheStake } from 'assets';
-import { ModeThemes, LiquidityIcons } from 'config/constants';
 // import { stakingApproveContract } from 'services/contractMethods';
 import StakingModal from '../../Modals/StakingModal';
 
@@ -59,7 +58,7 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, staked, reward, type, poolName, apy, subscription, duration, durationIndex, remainingCap },
   setTokenBalance,
-  ethereum: { address, wallet },
+  ethereum: { address, wallet, blockExplorerUrl },
   summaryData: { slice, lpList },
   theme,
   isDesktop,
@@ -149,7 +148,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -240,7 +239,12 @@ const TableCard = ({
               stakeCol
               sliceStaking={title === 'SLICE Staking Pools'}
             >
-              <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
+              <StakeBtnSlice
+                onClick={() => openModal('withdrawTokens')}
+                withdraw
+                disabled={true}
+                disabledBtnColor={ModeThemes[theme].disabledBtnColor}
+              >
                 disabled
               </StakeBtnSlice>
             </TableSeventhCol>
@@ -300,13 +304,22 @@ const TableCard = ({
                     <h2>{title === 'SLICE Staking Pools' && duration ? poolName && poolName : type && type}</h2>
                     {title === 'SLICE Staking Pools' && duration ? (
                       <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('staking')} disabled={remainingCap === 0} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
+                        <StakeBtnSlice
+                          onClick={() => openModal('staking')}
+                          disabled={remainingCap === 0}
+                          disabledBtnColor={ModeThemes[theme].disabledBtnColor}
+                        >
                           {remainingCap === 0 ? 'Capped' : 'Stake'}
                         </StakeBtnSlice>
                       </StakeBtns>
                     ) : title === 'SLICE Staking Pools' && !duration ? (
                       <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
+                        <StakeBtnSlice
+                          onClick={() => openModal('withdrawTokens')}
+                          withdraw
+                          disabled={true}
+                          disabledBtnColor={ModeThemes[theme].disabledBtnColor}
+                        >
                           disabled
                         </StakeBtnSlice>
                       </StakeBtns>
@@ -323,7 +336,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ERC20Setup } from 'utils/contractConstructor';
 import { toWei, fromWei } from 'services/contractMethods';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
-import { trancheCardToggle, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
+import { trancheCardToggle, setTxModalStatus, setTxModalLoading, setTxLink } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact, roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
@@ -80,6 +80,7 @@ const TableCard = ({
   ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
   toggleApproval,
   setTxLoading,
+  setTxLink,
   setTxModalStatus,
   setTxModalLoading,
   change,
@@ -135,6 +136,8 @@ const TableCard = ({
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
+              console.log(setTxLink(transaction.hash));
+              setTxLink(transaction.hash);
               return {
                 message: txMessage(transaction.hash)
               };
@@ -478,6 +481,7 @@ TableCard.propTypes = {
   trancheCardToggle: PropTypes.func.isRequired,
   toggleApproval: PropTypes.func.isRequired,
   setTxLoading: PropTypes.func.isRequired,
+  setTxLink: PropTypes.func.isRequired,
   setTxModalStatus: PropTypes.func.isRequired,
   setTxModalLoading: PropTypes.func.isRequired
 };
@@ -498,6 +502,7 @@ export default connect(mapStateToProps, {
   checkServer,
   trancheCardToggle,
   setTxLoading,
+  setTxLink,
   setTxModalStatus,
   setTxModalLoading,
   toggleApproval,

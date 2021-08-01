@@ -172,6 +172,7 @@ const TrancheModal = ({
     txModalType,
     txModalStatus,
     txLoading,
+    txLink,
     exchangeRates = {},
     txModalData: {
       name,
@@ -462,7 +463,7 @@ const TrancheModal = ({
             </TrancheModalFooter>
           ) : (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
-              <a href='/' target='_blank' rel='noreferrer noopener'>
+              <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
               </a>
             </TrancheModalFooter>
@@ -562,7 +563,7 @@ const TrancheModal = ({
               </h2>
               <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                 <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
-                <h2>Confirm Transaction</h2>
+                <h2>Transaction Pending</h2>
               </TrancheModalContentStatus>
             </TrancheModalContent>
           ) : txModalStatus === 'success' ? (
@@ -610,7 +611,7 @@ const TrancheModal = ({
             </TrancheModalFooter>
           ) : (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
-              <a href='/' target='_blank' rel='noreferrer noopener'>
+              <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
               </a>
             </TrancheModalFooter>

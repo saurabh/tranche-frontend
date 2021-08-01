@@ -7,6 +7,8 @@ import {
   maticNetworkId,
   maticAddress,
   serverUrl,
+  etherScanUrl,
+  maticBlockExplorerUrl,
   apiUri,
   ERC20Tokens,
   JCompoundAddress,
@@ -76,7 +78,9 @@ export const setNetwork = (network) => async (dispatch) => {
   }
   if (network === maticNetworkId) {
     store.dispatch(trancheMarketsToggle('aavePolygon'));
+    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
+  network !== maticNetworkId && store.dispatch(setBlockExplorerUrl(etherScanUrl));
 };
 
 export const setBalance = (balance) => (dispatch) => {
@@ -442,5 +446,5 @@ export const checkSIRRewards = () => async (dispatch) => {
   dispatch({
     type: SIR_REWARDS,
     payload: rewards
-  })
-}
+  });
+};

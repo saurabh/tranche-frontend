@@ -24,6 +24,7 @@ import {
   SET_TX_MODAL_DATA,
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
+  SET_TX_LINK,
   SET_MIGRATE_STEP,
   SET_MIGRATE_LOADING,
   SET_MIGRATED,
@@ -54,6 +55,7 @@ const initialState = {
   txModalData: {},
   txModalStatus: 'initialState',
   txLoading: false,
+  txLink: '',
   currentStep: 'claim',
   migrateLoading: false,
   userStakingList: {
@@ -117,6 +119,8 @@ export default function (state = initialState, action) {
       return { ...state, txModalStatus: payload };
     case SET_TX_MODAL_LOADING:
       return { ...state, txLoading: payload };
+    case SET_TX_LINK:
+      return { ...state, txLink: payload };
     case SET_MIGRATE_STEP:
       return { ...state, currentStep: payload };
     case SET_MIGRATE_LOADING:

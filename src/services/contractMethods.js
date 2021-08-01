@@ -26,7 +26,7 @@ import {
   RewardDistributionAddress
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
-import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus } from 'redux/actions/tableData';
+import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
@@ -204,6 +204,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
+              store.dispatch(setTxLink(transaction.hash));
               return {
                 message: txMessage(transaction.hash)
               };
@@ -242,6 +243,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
+              store.dispatch(setTxLink(transaction.hash));
               return {
                 message: txMessage(transaction.hash)
               };
@@ -280,7 +282,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
 
 export const sellTrancheTokens = async (contractAddress, trancheId, trancheType) => {
   const state = store.getState();
-  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  const { web3, address, notify, network } = state.ethereum;
   try {
     store.dispatch(setTxModalLoading(true));
     store.dispatch(setTxModalStatus('confirm'));
@@ -297,6 +299,9 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
+              console.log(transaction.hash)
+              console.log(setTxLink(transaction.hash))
+              store.dispatch(setTxLink(transaction.hash));
               return {
                 message: txMessage(transaction.hash)
               };
@@ -331,6 +336,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
+              store.dispatch(setTxLink(transaction.hash));
               return {
                 message: txMessage(transaction.hash)
               };
