@@ -320,7 +320,6 @@ export const setTxModalLoading = (bool) => (dispatch) => {
 };
 
 export const setTxLink = (string) => (dispatch) => {
-  console.log(string)
   dispatch({
     type: SET_TX_LINK,
     payload: txLink(string)

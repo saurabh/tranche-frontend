@@ -136,7 +136,6 @@ const TableCard = ({
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
-              console.log(setTxLink(transaction.hash));
               setTxLink(transaction.hash);
               return {
                 message: txMessage(transaction.hash)

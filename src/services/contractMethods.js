@@ -299,8 +299,6 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
-              console.log(transaction.hash)
-              console.log(setTxLink(transaction.hash))
               store.dispatch(setTxLink(transaction.hash));
               return {
                 message: txMessage(transaction.hash)
