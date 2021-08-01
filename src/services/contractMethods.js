@@ -202,7 +202,7 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
-            setTxLink(transaction.hash);
+            store.dispatch(setTxLink(transaction.hash));
             return {
               message: txMessage(transaction.hash)
             };
