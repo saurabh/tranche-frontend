@@ -10,7 +10,7 @@ import {
   RewardDistributionSetup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
-import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
+import { isGreaterThan, isEqualTo, searchTokenDecimals } from 'utils/helperFunctions';
 import { analyticsTrack } from 'analytics/googleAnalytics';
 import { web3 } from 'utils/getWeb3';
 import {
@@ -28,7 +28,6 @@ import {
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus } from 'redux/actions/tableData';
 
-const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
 export const toBN = web3.utils.toBN;
@@ -193,7 +192,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     store.dispatch(setTxModalStatus('confirm'));
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    depositAmount = searchTokenDecimals(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods

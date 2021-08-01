@@ -1,7 +1,9 @@
 import ReactHtmlParser from 'react-html-parser';
 import BigNumber from 'bignumber.js';
 import moment  from 'moment';
-import { gweiVariants } from 'config/constants';
+import { gweiVariants, tokenDecimals } from 'config/constants';
+
+export const searchTokenDecimals = (key) => tokenDecimals.find((i) => i.key === key);
 
 export const readyToTransact = async (wallet, onboard) => {
   if (!wallet) {

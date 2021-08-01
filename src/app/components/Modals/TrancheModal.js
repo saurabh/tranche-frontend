@@ -18,7 +18,7 @@ import {
   TrancheStake
 } from 'assets';
 import { SLICEAddress, ModeThemes } from 'config/constants';
-import { roundNumber, safeMultiply } from 'utils';
+import { roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
 import { claimRewardsAllMarkets, fromWei, buyTrancheTokens, sellTrancheTokens } from 'services';
 import useAnalytics from 'services/analytics';
 
@@ -540,7 +540,7 @@ const TrancheModal = ({
                 <h2>Your Wallet Balance</h2>
                 <h2>
                   {isDeposit
-                    ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress]))} ${cryptoType}`
+                    ? searchTokenDecimals(cryptoType) ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress], 'Mwei'))} ${cryptoType}` : `${roundNumber(fromWei(tokenBalance[buyerCoinAddress]))} ${cryptoType}`
                     : `${roundNumber(fromWei(tokenBalance[trancheTokenAddress]))} ${trancheToken}`}
                 </h2>
               </TrancheModalContentRow>

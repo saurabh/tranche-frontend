@@ -8,8 +8,8 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, s
 import { trancheCardToggle, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
-import { readyToTransact, roundNumber, safeMultiply } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ModeThemes, networkId } from 'config';
+import { readyToTransact, roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
+import { statuses, ApproveBigNumber, txMessage, trancheIcons, ModeThemes, networkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -102,11 +102,11 @@ const TableCard = ({
       : apyStatus === 'decrease'
       ? Down
       : '';
-  const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
+
   let buyerTokenBalance =
     cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
-      : searchArr(cryptoType)
+      : searchTokenDecimals(cryptoType)
       ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
