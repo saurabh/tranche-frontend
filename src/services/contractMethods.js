@@ -189,16 +189,16 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
   const { address, network, web3, txOngoing, notify } = state.ethereum;
   if (txOngoing) e.stopPropogation();
   try {
-    setTxModalLoading(true);
-    setTxModalStatus('confirm');
+    store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxModalStatus('confirm'));
     const amount = isApproved ? 0 : toWei(ApproveBigNumber);
     const token = ERC20Setup(web3, tokenAddress);
     await token.methods
       .approve(contractAddress, amount)
       .send({ from: address })
       .on('transactionHash', (hash) => {
-        setTxLoading(true);
-        setTxModalStatus('pending');
+        store.dispatch(setTxLoading(true));
+        store.dispatch(setTxModalStatus('pending'));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
@@ -208,29 +208,29 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
             };
           });
           emitter.on('txCancel', () => {
-            setTxLoading(false);
-            setTxModalLoading(false);
-            setTxModalStatus('failed');
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('failed'));
           });
           emitter.on('txFailed', () => {
-            setTxLoading(false);
-            setTxModalLoading(false);
-            setTxModalStatus('failed');
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('failed'));
           });
         }
       })
       .on('confirmation', (count) => {
         if (count === 0) {
           // isDeposit ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-          toggleApproval(tokenAddress, contractAddress, !isApproved);
-          setTxLoading(false);
-          setTxModalLoading(false);
-          setTxModalStatus('success');
+          store.dispatch(toggleApproval(tokenAddress, contractAddress, !isApproved));
+          store.dispatch(setTxLoading(false));
+          store.dispatch(setTxModalLoading(false));
+          store.dispatch(setTxModalStatus('success'));
         }
       });
   } catch (error) {
-    setTxModalLoading(false);
-    error.code === 4001 && setTxModalStatus('failed');
+    store.dispatch(setTxModalLoading(false));
+    error.code === 4001 && store.dispatch(setTxModalStatus('failed'));
     return error;
   }
 };
