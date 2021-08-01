@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import PropTypes from 'prop-types';
-import { ERC20Setup } from 'utils/contractConstructor';
-import { toWei, fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, toggleApproval, setTxLoading, setTokenBalances } from 'redux/actions/ethereum';
-import { trancheCardToggle, setTxModalStatus, setTxModalLoading, setTxLink } from 'redux/actions/tableData';
+import { fromWei } from 'services/contractMethods';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances } from 'redux/actions/ethereum';
+import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
-import { readyToTransact, roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
-import { statuses, ApproveBigNumber, txMessage, trancheIcons, ModeThemes, networkId } from 'config';
+import { roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
+import { statuses, trancheIcons, ModeThemes } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -77,20 +76,13 @@ const TableCard = ({
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
-  ethereum: { tokenBalance, balance, address, wallet, web3, network, notify, blockExplorerUrl, txOngoing },
-  toggleApproval,
-  setTxLoading,
-  setTxLink,
-  setTxModalStatus,
-  setTxModalLoading,
+  ethereum: { tokenBalance, balance, address, blockExplorerUrl },
   change,
   theme,
   isDesktop
   // checkServer
 }) => {
   // const [isLoading, setIsLoading] = useState(false);
-  const [isDepositApproved, setDepositApproved] = useState(false);
-  const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   // const dispatch = useNotification();
 
   const apyImage =
@@ -117,69 +109,6 @@ const TableCard = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
-  const approveContract = async (isDeposit, tokenAddress, isApproved, e) => {
-    if (txOngoing) e.stopPropogation();
-    // const ready = await readyToTransact(wallet, onboard);
-    // if (!ready) return;
-    try {
-      setTxModalLoading(true);
-      setTxModalStatus('confirm');
-      const amount = isApproved ? 0 : toWei(ApproveBigNumber);
-      const token = ERC20Setup(web3, tokenAddress);
-      await token.methods
-        .approve(contractAddress, amount)
-        .send({ from: address })
-        .on('transactionHash', (hash) => {
-          setTxLoading(true);
-          setTxModalStatus('pending');
-          if (network === networkId) {
-            const { emitter } = notify.hash(hash);
-            emitter.on('txPool', (transaction) => {
-              setTxLink(transaction.hash);
-              return {
-                message: txMessage(transaction.hash)
-              };
-            });
-            emitter.on('txCancel', () => {
-              setTxLoading(false);
-              setTxModalLoading(false);
-              setTxModalStatus('failed');
-            });
-            emitter.on('txFailed', () => {
-              setTxLoading(false);
-              setTxModalLoading(false);
-              setTxModalStatus('failed');
-            });
-          }
-        })
-        .on('confirmation', (count) => {
-          if (count === 0) {
-            isDeposit ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
-            toggleApproval(tokenAddress, contractAddress, !isApproved);
-            setTxLoading(false);
-            setTxModalLoading(false);
-            setTxModalStatus('success');
-          }
-        });
-    } catch (error) {
-      setTxModalLoading(false);
-      error.code === 4001 && setTxModalStatus('failed');
-      return error;
-    }
-  };
-
-  // const buySellTrancheTokens = async (e, buy) => {
-  //   try {
-  //     e.preventDefault();
-  //     const ready = await readyToTransact(wallet, onboard);
-  //     if (!ready) return;
-  //     buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
-  //     buy ? Tracker('Deposit', 'User address: ' + address) : Tracker('Withdraw', 'User address: ' + address);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
@@ -351,11 +280,6 @@ const TableCard = ({
               trancheRate={trancheRate}
               buyerCoinAddress={buyerCoinAddress}
               trancheTokenAddress={trancheTokenAddress}
-              isDepositApproved={isDepositApproved}
-              setDepositApproved={setDepositApproved}
-              isWithdrawApproved={isWithdrawApproved}
-              setWithdrawApproved={setWithdrawApproved}
-              approveContract={approveContract}
             />
           </TableCardMoreContent>
         </TableCardMore>
@@ -455,11 +379,6 @@ const TableCard = ({
               trancheRate={trancheRate}
               buyerCoinAddress={buyerCoinAddress}
               trancheTokenAddress={trancheTokenAddress}
-              isDepositApproved={isDepositApproved}
-              setDepositApproved={setDepositApproved}
-              isWithdrawApproved={isWithdrawApproved}
-              setWithdrawApproved={setWithdrawApproved}
-              approveContract={approveContract}
             />
           </TableCardMoreContent>
         </TableCardMore>
@@ -478,11 +397,6 @@ TableCard.propTypes = {
   setWalletAndWeb3: PropTypes.func.isRequired,
   setTokenBalances: PropTypes.func.isRequired,
   trancheCardToggle: PropTypes.func.isRequired,
-  toggleApproval: PropTypes.func.isRequired,
-  setTxLoading: PropTypes.func.isRequired,
-  setTxLink: PropTypes.func.isRequired,
-  setTxModalStatus: PropTypes.func.isRequired,
-  setTxModalLoading: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -500,10 +414,5 @@ export default connect(mapStateToProps, {
   setTokenBalances,
   checkServer,
   trancheCardToggle,
-  setTxLoading,
-  setTxLink,
-  setTxModalStatus,
-  setTxModalLoading,
-  toggleApproval,
   change
 })(TableCard);

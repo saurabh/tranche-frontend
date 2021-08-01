@@ -184,6 +184,57 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
   }
 };
 
+export const approveContract = async (isDeposit, tokenAddress, contractAddress, isApproved, e) => {
+  const state = store.getState();
+  const { address, network, web3, txOngoing, notify } = state.ethereum;
+  if (txOngoing) e.stopPropogation();
+  try {
+    setTxModalLoading(true);
+    setTxModalStatus('confirm');
+    const amount = isApproved ? 0 : toWei(ApproveBigNumber);
+    const token = ERC20Setup(web3, tokenAddress);
+    await token.methods
+      .approve(contractAddress, amount)
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        setTxLoading(true);
+        setTxModalStatus('pending');
+        if (network === networkId) {
+          const { emitter } = notify.hash(hash);
+          emitter.on('txPool', (transaction) => {
+            setTxLink(transaction.hash);
+            return {
+              message: txMessage(transaction.hash)
+            };
+          });
+          emitter.on('txCancel', () => {
+            setTxLoading(false);
+            setTxModalLoading(false);
+            setTxModalStatus('failed');
+          });
+          emitter.on('txFailed', () => {
+            setTxLoading(false);
+            setTxModalLoading(false);
+            setTxModalStatus('failed');
+          });
+        }
+      })
+      .on('confirmation', (count) => {
+        if (count === 0) {
+          // isDeposit ? setDepositApproved(!isApproved) : setWithdrawApproved(!isApproved);
+          toggleApproval(tokenAddress, contractAddress, !isApproved);
+          setTxLoading(false);
+          setTxModalLoading(false);
+          setTxModalStatus('success');
+        }
+      });
+  } catch (error) {
+    setTxModalLoading(false);
+    error.code === 4001 && setTxModalStatus('failed');
+    return error;
+  }
+};
+
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   const state = store.getState();
   const { web3, address, notify, network } = state.ethereum;

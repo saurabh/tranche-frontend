@@ -19,7 +19,7 @@ import {
 } from 'assets';
 import { SLICEAddress, ModeThemes } from 'config/constants';
 import { roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
-import { claimRewardsAllMarkets, fromWei, buyTrancheTokens, sellTrancheTokens } from 'services';
+import { claimRewardsAllMarkets, fromWei, approveContract, buyTrancheTokens, sellTrancheTokens } from 'services';
 import useAnalytics from 'services/analytics';
 
 // import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -199,7 +199,6 @@ const TrancheModal = ({
   type,
   // Functions
   trancheMarketsToggle,
-  approveContract,
   closeModal
   // API Values,
 }) => {
@@ -453,8 +452,8 @@ const TrancheModal = ({
                 <button
                   onClick={(e) =>
                     isDeposit
-                      ? approveContract(isDeposit, buyerCoinAddress, isDepositApproved, e)
-                      : approveContract(isDeposit, trancheTokenAddress, isWithdrawApproved, e)
+                      ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
+                      : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
                   }
                 >
                   <img src={CheckBtnWhite} alt='img' /> Enable

@@ -2,7 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { setTxModalOpen, setTxModalType } from 'redux/actions/tableData';
+import TrancheModal from '../../Modals/TrancheModal';
+import { setTxModalOpen, setTxModalType, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, roundNumber } from 'utils/helperFunctions';
@@ -21,21 +22,22 @@ const ConnectWallet = ({
   theme,
   ethereum: { address, balance, tokenBalance, unclaimedSIRRewards },
   setTxModalOpen,
+  setTxModalStatus,
+  setTxModalLoading,
   setTxModalType
 }) => {
-  const [ totalSliceBalance, setTotalSliceBalance ] = useState(0);
-  const [ unclaimedSlice, setUnclaimedSlice ] = useState(0);
-  const [ totalSlice, setTotalSlice ] = useState(0);
+  const [totalSliceBalance, setTotalSliceBalance] = useState(0);
+  const [unclaimedSlice, setUnclaimedSlice] = useState(0);
+  const [totalSlice, setTotalSlice] = useState(0);
   useEffect(() => {
-    setTotalSliceBalance(fromWei(tokenBalance[ SLICEAddress ]));
-  }, [ tokenBalance ]);
+    setTotalSliceBalance(fromWei(tokenBalance[SLICEAddress]));
+  }, [tokenBalance]);
   useEffect(() => {
     setUnclaimedSlice(fromWei(`${unclaimedSIRRewards || 0}`));
-  }, [ unclaimedSIRRewards ]);
+  }, [unclaimedSIRRewards]);
   useEffect(() => {
     setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
-  }, [ totalSliceBalance, unclaimedSlice ]);
-  
+  }, [totalSliceBalance, unclaimedSlice]);
 
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
@@ -73,8 +75,16 @@ const ConnectWallet = ({
     await onboard.walletCheck();
   };
 
+  const closeModal = () => {
+    setTxModalOpen(false);
+    setTxModalStatus('initialState');
+    setTxModalLoading(false);
+  };
+
   return (
     <NavBarRightWrapper>
+      <TrancheModal closeModal={() => closeModal()} />
+
       <WalletBtn
         disabled={!address}
         background={ModeThemes[theme].ModalTrancheNavbarBtn}
@@ -87,7 +97,7 @@ const ConnectWallet = ({
           <img src={TrancheStake} alt='tranche' />
         </WalletBtnIcon>
         <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
-          <h2>{address ? totalSlice: '--'}</h2>
+          <h2>{address ? totalSlice : '--'}</h2>
         </WalletBtnText>
       </WalletBtn>
 
@@ -121,6 +131,8 @@ ConnectWallet.propTypes = {
   setWalletAndWeb3: PropTypes.func.isRequired,
   setTxModalOpen: PropTypes.func.isRequired,
   setTxModalType: PropTypes.func.isRequired,
+  setTxModalStatus: PropTypes.func.isRequired,
+  setTxModalLoading: PropTypes.func.isRequired,
   ethereum: PropTypes.object.isRequired
 };
 
@@ -135,5 +147,7 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTxModalOpen,
-  setTxModalType
+  setTxModalType,
+  setTxModalStatus,
+  setTxModalLoading
 })(ConnectWallet);

@@ -21,7 +21,6 @@ import {
   TableMoreLeftBottomSection,
   TooltipWrapper
 } from '../../Stake/Table/styles/TableComponents';
-import TrancheModal from '../../Modals/TrancheModal';
 import { BtnArrow } from 'assets';
 import { setTxModalOpen, setTxModalType, setTxModalData, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
 import { fromWei } from 'services/contractMethods';
@@ -56,11 +55,10 @@ let TableMoreRow = ({
   trancheRate,
   buyerCoinAddress,
   trancheTokenAddress,
-  isDepositApproved,
-  isWithdrawApproved,
-  setDepositApproved,
-  setWithdrawApproved,
-  approveContract,
+  // isDepositApproved,
+  // isWithdrawApproved,
+  // setDepositApproved,
+  // setWithdrawApproved,
   // redux
   ethereum: { tokenBalance, trancheAllowance, txOngoing },
   setTxModalOpen,
@@ -73,6 +71,8 @@ let TableMoreRow = ({
   theme
 }) => {
   const [isEth, setIsEth] = useState(false);
+  const [isDepositApproved, setDepositApproved] = useState(false);
+  const [isWithdrawApproved, setWithdrawApproved] = useState(false);
   const [depositBalanceCheck, setDepositBalanceCheck] = useState('');
   const [withdrawBalanceCheck, setWithdrawBalanceCheck] = useState('');
   const [formType, setFormType] = useState('deposit');
@@ -170,8 +170,6 @@ let TableMoreRow = ({
   return (
     <TableMoreRowWrapper>
       <TableMoreRowContent>
-        <TrancheModal approveContract={approveContract} closeModal={() => closeModal()} />
-
         <TableMoreRowContentLeft>
           <TableMoreLeftTopSection color={ModeThemes[theme].dropDownBorder}>
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
