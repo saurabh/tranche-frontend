@@ -25,7 +25,7 @@ import {
   networkId,
   RewardDistributionAddress
 } from 'config';
-import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
+import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval, checkSIRRewards } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
@@ -272,11 +272,12 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             });
           }
         })
-        .on('confirmation', (count) => {
+        .on('confirmation', async(count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
+            store.dispatch(await checkSIRRewards());
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
               trancheType: trancheType,
@@ -311,11 +312,12 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             });
           }
         })
-        .on('confirmation', (count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
+            store.dispatch(await checkSIRRewards());
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
               trancheType: trancheType,

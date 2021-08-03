@@ -39,6 +39,8 @@ import {
   LoadingButtonCircle,
   TrancheModalContentStatus
 } from './styles/ModalsComponents';
+import { checkSIRRewards } from 'redux/actions/ethereum';
+
 const TrancheMarketStyles = {
   overlay: {
     display: 'flex',
@@ -199,6 +201,7 @@ const TrancheModal = ({
   type,
   // Functions
   trancheMarketsToggle,
+  checkSIRRewards,
   closeModal
   // API Values,
 }) => {
@@ -276,6 +279,7 @@ const TrancheModal = ({
   const TrancheRewards = () => {
     const onClaimReward = async () => {
       await claimRewardsAllMarkets();
+      await checkSIRRewards();
       closeModal();
     };
     return (
@@ -642,4 +646,4 @@ const mapStateToProps = (state) => ({
   data: state.data
 });
 
-export default connect(mapStateToProps, { trancheMarketsToggle })(TrancheModal);
+export default connect(mapStateToProps, { trancheMarketsToggle, checkSIRRewards })(TrancheModal);
