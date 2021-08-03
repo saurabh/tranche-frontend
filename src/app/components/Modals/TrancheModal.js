@@ -18,8 +18,8 @@ import {
   TrancheStake
 } from 'assets';
 import { SLICEAddress, ModeThemes } from 'config/constants';
-import { roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
-import { claimRewardsAllMarkets, fromWei, approveContract, buyTrancheTokens, sellTrancheTokens } from 'services';
+import { roundNumber, safeMultiply, searchTokenDecimals, toBigNumber } from 'utils';
+import { claimRewardsAllMarkets, fromWei, approveContract, buyTrancheTokens, sellTrancheTokens, toBN } from 'services';
 import useAnalytics from 'services/analytics';
 
 // import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -211,12 +211,14 @@ const TrancheModal = ({
   const [totalSliceInUSD, setTotalSliceInUSD] = useState(0);
   const Tracker = useAnalytics('ButtonClicks');
 
+  new 
+
   useEffect(() => {
     setTotalSliceBalance(fromWei(tokenBalance[SLICEAddress]));
   }, [tokenBalance]);
   useEffect(() => {
-    setUnclaimedSlice(fromWei(`${unclaimedSIRRewards || 0}`));
-  }, [unclaimedSIRRewards]);
+    setUnclaimedSlice(fromWei(toBN(toBigNumber(+unclaimedSIRRewards || 0))));
+  }, [ unclaimedSIRRewards ]);
 
   useEffect(() => {
     setTotalSliceInUSD(roundNumber(safeMultiply(+totalSliceBalance + +unclaimedSlice, exchangeRates.SLICE)));

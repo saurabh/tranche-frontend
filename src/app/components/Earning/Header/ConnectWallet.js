@@ -6,13 +6,13 @@ import TrancheModal from '../../Modals/TrancheModal';
 import { setTxModalOpen, setTxModalType, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, roundNumber } from 'utils/helperFunctions';
+import { addrShortener, roundNumber, toBigNumber } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper } from './styles/HeaderComponents';
 import { ModeThemes, PagesData, SLICEAddress } from 'config/constants';
 import Wallet from 'assets/images/svg/wallet.svg';
 import i18n from '../../locale/i18n';
 import { TrancheStake } from 'assets';
-import { fromWei } from 'services';
+import { fromWei, toBN } from 'services';
 
 const ConnectWallet = ({
   setAddress,
@@ -33,8 +33,8 @@ const ConnectWallet = ({
     setTotalSliceBalance(fromWei(tokenBalance[SLICEAddress]));
   }, [tokenBalance]);
   useEffect(() => {
-    setUnclaimedSlice(fromWei(`${unclaimedSIRRewards || 0}`));
-  }, [unclaimedSIRRewards]);
+    setUnclaimedSlice(fromWei(toBN(toBigNumber(+unclaimedSIRRewards || 0))));
+  }, [ unclaimedSIRRewards ]);
   useEffect(() => {
     setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
   }, [totalSliceBalance, unclaimedSlice]);

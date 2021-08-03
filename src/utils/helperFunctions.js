@@ -227,3 +227,7 @@ export const isEqualTo = function (a, b) {
   let y = new BigNumber(b);
   return x.isEqualTo(y);
 };
+
+export const toBigNumber = (a) => {
+  return new BigNumber(a);
+}
