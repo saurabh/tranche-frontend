@@ -367,7 +367,7 @@ const TrancheModal = ({
               >
                 <h2>{name}</h2>
                 <div>
-                  <h2>{dividendType}</h2>
+                  <h2>{trancheToken}</h2>
                   <h2>{apyStatus === 'fixed' ? apyStatus : 'Variable'}</h2>
                 </div>
               </TrancheModalContentHeaderText>
@@ -380,19 +380,19 @@ const TrancheModal = ({
               </h2>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>{dividendType} APY</h2>
-                <h2>{roundNumber(protocolAPY, 2)}</h2>
+                <h2>{roundNumber(protocolAPY, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>Tranche APY</h2>
-                <h2>{roundNumber(apy, 2)}</h2>
+                <h2>{roundNumber(apy, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>SLICE APY</h2>
-                <h2>{roundNumber(sliceAPY, 2)}</h2>
+                <h2>{roundNumber(sliceAPY, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>Net APY</h2>
-                <h2>{roundNumber(netAPY, 2)}</h2>
+                <h2>{roundNumber(netAPY, 2)}%</h2>
               </TrancheModalContentRow>
             </TrancheModalContent>
           ) : txModalStatus === 'confirm' ? (
@@ -425,14 +425,14 @@ const TrancheModal = ({
                 <h2>Transaction Successful</h2>
               </TrancheModalContentStatus>
             </TrancheModalContent>
-          ) : txModalStatus === 'failed' ? (
+          ) : txModalStatus === 'failed' || txModalStatus === 'rejected' ? (
             <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <h2>
                 To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
               </h2>
               <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                 <img src={TrancheRejected} alt='img' />
-                <h2>Transaction Failed</h2>
+                {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : <h2>Transaction Rejected</h2>}
               </TrancheModalContentStatus>
             </TrancheModalContent>
           ) : (
@@ -505,7 +505,7 @@ const TrancheModal = ({
               >
                 <h2>{name}</h2>
                 <div>
-                  <h2>{dividendType}</h2>
+                  <h2>{trancheToken}</h2>
                   <h2>{apyStatus === 'fixed' ? apyStatus : 'Variable'}</h2>
                 </div>
               </TrancheModalContentHeaderText>
@@ -518,29 +518,35 @@ const TrancheModal = ({
               </h2>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>{dividendType} APY</h2>
-                <h2>{roundNumber(protocolAPY, 2)}</h2>
+                <h2>{roundNumber(protocolAPY, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>Tranche APY</h2>
-                <h2>{roundNumber(apy, 2)}</h2>
+                <h2>{roundNumber(apy, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>SLICE APY</h2>
-                <h2>{roundNumber(sliceAPY, 2)}</h2>
+                <h2>{roundNumber(sliceAPY, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>Net APY</h2>
-                <h2>{roundNumber(netAPY, 2)}</h2>
+                <h2>{roundNumber(netAPY, 2)}%</h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>{isDeposit ? 'Depositing' : 'Withdrawing'}</h2>
-                <h2>{isDeposit ? roundNumber(formValues.depositAmount) : roundNumber(formValues.withdrawAmount)}</h2>
+                <h2>
+                  {isDeposit
+                    ? `${roundNumber(formValues.depositAmount)} ${cryptoType}`
+                    : `${roundNumber(formValues.withdrawAmount)}  ${trancheToken}`}
+                </h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>Your Wallet Balance</h2>
                 <h2>
                   {isDeposit
-                    ? searchTokenDecimals(cryptoType) ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress], 'Mwei'))} ${cryptoType}` : `${roundNumber(fromWei(tokenBalance[buyerCoinAddress]))} ${cryptoType}`
+                    ? searchTokenDecimals(cryptoType)
+                      ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress], 'Mwei'))} ${cryptoType}`
+                      : `${roundNumber(fromWei(tokenBalance[buyerCoinAddress]))} ${cryptoType}`
                     : `${roundNumber(fromWei(tokenBalance[trancheTokenAddress]))} ${trancheToken}`}
                 </h2>
               </TrancheModalContentRow>
@@ -575,14 +581,14 @@ const TrancheModal = ({
                 <h2>Transaction Successful</h2>
               </TrancheModalContentStatus>
             </TrancheModalContent>
-          ) : txModalStatus === 'failed' ? (
+          ) : txModalStatus === 'failed' || txModalStatus === 'rejected' ? (
             <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <h2>
                 {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
               </h2>
               <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                 <img src={TrancheRejected} alt='img' />
-                <h2>Transaction Failed</h2>
+                {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : <h2>Transaction Rejected</h2>}
               </TrancheModalContentStatus>
             </TrancheModalContent>
           ) : (

@@ -230,7 +230,7 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
       });
   } catch (error) {
     store.dispatch(setTxModalLoading(false));
-    error.code === 4001 && store.dispatch(setTxModalStatus('failed'));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
     return error;
   }
 };
@@ -326,7 +326,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     }
   } catch (error) {
     store.dispatch(setTxModalLoading(false));
-    error.code === 4001 && store.dispatch(setTxModalStatus('failed'));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
     console.error(error);
   }
 };
@@ -413,7 +413,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
     }
   } catch (error) {
     store.dispatch(setTxModalLoading(false));
-    error.code === 4001 && store.dispatch(setTxModalStatus('failed'));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
     console.error(error);
   }
 };
