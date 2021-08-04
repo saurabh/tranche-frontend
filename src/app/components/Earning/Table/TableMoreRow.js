@@ -112,11 +112,11 @@ let TableMoreRow = ({
     });
   };
 
-  const closeModal = () => {
-    setTxModalOpen(false);
-    setTxModalStatus('initialState');
-    setTxModalLoading(false);
-  };
+  // const closeModal = () => {
+  //   setTxModalOpen(false);
+  //   setTxModalStatus('initialState');
+  //   setTxModalLoading(false);
+  // };
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);

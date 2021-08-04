@@ -2,8 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import TrancheModal from '../../Modals/TrancheModal';
-import { setTxModalOpen, setTxModalType, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
+import { setTxModalOpen, setTxModalType } from 'redux/actions/tableData';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, roundNumber, toBigNumber } from 'utils/helperFunctions';
@@ -22,8 +21,6 @@ const ConnectWallet = ({
   theme,
   ethereum: { address, balance, tokenBalance, unclaimedSIRRewards },
   setTxModalOpen,
-  setTxModalStatus,
-  setTxModalLoading,
   setTxModalType
 }) => {
   const [totalSliceBalance, setTotalSliceBalance] = useState(0);
@@ -75,16 +72,8 @@ const ConnectWallet = ({
     await onboard.walletCheck();
   };
 
-  const closeModal = () => {
-    setTxModalOpen(false);
-    setTxModalStatus('initialState');
-    setTxModalLoading(false);
-  };
-
   return (
     <NavBarRightWrapper>
-      <TrancheModal closeModal={() => closeModal()} />
-
       <WalletBtn
         disabled={!address}
         background={ModeThemes[theme].ModalTrancheNavbarBtn}
@@ -131,8 +120,6 @@ ConnectWallet.propTypes = {
   setWalletAndWeb3: PropTypes.func.isRequired,
   setTxModalOpen: PropTypes.func.isRequired,
   setTxModalType: PropTypes.func.isRequired,
-  setTxModalStatus: PropTypes.func.isRequired,
-  setTxModalLoading: PropTypes.func.isRequired,
   ethereum: PropTypes.object.isRequired
 };
 
@@ -147,7 +134,5 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTxModalOpen,
-  setTxModalType,
-  setTxModalStatus,
-  setTxModalLoading
+  setTxModalType
 })(ConnectWallet);

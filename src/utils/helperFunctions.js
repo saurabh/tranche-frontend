@@ -3,6 +3,10 @@ import BigNumber from 'bignumber.js';
 import moment  from 'moment';
 import { gweiVariants, tokenDecimals } from 'config/constants';
 
+export const timeout = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 export const searchTokenDecimals = (key) => tokenDecimals.find((i) => i.key === key);
 
 export const readyToTransact = async (wallet, onboard) => {

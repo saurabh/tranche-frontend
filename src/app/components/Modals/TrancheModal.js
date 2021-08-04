@@ -39,7 +39,6 @@ import {
   LoadingButtonCircle,
   TrancheModalContentStatus
 } from './styles/ModalsComponents';
-import { checkSIRRewards } from 'redux/actions/ethereum';
 
 const TrancheMarketStyles = {
   overlay: {
@@ -201,7 +200,6 @@ const TrancheModal = ({
   type,
   // Functions
   trancheMarketsToggle,
-  checkSIRRewards,
   closeModal
   // API Values,
 }) => {
@@ -210,8 +208,6 @@ const TrancheModal = ({
   const [totalSlice, setTotalSlice] = useState(0);
   const [totalSliceInUSD, setTotalSliceInUSD] = useState(0);
   const Tracker = useAnalytics('ButtonClicks');
-
-  new 
 
   useEffect(() => {
     setTotalSliceBalance(fromWei(tokenBalance[SLICEAddress]));
@@ -279,11 +275,11 @@ const TrancheModal = ({
     );
   };
   const TrancheRewards = () => {
-    const onClaimReward = async () => {
-      await claimRewardsAllMarkets();
-      await checkSIRRewards();
+    const onClaimReward = () => {
+      claimRewardsAllMarkets();
       closeModal();
     };
+    
     return (
       <Modal
         isOpen={txModalIsOpen}
@@ -466,7 +462,7 @@ const TrancheModal = ({
                 </button>
               )}
             </TrancheModalFooter>
-          ) : (
+          ) : txModalStatus !== 'rejected' && (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
@@ -620,7 +616,7 @@ const TrancheModal = ({
                 </button>
               )}
             </TrancheModalFooter>
-          ) : (
+          ) : txModalStatus !== 'rejected' && (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
@@ -648,4 +644,4 @@ const mapStateToProps = (state) => ({
   data: state.data
 });
 
-export default connect(mapStateToProps, { trancheMarketsToggle, checkSIRRewards })(TrancheModal);
+export default connect(mapStateToProps, { trancheMarketsToggle })(TrancheModal);

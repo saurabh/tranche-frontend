@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from 'redux/store';
-import { web3 } from 'utils/getWeb3';
+import { web3, timeout } from 'utils';
 // import maticWeb3 from 'utils/maticWeb3';
 import { fetchTableData, trancheCardToggle, fetchUserStakingList } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
@@ -9,9 +9,6 @@ import { serverUrl, apiUri, StakingAddresses, YieldAddresses, LockupAddress, JCo
 import maticWeb3 from 'utils/maticWeb3';
 const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked, userStakingList } = apiUri;
 
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
 let JCompound, Staking, YieldFarm, JAave, Lockup;
 
 export const ETHContracts = {

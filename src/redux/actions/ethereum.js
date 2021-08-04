@@ -16,7 +16,13 @@ import {
   TrancheBuyerCoinAddresses,
   JAaveAddress,
   AaveTrancheTokens,
-  PolygonBuyerCoinAddresses
+  PolygonBuyerCoinAddresses,
+  StakingAddresses,
+  LockupAddress,
+  SLICEAddress,
+  LP1TokenAddress,
+  LP2TokenAddress,
+  RewardDistributionAddress
 } from 'config';
 import {
   SET_ADDRESS,
@@ -37,13 +43,8 @@ import {
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
 import { setHasMigrated, trancheMarketsToggle } from './tableData';
-import { StakingAddresses } from 'config';
-import { LockupAddress } from 'config';
-import { SLICEAddress } from 'config';
-import { LP1TokenAddress } from 'config';
-import { LP2TokenAddress } from 'config';
 import { getUnclaimedRewards } from 'services';
-import { RewardDistributionAddress } from 'config';
+
 const { stakingSummary } = apiUri;
 
 export const setAddress = (address) => (dispatch) => {

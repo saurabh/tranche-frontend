@@ -25,7 +25,7 @@ import {
   networkId,
   RewardDistributionAddress
 } from 'config';
-import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval, checkSIRRewards } from 'redux/actions/ethereum';
+import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval, checkSIRRewards, setTokenBalances } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
@@ -750,8 +750,10 @@ export const claimRewardsAllMarkets = async () => {
               message: txMessage(transaction.hash)
             };
           });
-          emitter.on('txConfirmed', () => {
+          emitter.on('txConfirmed', async () => {
             store.dispatch(setTxLoading(false));
+            await store.dispatch(checkSIRRewards());
+            store.dispatch(setTokenBalances(address));
           });
           emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
           emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
