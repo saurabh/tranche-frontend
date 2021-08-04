@@ -8,8 +8,13 @@ import {
   SET_WEB3,
   SET_CURRENT_BLOCK,
   SET_TRANSACTION_LOADING,
-  SET_TRANCHE_ALLOWANCE,
-  SET_BLOCKEXPLORER_URL
+  SET_ALLOWANCE,
+  SET_BLOCKEXPLORER_URL,
+  ADD_NOTIFICATION,
+  UPDATE_NOTIFICATION,
+  UPDATE_NOTIFICATION_COUNT,
+  REMOVE_NOTIFICATION,
+  SIR_REWARDS
 } from '../actions/constants';
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
@@ -45,7 +50,10 @@ const initialState = {
   trancheAllowance: {
     [JCompoundAddress]: compAllowance,
     [JAaveAddress]: aaveAllowance
-  }
+  },
+  notificationCount: 0,
+  notifications: [],
+  unclaimedSIRRewards: 0
 };
 
 export default function (state = initialState, action) {
@@ -62,7 +70,7 @@ export default function (state = initialState, action) {
       return { ...state, tokenBalance: { ...state.tokenBalance, [payload.tokenAddress]: payload.tokenBalance } };
     case SET_TOKEN_BALANCES:
       return { ...state, tokenBalance: payload };
-    case SET_TRANCHE_ALLOWANCE:
+    case SET_ALLOWANCE:
       return {
         ...state,
         trancheAllowance: {
@@ -80,6 +88,22 @@ export default function (state = initialState, action) {
       return { ...state, currentBlock: payload };
     case SET_TRANSACTION_LOADING:
       return { ...state, txOngoing: payload };
+    case UPDATE_NOTIFICATION_COUNT:
+      return { ...state, notificationCount: payload };
+    case ADD_NOTIFICATION:
+      return { ...state, notifications: [...state.notifications, payload] };
+    case UPDATE_NOTIFICATION: {
+      const newNotifications = [...state.notifications];
+      newNotifications[payload.id] = payload;
+      return { ...state, notifications: newNotifications };
+    }
+    case REMOVE_NOTIFICATION: {
+      state.notifications.splice(payload, 1);
+      return { ...state, notifications: [...state.notifications] };
+    }
+    case SIR_REWARDS: {
+      return { ...state, unclaimedSIRRewards: payload };
+    }
     default:
       return state;
   }

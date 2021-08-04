@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, ETHCARD } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -27,7 +27,10 @@ export const PolygonBuyerCoinAddresses = process.env.REACT_APP_MATIC_BUYER_COIN_
 export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
+export const LockupAddress = process.env.REACT_APP_STAKING_LOCKUP_ADDRESS;
 export const YieldAddresses = process.env.REACT_APP_STAKING_YIELD_ADDRESS.split(',');
+export const lockupDurations = process.env.REACT_APP_STAKING_LOCKUP_DURATION.split(',');
+export const lockupStakingOccurrences = process.env.REACT_APP_STAKING_LOCKUP_OCCURRENCES.split(',').map(o => +o);
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 //Google Analytics
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
@@ -40,12 +43,14 @@ export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
-
+export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLowerCase();
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
   { key: 'USDT', decimals: 6 }
 ];
+export const ETHorMaticCheck = ['ETH', 'MATIC'];
+export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 // Site Banner Data (imported in Header component)
 export const PagesData = {
@@ -127,10 +132,15 @@ export const trancheIcons = {
   BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
   aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
-  aamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
-  bamDAI: { protocolIcon: AAVE, assetIcon: DaiLogo },
+  aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
+  bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
   bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
+};
+export const LiquidityIcons = {
+  "SLICE": TrancheStake,
+  "SLICE/ETH LP": ETHCARD,
+  "SLICE/DAI LP": DAICARD
 };
 
 // pairData[0] is the default option in the loan creation process (value = pairId)
@@ -146,10 +156,8 @@ export const pairData = [
   }
 ];
 
-export const ETHorMaticCheck = ['ETH', 'MATIC'];
-export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
-
 export const apiUri = {
+  exchangeRates: 'common/exchange-rates',
   priceFeed: 'pairs',
   loanList: 'loans',
   transaction: 'loans/transaction',
@@ -162,7 +170,8 @@ export const apiUri = {
   sliceSummary: 'slice/summary',
   tranchesList: 'earn',
   totalValueLocked: 'earn/summary/total',
-  graphUri: 'earn/graph/apy?'
+  graphUri: 'earn/graph/apy?',
+  userStakingList: 'staking/list'
 };
 
 // Filters
@@ -318,10 +327,12 @@ export const ModeThemes = {
     titleColor: '#393F56',
     textColor: '#7C859B',
     ModalBackground: '#FFFFFF',
+    TrancheRateTypeColor: "rgba(106, 103, 255, 0.9)",
     ModalText: '#4F4F4F',
     SelectedStaking: 'rgba(68, 65, 207, 0.05)',
     SelectedStakingText: '#39295A',
     SelectedStakingLink: '#776E8B',
+    borderInputColor: '#EAEAEA',
     StakingInputText: '#838186',
     loadingSpinner: 'rgba(124,133,155,0.8)',
     Tooltip: '#2F2F2F',
@@ -331,31 +342,94 @@ export const ModeThemes = {
     TrancheMarketsTitle: '#393F56',
     TrancheModalLinkColor: '#4939D7',
     TrancheModalLinkBackground: '#E7E7F9',
+    BorderStake: "#CFCFE5",
     TrancheBtnBackground: '#FFFFFF',
     TrancheBtnBackgroundCurrent: 'rgba(255, 255, 255, 0.5);',
     TrancheBtnBorder: '#E9E9FC',
     TrancheBtnColor: '#000000',
+    inputText: "#838186",
+    BoxColorText: "#393F56",
+    EstimatedColor: "#000000",
+    boxText: "#776E8B",
+    BoxColor: "rgba(68, 65, 207, 0.05)",
+    TableHeadText: "rgba(79, 79, 79, 0.6)",
     TrancheBtnSpan: '#E9E9FC',
     ClaimHead: 'rgba(36, 39, 50, 0.6)',
     StakingMax: 'rgba(57,41,90,0.3)',
+    StakeModalNavigationText: "#4441CF",
     HowTo: '#FFFFFF',
     HowToText: '#4441CF',
     HowToBorder: '0.872727px solid #E9E9FC',
     HowToShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
+    StakeModalNavigationBorder: "#E9E9FC",
+    stakeModalBoxShadow: "0px 2.14578px 2.14578px rgba(189, 189, 189, 0.07)",
+    stakeModalBorderCurrent: "0.536446px solid #E9E9FC",
+    stakeModalBoxBackground: "#F9F9FE",
+    stakeBoxBackground: "#FFFFFF",
+    MigrateInput: "#F5F0FF",
     LoadingColorOne: '#eee',
     LoadingColorTwo: '#f7f7f7',
+    docsLockupText: "#4441CF",
+    docsLockupBackground: "rgba(68, 65, 207, 0.1)",
     cardShadow: '0 -1px 12px 0 rgb(0 0 0 / 10%), 0 0 12px 0 transparent',
-    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)'
+    btnShadow: '0px 4px 4px rgb(189 189 189 / 30%)',
+    MigrateProgressTextActive: "#39295A",
+    MigrateProgressTextPending: "#9F9DE6",
+    MigrateProgressLine: "#D4D4D4",
+    MigrateStepBorder: "rgba(0, 0, 0, 0.2)",
+    disabledBtnColor: "rgba(204,204,205,1)",
+    MigrateStepTextPending: "rgba(0, 0, 0, 0.5)",
+    MigrateStepText: "#FFFFFF",
+    ModalTrancheTextColor: "#393F56",
+    MigrateStepBackground: "#FFFFFF",
+    MigrateContentTitle: "#393F56",
+    MigrateClaimCardBackground: "rgba(138, 94, 234, 0.05)",
+    MigrateClaimCardTitle: "rgba(124, 133, 155, 0.8)",
+    ModalTrancheNavbarBtnBorder: "0.872727px solid #E9E9FC",
+    ModalTrancheNavbarBtn: "#FFFFFF",
+    MigrateClaimCardValue: "#393F56",
+    ModalTrancheNavbarBtnText: "#393F56",
+    TrancheRateFixedColor: "rgba(106, 103, 255, 0.9)",
+    TrancheRateVariableColor: "rgba(118, 77, 232, 0.9)",  
+    ModalTrancheTextRowBorder: "#F0F0F6",
+    ModalTrancheNavbarBtnShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
+    CongratsText: "rgba(57, 63, 86, 0.8)"
   },
   dark: {
     body: '#100F36',
     navlinkTab: '#FFFFFF',
+    ModalTrancheNavbarBtn: "rgba(175, 155, 255, 0.15)",
+    ModalTrancheNavbarBtnShadow: "",
+    ModalTrancheTextRowBorder: "rgba(249, 249, 251, 0.1)",
+    ModalTrancheNavbarBtnBorder: "",
+    TrancheRateFixedColor: "rgba(106, 103, 255, 0.4)",
+    TrancheRateVariableColor: "rgba(118, 77, 232, 0.4)",
+    ModalTrancheTextColor: "#FFFFFF",
+    ModalTrancheNavbarBtnText: "#FFFFFF",
     HeaderTitle: '#FFFFFF',
+    StakeModalNavigationText: "#C2C4DA",
+    docsLockupText: "#FFFFFF",
+    disabledBtnColor: "rgba(204,204,205,0.15)",
+    docsLockupBackground: "rgba(105,103,156,0.4)",
     HeaderSubtitle: '#C2C4DA',
+    TableHeadText: "rgba(255, 255, 255, 0.6)",
+    stakeModalBoxShadow: "",
+    stakeBoxBackground: "rgba(255, 255, 255, 0.05)",
+    stakeModalBorderCurrent: "",
+    stakeModalBoxBackground: "rgba(175, 155, 255, 0.15)",
+    BoxColor: "rgba(196, 149, 255, 0.15)",
+    BoxColorText: "#CEC6FF",
+    boxText: "#CEC6FF",
+    MigrateInput: "rgba(255, 255, 255, 0.05)",
+    TrancheRateTypeColor: "rgba(106, 103, 255, 0.4)",
+    StakeModalNavigationBorder: "rgba(255, 255, 255, 0.1)",
+    EstimatedColor: "rgba(255, 255, 255, 0.8)",
+    inputText: "rgba(255, 255, 255, 0.8)",
     TableHead: 'rgba(255, 255, 255, 0.6)',
     TableCard: 'rgba(255, 255, 255, 0.07)',
     TableCardBorderColor: '#363661',
     footerBackground: '#07052F',
+    BorderStake: "rgba(255, 255, 255, 0.5)",
     footerLinks: 'rgba(255, 255, 255, 0.6)',
     languageToggleBackground: 'rgba(134, 132, 255, 0.25)',
     languageToggleText: '#FFFFFF',
@@ -364,6 +438,7 @@ export const ModeThemes = {
     tableText: '#FFFFFF',
     tableCardShadow: '',
     dropDownBorder: '#363661',
+    borderInputColor: 'rgba(255, 255, 255, 0.5)',
     dropDownText: '#FFFFFF',
     inputBackground: 'rgba(255, 255, 255, 0.5)',
     inputDisabledBackground: 'transparent',
@@ -401,6 +476,18 @@ export const ModeThemes = {
     LoadingColorOne: 'rgba(255,255,255,0.07)',
     LoadingColorTwo: '#363661',
     cardShadow: '0 -1px 12px 0 rgb(255 255 255 / 15%), 0 0 12px 0 transparent',
-    btnShadow: ''
+    btnShadow: '',
+    MigrateProgressTextActive: "#FFFFFF",
+    MigrateProgressTextPending: "rgba(255, 255, 255, 0.5)",
+    MigrateProgressLine: "rgba(255, 255, 255, 0.5)",
+    MigrateStepBorder: "rgba(255, 255, 255, 0.2)",
+    MigrateStepTextPending: "rgba(255, 255, 255, 0.5)",
+    MigrateStepText: "#FFFFFF",
+    MigrateStepBackground: "#2A2254",
+    MigrateContentTitle: "#FFFFFF",
+    MigrateClaimCardBackground: "rgba(255, 255, 255, 0.04)",
+    MigrateClaimCardTitle: "rgba(255,255,255,0.5)",
+    MigrateClaimCardValue: "#FFFFFF",
+    CongratsText: "rgba(255, 255, 255, 0.8)"
   }
 };

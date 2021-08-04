@@ -282,6 +282,15 @@ const WalletBtn = styled.button`
   &:focus {
     outline: none;
   }
+
+  ${({ tranche, ModalBoxShadow, shadow, border}) => tranche && `
+    max-width: 149px;
+    height: 40px;
+    margin-right: 20px;
+    background: ${ModalBoxShadow} !important;
+    box-shadow: ${shadow};
+    border: ${border};
+  `}
   @media (max-width: 992px) {
     margin: 5px 0;
     width: 129px;
@@ -292,6 +301,11 @@ const WalletBtn = styled.button`
 const WalletBtnIcon = styled.div`
   display: flex;
   align-items: center;
+  ${({ tranche }) => tranche && `
+    img{
+      width: 24px;
+    }
+  `}
   @media (max-width: 992px) {
     img{
       width: 17px;
@@ -313,6 +327,9 @@ const WalletBtnText = styled.div`
     @media (max-width: 992px) {
       font-size: 10px;
     }
+    ${({ tranche, color }) => tranche && `
+      color: ${color};
+    `}
   }
 `;
 const RatesWrapper = styled.div`

@@ -1201,14 +1201,7 @@ table, th, td {
 .FormDetails{
   display: none !important;
 }
-@media (max-width: 633px){
-  .FormDetails{
-    display: block !important;
-  }
-  .ModalFormInput,  .ModalFormInputAPY, .ModalFormInputNewLoan{
-    border-radius: 7px;
-  }
-}
+
 @media (max-width: 767px){
   
   #other-tabs-container{
@@ -1220,6 +1213,57 @@ table, th, td {
     padding-left: 15px;
     margin-right: auto; 
     margin-left: auto; 
+  }
+
+}
+.ReactModal__Overlay{
+  overflow-y: scroll;
+}
+
+@media (max-width: 633px){
+  .ReactModal__Content{
+    position: absolute !important;
+    transform: scale(0.5) translateY(50%);
+  }
+  .TrancheEnableModal .ReactModal__Content{
+    max-height: unset !important;
+    max-width: unset !important;
+  }
+  .TrancheConfirmModal .ReactModal__Content{
+    max-height: unset !important;
+    max-width: unset !important;
+  }
+  .stakeModal .ReactModal__Content{
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+}
+@media (max-width: 663px){
+  .stakeModal .ReactModal__Content{
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+  .migrateStake .ReactModal__Content{
+    max-width: inherit !important;
+  }
+}
+@media (max-width: 633px){
+  .FormDetails{
+    display: block !important;
+  }
+  .ModalFormInput,  .ModalFormInputAPY, .ModalFormInputNewLoan{
+    border-radius: 7px;
+  }
+  .notFound .ReactModal__Content{
+    max-height: 246px !important;
+    max-width: 100% !important;
+    min-height: min-content !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
   }
 }
 @media (max-width: 992px){
@@ -1349,13 +1393,6 @@ table, th, td {
 
 
 
-@media (max-width: 633px){
-  .ReactModal__Content{
-    position: absolute !important;
-    transform: scale(0.5) translateY(50%);
-  }
-}
-
 
 
 
@@ -1458,7 +1495,7 @@ table, th, td {
   box-sizing: border-box;
   width: 16px;
 	height: 16px;	
-  border: 2px solid #936CE6;
+  border: 2px solid #555555;
   border-radius: 50%;
   border-left-color: transparent;
   border-bottom-color: transparent;
@@ -1474,7 +1511,15 @@ table, th, td {
   animation: donut-rotate 1000ms cubic-bezier(.4,0,.22,1) infinite;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+input[type=number] {
+  -moz-appearance: textfield;
+}
 @-webkit-keyframes clockwise {
   0% { -webkit-transform: rotate(0deg) }
   100% { -webkit-transform: rotate(360deg) }
@@ -1575,7 +1620,7 @@ table, th, td {
   bottom: 10px;
   right: 30px;
   width: 300px;
-  z-index: 1000;
+  z-index: 4000;
 }
 
 .NotifyItem{
@@ -2074,4 +2119,8 @@ table, th, td {
     animation-name: kf_el_q_eIK0z3HI_an_045tZJOHl;
     -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
     animation-timing-function: cubic-bezier(0, 0, 1, 1);
+    }
+
+    .bn-onboard-modal{
+      z-index: 3000 !important;
     }

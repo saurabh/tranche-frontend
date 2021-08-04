@@ -53,6 +53,175 @@ const HeaderTitle = styled.div`
     }
   }
 `;
+const StakeHeaderWrapper = styled.div`
+
+`
+
+const StakeSummaryCard = styled.div`
+  min-height: 159px;
+  background: ${props => props.color};
+  display: flex;
+  align-items: center;
+  border: 2px solid ${props => props.color};
+  box-sizing: border-box;
+  box-shadow: 0px 1.71507px 7.71781px rgba(68, 65, 207, 0.2);
+  margin: 15px 0;
+  padding: 20px 25px 20px 35px;
+  border-radius: 12px;
+  width: 49%;  
+  @media (max-width: 767px){
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+  ${({ claim }) => claim && `
+    justify-content: space-between;
+    padding: 20px;
+    button{
+      width: 302px;
+      height: 46px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10.3798px;
+      font-style: normal;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13.4938px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+  `}
+  @media (max-width: 1199px){
+    width: 100%;
+  }
+`
+const StackSummaryCol = styled.div`
+  width: ${props => props.stake ? "49" : props.claim ? "46" : "54"}%;  
+  min-height: 115px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  h2{
+    font-family: 'Inter', sans-serif;
+  }
+  & > h2:nth-child(1){
+    font-weight: 600;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  & > h2:nth-child(2){
+    font-weight: bold;
+    font-size: 24px;
+    color: #FFFFFF; 
+    margin: 5px 0;
+  }
+  & > h2:nth-child(3), & > h2:nth-child(4){
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 9px 0;
+  }
+  & > h2:nth-child(5){
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 15px;
+    color: rgba(255, 255, 255, 0.8); 
+    margin: 9px 0 0 0;
+  }
+  & > span{
+    width: 100%;
+    max-width: 213px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  ${({ claimBtn }) => claimBtn && `
+    align-items: center;
+    & > h2:nth-child(1){
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  `}
+  @media (max-width: 767px){
+    width: 100% !important;
+    margin: 15px 0;
+  }
+`
+
+const WithdrawStakeCard = styled.div`
+  min-height: 159px;
+  border: 2px solid #8639E8;
+  box-sizing: border-box;
+  box-shadow: 0px 1.71507px 7.71781px rgba(68, 65, 207, 0.2);
+  border-radius: 12px;  
+  margin: 15px 0;
+  padding: 29px 35px;
+  background: #8639E8;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 767px){
+    padding: 20px;
+    flex-direction: column;
+  }
+`
+const WithdrawStakeCardText = styled.div`
+  width: 80%; 
+  h2, p{
+    font-family: 'Inter', sans-serif;
+  }
+  h2{
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    
+  }
+  p{
+    margin: 10px 0 0 0;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 21px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  @media (max-width: 767px){
+    width: 100%;
+  }
+`
+const WithdrawStakeCardBtns = styled.div`
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  button{
+    width: 154px;
+    height: 57px;
+    margin: 0 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    padding: 0 20px;    
+    outline: none;
+    font-size: 13px;
+    line-height: 16px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8639E8;
+    background: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+  }
+  @media (max-width: 767px){
+    width: 100%;
+    margin: 15px 0 0 0;
+  }
+`
+
+
 const HeaderSubtitle = styled.div`
   & > h2 {
     margin-top: 9px;
@@ -591,6 +760,42 @@ const NavbarIconWrapper = styled.div`
 
 const NavbarIconContent = styled.div`
 `
+const StakeSummaryCardWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 1199px){
+    flex-direction: column;
+  }
+`
+const Countdown = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  h2{
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #FFFFFF;
+    span{
+      font-weight: 500;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-left: 3px;
+    }
+  }
+  ${({ modal, textColor }) => modal && `
+    width: 50%;
+    @media (max-width: 663px){
+      width: 100%;
+    }
+    h2{
+      color: ${textColor};
+      span{
+        color: #898FA4;
+      }
+    }
+  `}
+`
 
 
 export {
@@ -625,5 +830,13 @@ export {
   NavbarSpan,
   MobileNavbarIconWrapper,
   NavbarIconWrapper,
-  NavbarIconContent
+  NavbarIconContent,
+  StakeHeaderWrapper,
+  StakeSummaryCard,
+  WithdrawStakeCard,
+  StackSummaryCol,
+  WithdrawStakeCardText,
+  WithdrawStakeCardBtns,
+  StakeSummaryCardWrapper,
+  Countdown
 };

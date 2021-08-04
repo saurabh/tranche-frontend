@@ -6,12 +6,10 @@ import {
   SLICEAddress,
   LP1TokenAddress,
   LP2TokenAddress,
-  etherScanUrl,
-  maticBlockExplorerUrl
-} from 'config/constants';
-import { postRequest, initOnboard } from 'services';
+  txLink
+} from 'config';
+import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
-import { setBlockExplorerUrl } from './ethereum';
 import {
   LOANS_IS_LOADING,
   LOANS_SUCCESS,
@@ -25,13 +23,34 @@ import {
   TRANCHES_SUCCESS,
   TRANCHES_COUNT,
   STAKING_IS_LOADING,
-  STAKING_SUCCESS,
+  LPLIST_SUCCESS,
   STAKING_COUNT,
   OWN_ALL_TOGGLE,
   TRANCHE_CARD_TOGGLE,
-  TRANCHE_MARKETS
+  TRANCHE_MARKETS,
+  STAKING_SUCCESS,
+  USER_STAKING_LIST_IS_LOADING,
+  USER_STAKING_LIST_SUCCESS,
+  SET_TX_MODAL_OPEN,
+  SET_TX_MODAL_TYPE,
+  SET_TX_MODAL_DATA,
+  SET_TX_MODAL,
+  SET_TX_MODAL_LOADING,
+  SET_TX_LINK,
+  SET_MIGRATE_STEP,
+  SET_MIGRATE_LOADING,
+  SET_MIGRATED,
+  SET_EXCHANGE_RATES
 } from './constants';
-const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl } = apiUri;
+const { loanList: loanListUrl, tranchesList: tranchesListUrl, stakingList: stakingListUrl, exchangeRates } = apiUri;
+
+export const fetchExchangeRates = () => async (dispatch) => {
+  const { data: result } = await getRequest(exchangeRates, {}, null);
+  dispatch({
+    type: SET_EXCHANGE_RATES,
+    payload: result.result
+  });
+};
 
 export const loansIsLoading = (bool) => (dispatch) => {
   dispatch({
@@ -90,17 +109,21 @@ export const stakingIsLoading = (bool) => (dispatch) => {
 };
 
 export const stakingFetchSuccess = (list) => (dispatch) => {
-  const searchArr = (tokenAddress) => list.find((i) => i.tokenAddress === tokenAddress);
-  const orderedList = [];
-  orderedList.push(searchArr(SLICEAddress));
-  orderedList.push(searchArr(LP1TokenAddress));
-  orderedList.push(searchArr(LP2TokenAddress));
+  const searchArr = (tokenAddress) => list.filter((i) => i.duration === undefined).find((i) => i.tokenAddress === tokenAddress);
+  const sliceList = list.filter((i) => i.duration);
+  sliceList.push(searchArr(SLICEAddress));
+  const lpList = [];
+  lpList.push(searchArr(LP1TokenAddress));
+  lpList.push(searchArr(LP2TokenAddress));
+  dispatch({
+    type: LPLIST_SUCCESS,
+    payload: lpList
+  });
   dispatch({
     type: STAKING_SUCCESS,
-    payload: orderedList
+    payload: sliceList
   });
 };
-
 export const stakingSetCount = (count) => (dispatch) => {
   dispatch({
     type: STAKING_COUNT,
@@ -155,11 +178,9 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });
     store.dispatch(changeFilter('ethereum'));
-    store.dispatch(setBlockExplorerUrl(etherScanUrl));
   } else if (trancheMarket === 'aavePolygon') {
     onboard.config({ networkId: maticNetworkId });
     store.dispatch(changeFilter('polygon'));
-    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
   store.dispatch(trancheCardToggle({ status: false, id: null }));
   dispatch({
@@ -168,6 +189,28 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   });
 };
 
+const fetchUserStakingListSuccess = (userStakingList) => (dispatch) => {
+  const sliceStakes = userStakingList.find((l) => l.tokenAddress === SLICEAddress);
+  const slice = sliceStakes ? sliceStakes.stakes : [];
+  const lp1Stakes = userStakingList.find((l) => l.tokenAddress === LP1TokenAddress);
+  const lp2Stakes = userStakingList.find((l) => l.tokenAddress === LP2TokenAddress);
+  const lp = lp1Stakes ? lp1Stakes.stakes : [];
+  if (lp2Stakes) {
+    lp.push(...(lp2Stakes.stakes || []));
+  }
+
+  dispatch({
+    type: USER_STAKING_LIST_SUCCESS,
+    payload: { slice, lp }
+  });
+};
+
+const userStakingListIsLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: USER_STAKING_LIST_IS_LOADING,
+    payload: bool
+  });
+};
 export const fetchTableData = (data, endpoint) => async (dispatch) => {
   try {
     dispatch(loansIsLoading(true));
@@ -194,4 +237,91 @@ export const fetchTableData = (data, endpoint) => async (dispatch) => {
     console.log(error);
     dispatch(checkServer(false));
   }
+};
+
+export const fetchUserStakingList = (endpoint) => async (dispatch) => {
+  try {
+    dispatch(userStakingListIsLoading(true));
+    const { data: result } = await getRequest(endpoint, {}, null);
+    if (result.status) {
+      dispatch(userStakingListIsLoading(false));
+      dispatch(fetchUserStakingListSuccess(result.result.list));
+    }
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const setMigrateStep = (string) => (dispatch) => {
+  const state = store.getState();
+  const { address } = state.ethereum;
+  if (string === 'done') {
+    const migrateAddress = JSON.parse(window.localStorage.getItem('migrateAddress'));
+    window.localStorage.setItem(`migrateAddress`, JSON.stringify({ ...migrateAddress, [address]: true }));
+    dispatch({
+      type: SET_MIGRATED,
+      payload: true
+    });
+  }
+  dispatch({
+    type: SET_MIGRATE_STEP,
+    payload: string
+  });
+};
+
+export const setMigrateLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_MIGRATE_LOADING,
+    payload: bool
+  });
+};
+
+export const setHasMigrated = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_MIGRATED,
+    payload: bool
+  });
+};
+
+export const setTxModalOpen = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_OPEN,
+    payload: bool
+  });
+};
+
+export const setTxModalType = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_TYPE,
+    payload: string
+  });
+};
+
+export const setTxModalData = (object) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_DATA,
+    payload: object
+  });
+};
+
+export const setTxModalStatus = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL,
+    payload: string
+  });
+};
+
+export const setTxModalLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_LOADING,
+    payload: bool
+  });
+};
+
+export const setTxLink = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_LINK,
+    payload: txLink(string)
+  });
 };

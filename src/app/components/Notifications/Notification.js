@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from 'react-redux';
-import { removeNotification } from 'redux/actions/NotificationToggle';
 import Parser from 'html-react-parser';
 
-const Notification = props => {
+const Notification = ({ notification, removeNotification }) => {
+  const {type, message} = notification;
   const [exit, setExit] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -18,7 +18,6 @@ const Notification = props => {
     secondsRef.current = setInterval(() => timerFunction(), 1000)
   };
 
-
   useEffect(() =>{
     if(seconds >= 60 && seconds % 60 === 0){
       setMinutes(parseInt(seconds/60));
@@ -30,14 +29,13 @@ const Notification = props => {
   };
 
   const handleCloseNotification = () => {
-    // if (!props.notification.type === 'PENDING') {
       handleResetTimer();
       setExit(true);
       setTimeout(() => {
-        props.removeNotification();
+        removeNotification(notification);
       }, 400)
-    // }
   };
+
   const clearLogger = (val) => {
     return new Promise(resolve => resolve(clearTimeout(val)));
   };
@@ -45,21 +43,22 @@ const Notification = props => {
   useEffect(() => {
     setSeconds(0);
     setMinutes(0);
+    if (type === 'REJECTED' || type === 'PENDING') setExit(false);
     // eslint-disable-next-line
-  }, [props.notification.type]);
+  }, [type]);
 
   useEffect(() => {
     handleStartTimer();
   }, []);
   useEffect(() => {
-    if(props.notification.type === "SUCCESS"){
+    if(type === "SUCCESS"){
       clearLogger(removeNotificationVar2.current).then(() => {
         removeNotificationVar1.current = setTimeout(() => {
           handleCloseNotification();
         }, 3000);
       });
     }
-    else if(props.notification.type === "WAITING"){
+    else if(type === "WAITING"){
       clearLogger(removeNotificationVar1.current).then(() => {
         removeNotificationVar2.current = setTimeout(() => {
           handleCloseNotification();
@@ -67,17 +66,17 @@ const Notification = props => {
       });
     }
     // eslint-disable-next-line
-  }, [props.notification.type]);
+  }, [type]);
 
   return (
     <div
       className={`NotifyItem ${exit ? "NotifyExit" : ""}`}
     >
       <div id="NotifySvgIcon">
-        {props.notification.type === "SUCCESS" ? <svg viewBox="0 0 185 168" xmlns="http://www.w3.org/2000/svg" id="el_3OA8Szq_A" className="svelte-ta62lj">
+        {type === "SUCCESS" ? <svg viewBox="0 0 185 168" xmlns="http://www.w3.org/2000/svg" id="el_3OA8Szq_A" className="svelte-ta62lj">
           <path d="m176.126953 63.8789062-94.4130858 95.4130858-72.87402345-72.8740232
             27.93945315-27.9394532 44.9345703 44.9345704 94.4130858-94.413086" strokeLinecap="round" strokeLinejoin="round" id="el_RzYtw9rUyN"></path>
-        </svg> : (props.notification.type === "PENDING" || props.notification.type === "WAITING") ?
+        </svg> : (type === "PENDING" || type === "WAITING") ?
         <svg viewBox="0 0 190 190" xmlns="http://www.w3.org/2000/svg" id="el_XWLVvD_rP" className="svelte-ta62lj">
             <g fillRule="evenodd" id="el_Uh6HOhkAVi">
               <circle cx="88" cy="88" r="88" id="el_PHAWgO26lN"></circle>
@@ -90,7 +89,7 @@ const Notification = props => {
                   </g>
               </g>
             </g>
-        </svg> : props.notification.type === "REJECTED" ? 
+        </svg> : type === "REJECTED" ? 
         <svg viewBox="0 0 178 178" xmlns="http://www.w3.org/2000/svg" id="el_bYTVKD04y" className="svelte-ta62lj">
             <g fillRule="evenodd" id="el_doMgf96Cxx">
               <path d="m96.9442719 17.8885438 71.8196601 143.6393202c2.469893
@@ -109,9 +108,9 @@ const Notification = props => {
         : ""}
       </div>
       <div id="NotifyText">
-        <p>{Parser(props.notification.message)}</p>
+        <p>{Parser(message)}</p>
         <span>
-         {new Date().toLocaleTimeString([], {timeStyle: 'short'})} {(props.notification.type === "PENDING" || props.notification.type === "WAITING")? <span>- <svg width="15px" height="16px" viewBox="0 0 15 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="svelte-1c9mzro">
+         {new Date().toLocaleTimeString([], {timeStyle: 'short'})} {(type === "PENDING" || type === "WAITING")? <span>- <svg width="15px" height="16px" viewBox="0 0 15 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="svelte-1c9mzro">
                        <g id="Notify-Style-Concepts" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                           <path d="M7.06681227,1.92484595 C10.9634297,1.92484595 14.1336806,5.03922755
                              14.1336806,8.86724251 C14.1336806,12.6953675 10.9634297,15.8096941
@@ -146,6 +145,4 @@ const mapStateToProps = (state) => ({
   NotificationToggle: state.NotificationToggle
 });
 
-export default connect(mapStateToProps, {
-  removeNotification
-})(Notification);
+export default connect(mapStateToProps, {})(Notification);

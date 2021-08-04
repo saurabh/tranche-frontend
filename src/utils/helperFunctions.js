@@ -1,6 +1,9 @@
 import ReactHtmlParser from 'react-html-parser';
 import BigNumber from 'bignumber.js';
-import { gweiVariants } from 'config/constants';
+import moment  from 'moment';
+import { gweiVariants, tokenDecimals } from 'config/constants';
+
+export const searchTokenDecimals = (key) => tokenDecimals.find((i) => i.key === key);
 
 export const readyToTransact = async (wallet, onboard) => {
   if (!wallet) {
@@ -27,6 +30,42 @@ export const valShortner = (val) => {
   }
 };
 
+const singularOrPlural = (num, string) => {
+  return num === 1 ? num + string : num + string + 's';
+}
+
+export const formatTime = (value) =>{
+  // let format = (val) => moment().add(value, 'seconds').diff(moment(), val);
+  // let years =  format('years');
+  // let months =  format('months');
+  // let weeks =  format('weeks');
+  // let days =  format('days');
+  // let hours =  format('hours');
+  // let minutes = format('minutes');
+  // return years !== 0 ? singularOrPlural(years, ' year') : months !== 0 ? singularOrPlural(months, ' month') : weeks !== 0 ? singularOrPlural(weeks, ' week') : days !== 0 ? singularOrPlural(days, ' day') : hours !== 0 ? singularOrPlural(hours, ' hour') : minutes !== 0 ? singularOrPlural(minutes, ' minute') : ""
+  
+  const minutes = moment().add(value, 'seconds').diff(moment(), 'minutes');
+  if (minutes < 60) {
+    return singularOrPlural(minutes, ' minute');
+  }
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24)
+  {
+    return singularOrPlural(hours, ' hour');
+  }
+  const days = Math.floor(hours / 24);
+  if (days < 31)
+  {
+    return singularOrPlural(days, ' day');
+  }
+  const months = Math.floor(days / 30)
+  if (months < 12)
+  {
+    return singularOrPlural(months, ' month');
+  } 
+  return singularOrPlural(Math.floor(months / 12), ' year');
+}
+
 export const round = (type, input, roundTo) => {
   try {
     let result = safeMultiply(input, 10 ** roundTo);
@@ -44,13 +83,9 @@ export const roundNumber = (input, roundTo, type = false) => {
     if (input === 'N/A') return;
     if (typeof input === 'string') input = Number(input);
     let decimalPoints = 0;
-    if (!roundTo) {
-      if (input >= 10000) decimalPoints = 0;
-      if (input < 10000 && input >= 1000) decimalPoints = 1;
-      if (input < 1000 && input >= 100) decimalPoints = 2;
-      if (input < 100 && input >= 10) decimalPoints = 3;
-      if (input < 10 && input >= 1) decimalPoints = 4;
-      if (input < 1 && input > 0) decimalPoints = 5;
+    if (!roundTo && input % 10 !== 0) {
+      const value = Math.floor(input);
+      decimalPoints = input % 1 === 0 ? 0 : Math.max(5 - `${ value === 0 ? '' : value }`.length, 0);
     } else decimalPoints = roundTo;
     if (type) {
       let result = safeMultiply(input, 10 ** decimalPoints);
@@ -192,3 +227,7 @@ export const isEqualTo = function (a, b) {
   let y = new BigNumber(b);
   return x.isEqualTo(y);
 };
+
+export const toBigNumber = (a) => {
+  return new BigNumber(a);
+}
