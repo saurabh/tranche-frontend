@@ -1026,7 +1026,8 @@ const SecondColContent = styled.div`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 15px;
+    // left: 15px;
+    left: -5px;
     @media (max-width: 1200px){
       left: -9px;
     }

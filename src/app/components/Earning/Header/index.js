@@ -71,19 +71,17 @@ function Header({updateDate, theme}) {
           >
           {i18n.t('navbar.tranche')}
           </NavLink>
-          <NavLink
-            to={baseUrl + '/'}
+          <a
+            href="https://snapshot.org/#/tranche.eth"
             activeStyle={{
               opacity: 1,
               background: ModeThemes[theme].NavbarBackground,
               boxShadow: ModeThemes[theme].NavbarShadow
             }}
-            className="navLinkDisabled"
-            exact
           >
-          {i18n.t('navbar.vote')}
+            {i18n.t('navbar.vote')}
 
-          </NavLink>
+          </a>
         </NavbarLinks>
           }
       <HeaderWrapper>
