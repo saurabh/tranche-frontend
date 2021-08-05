@@ -178,8 +178,8 @@ function Navbar({ path, theme }) {
 
             </a>
           </NavbarLinks>
-          <ConnectWallet path={path} />
         </div>
+        <ConnectWallet path={path} />
       </NavbarContainer>
     </NavbarWrapper>
   );

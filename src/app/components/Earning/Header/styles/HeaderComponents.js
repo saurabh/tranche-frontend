@@ -100,6 +100,7 @@ const NavbarContainer = styled.div`
 const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
+  margin: 0 auto;
   // width: 350px;
   // padding: 17px 36px;
   border-radius: 159px;
@@ -267,7 +268,8 @@ const WalletBtn = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 155px;
+  // width: 155px;
+  width: 45%;
   height: 40px;
   background: ${(props) => props.background} !important;
   border-radius: 30px;
@@ -306,7 +308,7 @@ const WalletBtnIcon = styled.div`
       width: 24px;
     }
   `}
-  @media (max-width: 992px) {
+  @media (max-width: 1200px) {
     img{
       width: 17px;
     }
@@ -324,8 +326,8 @@ const WalletBtnText = styled.div`
     text-transform: uppercase;
     color: #FFFFFF;
     margin-left: 12px;
-    @media (max-width: 992px) {
-      font-size: 10px;
+    @media (max-width: 1200px) {
+      font-size: 9px;
     }
     ${({ tranche, color }) => tranche && `
       color: ${color};
@@ -539,6 +541,8 @@ const LocaleWrapper = styled.div`
 const NavBarRightWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  width: 28%;
   @media (max-width: 992px) {
     flex-direction: column;
   }

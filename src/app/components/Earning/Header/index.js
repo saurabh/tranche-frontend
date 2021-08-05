@@ -14,6 +14,7 @@ import {
   ModeThemes
 } from 'config/constants';
 import i18n from "../../locale/i18n";
+import ConnectWallet from './ConnectWallet';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 function Header({updateDate, theme}) {
@@ -40,6 +41,7 @@ function Header({updateDate, theme}) {
   return (
     <div className='content-container container'>
       <Navbar path={parsedPath[parsedPath.length - 1]} theme={theme}/>
+
       {
         path === "stake" &&
         <HeaderTabs theme={theme}/>

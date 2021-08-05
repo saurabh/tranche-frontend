@@ -2111,7 +2111,8 @@ const StakingMigrateModalContentWrapper = styled.div`
 const TrancheModalWrapper = styled.div`
   height: 517px;
   ${({ TrancheEnable }) => TrancheEnable && `
-    height: 571px;    
+    max-height: 600px;  
+    height: 100%;  
     @media (max-width: 633px){
       height: 100vh;
     }
@@ -2323,7 +2324,7 @@ const TrancheModalContentHeaderText = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 129px; 
+    // max-width: 129px; 
     width: 100%;
     h2:first-child{
       font-family: 'Inter', sans-serif;

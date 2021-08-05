@@ -156,6 +156,10 @@ const TableHeadTitle = styled.div`
         border-bottom: 2px dashed ${props => props.color};
         text-transform: uppercase;
         color: ${props => props.color};
+        
+        @media (max-width: 1200px){
+          font-size: 10px;
+        }
     }
     & > h2:nth-child(2){
       margin-left: 42px;
@@ -223,7 +227,7 @@ const TableHeadTitle = styled.div`
       }
     `}
     ${({ status }) => status && `
-      width: 15%;
+      width: 16%;
       h2{
         text-align: center;
         margin: 0 auto;
@@ -231,7 +235,7 @@ const TableHeadTitle = styled.div`
     `}
     
     ${({ trancheTableBtns }) => trancheTableBtns && `
-      width: 5%;
+      width: 4%;
       text-align: center;
     `}
 
@@ -1023,6 +1027,10 @@ const SecondColContent = styled.div`
     top: 50%;
     transform: translateY(-50%);
     left: 15px;
+    @media (max-width: 1200px){
+      left: -9px;
+    }
+    
   }
   & > div{
     position: absolute;
@@ -1145,7 +1153,7 @@ const TableFifthCol = styled.div`
     width: 30% !important;
   `}
   ${({ status }) => status && `
-    width: 15% !important;
+    width: 16% !important;
   `}
   ${({ stakeStatus }) => stakeStatus && `
     width: 15% !important;
@@ -1217,7 +1225,7 @@ const TableSixthCol = styled.div`
     width: 12% !important;
   `}
   ${({ trancheTableBtns }) => trancheTableBtns && `
-    width: 5% !important;
+    width: 4% !important;
   `}
   display: flex;
   justify-content: center;
@@ -1329,6 +1337,7 @@ const AdustBtnWrapper = styled.div`
     }
     img{
       pointer-events: none;
+      margin-right: 12px;
     }
     :disabled{
       background-color: #F1F1F1;
@@ -2050,6 +2059,11 @@ const TrancheRateType = styled.h2`
   text-align: center;
   text-transform: uppercase;
   color: #FFFFFF;
+  @media (max-width: 1200px) {
+    left: 180px;
+    width: 80px;
+    font-size: 12px;
+  }
 
 `
 

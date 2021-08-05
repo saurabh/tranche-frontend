@@ -17,7 +17,7 @@ import {
   TrancheRejected,
   TrancheStake
 } from 'assets';
-import { SLICEAddress, ModeThemes } from 'config/constants';
+import { SLICEAddress, ModeThemes, trancheIcons } from 'config/constants';
 import { roundNumber, safeMultiply, searchTokenDecimals, toBigNumber } from 'utils';
 import { claimRewardsAllMarkets, fromWei, approveContract, buyTrancheTokens, sellTrancheTokens, toBN } from 'services';
 import useAnalytics from 'services/analytics';
@@ -115,7 +115,7 @@ const TrancheEnableModal = {
   content: {
     position: 'relative',
     maxWidth: '438px',
-    maxHeight: '571px',
+    maxHeight: '600px',
     width: '100%',
     minHeight: '571px',
     //height: '326px',
@@ -357,9 +357,9 @@ const TrancheModal = ({
             </ModalHeader>
             <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} enableModal>
               <TrancheModalContentHeaderImg>
-                <img src={CompoundLogo} alt='img' />
+                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='img' />
                 <span>
-                  <img src={DAICARD} alt='img' />
+                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='img' />
                 </span>
               </TrancheModalContentHeaderImg>
               <TrancheModalContentHeaderText
