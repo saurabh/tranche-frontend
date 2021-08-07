@@ -1869,7 +1869,7 @@ const TooltipWrapper = styled.div`
   //   z-index: 1;
   // `}
   ${({ platform, language }) => platform && `
-    left: ${language === "en" ? "calc(100% - 135px)" : "calc(100% - 273px)" };
+    left: ${language === "en" ? "calc(100% - 119px)" : "calc(100% - 273px)" };
     z-index: -1;
   `}
   ${({ apy, language }) => apy && `
