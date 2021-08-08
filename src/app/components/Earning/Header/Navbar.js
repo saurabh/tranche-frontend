@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
@@ -23,6 +23,15 @@ function Navbar({ path, theme }) {
   // const [pair1Value, setPair1Value] = useState(0);
   // const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
+
 
   // const getPriceFeed = async () => {
   //   const { priceFeed: priceUrl } = apiUri;
@@ -56,8 +65,9 @@ function Navbar({ path, theme }) {
             <a href="https://tranche.finance/"><img src={theme === "dark" ? Logo : LogoColored} alt='Logo' /></a>
         </div>
         <MobileNavbarIconWrapper mobile>
-
+        { !isDesktop &&
           <ConnectWallet />
+        }
 
           <NavbarIconWrapper id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
             <NavbarIconContent>
@@ -179,7 +189,9 @@ function Navbar({ path, theme }) {
             </a>
           </NavbarLinks>
         </div>
-        <ConnectWallet path={path} />
+        { isDesktop &&
+          <ConnectWallet path={path} />
+        }
       </NavbarContainer>
     </NavbarWrapper>
   );

@@ -240,10 +240,10 @@ const TableHeadTitle = styled.div`
     `}
 
     ${({ stakingPoolStake }) => stakingPoolStake && `
-      width: 17%;
+      width: 19%;
     `}
     ${({ statusStake }) => statusStake&& `
-      width: 15%;
+      width: 18%;
       h2{
         text-align: center;
         margin: 0 auto;
@@ -253,21 +253,29 @@ const TableHeadTitle = styled.div`
       width: 10%;
     `}
     ${({ reward }) => reward && `
-      width: 14%;
+      width: 16%;
       h2{
         text-align: center;
         margin: 0 auto;
       }
     `}
     ${({ APYStake }) => APYStake && `
+      width: 10%;
+      h2{
+        text-align: center;
+        margin: 0 auto;
+      }
+    `}
+    ${({ StakeBtnsProvider }) => StakeBtnsProvider && `
       width: 12%;
       h2{
         text-align: center;
         margin: 0 auto;
       }
     `}
+    
     ${({ staked }) => staked && `
-      width: 14%;
+      width: 15%;
       h2{
         text-align: center;
         margin: 0 auto;      
@@ -281,7 +289,7 @@ const TableHeadTitle = styled.div`
       }
     `}
     ${({ btnsStake }) => btnsStake && `
-      width: 10%;
+      width: 12%;
       h2{
         text-align: center;
         margin: 0 auto;
@@ -901,7 +909,7 @@ const TableCardImg = styled.div`
 const TableFirstCol = styled.div`
   display: flex;
   align-items: center;
-  width: 17%;
+  width: 19%;
   padding-left: 20px;
   ${({ platform }) => platform && `
     width: 31% !important;
@@ -1008,7 +1016,7 @@ const TableSecondCol = styled.div`
     }
   `}
   ${({ stakeStaked }) => stakeStaked && `
-    width: 12% !important;
+    width: 10% !important;
   `}
   
   position: relative;
@@ -1026,7 +1034,8 @@ const SecondColContent = styled.div`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 15px;
+    // left: 15px;
+    left: -5px;
     @media (max-width: 1200px){
       left: -9px;
     }
@@ -1081,7 +1090,7 @@ const SecondColContent = styled.div`
 const TableThirdCol = styled.div`
   width: 7%;
   ${({ stake }) => stake && `
-    width: 14% !important;
+    width: 15% !important;
   `}
   ${({ totalValue }) => totalValue && `
     width: 15% !important;
@@ -1113,7 +1122,7 @@ const TableFourthCol = styled.div`
     width: 15%;
   `}
   ${({ stake }) => stake && `
-    width: 14% !important;
+    width: 16% !important;
   `}
   ${({ subscription }) => subscription && `
     width: 15% !important;
@@ -1156,7 +1165,7 @@ const TableFifthCol = styled.div`
     width: 16% !important;
   `}
   ${({ stakeStatus }) => stakeStatus && `
-    width: 15% !important;
+    width: 18% !important;
   `}
   ${({ sliceStaking }) => sliceStaking && `
     width: 10% !important;
@@ -1249,7 +1258,7 @@ const TableSixthCol = styled.div`
   }
 `
 const TableSeventhCol = styled.div`
-  width: 10% !important;
+  width: 12% !important;
   ${({ sliceStaking }) => sliceStaking && `
     width: 15% !important;
   `}
@@ -1860,7 +1869,7 @@ const TooltipWrapper = styled.div`
   //   z-index: 1;
   // `}
   ${({ platform, language }) => platform && `
-    left: ${language === "en" ? "calc(100% - 135px)" : "calc(100% - 273px)" };
+    left: ${language === "en" ? "calc(100% - 119px)" : "calc(100% - 273px)" };
     z-index: -1;
   `}
   ${({ apy, language }) => apy && `
@@ -1925,9 +1934,9 @@ const TooltipWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 240px;
+    max-width: 250px;
     width: 100%;
-    max-height: 100px;    
+    max-height: 140px;    
     padding: 12px 10px;  
     ${({ summary }) => summary && `
       z-index: -1;

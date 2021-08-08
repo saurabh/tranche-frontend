@@ -2251,6 +2251,11 @@ const TrancheModalFooter = styled.div`
     img{
       margin-right: 5px;
     }
+    :disabled{
+      background: ${props => props.disabledColor};
+      color: ${props => props.disabledTextColor};
+      pointer-events: none;
+    }
   }
   
 
