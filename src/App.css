@@ -2124,3 +2124,19 @@ input[type=number] {
     .bn-onboard-modal{
       z-index: 3000 !important;
     }
+    @media (max-height: 560px){
+      .TrancheEnableModal div .ReactModal__Content{
+        height: 100vh !important;
+        min-height: auto !important;
+      }
+      .TrancheConfirmModal div .ReactModal__Content{
+        height: 100vh !important;
+        min-height: auto !important;
+      }
+      .TrancheRewardsModal div .ReactModal__Content{
+        height: 100vh !important;
+        min-height: auto !important;
+      }
+      
+    }
+    
