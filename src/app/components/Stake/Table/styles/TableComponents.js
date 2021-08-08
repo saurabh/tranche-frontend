@@ -2053,8 +2053,9 @@ const HowToLink = styled.a`
 
 `
 const TrancheRateType = styled.h2`
-  background: ${props => props.TrancheRateColor};
+  background: transparent;
   border-radius: 10px;
+  border: 2px solid ${props => props.TrancheRateColor};
   width: 99px;
   height: 34px;
   display: flex;
@@ -2067,7 +2068,7 @@ const TrancheRateType = styled.h2`
   font-size: 15px;
   text-align: center;
   text-transform: uppercase;
-  color: #FFFFFF;
+  color: ${props => props.TrancheRateTextColor};
   @media (max-width: 1200px) {
     left: 180px;
     width: 80px;
