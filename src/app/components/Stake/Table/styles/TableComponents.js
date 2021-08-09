@@ -1470,6 +1470,7 @@ const TableMoreLeftSectionContent = styled.div`
     font-size: 17px;
     text-transform: uppercase;
     color: ${props => props.value};
+    text-align: center;
     @media (max-width: 992px){
       font-size: 12px;
     }
