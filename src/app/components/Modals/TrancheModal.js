@@ -495,9 +495,9 @@ const TrancheModal = ({
             </ModalHeader>
             <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} enableModal>
               <TrancheModalContentHeaderImg>
-                <img src={CompoundLogo} alt='img' />
+                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='img' />
                 <span>
-                  <img src={DAICARD} alt='img' />
+                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='img' />
                 </span>
               </TrancheModalContentHeaderImg>
               <TrancheModalContentHeaderText
