@@ -212,6 +212,7 @@
   "migrateYour": "스테이크 된 SLICE 토큰 이전",
   "migrateTokens": "토큰 이전",
   "stakingPools": "스테이킹 풀",
+  "stakingPool": "스테이킹 풀",
   "everyPoolHas": "각 풀은 서로 다은 락업 기간을 가지고 있습니다.",
   "lockup": "락업",
   "totalTimeYour": "토큰이 계약에 락업 상태로 유지되는 총 시간입니다.",

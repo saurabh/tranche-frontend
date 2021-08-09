@@ -324,7 +324,7 @@ const TrancheModal = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
 
-          <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
+          <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
             <button onClick={onClaimReward} disabled={txOngoing || unclaimedSlice <= 0}>
               Claim {roundNumber(unclaimedSlice)} SLICE
             </button>
@@ -441,7 +441,7 @@ const TrancheModal = ({
             ''
           )}
           {txModalStatus === 'initialState' || txModalStatus === 'confirm' ? (
-            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
               {txLoading ? (
                 <button>
                   <LoadingButton>
@@ -463,7 +463,7 @@ const TrancheModal = ({
               )}
             </TrancheModalFooter>
           ) : txModalStatus !== 'rejected' && (
-            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
+            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
               </a>
@@ -536,8 +536,9 @@ const TrancheModal = ({
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>{isDeposit ? 'Depositing' : 'Withdrawing'}</h2>
+                {console.log(formValues)}
                 <h2>
-                  {isDeposit
+                  {isDeposit && formValues
                     ? `${roundNumber(formValues.depositAmount)} ${cryptoType}`
                     : `${roundNumber(formValues.withdrawAmount)}  ${trancheToken}`}
                 </h2>
@@ -597,7 +598,7 @@ const TrancheModal = ({
             ''
           )}
           {txModalStatus === 'initialState' || txModalStatus === 'confirm' ? (
-            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
               {txLoading ? (
                 <button>
                   <LoadingButton>
@@ -617,7 +618,7 @@ const TrancheModal = ({
               )}
             </TrancheModalFooter>
           ) : txModalStatus !== 'rejected' && (
-            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm>
+            <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
               </a>

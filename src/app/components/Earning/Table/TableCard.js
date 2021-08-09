@@ -179,6 +179,7 @@ const TableCard = ({
               </FirstColContent>
               <TrancheRateType
                 TrancheRateColor={type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor}
+                TrancheRateTextColor={theme === 'dark' ? "#FFFFFF" : (type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor)}
               >
                 {type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}
               </TrancheRateType>

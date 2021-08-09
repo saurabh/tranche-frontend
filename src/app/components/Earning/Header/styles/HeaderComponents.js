@@ -544,7 +544,8 @@ const NavBarRightWrapper = styled.div`
   justify-content: flex-end;
   width: 28%;
   @media (max-width: 992px) {
-    flex-direction: column;
+    flex-direction: row;
+    width: 83%;
   }
 `
 const OtherTabsContainer = styled.div`

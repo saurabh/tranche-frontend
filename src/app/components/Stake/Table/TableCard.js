@@ -212,7 +212,7 @@ const TableCard = ({
             onClick={(e) => e.stopPropagation()}
             className='table-sixth-col table-col'
             stake
-            APYStake
+            StakeBtnsProvider
             color={ModeThemes[theme].tableText}
           >
             <h2>{roundNumber(subscription)}</h2>
@@ -249,7 +249,7 @@ const TableCard = ({
               </StakeBtnSlice>
             </TableSeventhCol>
           ) : (
-            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol>
+            <TableSeventhCol onClick={(e) => e.stopPropagation()} className='table-sixth-col table-col' stake stakeCol stakeColProvider>
               <StakeBtn background='#6E41CF' onClick={() => openModal('liqWithdraw')} disabled={false}>
                 -
               </StakeBtn>

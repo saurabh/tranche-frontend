@@ -2111,7 +2111,7 @@ const StakingMigrateModalContentWrapper = styled.div`
 const TrancheModalWrapper = styled.div`
   height: 517px;
   ${({ TrancheEnable }) => TrancheEnable && `
-    max-height: 600px;  
+    // max-height: 600px;  
     height: 100%;  
     @media (max-width: 633px){
       height: 100vh;
@@ -2127,6 +2127,9 @@ const TrancheModalWrapper = styled.div`
   `}
   width: 100%;
   background: ${props => props.backgroundColor};
+  @media (max-height: 560px){
+    min-height: 571px;
+  }
 `;
 const TrancheModalHeader = styled.div`
   height: 68px; 
@@ -2250,6 +2253,11 @@ const TrancheModalFooter = styled.div`
     margin: 10px auto 16px auto;
     img{
       margin-right: 5px;
+    }
+    :disabled{
+      background: ${props => props.disabledColor};
+      color: ${props => props.disabledTextColor};
+      pointer-events: none;
     }
   }
   
