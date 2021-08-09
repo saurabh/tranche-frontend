@@ -40,11 +40,7 @@ export const loanAllowanceCheck = async (pairId, amount, collateral = false) => 
     const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
     const token = collateral ? collateralTokenSetup(web3) : lendTokenSetup(web3);
     let userAllowance = await token.methods.allowance(address, LoanContractAddress).call();
-    if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-      return true;
-    } else {
-      return false;
-    }
+    return isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount);
   } catch (error) {
     console.error(error);
   }
@@ -52,10 +48,10 @@ export const loanAllowanceCheck = async (pairId, amount, collateral = false) => 
 
 export const calculateFees = async (collateralAmount) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoanHelper = JLoanHelperSetup(web3);
     if (collateralAmount) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoanHelper = JLoanHelperSetup(web3);
       const result = await JLoanHelper.methods.calculateCollFeesOnActivation(collateralAmount, factoryFees.toString()).call();
       return fromWei(result);
     }
@@ -66,10 +62,10 @@ export const calculateFees = async (collateralAmount) => {
 
 export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoan = JLoanSetup(web3);
     if (askAmount !== '' && askAmount !== 0) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoan = JLoanSetup(web3);
       const result = await JLoan.methods.getMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount)).call();
       return web3.utils.fromWei(result);
     }
@@ -80,10 +76,10 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
 
 export const calcMaxBorrowAmount = async (pairId, collAmount) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoan = JLoanSetup(web3);
     if (collAmount > 0) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoan = JLoanSetup(web3);
       const result = await JLoan.methods.getMaxStableCoinWithFeesAmount(pairId, collAmount).call();
       return web3.utils.fromWei(result);
     }
@@ -94,10 +90,10 @@ export const calcMaxBorrowAmount = async (pairId, collAmount) => {
 
 export const calcAdjustCollateralRatio = async (loanId, amount, actionType) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoan = JLoanSetup(web3);
     if (amount !== '' && amount !== 0) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoan = JLoanSetup(web3);
       const result = await JLoan.methods.calcRatioAdjustingCollateral(loanId, toWei(amount), actionType).call();
       return result;
     }
@@ -174,11 +170,9 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if ((isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0') {
-      return true;
-    } else {
-      return false;
-    }
+    return (
+      isGreaterThan(userAllowance, tokenBalance[ tokenAddress ]) || isEqualTo(userAllowance, tokenBalance[ tokenAddress ])
+    ) && userAllowance !== '0'
   } catch (error) {
     console.error(error);
   }
@@ -428,11 +422,7 @@ export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userA
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
-      return true;
-    } else {
-      return false;
-    }
+    return isGreaterThan(userAllowance, tokenBalance[ tokenAddress ]) || isEqualTo(userAllowance, tokenBalance[ tokenAddress ]);
   } catch (error) {
     console.error(error);
   }
@@ -528,7 +518,6 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex, migr
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
     let { amount } = state.form.stake.values;
-    console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones');
     const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress) : StakingSetup(web3, stakingAddress);
     amount = toWei(amount.toString());
     store.dispatch(
