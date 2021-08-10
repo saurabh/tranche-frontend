@@ -25,15 +25,7 @@ import {
   networkId,
   RewardDistributionAddress
 } from 'config';
-import {
-  setTxLoading,
-  addNotification,
-  setNotificationCount,
-  updateNotification,
-  toggleApproval,
-  checkSIRRewards,
-  setTokenBalances
-} from 'redux/actions/ethereum';
+import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval, checkSIRRewards, setTokenBalances } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
@@ -278,16 +270,18 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
               store.dispatch(setTxModalLoading(false));
               store.dispatch(setTxModalStatus('failed'));
             });
-            emitter.on('txConfirmed', async () => {
-              store.dispatch(setTxLoading(false));
-              store.dispatch(setTxLoading(false));
-              store.dispatch(setTxModalStatus('success'));
-              store.dispatch(await checkSIRRewards());
-              analyticsTrack('Tracking user activity', 'Tranche Markets', {
-                address: address,
-                trancheType: trancheType,
-                deposit: depositAmount + cryptoType
-              });
+          }
+        })
+        .on('confirmation', async(count) => {
+          if (count === 0) {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalStatus('success'));
+            store.dispatch(await checkSIRRewards());
+            analyticsTrack('Tracking user activity', 'Tranche Markets', {
+              address: address,
+              trancheType: trancheType,
+              deposit: depositAmount + cryptoType
             });
           }
         });
@@ -316,16 +310,18 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
               store.dispatch(setTxModalLoading(false));
               store.dispatch(setTxModalStatus('failed'));
             });
-            emitter.on('txConfirmed', async () => {
-              store.dispatch(setTxLoading(false));
-              store.dispatch(setTxLoading(false));
-              store.dispatch(setTxModalStatus('success'));
-              store.dispatch(await checkSIRRewards());
-              analyticsTrack('Tracking user activity', 'Tranche Markets', {
-                address: address,
-                trancheType: trancheType,
-                deposit: depositAmount + cryptoType
-              });
+          }
+        })
+        .on('confirmation', async (count) => {
+          if (count === 0) {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalStatus('success'));
+            store.dispatch(await checkSIRRewards());
+            analyticsTrack('Tracking user activity', 'Tranche Markets', {
+              address: address,
+              trancheType: trancheType,
+              deposit: depositAmount + cryptoType
             });
           }
         });
@@ -371,16 +367,14 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
               store.dispatch(setTxModalLoading(false));
               store.dispatch(setTxModalStatus('failed'));
             });
-            emitter.on('txConfirmed', () => {
-              store.dispatch(setTxLoading(false));
-              store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('success'));
-              analyticsTrack('Tracking user activity', 'Tranche Markets', {
-                address: address,
-                trancheType: trancheType,
-                withdrawn: withdrawAmount
-              });
-            });
+          }
+        })
+        .on('confirmation', (count) => {
+          if (count === 0) {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('success'));
+            analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
         });
     } else {
@@ -408,12 +402,14 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
               store.dispatch(setTxModalLoading(false));
               store.dispatch(setTxModalStatus('failed'));
             });
-            emitter.on('txConfirmed', () => {
-              store.dispatch(setTxLoading(false));
-              store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('success'));
-              analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
-            });
+          }
+        })
+        .on('confirmation', (count) => {
+          if (count === 0) {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('success'));
+            analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
         });
     }
