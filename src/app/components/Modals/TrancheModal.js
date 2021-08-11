@@ -497,7 +497,7 @@ const TrancheModal = ({
               <TrancheModalContentHeaderImg>
                 <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='img' />
                 <span>
-                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='img' />
+                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='img' />
                 </span>
               </TrancheModalContentHeaderImg>
               <TrancheModalContentHeaderText
