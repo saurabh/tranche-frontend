@@ -536,11 +536,10 @@ const TrancheModal = ({
               </TrancheModalContentRow>
               <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>{isDeposit ? 'Depositing' : 'Withdrawing'}</h2>
-                {console.log(formValues)}
                 <h2>
-                  {isDeposit && formValues
-                    ? `${roundNumber(formValues.depositAmount)} ${cryptoType}`
-                    : `${roundNumber(formValues.withdrawAmount)}  ${trancheToken}`}
+                  {isDeposit
+                    ? formValues ? `${roundNumber(formValues.depositAmount)} ${cryptoType}` : `0 ${cryptoType}`
+                    : formValues ? `${roundNumber(formValues.withdrawAmount)}  ${trancheToken}` : `0 ${trancheToken}`}
                 </h2>
               </TrancheModalContentRow>
               <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
