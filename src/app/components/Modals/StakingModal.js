@@ -280,7 +280,7 @@ const StakingModal = ({
 
   useEffect(() => {
     const getStakingDetails = async () => {
-      const res = await axios(`${serverUrl + stakingSummaryDetail + tokenAddress + '/' + address}`);
+      const res = await axios(`${serverUrl}${stakingSummaryDetail}${tokenAddress}/${address}`);
       const { result } = res.data;
       setTotalStaked(result.staked);
       let userStaked = await getUserStaked(contractAddress, tokenAddress);
