@@ -547,9 +547,9 @@ const TrancheModal = ({
                 <h2>
                   {isDeposit
                     ? searchTokenDecimals(cryptoType)
-                      ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress], 'Mwei'))} ${cryptoType}`
-                      : `${roundNumber(fromWei(tokenBalance[buyerCoinAddress]))} ${cryptoType}`
-                    : `${roundNumber(fromWei(tokenBalance[trancheTokenAddress]))} ${trancheToken}`}
+                      ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress] || '0', 'Mwei'))} ${cryptoType}`
+                      : `${roundNumber(fromWei(tokenBalance[buyerCoinAddress] || '0'))} ${cryptoType}`
+                    : `${roundNumber(fromWei(tokenBalance[trancheTokenAddress] || '0'))} ${trancheToken}`}
                 </h2>
               </TrancheModalContentRow>
             </TrancheModalContent>

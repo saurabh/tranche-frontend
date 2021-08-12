@@ -64,6 +64,7 @@ const TableCard = ({
     subscription,
     apy,
     sliceAPY,
+    netAPY,
     apyStatus,
     cryptoType,
     dividendType,
@@ -84,7 +85,6 @@ const TableCard = ({
 }) => {
   // const [isLoading, setIsLoading] = useState(false);
   // const dispatch = useNotification();
-
   const apyImage =
     apyStatus && apyStatus === 'fixed'
       ? theme === 'light'
@@ -189,7 +189,7 @@ const TableCard = ({
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <img src={apyImage} alt='apyImage' />
-              <h2>{roundNumber(apy + sliceAPY, 2)}%</h2>
+              <h2>{roundNumber(netAPY, 2)}%</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
@@ -271,7 +271,8 @@ const TableCard = ({
               trancheId={trancheId}
               apyStatus={apyStatus}
               apy={apy}
-              sliceAPY={sliceAPY}
+              sliceAPY={sliceAPY || 0}
+              netAPY={netAPY}
               contractAddress={contractAddress}
               cryptoType={cryptoType}
               dividendType={dividendType}
@@ -337,7 +338,7 @@ const TableCard = ({
                 <h2>NET APY</h2>
                 <h2>
                   <img src={apyImage} alt='apyImage' />
-                  {roundNumber(apy + sliceAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
+                  {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
@@ -370,7 +371,8 @@ const TableCard = ({
               trancheId={trancheId}
               apyStatus={apyStatus}
               apy={apy}
-              sliceAPY={sliceAPY}
+              sliceAPY={sliceAPY || 0}
+              netAPY={netAPY}
               contractAddress={contractAddress}
               cryptoType={cryptoType}
               dividendType={dividendType}

@@ -46,6 +46,7 @@ let TableMoreRow = ({
   apyStatus,
   apy,
   sliceAPY,
+  netAPY,
   contractAddress,
   cryptoType,
   dividendType,
@@ -103,7 +104,7 @@ let TableMoreRow = ({
       apy,
       protocolAPY,
       sliceAPY,
-      netAPY: apy + sliceAPY,
+      netAPY,
       isDeposit,
       isDepositApproved,
       isWithdrawApproved,
@@ -157,11 +158,11 @@ let TableMoreRow = ({
 
   const handleInputChange = (newValue, type) => {
     if (type) {
-      isGreaterThan(newValue, buyerTokenBalance) || isLessThan(newValue, 0)
+      isGreaterThan(newValue, buyerTokenBalance || 0) || isLessThan(newValue, 0)
         ? setDepositBalanceCheck('InputStylingError')
         : setDepositBalanceCheck('');
     } else {
-      isGreaterThan(newValue, trancheTokenBalance) || isLessThan(newValue, 0)
+      isGreaterThan(newValue, trancheTokenBalance || 0) || isLessThan(newValue, 0)
         ? setWithdrawBalanceCheck('InputStylingError')
         : setWithdrawBalanceCheck('');
     }
@@ -280,7 +281,11 @@ let TableMoreRow = ({
                 {isDepositApproved ? (
                   <button
                     onClick={() => openModal('trancheConfirm', true)}
-                    disabled={depositBalanceCheck === 'InputStylingError' || +formValues.depositAmount <= 0}
+                    disabled={
+                      depositBalanceCheck === 'InputStylingError'
+                      || +formValues.depositAmount <= 0
+                      || isNaN(+formValues.depositAmount)
+                    }
                   >
                     <img src={BtnArrow} alt='arrow' />
                     {i18n.t('tranche.trancheData.deposit')}
@@ -348,7 +353,11 @@ let TableMoreRow = ({
                 {isWithdrawApproved ? (
                   <button
                     onClick={() => openModal('trancheConfirm', false)}
-                    disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount <= 0}
+                    disabled={
+                      withdrawBalanceCheck === 'InputStylingError'
+                      || +formValues.withdrawAmount <= 0
+                      || isNaN(+formValues.withdrawAmount)
+                    }
                   >
                     <img src={BtnArrow} alt='arrow' />
                     {i18n.t('tranche.trancheData.withdraw')}
@@ -435,7 +444,11 @@ let TableMoreRow = ({
                   {isDepositApproved ? (
                     <button
                       onClick={() => openModal('trancheConfirm', true)}
-                      disabled={depositBalanceCheck === 'InputStylingError' || +formValues.depositAmount <= 0}
+                        disabled={
+                          depositBalanceCheck === 'InputStylingError'
+                          || +formValues.depositAmount <= 0
+                          || isNaN(+formValues.depositAmount)
+                        }
                     >
                       <img src={BtnArrow} alt='arrow' />
                       {i18n.t('tranche.trancheData.deposit')}
@@ -519,7 +532,11 @@ let TableMoreRow = ({
                   {isWithdrawApproved ? (
                     <button
                       onClick={() => openModal('trancheConfirm', false)}
-                      disabled={withdrawBalanceCheck === 'InputStylingError' || +formValues.withdrawAmount <= 0}
+                          disabled={
+                            withdrawBalanceCheck === 'InputStylingError'
+                            || +formValues.withdrawAmount <= 0
+                            || isNaN(+formValues.withdrawAmount)
+                          }
                     >
                       <img src={BtnArrow} alt='arrow' />
                       {i18n.t('tranche.trancheData.withdraw')}
@@ -542,7 +559,7 @@ let TableMoreRow = ({
 
 TableMoreRow = reduxForm({
   form: 'tranche',
-  initialValues: { depositAmount: '', withdrawAmount: '' }
+  initialValues: { depositAmount: '', withdrawAmount: '' },
   // destroyOnUnmount: false
 })(TableMoreRow);
 
