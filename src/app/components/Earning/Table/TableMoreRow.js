@@ -234,6 +234,8 @@ let TableMoreRow = ({
               btn={ModeThemes[theme].backgroundBorder}
               loading={txOngoing}
               disabled={!isDepositApproved}
+              approved={!isDepositApproved}
+              disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
               {txOngoing && (
                 <div>
@@ -305,6 +307,8 @@ let TableMoreRow = ({
               btn={ModeThemes[theme].backgroundBorder}
               loading={txOngoing}
               disabled={!isWithdrawApproved}
+              approved={!isWithdrawApproved}
+              disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
               {txOngoing && (
                 <div>
@@ -380,6 +384,8 @@ let TableMoreRow = ({
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={txOngoing}
                 disabled={!isDepositApproved}
+                approved={!isDepositApproved}
+                disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}
               >
                 {txOngoing && (
                   <div>
@@ -469,6 +475,8 @@ let TableMoreRow = ({
                 btn={ModeThemes[theme].backgroundBorder}
                 loading={txOngoing}
                 disabled={!isWithdrawApproved}
+                approved={!isWithdrawApproved}
+                disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}
               >
                 {txOngoing && (
                   <div>

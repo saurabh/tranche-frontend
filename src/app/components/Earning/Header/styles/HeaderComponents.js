@@ -124,7 +124,7 @@ const NavbarLinks = styled.div`
     padding: 17px 37px;
     border-radius: 159px;
     :hover{
-      opacity: 0.6;
+      opacity: 1;
     }
   }
   @media (max-width: 992px) {
@@ -297,6 +297,9 @@ const WalletBtn = styled.button`
     margin: 5px 0;
     width: 129px;
     height: 33px;
+  }
+  &:hover{
+    opacity: 0.7;
   }
 `;
 
@@ -706,6 +709,9 @@ const MarketTab = styled.button`
       box-shadow: ${btnShadow} !important;
       opacity: 1;
   `} 
+  :hover{
+    opacity: ${props => props.current ? "" : "0.7"};
+  }
 `
 const BridgeTokensWrapper = styled.div`
   display: flex;

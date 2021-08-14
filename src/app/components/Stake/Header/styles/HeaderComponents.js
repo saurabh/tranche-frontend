@@ -144,6 +144,12 @@ const StackSummaryCol = styled.div`
       font-size: 14px;
       color: rgba(255, 255, 255, 0.8);
     }
+    button{
+      transition: 300ms;
+      :hover{
+        opacity: 0.7;
+      }
+    }
   `}
   @media (max-width: 767px){
     width: 100% !important;
@@ -214,6 +220,10 @@ const WithdrawStakeCardBtns = styled.div`
     background: #FFFFFF;
     border: none;
     border-radius: 10px;
+    transition: 300ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
   @media (max-width: 767px){
     width: 100%;
@@ -288,7 +298,7 @@ const NavbarLinks = styled.div`
     border-radius: 159px;
     opacity: 0.5;
     :hover{
-      opacity: 0.6;
+      opacity: 1;
     }
   }
   @media (max-width: 992px) {

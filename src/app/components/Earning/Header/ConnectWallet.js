@@ -74,6 +74,8 @@ const ConnectWallet = ({
 
   return (
     <NavBarRightWrapper>
+      {
+        path === "tranche" &&
       <WalletBtn
         disabled={!address}
         background={ModeThemes[theme].ModalTrancheNavbarBtn}
@@ -82,13 +84,17 @@ const ConnectWallet = ({
         tranche
         onClick={() => openModal()}
       >
+            
         <WalletBtnIcon tranche>
-          <img src={TrancheStake} alt='tranche' />
-        </WalletBtnIcon>
+        <img src={TrancheStake} alt='tranche' />
+        </WalletBtnIcon>        
+                  
         <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
           <h2>{address ? totalSlice : '--'}</h2>
         </WalletBtnText>
       </WalletBtn>
+      }
+
 
       {balance < 0 ? (
         <WalletBtn background='#4441CF' onClick={handleConnect} onKeyUp={handleConnect}>

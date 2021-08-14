@@ -634,7 +634,8 @@ const TrancheModal = ({
     ? TrancheEnable()
     : txModalType === 'trancheConfirm'
     ? TrancheConfirm()
-    : TrancheMarket();
+    : txModalType === 'trancheMarkets'
+    ? TrancheMarket() : "";
 };
 
 const mapStateToProps = (state) => ({

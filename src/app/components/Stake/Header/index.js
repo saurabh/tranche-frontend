@@ -5,7 +5,7 @@ import {
   NavbarLinks
 } from './styles/HeaderComponents';
 // import HeaderTabs from "./HeaderTabs"
-import Navbar from "./Navbar"
+import Navbar from "../../Earning/Header/Navbar"
 import {
   ModeThemes
 } from 'config/constants';

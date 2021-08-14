@@ -160,6 +160,10 @@ const TableHeadTitle = styled.div`
         @media (max-width: 1200px){
           font-size: 10px;
         }
+        :hover{
+          color: ${props => props.theme === "light" ? "#242732" : "#FFFFFF"};
+          border-color: ${props => props.theme === "light" ? "#242732" : "#FFFFFF"};
+        }
     }
     & > h2:nth-child(2){
       margin-left: 42px;
@@ -347,6 +351,10 @@ const TableTitle = styled.div`
     ${({ stake }) => stake && `
      margin: 40px 0;
     `}
+    ${({ stakeTitle }) => stakeTitle && `
+      margin: 25px 0 20px 0;
+    `}
+
 `;
 const TableSubTitle = styled.div`
     & > h2{
@@ -1282,8 +1290,9 @@ const StakeBtn = styled.button`
     pointer-events: none;
     cursor: default;
   `}
+  transition: 300ms;
   :hover{
-    filter: brightness(1.2);
+    opacity: 0.7;
   }
   @media (max-width: 992px){
     width: 25px;
@@ -1319,6 +1328,10 @@ const StakeBtnSlice = styled.button`
     width: 73.32px;
     height: 25.19px;
   } 
+  transition: 300ms;
+  :hover{
+    opacity: 0.7;
+  }
 `
 
 const StakeBtns = styled.div`
@@ -1337,7 +1350,7 @@ const AdustBtnWrapper = styled.div`
     justify-content: center;
     display: flex;
     overflow: hidden;
-    transition: none;
+    transition: 300ms;
     ${({ status }) => status && `
       transform: rotate(180deg);
     `}
@@ -1346,7 +1359,7 @@ const AdustBtnWrapper = styled.div`
     }
     img{
       pointer-events: none;
-      margin-right: 12px;
+      // margin-right: 12px;
     }
     :disabled{
       background-color: #F1F1F1;
@@ -1537,8 +1550,13 @@ const TableMoreRightSection = styled.div`
       outline: none;
       cursor: pointer;
       :disabled{
-        opacity: 0.5;
+        // opacity: 0.5;
+        // pointer-events: none;
+        background: ${props => props.disabledColor} !important;  
+        color: ${props => props.disabledTextColor} !important;  
+        opacity: 1 !important;
         pointer-events: none;
+        
       }
       img{
         margin-right: 5px;
@@ -1565,13 +1583,13 @@ const TableMoreRightSection = styled.div`
       transform: translate(-50%, -50%);
     }
   `}
-  ${({ disabled, disabledBackground, btn }) => disabled && `
+  ${({ disabled, disabledBackground, btn, disabledColor, disabledTextColor }) => disabled && `
     form{
       div{
-        /* button{
-          color: rgba(57, 41, 90, 0.5) !important;
+        button{
+          opacity: 0.5;
           pointer-events: none !important;
-        } */
+        }
         input{
           background: ${disabledBackground} !important;  
           pointer-events: none !important;
@@ -1583,10 +1601,22 @@ const TableMoreRightSection = styled.div`
         background: ${btn} !important;
       } */
     }
+    
   `}
   @media (max-width: 992px){
     width: 100%;
   }
+  form{
+    button{
+      transition: 200ms;
+      :hover{
+        opacity: 0.7;
+      }
+    }
+  }
+
+
+  
 `
 const FormContent = styled.div` 
   position: relative;
@@ -1648,6 +1678,12 @@ const FormContent = styled.div`
     text-transform: uppercase;
     color: ${props => props.color} !important;
     margin: 0;
+  }
+  & > h2{
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 `
 const CheckboxWrapper = styled.div`
@@ -2043,7 +2079,8 @@ const HowToLink = styled.a`
   transition: 200ms;
   :hover{
     color: ${props => props.color}; 
-    filter: brightness(1.3);
+    // filter: brightness(1.3);
+    opacity: 0.7;
   }
   
   @media (max-width: 992px){

@@ -750,7 +750,10 @@ const SliceNotFoundBtn = styled.div`
     justify-content: center;
     align-items: center;
     text-decoration: none;
-  ]
+    transition: 300ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 `;
 const ModalMarketWrapper = styled.div`
@@ -791,6 +794,11 @@ const ModalMarketWrapper = styled.div`
     align-items: center;
     text-align: center;
     color: ${props => props.linkColor};
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
+    
   }
 `;
 
@@ -822,6 +830,10 @@ const ModalMarketWrapperBtn = styled.div`
     justify-content: center;
     align-items: center;
     text-decoration: none;
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -1033,6 +1045,15 @@ const StakingModalClose = styled.div`
     border: none;
     outline: none;
     cursor: pointer;
+    img{
+      opacity: 0.7;
+      transition: 300ms;
+    }
+    :hover{
+      img{
+        opacity: 1;
+      }
+    }
   }
   ${({ migrate }) => migrate && `
     top: unset;
@@ -1062,6 +1083,17 @@ const ClaimModalHeader = styled.div`
       font-weight: 600;
       font-size: 14px;
       color: #898FA4;
+    }
+  }
+  button{
+    img{
+      opacity: 0.7;
+      transition: 300ms;
+    }
+    :hover{
+      img{
+        opacity: 1;
+      }
     }
   }
 `;
@@ -1267,6 +1299,10 @@ const ClaimModalTableBtn = styled.button`
   // background: #CECECE;
   // background: #C22D2D;
   // color: #666666;
+  transition: 300ms;
+  :hover{
+    opacity: 0.7;
+  }
 `;
 const StakingModalContentSideWrapper = styled.div`
   width: 100%;
@@ -1549,6 +1585,10 @@ const StakeModalNavigationBtn = styled.button`
   ${({ Withdraw }) => Withdraw && `
     right: 0;
   `}
+  transition: 300ms;
+  :hover{
+    opacity: 1;
+  }
 `;
 const StakeModalFormWrapper = styled.div`
     & > h2{
@@ -1676,6 +1716,11 @@ const StakeModalFormBtn = styled.button`
     position: relative;
     width: 100%;
     margin: 15px 0;
+  }
+
+  transition: 300ms;
+  :hover{
+    opacity: 0.7;
   }
   
 `;
@@ -1826,6 +1871,10 @@ const InputTag = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.textColor};
+    transition: 300ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 
 `;
@@ -1911,6 +1960,12 @@ const StakeNewCol = styled.div`
     width: 25.6666667%;
     h2{
       text-align: center;
+    }
+    button{
+      transition: 300ms;
+      :hover{
+        opacity: 0.7;
+      }
     }
   `}
   ${({ head, color }) => head && `
@@ -2259,6 +2314,16 @@ const TrancheModalFooter = styled.div`
       color: ${props => props.disabledTextColor};
       pointer-events: none;
     }
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
+  }
+  a{
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
   
 
@@ -2276,6 +2341,10 @@ const TrancheModalFooter = styled.div`
     a{
       color: #A98BFF;
       font-weight: bold;
+      transition: 200ms;
+      :hover{
+        opacity: 0.7;
+      } 
     }
   }
   ${({ TrancheEnableConfirm }) => TrancheEnableConfirm && `
