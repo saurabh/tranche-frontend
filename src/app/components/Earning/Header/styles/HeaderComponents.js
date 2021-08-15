@@ -100,6 +100,7 @@ const NavbarContainer = styled.div`
 const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
   margin: 0 auto;
   // width: 350px;
   // padding: 17px 36px;

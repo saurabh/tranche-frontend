@@ -146,6 +146,7 @@ const StackSummaryCol = styled.div`
     }
     button{
       transition: 300ms;
+      outline: none;
       :hover{
         opacity: 0.7;
       }

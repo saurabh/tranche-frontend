@@ -1922,13 +1922,24 @@ const TooltipWrapper = styled.div`
     z-index: -1;
   `}
   ${({ available, language}) => available && `
-    left: ${language === "en" ? "calc(100% + 5px)" : language === "kr" ? "calc(100% - 36px)" : "calc(100% - 45px)" };
+    // left: ${language === "en" ? "calc(100% + 5px)" : language === "kr" ? "calc(100% - 36px)" : "calc(100% - 45px)" };
+    left: 0;
+    bottom: 105px !important;
+    top: unset !important;
     z-index: -1;
+    div{
+      :after{
+        content: '';
+        top: 93% !important;
+        left: 0 !important;
+        transform: rotate(-180deg) !important;
+      }
+    }
   `}
   ${({ stakingPool, language }) => stakingPool && `
     top: calc(100% - 23px) ;
     bottom: unset;
-    left: ${language === "en" ? "calc(100% - 76px)" : language === "kr" ? "calc(100% - 115px)" : "calc(100% - 140px)" };;
+    left: ${language === "en" ? "calc(100% - 90px)" : language === "kr" ? "calc(100% - 115px)" : "calc(100% - 140px)" };;
   `}
   ${({ status, language }) => status && `
     top: calc(100% - 23px);
@@ -1948,7 +1959,7 @@ const TooltipWrapper = styled.div`
   ${({ APY, language}) => APY && `
     top: calc(100% - 23px);
     bottom: unset;
-    left: ${language === "en" ? "calc(100% - 45px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 45px)" };
+    left: ${language === "en" ? "calc(100% - 25px)" : language === "kr" ? "calc(100% - 40px)" : "calc(100% - 45px)" };
   `}
   ${({ yourStake, language }) => yourStake && `
     top: calc(100% - 23px);
@@ -1956,10 +1967,22 @@ const TooltipWrapper = styled.div`
     left: ${language === "en" ? "calc(100% - 12px)" : language === "kr" ? "calc(100% - 25px)" : "calc(100% - 25px)" };
   `}
   ${({ manageStake, language, sliceStaking }) => manageStake && `
-    top: calc(100% - 23px);
-    bottom: unset;
-    left: ${language === "en" ? (sliceStaking ? "calc(100% - 20px)" : "calc(100% + 10px)") : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
-  `}
+    // top: calc(100% - 23px);
+    // bottom: unset;
+    // left: ${language === "en" ? (sliceStaking ? "calc(100% - 20px)" : "calc(100% + 10px)") : language === "kr" ? "calc(100% - 10px)" : "calc(100% - 20px)" };
+    left: 15px;
+    bottom: 30px !important;
+    top: unset !important;
+    z-index: -1;
+    div{
+      :after{
+        content: '';
+        top: 92% !important;
+        left: 0 !important;
+        transform: rotate(-180deg) !important;
+      }
+    }
+    `}
   ${({ summary }) => summary && `
     transform: translateX(25px);
     z-index: -1;
@@ -2007,7 +2030,7 @@ const TooltipWrapper = styled.div`
       content: '';
       position: absolute;
       top: 10px;
-      left: -14px !important;
+      left: -14px;
       transform: rotate(-90deg);
       width: 0;
       height: 0;
