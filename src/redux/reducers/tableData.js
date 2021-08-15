@@ -24,6 +24,7 @@ import {
   SET_TX_MODAL_DATA,
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
+  SET_TX_ONGOING_DATA,
   SET_TX_LINK,
   SET_MIGRATE_STEP,
   SET_MIGRATE_LOADING,
@@ -55,6 +56,7 @@ const initialState = {
   txModalData: {},
   txModalStatus: 'initialState',
   txLoading: false,
+  txOngoingData: { isDeposit: undefined, trancheCardId: undefined },
   txLink: '',
   currentStep: 'claim',
   migrateLoading: false,
@@ -119,6 +121,8 @@ export default function (state = initialState, action) {
       return { ...state, txModalStatus: payload };
     case SET_TX_MODAL_LOADING:
       return { ...state, txLoading: payload };
+    case SET_TX_ONGOING_DATA:
+      return { ...state, txOngoingData: payload };
     case SET_TX_LINK:
       return { ...state, txLink: payload };
     case SET_MIGRATE_STEP:

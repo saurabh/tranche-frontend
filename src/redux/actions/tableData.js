@@ -8,6 +8,7 @@ import {
   LP2TokenAddress,
   txLink
 } from 'config';
+import { timeout } from 'utils';
 import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
 import {
@@ -36,6 +37,7 @@ import {
   SET_TX_MODAL_DATA,
   SET_TX_MODAL,
   SET_TX_MODAL_LOADING,
+  SET_TX_ONGOING_DATA,
   SET_TX_LINK,
   SET_MIGRATE_STEP,
   SET_MIGRATE_LOADING,
@@ -305,17 +307,35 @@ export const setTxModalData = (object) => (dispatch) => {
   });
 };
 
-export const setTxModalStatus = (string) => (dispatch) => {
+export const setTxModalStatus = (string) => async (dispatch) => {
   dispatch({
     type: SET_TX_MODAL,
     payload: string
   });
+  if (string === 'success' || string === 'rejected') {
+    await timeout(5000);
+    dispatch({
+      type: SET_TX_MODAL_OPEN,
+      payload: false
+    });
+    dispatch({
+      type: SET_TX_MODAL,
+      payload: 'initialState'
+    });
+  }
 };
 
 export const setTxModalLoading = (bool) => (dispatch) => {
   dispatch({
     type: SET_TX_MODAL_LOADING,
     payload: bool
+  });
+};
+
+export const setTxOngoingData = (obj) => (dispatch) => {
+  dispatch({
+    type: SET_TX_ONGOING_DATA,
+    payload: obj
   });
 };
 
