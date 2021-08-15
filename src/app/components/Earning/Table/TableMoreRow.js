@@ -118,7 +118,7 @@ let TableMoreRow = ({
   // const closeModal = () => {
   //   setTxModalOpen(false);
   //   setTxModalStatus('initialState');
-  //   setTxModalLoading({ loading: false });
+  //   setTxModalLoading(false);
   // };
 
   useEffect(() => {

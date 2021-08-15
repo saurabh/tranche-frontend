@@ -29,7 +29,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
   const closeModal = () => {
     setTxModalOpen(false);
     setTxModalStatus('initialState');
-    setTxModalLoading({ loading: false });
+    setTxModalLoading(false);
   };
 
   return (
