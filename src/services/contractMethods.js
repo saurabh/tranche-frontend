@@ -25,8 +25,16 @@ import {
   networkId,
   RewardDistributionAddress
 } from 'config';
-import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval, checkSIRRewards, setTokenBalances } from 'redux/actions/ethereum';
-import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
+import {
+  setTxLoading,
+  addNotification,
+  setNotificationCount,
+  updateNotification,
+  toggleApproval,
+  checkSIRRewards,
+  setTokenBalances
+} from 'redux/actions/ethereum';
+import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxOngoingData, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
@@ -187,9 +195,11 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
 export const approveContract = async (isDeposit, tokenAddress, contractAddress, isApproved, e) => {
   const state = store.getState();
   const { address, network, web3, txOngoing, notify } = state.ethereum;
+  const { trancheCard } = state.data;
   if (txOngoing) e.stopPropogation();
   try {
     store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxOngoingData({ isDeposit, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
     const amount = isApproved ? 0 : toWei(ApproveBigNumber);
     const token = ERC20Setup(web3, tokenAddress);
@@ -238,8 +248,10 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   const state = store.getState();
   const { web3, address, notify, network } = state.ethereum;
+  const { trancheCard } = state.data;
   try {
     store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxOngoingData({ isDeposit: true, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
@@ -272,7 +284,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             });
           }
         })
-        .on('confirmation', async(count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
@@ -336,8 +348,10 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
 export const sellTrancheTokens = async (contractAddress, trancheId, trancheType) => {
   const state = store.getState();
   const { web3, address, notify, network } = state.ethereum;
+  const { trancheCard } = state.data;
   try {
     store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxOngoingData({ isDeposit: false, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
     let { withdrawAmount } = state.form.tranche.values;
     withdrawAmount = toWei(withdrawAmount);

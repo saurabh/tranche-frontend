@@ -165,6 +165,10 @@ export const setTokenBalances = (address) => async (dispatch) => {
         );
         return batch;
       });
+      network === maticNetworkId && dispatch({
+        type: SET_TOKEN_BALANCE,
+        payload: { tokenAddress: SLICEAddress.toLowerCase(), tokenBalance: '0' }
+      });
       batch.execute();
     }
   } catch (error) {
