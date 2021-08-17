@@ -702,33 +702,63 @@ export const getUnclaimedRewards = async (contractAddress) => {
     const contract = await RewardDistributionSetup(web3, contractAddress);
     const marketsCounter = await contract.methods.marketsCounter().call();
     const marketArray = new Array(+(marketsCounter || 0)).fill(0);
-    const batch = new web3.BatchRequest();
-    const trARewardsPromise = marketArray.map((_v, marketId) => {
+    const b = new web3.BatchRequest();
+    const distributionCounterPromise = marketArray.map((_v, marketId) => {
       return new Promise((resolve, reject) => {
-        batch.add(
-          contract.methods.trAEarned(marketId, address).call.request((err, res) => {
+        b.add(
+          contract.methods.availableMarketsRewards(marketId).call.request((err, res) => {
             if (err) {
-              reject(err);
+              resolve({
+                trADistributionCounter: 0, trBDistributionCounter: 0
+              });
             }
-            resolve(res);
+            const { trADistributionCounter, trBDistributionCounter } = res;
+            resolve({ trADistributionCounter, trBDistributionCounter });
           })
         );
+      })
+    });
+    b.execute();
+    const distributionCounter = await Promise.all(distributionCounterPromise);
+    const batch = new web3.BatchRequest();
+    const trARewardsPromise = [];
+    distributionCounter.forEach((o, marketId) => {
+      const distributionArray = new Array(+(o.trADistributionCounter || 0)).fill(0);
+      distributionArray.forEach((_v, distributionId) => {
+        trARewardsPromise.push(
+          new Promise((resolve, reject) => {
+            batch.add(
+              contract.methods.trAEarned(marketId, address, distributionId).call.request((err, res) => {
+                if (err) {
+                  reject(err);
+                }
+                resolve(res);
+              })
+            );
+          })
+        )
       });
     });
-    const trBRewardsPromise = marketArray.map((_v, marketId) => {
-      return new Promise((resolve, reject) => {
-        batch.add(
-          contract.methods.trBEarned(marketId, address).call.request((err, res) => {
-            if (err) {
-              reject(err);
-            }
-            resolve(res);
+    const trBRewardsPromise = [];
+    distributionCounter.forEach((o, marketId) => {
+      const distributionArray = new Array(+(o.trBDistributionCounter || 0)).fill(0);
+      distributionArray.forEach((_v, distributionId) => {
+        trBRewardsPromise.push(
+          new Promise((resolve, reject) => {
+            batch.add(
+              contract.methods.trBEarned(marketId, address, distributionId).call.request((err, res) => {
+                if (err) {
+                  reject(err);
+                }
+                resolve(res);
+              })
+            );
           })
-        );
+        )
       });
     });
     batch.execute();
-    const rewards = await Promise.all([...trARewardsPromise, ...trBRewardsPromise]);
+    const rewards = await Promise.all([ ...trARewardsPromise, ...trBRewardsPromise ]);
     return rewards.reduce((acc, cur) => {
       acc += +(cur || 0);
       return acc;
