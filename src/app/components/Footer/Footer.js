@@ -25,7 +25,8 @@ function Footer({ changeTheme, theme }) {
     setCurrentLanguage(currentLng === 'en' ? "English" : currentLng === 'zh' ? "中文" : currentLng === 'kr' ? "한국어" : "English")
   }, [currentLng])
   const newPath = (lng) =>{
-    return `${"/" + lng + "/" + currentPath}`;
+    // return `${ "/" + lng + "/" + currentPath }`;
+    return `/${ lng }/${ currentPath }`;
   }
   return (
     <FooterContainer className="footer-container" color={ModeThemes[theme].footerBackground}>

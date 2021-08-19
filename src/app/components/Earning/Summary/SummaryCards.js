@@ -60,12 +60,12 @@ const SummaryCards = ({
 
   useEffect(() => {
     const getSliceStats = async () => {
-      const res = await axios(`${ serverUrl + sliceSummary }`);
+      const res = await axios(`${ serverUrl }${ sliceSummary }`);
       const { result } = res.data;
       setSliceStats(result);
     };
     const getTvl = async () => {
-      const res = await axios(`${ serverUrl + totalValueLocked }`);
+      const res = await axios(`${ serverUrl }${ totalValueLocked }`);
       const { result } = res.data;
       setTvl(result);
     };

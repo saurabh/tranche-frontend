@@ -57,7 +57,7 @@ const HeaderTabs = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${serverUrl + stakingSummary + address}`);
+      const res = await axios(`${serverUrl}${stakingSummary}${address}`);
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
