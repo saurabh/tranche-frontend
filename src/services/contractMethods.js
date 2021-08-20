@@ -712,39 +712,33 @@ export const getUnclaimedRewards = async (contractAddress) => {
     const batch = new web3.BatchRequest();
     const trARewardsPromise = [];
     distributionCounter.forEach((o, marketId) => {
-      const distributionArray = new Array(+(o.trADistributionCounter || 0)).fill(0);
-      distributionArray.forEach((_v, distributionId) => {
-        trARewardsPromise.push(
-          new Promise((resolve, reject) => {
-            batch.add(
-              contract.methods.trAEarned(marketId, address, distributionId+1).call.request((err, res) => {
-                if (err) {
-                  reject(err);
-                }
-                resolve(res);
-              })
-            );
-          })
-        )
-      });
+      trARewardsPromise.push(
+        new Promise((resolve, reject) => {
+          batch.add(
+            contract.methods.trAEarned(marketId, address, +(o.trADistributionCounter || 0)).call.request((err, res) => {
+              if (err) {
+                reject(err);
+              }
+              resolve(res);
+            })
+          );
+        })
+      )
     });
     const trBRewardsPromise = [];
     distributionCounter.forEach((o, marketId) => {
-      const distributionArray = new Array(+(o.trBDistributionCounter || 0)).fill(0);
-      distributionArray.forEach((_v, distributionId) => {
-        trBRewardsPromise.push(
-          new Promise((resolve, reject) => {
-            batch.add(
-              contract.methods.trBEarned(marketId, address, distributionId + 1).call.request((err, res) => {
-                if (err) {
-                  reject(err);
-                }
-                resolve(res);
-              })
-            );
-          })
-        )
-      });
+      trBRewardsPromise.push(
+        new Promise((resolve, reject) => {
+          batch.add(
+            contract.methods.trBEarned(marketId, address, +(o.trBDistributionCounter || 0)).call.request((err, res) => {
+              if (err) {
+                reject(err);
+              }
+              resolve(res);
+            })
+          );
+        })
+      )
     });
     batch.execute();
     const rewards = await Promise.all([ ...trARewardsPromise, ...trBRewardsPromise ]);
