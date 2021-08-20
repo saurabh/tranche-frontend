@@ -717,7 +717,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
         trARewardsPromise.push(
           new Promise((resolve, reject) => {
             batch.add(
-              contract.methods.trAEarned(marketId, address, distributionId).call.request((err, res) => {
+              contract.methods.trAEarned(marketId, address, distributionId+1).call.request((err, res) => {
                 if (err) {
                   reject(err);
                 }
@@ -735,7 +735,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
         trBRewardsPromise.push(
           new Promise((resolve, reject) => {
             batch.add(
-              contract.methods.trBEarned(marketId, address, distributionId).call.request((err, res) => {
+              contract.methods.trBEarned(marketId, address, distributionId + 1).call.request((err, res) => {
                 if (err) {
                   reject(err);
                 }
