@@ -179,8 +179,8 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
     return (
-      isGreaterThan(userAllowance, tokenBalance[ tokenAddress ]) || isEqualTo(userAllowance, tokenBalance[ tokenAddress ])
-    ) && userAllowance !== '0'
+      (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0'
+    );
   } catch (error) {
     console.error(error);
   }
@@ -436,7 +436,7 @@ export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userA
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    return isGreaterThan(userAllowance, tokenBalance[ tokenAddress ]) || isEqualTo(userAllowance, tokenBalance[ tokenAddress ]);
+    return isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress]);
   } catch (error) {
     console.error(error);
   }
@@ -692,15 +692,16 @@ export const getUnclaimedRewards = async (contractAddress) => {
     const marketsCounter = await contract.methods.marketsCounter().call();
     const marketArray = new Array(+(marketsCounter || 0)).fill(0);
     const b = new web3.BatchRequest();
-    const historicalTrARewardPromises = [], historicalTrBRewardPromises = [];
+    const historicalTrARewardPromises = [],
+      historicalTrBRewardPromises = [];
     const distributionCounterPromise = marketArray.map((_v, marketId) => {
       historicalTrARewardPromises.push(
         new Promise((resolve, reject) => {
           b.add(
             contract.methods.getHistoricalUnclaimedRewardsAmountTrA(marketId, address).call.request((err, res) => {
-              if (err)
-              {
+              if (err) {
                 resolve(0);
+                return;
               }
               resolve(+res);
             })
@@ -711,9 +712,9 @@ export const getUnclaimedRewards = async (contractAddress) => {
         new Promise((resolve, reject) => {
           b.add(
             contract.methods.getHistoricalUnclaimedRewardsAmountTrB(marketId, address).call.request((err, res) => {
-              if (err)
-              {
+              if (err) {
                 resolve(0);
+                return;
               }
               resolve(+res);
             })
@@ -725,14 +726,16 @@ export const getUnclaimedRewards = async (contractAddress) => {
           contract.methods.availableMarketsRewards(marketId).call.request((err, res) => {
             if (err) {
               resolve({
-                trADistributionCounter: 0, trBDistributionCounter: 0
+                trADistributionCounter: 0,
+                trBDistributionCounter: 0
               });
+              return;
             }
             const { trADistributionCounter, trBDistributionCounter } = res;
             resolve({ trADistributionCounter, trBDistributionCounter });
           })
         );
-      })
+      });
     });
     b.execute();
     const distributionCounter = await Promise.all(distributionCounterPromise);
@@ -745,12 +748,13 @@ export const getUnclaimedRewards = async (contractAddress) => {
             contract.methods.trAEarned(marketId, address, +(o.trADistributionCounter || 0)).call.request((err, res) => {
               if (err) {
                 reject(err);
+                return;
               }
               resolve(res);
             })
           );
         })
-      )
+      );
     });
     const trBRewardsPromise = [];
     distributionCounter.forEach((o, marketId) => {
@@ -760,20 +764,16 @@ export const getUnclaimedRewards = async (contractAddress) => {
             contract.methods.trBEarned(marketId, address, +(o.trBDistributionCounter || 0)).call.request((err, res) => {
               if (err) {
                 reject(err);
+                return;
               }
               resolve(res);
             })
           );
         })
-      )
+      );
     });
     batch.execute();
-    const rewards = await Promise.all([
-      ...trARewardsPromise,
-      ...trBRewardsPromise,
-      ...historicalTrARewardPromises,
-      ...historicalTrBRewardPromises
-    ]);
+    const rewards = await Promise.all([...trARewardsPromise, ...trBRewardsPromise, ...historicalTrARewardPromises, ...historicalTrBRewardPromises]);
     return rewards.reduce((acc, cur) => {
       acc += +(cur || 0);
       return acc;
