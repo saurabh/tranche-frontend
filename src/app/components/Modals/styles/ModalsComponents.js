@@ -2445,7 +2445,130 @@ const TrancheModalContentStatus = styled.div`
     color: ${props => props.color};
   }
 `
+
+
+const NotFoundStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '292px',
+    width: '100%',
+    minHeight: '245px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const MigrateStake = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '473px',
+    width: '100%',
+    minHeight: '457px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const FirstCustomStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '731px',
+    width: '100%',
+    minHeight: '634px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const stakingModalStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '731px',
+    width: '100%',
+    minHeight: '454px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
 export {
+  NotFoundStyles,
+  MigrateStake,
+  FirstCustomStyles,
+  stakingModalStyles,
   ModalHeader, 
   ModalContent,
   ModalContentDetails,
