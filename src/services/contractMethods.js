@@ -786,17 +786,8 @@ export const getUnclaimedRewards = async (contractAddress) => {
 
 export const claimRewardsAllMarkets = async () => {
   const state = store.getState();
-  const { web3, address, notify, network, notificationCount } = state.ethereum;
-  let id = notificationCount;
+  const { web3, address, notify, network } = state.ethereum;
   try {
-    store.dispatch(
-      addNotification({
-        id,
-        type: 'WAITING',
-        message: 'Your transaction is waiting for you to confirm',
-        title: 'awaiting confirmation'
-      })
-    );
     const contract = await RewardDistributionSetup(web3, RewardDistributionAddress);
     await contract.methods
       .claimRewardsAllMarkets(address)
@@ -820,15 +811,6 @@ export const claimRewardsAllMarkets = async () => {
       });
   } catch (error) {
     console.log(error);
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
     return error;
   }
 };

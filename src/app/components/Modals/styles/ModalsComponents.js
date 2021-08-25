@@ -2564,7 +2564,134 @@ const stakingModalStyles = {
   }
 };
 
+const TrancheMarketStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '372px',
+    maxHeight: '388px',
+    width: '100%',
+    minHeight: '366px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheRewardsStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '340px',
+    maxHeight: '517px',
+    width: '100%',
+    minHeight: '517px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheEnableModal = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '600px',
+    width: '100%',
+    minHeight: '571px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheConfirmModal = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '685px',
+    width: '100%',
+    minHeight: '571px',
+    height: '100%',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
+
 export {
+  TrancheMarketStyles,
+  TrancheRewardsStyles,
+  TrancheEnableModal,
+  TrancheConfirmModal,
   NotFoundStyles,
   MigrateStake,
   FirstCustomStyles,
