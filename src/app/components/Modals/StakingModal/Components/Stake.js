@@ -1,4 +1,49 @@
-const stakingModal = () => {
+import React from 'react';
+import Modal from 'react-modal';
+import moment from 'moment';
+import { ModeThemes, SLICEAddress } from 'config';
+import { roundNumber, formatTime } from 'utils';
+import StakingForm from 'app/components/Form/Staking';
+import i18n from 'app/components/locale/i18n';
+import {
+  StakingModalContentWrapper,
+  StakingModalContent,
+  StakingModalClose,
+  StakeModalPoolTable,
+  StakeModalPoolTableTitle,
+  StakeModalPoolTableHead,
+  StakeModalPoolTableRow,
+  StakeModalPoolTableCol,
+  StakingModalContentSideWrapper,
+  StakingModalContentSide,
+  BreakLink,
+  stakingModalStyles,
+  StakingModalContentSideTitle,
+  StakingModalContentSideHeader,
+  StakingModalContentSideHeaderBoxWrapper,
+  StakingModalContentSideHeaderBox,
+  StakingModalContentSideHeaderImg,
+  StakingModalContentSideHeaderText,
+} from '../../styles/ModalsComponents';
+import { CloseModal, CloseModalWhite, TrancheStake, LockLight } from 'assets';
+
+export const stakingModal = ({
+  modalTypeVar,
+  theme,
+  modalIsOpen,
+  type,
+  contractAddress,
+  tokenAddress,
+  apy,
+  userStaked,
+  userStakes,
+  durationIndex,
+  duration,
+  remainingCap,
+  // Functions
+  closeModal,
+  adjustStake
+}) => {
   return (
     <Modal
       isOpen={modalIsOpen}

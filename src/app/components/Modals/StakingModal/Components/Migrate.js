@@ -1,4 +1,63 @@
-export const migrateStake = () => {
+import React from 'react';
+import Modal from 'react-modal';
+import { ModeThemes } from 'config';
+import { addrShortener, roundNumber, formatTime } from 'utils';
+import StakingForm from 'app/components/Form/Staking';
+import i18n from 'app/components/locale/i18n';
+import {
+  StakingModalContentWrapper,
+  StakingModalContent,
+  StakingModalClose,
+  StakingModalContentSideTitle,
+  StakingModalContentSideHeader,
+  StakingModalContentSideHeaderBoxWrapper,
+  StakingModalContentSideHeaderBox,
+  StakingModalContentSideHeaderImg,
+  StakingModalContentSideHeaderText,
+  StakeModalFormBtn,
+  StakingModalHeader,
+  StepProgressBarWrapper,
+  ProgressBarStep,
+  ProgressBarLineWrapper,
+  ProgressBarDashedLine,
+  ProgressBarLine,
+  StakingMigrateModalContent,
+  RewardsAmountWrapper,
+  RewardsAmountCardsWrapper,
+  RewardsAmountCard,
+  StakeNewWrapper,
+  StakeNewTable,
+  StakeNewCol,
+  StakeNewTableHead,
+  StakeNewTableCards,
+  StakeNewTableCard,
+  StakeNewColFirst,
+  StakeNewColImg,
+  StakeNewColText,
+  SliceMigratedWrapper,
+  SliceMigratedText,
+  LoadingButton,
+  LoadingButtonCircle,
+  StakingModalChangeBtn,
+  StakingMigrateModalContentWrapper,
+  MigrateStake
+} from '../../styles/ModalsComponents';
+import { CloseModal, CloseModalWhite, TrancheStake, Migrated } from 'assets';
+
+export const migrateStake = ({
+  theme,
+  modalIsOpen,
+  currentStep,
+  accruedRewards,
+  oldSlice,
+  migrateLoading,
+  claimAndProgress,
+  newSlice,
+  objId,
+  setObjId,
+  // Functions
+  closeModal
+}) => {
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -88,13 +147,13 @@ export const migrateStake = () => {
           </StakingModalHeader>
 
           {currentStep === 'claim'
-            ? migrateClaim()
+            ? migrateClaim({ theme, currentStep, accruedRewards, oldSlice, migrateLoading, claimAndProgress })
             : currentStep === 'withdraw'
-            ? migrateWithdraw()
+            ? migrateWithdraw({ theme, oldSlice, currentStep, migrateLoading, claimAndProgress })
             : currentStep === 'stake'
-            ? migrateStakeSkip()
+            ? migrateStakeSkip({ theme, newSlice, objId, setObjId, currentStep, claimAndProgress })
             : currentStep === 'done'
-            ? migrateDone()
+            ? migrateDone({ theme, currentStep, closeModal })
             : ''}
         </StakingModalContent>
       </StakingModalContentWrapper>
@@ -102,7 +161,7 @@ export const migrateStake = () => {
   );
 };
 
-export const migrateClaim = () => {
+export const migrateClaim = ({ theme, currentStep, accruedRewards, oldSlice, migrateLoading, claimAndProgress }) => {
   return (
     <StakingMigrateModalContent>
       <RewardsAmountWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>
@@ -140,7 +199,7 @@ export const migrateClaim = () => {
     </StakingMigrateModalContent>
   );
 };
-export const migrateWithdraw = () => {
+export const migrateWithdraw = ({ theme, oldSlice, currentStep, migrateLoading, claimAndProgress }) => {
   return (
     <StakingMigrateModalContent>
       <RewardsAmountWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>
@@ -180,7 +239,7 @@ export const migrateWithdraw = () => {
   );
 };
 
-export const migrateStakeSkip = () => {
+export const migrateStakeSkip = ({ theme, newSlice, objId, setObjId, currentStep, claimAndProgress }) => {
   return (
     <StakingMigrateModalContentWrapper>
       {objId === null ? (
@@ -234,9 +293,7 @@ export const migrateStakeSkip = () => {
                     </StakeNewCol>
 
                     <StakeNewCol stake stakeValue disabled={stakingPool.remainingCap <= 0} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
-                      <button onClick={() => setObjId(i)}>
-                        {stakingPool.remainingCap === 0 ? 'Capped' : 'Stake'}
-                      </button>
+                      <button onClick={() => setObjId(i)}>{stakingPool.remainingCap === 0 ? 'Capped' : 'Stake'}</button>
                     </StakeNewCol>
                   </StakeNewTableCard>
                 ))}
@@ -254,7 +311,7 @@ export const migrateStakeSkip = () => {
     </StakingMigrateModalContentWrapper>
   );
 };
-export const MigrateForm = ({ id }) => {
+export const MigrateForm = ({ id, theme, newSlice, setObjId, userStaked, adjustStake, remainingCap, migrateLoading }) => {
   return (
     <StakingMigrateModalContent>
       <SliceMigratedWrapper migrate>
@@ -316,7 +373,7 @@ export const MigrateForm = ({ id }) => {
   );
 };
 
-export const migrateDone = () => {
+export const migrateDone = ({ theme, currentStep, closeModal }) => {
   return (
     <StakingMigrateModalContent>
       <SliceMigratedWrapper>

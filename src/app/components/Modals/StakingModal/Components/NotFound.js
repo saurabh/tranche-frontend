@@ -1,4 +1,11 @@
-export const notFound = () => {
+import React from 'react';
+import Modal from 'react-modal';
+import { ModeThemes } from 'config';
+import i18n from 'app/components/locale/i18n';
+import { SliceNotFound, SliceNotFoundBtn, ModalHeader, NotFoundStyles } from '../../styles/ModalsComponents';
+import { CloseModal, CloseModalWhite } from 'assets';
+
+export const notFound = ({ theme, type, modalIsOpen, closeModal }) => {
   return (
     <Modal
       isOpen={modalIsOpen}

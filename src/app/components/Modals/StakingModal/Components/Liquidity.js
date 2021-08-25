@@ -1,10 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import Modal from 'react-modal';
-import StakingForm from '../../Form/Staking';
+import StakingForm from 'app/components/Form/Staking';
 import { ModeThemes, LiquidityIcons } from 'config';
 import { roundNumber } from 'utils';
-import store from 'redux/store';
 import i18n from 'app/components/locale/i18n';
 import {
   StakingModalContentWrapper,
@@ -27,12 +25,13 @@ import {
   StakeModalNavigationWrapper,
   StakeModalNavigationBtn,
   stakingModalStyles
-} from '../styles/ModalsComponents';
+} from '../../styles/ModalsComponents';
 import { CloseModal, CloseModalWhite, TrancheStake } from 'assets';
 
 export const liquidityModal = ({
   modalTypeVar,
   setModalTypeVar,
+  theme,
   modalIsOpen,
   type,
   contractAddress,
@@ -47,9 +46,6 @@ export const liquidityModal = ({
   adjustStake,
   closeModal
 }) => {
-  const state = store.getState();
-  let theme = state.theme;
-console.log(modalIsOpen)
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -186,11 +182,3 @@ console.log(modalIsOpen)
     </Modal>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   theme: state.theme
-// });
-
-// connect(mapStateToProps, {})(liquidityModal)
-
-// export { liquidityModal };

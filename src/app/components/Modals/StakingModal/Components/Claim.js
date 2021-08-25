@@ -1,4 +1,56 @@
-const claimModal = () => {
+import React from 'react';
+import Modal from 'react-modal';
+import moment from 'moment';
+import { ModeThemes, LiquidityIcons, SLICEAddress } from 'config';
+import { roundNumber, safeMultiply } from 'utils';
+import { claimRewards } from 'services/contractMethods';
+import i18n from 'app/components/locale/i18n';
+import {
+  StakingModalContentWrapper,
+  StakingModalContent,
+  StakingModalClose,
+  ClaimModalHeader,
+  ClaimModalTableWrapper,
+  ClaimModalTableTitle,
+  ClaimModalTableSubTitle,
+  ClaimModalTableHead,
+  ClaimModalTableRow,
+  ClaimModalTableCol,
+  ClaimModalTableBtn,
+  FirstCustomStyles
+} from '../../styles/ModalsComponents';
+import { CloseModal, CloseModalWhite, TrancheStake, Lock } from 'assets';
+import ProgressBar from 'app/components/Stake/ProgressBar/ProgressBar';
+import CountdownWrapper from 'app/components/Stake/ProgressBar/Countdown';
+
+export const claimModal = ({
+  theme,
+  modalIsOpen,
+  totalAccruedRewards,
+  slice,
+  userStakes,
+  stakingList,
+  sliceStakingList,
+  accruedRewards,
+  exchangeRates,
+  // Functions
+  openModal,
+  closeModal
+}) => {
+  const newSliceRewards = slice.filter((s) => s.duration).reduce((acc, cur) => acc + cur.reward, 0);
+
+  const fullStakingList = sliceStakingList.concat(stakingList);
+  const apiMapping = fullStakingList.reduce((acc, cur) => {
+    if (!cur) return acc;
+    const { duration, poolName, contractAddress, type } = cur;
+    if (duration) {
+      acc[duration] = poolName;
+    } else if (type !== 'SLICE') {
+      acc[contractAddress] = type;
+    }
+    return acc;
+  }, {});
+
   return (
     <Modal
       isOpen={modalIsOpen}
