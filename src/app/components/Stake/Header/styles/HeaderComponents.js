@@ -560,6 +560,46 @@ const RatesValueImg = styled.div`
 const RatesValueText = styled.div`
   position: relative;
 `;
+const NotFoundWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 100px auto;
+  & > img{
+    @media (max-width: 992px) {
+      width: 100%;
+    }
+  }
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    text-align: center;
+    // color: #393F56;
+    color: ${props => props.color};
+    margin: 61px auto 41px auto;
+  }
+  & > a{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 14.9246px;
+    text-align: center;
+    color: #FFFFFF;
+    width: 173px;
+    height: 48px;
+    background: #4441CF;
+    border-radius: 45.922px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 300ms;
+    :hover{
+      opacity: 0.7;
+    }
+  }
+`;
+
 const RatesRowDash = styled.div`
   h2 {
     font-style: normal;
@@ -849,5 +889,6 @@ export {
   WithdrawStakeCardText,
   WithdrawStakeCardBtns,
   StakeSummaryCardWrapper,
-  Countdown
+  Countdown,
+  NotFoundWrapper
 };
