@@ -283,7 +283,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            store.dispatch(await checkSIRRewards());
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
               trancheType: trancheType,
@@ -323,7 +324,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            store.dispatch(await checkSIRRewards());
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
               trancheType: trancheType,
@@ -377,11 +379,13 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             });
           }
         })
-        .on('confirmation', (count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
         });
@@ -412,11 +416,13 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             });
           }
         })
-        .on('confirmation', (count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
         });
@@ -685,7 +691,8 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
 };
 
 export const getUnclaimedRewards = async (contractAddress) => {
-  try {
+  try
+  {
     const state = store.getState();
     const { web3, address } = state.ethereum;
     const contract = await RewardDistributionSetup(web3, contractAddress);
@@ -773,7 +780,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
       );
     });
     batch.execute();
-    const rewards = await Promise.all([...trARewardsPromise, ...trBRewardsPromise, ...historicalTrARewardPromises, ...historicalTrBRewardPromises]);
+    const rewards = await Promise.all([ ...trARewardsPromise, ...trBRewardsPromise, ...historicalTrARewardPromises, ...historicalTrBRewardPromises ]);
     return rewards.reduce((acc, cur) => {
       acc += +(cur || 0);
       return acc;
@@ -812,7 +819,7 @@ export const claimRewardsAllMarkets = async () => {
           emitter.on('txConfirmed', async () => {
             store.dispatch(setTxLoading(false));
             await store.dispatch(checkSIRRewards());
-            store.dispatch(setTokenBalances(address));
+            await store.dispatch(setTokenBalances(address));
           });
           emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
           emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
