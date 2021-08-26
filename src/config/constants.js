@@ -47,7 +47,8 @@ export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCa
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
-  { key: 'USDT', decimals: 6 }
+  { key: 'USDT', decimals: 6 },
+  { key: 'WBTC', decimals: 8 }
 ];
 export const ETHorMaticCheck = ['ETH', 'MATIC'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
