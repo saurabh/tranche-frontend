@@ -78,7 +78,9 @@ function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpe
           </a>
         </NavbarLinks>
           }
-        <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
+        {
+          path === 'stake' && <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
+        }
 
       {/* <HeaderWrapper>
             <HeaderContent path={path}>
