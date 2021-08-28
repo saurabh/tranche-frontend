@@ -168,7 +168,7 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
-                  <h2>{dividendType && dividendType}</h2>
+                  <h2>{cryptoType && cryptoType}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>

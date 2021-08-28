@@ -2164,7 +2164,7 @@ const StakingMigrateModalContentWrapper = styled.div`
   
 `;
 const TrancheModalWrapper = styled.div`
-  height: 517px;
+  max-height: 517px;
   ${({ TrancheEnable }) => TrancheEnable && `
     // max-height: 600px;  
     height: 100%;  
@@ -2335,6 +2335,7 @@ const TrancheModalFooter = styled.div`
   h2{
     font-family: 'Inter', sans-serif;
     font-weight: 500;
+    padding: 0 0 20px 0;
     font-size: 12.3841px;
     text-align: center;
     color: ${props => props.color};

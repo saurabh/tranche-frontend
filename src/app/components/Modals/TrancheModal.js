@@ -87,7 +87,7 @@ const TrancheRewardsStyles = {
     maxWidth: '340px',
     maxHeight: '517px',
     width: '100%',
-    minHeight: '517px',
+    maxHeight: '517px',
     //height: '326px',
     height: 'auto',
     border: 'none',
@@ -207,6 +207,9 @@ const TrancheModal = ({
   const [unclaimedSlice, setUnclaimedSlice] = useState(0);
   const [totalSlice, setTotalSlice] = useState(0);
   const [totalSliceInUSD, setTotalSliceInUSD] = useState(0);
+  const [claimState, setClaimState] = useState('claimInitialState');
+  const [claimLoading, setClaimLoading] = useState(false);
+  const [claimSuccess, setClaimSuccess] = useState(false);
   const Tracker = useAnalytics('ButtonClicks');
 
   useEffect(() => {
@@ -304,34 +307,87 @@ const TrancheModal = ({
             </ModalHeader>
           </TrancheModalHeader>
 
-          <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
-            <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} trancheRewardsModal>
-              <img src={TrancheStake} alt='img' />
-              <h2>{totalSlice}</h2>
-              <h2>(${totalSliceInUSD})</h2>
-            </TrancheModalContentHeader>
-            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
-              <h2>Wallet Balance </h2>
-              <h2>{roundNumber(totalSliceBalance)}</h2>
-            </TrancheModalContentRow>
-            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
-              <h2>Unclaimed Balance</h2>
-              <h2>{roundNumber(unclaimedSlice)}</h2>
-            </TrancheModalContentRow>
-            <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
-              <h2>Price</h2>
-              <h2>${roundNumber(exchangeRates.SLICE, 2)}</h2>
-            </TrancheModalContentRow>
-          </TrancheModalContent>
+          {
+            claimLoading && claimState !== 'claimInitialState' ?    
+            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+              <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
+                <h2>Confirm Transaction</h2>
+              </TrancheModalContentStatus>
+            </TrancheModalContent>  :
+            claimSuccess && !claimLoading && claimState !== 'claimInitialState' ?    
 
+            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+              <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                <img src={Migrated} alt='img' />
+                <h2>Transaction Successful</h2>
+              </TrancheModalContentStatus>
+            </TrancheModalContent> :
+            !claimSuccess && !claimLoading && claimState !== 'claimInitialState' ?   
+            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+              <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                <img src={TrancheRejected} alt='img' />
+                {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : <h2>Transaction Rejected</h2>}
+              </TrancheModalContentStatus>
+            </TrancheModalContent> 
+            :
+            <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
+              <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} trancheRewardsModal>
+                <img src={TrancheStake} alt='img' />
+                <h2>{totalSlice}</h2>
+                <h2>(${totalSliceInUSD})</h2>
+              </TrancheModalContentHeader>
+              <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>Wallet Balance </h2>
+                <h2>{roundNumber(totalSliceBalance)}</h2>
+              </TrancheModalContentRow>
+              <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>Unclaimed Balance</h2>
+                <h2>{roundNumber(unclaimedSlice)}</h2>
+              </TrancheModalContentRow>
+              <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+                <h2>Price</h2>
+                <h2>${roundNumber(exchangeRates.SLICE, 2)}</h2>
+              </TrancheModalContentRow>
+            </TrancheModalContent>
+          }
+
+          
+          { ((claimSuccess || !claimSuccess) && claimState !== 'claimInitialState') ?
+          <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
+            <a href={txLink} target='_blank' rel='noreferrer noopener'>
+              <img src={LinkIcon} alt='img' /> View on Etherscan
+            </a>
+          </TrancheModalFooter> :
           <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
-            <button onClick={onClaimReward} disabled={txOngoing || unclaimedSlice <= 0}>
-              Claim {roundNumber(unclaimedSlice)} SLICE
-            </button>
-            <h2>
-              Looking for Staking Rewards? <a href='/stake'>Click Here</a>
-            </h2>
-          </TrancheModalFooter>
+            {
+              claimLoading && claimState !== 'claimInitialState' ?
+                <button>
+                  <LoadingButton>
+                    {[...Array(4).keys()].map((idx) => {
+                      return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
+                    })}
+                  </LoadingButton>
+                </button>
+              :
+              <button onClick={onClaimReward} disabled={txOngoing || unclaimedSlice <= 0}>
+                Claim {roundNumber(unclaimedSlice)} SLICE
+              </button>
+            }
+            {
+              ((claimLoading || claimSuccess || !claimSuccess) && claimState !== 'claimInitialState') ?
+              "" : 
+              <h2>
+                Looking for Staking Rewards? <a href='/stake'>Click Here</a>
+              </h2>
+            }
+            
+          </TrancheModalFooter> 
+          
+        }
         </TrancheModalWrapper>
       </Modal>
     );
