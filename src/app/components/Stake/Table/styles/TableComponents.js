@@ -1480,7 +1480,7 @@ const TableMoreLeftSectionContent = styled.div`
   }
   & > h2:nth-of-type(2){
     font-weight: bold;
-    font-size: 17px;
+    font-size: 15px;
     text-transform: uppercase;
     color: ${props => props.value};
     text-align: center;
