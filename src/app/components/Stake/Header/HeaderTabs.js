@@ -69,7 +69,7 @@ const HeaderTabs = ({
   return (
     <StakeHeaderWrapper>
       <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stakeTitle>
-        <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
+        <h2>{i18n.t('stake.table.tableHeader.title')}</h2>
         <HowToLink
           href='https://docs.tranche.finance/tranchefinance/tranche-app/staking'
           onClick={(e) => Tracker('Documentation', 'https://docs.tranche.finance/tranchefinance/tranche-app/staking')}
