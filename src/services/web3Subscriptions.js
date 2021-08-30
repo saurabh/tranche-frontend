@@ -121,6 +121,7 @@ export const ETHContracts = {
           })
           .on('data', async (log) => {
             console.log(log);
+            console.log(new Date().toUTCString());
             let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
             if (log.topics.includes(userAddress)) {
               await timeout(5000);

@@ -11,7 +11,7 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { analyticsTrack } from 'analytics/googleAnalytics';
-import { web3 } from 'utils/getWeb3';
+import { web3, safeDivide } from 'utils';
 import {
   pairData,
   LoanContractAddress,
@@ -192,7 +192,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
   try {
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    depositAmount = searchArr(cryptoType) ? safeDivide(depositAmount, 10 ** searchArr(cryptoType).decimals) : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     store.dispatch(
       addNotification({
