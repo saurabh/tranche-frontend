@@ -443,13 +443,6 @@ export const stakingApproveContract = async (e, contractAddress, tokenAddress, i
         store.dispatch(setTxLoading(false));
       });
   } catch (error) {
-    error.code === 4001 &&
-      updateNotification({
-        id,
-        type: 'REJECTED',
-        message: 'You rejected the transaction',
-        title: 'Transaction rejected'
-      });
     console.error(error);
   }
 };

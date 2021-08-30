@@ -186,13 +186,6 @@ const TableCard = ({
           }
         });
     } catch (error) {
-      error.code === 4001 &&
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        });
       return error;
     }
   };
