@@ -117,7 +117,7 @@ const TrancheEnableModal = {
     maxWidth: '438px',
     maxHeight: '600px',
     width: '100%',
-    minHeight: '571px',
+    // minHeight: '571px',
     //height: '326px',
     height: 'auto',
     border: 'none',
@@ -293,7 +293,7 @@ const TrancheModal = ({
         contentLabel='Adjust'
         portalClassName='TrancheRewardsModal'
       >
-        <TrancheModalWrapper backgroundColor={ModeThemes[theme].ModalBackground}>
+        <TrancheModalWrapper backgroundColor={ModeThemes[theme].ModalBackground} TrancheRewards>
           <TrancheModalHeader
             color={ModeThemes[theme].ModalTrancheTextColor}
             border={ModeThemes[theme].ModalTrancheTextRowBorder}
@@ -309,7 +309,7 @@ const TrancheModal = ({
 
           {
             claimLoading && claimState !== 'claimInitialState' ?    
-            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
               <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
               <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                 <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
@@ -318,7 +318,7 @@ const TrancheModal = ({
             </TrancheModalContent>  :
             claimSuccess && !claimLoading && claimState !== 'claimInitialState' ?    
 
-            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
               <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
               <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                 <img src={Migrated} alt='img' />
@@ -326,7 +326,7 @@ const TrancheModal = ({
               </TrancheModalContentStatus>
             </TrancheModalContent> :
             !claimSuccess && !claimLoading && claimState !== 'claimInitialState' ?   
-            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
               <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
               <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                 <img src={TrancheRejected} alt='img' />
@@ -334,7 +334,7 @@ const TrancheModal = ({
               </TrancheModalContentStatus>
             </TrancheModalContent> 
             :
-            <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
+            <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
               <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} trancheRewardsModal>
                 <img src={TrancheStake} alt='img' />
                 <h2>{totalSlice}</h2>
@@ -586,7 +586,7 @@ const TrancheModal = ({
                 <h2>SLICE APY</h2>
                 <h2>{roundNumber(sliceAPY, 2)}%</h2>
               </TrancheModalContentRow>
-              <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+              <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
                 <h2>Net APY</h2>
                 <h2>{roundNumber(netAPY, 2)}%</h2>
               </TrancheModalContentRow>

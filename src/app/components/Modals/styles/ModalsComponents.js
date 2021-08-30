@@ -2164,9 +2164,12 @@ const StakingMigrateModalContentWrapper = styled.div`
   
 `;
 const TrancheModalWrapper = styled.div`
-  max-height: 517px;
+  max-height: 571px;
+  ${({ TrancheRewards }) => TrancheRewards && `
+      max-height: 517px;
+  `}
   ${({ TrancheEnable }) => TrancheEnable && `
-    // max-height: 600px;  
+    max-height: 600px;  
     height: 100%;  
     @media (max-width: 633px){
       height: 100vh;
@@ -2217,7 +2220,11 @@ const TrancheModalContent = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 0 40px;
+  padding: 5px 40px;
+
+  ${({ TrancheRewards }) => TrancheRewards && `
+    padding: 0 40px;
+  `}
   & > h2{
     font-family: 'Inter', sans-serif;
     font-weight: bold;
