@@ -78,8 +78,10 @@ import LinkIcon from './images/svg/LinkIcon.svg';
 import TranchePending from './images/svg/TranchePending.svg';
 import TranchePendingLight from './images/svg/TranchePendingLight.svg';
 import TrancheRejected from './images/svg/TrancheRejected.svg';
+import Chainlink from './images/svg/chainlink.svg';
+import WBTC from './images/svg/wbtc.svg';
 
 
 export {
-    Adjust, DAI, DaiClaim, AAVE, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCArd, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
+    Adjust, DAI, DaiClaim, AAVE, Chainlink, WBTC, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCArd, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
 };
