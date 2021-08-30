@@ -9,7 +9,6 @@ import {
   setWalletAndWeb3,
   setTokenBalance,
   addNotification,
-  updateNotification,
   setNotificationCount
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
@@ -306,8 +305,8 @@ const TableCard = ({
                       </StakeBtns>
                     ) : title === 'SLICE Staking Pools' && !duration ? (
                       <StakeBtns>
-                        <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={false}>
-                          withdraw
+                        <StakeBtnSlice onClick={() => openModal('withdrawTokens')} withdraw disabled={true} disabledBtnColor={ModeThemes[theme].disabledBtnColor}>
+                          disabled
                         </StakeBtnSlice>
                       </StakeBtns>
                     ) : (
@@ -400,7 +399,6 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   setTokenBalance,
   addNotification,
-  updateNotification,
   setNotificationCount,
   checkServer
 })(TableCard);

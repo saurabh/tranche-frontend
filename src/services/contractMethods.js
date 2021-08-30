@@ -11,7 +11,7 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo } from 'utils/helperFunctions';
 import { analyticsTrack } from 'analytics/googleAnalytics';
-import { web3 } from 'utils/getWeb3';
+import { web3, safeMultiply } from 'utils';
 import {
   pairData,
   LoanContractAddress,
@@ -25,7 +25,7 @@ import {
   maticNetworkId
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
-import { setMigrateStep } from 'redux/actions/tableData';
+import { setMigrateStep, setMigrateLoading } from 'redux/actions/tableData';
 
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
@@ -192,7 +192,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
   try {
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = searchArr(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    depositAmount = searchArr(cryptoType) ? safeMultiply(depositAmount, 10 ** searchArr(cryptoType).decimals) : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     store.dispatch(
       addNotification({
@@ -289,16 +289,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         });
     }
   } catch (error) {
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
-    console.error(error);
+    error.code === 4001 && console.error(error);
   }
 };
 
@@ -397,16 +388,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         });
     }
   } catch (error) {
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
-    console.error(error);
+    error.code === 4001 && console.error(error);
   }
 };
 
@@ -461,13 +443,6 @@ export const stakingApproveContract = async (e, contractAddress, tokenAddress, i
         store.dispatch(setTxLoading(false));
       });
   } catch (error) {
-    error.code === 4001 &&
-      updateNotification({
-        id,
-        type: 'REJECTED',
-        message: 'You rejected the transaction',
-        title: 'Transaction rejected'
-      });
     console.error(error);
   }
 };
@@ -511,7 +486,7 @@ export const getAccruedStakingRewards = async (yieldfarmAddress, address) => {
   }
 };
 
-export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
+export const addStake = async (stakingAddress, tokenAddress, durationIndex, migrate) => {
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
@@ -543,6 +518,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
         });
         emitter.on('txConfirmed', () => {
           store.dispatch(setTxLoading(false));
+          migrate && store.dispatch(setMigrateStep('done'));
           analyticsTrack('Tracking user activity', 'SLICE staking pool', { address: address, staked: amount });
         });
         emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
@@ -550,15 +526,9 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex) => {
       }
     });
   } catch (error) {
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
+    if (error.code === 4001) {
+      store.dispatch(setMigrateLoading(false));
+    }
     console.error(error);
   }
 };
@@ -593,9 +563,9 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
               };
             });
             emitter.on('txConfirmed', () => {
+              store.dispatch(setTxLoading(false));
               migrate && store.dispatch(setMigrateStep('stake'));
               analyticsTrack('Tracking user activity', 'SLICE staking pool', { address: address, withdrawn: amount });
-              store.dispatch(setTxLoading(false));
             });
             emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
             emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
@@ -603,15 +573,9 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
         });
     } else return;
   } catch (error) {
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
+    if (error.code === 4001) {
+      store.dispatch(setMigrateLoading(false));
+    }
     console.log(error);
   }
 };
@@ -651,15 +615,9 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
       }
     });
   } catch (error) {
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
+    if (error.code === 4001) {
+      store.dispatch(setMigrateLoading(false));
+    }
     return error;
   }
 };

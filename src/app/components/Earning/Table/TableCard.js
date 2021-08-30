@@ -20,7 +20,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import useAnalytics from 'services/analytics';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener, readyToTransact, roundNumber, safeMultiply } from 'utils';
+import { addrShortener, readyToTransact, roundNumber, safeDivide, safeMultiply } from 'utils';
 import { statuses, ApproveBigNumber, txMessage, trancheIcons, tokenDecimals, ModeThemes, networkId, maticNetworkId } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -120,7 +120,7 @@ const TableCard = ({
     cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
       : searchArr(cryptoType)
-      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      ? tokenBalance[buyerCoinAddress] && safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchArr(cryptoType).decimals)
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
   const onboard = initOnboard({
@@ -186,13 +186,6 @@ const TableCard = ({
           }
         });
     } catch (error) {
-      error.code === 4001 &&
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        });
       return error;
     }
   };

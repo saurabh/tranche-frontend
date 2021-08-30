@@ -1,4 +1,5 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, ETHCARD } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, 
+  ETHCARD, Chainlink, WBTC} from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -47,7 +48,8 @@ export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCa
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
-  { key: 'USDT', decimals: 6 }
+  { key: 'USDT', decimals: 6 },
+  { key: 'WBTC', decimals: 8 }
 ];
 export const ETHorMaticCheck = ['ETH', 'MATIC'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
@@ -135,7 +137,11 @@ export const trancheIcons = {
   aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
+  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  ACWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  BCWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  ACLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
+  BCLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,
@@ -327,11 +333,12 @@ export const ModeThemes = {
     titleColor: '#393F56',
     textColor: '#7C859B',
     ModalBackground: '#FFFFFF',
+    TrancheRateTypeColor: "rgba(106, 103, 255, 0.9)",
     ModalText: '#4F4F4F',
     SelectedStaking: 'rgba(68, 65, 207, 0.05)',
     SelectedStakingText: '#39295A',
     SelectedStakingLink: '#776E8B',
-    borderInputColor: '#F1F1F1;',
+    borderInputColor: '#EAEAEA',
     StakingInputText: '#838186',
     loadingSpinner: 'rgba(124,133,155,0.8)',
     Tooltip: '#2F2F2F',
@@ -416,6 +423,7 @@ export const ModeThemes = {
     BoxColorText: "#CEC6FF",
     boxText: "#CEC6FF",
     MigrateInput: "rgba(255, 255, 255, 0.05)",
+    TrancheRateTypeColor: "rgba(106, 103, 255, 0.4)",
     StakeModalNavigationBorder: "rgba(255, 255, 255, 0.1)",
     EstimatedColor: "rgba(255, 255, 255, 0.8)",
     inputText: "rgba(255, 255, 255, 0.8)",

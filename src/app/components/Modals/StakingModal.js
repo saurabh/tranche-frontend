@@ -8,7 +8,7 @@ import StakingForm from '../Form/Staking';
 import { ModeThemes, serverUrl, apiUri, SLICEAddress, LiquidityIcons } from 'config';
 import { getUserStaked, claimRewards, addStake, withdrawStake } from 'services/contractMethods';
 import useAnalytics from 'services/analytics';
-import { setMigrateStep } from 'redux/actions/tableData';
+import { setMigrateStep, setMigrateLoading } from 'redux/actions/tableData';
 import { CloseModal, CloseModalWhite, Lock, LockLight, TrancheStake, Migrated } from 'assets';
 import { addrShortener, roundNumber, formatTime, isEqualTo, safeMultiply } from 'utils';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -200,10 +200,11 @@ Modal.setAppElement('#root');
 const StakingModal = ({
   // Redux
   ethereum: { address },
-  data: { stakingList, sliceStakingList, userStakingList, currentStep, hasMigrated, exchangeRates },
+  data: { stakingList, sliceStakingList, userStakingList, currentStep, migrateLoading, hasMigrated, exchangeRates },
   summaryData: { accruedRewards, totalAccruedRewards },
   theme,
   setMigrateStep,
+  setMigrateLoading,
   // State Values
   modalIsOpen,
   type,
@@ -230,7 +231,6 @@ const StakingModal = ({
   const [userStaked, setUserStaked] = useState(0);
   const [stakedShare, setStakedShare] = useState(0);
   const [userStakes, setUserStakes] = useState([]);
-  const [migrateLoading, setMigrateLoading] = useState(false);
   const { slice, lp } = userStakingList;
   const newSliceRewards = slice.filter((s) => s.duration).reduce((acc, cur) => acc + cur.reward, 0);
 
@@ -297,7 +297,7 @@ const StakingModal = ({
       migrate && setMigrateLoading(true);
       if (modalType !== 'liqWithdraw') {
         if (migrate) {
-          await addStake(contractAddress, tokenAddress, durationIndex);
+          await addStake(contractAddress, tokenAddress, durationIndex, migrate);
           setMigrateLoading(false);
         }
         addStake(contractAddress, tokenAddress, durationIndex);
@@ -310,7 +310,7 @@ const StakingModal = ({
         : modalType === 'staking'
         ? Tracker('addLockup', 'User address: ' + address)
         : Tracker('withdrawStake', 'User address: ' + address);
-      migrate ? setMigrateStep('done') : closeModal();
+      if (!migrate) closeModal();
     } catch (error) {
       console.error(error);
     }
@@ -443,7 +443,7 @@ const StakingModal = ({
                 <h2>Liquidity Provider Pools</h2>
               </ClaimModalTableTitle>
               <ClaimModalTableSubTitle textColor={ModeThemes[theme].ModalText}>
-                <h2>Next Liqudity Provider Pool Distribution</h2>
+                <h2>Next Liquidity Provider Pool Distribution</h2>
                 <CountdownWrapper modal theme={theme} />
               </ClaimModalTableSubTitle>
 
@@ -454,7 +454,7 @@ const StakingModal = ({
                   <h2>Pair</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
-                  <h2>Total Staked</h2>
+                  <h2>Your Stake</h2>
                 </ClaimModalTableCol>
                 <ClaimModalTableCol head liquidityCol TableHeadText={ModeThemes[theme].TableHeadText} mobile>
                   <h2>Rewards</h2>
@@ -1190,4 +1190,4 @@ const mapStateToProps = (state) => ({
   theme: state.theme
 });
 
-export default connect(mapStateToProps, { setMigrateStep })(StakingModal);
+export default connect(mapStateToProps, { setMigrateStep, setMigrateLoading })(StakingModal);
