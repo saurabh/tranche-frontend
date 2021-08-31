@@ -26,6 +26,7 @@ import {
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading } from 'redux/actions/tableData';
+console.log(tokenDecimals)
 
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
@@ -194,7 +195,10 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? safeMultiply(depositAmount, 10 ** searchArr(cryptoType).decimals) : toWei(depositAmount);
+    console.log(depositAmount, searchArr(cryptoType))
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
+    console.log(depositAmountInEth)
+    console.log(typeof depositAmount, cryptoType === searchArr(cryptoType))
     store.dispatch(
       addNotification({
         id,
