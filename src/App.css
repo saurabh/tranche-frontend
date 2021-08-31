@@ -1285,8 +1285,9 @@ table, th, td {
     transform: scale(1) translateY(0) !important;
   }
   .TrancheMarketsModal .ReactModal__Content--after-open{
-    transform: scale(1) translateY(-50%) !important;
+    transform: scale(1) translateY(-50%) translateX(-50%) !important;
     top: 50% !important;
+    left: 52% !important;
     height: 100% !important;
   }
   .footerWrapper{
