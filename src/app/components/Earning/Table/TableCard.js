@@ -194,6 +194,7 @@ const TableCard = ({
     try {
       e.preventDefault();
       const ready = await readyToTransact(wallet, onboard);
+      console.log(ready)
       if (!ready) return;
       buy ? buyTrancheTokens(contractAddress, trancheId, type, cryptoType) : sellTrancheTokens(contractAddress, trancheId, type);
       buy ? Tracker('Deposit', 'User address: ' + address) : Tracker('Withdraw', 'User address: ' + address);

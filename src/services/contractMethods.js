@@ -185,6 +185,7 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
 };
 
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
+  console.log(contractAddress, trancheId, trancheType, cryptoType)
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
@@ -203,6 +204,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
       })
     );
     if (trancheType === 'TRANCHE_A') {
+      console.log('tranche a condition', network)
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
@@ -246,6 +248,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
           }
         });
     } else {
+      console.log('tranche a tranche b condition', network)
       await JCompound.methods
         .buyTrancheBToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
@@ -289,6 +292,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         });
     }
   } catch (error) {
+    console.log(error)
     error.code === 4001 && console.error(error);
   }
 };
