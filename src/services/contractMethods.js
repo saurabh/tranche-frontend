@@ -26,7 +26,6 @@ import {
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading } from 'redux/actions/tableData';
-console.log(tokenDecimals)
 
 const searchArr = (key) => tokenDecimals.find((i) => i.key === key);
 export const toWei = web3.utils.toWei;
@@ -186,7 +185,6 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
 };
 
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
-  console.log(contractAddress, trancheId, trancheType, cryptoType)
   const state = store.getState();
   const { web3, address, notify, network, notificationCount } = state.ethereum;
   let id = notificationCount;
@@ -195,11 +193,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     depositAmount = searchArr(cryptoType) ? safeMultiply(depositAmount, 10 ** searchArr(cryptoType).decimals) : toWei(depositAmount);
-    console.log(depositAmount, searchArr(cryptoType))
+    depositAmount = depositAmount.toString()
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
-    console.log(depositAmountInEth)
-    console.log(typeof depositAmount, cryptoType === searchArr(cryptoType).key)
-    console.log(tokenDecimals[2].key === cryptoType)
     store.dispatch(
       addNotification({
         id,
@@ -209,7 +204,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
       })
     );
     if (trancheType === 'TRANCHE_A') {
-      console.log('tranche a condition', network)
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
@@ -253,7 +247,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
           }
         });
     } else {
-      console.log('tranche a tranche b condition', network)
       await JCompound.methods
         .buyTrancheBToken(trancheId, depositAmount)
         .send({ value: depositAmountInEth, from: address })
