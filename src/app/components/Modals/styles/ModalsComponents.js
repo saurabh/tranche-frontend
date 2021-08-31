@@ -2177,7 +2177,8 @@ const TrancheModalWrapper = styled.div`
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
     max-height: 685px;
-    min-height: 685px;
+    // min-height: 685px;
+    min-height: 573px;
     @media (max-width: 633px){
       height: 100vh;
       max-height: unset;
