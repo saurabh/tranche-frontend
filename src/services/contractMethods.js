@@ -198,7 +198,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     console.log(depositAmount, searchArr(cryptoType))
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     console.log(depositAmountInEth)
-    console.log(typeof depositAmount, cryptoType === searchArr(cryptoType))
+    console.log(typeof depositAmount, cryptoType === searchArr(cryptoType).key)
+    console.log(tokenDecimals[2].key === cryptoType)
     store.dispatch(
       addNotification({
         id,
