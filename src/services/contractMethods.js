@@ -754,7 +754,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
           batch.add(
             contract.methods.trAEarned(marketId, address, +(o.trADistributionCounter || 0)).call.request((err, res) => {
               if (err) {
-                reject(err);
+                resolve(0);
                 return;
               }
               resolve(res);
@@ -770,7 +770,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
           batch.add(
             contract.methods.trBEarned(marketId, address, +(o.trBDistributionCounter || 0)).call.request((err, res) => {
               if (err) {
-                reject(err);
+                resolve(0);
                 return;
               }
               resolve(res);
