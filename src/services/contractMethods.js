@@ -840,6 +840,7 @@ export const claimRewardsAllMarkets = async () => {
           });
           emitter.on('txConfirmed', async () => {
             store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
             await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
