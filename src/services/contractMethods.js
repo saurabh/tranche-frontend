@@ -214,7 +214,7 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
           emitter.on('txCancel', () => {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
-            store.dispatch(setTxModalStatus('failed'));
+            store.dispatch(setTxModalStatus('cancelled'));
           });
           emitter.on('txFailed', () => {
             store.dispatch(setTxLoading(false));
@@ -241,9 +241,18 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
 
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   const state = store.getState();
-  const { web3, address, notify, network } = state.ethereum;
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
   const { trancheCard } = state.data;
   try {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
     store.dispatch(setTxModalLoading(true));
     store.dispatch(setTxOngoingData({ isDeposit: true, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
@@ -269,7 +278,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -280,7 +289,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         })
         .on('confirmation', async (count) => {
           if (count === 0) {
-            store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
             await store.dispatch(checkSIRRewards());
@@ -310,7 +318,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -343,9 +351,18 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
 
 export const sellTrancheTokens = async (contractAddress, trancheId, trancheType) => {
   const state = store.getState();
-  const { web3, address, notify, network } = state.ethereum;
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
   const { trancheCard } = state.data;
   try {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
     store.dispatch(setTxModalLoading(true));
     store.dispatch(setTxOngoingData({ isDeposit: false, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
@@ -370,7 +387,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -407,7 +424,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -793,30 +810,55 @@ export const getUnclaimedRewards = async (contractAddress) => {
 
 export const claimRewardsAllMarkets = async () => {
   const state = store.getState();
-  const { web3, address, notify, network } = state.ethereum;
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
   try {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
+    store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxModalStatus('confirm'));
     const contract = await RewardDistributionSetup(web3, RewardDistributionAddress);
     await contract.methods
       .claimRewardsAllMarkets(address)
       .send({ from: address })
       .on('transactionHash', (hash) => {
+        store.dispatch(setTxLoading(true));
+        store.dispatch(setTxModalStatus('pending'));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
+            store.dispatch(setTxLink(transaction.hash));
             return {
               message: txMessage(transaction.hash)
             };
           });
           emitter.on('txConfirmed', async () => {
             store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalStatus('success'));
             await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
           });
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('cancelled'));
+          });
+          emitter.on('txFailed', () => {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('failed'));
+          });
         }
       });
   } catch (error) {
+    store.dispatch(setTxModalLoading(false));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
     console.log(error);
     return error;
   }

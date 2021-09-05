@@ -165,7 +165,7 @@ export const TrancheConfirm = ({
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <img src={TrancheRejected} alt='img' />
-              {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : <h2>Transaction Rejected</h2>}
+              {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : txModalStatus === 'cancelled' ? <h2>Transaction Cancelled</h2> : <h2>Transaction Rejected</h2>}
             </TrancheModalContentStatus>
           </TrancheModalContent>
         ) : (

@@ -83,7 +83,20 @@ const TrancheModal = ({
   };
 
   return txModalType === 'trancheRewards'
-    ? TrancheRewards({ theme, totalSlice, totalSliceInUSD, totalSliceBalance, unclaimedSlice, exchangeRates, txModalIsOpen, txOngoing, closeModal })
+    ? TrancheRewards({ 
+      theme,
+      totalSlice,
+      totalSliceInUSD,
+      totalSliceBalance,
+      unclaimedSlice,
+      exchangeRates,
+      txModalIsOpen,
+      txModalStatus,
+      txLoading,
+      txLink,
+      txOngoing,
+      closeModal
+    })
     : txModalType === 'trancheEnable'
     ? TrancheEnable({
         theme,
