@@ -9,7 +9,6 @@ import {
   setWalletAndWeb3,
   setTokenBalance,
   addNotification,
-  updateNotification,
   setNotificationCount
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
@@ -413,7 +412,6 @@ export default connect(mapStateToProps, {
   setWalletAndWeb3,
   setTokenBalance,
   addNotification,
-  updateNotification,
   setNotificationCount,
   checkServer
 })(TableCard);

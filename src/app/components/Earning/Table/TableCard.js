@@ -7,7 +7,7 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances 
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
-import { roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
+import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -100,7 +100,7 @@ const TableCard = ({
     cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
       : searchTokenDecimals(cryptoType)
-      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      ? tokenBalance[buyerCoinAddress] && safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchTokenDecimals(cryptoType).decimals)
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
   const onboard = initOnboard({

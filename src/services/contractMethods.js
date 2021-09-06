@@ -12,6 +12,7 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo, searchTokenDecimals } from 'utils/helperFunctions';
 import { analyticsTrack } from 'analytics/googleAnalytics';
+import { safeMultiply } from 'utils';
 import { web3 } from 'utils/getWeb3';
 import {
   pairData,
@@ -20,7 +21,6 @@ import {
   epochDuration,
   txMessage,
   ApproveBigNumber,
-  tokenDecimals,
   ETHorMaticCheck,
   networkId,
   RewardDistributionAddress
@@ -29,7 +29,6 @@ import {
   setTxLoading,
   addNotification,
   setNotificationCount,
-  updateNotification,
   toggleApproval,
   checkSIRRewards,
   setTokenBalances
@@ -245,6 +244,10 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
   let id = notificationCount;
   const { trancheCard } = state.data;
   try {
+    let { depositAmount } = state.form.tranche.values;
+    const JCompound = JCompoundSetup(web3, contractAddress);
+    depositAmount = searchTokenDecimals(cryptoType) ? safeMultiply(depositAmount, 10 ** searchTokenDecimals(cryptoType).decimals) : toWei(depositAmount);
+    let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     store.dispatch(
       addNotification({
         id,
@@ -256,10 +259,6 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     store.dispatch(setTxModalLoading(true));
     store.dispatch(setTxOngoingData({ isDeposit: true, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
-    let { depositAmount } = state.form.tranche.values;
-    const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = searchTokenDecimals(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
-    let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
@@ -498,13 +497,6 @@ export const stakingApproveContract = async (e, contractAddress, tokenAddress, i
         store.dispatch(setTxLoading(false));
       });
   } catch (error) {
-    error.code === 4001 &&
-      updateNotification({
-        id,
-        type: 'REJECTED',
-        message: 'You rejected the transaction',
-        title: 'Transaction rejected'
-      });
     console.error(error);
   }
 };
@@ -588,14 +580,6 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex, migr
     });
   } catch (error) {
     if (error.code === 4001) {
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
       store.dispatch(setMigrateLoading(false));
     }
     console.error(error);
@@ -643,14 +627,6 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
     } else return;
   } catch (error) {
     if (error.code === 4001) {
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
       store.dispatch(setMigrateLoading(false));
     }
     console.log(error);
@@ -693,14 +669,6 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
     });
   } catch (error) {
     if (error.code === 4001) {
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
       store.dispatch(setMigrateLoading(false));
     }
     return error;

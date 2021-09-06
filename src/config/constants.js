@@ -1,4 +1,5 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, ETHCARD } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, 
+  ETHCARD, Chainlink, WBTC} from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -47,7 +48,8 @@ export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLow
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
-  { key: 'USDT', decimals: 6 }
+  { key: 'USDT', decimals: 6 },
+  { key: 'WBTC', decimals: 8 }
 ];
 export const ETHorMaticCheck = ['ETH', 'MATIC'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
@@ -135,7 +137,11 @@ export const trancheIcons = {
   aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
+  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  ACWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  BCWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  ACLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
+  BCLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,
