@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import LogoColored from 'assets/images/svg/LogoColored.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent, MobileNavbarIconWrapper, NavbarIconWrapper, NavbarIconContent } from './styles/HeaderComponents';
@@ -23,31 +23,14 @@ function Navbar({ path, theme }) {
   // const [pair1Value, setPair1Value] = useState(0);
   // const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
-
-  // const getPriceFeed = async () => {
-  //   const { priceFeed: priceUrl } = apiUri;
-  //   setRatesVisability(!ratesVisability);
-  //   try {
-  //     const { data: result } = await getRequest(priceUrl, {}, null);
-  //     result.result.forEach(pair => {
-  //       let price = safeDivide(pair.pairValue,10**pair.pairDecimals)
-  //       price = roundNumber(price);
-  //       if (pair.pairId === pairData[0].value) setPair0Value(price)
-  //       // if (pair.pairId === pairData[1].value) setPair1Value(price)
-  //     })
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // useEffect(()=>{
-  //   getPriceFeed();
-  //   //eslint to be fixed
-  // }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // const ratesToggleBtn = (e) =>{
-  //   e.preventDefault();
-  //   setRatesToggle(true);
-  // }
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
 
   return (
     <NavbarWrapper>
@@ -56,8 +39,9 @@ function Navbar({ path, theme }) {
             <a href="https://tranche.finance/"><img src={theme === "dark" ? Logo : LogoColored} alt='Logo' /></a>
         </div>
         <MobileNavbarIconWrapper mobile>
-
+        { !isDesktop &&
           <ConnectWallet />
+        }
 
           <NavbarIconWrapper id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
             <NavbarIconContent>
@@ -89,60 +73,15 @@ function Navbar({ path, theme }) {
                 className='ratesBoxWrapper' 
                 mobile
               >
-                {/* <RatesRowWrapper border={false}>
-                  <RatesRowContent>
-                    <RatesValue>
-                      <RatesValueImg>
-                        <img src={ETH} alt='ETH' />
-                      </RatesValueImg>
-                      <RatesValueText>
-                        <h2>1 ETH</h2>
-                      </RatesValueText>
-                    </RatesValue>
-                    <RatesRowDash>
-                      <h2>—</h2>
-                    </RatesRowDash>
-                    <RatesValue>
-                      <RatesValueImg>
-                        <img src={DAI} alt='DAI' />
-                      </RatesValueImg>
-                      <RatesValueText>
-                        <h2>{pair0Value} DAI</h2>
-                      </RatesValueText>
-                    </RatesValue>
-                  </RatesRowContent>
-                </RatesRowWrapper> */}
 
-                {/* <RatesRowWrapper>
-                  <RatesRowContent>
-                    <RatesValue>
-                      <RatesValueImg>
-                        <img src={SLICE} alt='SLICE' />
-                      </RatesValueImg>
-                      <RatesValueText>
-                        <h2>1 SLICE</h2>
-                      </RatesValueText>
-                    </RatesValue>
-                    <RatesRowDash>
-                      <h2>—</h2>
-                    </RatesRowDash>
-                    <RatesValue>
-                      <RatesValueImg>
-                        <img src={USDC} alt='USDC' />
-                      </RatesValueImg>
-                      <RatesValueText>
-                        <h2>{pair1Value} USDC</h2>
-                      </RatesValueText>
-                    </RatesValue>
-                  </RatesRowContent>
-                </RatesRowWrapper> */}
+
               </RatesBoxWrapper>
             </RatesWrapper>
           </NavBarMobileContent>
         </NavBarMobile>
         
         <div className='navbar-right'>
-          <NavbarLinks theme={ModeThemes[theme]} color={ModeThemes[theme].NavbarBorder}>
+          <NavbarLinks path={path} theme={ModeThemes[theme]} color={ModeThemes[theme].NavbarBorder} boxBackground={ModeThemes[theme].stakeBoxBackground}>
             <NavLink
               to={baseUrl + '/stake'}
               activeStyle={{
@@ -175,11 +114,12 @@ function Navbar({ path, theme }) {
               // className="navLinkDisabled"
             >
             {i18n.t('navbar.vote')}
-
             </a>
           </NavbarLinks>
-          <ConnectWallet path={path} />
         </div>
+        { isDesktop &&
+          <ConnectWallet path={path} />
+        }
       </NavbarContainer>
     </NavbarWrapper>
   );

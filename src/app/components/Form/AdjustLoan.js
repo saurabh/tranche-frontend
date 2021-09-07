@@ -185,7 +185,7 @@ let AdjustLoan = ({
                     </ModalFormLabel>
                     <Field
                       component={InputField}
-                      className={`ModalFormInput ${'ModalFormInput' + pairData[pairId].collateral}`}
+                      className={`ModalFormInput ModalFormInput${pairData[pairId].collateral}`}
                       name='collateralAmount'
                       onChange={(event, newValue) =>
                         handleCollateralizingChange(newValue, actionType)

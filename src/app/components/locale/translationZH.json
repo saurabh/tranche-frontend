@@ -228,6 +228,7 @@
   "migrateYour": "迁移你的已质押SLICE代币",
   "migrateTokens": "迁移代币",
   "stakingPools": "质押池",
+  "stakingPool": "质押池",
   "everyPoolHas": "每个池都有不同的锁定时间",
   "lockup": "封锁",
   "totalTimeYour": "您的代币在合同中保持锁定的总时间。",

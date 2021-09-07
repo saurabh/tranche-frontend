@@ -60,12 +60,12 @@ const SummaryCards = ({
 
   useEffect(() => {
     const getSliceStats = async () => {
-      const res = await axios(`${serverUrl + sliceSummary}`);
+      const res = await axios(`${ serverUrl }${ sliceSummary }`);
       const { result } = res.data;
       setSliceStats(result);
     };
     const getTvl = async () => {
-      const res = await axios(`${serverUrl + totalValueLocked}`);
+      const res = await axios(`${ serverUrl }${ totalValueLocked }`);
       const { result } = res.data;
       setTvl(result);
     };
@@ -74,7 +74,7 @@ const SummaryCards = ({
       getSliceStats();
       getTvl();
     }
-  }, [isDesktop, currentPath, address, setSliceStats, setTvl]);
+  }, [isDesktop, currentPath, setSliceStats, setTvl]);
 
   const openModal = () => console.log('needs to be removed at the time of components merge');
   const closeModal = () => console.log('needs to be removed at the time of components merge');

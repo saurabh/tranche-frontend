@@ -130,8 +130,11 @@ const Table = ({
   }, [changePath, pathname, currentPath, changeOwnAllFilter, ownAllToggle]);
 
   useEffect(() => {
-    stakingListing();
-  }, [stakingListing, filter, skip, limit, filterType, sort]);
+    if (title === 'SLICE Staking Pools')
+    {
+      stakingListing(); 
+    }
+  }, [stakingListing, filter, skip, limit, filterType, sort, title]);
 
   const handlePageChange = (p) => {
     paginationOffset((p - 1) * limit);
@@ -146,10 +149,10 @@ const Table = ({
     const getStakingData = async () => {
       fetchUserStakingList(`${ userStakingListUrl }/${ address }`);
     };
-    if (currentPath === 'stake' && address) {
+    if (currentPath === 'stake' && address && title === 'SLICE Staking Pools') {
       getStakingData();
     }
-  }, [currentPath, fetchUserStakingList, address]);
+  }, [currentPath, fetchUserStakingList, address, title]);
 
 
   return (

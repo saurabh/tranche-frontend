@@ -39,7 +39,7 @@ const GlobalStyle = createGlobalStyle`
   @media (min-width: 1200px){ 
       .container{ 
         //change 
-        width: 1270px;
+        width: 1170px;
           // width: 1170px;
       } 
   }
@@ -58,7 +58,7 @@ const GlobalStyle = createGlobalStyle`
   // }
   
   .navbar-right{
-    width: 66%;
+    width: 44%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -69,7 +69,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #logo-wrapper{
-    width: 34%;
+    width: 28%;
   }
 
   .return-wrapper{

@@ -12,6 +12,7 @@ import {
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo, searchTokenDecimals } from 'utils/helperFunctions';
 import { analyticsTrack } from 'analytics/googleAnalytics';
+import { safeMultiply } from 'utils';
 import { web3 } from 'utils/getWeb3';
 import {
   pairData,
@@ -20,13 +21,19 @@ import {
   epochDuration,
   txMessage,
   ApproveBigNumber,
-  tokenDecimals,
   ETHorMaticCheck,
   networkId,
   RewardDistributionAddress
 } from 'config';
-import { setTxLoading, addNotification, setNotificationCount, updateNotification, toggleApproval, checkSIRRewards } from 'redux/actions/ethereum';
-import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
+import {
+  setTxLoading,
+  addNotification,
+  setNotificationCount,
+  toggleApproval,
+  checkSIRRewards,
+  setTokenBalances
+} from 'redux/actions/ethereum';
+import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxOngoingData, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
@@ -40,11 +47,7 @@ export const loanAllowanceCheck = async (pairId, amount, collateral = false) => 
     const { lendTokenSetup, collateralTokenSetup } = pairData[pairId];
     const token = collateral ? collateralTokenSetup(web3) : lendTokenSetup(web3);
     let userAllowance = await token.methods.allowance(address, LoanContractAddress).call();
-    if (isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount)) {
-      return true;
-    } else {
-      return false;
-    }
+    return isGreaterThan(userAllowance, amount) || isEqualTo(userAllowance, amount);
   } catch (error) {
     console.error(error);
   }
@@ -52,10 +55,10 @@ export const loanAllowanceCheck = async (pairId, amount, collateral = false) => 
 
 export const calculateFees = async (collateralAmount) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoanHelper = JLoanHelperSetup(web3);
     if (collateralAmount) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoanHelper = JLoanHelperSetup(web3);
       const result = await JLoanHelper.methods.calculateCollFeesOnActivation(collateralAmount, factoryFees.toString()).call();
       return fromWei(result);
     }
@@ -66,10 +69,10 @@ export const calculateFees = async (collateralAmount) => {
 
 export const calcMinCollateralAmount = async (pairId, askAmount) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoan = JLoanSetup(web3);
     if (askAmount !== '' && askAmount !== 0) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoan = JLoanSetup(web3);
       const result = await JLoan.methods.getMinCollateralWithFeesAmount(pairId, web3.utils.toWei(askAmount)).call();
       return web3.utils.fromWei(result);
     }
@@ -80,10 +83,10 @@ export const calcMinCollateralAmount = async (pairId, askAmount) => {
 
 export const calcMaxBorrowAmount = async (pairId, collAmount) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoan = JLoanSetup(web3);
     if (collAmount > 0) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoan = JLoanSetup(web3);
       const result = await JLoan.methods.getMaxStableCoinWithFeesAmount(pairId, collAmount).call();
       return web3.utils.fromWei(result);
     }
@@ -94,10 +97,10 @@ export const calcMaxBorrowAmount = async (pairId, collAmount) => {
 
 export const calcAdjustCollateralRatio = async (loanId, amount, actionType) => {
   try {
-    const state = store.getState();
-    const { web3 } = state.ethereum;
-    const JLoan = JLoanSetup(web3);
     if (amount !== '' && amount !== 0) {
+      const state = store.getState();
+      const { web3 } = state.ethereum;
+      const JLoan = JLoanSetup(web3);
       const result = await JLoan.methods.calcRatioAdjustingCollateral(loanId, toWei(amount), actionType).call();
       return result;
     }
@@ -174,11 +177,9 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if ((isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0') {
-      return true;
-    } else {
-      return false;
-    }
+    return (
+      (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) && userAllowance !== '0'
+    );
   } catch (error) {
     console.error(error);
   }
@@ -187,9 +188,11 @@ export const trancheAllowanceCheck = async (tokenAddress, contractAddress, userA
 export const approveContract = async (isDeposit, tokenAddress, contractAddress, isApproved, e) => {
   const state = store.getState();
   const { address, network, web3, txOngoing, notify } = state.ethereum;
+  const { trancheCard } = state.data;
   if (txOngoing) e.stopPropogation();
   try {
     store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxOngoingData({ isDeposit, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
     const amount = isApproved ? 0 : toWei(ApproveBigNumber);
     const token = ERC20Setup(web3, tokenAddress);
@@ -210,7 +213,7 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
           emitter.on('txCancel', () => {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
-            store.dispatch(setTxModalStatus('failed'));
+            store.dispatch(setTxModalStatus('cancelled'));
           });
           emitter.on('txFailed', () => {
             store.dispatch(setTxLoading(false));
@@ -237,14 +240,25 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
 
 export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, cryptoType) => {
   const state = store.getState();
-  const { web3, address, notify, network } = state.ethereum;
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
+  const { trancheCard } = state.data;
   try {
-    store.dispatch(setTxModalLoading(true));
-    store.dispatch(setTxModalStatus('confirm'));
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = searchTokenDecimals(cryptoType) ? toWei(depositAmount, 'Mwei') : toWei(depositAmount);
+    depositAmount = searchTokenDecimals(cryptoType) ? safeMultiply(depositAmount, 10 ** searchTokenDecimals(cryptoType).decimals) : toWei(depositAmount);
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
+    store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxOngoingData({ isDeposit: true, trancheCardId: trancheCard.id }));
+    store.dispatch(setTxModalStatus('confirm'));
     if (trancheType === 'TRANCHE_A') {
       await JCompound.methods
         .buyTrancheAToken(trancheId, depositAmount)
@@ -263,7 +277,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -272,12 +286,12 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             });
           }
         })
-        .on('confirmation', async(count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
-            store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            store.dispatch(await checkSIRRewards());
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
               trancheType: trancheType,
@@ -303,7 +317,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -317,7 +331,8 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            store.dispatch(await checkSIRRewards());
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
               trancheType: trancheType,
@@ -335,9 +350,20 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
 
 export const sellTrancheTokens = async (contractAddress, trancheId, trancheType) => {
   const state = store.getState();
-  const { web3, address, notify, network } = state.ethereum;
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
+  const { trancheCard } = state.data;
   try {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
     store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxOngoingData({ isDeposit: false, trancheCardId: trancheCard.id }));
     store.dispatch(setTxModalStatus('confirm'));
     let { withdrawAmount } = state.form.tranche.values;
     withdrawAmount = toWei(withdrawAmount);
@@ -360,7 +386,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -369,11 +395,13 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             });
           }
         })
-        .on('confirmation', (count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
         });
@@ -395,7 +423,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             emitter.on('txCancel', () => {
               store.dispatch(setTxLoading(false));
               store.dispatch(setTxModalLoading(false));
-              store.dispatch(setTxModalStatus('failed'));
+              store.dispatch(setTxModalStatus('cancelled'));
             });
             emitter.on('txFailed', () => {
               store.dispatch(setTxLoading(false));
@@ -404,11 +432,13 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             });
           }
         })
-        .on('confirmation', (count) => {
+        .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
         });
@@ -428,11 +458,7 @@ export const stakingAllowanceCheck = async (tokenAddress, contractAddress, userA
     const { web3, tokenBalance } = state.ethereum;
     const token = ERC20Setup(web3, tokenAddress);
     let userAllowance = await token.methods.allowance(userAddress, contractAddress).call();
-    if (isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress])) {
-      return true;
-    } else {
-      return false;
-    }
+    return isGreaterThan(userAllowance, tokenBalance[tokenAddress]) || isEqualTo(userAllowance, tokenBalance[tokenAddress]);
   } catch (error) {
     console.error(error);
   }
@@ -471,13 +497,6 @@ export const stakingApproveContract = async (e, contractAddress, tokenAddress, i
         store.dispatch(setTxLoading(false));
       });
   } catch (error) {
-    error.code === 4001 &&
-      updateNotification({
-        id,
-        type: 'REJECTED',
-        message: 'You rejected the transaction',
-        title: 'Transaction rejected'
-      });
     console.error(error);
   }
 };
@@ -528,7 +547,6 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex, migr
   store.dispatch(setNotificationCount(notificationCount + 1));
   try {
     let { amount } = state.form.stake.values;
-    console.log(durationIndex || durationIndex === 0 ? 'lockup' : 'milestones');
     const StakingContract = durationIndex || durationIndex === 0 ? LockupSetup(web3, stakingAddress) : StakingSetup(web3, stakingAddress);
     amount = toWei(amount.toString());
     store.dispatch(
@@ -562,14 +580,6 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex, migr
     });
   } catch (error) {
     if (error.code === 4001) {
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
       store.dispatch(setMigrateLoading(false));
     }
     console.error(error);
@@ -617,14 +627,6 @@ export const withdrawStake = async (stakingAddress, tokenAddress, maxAmount = fa
     } else return;
   } catch (error) {
     if (error.code === 4001) {
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
       store.dispatch(setMigrateLoading(false));
     }
     console.log(error);
@@ -667,14 +669,6 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
     });
   } catch (error) {
     if (error.code === 4001) {
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
       store.dispatch(setMigrateLoading(false));
     }
     return error;
@@ -682,39 +676,96 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
 };
 
 export const getUnclaimedRewards = async (contractAddress) => {
-  try {
+  try
+  {
     const state = store.getState();
     const { web3, address } = state.ethereum;
     const contract = await RewardDistributionSetup(web3, contractAddress);
     const marketsCounter = await contract.methods.marketsCounter().call();
     const marketArray = new Array(+(marketsCounter || 0)).fill(0);
-    const batch = new web3.BatchRequest();
-    const trARewardsPromise = marketArray.map((_v, marketId) => {
+    const b = new web3.BatchRequest();
+    const historicalTrARewardPromises = [],
+      historicalTrBRewardPromises = [];
+    const distributionCounterPromise = marketArray.map((_v, marketId) => {
+      historicalTrARewardPromises.push(
+        new Promise((resolve, reject) => {
+          b.add(
+            contract.methods.getHistoricalUnclaimedRewardsAmountTrA(marketId, address).call.request((err, res) => {
+              if (err) {
+                resolve(0);
+                return;
+              }
+              resolve(+res);
+            })
+          );
+        })
+      );
+      historicalTrBRewardPromises.push(
+        new Promise((resolve, reject) => {
+          b.add(
+            contract.methods.getHistoricalUnclaimedRewardsAmountTrB(marketId, address).call.request((err, res) => {
+              if (err) {
+                resolve(0);
+                return;
+              }
+              resolve(+res);
+            })
+          );
+        })
+      );
       return new Promise((resolve, reject) => {
-        batch.add(
-          contract.methods.trAEarned(marketId, address).call.request((err, res) => {
+        b.add(
+          contract.methods.availableMarketsRewards(marketId).call.request((err, res) => {
             if (err) {
-              reject(err);
+              resolve({
+                trADistributionCounter: 0,
+                trBDistributionCounter: 0
+              });
+              return;
             }
-            resolve(res);
+            const { trADistributionCounter, trBDistributionCounter } = res;
+            resolve({ trADistributionCounter, trBDistributionCounter });
           })
         );
       });
     });
-    const trBRewardsPromise = marketArray.map((_v, marketId) => {
-      return new Promise((resolve, reject) => {
-        batch.add(
-          contract.methods.trBEarned(marketId, address).call.request((err, res) => {
-            if (err) {
-              reject(err);
-            }
-            resolve(res);
-          })
-        );
-      });
+    b.execute();
+    const distributionCounter = await Promise.all(distributionCounterPromise);
+    const batch = new web3.BatchRequest();
+    const trARewardsPromise = [];
+    distributionCounter.forEach((o, marketId) => {
+      trARewardsPromise.push(
+        new Promise((resolve, reject) => {
+          batch.add(
+            contract.methods.trAEarned(marketId, address, +(o.trADistributionCounter || 0)).call.request((err, res) => {
+              if (err) {
+                resolve(0);
+                return;
+              }
+              resolve(res);
+            })
+          );
+        })
+      );
+    });
+    const trBRewardsPromise = [];
+    distributionCounter.forEach((o, marketId) => {
+      trBRewardsPromise.push(
+        new Promise((resolve, reject) => {
+          batch.add(
+            contract.methods.trBEarned(marketId, address, +(o.trBDistributionCounter || 0)).call.request((err, res) => {
+              if (err) {
+                resolve(0);
+                return;
+              }
+              resolve(res);
+            })
+          );
+        })
+      );
     });
     batch.execute();
-    const rewards = await Promise.all([...trARewardsPromise, ...trBRewardsPromise]);
+    const rewards = await Promise.all([ ...trARewardsPromise, ...trBRewardsPromise, ...historicalTrARewardPromises, ...historicalTrBRewardPromises ]);
     return rewards.reduce((acc, cur) => {
       acc += +(cur || 0);
       return acc;
@@ -738,36 +789,46 @@ export const claimRewardsAllMarkets = async () => {
         title: 'awaiting confirmation'
       })
     );
+    store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxModalStatus('confirm'));
     const contract = await RewardDistributionSetup(web3, RewardDistributionAddress);
     await contract.methods
-      .claimRewardsAllMarkets()
+      .claimRewardsAllMarkets(address)
       .send({ from: address })
       .on('transactionHash', (hash) => {
+        store.dispatch(setTxLoading(true));
+        store.dispatch(setTxModalStatus('pending'));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
+            store.dispatch(setTxLink(transaction.hash));
             return {
               message: txMessage(transaction.hash)
             };
           });
-          emitter.on('txConfirmed', () => {
+          emitter.on('txConfirmed', async () => {
             store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('success'));
+            await store.dispatch(checkSIRRewards());
+            await store.dispatch(setTokenBalances(address));
           });
-          emitter.on('txFailed', () => store.dispatch(setTxLoading(false)));
-          emitter.on('txCancel', () => store.dispatch(setTxLoading(false)));
+          emitter.on('txCancel', () => {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('cancelled'));
+          });
+          emitter.on('txFailed', () => {
+            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
+            store.dispatch(setTxModalStatus('failed'));
+          });
         }
       });
   } catch (error) {
+    store.dispatch(setTxModalLoading(false));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
     console.log(error);
-    error.code === 4001 &&
-      store.dispatch(
-        updateNotification({
-          id,
-          type: 'REJECTED',
-          message: 'You rejected the transaction',
-          title: 'Transaction rejected'
-        })
-      );
     return error;
   }
 };

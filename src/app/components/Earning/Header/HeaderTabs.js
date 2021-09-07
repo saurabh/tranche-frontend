@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import i18n from '../../locale/i18n';
-import { trancheMarketsToggle, setTxModalOpen } from 'redux/actions/tableData';
+import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
 import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
@@ -11,7 +11,7 @@ import useAnalytics from 'services/analytics';
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, theme }) => {
+const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
   const [modalOpened, setModalOpened] = useState(false);
   const Tracker = useAnalytics('ExternalLinks');
 
@@ -21,14 +21,15 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, theme }) => {
     setModalOpened(true);
     if (!modalOpened) {
       setTxModalOpen(true);
+      setTxModalType('trancheMarkets');
     } else {
       trancheMarketsToggle('aavePolygon');
     }
   };
-  
   const closeModal = () => {
     setTxModalOpen(false);
-    // onClick={() => trancheMarketsToggle("aavePolygon")}>
+    setTxModalStatus('initialState');
+    setTxModalLoading(false);
   };
 
   return (
@@ -104,4 +105,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { trancheMarketsToggle, setTxModalOpen })(HeaderTabs);
+export default connect(mapStateToProps, { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType })(HeaderTabs);

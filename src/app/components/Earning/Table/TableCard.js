@@ -7,7 +7,7 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances 
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
-import { roundNumber, safeMultiply, searchTokenDecimals } from 'utils';
+import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
@@ -64,6 +64,7 @@ const TableCard = ({
     subscription,
     apy,
     sliceAPY,
+    netAPY,
     apyStatus,
     cryptoType,
     dividendType,
@@ -84,7 +85,6 @@ const TableCard = ({
 }) => {
   // const [isLoading, setIsLoading] = useState(false);
   // const dispatch = useNotification();
-
   const apyImage =
     apyStatus && apyStatus === 'fixed'
       ? theme === 'light'
@@ -100,7 +100,7 @@ const TableCard = ({
     cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
       : searchTokenDecimals(cryptoType)
-      ? tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress], 'Mwei')
+      ? tokenBalance[buyerCoinAddress] && safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchTokenDecimals(cryptoType).decimals)
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
 
   const onboard = initOnboard({
@@ -168,7 +168,7 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText}>
-                  <h2>{dividendType && dividendType}</h2>
+                  <h2>{cryptoType && cryptoType}</h2>
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>
@@ -179,6 +179,7 @@ const TableCard = ({
               </FirstColContent>
               <TrancheRateType
                 TrancheRateColor={type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor}
+                TrancheRateTextColor={theme === 'dark' ? "#FFFFFF" : (type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor)}
               >
                 {type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}
               </TrancheRateType>
@@ -187,8 +188,8 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              <img src={apyImage} alt='apyImage' />
-              <h2>{roundNumber(apy + sliceAPY, 2)}%</h2>
+              {/* <img src={apyImage} alt='apyImage' /> */}
+              <h2>{roundNumber(netAPY, 2)}%</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
@@ -270,7 +271,8 @@ const TableCard = ({
               trancheId={trancheId}
               apyStatus={apyStatus}
               apy={apy}
-              sliceAPY={sliceAPY}
+              sliceAPY={sliceAPY || 0}
+              netAPY={netAPY}
               contractAddress={contractAddress}
               cryptoType={cryptoType}
               dividendType={dividendType}
@@ -335,8 +337,8 @@ const TableCard = ({
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
                 <h2>NET APY</h2>
                 <h2>
-                  <img src={apyImage} alt='apyImage' />
-                  {roundNumber(apy + sliceAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
+                  {/* <img src={apyImage} alt='apyImage' /> */}
+                  {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
@@ -369,7 +371,8 @@ const TableCard = ({
               trancheId={trancheId}
               apyStatus={apyStatus}
               apy={apy}
-              sliceAPY={sliceAPY}
+              sliceAPY={sliceAPY || 0}
+              netAPY={netAPY}
               contractAddress={contractAddress}
               cryptoType={cryptoType}
               dividendType={dividendType}

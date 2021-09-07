@@ -100,6 +100,8 @@ const NavbarContainer = styled.div`
 const NavbarLinks = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
+  margin: 0 auto;
   // width: 350px;
   // padding: 17px 36px;
   border-radius: 159px;
@@ -123,7 +125,7 @@ const NavbarLinks = styled.div`
     padding: 17px 37px;
     border-radius: 159px;
     :hover{
-      opacity: 0.6;
+      opacity: 1;
     }
   }
   @media (max-width: 992px) {
@@ -267,7 +269,8 @@ const WalletBtn = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 155px;
+  // width: 155px;
+  width: 45%;
   height: 40px;
   background: ${(props) => props.background} !important;
   border-radius: 30px;
@@ -283,6 +286,12 @@ const WalletBtn = styled.button`
     outline: none;
   }
 
+  
+  @media (max-width: 992px) {
+    margin: 5px 0;
+    width: 129px;
+    height: 33px !important;
+  }
   ${({ tranche, ModalBoxShadow, shadow, border}) => tranche && `
     max-width: 149px;
     height: 40px;
@@ -290,11 +299,19 @@ const WalletBtn = styled.button`
     background: ${ModalBoxShadow} !important;
     box-shadow: ${shadow};
     border: ${border};
+    h2{
+      font-size: 9px;
+      display: none;
+    }
+    @media (max-width: 992px) {
+      margin: 5px 3px;
+      width: auto;
+      padding: 9px;
+      height: 33px !important;
+    }
   `}
-  @media (max-width: 992px) {
-    margin: 5px 0;
-    width: 129px;
-    height: 33px;
+  &:hover{
+    opacity: 0.7;
   }
 `;
 
@@ -306,7 +323,7 @@ const WalletBtnIcon = styled.div`
       width: 24px;
     }
   `}
-  @media (max-width: 992px) {
+  @media (max-width: 1200px) {
     img{
       width: 17px;
     }
@@ -324,8 +341,8 @@ const WalletBtnText = styled.div`
     text-transform: uppercase;
     color: #FFFFFF;
     margin-left: 12px;
-    @media (max-width: 992px) {
-      font-size: 10px;
+    @media (max-width: 1200px) {
+      font-size: 9px;
     }
     ${({ tranche, color }) => tranche && `
       color: ${color};
@@ -539,8 +556,11 @@ const LocaleWrapper = styled.div`
 const NavBarRightWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  width: 28%;
   @media (max-width: 992px) {
-    flex-direction: column;
+    flex-direction: row;
+    width: 83%;
   }
 `
 const OtherTabsContainer = styled.div`
@@ -701,6 +721,9 @@ const MarketTab = styled.button`
       box-shadow: ${btnShadow} !important;
       opacity: 1;
   `} 
+  :hover{
+    opacity: ${props => props.current ? "" : "0.7"};
+  }
 `
 const BridgeTokensWrapper = styled.div`
   display: flex;

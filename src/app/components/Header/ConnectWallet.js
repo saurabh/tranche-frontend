@@ -61,7 +61,8 @@ const ConnectWallet = ({
   let parsedPathWindow = pathWindow.split('/');
   let currentPath = parsedPathWindow[parsedPathWindow.length - 1];
   const newPath = (lng) =>{
-    return `${"/" + lng + "/" + currentPath}`;
+    // return `${ "/" + lng + "/" + currentPath }`;
+    return `/${ lng }/${ currentPath }`;
   }
   return (
     <NavBarRightWrapper>

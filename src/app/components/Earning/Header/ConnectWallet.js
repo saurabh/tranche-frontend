@@ -2,8 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import TrancheModal from '../../Modals/TrancheModal';
-import { setTxModalOpen, setTxModalType, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
+import { setTxModalOpen, setTxModalType } from 'redux/actions/tableData';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
 import { addrShortener, roundNumber, toBigNumber } from 'utils/helperFunctions';
@@ -22,8 +21,6 @@ const ConnectWallet = ({
   theme,
   ethereum: { address, balance, tokenBalance, unclaimedSIRRewards },
   setTxModalOpen,
-  setTxModalStatus,
-  setTxModalLoading,
   setTxModalType
 }) => {
   const [totalSliceBalance, setTotalSliceBalance] = useState(0);
@@ -75,16 +72,10 @@ const ConnectWallet = ({
     await onboard.walletCheck();
   };
 
-  const closeModal = () => {
-    setTxModalOpen(false);
-    setTxModalStatus('initialState');
-    setTxModalLoading(false);
-  };
-
   return (
     <NavBarRightWrapper>
-      <TrancheModal closeModal={() => closeModal()} />
-
+      {
+        path === "tranche" &&
       <WalletBtn
         disabled={!address}
         background={ModeThemes[theme].ModalTrancheNavbarBtn}
@@ -93,20 +84,24 @@ const ConnectWallet = ({
         tranche
         onClick={() => openModal()}
       >
+            
         <WalletBtnIcon tranche>
-          <img src={TrancheStake} alt='tranche' />
-        </WalletBtnIcon>
+        <img src={TrancheStake} alt='tranche' />
+        </WalletBtnIcon>        
+                  
         <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
           <h2>{address ? totalSlice : '--'}</h2>
         </WalletBtnText>
       </WalletBtn>
+      }
+
 
       {balance < 0 ? (
         <WalletBtn background='#4441CF' onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>
             <img src={Wallet} alt='wallet' />
           </WalletBtnIcon>
-          <WalletBtnText icon={false} color={PagesData[path].color}>
+          <WalletBtnText icon={false} color={PagesData[path] ? PagesData[path].color : PagesData['stake'].color}>
             <h2>{i18n.t('connect')}</h2>
           </WalletBtnText>
         </WalletBtn>
@@ -115,7 +110,7 @@ const ConnectWallet = ({
           <WalletBtnIcon>
             <img src={Wallet} alt='' />
           </WalletBtnIcon>
-          <WalletBtnText color={PagesData[path].color}>
+          <WalletBtnText color={PagesData[path] ? PagesData[path].color : PagesData['stake'].color}>
             <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>
@@ -131,8 +126,6 @@ ConnectWallet.propTypes = {
   setWalletAndWeb3: PropTypes.func.isRequired,
   setTxModalOpen: PropTypes.func.isRequired,
   setTxModalType: PropTypes.func.isRequired,
-  setTxModalStatus: PropTypes.func.isRequired,
-  setTxModalLoading: PropTypes.func.isRequired,
   ethereum: PropTypes.object.isRequired
 };
 
@@ -147,7 +140,5 @@ export default connect(mapStateToProps, {
   setBalance,
   setWalletAndWeb3,
   setTxModalOpen,
-  setTxModalType,
-  setTxModalStatus,
-  setTxModalLoading
+  setTxModalType
 })(ConnectWallet);

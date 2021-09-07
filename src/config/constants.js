@@ -1,4 +1,5 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, ETHCARD } from 'assets';
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, 
+  ETHCARD, Chainlink, WBTC} from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -47,7 +48,8 @@ export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLow
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
-  { key: 'USDT', decimals: 6 }
+  { key: 'USDT', decimals: 6 },
+  { key: 'WBTC', decimals: 8 }
 ];
 export const ETHorMaticCheck = ['ETH', 'MATIC'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
@@ -135,7 +137,11 @@ export const trancheIcons = {
   aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd }
+  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  ACWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  BCWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  ACLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
+  BCLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,
@@ -314,6 +320,8 @@ export const ModeThemes = {
     languageToggleText: '#4441CF',
     activeStatus: '#DDFFEB',
     activeStatusText: '#2ECC71',
+    DisabledBtn: "#BCBEC1",
+    DisabledBtnText: "#666666",
     tableText: '#39295A',
     tableCardShadow: '0px 4px 4px rgb(189 189 189 / 7%)',
     dropDownBorder: '#F9F9FB',
@@ -389,8 +397,8 @@ export const ModeThemes = {
     ModalTrancheNavbarBtn: "#FFFFFF",
     MigrateClaimCardValue: "#393F56",
     ModalTrancheNavbarBtnText: "#393F56",
-    TrancheRateFixedColor: "rgba(106, 103, 255, 0.9)",
-    TrancheRateVariableColor: "rgba(118, 77, 232, 0.9)",  
+    TrancheRateFixedColor: "#6A67FF",
+    TrancheRateVariableColor: "#764DE8",
     ModalTrancheTextRowBorder: "#F0F0F6",
     ModalTrancheNavbarBtnShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
     CongratsText: "rgba(57, 63, 86, 0.8)"
@@ -402,8 +410,8 @@ export const ModeThemes = {
     ModalTrancheNavbarBtnShadow: "",
     ModalTrancheTextRowBorder: "rgba(249, 249, 251, 0.1)",
     ModalTrancheNavbarBtnBorder: "",
-    TrancheRateFixedColor: "rgba(106, 103, 255, 0.4)",
-    TrancheRateVariableColor: "rgba(118, 77, 232, 0.4)",
+    TrancheRateFixedColor: "#6A67FF",
+    TrancheRateVariableColor: "#764DE8",
     ModalTrancheTextColor: "#FFFFFF",
     ModalTrancheNavbarBtnText: "#FFFFFF",
     HeaderTitle: '#FFFFFF',
@@ -441,6 +449,8 @@ export const ModeThemes = {
     borderInputColor: 'rgba(255, 255, 255, 0.5)',
     dropDownText: '#FFFFFF',
     inputBackground: 'rgba(255, 255, 255, 0.5)',
+    DisabledBtn: "rgba(204, 204, 205, 0.15)",
+    DisabledBtnText: "#FFFFFF",
     inputDisabledBackground: 'transparent',
     borderColor: 'rgba(204, 204, 205, 0.15)',
     backgroundBorder: 'rgba(204, 204, 205, 0.15)',
