@@ -286,6 +286,12 @@ const WalletBtn = styled.button`
     outline: none;
   }
 
+  
+  @media (max-width: 992px) {
+    margin: 5px 0;
+    width: 129px;
+    height: 33px !important;
+  }
   ${({ tranche, ModalBoxShadow, shadow, border}) => tranche && `
     max-width: 149px;
     height: 40px;
@@ -293,12 +299,17 @@ const WalletBtn = styled.button`
     background: ${ModalBoxShadow} !important;
     box-shadow: ${shadow};
     border: ${border};
+    h2{
+      font-size: 9px;
+      display: none;
+    }
+    @media (max-width: 992px) {
+      margin: 5px 3px;
+      width: auto;
+      padding: 9px;
+      height: 33px !important;
+    }
   `}
-  @media (max-width: 992px) {
-    margin: 5px 0;
-    width: 129px;
-    height: 33px;
-  }
   &:hover{
     opacity: 0.7;
   }

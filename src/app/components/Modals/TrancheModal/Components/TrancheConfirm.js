@@ -85,7 +85,7 @@ export const TrancheConfirm = ({
           </TrancheModalContentHeader>
         </TrancheModalHeader>
         {txModalStatus === 'initialState' ? (
-          <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
+          <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor} initialStatus>
             <h2>
               {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
             </h2>

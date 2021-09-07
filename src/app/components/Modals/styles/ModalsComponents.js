@@ -2180,7 +2180,7 @@ const TrancheModalWrapper = styled.div`
     // min-height: 685px;
     min-height: 573px;
     @media (max-width: 633px){
-      height: 100vh;
+      min-height: 100vh;
       max-height: unset;
     }
   `}
@@ -2235,10 +2235,13 @@ const TrancheModalContent = styled.div`
     margin: 29px auto 9px auto;
   }
   ${({ trancheStatus }) => trancheStatus && `
-    min-height: 280px;
+    min-height: 300px;
     & > h2{
       margin: -33px 0 0 0;
     }
+  `}
+  ${({ initialStatus }) => initialStatus && `
+    min-height: 347px;
   `}
 `;
 const TrancheModalContentHeader = styled.div`
