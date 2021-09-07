@@ -391,7 +391,7 @@ let NewLoan = ({
               <ModalFormLabel htmlFor='COLLATERALIZINGInput'>COLLATERALIZING</ModalFormLabel>
               <Field
                 component={InputField}
-                className={`ModalFormInput ${'ModalFormInput' + pairData[pair].collateral}`}
+                className={`ModalFormInput ModalFormInput${pairData[pair].collateral}`}
                 name='collateralAmount'
                 onChange={(e, newValue) =>
                   handleCollateralizingChange(formValues.borrowedAskAmount, newValue)

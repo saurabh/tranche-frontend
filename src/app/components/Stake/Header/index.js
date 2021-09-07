@@ -5,7 +5,7 @@ import {
   NavbarLinks
 } from './styles/HeaderComponents';
 // import HeaderTabs from "./HeaderTabs"
-import Navbar from "./Navbar"
+import Navbar from "../../Earning/Header/Navbar"
 import {
   ModeThemes
 } from 'config/constants';
@@ -78,7 +78,9 @@ function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpe
           </a>
         </NavbarLinks>
           }
-        <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
+        {
+          path === 'stake' && <HeaderTabs modalType={modalType} openModal={openModal} closeModal={closeModal} ModalIsOpen={ModalIsOpen}/>
+        }
 
       {/* <HeaderWrapper>
             <HeaderContent path={path}>

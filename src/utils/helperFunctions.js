@@ -1,7 +1,13 @@
 import ReactHtmlParser from 'react-html-parser';
 import BigNumber from 'bignumber.js';
 import moment  from 'moment';
-import { gweiVariants } from 'config/constants';
+import { gweiVariants, tokenDecimals } from 'config/constants';
+
+export const timeout = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+export const searchTokenDecimals = (key) => tokenDecimals.find((i) => i.key === key);
 
 export const readyToTransact = async (wallet, onboard) => {
   if (!wallet) {
@@ -23,7 +29,8 @@ export const addrShortener = (addr) => {
 export const valShortner = (val) => {
   if (typeof val === 'string') {
     return ReactHtmlParser(val.substring(0, 12) + (val.length >= 12 ? '.' : ''));
-  } else if (typeof val === 'number') {
+  }
+  if (typeof val === 'number') {
     return val;
   }
 };
@@ -82,12 +89,8 @@ export const roundNumber = (input, roundTo, type = false) => {
     if (typeof input === 'string') input = Number(input);
     let decimalPoints = 0;
     if (!roundTo && input % 10 !== 0) {
-      if (input >= 10000) decimalPoints = 0;
-      if (input < 10000 && input >= 1000) decimalPoints = 1;
-      if (input < 1000 && input >= 100) decimalPoints = 2;
-      if (input < 100 && input >= 10) decimalPoints = 3;
-      if (input < 10 && input >= 1) decimalPoints = 4;
-      if (input < 1 && input > 0) decimalPoints = 5;
+      const value = Math.floor(input);
+      decimalPoints = input % 1 === 0 ? 0 : Math.max(5 - `${ value === 0 ? '' : value }`.length, 0);
     } else decimalPoints = roundTo;
     if (type) {
       let result = safeMultiply(input, 10 ** decimalPoints);
@@ -115,15 +118,18 @@ export const gweiOrEther = (input, cryptoName) => {
       if (input <= 0.0001) {
         return 'Gwei';
       } else return 'ETH';
-    } else if (cryptoName === 'SLICE') {
+    }
+    if (cryptoName === 'SLICE') {
       if (input <= 0.00099) {
         return 'nSLICE';
       } else return 'SLICE';
-    } else if (cryptoName === 'DAI') {
+    }
+    if (cryptoName === 'DAI') {
       if (input <= 0.00099) {
         return 'nDAI';
       } else return 'DAI';
-    } else if (cryptoName === 'USDC') {
+    }
+    if (cryptoName === 'USDC') {
       if (input <= 0.00099) {
         return 'nUSDC';
       } else return 'USDC';
@@ -138,8 +144,7 @@ export const roundBasedOnUnit = (input, cryptoName, roundTo) => {
     if (gweiVariants.indexOf(gweiOrEther(input, cryptoName)) !== -1) {
       input *= 10 ** 9;
     }
-    const result = roundNumber(input, roundTo);
-    return result;
+    return roundNumber(input, roundTo);
   } catch (error) {
     console.error(error);
   }
@@ -229,3 +234,7 @@ export const isEqualTo = function (a, b) {
   let y = new BigNumber(b);
   return x.isEqualTo(y);
 };
+
+export const toBigNumber = (a) => {
+  return new BigNumber(a);
+}

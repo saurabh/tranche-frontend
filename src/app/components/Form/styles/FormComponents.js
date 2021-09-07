@@ -275,6 +275,10 @@ const ModalFormButton = styled.button`
   ${({ loading }) => loading === 'true' && `
     width: 192px !important;
   `}
+  transition: 300ms;
+  :hover{
+    opacity: 0.7;
+  }
 
   
 

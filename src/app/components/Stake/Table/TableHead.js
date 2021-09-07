@@ -59,7 +59,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
     const TableHeadDesktop = () => {
         return (
             <TableHeadWrapper path={path}>
-                <TableHeadTitle defaultCursor={true} stakingPool color={color} stakingPoolStake>
+                <TableHeadTitle defaultCursor={true} stakingPool color={color} stakingPoolStake theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("stakingPool")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Address" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('stake.table.tableHead.stakingPool') : "Liquidity Provider Pool") :  "INSTRUMENT"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
@@ -70,7 +70,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     </TooltipWrapper>
                     }
                 </TableHeadTitle>
-                <TableHeadTitle color={color} statusStake sliceStaking={title === "SLICE Staking Pools"}>
+                <TableHeadTitle color={color} statusStake sliceStaking={title === "SLICE Staking Pools"} theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("status")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow" || path === "stake") ? (title ===  "SLICE Staking Pools" ? i18n.t('lockup') : ""): "BOND APY"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
@@ -81,7 +81,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     </TooltipWrapper>
                     }
                 </TableHeadTitle>
-                <TableHeadTitle color={color} staked>
+                <TableHeadTitle color={color} staked theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("staked")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? i18n.t('stake.table.tableHead.staked') : "TRANCHE SIZE"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
@@ -92,7 +92,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     </TooltipWrapper>
                     }
                 </TableHeadTitle>
-                <TableHeadTitle color={color} reward>
+                <TableHeadTitle color={color} reward theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("reward")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Ratio" : path === "stake" ? (title ===  "SLICE Staking Pools" ? i18n.t('remainingCap') : i18n.t('stake.table.tableHead.reward')) : "RETURN/BLOCK"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
@@ -103,7 +103,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     </TooltipWrapper>
                     }
                 </TableHeadTitle> 
-                <TableHeadTitle color={color} APYStake>
+                <TableHeadTitle color={color} APYStake theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("APY")} onMouseLeave={() => tooltipToggle("")}>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? i18n.t('stake.table.tableHead.apy') : "SUBSCRIPTION"}</h2>
                     {
                     title === "SLICE Staking Pools" &&
@@ -114,7 +114,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     </TooltipWrapper>
                     }
                 </TableHeadTitle>
-                <TableHeadTitle color={color} stakeCol>
+                <TableHeadTitle color={color} stakeCol theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("yourStake")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('stake.table.tableHead.yourStake')}</h2>
                     {
                     title === "SLICE Staking Pools" &&
@@ -125,7 +125,7 @@ const TableHead = ({changeSorting, path, color, theme, title}) => {
                     </TooltipWrapper>
                     }
                 </TableHeadTitle>
-                <TableHeadTitle color={color} btnsStake sliceStaking={title === "SLICE Staking Pools"}>
+                <TableHeadTitle color={color} btnsStake sliceStaking={title === "SLICE Staking Pools"} theme={theme}>
                     <h2 onMouseOver={() => tooltipToggle("manageStake")} onMouseLeave={() => tooltipToggle("")}>{i18n.t('stake.table.tableHead.manageStake')}</h2>
                     {
                         title === "SLICE Staking Pools" &&

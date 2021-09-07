@@ -19,6 +19,13 @@ import {
   TRANCHE_MARKETS,
   USER_STAKING_LIST_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
+  SET_TX_MODAL_OPEN,
+  SET_TX_MODAL_TYPE,
+  SET_TX_MODAL_DATA,
+  SET_TX_MODAL,
+  SET_TX_MODAL_LOADING,
+  SET_TX_ONGOING_DATA,
+  SET_TX_LINK,
   SET_MIGRATE_STEP,
   SET_MIGRATE_LOADING,
   SET_MIGRATED,
@@ -44,6 +51,13 @@ const initialState = {
   tradeType: 'allTranches',
   trancheCard: { status: false, id: null },
   trancheMarket: 'compound',
+  txModalIsOpen: false,
+  txModalType: '',
+  txModalData: {},
+  txModalStatus: 'initialState',
+  txLoading: false,
+  txOngoingData: { isDeposit: undefined, trancheCardId: undefined },
+  txLink: '',
   currentStep: 'claim',
   migrateLoading: false,
   userStakingList: {
@@ -97,6 +111,20 @@ export default function (state = initialState, action) {
       return { ...state, userStakingList: payload };
     case USER_STAKING_LIST_IS_LOADING:
       return { ...state, isUserStakingListLoading: payload };
+    case SET_TX_MODAL_OPEN:
+      return { ...state, txModalIsOpen: payload };
+    case SET_TX_MODAL_TYPE:
+      return { ...state, txModalType: payload };
+    case SET_TX_MODAL_DATA:
+      return { ...state, txModalData: payload };
+    case SET_TX_MODAL:
+      return { ...state, txModalStatus: payload };
+    case SET_TX_MODAL_LOADING:
+      return { ...state, txLoading: payload };
+    case SET_TX_ONGOING_DATA:
+      return { ...state, txOngoingData: payload };
+    case SET_TX_LINK:
+      return { ...state, txLink: payload };
     case SET_MIGRATE_STEP:
       return { ...state, currentStep: payload };
     case SET_MIGRATE_LOADING:

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from 'redux/store';
-import { web3 } from 'utils/getWeb3';
+import { web3, timeout } from 'utils';
 // import maticWeb3 from 'utils/maticWeb3';
 import { fetchTableData, trancheCardToggle, fetchUserStakingList } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
@@ -9,9 +9,6 @@ import { serverUrl, apiUri, StakingAddresses, YieldAddresses, LockupAddress, JCo
 import maticWeb3 from 'utils/maticWeb3';
 const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked, userStakingList } = apiUri;
 
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
 let JCompound, Staking, YieldFarm, JAave, Lockup;
 
 export const ETHContracts = {
@@ -50,7 +47,7 @@ export const ETHContracts = {
               );
               store.dispatch(trancheCardToggle({ status: false, id: null }));
               const getSliceStats = async () => {
-                const res = await axios(`${serverUrl + sliceSummary}`);
+                const res = await axios(`${serverUrl}${sliceSummary}`);
                 const { result } = res.data;
                 store.dispatch(setSliceStats(result));
               };
@@ -89,7 +86,7 @@ export const ETHContracts = {
                   stakingList
                 )
               );
-              const res = await axios(`${serverUrl + stakingSummary + address}`);
+              const res = await axios(`${serverUrl}${stakingSummary}${address}`);
               const { result } = res.data;
               store.dispatch(summaryFetchSuccess(result));
               store.dispatch(setTokenBalances(address));
@@ -106,7 +103,7 @@ export const ETHContracts = {
             let userAddress = '0x000000000000000000000000' + address.split('0x')[1];
             if (log.topics.includes(userAddress)) {
               await timeout(5000);
-              const res = await axios(`${serverUrl + stakingSummary + address}`);
+              const res = await axios(`${serverUrl}${stakingSummary}${address}`);
               const { result } = res.data;
               store.dispatch(summaryFetchSuccess(result));
               store.dispatch(setTokenBalances(address));
@@ -140,7 +137,7 @@ export const ETHContracts = {
                 )
               );
               await store.dispatch(fetchUserStakingList(`${userStakingList}/${address}`));
-              const res = await axios(`${serverUrl + stakingSummary + address}`);
+              const res = await axios(`${serverUrl}${stakingSummary}${address}`);
               const { result } = res.data;
               store.dispatch(summaryFetchSuccess(result));
               store.dispatch(setTokenBalances(address));
@@ -216,7 +213,7 @@ export const MaticContracts = {
                 store.dispatch(setSliceStats(result));
               };
               const getTvl = async () => {
-                const res = await axios(`${serverUrl + totalValueLocked}`);
+                const res = await axios(`${serverUrl}${totalValueLocked}`);
                 const { result } = res.data;
                 store.dispatch(setTvl(result));
               };

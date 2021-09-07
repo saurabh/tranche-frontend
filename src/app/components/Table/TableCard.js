@@ -701,7 +701,7 @@ const TableCard = ({
                 {/* {Object.values(searchObj(status))[0].key === 'Under Collateralized'
                   ? 'Under'
                   : valShortner(Object.values(searchObj(status))[0].key)} */}
-                {i18n.t(`${'statuses.' + status.toString() + '.key'}`)}
+                {i18n.t(`statuses.${status.toString()}.key`)}
               </StatusTextWrapper>
             </FifthColContent>
           </TableFifthCol>

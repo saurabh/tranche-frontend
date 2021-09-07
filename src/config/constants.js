@@ -44,7 +44,7 @@ export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
-
+// export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLowerCase();
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
@@ -320,6 +320,8 @@ export const ModeThemes = {
     languageToggleText: '#4441CF',
     activeStatus: '#DDFFEB',
     activeStatusText: '#2ECC71',
+    DisabledBtn: "#BCBEC1",
+    DisabledBtnText: "#666666",
     tableText: '#39295A',
     tableCardShadow: '0px 4px 4px rgb(189 189 189 / 7%)',
     dropDownBorder: '#F9F9FB',
@@ -395,6 +397,8 @@ export const ModeThemes = {
     ModalTrancheNavbarBtn: "#FFFFFF",
     MigrateClaimCardValue: "#393F56",
     ModalTrancheNavbarBtnText: "#393F56",
+    TrancheRateFixedColor: "#6A67FF",
+    TrancheRateVariableColor: "#764DE8",
     ModalTrancheTextRowBorder: "#F0F0F6",
     ModalTrancheNavbarBtnShadow: "0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)",
     CongratsText: "rgba(57, 63, 86, 0.8)"
@@ -406,6 +410,8 @@ export const ModeThemes = {
     ModalTrancheNavbarBtnShadow: "",
     ModalTrancheTextRowBorder: "rgba(249, 249, 251, 0.1)",
     ModalTrancheNavbarBtnBorder: "",
+    TrancheRateFixedColor: "#6A67FF",
+    TrancheRateVariableColor: "#764DE8",
     ModalTrancheTextColor: "#FFFFFF",
     ModalTrancheNavbarBtnText: "#FFFFFF",
     HeaderTitle: '#FFFFFF',
@@ -443,6 +449,8 @@ export const ModeThemes = {
     borderInputColor: 'rgba(255, 255, 255, 0.5)',
     dropDownText: '#FFFFFF',
     inputBackground: 'rgba(255, 255, 255, 0.5)',
+    DisabledBtn: "rgba(204, 204, 205, 0.15)",
+    DisabledBtnText: "#FFFFFF",
     inputDisabledBackground: 'transparent',
     borderColor: 'rgba(204, 204, 205, 0.15)',
     backgroundBorder: 'rgba(204, 204, 205, 0.15)',

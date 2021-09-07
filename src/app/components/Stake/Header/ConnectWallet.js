@@ -62,7 +62,7 @@ const ConnectWallet = ({
            <WalletBtnIcon>
             <img src={Wallet} alt='wallet' />
           </WalletBtnIcon>
-          <WalletBtnText icon={false} color={PagesData[path].color}>
+          <WalletBtnText icon={false} color={PagesData[path] ? PagesData[path].color : PagesData['stake'].color}>
             <h2>{i18n.t('connect')}</h2>
           </WalletBtnText>
         </WalletBtn>
@@ -75,7 +75,7 @@ const ConnectWallet = ({
           <WalletBtnIcon>
             <img src={Wallet} alt='' />
           </WalletBtnIcon>
-          <WalletBtnText color={PagesData[path].color}>
+          <WalletBtnText color={PagesData[path] ? PagesData[path].color : PagesData['stake'].color}>
             <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>

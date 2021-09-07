@@ -50,7 +50,7 @@ const SummaryCards = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${serverUrl + stakingSummary + address}`);
+      const res = await axios(`${ serverUrl }${ stakingSummary }${ address }`);
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
@@ -70,7 +70,7 @@ const SummaryCards = ({
     // setRatioIsLoading(false);
   };
   const getCollateral = async () => {
-    const res = await axios(`${serverUrl + summaryCollateral}`);
+    const res = await axios(`${serverUrl}${summaryCollateral}`);
     const { result } = res.data;
     setCollateral(result);
     setCollateralIsLoading(false);

@@ -6,12 +6,11 @@ import {
   SLICEAddress,
   LP1TokenAddress,
   LP2TokenAddress,
-  etherScanUrl,
-  maticBlockExplorerUrl
-} from 'config/constants';
+  txLink
+} from 'config';
+import { timeout } from 'utils';
 import { postRequest, initOnboard, getRequest } from 'services';
 import { checkServer } from './checkServer';
-import { setBlockExplorerUrl } from './ethereum';
 import {
   LOANS_IS_LOADING,
   LOANS_SUCCESS,
@@ -33,6 +32,13 @@ import {
   STAKING_SUCCESS,
   USER_STAKING_LIST_IS_LOADING,
   USER_STAKING_LIST_SUCCESS,
+  SET_TX_MODAL_OPEN,
+  SET_TX_MODAL_TYPE,
+  SET_TX_MODAL_DATA,
+  SET_TX_MODAL,
+  SET_TX_MODAL_LOADING,
+  SET_TX_ONGOING_DATA,
+  SET_TX_LINK,
   SET_MIGRATE_STEP,
   SET_MIGRATE_LOADING,
   SET_MIGRATED,
@@ -174,11 +180,9 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });
     store.dispatch(changeFilter('ethereum'));
-    store.dispatch(setBlockExplorerUrl(etherScanUrl));
   } else if (trancheMarket === 'aavePolygon') {
     onboard.config({ networkId: maticNetworkId });
     store.dispatch(changeFilter('polygon'));
-    store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
   store.dispatch(trancheCardToggle({ status: false, id: null }));
   dispatch({
@@ -279,5 +283,65 @@ export const setHasMigrated = (bool) => (dispatch) => {
   dispatch({
     type: SET_MIGRATED,
     payload: bool
+  });
+};
+
+export const setTxModalOpen = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_OPEN,
+    payload: bool
+  });
+};
+
+export const setTxModalType = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_TYPE,
+    payload: string
+  });
+};
+
+export const setTxModalData = (object) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_DATA,
+    payload: object
+  });
+};
+
+export const setTxModalStatus = (string) => async (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL,
+    payload: string
+  });
+  if (string === 'success' || string === 'rejected') {
+    await timeout(5000);
+    dispatch({
+      type: SET_TX_MODAL_OPEN,
+      payload: false
+    });
+    dispatch({
+      type: SET_TX_MODAL,
+      payload: 'initialState'
+    });
+  }
+};
+
+export const setTxModalLoading = (bool) => (dispatch) => {
+  dispatch({
+    type: SET_TX_MODAL_LOADING,
+    payload: bool
+  });
+};
+
+export const setTxOngoingData = (obj) => (dispatch) => {
+  dispatch({
+    type: SET_TX_ONGOING_DATA,
+    payload: obj
+  });
+};
+
+export const setTxLink = (string) => (dispatch) => {
+  dispatch({
+    type: SET_TX_LINK,
+    payload: txLink(string)
   });
 };

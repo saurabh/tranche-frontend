@@ -57,7 +57,7 @@ const HeaderTabs = ({
 
   useEffect(() => {
     const getStakingData = async () => {
-      const res = await axios(`${serverUrl + stakingSummary + address}`);
+      const res = await axios(`${serverUrl}${stakingSummary}${address}`);
       const { result } = res.data;
       summaryFetchSuccess(result);
     };
@@ -68,8 +68,8 @@ const HeaderTabs = ({
 
   return (
     <StakeHeaderWrapper>
-      <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stake>
-        <h2>{i18n.t('stake.table.tableHeader.title')}</h2> :
+      <TableTitle color={ModeThemes[theme].HeaderTitle} withHowto stakeTitle>
+        <h2>{i18n.t('stake.table.tableHeader.title')}</h2>
         <HowToLink
           href='https://docs.tranche.finance/tranchefinance/tranche-app/staking'
           onClick={(e) => Tracker('Documentation', 'https://docs.tranche.finance/tranchefinance/tranche-app/staking')}

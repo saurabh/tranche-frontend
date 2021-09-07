@@ -8,6 +8,7 @@ import { abi as StakingABI } from 'build/contracts/StakingMilestones.json';
 import { abi as LockupABI } from 'build/contracts/StakingWithLockup.json';
 import { abi as YieldFarmABI } from 'build/contracts/YieldFarm.json';
 import { abi as ERC20ABI } from 'build/contracts/myERC20.json';
+// import { abi as RewardDistributionABI } from 'build/contracts/IncentivesController.json'
 import {
   LoanContractAddress,
   DAIAddress,
@@ -62,3 +63,7 @@ export function SLICESetup(web3) {
 export function ERC20Setup(web3, address) {
   return new web3.eth.Contract(ERC20ABI, address);
 }
+
+// export function RewardDistributionSetup (web3, RewardDistributionAddress) {
+//   return new web3.eth.Contract(RewardDistributionABI, RewardDistributionAddress);
+// }

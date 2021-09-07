@@ -2,15 +2,16 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import { setTxModalOpen, setTxModalType } from 'redux/actions/tableData';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { initOnboard } from 'services/blocknative';
-import { addrShortener } from 'utils/helperFunctions';
+import { addrShortener, roundNumber, toBigNumber } from 'utils/helperFunctions';
 import { WalletBtn, WalletBtnIcon, WalletBtnText, NavBarRightWrapper } from './styles/HeaderComponents';
-import { ModeThemes, PagesData } from 'config/constants';
-import Wallet from "assets/images/svg/wallet.svg";
+import { ModeThemes, PagesData, SLICEAddress } from 'config/constants';
+import Wallet from 'assets/images/svg/wallet.svg';
 import i18n from '../../locale/i18n';
 import { TrancheStake } from 'assets';
-import TrancheModal from 'app/components/Modals/TrancheModal';
+import { fromWei, toBN } from 'services';
 
 const ConnectWallet = ({
   setAddress,
@@ -18,12 +19,24 @@ const ConnectWallet = ({
   setBalance,
   setWalletAndWeb3,
   theme,
-  ethereum: { address, balance }
+  ethereum: { address, balance, tokenBalance, unclaimedSIRRewards },
+  setTxModalOpen,
+  setTxModalType
 }) => {
+  const [totalSliceBalance, setTotalSliceBalance] = useState(0);
+  const [unclaimedSlice, setUnclaimedSlice] = useState(0);
+  const [totalSlice, setTotalSlice] = useState(0);
+  useEffect(() => {
+    setTotalSliceBalance(fromWei(tokenBalance[SLICEAddress]));
+  }, [tokenBalance]);
+  useEffect(() => {
+    setUnclaimedSlice(fromWei(toBN(toBigNumber(+unclaimedSIRRewards || 0))));
+  }, [ unclaimedSIRRewards ]);
+  useEffect(() => {
+    setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
+  }, [totalSliceBalance, unclaimedSlice]);
+
   const { pathname } = useLocation();
-  
-  const [modalType, setModalType] = useState('');
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   let parsedPath = pathname.split('/');
   const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || 'borrow');
 
@@ -33,14 +46,12 @@ const ConnectWallet = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-  const closeModal = () => {
-    setModalIsOpen(false);
-    // onClick={() => trancheMarketsToggle("aavePolygon")}>
+
+  const openModal = () => {
+    setTxModalOpen(true);
+    setTxModalType('trancheRewards');
   };
-  const openModal = (type) => {
-    setModalIsOpen(true);
-    setModalType(type)
-  };
+
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem('selectedWallet');
 
@@ -49,7 +60,7 @@ const ConnectWallet = ({
     }
   }, [onboard]);
 
-  const parsePath = useCallback(() =>{
+  const parsePath = useCallback(() => {
     setPath(parsedPath[parsedPath.length - 1]);
   }, [parsedPath]);
   useEffect(() => {
@@ -60,52 +71,46 @@ const ConnectWallet = ({
     await onboard.walletSelect();
     await onboard.walletCheck();
   };
-  
+
   return (
     <NavBarRightWrapper>
-        {/* <WalletBtn
-          background={ModeThemes[theme].ModalTrancheNavbarBtn}
-          shadow={ModeThemes[theme].ModalTrancheNavbarBtnShadow}
-          border={ModeThemes[theme].ModalTrancheNavbarBtnBorder}
-          tranche
-          onClick={() => openModal('trancheRewards')}
-        >
-          <WalletBtnIcon tranche>
-            <img src={TrancheStake} alt='tranche' />
-          </WalletBtnIcon>
+      {/* {
+        path === "tranche" &&
+      <WalletBtn
+        disabled={!address}
+        background={ModeThemes[theme].ModalTrancheNavbarBtn}
+        shadow={ModeThemes[theme].ModalTrancheNavbarBtnShadow}
+        border={ModeThemes[theme].ModalTrancheNavbarBtnBorder}
+        tranche
+        onClick={() => openModal()}
+      >
+            
+        <WalletBtnIcon tranche>
+        <img src={TrancheStake} alt='tranche' />
+        </WalletBtnIcon>        
+                  
         <WalletBtnText tranche icon={false} color={ModeThemes[theme].ModalTrancheNavbarBtnText}>
-          <h2>1005.125</h2>
+          <h2>{address ? totalSlice : '--'}</h2>
         </WalletBtnText>
-      </WalletBtn> */}
+      </WalletBtn>
+      } */}
 
-      <TrancheModal 
-        modalIsOpen={modalIsOpen} 
-        modalType={modalType}
-        closeModal={() => closeModal()}
-      />
+
       {balance < 0 ? (
-        <WalletBtn
-          background="#4441CF"
-          onClick={handleConnect}
-          onKeyUp={handleConnect}
-        >
-           <WalletBtnIcon>
+        <WalletBtn background='#4441CF' onClick={handleConnect} onKeyUp={handleConnect}>
+          <WalletBtnIcon>
             <img src={Wallet} alt='wallet' />
           </WalletBtnIcon>
-          <WalletBtnText icon={false} color={PagesData[path].color}>
+          <WalletBtnText icon={false} color={PagesData[path] ? PagesData[path].color : PagesData['stake'].color}>
             <h2>{i18n.t('connect')}</h2>
           </WalletBtnText>
         </WalletBtn>
       ) : (
-        <WalletBtn
-          background="#4441CF"
-          onClick={handleConnect}
-          onKeyUp={handleConnect}
-        >
+        <WalletBtn background='#4441CF' onClick={handleConnect} onKeyUp={handleConnect}>
           <WalletBtnIcon>
             <img src={Wallet} alt='' />
           </WalletBtnIcon>
-          <WalletBtnText color={PagesData[path].color}>
+          <WalletBtnText color={PagesData[path] ? PagesData[path].color : PagesData['stake'].color}>
             <h2>{addrShortener(address)}</h2>
           </WalletBtnText>
         </WalletBtn>
@@ -119,6 +124,8 @@ ConnectWallet.propTypes = {
   setNetwork: PropTypes.func.isRequired,
   setBalance: PropTypes.func.isRequired,
   setWalletAndWeb3: PropTypes.func.isRequired,
+  setTxModalOpen: PropTypes.func.isRequired,
+  setTxModalType: PropTypes.func.isRequired,
   ethereum: PropTypes.object.isRequired
 };
 
@@ -131,5 +138,7 @@ export default connect(mapStateToProps, {
   setAddress,
   setNetwork,
   setBalance,
-  setWalletAndWeb3
+  setWalletAndWeb3,
+  setTxModalOpen,
+  setTxModalType
 })(ConnectWallet);

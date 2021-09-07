@@ -137,6 +137,9 @@ ${({ tranche }) => tranche && `
 
 ${({ enableModal }) => enableModal && `
   top: 0;
+  @media (max-width: 633px){
+    position: absolute;
+  }
 `}
 
 
@@ -747,7 +750,10 @@ const SliceNotFoundBtn = styled.div`
     justify-content: center;
     align-items: center;
     text-decoration: none;
-  ]
+    transition: 300ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 `;
 const ModalMarketWrapper = styled.div`
@@ -788,6 +794,11 @@ const ModalMarketWrapper = styled.div`
     align-items: center;
     text-align: center;
     color: ${props => props.linkColor};
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
+    
   }
 `;
 
@@ -819,6 +830,10 @@ const ModalMarketWrapperBtn = styled.div`
     justify-content: center;
     align-items: center;
     text-decoration: none;
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -1030,6 +1045,15 @@ const StakingModalClose = styled.div`
     border: none;
     outline: none;
     cursor: pointer;
+    img{
+      opacity: 0.7;
+      transition: 300ms;
+    }
+    :hover{
+      img{
+        opacity: 1;
+      }
+    }
   }
   ${({ migrate }) => migrate && `
     top: unset;
@@ -1059,6 +1083,17 @@ const ClaimModalHeader = styled.div`
       font-weight: 600;
       font-size: 14px;
       color: #898FA4;
+    }
+  }
+  button{
+    img{
+      opacity: 0.7;
+      transition: 300ms;
+    }
+    :hover{
+      img{
+        opacity: 1;
+      }
     }
   }
 `;
@@ -1264,6 +1299,10 @@ const ClaimModalTableBtn = styled.button`
   // background: #CECECE;
   // background: #C22D2D;
   // color: #666666;
+  transition: 300ms;
+  :hover{
+    opacity: 0.7;
+  }
 `;
 const StakingModalContentSideWrapper = styled.div`
   width: 100%;
@@ -1546,6 +1585,10 @@ const StakeModalNavigationBtn = styled.button`
   ${({ Withdraw }) => Withdraw && `
     right: 0;
   `}
+  transition: 300ms;
+  :hover{
+    opacity: 1;
+  }
 `;
 const StakeModalFormWrapper = styled.div`
     & > h2{
@@ -1673,6 +1716,11 @@ const StakeModalFormBtn = styled.button`
     position: relative;
     width: 100%;
     margin: 15px 0;
+  }
+
+  transition: 300ms;
+  :hover{
+    opacity: 0.7;
   }
   
 `;
@@ -1823,6 +1871,10 @@ const InputTag = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.textColor};
+    transition: 300ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
 
 `;
@@ -1908,6 +1960,12 @@ const StakeNewCol = styled.div`
     width: 25.6666667%;
     h2{
       text-align: center;
+    }
+    button{
+      transition: 300ms;
+      :hover{
+        opacity: 0.7;
+      }
     }
   `}
   ${({ head, color }) => head && `
@@ -2106,16 +2164,31 @@ const StakingMigrateModalContentWrapper = styled.div`
   
 `;
 const TrancheModalWrapper = styled.div`
-  height: 517px;
+  max-height: 571px;
+  ${({ TrancheRewards }) => TrancheRewards && `
+      max-height: 517px;
+  `}
   ${({ TrancheEnable }) => TrancheEnable && `
-    height: 571px;    
+    max-height: 600px;  
+    height: 100%;  
+    @media (max-width: 633px){
+      height: 100vh;
+    }
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
     max-height: 685px;
-    min-height: 571px;
+    // min-height: 685px;
+    min-height: 573px;
+    @media (max-width: 633px){
+      min-height: 100vh;
+      max-height: unset;
+    }
   `}
   width: 100%;
   background: ${props => props.backgroundColor};
+  @media (max-height: 560px){
+    min-height: 571px;
+  }
 `;
 const TrancheModalHeader = styled.div`
   height: 68px; 
@@ -2148,7 +2221,11 @@ const TrancheModalContent = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 0 40px;
+  padding: 5px 40px;
+
+  ${({ TrancheRewards }) => TrancheRewards && `
+    padding: 0 40px;
+  `}
   & > h2{
     font-family: 'Inter', sans-serif;
     font-weight: bold;
@@ -2158,10 +2235,13 @@ const TrancheModalContent = styled.div`
     margin: 29px auto 9px auto;
   }
   ${({ trancheStatus }) => trancheStatus && `
-    min-height: 280px;
+    min-height: 300px;
     & > h2{
       margin: -33px 0 0 0;
     }
+  `}
+  ${({ initialStatus }) => initialStatus && `
+    min-height: 347px;
   `}
 `;
 const TrancheModalContentHeader = styled.div`
@@ -2240,6 +2320,21 @@ const TrancheModalFooter = styled.div`
     img{
       margin-right: 5px;
     }
+    :disabled{
+      background: ${props => props.disabledColor};
+      color: ${props => props.disabledTextColor};
+      pointer-events: none;
+    }
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
+  }
+  a{
+    transition: 200ms;
+    :hover{
+      opacity: 0.7;
+    }
   }
   
 
@@ -2251,12 +2346,17 @@ const TrancheModalFooter = styled.div`
   h2{
     font-family: 'Inter', sans-serif;
     font-weight: 500;
+    padding: 0 0 20px 0;
     font-size: 12.3841px;
     text-align: center;
     color: ${props => props.color};
     a{
       color: #A98BFF;
       font-weight: bold;
+      transition: 200ms;
+      :hover{
+        opacity: 0.7;
+      } 
     }
   }
   ${({ TrancheEnableConfirm }) => TrancheEnableConfirm && `
@@ -2313,7 +2413,7 @@ const TrancheModalContentHeaderText = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 129px; 
+    // max-width: 129px; 
     width: 100%;
     h2:first-child{
       font-family: 'Inter', sans-serif;
@@ -2357,7 +2457,257 @@ const TrancheModalContentStatus = styled.div`
     color: ${props => props.color};
   }
 `
+
+
+const NotFoundStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '292px',
+    width: '100%',
+    minHeight: '245px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const MigrateStake = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '473px',
+    width: '100%',
+    minHeight: '457px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const FirstCustomStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '731px',
+    width: '100%',
+    minHeight: '634px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const stakingModalStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '3000'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '731px',
+    width: '100%',
+    minHeight: '454px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
+const TrancheMarketStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '372px',
+    maxHeight: '388px',
+    width: '100%',
+    minHeight: '366px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheRewardsStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '340px',
+    maxHeight: '517px',
+    width: '100%',
+    minHeight: '517px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheEnableModal = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '600px',
+    width: '100%',
+    minHeight: '571px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+const TrancheConfirmModal = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '685px',
+    width: '100%',
+    minHeight: '571px',
+    height: '100%',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
+
 export {
+  TrancheMarketStyles,
+  TrancheRewardsStyles,
+  TrancheEnableModal,
+  TrancheConfirmModal,
+  NotFoundStyles,
+  MigrateStake,
+  FirstCustomStyles,
+  stakingModalStyles,
   ModalHeader, 
   ModalContent,
   ModalContentDetails,
