@@ -74,7 +74,7 @@ const ConnectWallet = ({
 
   return (
     <NavBarRightWrapper>
-      {
+      {/* {
         path === "tranche" &&
       <WalletBtn
         disabled={!address}
@@ -93,7 +93,7 @@ const ConnectWallet = ({
           <h2>{address ? totalSlice : '--'}</h2>
         </WalletBtnText>
       </WalletBtn>
-      }
+      } */}
 
 
       {balance < 0 ? (

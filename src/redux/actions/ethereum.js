@@ -43,7 +43,7 @@ import {
 } from './constants';
 import { summaryFetchSuccess } from './summaryData';
 import { setHasMigrated, trancheMarketsToggle } from './tableData';
-import { getUnclaimedRewards } from 'services';
+// import { getUnclaimedRewards } from 'services';
 
 const { stakingSummary } = apiUri;
 
@@ -446,10 +446,10 @@ export const removeNotification = (notification) => (dispatch) => {
   });
 };
 
-export const checkSIRRewards = () => async (dispatch) => {
-  const rewards = await getUnclaimedRewards(RewardDistributionAddress);
-  dispatch({
-    type: SIR_REWARDS,
-    payload: rewards
-  });
-};
+// export const checkSIRRewards = () => async (dispatch) => {
+//   const rewards = await getUnclaimedRewards(RewardDistributionAddress);
+//   dispatch({
+//     type: SIR_REWARDS,
+//     payload: rewards
+//   });
+// };

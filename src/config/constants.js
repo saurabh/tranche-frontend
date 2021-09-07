@@ -44,7 +44,7 @@ export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
-export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLowerCase();
+// export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLowerCase();
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },

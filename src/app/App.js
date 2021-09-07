@@ -7,7 +7,7 @@ import { ThemeProvider } from 'styled-components';
 // import Banner from 'app/components/Banner/Banner';
 import ErrorModal from 'app/components/Modals/Error';
 
-import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards } from 'redux/actions/ethereum';
+import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances } from 'redux/actions/ethereum';
 import { fetchExchangeRates } from 'redux/actions/tableData';
 import { ETHContracts, MaticContracts } from 'services/web3Subscriptions';
 import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes } from 'config/constants';
@@ -39,7 +39,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
       {
         checkTrancheAllowances(address, JCompoundAddress);
         checkStakingAllowances(address);
-        checkSIRRewards();
+        // checkSIRRewards();
       }
       if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
     }
@@ -89,7 +89,7 @@ App.propTypes = {
   setTokenBalances: PropTypes.func.isRequired,
   checkTrancheAllowances: PropTypes.func.isRequired,
   checkStakingAllowances: PropTypes.func.isRequired,
-  checkSIRRewards: PropTypes.func.isRequired
+  // checkSIRRewards: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -105,5 +105,5 @@ export default connect(mapStateToProps, {
   checkTrancheAllowances,
   checkStakingAllowances,
   fetchExchangeRates,
-  checkSIRRewards
+  // checkSIRRewards
 })(NetworkDetector(App));
