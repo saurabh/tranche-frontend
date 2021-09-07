@@ -246,7 +246,15 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
   try {
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
-    depositAmount = searchTokenDecimals(cryptoType) ? safeMultiply(depositAmount, 10 ** searchTokenDecimals(cryptoType).decimals) : toWei(depositAmount);
+    const tokenDecimalObj = searchTokenDecimals(cryptoType);
+    if (tokenDecimalObj)
+    {
+      depositAmount = safeMultiply(depositAmount, 10 ** tokenDecimalObj.decimals);
+      depositAmount = toBN(depositAmount);
+    } else
+    {
+      depositAmount = toWei(depositAmount);
+    }
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
     store.dispatch(
       addNotification({
