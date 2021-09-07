@@ -316,7 +316,7 @@ const TableCard = ({
               <TableFirstColWrapper>
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                    <h2>{dividendType && dividendType}</h2>
+                    <h2>{cryptoType && cryptoType}</h2>
                     <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
                       <button>
                         <img src={ChevronTable} alt='ChevronTable' />

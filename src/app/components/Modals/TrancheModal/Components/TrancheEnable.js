@@ -97,11 +97,12 @@ export const TrancheEnable = ({
             </TrancheModalContentRow>
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>SLICE APY</h2>
-              <h2>{roundNumber(sliceAPY, 2)}%</h2>
+              {/* <h2>{roundNumber(sliceAPY, 2)}%</h2> */}
+              <h2>TBD</h2>
             </TrancheModalContentRow>
             <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Net APY</h2>
-              <h2>{roundNumber(netAPY, 2)}%</h2>
+              <h2>{roundNumber(netAPY, 2) !== 'NaN' ? roundNumber(netAPY, 2) : roundNumber(apy, 2)}%</h2>
             </TrancheModalContentRow>
           </TrancheModalContent>
         ) : txModalStatus === 'confirm' ? (
