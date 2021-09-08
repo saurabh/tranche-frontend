@@ -172,7 +172,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>
-                  <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -316,7 +316,7 @@ const TableCard = ({
               <TableFirstColWrapper>
                 <FirstColContent instrument>
                   <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                    <h2>{dividendType && dividendType}</h2>
+                    <h2>{cryptoType && cryptoType}</h2>
                     <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
                       <button>
                         <img src={ChevronTable} alt='ChevronTable' />
@@ -325,7 +325,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>
-                    <a href={blockExplorerUrl + 'address/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
