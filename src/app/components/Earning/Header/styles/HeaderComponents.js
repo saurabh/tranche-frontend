@@ -301,13 +301,15 @@ const WalletBtn = styled.button`
     border: ${border};
     h2{
       font-size: 9px;
-      display: none;
     }
     @media (max-width: 992px) {
       margin: 5px 3px;
       width: auto;
       padding: 9px;
       height: 33px !important;
+      h2{
+        display: none;
+      }
     }
   `}
   &:hover{
