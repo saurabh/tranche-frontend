@@ -2167,6 +2167,10 @@ const TrancheModalWrapper = styled.div`
   max-height: 571px;
   ${({ TrancheRewards }) => TrancheRewards && `
       max-height: 517px;
+      @media (max-width: 633px){
+        max-height: unset;
+        height: 100vh;
+      }
   `}
   ${({ TrancheEnable }) => TrancheEnable && `
     max-height: 600px;  
@@ -2211,6 +2215,9 @@ const TrancheModalHeader = styled.div`
       text-align: center;
       z-index: 2;
       color: ${color};
+      @media (max-height: 660px){
+        position: absolute;
+      }
     }
   `}
 
@@ -2226,6 +2233,8 @@ const TrancheModalContent = styled.div`
   ${({ TrancheRewards }) => TrancheRewards && `
     padding: 0 40px;
   `}
+  
+  
   & > h2{
     font-family: 'Inter', sans-serif;
     font-weight: bold;
@@ -2239,6 +2248,9 @@ const TrancheModalContent = styled.div`
     & > h2{
       margin: -33px 0 0 0;
     }
+  `}
+  ${({ TrancheStatusFailed }) => TrancheStatusFailed && `
+    min-height: 347px !important;
   `}
   ${({ initialStatus }) => initialStatus && `
     min-height: 347px;
@@ -2381,6 +2393,12 @@ const TrancheModalFooter = styled.div`
         margin-right: 5px;
       }
     }
+  `}
+  ${({ TrancheRewards }) => TrancheRewards && `
+    padding: 2px 40px;
+  `}
+  ${({ TrancheRewards, TrancheRewardsProcess }) => (TrancheRewards && TrancheRewardsProcess) && `
+    padding: 41px 40px;
   `}
 `;
 
@@ -2623,8 +2641,8 @@ const TrancheRewardsStyles = {
     maxWidth: '340px',
     maxHeight: '517px',
     width: '100%',
-    minHeight: '517px',
-    //height: '326px',
+    minHeight: '347px',
+    height: '100%',
     height: 'auto',
     border: 'none',
     boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
