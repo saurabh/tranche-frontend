@@ -297,6 +297,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
             await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
@@ -337,7 +338,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('confirmation', async (count) => {
           if (count === 0) {
             store.dispatch(setTxLoading(false));
-            store.dispatch(setTxLoading(false));
+            store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
             await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
