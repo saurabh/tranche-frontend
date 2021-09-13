@@ -3,8 +3,10 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal, CloseModalWhite, TrancheStake, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes } from 'config/constants';
-import { roundNumber } from 'utils';
-import { claimRewardsAllMarkets } from 'services';
+import { roundNumber, readyToTransact } from 'utils';
+import store from 'redux/store';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
+import { claimRewardsAllMarkets, initOnboard } from 'services';
 
 import {
   ModalHeader,
@@ -32,8 +34,22 @@ export const TrancheRewards = ({
   txLoading,
   txLink,
   txOngoing,
-  closeModal
+  closeModal,
+  wallet
 }) => {
+  const onboard = initOnboard({
+    address: store.dispatch(setAddress),
+    network: store.dispatch(setNetwork),
+    balance: store.dispatch(setBalance),
+    wallet: store.dispatch(setWalletAndWeb3)
+  });
+
+  const claimRewards = async () => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
+    claimRewardsAllMarkets()
+  }
+
   return (
     <Modal
         isOpen={txModalIsOpen}
@@ -161,7 +177,7 @@ export const TrancheRewards = ({
                   </LoadingButton>
                 </button>
               ) : (
-                <button onClick={claimRewardsAllMarkets} disabled={txOngoing || unclaimedSlice <= 0}>
+                <button onClick={claimRewards} disabled={txOngoing || unclaimedSlice <= 0}>
                   Claim {roundNumber(unclaimedSlice)} SLICE
                 </button>
               )}
