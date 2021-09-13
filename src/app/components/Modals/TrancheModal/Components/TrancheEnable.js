@@ -166,33 +166,31 @@ export const TrancheEnable = ({
             </a>
           </TrancheModalFooter>
         ) : (
-          (txModalStatus === 'initialState' || txModalStatus === 'confirm') && (
-            <TrancheModalFooter
-              color={ModeThemes[theme].ModalTrancheTextColor}
-              disabledColor={ModeThemes[theme].DisabledBtn}
-              disabledTextColor={ModeThemes[theme].DisabledBtnText}
-            >
-              {txLoading ? (
-                <button>
-                  <LoadingButton>
-                    {[...Array(4).keys()].map((idx) => {
-                      return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
-                    })}
-                  </LoadingButton>
-                </button>
-              ) : (
-                <button
-                  onClick={(e) =>
-                    isDeposit
-                      ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
-                      : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
-                  }
-                >
-                  <img src={CheckBtnWhite} alt='img' /> Enable
-                </button>
-              )}
-            </TrancheModalFooter>
-          )
+          <TrancheModalFooter
+            color={ModeThemes[theme].ModalTrancheTextColor}
+            disabledColor={ModeThemes[theme].DisabledBtn}
+            disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          >
+            {trancheCard.id === trancheCardId && txLoading ? (
+              <button>
+                <LoadingButton>
+                  {[...Array(4).keys()].map((idx) => {
+                    return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
+                  })}
+                </LoadingButton>
+              </button>
+            ) : (
+              <button
+                onClick={(e) =>
+                  isDeposit
+                    ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
+                    : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
+                }
+              >
+                <img src={CheckBtnWhite} alt='img' /> Enable
+              </button>
+            )}
+          </TrancheModalFooter>
         )}
       </TrancheModalWrapper>
     </Modal>
