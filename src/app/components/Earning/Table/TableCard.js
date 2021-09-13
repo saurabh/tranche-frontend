@@ -8,7 +8,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { initOnboard } from 'services/blocknative';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
-import { statuses, trancheIcons, ModeThemes } from 'config';
+import { statuses, trancheIcons, ModeThemes, etherScanUrl, maticBlockExplorerUrl } from 'config';
 import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -70,19 +70,21 @@ const TableCard = ({
     dividendType,
     protocolAPY,
     trancheToken,
-    trancheRate
+    trancheRate,
+    network
   },
   setAddress,
   setNetwork,
   setBalance,
   setWalletAndWeb3,
   setTokenBalances,
-  ethereum: { tokenBalance, balance, address, blockExplorerUrl },
+  ethereum: { tokenBalance, balance, address },
   change,
   theme,
   isDesktop
   // checkServer
 }) => {
+  const blockExplorerUrl = network === 'polygon' ? maticBlockExplorerUrl : etherScanUrl;
   // const [isLoading, setIsLoading] = useState(false);
   // const dispatch = useNotification();
   const apyImage =
