@@ -28,7 +28,7 @@ export const TrancheEnable = ({
   txModalIsOpen,
   txModalStatus,
   trancheCard,
-  txOngoingData: {trancheCardId},
+  txOngoingData: { trancheCardId },
   txLoading,
   txLink,
   name,
@@ -121,7 +121,13 @@ export const TrancheEnable = ({
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <img src={TrancheRejected} alt='img' />
-              {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : txModalStatus === 'cancelled' ? <h2>Transaction Cancelled</h2> : <h2>Transaction Rejected</h2>}
+              {txModalStatus === 'failed' ? (
+                <h2>Transaction Failed</h2>
+              ) : txModalStatus === 'cancelled' ? (
+                <h2>Transaction Cancelled</h2>
+              ) : (
+                <h2>Transaction Rejected</h2>
+              )}
             </TrancheModalContentStatus>
           </TrancheModalContent>
         ) : (
@@ -147,44 +153,44 @@ export const TrancheEnable = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
         )}
-        {txModalStatus === 'initialState' || txModalStatus === 'confirm' ? (
+        {trancheCard.id === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
+            link
+            TrancheEnableConfirm
             disabledColor={ModeThemes[theme].DisabledBtn}
             disabledTextColor={ModeThemes[theme].DisabledBtnText}
           >
-            {txLoading ? (
-              <button>
-                <LoadingButton>
-                  {[...Array(4).keys()].map((idx) => {
-                    return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
-                  })}
-                </LoadingButton>
-              </button>
-            ) : (
-              <button
-                onClick={(e) =>
-                  isDeposit
-                    ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
-                    : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
-                }
-              >
-                <img src={CheckBtnWhite} alt='img' /> Enable
-              </button>
-            )}
+            <a href={txLink} target='_blank' rel='noreferrer noopener'>
+              <img src={LinkIcon} alt='img' /> View on Etherscan
+            </a>
           </TrancheModalFooter>
         ) : (
-          trancheCard.id === trancheCardId && txModalStatus !== 'rejected' && (
+          (txModalStatus === 'initialState' || txModalStatus === 'confirm') && (
             <TrancheModalFooter
               color={ModeThemes[theme].ModalTrancheTextColor}
-              link
-              TrancheEnableConfirm
               disabledColor={ModeThemes[theme].DisabledBtn}
               disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
-              <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Etherscan
-              </a>
+              {txLoading ? (
+                <button>
+                  <LoadingButton>
+                    {[...Array(4).keys()].map((idx) => {
+                      return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
+                    })}
+                  </LoadingButton>
+                </button>
+              ) : (
+                <button
+                  onClick={(e) =>
+                    isDeposit
+                      ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
+                      : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
+                  }
+                >
+                  <img src={CheckBtnWhite} alt='img' /> Enable
+                </button>
+              )}
             </TrancheModalFooter>
           )
         )}

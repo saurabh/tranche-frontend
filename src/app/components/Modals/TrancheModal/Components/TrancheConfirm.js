@@ -177,42 +177,42 @@ export const TrancheConfirm = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
         )}
-        {txModalStatus === 'initialState' || txModalStatus === 'confirm' ? (
+        {trancheCard.id === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
+            link
+            TrancheEnableConfirm
             disabledColor={ModeThemes[theme].DisabledBtn}
             disabledTextColor={ModeThemes[theme].DisabledBtnText}
           >
-            {txLoading ? (
-              <button>
-                <LoadingButton>
-                  {[...Array(4).keys()].map((idx) => {
-                    return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
-                  })}
-                </LoadingButton>
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  handleSubmit();
-                }}
-              >
-                <img src={CheckBtnWhite} alt='img' /> Confirm
-              </button>
-            )}
+            <a href={txLink} target='_blank' rel='noreferrer noopener'>
+              <img src={LinkIcon} alt='img' /> View on Etherscan
+            </a>
           </TrancheModalFooter>
         ) : (
-          trancheCard.id === trancheCardId && txModalStatus !== 'rejected' && (
+          (txModalStatus === 'initialState' || txModalStatus === 'confirm') && (
             <TrancheModalFooter
               color={ModeThemes[theme].ModalTrancheTextColor}
-              link
-              TrancheEnableConfirm
               disabledColor={ModeThemes[theme].DisabledBtn}
               disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
-              <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Etherscan
-              </a>
+              {txLoading ? (
+                <button>
+                  <LoadingButton>
+                    {[...Array(4).keys()].map((idx) => {
+                      return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
+                    })}
+                  </LoadingButton>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                >
+                  <img src={CheckBtnWhite} alt='img' /> Confirm
+                </button>
+              )}
             </TrancheModalFooter>
           )
         )}
