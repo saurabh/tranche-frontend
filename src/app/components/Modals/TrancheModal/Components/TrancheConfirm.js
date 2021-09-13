@@ -202,7 +202,7 @@ export const TrancheConfirm = ({
             )}
           </TrancheModalFooter>
         ) : (
-          txModalStatus !== 'rejected' && (
+          trancheCard.id === trancheCardId && txModalStatus !== 'rejected' && (
             <TrancheModalFooter
               color={ModeThemes[theme].ModalTrancheTextColor}
               link
