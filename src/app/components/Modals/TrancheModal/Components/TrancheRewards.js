@@ -29,6 +29,7 @@ export const TrancheRewards = ({
   totalSliceBalance,
   unclaimedSlice,
   exchangeRates,
+  txModalType,
   txModalIsOpen,
   txModalStatus,
   txLoading,
@@ -75,8 +76,41 @@ export const TrancheRewards = ({
           </TrancheModalHeader>
 
           {
-            txModalStatus === 'initialState' ?
-              <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
+            txModalType === 'trancheRewards' && txModalStatus === 'confirm' ?    
+              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
+                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                  <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
+                  <h2>Confirm Transaction</h2>
+                </TrancheModalContentStatus>
+              </TrancheModalContent>  
+            : txModalType === 'trancheRewards' && txModalStatus === 'pending' ? 
+              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                  <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
+                  <h2>Transaction Pending</h2>
+                </TrancheModalContentStatus>
+              </TrancheModalContent>
+
+             : txModalType === 'trancheRewards' && txModalStatus === 'success' ? 
+              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
+                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                  <img src={Migrated} alt='img' />
+                  <h2>Transaction Successful</h2>
+                </TrancheModalContentStatus>
+              </TrancheModalContent>
+            : txModalType === 'trancheRewards' && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ?   
+              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards TrancheStatusFailed={txModalStatus === 'rejected' || txModalStatus === 'failed' || txModalStatus === 'cancelled'}>
+                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+                  <img src={TrancheRejected} alt='img' />
+                  {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : txModalStatus === 'cancelled' ? <h2>Transaction Cancelled</h2> : <h2>Transaction Rejected</h2>}
+                </TrancheModalContentStatus>
+              </TrancheModalContent> 
+            :
+            <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
                 <TrancheModalContentHeader color={ModeThemes[theme].ModalTrancheTextColor} trancheRewardsModal>
                   <img src={TrancheStake} alt='img' />
                   <h2>{totalSlice}</h2>
@@ -95,41 +129,6 @@ export const TrancheRewards = ({
                   <h2>${roundNumber(exchangeRates.SLICE, 2)}</h2>
                 </TrancheModalContentRow>
               </TrancheModalContent>
-            : txModalStatus === 'confirm' ?    
-              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
-                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
-                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-                  <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
-                  <h2>Confirm Transaction</h2>
-                </TrancheModalContentStatus>
-              </TrancheModalContent>  
-            : txModalStatus === 'pending' ? 
-              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
-                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-                  <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
-                  <h2>Transaction Pending</h2>
-                </TrancheModalContentStatus>
-              </TrancheModalContent>
-
-             : txModalStatus === 'success' ? 
-              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
-                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
-                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-                  <img src={Migrated} alt='img' />
-                  <h2>Transaction Successful</h2>
-                </TrancheModalContentStatus>
-              </TrancheModalContent>
-            : txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled' ?   
-              <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards TrancheStatusFailed={txModalStatus === 'rejected' || txModalStatus === 'failed' || txModalStatus === 'cancelled'}>
-                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
-                <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-                  <img src={TrancheRejected} alt='img' />
-                  {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : txModalStatus === 'cancelled' ? <h2>Transaction Cancelled</h2> : <h2>Transaction Rejected</h2>}
-                </TrancheModalContentStatus>
-              </TrancheModalContent> 
-            :
-            ''
           }
 
           
@@ -166,7 +165,7 @@ export const TrancheRewards = ({
           
         } */}
 
-          {txModalStatus === 'initialState' || txModalStatus === 'confirm' ? (
+          {txModalType === 'trancheRewards' && (txModalStatus === 'initialState' || txModalStatus === 'confirm') ? (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText} TrancheRewards TrancheRewardsProcess={txModalStatus !== 'initialState'}>
               {txLoading ? (
                 <button>
@@ -182,7 +181,7 @@ export const TrancheRewards = ({
                 </button>
               )}
             </TrancheModalFooter>
-          ) : txModalStatus !== 'rejected' && (
+          ) : txModalType === 'trancheRewards' && txModalStatus !== 'rejected' && (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText} TrancheRewards TrancheRewardsProcess={txModalStatus !== 'initialState'}>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
@@ -190,7 +189,7 @@ export const TrancheRewards = ({
             </TrancheModalFooter>
           )}
           
-          {txModalStatus === 'initialState' && (
+          {txModalType === 'trancheRewards' && txModalStatus === 'initialState' && (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText} TrancheRewards TrancheRewardsProcess={txModalStatus !== 'initialState'}>
               <h2>
                 Looking for Staking Rewards? <a href='/stake'>Click Here</a>
