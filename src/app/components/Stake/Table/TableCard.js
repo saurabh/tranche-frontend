@@ -13,7 +13,7 @@ import {
 } from 'redux/actions/ethereum';
 import { checkServer } from 'redux/actions/checkServer';
 import { addrShortener, roundNumber, readyToTransact, formatTime } from 'utils';
-import { statuses, ModeThemes, LiquidityIcons } from 'config';
+import { statuses, ModeThemes, LiquidityIcons, etherScanUrl } from 'config';
 import { LinkArrow, TrancheStake } from 'assets';
 // import { stakingApproveContract } from 'services/contractMethods';
 import StakingModal from '../../Modals/StakingModal';
@@ -57,7 +57,7 @@ import { initOnboard } from 'services/blocknative';
 const TableCard = ({
   staking: { contractAddress, staked, reward, type, poolName, apy, subscription, duration, durationIndex, remainingCap },
   setTokenBalance,
-  ethereum: { address, wallet, blockExplorerUrl },
+  ethereum: { address, wallet },
   summaryData: { slice, lpList },
   theme,
   isDesktop,
@@ -147,7 +147,7 @@ const TableCard = ({
                 </FirstColTitle>
                 <FirstColSubtitle>
                   <h2>{addrShortener(contractAddress)}</h2>
-                  <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
                 </FirstColSubtitle>
@@ -335,7 +335,7 @@ const TableCard = ({
                   </FirstColTitle>
                   <FirstColSubtitle>
                     <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={blockExplorerUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
                   </FirstColSubtitle>
