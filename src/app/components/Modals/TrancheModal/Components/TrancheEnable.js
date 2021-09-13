@@ -161,17 +161,7 @@ export const TrancheEnable = ({
             disabledColor={ModeThemes[theme].DisabledBtn}
             disabledTextColor={ModeThemes[theme].DisabledBtnText}
           >
-            <a href={txLink} target='_blank' rel='noreferrer noopener'>
-              <img src={LinkIcon} alt='img' /> View on Etherscan
-            </a>
-          </TrancheModalFooter>
-        ) : (
-          <TrancheModalFooter
-            color={ModeThemes[theme].ModalTrancheTextColor}
-            disabledColor={ModeThemes[theme].DisabledBtn}
-            disabledTextColor={ModeThemes[theme].DisabledBtnText}
-          >
-            {trancheCard.id === trancheCardId && txLoading ? (
+            {txModalStatus === 'confirm' ? (
               <button>
                 <LoadingButton>
                   {[...Array(4).keys()].map((idx) => {
@@ -180,6 +170,18 @@ export const TrancheEnable = ({
                 </LoadingButton>
               </button>
             ) : (
+              <a href={txLink} target='_blank' rel='noreferrer noopener'>
+                <img src={LinkIcon} alt='img' /> View on Etherscan
+              </a>
+            )}
+          </TrancheModalFooter>
+        ) : (
+          <TrancheModalFooter
+            color={ModeThemes[theme].ModalTrancheTextColor}
+            disabledColor={ModeThemes[theme].DisabledBtn}
+            disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          >
+            {
               <button
                 onClick={(e) =>
                   isDeposit
@@ -189,7 +191,7 @@ export const TrancheEnable = ({
               >
                 <img src={CheckBtnWhite} alt='img' /> Enable
               </button>
-            )}
+            }
           </TrancheModalFooter>
         )}
       </TrancheModalWrapper>
