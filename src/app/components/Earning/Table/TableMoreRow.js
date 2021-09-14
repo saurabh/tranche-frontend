@@ -110,6 +110,7 @@ let TableMoreRow = ({
       name: name.split('-')[1].trim(),
       contractAddress,
       trancheId,
+      trancheCard: trancheCard.id,
       trancheType: type,
       apyStatus,
       cryptoType,

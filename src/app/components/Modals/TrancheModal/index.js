@@ -17,7 +17,6 @@ const TrancheModal = ({
   formValues,
   ethereum: { address, txOngoing, tokenBalance, unclaimedSIRRewards, wallet },
   data: {
-    trancheCard,
     txModalIsOpen,
     txModalType,
     txModalStatus,
@@ -29,6 +28,7 @@ const TrancheModal = ({
       name,
       contractAddress,
       trancheId,
+      trancheCard,
       trancheType,
       apyStatus,
       cryptoType,

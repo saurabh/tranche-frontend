@@ -86,7 +86,7 @@ export const TrancheConfirm = ({
             </TrancheModalContentHeaderText>
           </TrancheModalContentHeader>
         </TrancheModalHeader>
-        {trancheCard.id === trancheCardId && txModalStatus === 'confirm' ? (
+        {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
@@ -96,7 +96,7 @@ export const TrancheConfirm = ({
               <h2>Confirm Transaction</h2>
             </TrancheModalContentStatus>
           </TrancheModalContent>
-        ) : trancheCard.id === trancheCardId && txModalStatus === 'pending' ? (
+        ) : trancheCard === trancheCardId && txModalStatus === 'pending' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
@@ -106,7 +106,7 @@ export const TrancheConfirm = ({
               <h2>Transaction Pending</h2>
             </TrancheModalContentStatus>
           </TrancheModalContent>
-        ) : trancheCard.id === trancheCardId && txModalStatus === 'success' ? (
+        ) : trancheCard === trancheCardId && txModalStatus === 'success' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
@@ -116,7 +116,7 @@ export const TrancheConfirm = ({
               <h2>Transaction Successful</h2>
             </TrancheModalContentStatus>
           </TrancheModalContent>
-        ) : trancheCard.id === trancheCardId && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ? (
+        ) : trancheCard === trancheCardId && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
@@ -177,7 +177,7 @@ export const TrancheConfirm = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
         )}
-        {trancheCard.id === trancheCardId && txModalStatus !== 'rejected' ? (
+        {trancheCard === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
             link
@@ -192,6 +192,14 @@ export const TrancheConfirm = ({
                     return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
                   })}
                 </LoadingButton>
+              </button>
+            ) : txModalStatus === 'initialState' ? (
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+              >
+                <img src={CheckBtnWhite} alt='img' /> Confirm
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>

@@ -84,7 +84,7 @@ export const TrancheEnable = ({
             </TrancheModalContentHeaderText>
           </TrancheModalContentHeader>
         </TrancheModalHeader>
-        {trancheCard.id === trancheCardId && txModalStatus === 'confirm' ? (
+        {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
@@ -94,7 +94,7 @@ export const TrancheEnable = ({
               <h2>Confirm Transaction</h2>
             </TrancheModalContentStatus>
           </TrancheModalContent>
-        ) : trancheCard.id === trancheCardId && txModalStatus === 'pending' ? (
+        ) : trancheCard === trancheCardId && txModalStatus === 'pending' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
@@ -104,7 +104,7 @@ export const TrancheEnable = ({
               <h2>Transaction Pending</h2>
             </TrancheModalContentStatus>
           </TrancheModalContent>
-        ) : trancheCard.id === trancheCardId && txModalStatus === 'success' ? (
+        ) : trancheCard === trancheCardId && txModalStatus === 'success' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
@@ -114,7 +114,7 @@ export const TrancheEnable = ({
               <h2>Transaction Successful</h2>
             </TrancheModalContentStatus>
           </TrancheModalContent>
-        ) : trancheCard.id === trancheCardId && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ? (
+        ) : trancheCard === trancheCardId && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
               To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
@@ -153,7 +153,7 @@ export const TrancheEnable = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
         )}
-        {trancheCard.id === trancheCardId && txModalStatus !== 'rejected' ? (
+        {trancheCard === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
             link
@@ -168,6 +168,16 @@ export const TrancheEnable = ({
                     return <LoadingButtonCircle i={idx + 1}></LoadingButtonCircle>;
                   })}
                 </LoadingButton>
+              </button>
+            ) : txModalStatus === 'initialState' ? (
+              <button
+                onClick={(e) =>
+                  isDeposit
+                    ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
+                    : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
+                }
+              >
+                <img src={CheckBtnWhite} alt='img' /> Enable
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
