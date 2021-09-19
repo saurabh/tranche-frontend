@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import SummaryCard from './SummaryCard';
-import { SummaryCardsWrapper } from './styles/SummaryComponents';
+import { SummaryCardsWrapper } from '../../Summary/styles/SummaryComponents';
 import { TableTitle } from '../../Stake/Table/styles/TableComponents';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';

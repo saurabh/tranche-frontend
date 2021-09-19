@@ -14,7 +14,7 @@ import {
   StakeCardBtn,
   StakeCardText,
   SummaryCardWrapperContent
-} from './styles/SummaryComponents';
+} from '../../Summary/styles/SummaryComponents';
 import i18n from '../../locale/i18n';
 import { TooltipWrapper } from 'app/components/Stake/Table/styles/TableComponents';
 import { InfoWhite } from 'assets';
