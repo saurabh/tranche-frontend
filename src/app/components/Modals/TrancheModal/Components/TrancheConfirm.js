@@ -208,7 +208,7 @@ export const TrancheConfirm = ({
             )}
           </TrancheModalFooter>
         ) : (
-          (txModalStatus !== 'rejected' || txModalStatus !== 'failed' || txModalStatus !== 'cancelled') && (
+          (txModalStatus === 'rejected' || txModalStatus === 'failed' || txModalStatus === 'cancelled') && (
             <TrancheModalFooter
               color={ModeThemes[theme].ModalTrancheTextColor}
               disabledColor={ModeThemes[theme].DisabledBtn}
