@@ -207,22 +207,26 @@ export const TrancheConfirm = ({
               </a>
             )}
           </TrancheModalFooter>
+        ) : txModalStatus !== 'rejected' || txModalStatus !== 'failed' || txModalStatus !== 'cancelled' ? (
+          <TrancheModalFooter
+            color={ModeThemes[theme].ModalTrancheTextColor}
+            disabledColor={ModeThemes[theme].DisabledBtn}
+            disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          ></TrancheModalFooter>
         ) : (
-          (txModalStatus === 'rejected' || txModalStatus === 'failed' || txModalStatus === 'cancelled') && (
-            <TrancheModalFooter
-              color={ModeThemes[theme].ModalTrancheTextColor}
-              disabledColor={ModeThemes[theme].DisabledBtn}
-              disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          <TrancheModalFooter
+            color={ModeThemes[theme].ModalTrancheTextColor}
+            disabledColor={ModeThemes[theme].DisabledBtn}
+            disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          >
+            <button
+              onClick={() => {
+                handleSubmit();
+              }}
             >
-              <button
-                onClick={() => {
-                  handleSubmit();
-                }}
-              >
-                <img src={CheckBtnWhite} alt='img' /> Confirm
-              </button>
-            </TrancheModalFooter>
-          )
+              <img src={CheckBtnWhite} alt='img' /> Confirm
+            </button>
+          </TrancheModalFooter>
         )}
       </TrancheModalWrapper>
     </Modal>
