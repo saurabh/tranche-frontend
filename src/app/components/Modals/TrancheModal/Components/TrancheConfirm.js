@@ -177,7 +177,7 @@ export const TrancheConfirm = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
         )}
-        {trancheCard === trancheCardId && (txModalStatus !== 'rejected' || txModalStatus !== 'failed' || txModalStatus !== 'cancelled') ? (
+        {trancheCard === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
             link
@@ -208,19 +208,21 @@ export const TrancheConfirm = ({
             )}
           </TrancheModalFooter>
         ) : (
-          <TrancheModalFooter
-            color={ModeThemes[theme].ModalTrancheTextColor}
-            disabledColor={ModeThemes[theme].DisabledBtn}
-            disabledTextColor={ModeThemes[theme].DisabledBtnText}
-          >
-            <button
-              onClick={() => {
-                handleSubmit();
-              }}
+          (txModalStatus !== 'failed' || txModalStatus !== 'cancelled') && (
+            <TrancheModalFooter
+              color={ModeThemes[theme].ModalTrancheTextColor}
+              disabledColor={ModeThemes[theme].DisabledBtn}
+              disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
-              <img src={CheckBtnWhite} alt='img' /> Confirm
-            </button>
-          </TrancheModalFooter>
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+              >
+                <img src={CheckBtnWhite} alt='img' /> Confirm
+              </button>
+            </TrancheModalFooter>
+          )
         )}
       </TrancheModalWrapper>
     </Modal>

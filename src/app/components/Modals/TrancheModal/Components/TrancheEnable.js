@@ -153,7 +153,7 @@ export const TrancheEnable = ({
             </TrancheModalContentRow>
           </TrancheModalContent>
         )}
-        {trancheCard === trancheCardId && (txModalStatus !== 'rejected' || txModalStatus !== 'failed' || txModalStatus !== 'cancelled') ? (
+        {trancheCard === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
             link
@@ -186,23 +186,25 @@ export const TrancheEnable = ({
             )}
           </TrancheModalFooter>
         ) : (
-          <TrancheModalFooter
-            color={ModeThemes[theme].ModalTrancheTextColor}
-            disabledColor={ModeThemes[theme].DisabledBtn}
-            disabledTextColor={ModeThemes[theme].DisabledBtnText}
-          >
-            {
-              <button
-                onClick={(e) =>
-                  isDeposit
-                    ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
-                    : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
-                }
-              >
-                <img src={CheckBtnWhite} alt='img' /> Enable
-              </button>
-            }
-          </TrancheModalFooter>
+          (txModalStatus !== 'failed' || txModalStatus !== 'cancelled') && (
+            <TrancheModalFooter
+              color={ModeThemes[theme].ModalTrancheTextColor}
+              disabledColor={ModeThemes[theme].DisabledBtn}
+              disabledTextColor={ModeThemes[theme].DisabledBtnText}
+            >
+              {
+                <button
+                  onClick={(e) =>
+                    isDeposit
+                      ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
+                      : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
+                  }
+                >
+                  <img src={CheckBtnWhite} alt='img' /> Enable
+                </button>
+              }
+            </TrancheModalFooter>
+          )
         )}
       </TrancheModalWrapper>
     </Modal>
