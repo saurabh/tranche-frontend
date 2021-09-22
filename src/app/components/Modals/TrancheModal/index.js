@@ -77,7 +77,9 @@ const TrancheModal = ({
 
   const handleSubmit = () => {
     try {
-      isDeposit ? buyTrancheTokens(contractAddress, trancheId, trancheType, cryptoType) : sellTrancheTokens(contractAddress, trancheId, trancheType);
+      isDeposit
+        ? buyTrancheTokens(contractAddress, trancheId, trancheType, cryptoType)
+        : sellTrancheTokens(contractAddress, trancheId, trancheType, trancheToken);
       isDeposit ? Tracker('Deposit', 'User address: ' + address) : Tracker('Withdraw', 'User address: ' + address);
     } catch (error) {
       console.error(error);
@@ -85,22 +87,22 @@ const TrancheModal = ({
   };
 
   return txModalType === 'trancheRewards'
-    ? TrancheRewards({ 
-      theme,
-      totalSlice,
-      totalSliceInUSD,
-      totalSliceBalance,
-      unclaimedSlice,
-      exchangeRates,
-      txModalType,
-      txModalIsOpen,
-      txModalStatus,
-      txLoading,
-      txLink,
-      txOngoing,
-      closeModal,
-      wallet
-    })
+    ? TrancheRewards({
+        theme,
+        totalSlice,
+        totalSliceInUSD,
+        totalSliceBalance,
+        unclaimedSlice,
+        exchangeRates,
+        txModalType,
+        txModalIsOpen,
+        txModalStatus,
+        txLoading,
+        txLink,
+        txOngoing,
+        closeModal,
+        wallet
+      })
     : txModalType === 'trancheEnable'
     ? TrancheEnable({
         theme,

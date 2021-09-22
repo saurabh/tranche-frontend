@@ -95,7 +95,7 @@ export const TrancheRewards = ({
 
              : txModalType === 'trancheRewards' && txModalStatus === 'success' ? 
               <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheRewards>
-                <h2>Claiming {roundNumber(unclaimedSlice)} SLICE</h2>
+                <h2>Claimed {roundNumber(unclaimedSlice)} SLICE</h2>
                 <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
                   <img src={Migrated} alt='img' />
                   <h2>Transaction Successful</h2>
@@ -181,7 +181,7 @@ export const TrancheRewards = ({
                 </button>
               )}
             </TrancheModalFooter>
-          ) : txModalType === 'trancheRewards' && txModalStatus !== 'rejected' && (
+          ) : txModalType === 'trancheRewards' && (txModalStatus !== 'rejected' || txModalStatus !== 'failed' || txModalStatus !== 'cancelled') && (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText} TrancheRewards TrancheRewardsProcess={txModalStatus !== 'initialState'}>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
