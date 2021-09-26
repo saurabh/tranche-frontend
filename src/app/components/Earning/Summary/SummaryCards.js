@@ -39,7 +39,6 @@ const SummaryCards = ({
   path,
   ethereum: { address },
   summaryData: { slice, lp, lpList, sliceStats, tvl },
-  summaryFetchSuccess,
   setSliceStats,
   setTvl,
   theme
