@@ -186,12 +186,14 @@ export const TrancheEnable = ({
             )}
           </TrancheModalFooter>
         ) : (
-          <TrancheModalFooter
-            color={ModeThemes[theme].ModalTrancheTextColor}
-            disabledColor={ModeThemes[theme].DisabledBtn}
-            disabledTextColor={ModeThemes[theme].DisabledBtnText}
-          >
-            {
+          txModalStatus !== 'rejected' &&
+          txModalStatus !== 'failed' &&
+          txModalStatus !== 'cancelled' && (
+            <TrancheModalFooter
+              color={ModeThemes[theme].ModalTrancheTextColor}
+              disabledColor={ModeThemes[theme].DisabledBtn}
+              disabledTextColor={ModeThemes[theme].DisabledBtnText}
+            >
               <button
                 onClick={(e) =>
                   isDeposit
@@ -201,8 +203,8 @@ export const TrancheEnable = ({
               >
                 <img src={CheckBtnWhite} alt='img' /> Enable
               </button>
-            }
-          </TrancheModalFooter>
+            </TrancheModalFooter>
+          )
         )}
       </TrancheModalWrapper>
     </Modal>
