@@ -83,7 +83,9 @@ import Dark404 from './images/dark404.gif';
 import Light404 from './images/light404.gif';
 import Chainlink from './images/svg/chainlink.svg';
 import WBTC from './images/svg/wbtc.svg';
-
+import YAEICON from './images/svg/yaeIcon.svg';
+import NAEICON from './images/svg/naeIcon.svg';
+ 
 export {
-    Adjust, DAI, DaiClaim, AAVE, Chainlink, WBTC, Dark404, Light404, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCard, USDTCard, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
+    Adjust, DAI, DaiClaim, AAVE, Chainlink, WBTC, YAEICON, NAEICON, Dark404, Light404, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCard, USDTCard, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
 };

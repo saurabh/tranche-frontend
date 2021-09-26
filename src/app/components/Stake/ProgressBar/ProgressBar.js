@@ -4,21 +4,7 @@ import { StakingAddresses } from 'config';
 
 import { epochTimeRemaining } from 'services/contractMethods';
 import moment from 'moment';
-
-const ProgressBarContainer = styled.div`
-    height: 5px;
-    width: ${props => props.widthBar}%;    
-    background-color: ${props => props.colorOne};
-    border-radius: 100px;
-`;
-const Progress = styled.div`
-    height: 100%;
-    width: ${props => props.progress}%;
-    background-color: ${props => props.colorTwo};
-    transition: width 1s ease-in-out;
-    border-radius: inherit;
-    text-align: right;
-`;
+import ProgressBarComp from './ProgressBarComp';
 const ProgressBar = ({ widthBar, colorOne, colorTwo }) => {
   const [progress, setProgress] = useState(0);
   useEffect(() => {
@@ -57,10 +43,7 @@ const ProgressBar = ({ widthBar, colorOne, colorTwo }) => {
     setEpochTime();
   }, []);
   return (
-    <ProgressBarContainer widthBar={widthBar} colorOne={colorOne}>
-      <Progress progress={progress} colorTwo={colorTwo}>
-      </Progress>
-    </ProgressBarContainer>
+    <ProgressBarComp widthBar={widthBar} colorOne={colorOne} progress={progress} colorTwo={colorTwo}/>
   );
 };
 

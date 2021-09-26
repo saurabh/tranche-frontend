@@ -106,14 +106,9 @@ function Navbar({ path, theme }) {
             </NavLink>
             <a
               href="https://snapshot.org/#/tranche.eth"
-              activeStyle={{
-                opacity: 1,
-                background: ModeThemes[theme].NavbarBackground,
-                boxShadow: ModeThemes[theme].NavbarShadow
-              }}
-              // className="navLinkDisabled"
+              target="_blank"
             >
-            {i18n.t('navbar.vote')}
+              Vote
             </a>
           </NavbarLinks>
         </div>

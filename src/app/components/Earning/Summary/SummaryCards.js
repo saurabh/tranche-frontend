@@ -20,12 +20,12 @@ const responsive = {
     paritialVisibilityGutter: 60
   },
   tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    paritialVisibilityGutter: 50
+    breakpoint: { max: 1024, min: 700 },
+    items: 3,
+    paritialVisibilityGutter: 20
   },
   mobile: {
-    breakpoint: { max: 464, min: 0 },
+    breakpoint: { max: 700, min: 0 },
     items: 1,
     paritialVisibilityGutter: 100
   }
@@ -81,7 +81,7 @@ const SummaryCards = ({
 
   return (
     <div>
-      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
+      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false} summaryTitle>
         <h2>{i18n.t('tranche.trancheData.TrancheStats')}</h2>
       </TableTitle>
       {!isDesktop && currentPath === 'stake' && (
@@ -93,7 +93,7 @@ const SummaryCards = ({
         </SummaryCardsWrapper>
       )}
       {isDesktop && (
-        <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop}>
+        <SummaryCardsWrapper className='container content-container' path={currentPath} isDesktop={isDesktop} summaryTranche>
           <SummaryCard
             title={
               currentPath === 'stake'

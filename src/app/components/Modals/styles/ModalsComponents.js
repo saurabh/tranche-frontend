@@ -1357,7 +1357,7 @@ const StakingModalContentSideHeader = styled.div`
   margin: 14px 0 12px 0;
   background: ${props => props.BoxColor};
   border-radius: 4.33px;
-  padding: 0 12px;
+  padding: 0 20px;
   position: relative;
 `;
 const StakingModalContentSideHeaderBoxWrapper = styled.div`
@@ -1400,7 +1400,10 @@ const StakingModalContentSideHeaderBox = styled.div`
   ${({ stake }) => stake && `
     width: 23%;
   `}
-
+  ${({ governance }) => governance && `
+    width: 32%;
+  `}
+  
   
 
 
@@ -2684,6 +2687,37 @@ const TrancheEnableModal = {
     bottom: '0'
   }
 };
+const GovernanceModalStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '355px',
+    width: '100%',
+    minHeight: '355px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
 const TrancheConfirmModal = {
   overlay: {
     display: 'flex',
@@ -2715,6 +2749,107 @@ const TrancheConfirmModal = {
     bottom: '0'
   }
 };
+const GovernanceModalWrapper = styled.div`
+  min-height: 355px;
+  height: 100%;
+  width: 100%;
+  background: #221F46;
+  padding: 32px;
+  // media (max-height: 560px) {
+  //   min-height: 571px;
+  // }
+`;
+const GovernanceModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    color: #FFFFFF;
+  }
+  button{
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 300ms;
+    :active{
+      cursor: pointer;
+      transform: scale(0.9);
+    }
+  }
+`;
+const GovernanceModalContent= styled.div`
+
+`
+const GovernanceModalDelegateFormText= styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  button{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 9px;
+    line-height: 13px;
+    color: #FFFFFF;
+    border: none;
+    background: transparent;
+    text-transform: uppercase;
+    outline: none;
+    cursor: pointer;
+  }
+`
+
+const GovernanceModalDelegateFormWrapper= styled.div`
+  form{
+    input{
+      font-family: 'Inter', sans-serif;
+      background: rgba(255, 255, 255, 0.05);
+      border: 0.92283px solid rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+      border-radius: 3.69132px;
+      color: #FFFFFF;
+      height: 34px;
+      outline: none;
+      margin: 9px auto 20px auto;
+      font-size: 10px;
+      padding: 3px 12px;
+      width: 100%;
+      ${({ delegated}) => delegated && `
+        opacity: 0.5;
+        pointer-events: none;
+      `}
+    }
+
+   
+
+  }
+`
+const GovernanceModalDelegateFormSubmitBtn = styled.button`
+  height: 27.29px;
+  background: #4939D7;
+  border-radius: 4.50331px;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 12.3841px;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  border: none;
+  outline: none;
+`
 
 
 export {
@@ -2828,5 +2963,12 @@ export {
   TrancheModalFooter,
   TrancheModalContentHeaderImg,
   TrancheModalContentHeaderText,
-  TrancheModalContentStatus
+  TrancheModalContentStatus,
+  GovernanceModalStyles,
+  GovernanceModalWrapper,
+  GovernanceModalHeader,
+  GovernanceModalContent,
+  GovernanceModalDelegateFormWrapper,
+  GovernanceModalDelegateFormText,
+  GovernanceModalDelegateFormSubmitBtn
 };
