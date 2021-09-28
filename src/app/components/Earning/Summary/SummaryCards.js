@@ -22,7 +22,7 @@ const responsive = {
   tablet: {
     breakpoint: { max: 1024, min: 700 },
     items: 3,
-    paritialVisibilityGutter: 20
+    paritialVisibilityGutter: 30
   },
   mobile: {
     breakpoint: { max: 700, min: 0 },
