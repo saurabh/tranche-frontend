@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import PropTypes from 'prop-types';
 import { fromWei } from 'services/contractMethods';
-import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances } from 'redux/actions/ethereum';
+import { setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
-import { initOnboard } from 'services/blocknative';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes, etherScanUrl, maticBlockExplorerUrl } from 'config';
-import { Lock, LockLight, LinkArrow, Up, Down, ChevronTable } from 'assets';
+import { LinkArrow, ChevronTable } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -73,10 +72,6 @@ const TableCard = ({
     trancheRate,
     network
   },
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
   setTokenBalances,
   ethereum: { tokenBalance, balance, address },
   change,
@@ -85,18 +80,6 @@ const TableCard = ({
   // checkServer
 }) => {
   const blockExplorerUrl = network === 'polygon' ? maticBlockExplorerUrl : etherScanUrl;
-  // const [isLoading, setIsLoading] = useState(false);
-  // const dispatch = useNotification();
-  const apyImage =
-    apyStatus && apyStatus === 'fixed'
-      ? theme === 'light'
-        ? LockLight
-        : Lock
-      : apyStatus === 'increase'
-      ? Up
-      : apyStatus === 'decrease'
-      ? Down
-      : '';
 
   let buyerTokenBalance =
     cryptoType === 'ETH'
@@ -104,13 +87,6 @@ const TableCard = ({
       : searchTokenDecimals(cryptoType)
       ? tokenBalance[buyerCoinAddress] && safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchTokenDecimals(cryptoType).decimals)
       : tokenBalance[buyerCoinAddress] && fromWei(tokenBalance[buyerCoinAddress]);
-
-  const onboard = initOnboard({
-    address: setAddress,
-    network: setNetwork,
-    balance: setBalance,
-    wallet: setWalletAndWeb3
-  });
 
   const searchObj = (val) => {
     return Object.fromEntries(Object.entries(statuses).filter(([key, value]) => value.status === val));
@@ -127,7 +103,6 @@ const TableCard = ({
       change('tranche', 'withdrawAmount', '');
       trancheCardToggle({ status: true, id });
     }
-    // setIsLoading(false);
   };
 
   const checkLoan = false;
@@ -396,10 +371,6 @@ const TableCard = ({
 TableCard.propTypes = {
   ethereum: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired,
-  setAddress: PropTypes.func.isRequired,
-  setNetwork: PropTypes.func.isRequired,
-  setBalance: PropTypes.func.isRequired,
-  setWalletAndWeb3: PropTypes.func.isRequired,
   setTokenBalances: PropTypes.func.isRequired,
   trancheCardToggle: PropTypes.func.isRequired,
 };
@@ -412,10 +383,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  setAddress,
-  setNetwork,
-  setBalance,
-  setWalletAndWeb3,
   setTokenBalances,
   checkServer,
   trancheCardToggle,

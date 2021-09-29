@@ -56,7 +56,7 @@ const initialState = {
   txModalData: {},
   txModalStatus: 'initialState',
   txLoading: false,
-  txOngoingData: { isDeposit: undefined, trancheCardId: undefined },
+  txOngoingData: { txModal: undefined, isDeposit: undefined, trancheCardId: undefined },
   txLink: '',
   currentStep: 'claim',
   migrateLoading: false,

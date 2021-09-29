@@ -1,4 +1,4 @@
-import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCArd, DAICARD, MaticTable, TrancheStake, 
+import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCard, USDTCard, DAICARD, MaticTable, TrancheStake, 
   ETHCARD, Chainlink, WBTC} from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
@@ -44,7 +44,7 @@ export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
 export const USDCAddress = process.env.REACT_APP_USDC_ADDRESS.toLowerCase();
 export const LP1TokenAddress = process.env.REACT_APP_SLICE_LP1_ADDRESS.toLowerCase();
 export const LP2TokenAddress = process.env.REACT_APP_SLICE_LP2_ADDRESS.toLowerCase();
-// export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLowerCase();
+export const RewardDistributionAddress = process.env.REACT_APP_SIR_ADDRESS.toLowerCase();
 export const ApproveBigNumber = '100000000000000';
 export const tokenDecimals = [
   { key: 'USDC', decimals: 6 },
@@ -128,16 +128,16 @@ export const PagesData = {
 export const trancheIcons = {
   ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
   BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
-  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
-  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
-  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
-  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDCCArd },
+  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCard },
+  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCard },
+  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDTCard },
+  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDTCard },
   aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
-  aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
-  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCArd },
+  aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCard },
+  bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCard },
   ACWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
   BCWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
   ACLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },

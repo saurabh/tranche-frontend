@@ -14,7 +14,6 @@ import {
   ModeThemes
 } from 'config/constants';
 import i18n from "../../locale/i18n";
-import ConnectWallet from './ConnectWallet';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 function Header({updateDate, theme}) {
@@ -84,21 +83,25 @@ function Header({updateDate, theme}) {
           </a>
         </NavbarLinks>
           }
-      <HeaderWrapper>
-            <HeaderContent path={path}>
-              {  (path === "privacy" || path === "terms") ? 
-                <HeaderSubtitle className='header-text' fontSize="9px">
-                  <h2>Last Updated: {updateDate}</h2>
-                </HeaderSubtitle> : ""
-              }
-              {/* <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
-                <h2>{i18n.t("tranche.title")}</h2>
-              </HeaderTitle>
-              <HeaderSubtitle path={path} color={ModeThemes[theme].HeaderSubtitle}>
-                <h2>{i18n.t("tranche.text")}</h2>
-              </HeaderSubtitle> */}
-            </HeaderContent>
-      </HeaderWrapper>
+          {
+            path !== 'tranche' &&
+            <HeaderWrapper>
+                <HeaderContent path={path}>
+                  {  (path === "privacy" || path === "terms") ? 
+                    <HeaderSubtitle className='header-text' fontSize="9px">
+                      <h2>Last Updated: {updateDate}</h2>
+                    </HeaderSubtitle> : ""
+                  }
+                  {/* <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
+                    <h2>{i18n.t("tranche.title")}</h2>
+                  </HeaderTitle>
+                  <HeaderSubtitle path={path} color={ModeThemes[theme].HeaderSubtitle}>
+                    <h2>{i18n.t("tranche.text")}</h2>
+                  </HeaderSubtitle> */}
+                </HeaderContent>
+          </HeaderWrapper>
+          }
+      
     </div>
   );
 }

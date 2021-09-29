@@ -624,7 +624,7 @@ const NavbarIconContent = styled.div`
 const MarketsTabsWrapper = styled.div`
   & > div{
     display: flex;
-    align-items: center;s
+    align-items: center;
   }
   & > div h2{
     font-family: 'Inter', sans-serif;

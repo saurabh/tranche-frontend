@@ -354,6 +354,14 @@ const TableTitle = styled.div`
     ${({ stakeTitle }) => stakeTitle && `
       margin: 25px 0 20px 0;
     `}
+    ${({ summaryTitle }) => summaryTitle && `
+        margin: 25px auto 20px auto !important;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    `}
+    
+    
 
 `;
 const TableSubTitle = styled.div`
