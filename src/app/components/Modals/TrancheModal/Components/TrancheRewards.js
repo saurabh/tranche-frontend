@@ -132,7 +132,7 @@ export const TrancheRewards = ({
           }
 
           
-//           {/* { ((claimSuccess || !claimSuccess) && claimState !== 'claimInitialState') ?
+           {/* { ((claimSuccess || !claimSuccess) && claimState !== 'claimInitialState') ?
 //           <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText}>
 //             <a href={txLink} target='_blank' rel='noreferrer noopener'>
 //               <img src={LinkIcon} alt='img' /> View on Etherscan
