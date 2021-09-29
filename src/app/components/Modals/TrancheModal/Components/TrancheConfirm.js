@@ -60,7 +60,6 @@ export const TrancheConfirm = ({
     >
       <TrancheModalWrapper backgroundColor={ModeThemes[theme].ModalBackground} TrancheConfirm>
         <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder} TrancheConfirm>
-          <h2>TRANCHE REWARDS</h2>
           <ModalHeader tranche ModalBackground={ModeThemes[theme].ModalBackground} enableModal>
             <button onClick={() => closeModal()}>
               <img src={theme === 'light' ? CloseModal : CloseModalWhite} alt='' />
