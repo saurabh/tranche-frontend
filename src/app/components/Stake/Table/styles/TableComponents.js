@@ -961,7 +961,7 @@ const FirstColContent = styled.div`
   
 `
 const FirstColTitle = styled.div`
-  h2{
+  h2, a{
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
