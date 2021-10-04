@@ -970,6 +970,15 @@ const FirstColTitle = styled.div`
     text-transform: uppercase;
     color: ${props => props.color};
   } 
+  a{
+    display: flex;
+    align-items: center;
+    svg{
+      height: 14px;
+      width: 14px;
+      margin-left: 3px;
+    }
+  }
   @media (max-width: 992px){
     display: flex;
     align-items: center;
