@@ -167,7 +167,7 @@ const TableCard = ({
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               {/* <img src={apyImage} alt='apyImage' /> */}
-              <h2>{roundNumber(netAPY, 2)}%</h2>
+              <h2>{roundNumber(netAPY, 2) !== 'NaN' ? roundNumber(netAPY, 2) : roundNumber(apy, 2)}%</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
@@ -316,7 +316,7 @@ const TableCard = ({
                 <h2>NET APY</h2>
                 <h2>
                   {/* <img src={apyImage} alt='apyImage' /> */}
-                  {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
+                  {roundNumber(netAPY, 2) !== 'NaN' ? roundNumber(netAPY, 2) : roundNumber(apy, 2)}%{/* <img src={Info} alt='infoImage' /> */}
                 </h2>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
