@@ -68,6 +68,7 @@ function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpe
             <a
               href="https://snapshot.org/#/tranche.eth"
               target="_blank"
+              rel="noopener noreferrer"
             >
               Vote
             </a>
