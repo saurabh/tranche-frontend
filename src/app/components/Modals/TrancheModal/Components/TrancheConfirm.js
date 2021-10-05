@@ -28,6 +28,8 @@ export const TrancheConfirm = ({
   tokenBalance,
   txModalIsOpen,
   txModalStatus,
+  trancheCard,
+  txOngoingData: { trancheCardId },
   txLoading,
   txLink,
   name,
@@ -58,7 +60,6 @@ export const TrancheConfirm = ({
     >
       <TrancheModalWrapper backgroundColor={ModeThemes[theme].ModalBackground} TrancheConfirm>
         <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder} TrancheConfirm>
-          {/* <h2>TRANCHE REWARDS</h2> */}
           <ModalHeader tranche ModalBackground={ModeThemes[theme].ModalBackground} enableModal>
             <button onClick={() => closeModal()}>
               <img src={theme === 'light' ? CloseModal : CloseModalWhite} alt='' />
@@ -84,7 +85,53 @@ export const TrancheConfirm = ({
             </TrancheModalContentHeaderText>
           </TrancheModalContentHeader>
         </TrancheModalHeader>
-        {txModalStatus === 'initialState' ? (
+        {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>
+              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
+            </h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
+              <h2>Confirm Transaction</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent>
+        ) : trancheCard === trancheCardId && txModalStatus === 'pending' ? (
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>
+              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
+            </h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
+              <h2>Transaction Pending</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent>
+        ) : trancheCard === trancheCardId && txModalStatus === 'success' ? (
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>
+              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
+            </h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={Migrated} alt='img' />
+              <h2>Transaction Successful</h2>
+            </TrancheModalContentStatus>
+          </TrancheModalContent>
+        ) : trancheCard === trancheCardId && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ? (
+          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+            <h2>
+              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
+            </h2>
+            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
+              <img src={TrancheRejected} alt='img' />
+              {txModalStatus === 'failed' ? (
+                <h2>Transaction Failed</h2>
+              ) : txModalStatus === 'cancelled' ? (
+                <h2>Transaction Cancelled</h2>
+              ) : (
+                <h2>Transaction Rejected</h2>
+              )}
+            </TrancheModalContentStatus>
+          </TrancheModalContent>
+        ) : (
           <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor} initialStatus>
             <h2>
               {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
@@ -100,10 +147,11 @@ export const TrancheConfirm = ({
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>SLICE APY</h2>
               <h2>{roundNumber(sliceAPY, 2)}%</h2>
+              {/* <h2>TBD</h2> */}
             </TrancheModalContentRow>
             <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Net APY</h2>
-              <h2>{roundNumber(netAPY, 2)}%</h2>
+              <h2>{roundNumber(netAPY, 2) !== 'NaN' ? roundNumber(netAPY, 2) : roundNumber(apy, 2)}%</h2>
             </TrancheModalContentRow>
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>{isDeposit ? 'Depositing' : 'Withdrawing'}</h2>
@@ -128,56 +176,16 @@ export const TrancheConfirm = ({
               </h2>
             </TrancheModalContentRow>
           </TrancheModalContent>
-        ) : txModalStatus === 'confirm' ? (
-          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-            <h2>
-              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
-            </h2>
-            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-              <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
-              <h2>Confirm Transaction</h2>
-            </TrancheModalContentStatus>
-          </TrancheModalContent>
-        ) : txModalStatus === 'pending' ? (
-          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-            <h2>
-              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
-            </h2>
-            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-              <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
-              <h2>Transaction Pending</h2>
-            </TrancheModalContentStatus>
-          </TrancheModalContent>
-        ) : txModalStatus === 'success' ? (
-          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-            <h2>
-              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
-            </h2>
-            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-              <img src={Migrated} alt='img' />
-              <h2>Transaction Successful</h2>
-            </TrancheModalContentStatus>
-          </TrancheModalContent>
-        ) : txModalStatus === 'failed' || txModalStatus === 'rejected' ? (
-          <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-            <h2>
-              {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}
-            </h2>
-            <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
-              <img src={TrancheRejected} alt='img' />
-              {txModalStatus === 'failed' ? <h2>Transaction Failed</h2> : txModalStatus === 'cancelled' ? <h2>Transaction Cancelled</h2> : <h2>Transaction Rejected</h2>}
-            </TrancheModalContentStatus>
-          </TrancheModalContent>
-        ) : (
-          ''
         )}
-        {txModalStatus === 'initialState' || txModalStatus === 'confirm' ? (
+        {trancheCard === trancheCardId && txModalStatus !== 'rejected' ? (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
+            link
+            TrancheEnableConfirm
             disabledColor={ModeThemes[theme].DisabledBtn}
             disabledTextColor={ModeThemes[theme].DisabledBtnText}
           >
-            {txLoading ? (
+            {txModalStatus === 'confirm' ? (
               <button>
                 <LoadingButton>
                   {[...Array(4).keys()].map((idx) => {
@@ -185,7 +193,7 @@ export const TrancheConfirm = ({
                   })}
                 </LoadingButton>
               </button>
-            ) : (
+            ) : txModalStatus === 'initialState' ? (
               <button
                 onClick={() => {
                   handleSubmit();
@@ -193,20 +201,28 @@ export const TrancheConfirm = ({
               >
                 <img src={CheckBtnWhite} alt='img' /> Confirm
               </button>
-            )}
-          </TrancheModalFooter>
-        ) : (
-          txModalStatus !== 'rejected' && (
-            <TrancheModalFooter
-              color={ModeThemes[theme].ModalTrancheTextColor}
-              link
-              TrancheEnableConfirm
-              disabledColor={ModeThemes[theme].DisabledBtn}
-              disabledTextColor={ModeThemes[theme].DisabledBtnText}
-            >
+            ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' /> View on Etherscan
               </a>
+            )}
+          </TrancheModalFooter>
+        ) : (
+          txModalStatus !== 'rejected' &&
+          txModalStatus !== 'failed' &&
+          txModalStatus !== 'cancelled' && (
+            <TrancheModalFooter
+              color={ModeThemes[theme].ModalTrancheTextColor}
+              disabledColor={ModeThemes[theme].DisabledBtn}
+              disabledTextColor={ModeThemes[theme].DisabledBtnText}
+            >
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+              >
+                <img src={CheckBtnWhite} alt='img' /> Confirm
+              </button>
             </TrancheModalFooter>
           )
         )}

@@ -15,11 +15,12 @@ Modal.setAppElement('#root');
 const TrancheModal = ({
   // Redux
   formValues,
-  ethereum: { address, txOngoing, tokenBalance, unclaimedSIRRewards },
+  ethereum: { address, txOngoing, tokenBalance, unclaimedSIRRewards, wallet },
   data: {
     txModalIsOpen,
     txModalType,
     txModalStatus,
+    txOngoingData,
     txLoading,
     txLink,
     exchangeRates = {},
@@ -27,6 +28,7 @@ const TrancheModal = ({
       name,
       contractAddress,
       trancheId,
+      trancheCard,
       trancheType,
       apyStatus,
       cryptoType,
@@ -75,7 +77,9 @@ const TrancheModal = ({
 
   const handleSubmit = () => {
     try {
-      isDeposit ? buyTrancheTokens(contractAddress, trancheId, trancheType, cryptoType) : sellTrancheTokens(contractAddress, trancheId, trancheType);
+      isDeposit
+        ? buyTrancheTokens(contractAddress, trancheId, trancheType, cryptoType)
+        : sellTrancheTokens(contractAddress, trancheId, trancheType, trancheToken);
       isDeposit ? Tracker('Deposit', 'User address: ' + address) : Tracker('Withdraw', 'User address: ' + address);
     } catch (error) {
       console.error(error);
@@ -83,26 +87,30 @@ const TrancheModal = ({
   };
 
   return txModalType === 'trancheRewards'
-    ? TrancheRewards({ 
-      theme,
-      totalSlice,
-      totalSliceInUSD,
-      totalSliceBalance,
-      unclaimedSlice,
-      exchangeRates,
-      txModalIsOpen,
-      txModalStatus,
-      txLoading,
-      txLink,
-      txOngoing,
-      closeModal
-    })
+    ? TrancheRewards({
+        theme,
+        totalSlice,
+        totalSliceInUSD,
+        totalSliceBalance,
+        unclaimedSlice,
+        exchangeRates,
+        txModalType,
+        txModalIsOpen,
+        txModalStatus,
+        txLoading,
+        txLink,
+        txOngoing,
+        closeModal,
+        wallet
+      })
     : txModalType === 'trancheEnable'
     ? TrancheEnable({
         theme,
         closeModal,
         txModalIsOpen,
         txModalStatus,
+        trancheCard,
+        txOngoingData,
         txLoading,
         txLink,
         name,
@@ -127,6 +135,8 @@ const TrancheModal = ({
         tokenBalance,
         txModalIsOpen,
         txModalStatus,
+        trancheCard,
+        txOngoingData,
         txLoading,
         txLink,
         name,

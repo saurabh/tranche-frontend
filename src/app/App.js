@@ -16,6 +16,7 @@ import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
 import Trade from 'app/pages/Earn';
 import Stake from 'app/pages/Stake';
+
 import NotFound from 'app/pages/NotFound';
 import NetworkDetector from './components/NetworkDetector';
 import NotificationProvider from './components/Notifications/NotificationProvider';

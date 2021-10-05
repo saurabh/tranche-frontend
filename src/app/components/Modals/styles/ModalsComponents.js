@@ -1357,7 +1357,7 @@ const StakingModalContentSideHeader = styled.div`
   margin: 14px 0 12px 0;
   background: ${props => props.BoxColor};
   border-radius: 4.33px;
-  padding: 0 12px;
+  padding: 0 20px;
   position: relative;
 `;
 const StakingModalContentSideHeaderBoxWrapper = styled.div`
@@ -1400,7 +1400,10 @@ const StakingModalContentSideHeaderBox = styled.div`
   ${({ stake }) => stake && `
     width: 23%;
   `}
-
+  ${({ governance }) => governance && `
+    width: 32%;
+  `}
+  
   
 
 
@@ -2167,10 +2170,14 @@ const TrancheModalWrapper = styled.div`
   max-height: 571px;
   ${({ TrancheRewards }) => TrancheRewards && `
       max-height: 517px;
+      @media (max-width: 633px){
+        max-height: unset;
+        height: 100vh;
+      }
   `}
   ${({ TrancheEnable }) => TrancheEnable && `
-    max-height: 600px;  
-    height: 100%;  
+    max-height: 600px;
+    height: 100%;
     @media (max-width: 633px){
       height: 100vh;
     }
@@ -2191,12 +2198,12 @@ const TrancheModalWrapper = styled.div`
   }
 `;
 const TrancheModalHeader = styled.div`
-  height: 68px; 
+  height: 68px;
   ${({ TrancheEnable }) => TrancheEnable && `
-    height: 210px;   
+    height: 210px;
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
-    height: 210px; 
+    height: 210px;
   `}
   display: flex;
   align-items: center;
@@ -2204,18 +2211,20 @@ const TrancheModalHeader = styled.div`
   border-bottom: 1.05851px solid ${props => props.border};
   ${({ trancheRewardsModal, color }) => trancheRewardsModal && `
     h2{
-      font-family: 'Inter', sans-serif;
+      font-family: ‘Inter’, sans-serif;
       font-weight: bold;
       font-size: 15px;
       text-transform: uppercase;
       text-align: center;
       z-index: 2;
       color: ${color};
+      @media (max-height: 660px){
+        position: absolute;
+      }
     }
   `}
-
-
 `;
+
 const TrancheModalContent = styled.div`
   display: flex;
   justify-content: center;
@@ -2226,6 +2235,8 @@ const TrancheModalContent = styled.div`
   ${({ TrancheRewards }) => TrancheRewards && `
     padding: 0 40px;
   `}
+  
+  
   & > h2{
     font-family: 'Inter', sans-serif;
     font-weight: bold;
@@ -2239,6 +2250,9 @@ const TrancheModalContent = styled.div`
     & > h2{
       margin: -33px 0 0 0;
     }
+  `}
+  ${({ TrancheStatusFailed }) => TrancheStatusFailed && `
+    min-height: 347px !important;
   `}
   ${({ initialStatus }) => initialStatus && `
     min-height: 347px;
@@ -2381,6 +2395,12 @@ const TrancheModalFooter = styled.div`
         margin-right: 5px;
       }
     }
+  `}
+  ${({ TrancheRewards }) => TrancheRewards && `
+    padding: 2px 40px;
+  `}
+  ${({ TrancheRewards, TrancheRewardsProcess }) => (TrancheRewards && TrancheRewardsProcess) && `
+    padding: 41px 40px;
   `}
 `;
 
@@ -2623,8 +2643,8 @@ const TrancheRewardsStyles = {
     maxWidth: '340px',
     maxHeight: '517px',
     width: '100%',
-    minHeight: '517px',
-    //height: '326px',
+    minHeight: '347px',
+    height: '100%',
     height: 'auto',
     border: 'none',
     boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
@@ -2666,6 +2686,37 @@ const TrancheEnableModal = {
     bottom: '0'
   }
 };
+const GovernanceModalStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '438px',
+    maxHeight: '355px',
+    width: '100%',
+    minHeight: '355px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
 const TrancheConfirmModal = {
   overlay: {
     display: 'flex',
@@ -2697,6 +2748,107 @@ const TrancheConfirmModal = {
     bottom: '0'
   }
 };
+const GovernanceModalWrapper = styled.div`
+  min-height: 355px;
+  height: 100%;
+  width: 100%;
+  background: #221F46;
+  padding: 32px;
+  // media (max-height: 560px) {
+  //   min-height: 571px;
+  // }
+`;
+const GovernanceModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    color: #FFFFFF;
+  }
+  button{
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 300ms;
+    :active{
+      cursor: pointer;
+      transform: scale(0.9);
+    }
+  }
+`;
+const GovernanceModalContent= styled.div`
+
+`
+const GovernanceModalDelegateFormText= styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  button{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 9px;
+    line-height: 13px;
+    color: #FFFFFF;
+    border: none;
+    background: transparent;
+    text-transform: uppercase;
+    outline: none;
+    cursor: pointer;
+  }
+`
+
+const GovernanceModalDelegateFormWrapper= styled.div`
+  form{
+    input{
+      font-family: 'Inter', sans-serif;
+      background: rgba(255, 255, 255, 0.05);
+      border: 0.92283px solid rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+      border-radius: 3.69132px;
+      color: #FFFFFF;
+      height: 34px;
+      outline: none;
+      margin: 9px auto 20px auto;
+      font-size: 10px;
+      padding: 3px 12px;
+      width: 100%;
+      ${({ delegated}) => delegated && `
+        opacity: 0.5;
+        pointer-events: none;
+      `}
+    }
+
+   
+
+  }
+`
+const GovernanceModalDelegateFormSubmitBtn = styled.button`
+  height: 27.29px;
+  background: #4939D7;
+  border-radius: 4.50331px;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 12.3841px;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  border: none;
+  outline: none;
+`
 
 
 export {
@@ -2810,5 +2962,12 @@ export {
   TrancheModalFooter,
   TrancheModalContentHeaderImg,
   TrancheModalContentHeaderText,
-  TrancheModalContentStatus
+  TrancheModalContentStatus,
+  GovernanceModalStyles,
+  GovernanceModalWrapper,
+  GovernanceModalHeader,
+  GovernanceModalContent,
+  GovernanceModalDelegateFormWrapper,
+  GovernanceModalDelegateFormText,
+  GovernanceModalDelegateFormSubmitBtn
 };

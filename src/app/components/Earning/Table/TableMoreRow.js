@@ -10,8 +10,6 @@ import {
   TableMoreRowContentRight,
   TableMoreRightSection,
   FormContent,
-  CheckboxWrapper,
-  CheckboxContent,
   TableMoreTitleWrapper,
   MobileMoreFormBtns,
   MobileMoreFormBtn,
@@ -24,8 +22,9 @@ import {
 import { LoadingButton, LoadingButtonCircle } from '../../Modals/styles/ModalsComponents';
 import { BtnArrow } from 'assets';
 import { setTxModalOpen, setTxModalType, setTxModalData, setTxModalStatus, setTxModalLoading } from 'redux/actions/tableData';
-import { fromWei } from 'services/contractMethods';
-import { roundNumber, isGreaterThan, isEqualTo, isLessThan } from 'utils';
+import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
+import { fromWei, initOnboard } from 'services';
+import { roundNumber, isGreaterThan, isEqualTo, isLessThan, readyToTransact } from 'utils';
 import { ModeThemes, ETHorMaticCheck } from 'config';
 import i18n from '../../locale/i18n';
 
@@ -62,8 +61,12 @@ let TableMoreRow = ({
   // setDepositApproved,
   // setWithdrawApproved,
   // redux
-  ethereum: { tokenBalance, trancheAllowance, txOngoing },
+  ethereum: { tokenBalance, trancheAllowance, txOngoing, wallet },
   data: { txOngoingData, trancheCard },
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3,
   setTxModalOpen,
   setTxModalType,
   setTxModalStatus,
@@ -91,13 +94,23 @@ let TableMoreRow = ({
     setTooltipToggle(val);
   };
 
-  const openModal = (txType, isDeposit) => {
+  const onboard = initOnboard({
+    address: setAddress,
+    network: setNetwork,
+    balance: setBalance,
+    wallet: setWalletAndWeb3
+  });
+
+  const openModal = async (txType, isDeposit) => {
+    const ready = await readyToTransact(wallet, onboard);
+    if (!ready) return;
     setTxModalType(txType);
     setTxModalOpen(true);
     setTxModalData({
       name: name.split('-')[1].trim(),
       contractAddress,
       trancheId,
+      trancheCard: trancheCard.id,
       trancheType: type,
       apyStatus,
       cryptoType,
@@ -195,6 +208,7 @@ let TableMoreRow = ({
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.sliceAPY')}</h2>
                 <h2>{sliceAPY && roundNumber(sliceAPY, 2) !== 'NaN' ? roundNumber(sliceAPY, 2) : 0}%</h2>
+                {/* <h2>TBD</h2> */}
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
@@ -610,5 +624,9 @@ export default TableMoreRow = connect(mapStateToProps, {
   setTxModalType,
   setTxModalStatus,
   setTxModalData,
-  setTxModalLoading
+  setTxModalLoading,
+  setAddress,
+  setNetwork,
+  setBalance,
+  setWalletAndWeb3
 })(TableMoreRow);
