@@ -175,12 +175,17 @@ function Navbar({ path, theme }) {
             >
              {i18n.t('navbar.tranche')}
             </NavLink>
-            <a
-              href="https://snapshot.org/#/tranche.eth"
-              target="_blank"
+            <NavLink
+              to={baseUrl + '/governance'}
+              activeStyle={{
+                opacity: 1,
+                background: ModeThemes[theme].NavbarBackground,
+                boxShadow: ModeThemes[theme].NavbarShadow
+              }}
+              exact
             >
               Vote
-            </a>
+            </NavLink>
           </NavbarLinks>
         </div>
         { isDesktop &&

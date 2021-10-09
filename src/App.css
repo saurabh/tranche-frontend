@@ -991,17 +991,17 @@ button[disabled] img{
   font-size: 15px;
   line-height: 27px;
 }
-table{
+.staticContentWrapper table{
   margin: 50px 0;
 }
-table th {
+.staticContentWrapper table th {
   padding: 5px;
   color: #5F5F5F;
 }
-table td {
+.staticContentWrapper table td {
   padding: 5px 20px;
 }
-table, th, td {
+.staticContentWrapper table, .staticContentWrapper th, .staticContentWrapper td {
   border: 1px solid #5F5F5F;
 }
 
@@ -1234,18 +1234,10 @@ table, th, td {
   overflow-y: scroll;
 }
 
-@media (max-height: 390px){
-  .TrancheMarketsModal .ReactModal__Content--after-open {
-    transform: scale(0.8) translateY(0);
-  }
-}
 @media (max-width: 633px){
   .ReactModal__Content{
     position: absolute !important;
     transform: scale(0.5) translateY(50%);
-  }
-  .TrancheMarketsModal .ReactModal__Content{
-    position: relative !important;
   }
   .TrancheEnableModal .ReactModal__Content{
     max-height: unset !important;
@@ -1299,14 +1291,14 @@ table, th, td {
     height: 25px;
   }
   .ReactModal__Content--after-open{
-    transform: scale(0.8) translateY(0) !important;
+    transform: scale(1) translateY(0) !important;
   }
-  /* .TrancheMarketsModal .ReactModal__Content--after-open{
+  .TrancheMarketsModal .ReactModal__Content--after-open{
     transform: scale(1) translateY(-50%) translateX(-50%) !important;
     top: 50% !important;
     left: 52% !important;
     height: 100% !important;
-  } */
+  }
   .footerWrapper{
     flex-direction: column;
     padding: 12px 0;

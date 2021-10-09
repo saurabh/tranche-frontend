@@ -11,17 +11,20 @@ import {
 } from 'config/constants';
 import i18n from "../../locale/i18n";
 import HeaderTabs from 'app/components/Stake/Header/HeaderTabs';
+import { changePath } from 'redux/actions/TogglePath';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
-function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpen}) {
+function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpen, changePath}) {
   const { pathname } = useLocation();
   let parsedPath = pathname.split('/');
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
 
   const [path, setPath] = useState(parsedPath[parsedPath.length - 1] || "borrow");
+
   const parsePath = useCallback(() =>{
     setPath(parsedPath[parsedPath.length - 1]);
+    changePath(parsedPath[parsedPath.length - 1])
   }, [parsedPath]);
   const updateMedia = () => {
     setDesktop(window.innerWidth > 992);
@@ -65,13 +68,17 @@ function Header({updateDate, theme, openModal, closeModal, modalType, ModalIsOpe
           >
           {i18n.t('navbar.tranche')}
           </NavLink>
-            <a
-              href="https://snapshot.org/#/tranche.eth"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Vote
-            </a>
+          <NavLink
+            to={baseUrl + '/governance'}
+            activeStyle={{
+              opacity: 1,
+              background: ModeThemes[theme].NavbarBackground,
+              boxShadow: ModeThemes[theme].NavbarShadow
+            }}
+            exact
+          >
+            Vote
+          </NavLink>
         </NavbarLinks>
           }
         {
@@ -102,4 +109,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps,  null)(Header);
+export default connect(mapStateToProps,  {changePath})(Header);

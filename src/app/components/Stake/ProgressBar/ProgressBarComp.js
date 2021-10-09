@@ -1,7 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 const ProgressBarContainer = styled.div`
-    height: 5px;
+    height: ${props => props.heightBar ? props.heightBar : "5px"};
     width: ${props => props.widthBar}%;    
     background-color: ${props => props.colorOne};
     border-radius: 100px;
@@ -14,9 +14,9 @@ const Progress = styled.div`
     border-radius: inherit;
     text-align: right;
 `;
-const ProgressBarComp = ({ widthBar, colorOne, colorTwo, progress }) => {
+const ProgressBarComp = ({ widthBar, heightBar, colorOne, colorTwo, progress }) => {
   return (
-    <ProgressBarContainer widthBar={widthBar} colorOne={colorOne}>
+    <ProgressBarContainer widthBar={widthBar} heightBar={heightBar} colorOne={colorOne}>
       <Progress progress={progress} colorTwo={colorTwo}>
       </Progress>
     </ProgressBarContainer>

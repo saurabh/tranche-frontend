@@ -11,13 +11,13 @@ const SummaryCardWrapperContent = styled.div`
     border-radius: 12px;
      @media (max-width: 992px){
         // margin: 0 19px;
-        width: 100% !important;
+        width: 90% !important;
         // display: none !important;
     }
     ${({ stakeCard }) => stakeCard && `
         width: 30% !important;
         @media (max-width: 992px){
-            width: 94% !important;
+            width: 90% !important;
             // display: none !important;
         }
      `}
@@ -34,11 +34,10 @@ const SummaryCardWrapper = styled.div`
     border-radius: 12px;
      @media (max-width: 992px){
         margin: 0 19px;
-        width: 94% !important;
+        width: 90% !important;
         // display: none !important;
-        width: 94%;
+        width: 90%;
     }
-    
 `;
 const SummaryCardContainer = styled.div`
     display: flex;
@@ -114,7 +113,7 @@ const SummaryCardDetails = styled.h2`
 `;
 
 const SummaryCardsWrapper = styled.div`
-//   margin-top: ${props => props.path === "stake" && !props.isDesktop ? "" : "30px"};
+  margin-top: ${props => props.path === "stake" && !props.isDesktop ? "" : "30px"};
   display: flex;
   justify-content: space-between;
   @media (max-width: 992px) {
@@ -142,9 +141,6 @@ const SummaryCardsWrapper = styled.div`
     cursor: pointer;
     outline: none;
   }
-    ${({ summaryTranche }) => summaryTranche && `
-        margin-top: 0;
-    `}
 `;
 
 const SummaryCardCounter = styled.div`

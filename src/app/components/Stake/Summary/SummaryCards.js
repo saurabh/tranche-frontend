@@ -66,7 +66,7 @@ const SummaryCards = ({ ethereum: { wallet, address, network }, summaryData: { s
 
   return (
     <div>
-      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summaryTitle>
+      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary>
         <h2>{i18n.t('stake.StakingStats')}</h2>
       </TableTitle>
       {isDesktop ? (
