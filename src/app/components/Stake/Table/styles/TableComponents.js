@@ -962,6 +962,20 @@ const FirstColTitle = styled.div`
     text-transform: uppercase;
     color: ${props => props.color};
   } 
+  
+  ${({ tranche }) => tranche && `
+    display: flex;
+    align-items: center;
+    a{
+      display: flex;
+      align-items: center;
+      img{
+        margin-left: 3px;
+        width: 14px;
+        height: 14px;
+      }
+    }
+  `}
   @media (max-width: 992px){
     display: flex;
     align-items: center;

@@ -8,7 +8,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes, etherScanUrl, maticBlockExplorerUrl } from 'config';
-import { LinkArrow, ChevronTable } from 'assets';
+import { LinkArrow, ChevronTable, LinkArrowWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -144,15 +144,18 @@ const TableCard = ({
                 </span>
               </TableCardImg>
               <FirstColContent instrument>
-                <FirstColTitle color={ModeThemes[theme].tableText}>
-                  <h2>{cryptoType && cryptoType}</h2>
+                <FirstColTitle color={ModeThemes[theme].tableText} tranche>
+                  <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                    <h2>{cryptoType && cryptoType}</h2>
+                    <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
+                  </a>
                 </FirstColTitle>
-                <FirstColSubtitle>
+                {/* <FirstColSubtitle>
                   <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>
                   <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <img src={LinkArrow} alt='' />
                   </a>
-                </FirstColSubtitle>
+                </FirstColSubtitle> */}
               </FirstColContent>
               <TrancheRateType
                 TrancheRateColor={type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor}
