@@ -144,7 +144,7 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                  <a href={`${landingUrl}analytics/${network}/${trancheId}`} target='_blank' rel='noopener noreferrer'>
+                  <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
                     <h2>{cryptoType && cryptoType}</h2>
                     <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
                   </a>
@@ -295,7 +295,7 @@ const TableCard = ({
               <TableFirstColWrapper>
                 <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                  <a href={`${landingUrl}analytics/${network}/${trancheId}`} target='_blank' rel='noopener noreferrer'>
+                  <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
                     <h2>{cryptoType && cryptoType}</h2>
                     <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
                   </a>
