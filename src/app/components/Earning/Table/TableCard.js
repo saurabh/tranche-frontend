@@ -22,7 +22,6 @@ import {
   TableFirstColWrapper,
   FirstColContent,
   FirstColTitle,
-  FirstColSubtitle,
   TableSecondCol,
   SecondColContent,
   TableThirdCol,
@@ -145,7 +144,7 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                  <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={process.env.REACT_APP_LANDING_URL + 'analytics/' + network + '/' + trancheId} target='_blank' rel='noopener noreferrer'>
                     <h2>{cryptoType && cryptoType}</h2>
                     <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
                   </a>
@@ -295,20 +294,18 @@ const TableCard = ({
             <TableMobileContentRow>
               <TableFirstColWrapper>
                 <FirstColContent instrument>
-                  <FirstColTitle color={ModeThemes[theme].tableText} tranche>
+                <FirstColTitle color={ModeThemes[theme].tableText} tranche>
+                  <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                     <h2>{cryptoType && cryptoType}</h2>
-                    <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
-                      <button>
-                        <img src={ChevronTable} alt='ChevronTable' />
-                      </button>
-                    </AdustBtnWrapper>
-                  </FirstColTitle>
-                  <FirstColSubtitle>
+                    <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
+                  </a>
+                </FirstColTitle>
+                  {/* <FirstColSubtitle>
                     <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>
                     <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
                       <img src={LinkArrow} alt='' />
                     </a>
-                  </FirstColSubtitle>
+                  </FirstColSubtitle> */}
                 </FirstColContent>
               </TableFirstColWrapper>
             </TableMobileContentRow>
