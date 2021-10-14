@@ -7,7 +7,7 @@ import { setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
-import { statuses, trancheIcons, ModeThemes, etherScanUrl, maticBlockExplorerUrl } from 'config';
+import { statuses, trancheIcons, ModeThemes, etherScanUrl, landingUrl, maticBlockExplorerUrl } from 'config';
 import { LinkArrow, ChevronTable, LinkArrowWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -144,7 +144,7 @@ const TableCard = ({
               </TableCardImg>
               <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                  <a href={process.env.REACT_APP_LANDING_URL + 'analytics/' + network + '/' + trancheId} target='_blank' rel='noopener noreferrer'>
+                  <a href={`${landingUrl}analytics/${network}/${trancheId}`} target='_blank' rel='noopener noreferrer'>
                     <h2>{cryptoType && cryptoType}</h2>
                     <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
                   </a>
@@ -295,7 +295,7 @@ const TableCard = ({
               <TableFirstColWrapper>
                 <FirstColContent instrument>
                 <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                  <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
+                  <a href={`${landingUrl}analytics/${network}/${trancheId}`} target='_blank' rel='noopener noreferrer'>
                     <h2>{cryptoType && cryptoType}</h2>
                     <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
                   </a>

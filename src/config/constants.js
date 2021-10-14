@@ -4,7 +4,7 @@ import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
-export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
+export const landingUrl = process.env.REACT_APP_LANDING_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
