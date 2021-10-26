@@ -207,7 +207,10 @@ export const TrancheConfirm = ({
               </a>
             )}
           </TrancheModalFooter>
-        ) : (
+        ) : ( 
+          txModalStatus !== 'rejected' &&
+          txModalStatus !== 'failed' &&
+          txModalStatus !== 'cancelled' && (
           <TrancheModalFooter
             color={ModeThemes[theme].ModalTrancheTextColor}
             disabledColor={ModeThemes[theme].DisabledBtn}
@@ -220,7 +223,7 @@ export const TrancheConfirm = ({
             >
               <img src={CheckBtnWhite} alt='img' /> Confirm
             </button>
-          </TrancheModalFooter>
+          </TrancheModalFooter>)
         )}
       </TrancheModalWrapper>
     </Modal>
