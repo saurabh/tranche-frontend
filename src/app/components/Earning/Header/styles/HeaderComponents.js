@@ -654,7 +654,7 @@ const MarketTab = styled.button`
   outline: none;
   padding: 0 29px;
   position: relative;
-  margin-right: ${props => props.market === "compound" ? "14px" : "0"};
+  margin-right: 14px;
   border-radius: 5px;
   height: 51px;
   background: ${props => props.current ? props.backgroundActive : props.background};
@@ -667,6 +667,7 @@ const MarketTab = styled.button`
   text-transform: uppercase;
   color: ${props => props.color};
   img{
+    width: ${props => props.market === 'fantom' ? "100px" : ""};
     margin-right: ${props => props.market === "aavePolygon" ? "5px" : "0"};
   }
   & > span{

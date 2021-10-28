@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import i18n from '../../locale/i18n';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
-import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack } from 'assets';
+import { AaveBtn, CompoundBtn, CompoundBtnBlack, FantomDark, FantomLight, PolygonLogo, PolygonLogoBlack } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
@@ -79,6 +79,19 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
             <img src={AaveBtn} alt='' /> Market
           </h2>{' '}
           <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+        </MarketTab>
+        <MarketTab
+          market='fantom'
+          current={trancheMarket === 'fantom'}
+          onClick={() => trancheMarketsToggle('fantom')}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+        >
+          <img src={theme === 'light' ? FantomLight : FantomDark} alt='' />
         </MarketTab>
       </MarketsTabs>
       {trancheMarket === 'aavePolygon' && (
