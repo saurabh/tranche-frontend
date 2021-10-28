@@ -2176,8 +2176,8 @@ const TrancheModalWrapper = styled.div`
       }
   `}
   ${({ TrancheEnable }) => TrancheEnable && `
-    max-height: 600px;
-    height: 100%;
+    max-height: 600px;  
+    height: 100%;  
     @media (max-width: 633px){
       height: 100vh;
     }
@@ -2198,12 +2198,12 @@ const TrancheModalWrapper = styled.div`
   }
 `;
 const TrancheModalHeader = styled.div`
-  height: 68px;
+  height: 68px; 
   ${({ TrancheEnable }) => TrancheEnable && `
-    height: 210px;
+    height: 210px;   
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
-    height: 210px;
+    height: 210px; 
   `}
   display: flex;
   align-items: center;
@@ -2211,7 +2211,7 @@ const TrancheModalHeader = styled.div`
   border-bottom: 1.05851px solid ${props => props.border};
   ${({ trancheRewardsModal, color }) => trancheRewardsModal && `
     h2{
-      font-family: ‘Inter’, sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: bold;
       font-size: 15px;
       text-transform: uppercase;
@@ -2223,8 +2223,9 @@ const TrancheModalHeader = styled.div`
       }
     }
   `}
-`;
 
+
+`;
 const TrancheModalContent = styled.div`
   display: flex;
   justify-content: center;

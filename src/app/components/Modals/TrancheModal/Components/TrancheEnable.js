@@ -194,15 +194,17 @@ export const TrancheEnable = ({
               disabledColor={ModeThemes[theme].DisabledBtn}
               disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
-              <button
-                onClick={(e) =>
-                  isDeposit
-                    ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
-                    : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
-                }
-              >
-                <img src={CheckBtnWhite} alt='img' /> Enable
-              </button>
+              {
+                <button
+                  onClick={(e) =>
+                    isDeposit
+                      ? approveContract(isDeposit, buyerCoinAddress, contractAddress, isDepositApproved, e)
+                      : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
+                  }
+                >
+                  <img src={CheckBtnWhite} alt='img' /> Enable
+                </button>
+              }
             </TrancheModalFooter>
           )
         )}

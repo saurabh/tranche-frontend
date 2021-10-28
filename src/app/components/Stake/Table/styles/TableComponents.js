@@ -354,14 +354,6 @@ const TableTitle = styled.div`
     ${({ stakeTitle }) => stakeTitle && `
       margin: 25px 0 20px 0;
     `}
-    ${({ summaryTitle }) => summaryTitle && `
-        margin: 25px auto 20px auto !important;
-        height: 40px;
-        display: flex;
-        align-items: center;
-    `}
-    
-    
 
 `;
 const TableSubTitle = styled.div`
@@ -961,7 +953,7 @@ const FirstColContent = styled.div`
   
 `
 const FirstColTitle = styled.div`
-  h2, a{
+  h2{
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -970,15 +962,20 @@ const FirstColTitle = styled.div`
     text-transform: uppercase;
     color: ${props => props.color};
   } 
-  a{
+  
+  ${({ tranche }) => tranche && `
     display: flex;
     align-items: center;
-    svg{
-      height: 14px;
-      width: 14px;
-      margin-left: 3px;
+    a{
+      display: flex;
+      align-items: center;
+      img{
+        margin-left: 3px;
+        width: 14px;
+        height: 14px;
+      }
     }
-  }
+  `}
   @media (max-width: 992px){
     display: flex;
     align-items: center;

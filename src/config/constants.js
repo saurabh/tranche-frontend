@@ -4,7 +4,7 @@ import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
-export const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
+export const landingUrl = process.env.REACT_APP_LANDING_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
@@ -126,22 +126,22 @@ export const PagesData = {
 };
 
 export const trancheIcons = {
-  ACDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
-  BCDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
-  ACUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCard },
-  BCUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCard },
-  ACUSDT: { protocolIcon: CompoundLogo, assetIcon: USDTCard },
-  BCUSDT: { protocolIcon: CompoundLogo, assetIcon: USDTCard },
+  acDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  bcDAI: { protocolIcon: CompoundLogo, assetIcon: DAICARD },
+  acUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCard },
+  bcUSDC: { protocolIcon: CompoundLogo, assetIcon: USDCCard },
+  acUSDT: { protocolIcon: CompoundLogo, assetIcon: USDTCard },
+  bcUSDT: { protocolIcon: CompoundLogo, assetIcon: USDTCard },
   aamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   bamMATIC: { protocolIcon: AAVE, assetIcon: MaticTable },
   aamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   bamDAI: { protocolIcon: AAVE, assetIcon: DAICARD },
   aamUSDC: { protocolIcon: AAVE, assetIcon: USDCCard },
   bamUSDC: { protocolIcon: AAVE, assetIcon: USDCCard },
-  ACWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
-  BCWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
-  ACLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
-  BCLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
+  acWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  bcWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
+  acLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
+  bcLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,

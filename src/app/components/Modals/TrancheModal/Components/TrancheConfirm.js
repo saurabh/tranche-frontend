@@ -60,6 +60,7 @@ export const TrancheConfirm = ({
     >
       <TrancheModalWrapper backgroundColor={ModeThemes[theme].ModalBackground} TrancheConfirm>
         <TrancheModalHeader color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder} TrancheConfirm>
+          {/* <h2>TRANCHE REWARDS</h2> */}
           <ModalHeader tranche ModalBackground={ModeThemes[theme].ModalBackground} enableModal>
             <button onClick={() => closeModal()}>
               <img src={theme === 'light' ? CloseModal : CloseModalWhite} alt='' />
@@ -147,11 +148,10 @@ export const TrancheConfirm = ({
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>SLICE APY</h2>
               <h2>{roundNumber(sliceAPY, 2)}%</h2>
-              {/* <h2>TBD</h2> */}
             </TrancheModalContentRow>
             <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Net APY</h2>
-              <h2>{roundNumber(netAPY, 2) !== 'NaN' ? roundNumber(netAPY, 2) : roundNumber(apy, 2)}%</h2>
+              <h2>{roundNumber(netAPY, 2)}%</h2>
             </TrancheModalContentRow>
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>{isDeposit ? 'Depositing' : 'Withdrawing'}</h2>
@@ -207,24 +207,23 @@ export const TrancheConfirm = ({
               </a>
             )}
           </TrancheModalFooter>
-        ) : (
+        ) : ( 
           txModalStatus !== 'rejected' &&
           txModalStatus !== 'failed' &&
           txModalStatus !== 'cancelled' && (
-            <TrancheModalFooter
-              color={ModeThemes[theme].ModalTrancheTextColor}
-              disabledColor={ModeThemes[theme].DisabledBtn}
-              disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          <TrancheModalFooter
+            color={ModeThemes[theme].ModalTrancheTextColor}
+            disabledColor={ModeThemes[theme].DisabledBtn}
+            disabledTextColor={ModeThemes[theme].DisabledBtnText}
+          >
+            <button
+              onClick={() => {
+                handleSubmit();
+              }}
             >
-              <button
-                onClick={() => {
-                  handleSubmit();
-                }}
-              >
-                <img src={CheckBtnWhite} alt='img' /> Confirm
-              </button>
-            </TrancheModalFooter>
-          )
+              <img src={CheckBtnWhite} alt='img' /> Confirm
+            </button>
+          </TrancheModalFooter>)
         )}
       </TrancheModalWrapper>
     </Modal>

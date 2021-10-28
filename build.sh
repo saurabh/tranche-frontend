@@ -1,9 +1,9 @@
 git branch
-git checkout dev-build-2
-git pull origin dev-build-2
-git pull origin newTranche
+git checkout dev-build-3
+git pull origin dev-build-3
+git pull origin ftmTranche
 yarn build
 git add .
 git commit -m 'new build'
-git push origin dev-build-2
-git checkout newTranche
+git push origin dev-build-3
+git checkout ftmTranche
