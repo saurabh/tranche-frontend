@@ -586,7 +586,17 @@ const TableContentCardWrapperMobile = styled.div`
   ${({ tranche }) => tranche && `
     min-height: 120px;
     height: auto;
+    @media (max-width: 992px){
+      height: 90px;
+      min-height: 90px;
+    }
   `}
+  ${({ toggleCard }) => toggleCard && `
+    @media (max-width: 992px){
+      height: auto;
+    }
+  `}
+  
 `
 const TableContentCardMobile = styled.div`
   position: relative;
@@ -604,7 +614,6 @@ const TableContentCardMobile = styled.div`
     left: 0;
   }
   ${({ trancheMobile }) => trancheMobile && `
-    margin-top: 8px;
   `}
   border-bottom: none !important;
 `
@@ -1839,6 +1848,7 @@ const TableMobileContent = styled.div`
   justify-content: space-between;
   ${({ trancheMobile }) => trancheMobile && `
     justify-content: center !important;
+    height: auto;
   `}
   
 `
