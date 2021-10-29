@@ -47,8 +47,7 @@ const GlobalStyle = createGlobalStyle`
   }
   
   .layout-container{
-    min-height: 100vh;
-    margin-bottom: 50px;
+    min-height: 90vh;
   }
 
   #navbar-container{
