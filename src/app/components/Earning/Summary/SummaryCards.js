@@ -83,7 +83,7 @@ const SummaryCards = ({
     <div>
       {
         isDesktop && (
-          <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
+          <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={true}>
             <h2>{i18n.t('tranche.trancheData.TrancheStats')}</h2>
           </TableTitle>
         )
