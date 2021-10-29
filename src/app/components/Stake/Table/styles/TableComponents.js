@@ -603,8 +603,8 @@ const TableContentCardMobile = styled.div`
     position: absolute;
     left: 0;
   }
-  ${({ tranche }) => tranche && `
-   
+  ${({ trancheMobile }) => trancheMobile && `
+    margin-top: 8px;
   `}
   border-bottom: none !important;
 `
@@ -963,6 +963,7 @@ const FirstColTitle = styled.div`
     color: ${props => props.color};
   } 
   
+  
   ${({ tranche }) => tranche && `
     display: flex;
     align-items: center;
@@ -1000,6 +1001,13 @@ const FirstColTitle = styled.div`
             width: 12px;
           }
         }
+      }
+    }
+  `}
+  ${({ trancheMobile }) => trancheMobile && `
+    @media (max-width: 992px){
+      a h2{
+        font-size: 12px !important;
       }
     }
   `}
@@ -1388,6 +1396,16 @@ const AdustBtnWrapper = styled.div`
   ${({ chevron }) => chevron && `
     button{
       background: transparent  !important;
+    }
+  `}
+  ${({ trancheMobile }) => trancheMobile && `
+    button{
+      position: absolute !important;
+      top: 8px !important;
+      right: 0 !important;
+      img{
+        width: 12px;
+      }
     }
   `}
   
@@ -1819,6 +1837,9 @@ const TableMobileContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  ${({ trancheMobile }) => trancheMobile && `
+    justify-content: center !important;
+  `}
   
 `
 
@@ -1826,6 +1847,13 @@ const TableMobileContentRow = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  
+  ${({ trancheMobile }) => trancheMobile && `
+    display: flex;
+    align-items: center;
+    height: auto !important;
+  `}
 `
 
 
@@ -1884,6 +1912,15 @@ const TableMobileContentCol = styled.div`
     font-size: 9px;
     color: #CCCCCD;
   }
+  ${({ trancheMobileRows }) => trancheMobileRows && `
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h2:first-child{
+      font-size: 8px;
+    }
+  `}
 `
 
 const MobileMoreFormBtns = styled.div`

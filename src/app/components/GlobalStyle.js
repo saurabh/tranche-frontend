@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
     color: rgba(255, 255, 255, 0.5);
   }
   .table-content{
-    margin-bottom: 100px;
+    margin-bottom: 340px;
   }
 
   .container{ 
