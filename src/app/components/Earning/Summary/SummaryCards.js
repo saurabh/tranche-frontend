@@ -81,9 +81,13 @@ const SummaryCards = ({
 
   return (
     <div>
-      <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
-        <h2>{i18n.t('tranche.trancheData.TrancheStats')}</h2>
-      </TableTitle>
+      {
+        isDesktop && (
+          <TableTitle color={ModeThemes[theme].HeaderTitle} className='container content-container' summary={false}>
+            <h2>{i18n.t('tranche.trancheData.TrancheStats')}</h2>
+          </TableTitle>
+        )
+      }
       {!isDesktop && currentPath === 'stake' && (
         <SummaryCardsWrapper className='container content-container'>
           <button onClick={() => openModal(undefined, 0)}>
@@ -192,145 +196,7 @@ const SummaryCards = ({
         </SummaryCardsWrapper>
       )}
 
-      {!isDesktop && (
-        <SummaryCardsWrapper>
-          <Carousel responsive={responsive} arrows={false} partialVisible={true}>
-          <SummaryCard
-              title={
-                currentPath === 'stake'
-                  ? i18n.t('stake.summary.slice.title')
-                  : currentPath === 'tranche'
-                  ? i18n.t('tranche.summary.valueLocked.title')
-                  : 'Decentralized Loans'
-              }
-              tokenAddress={slice.address}
-              value={tvl && tvl.total}
-              path={currentPath}
-              type={'tvl'}
-              details={''}
-              openModal={(bool, num = 1) => openModal(bool, num)}
-              closeModal={closeModal}
-              modalType={false}
-              summaryModal={''}
-              hasAllowance={hasAllowance}
-              setHasAllowance={setHasAllowance}
-              color='#4441CF'
-            />
-            <SummaryCard
-              title={
-                currentPath === 'stake'
-                  ? i18n.t('stake.summary.sliceLP.title')
-                  : currentPath === 'tranche'
-                  ? i18n.t('tranche.summary.slicePrice.title')
-                  : 'Protocol Collateral'
-              }
-              tokenAddress={lp.address}
-              lpList={lpList}
-              value={sliceStats && sliceStats.price}
-              path={currentPath}
-              type={'price'}
-              details={''}
-              openModal={(bool, num = 2) => openModal(bool, num)}
-              closeModal={closeModal}
-              modalType={false}
-              summaryModal={''}
-              hasAllowance={hasAllowance}
-              setHasAllowance={setHasAllowance}
-              color='#5826E5'
-            />
-            <SummaryCard
-              title={
-                currentPath === 'stake'
-                  ? i18n.t('stake.summary.sliceRewards.title')
-                  : currentPath === 'tranche'
-                  ? 'SLICE 24H Volume'
-                  : 'Collateralization Ratio'
-              }
-              value={sliceStats && sliceStats.volume}
-              isLoading={false}
-              path={currentPath}
-              type={'volume'}
-              details={''}
-              openModal={(bool = null, num = 3) => openModal(bool, num)}
-              closeModal={closeModal}
-              modalType={false}
-              summaryModal={''}
-              color='#2E65F3'
-            />
-            <SummaryCard
-              title={currentPath !== 'stake' ? 'Collateralization Ratio' : currentPath === 'tranche' ? '' : i18n.t('stake.summary.sliceRewards.title')}
-              value={'Card'}
-              isLoading={false}
-              path={currentPath}
-              type={''}
-              details={''}
-              openModal={(bool = null, num = 3) => openModal(bool, num)}
-              closeModal={closeModal}
-              modalType={false}
-              summaryModal={''}
-              color='linear-gradient(180deg, #433FFB 0%, #0C08D6 100%);'
-              stakeCard={true}
-            />
-              {/* <SummaryCard
-                title="Wallet Balance"
-                tokenAddress={slice.address}
-                value={tvl && tvl.total}
-                path={currentPath}
-                type={'tvl'}
-                details={''}
-                openModal={(bool, num = 1) => openModal(bool, num)}
-                closeModal={closeModal}
-                modalType={false}
-                summaryModal={''}
-                hasAllowance={hasAllowance}
-                setHasAllowance={setHasAllowance}
-                color='#343267'
-              />
-              <SummaryCard
-                title="Tranche A Yields"
-                tokenAddress={lp.address}
-                lpList={lpList}
-                value={sliceStats && sliceStats.price}
-                path={currentPath}
-                type={'price'}
-                details={''}
-                openModal={(bool, num = 2) => openModal(bool, num)}
-                closeModal={closeModal}
-                modalType={false}
-                summaryModal={''}
-                hasAllowance={hasAllowance}
-                setHasAllowance={setHasAllowance}
-                color='#4441CF'
-              />
-              <SummaryCard
-                title="Tranche B Yields"
-                value={sliceStats && sliceStats.volume}
-                isLoading={false}
-                path={currentPath}
-                type={'volume'}
-                details={''}
-                openModal={(bool = null, num = 3) => openModal(bool, num)}
-                closeModal={closeModal}
-                modalType={false}
-                summaryModal={''}
-                color='#5826E5'
-              />
-              <SummaryCard
-                title="All Staked Rewards"
-                value={sliceStats && sliceStats.volume}
-                isLoading={false}
-                path={currentPath}
-                type={'volume'}
-                details={''}
-                openModal={(bool = null, num = 3) => openModal(bool, num)}
-                closeModal={closeModal}
-                modalType={false}
-                summaryModal={''}
-                color="#369987"
-              /> */}
-          </Carousel>
-        </SummaryCardsWrapper>
-      )}
+      
     </div>
   );
 };

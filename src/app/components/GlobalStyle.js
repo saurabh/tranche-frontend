@@ -16,6 +16,9 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
     color: rgba(255, 255, 255, 0.5);
   }
+  .table-content{
+    margin-bottom: 100px;
+  }
 
   .container{ 
     padding-right: 15px; 

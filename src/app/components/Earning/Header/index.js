@@ -74,26 +74,30 @@ function Header({updateDate, theme}) {
             <a
               href="https://snapshot.org/#/tranche.eth"
               target="_blank"
+              rel="noopener noreferrer"
             >
               Vote
             </a>
         </NavbarLinks>
           }
-      <HeaderWrapper>
-            <HeaderContent path={path}>
-              {  (path === "privacy" || path === "terms") ? 
-                <HeaderSubtitle className='header-text' fontSize="9px">
-                  <h2>Last Updated: {updateDate}</h2>
-                </HeaderSubtitle> : ""
-              }
-              {/* <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
-                <h2>{i18n.t("tranche.title")}</h2>
-              </HeaderTitle>
-              <HeaderSubtitle path={path} color={ModeThemes[theme].HeaderSubtitle}>
-                <h2>{i18n.t("tranche.text")}</h2>
-              </HeaderSubtitle> */}
-            </HeaderContent>
-      </HeaderWrapper>
+          { path !== 'tranche' &&
+            <HeaderWrapper>
+                <HeaderContent path={path}>
+                  {  (path === "privacy" || path === "terms") ? 
+                    <HeaderSubtitle className='header-text' fontSize="9px">
+                      <h2>Last Updated: {updateDate}</h2>
+                    </HeaderSubtitle> : ""
+                  }
+                  {/* <HeaderTitle path={path} color={ModeThemes[theme].HeaderTitle}>
+                    <h2>{i18n.t("tranche.title")}</h2>
+                  </HeaderTitle>
+                  <HeaderSubtitle path={path} color={ModeThemes[theme].HeaderSubtitle}>
+                    <h2>{i18n.t("tranche.text")}</h2>
+                  </HeaderSubtitle> */}
+                </HeaderContent>
+          </HeaderWrapper>
+          }
+      
     </div>
   );
 }

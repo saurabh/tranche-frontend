@@ -1302,6 +1302,7 @@ button[disabled] img{
   .footerWrapper{
     flex-direction: column;
     padding: 12px 0;
+    height: 110px;
   }
   .footerLinks a{
     font-size: 7px;    

@@ -1832,7 +1832,7 @@ const TableMobileContentRow = styled.div`
 const TableMobileContentCol = styled.div`
   width: 33.3333333%;
   // text-align: left;
-  text-align: center;
+  // text-align: center;
   ${({ stake }) => stake && `
     width: 25%;
     text-align: center;

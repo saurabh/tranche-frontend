@@ -562,7 +562,7 @@ const NavBarRightWrapper = styled.div`
   width: 28%;
   @media (max-width: 992px) {
     flex-direction: row;
-    width: 83%;
+    width: 100%;
   }
 `
 const OtherTabsContainer = styled.div`
@@ -634,7 +634,7 @@ const MarketsTabsWrapper = styled.div`
     line-height: 29px;
     color: ${props => props.color};
     @media (max-width: 767px){
-      font-size: 15px;
+      font-size: 17px;
     }
   }
 `
@@ -657,6 +657,7 @@ const MarketTab = styled.button`
   margin-right: ${props => props.market === "compound" ? "14px" : "0"};
   border-radius: 5px;
   height: 51px;
+  width: 235px;
   background: ${props => props.current ? props.backgroundActive : props.background};
   border: 1px solid ${props => props.border};
   font-family: 'Inter', sans-serif;
@@ -677,8 +678,9 @@ const MarketTab = styled.button`
     margin: 0 12px;
   }
   @media (max-width: 992px) {
+    width: 50%;
     img{
-      width: ${props => props.market === "aavePolygon" ? "32px" : "73px"};
+      width: ${props => props.market === "aavePolygon" ? "32px" : "125px"};
     }
     padding: 12px;
     height: 45px;
@@ -691,6 +693,21 @@ const MarketTab = styled.button`
     /* opacity: 0.5;
     pointer-events: none;
     padding: 0 20px; */
+    @media (max-width: 992px) {
+      & > span{
+        margin: 0 10px;
+      }
+      img{
+        height: 20px;
+        width: auto;
+        margin-right: 0;
+      }
+      h2 > img{
+        height: 12px;
+        width: auto;
+        margin-right: 5px;
+      }
+    }
     
     h2{
       display: flex;
@@ -708,7 +725,12 @@ const MarketTab = styled.button`
       align-items: center;
       color: ${color};
       @media (max-width: 992px) {
-        height: 73%;
+        height: 67%;
+        font-size: 12px !important;
+        span{
+          font-size: 13px !important;
+          margin-top: 1px;
+        }
       }  
     }
 

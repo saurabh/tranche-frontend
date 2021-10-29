@@ -276,67 +276,52 @@ const TableCard = ({
           className={trancheCard ? 'table-card-toggle' : ''}
           tranche
         >
-          <TableCardImgWrapper>
-            <TableCardImg
-              tranche={true}
-              background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
-              // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
-              // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
-            >
-              <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
-              <span>
-                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
-              </span>
-            </TableCardImg>
-          </TableCardImgWrapper>
+          
 
           <TableMobileContent>
             <TableMobileContentRow>
-              <TableFirstColWrapper>
-                <FirstColContent instrument>
-                <FirstColTitle color={ModeThemes[theme].tableText} tranche>
-                  <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
-                    <h2>{cryptoType && cryptoType}</h2>
-                    <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
-                  </a>
-                  <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
-                    <button>
-                      <img src={ChevronTable} alt='ChevronTable' />
-                    </button>
-                  </AdustBtnWrapper>
-                </FirstColTitle>
-                  {/* <FirstColSubtitle>
-                    <h2>{type === 'TRANCHE_A' ? 'A' + dividendType : 'B' + dividendType}</h2>
-                    <a href={blockExplorerUrl + 'token/' + trancheTokenAddress} target='_blank' rel='noopener noreferrer'>
-                      <img src={LinkArrow} alt='' />
-                    </a>
-                  </FirstColSubtitle> */}
-                </FirstColContent>
-              </TableFirstColWrapper>
+              <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id} trancheMobile>
+                <button>
+                  <img src={ChevronTable} alt='ChevronTable' />
+                </button>
+              </AdustBtnWrapper>
             </TableMobileContentRow>
 
             <TableMobileContentRow>
-              <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>NET APY</h2>
-                <h2>
-                  {/* <img src={apyImage} alt='apyImage' /> */}
-                  {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
-                </h2>
+              <TableMobileContentCol>
+                <TableCardImgWrapper>
+                  <TableCardImg
+                    tranche={true}
+                    background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
+                    // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+                    // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+                  >
+                    <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+                    <span>
+                      <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                    </span>
+                  </TableCardImg>
+                </TableCardImgWrapper>
               </TableMobileContentCol>
-              <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>Total Deposits</h2>
-                <h2>${roundNumber(trancheValueUSD)}</h2>
-                <h2>
-                  {trancheValue ? roundNumber(trancheValue) : '0'} <span>{cryptoType}</span>
-                </h2>
-              </TableMobileContentCol>
-              <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <h2>My Deposits</h2>
-                <h2>${roundNumber(subscriptionUSD)}</h2>
-                <h2>
-                  {subscription ? roundNumber(subscription) : '0'} <span>{trancheToken}</span>
-                </h2>
-              </TableMobileContentCol>
+              <TableMobileContentCol>
+                <TableFirstColWrapper>
+                  <FirstColContent instrument>
+                    <FirstColTitle color={ModeThemes[theme].tableText} tranche trancheMobile>
+                      <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
+                        <h2>{cryptoType && cryptoType}</h2>
+                        <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
+                      </a>
+                    </FirstColTitle>
+                    </FirstColContent>
+                  </TableFirstColWrapper>
+                </TableMobileContentCol>
+                <TableMobileContentCol color={ModeThemes[theme].tableText} tranche>
+                  <h2>NET APY</h2>
+                  <h2>
+                    {/* <img src={apyImage} alt='apyImage' /> */}
+                    {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
+                  </h2>
+                </TableMobileContentCol>
             </TableMobileContentRow>
           </TableMobileContent>
         </TableContentCardMobile>
