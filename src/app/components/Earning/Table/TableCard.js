@@ -292,13 +292,6 @@ const TableCard = ({
           </TableCardImgWrapper>
 
           <TableMobileContent trancheMobile>
-            <TableMobileContentRow trancheMobile>
-              <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id} trancheMobile>
-                <button>
-                  <img src={ChevronTable} alt='ChevronTable' />
-                </button>
-              </AdustBtnWrapper>
-            </TableMobileContentRow>
 
             <TableMobileContentRow trancheMobile>
               <TableMobileContentCol color={ModeThemes[theme].tableText}>
