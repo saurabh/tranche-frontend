@@ -1930,6 +1930,11 @@ const TableMobileContentCol = styled.div`
     h2:first-child{
       font-size: 8px;
     }
+    h2:last-child{
+      font-size: 12px;
+    }
+
+    
   `}
 `
 

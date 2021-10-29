@@ -267,7 +267,6 @@ const TableCard = ({
       </TableContentCardWrapper>
     );
   };
-  console.log(trancheCard)
   const TableCardMobile = () => {
     return (
       <TableContentCardWrapperMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor} toggleCard={trancheCard.status}>
