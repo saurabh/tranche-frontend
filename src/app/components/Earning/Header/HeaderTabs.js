@@ -76,7 +76,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           btnShadow={ModeThemes[theme].btnShadow}
         >
           <h2>
-            <img src={AaveBtn} alt='' /> Market
+            <img src={AaveBtn} alt='' /> <span>Market</span>
           </h2>{' '}
           <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>

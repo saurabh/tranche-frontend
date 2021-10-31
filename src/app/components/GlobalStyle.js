@@ -16,6 +16,8 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
     color: rgba(255, 255, 255, 0.5);
   }
+  .table-content{
+  }
 
   .container{ 
     padding-right: 15px; 
@@ -43,7 +45,10 @@ const GlobalStyle = createGlobalStyle`
           // width: 1170px;
       } 
   }
-
+  
+  .layout-container{
+    min-height: 90vh;
+  }
 
   #navbar-container{
     display: flex;

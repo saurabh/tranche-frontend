@@ -714,6 +714,11 @@ const FirstColTitle = styled.div`
     text-transform: uppercase;
     color: #39295A;
   }   
+  ${({ trancheMobile }) => trancheMobile && `
+    a h2{
+      font-size: 12px !important;
+    }
+  `}
 `
 const FirstColSubtitle = styled.div`
   display: flex;
@@ -826,6 +831,14 @@ const AdustBtnWrapper = styled.div`
       }
     }
   }
+  
+  ${({ trancheMobile }) => trancheMobile && `
+    button{
+      position: absolute !important;
+      top: 12px !important;
+      right: 0 !important;
+    }
+  `}
 `
 const TableCardMore = styled.div`
   @media (max-width: 1200px){
