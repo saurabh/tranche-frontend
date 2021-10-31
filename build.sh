@@ -1,9 +1,9 @@
 git branch
 git checkout dev-build-3
 git pull origin dev-build-3
-git pull origin ftmTranche
+git pull origin hotfix
 yarn build
 git add .
 git commit -m 'new build'
 git push origin dev-build-3
-git checkout ftmTranche
+git checkout hotfix
