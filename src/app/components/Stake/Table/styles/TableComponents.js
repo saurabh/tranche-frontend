@@ -1971,7 +1971,9 @@ const TableMobileContentCol = styled.div`
   }
   ${({ trancheMobileRows }) => trancheMobileRows && `
     display: flex;
+    width: 33.3333333%;
     flex-direction: column;
+    position: relative;
     justify-content: center;
     align-items: center;
     h2:first-child{
@@ -1983,6 +1985,9 @@ const TableMobileContentCol = styled.div`
 
     
   `}
+  
+
+  
   ${({ stakeMobile, color, width }) => stakeMobile && `
     width: ${width}%;
     text-align: left;
@@ -2269,6 +2274,15 @@ const TrancheRateType = styled.h2`
     width: 80px;
     font-size: 12px;
   }
+  ${({ trancheMobile, TrancheRateColor }) => trancheMobile && `
+    border-radius: 5px !important;
+    width: 80px !important;
+    height: 25px !important;
+    position: relative;
+    left: -15px !important;
+    font-size: 11px !important;
+    color: ${TrancheRateColor} !important;
+  `}
 
 `
 

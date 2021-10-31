@@ -990,8 +990,7 @@ const ClaimModalCol = styled.div`
 const StakingModalContentWrapper = styled.div`
   width: ${props => props.migrateStake ? "473px" : "731px"};
   background: ${props => props.backgroundColor};
-  height: 100%;
-  min-height: ${props => props.height};
+  height: ${props => props.height};
   @media (max-width: 663px){
     width: 100%;
     height: 100vh;
@@ -1001,9 +1000,9 @@ const StakingModalContentWrapper = styled.div`
     overflow: scroll;
     transform: translateY(-50%);
   }
-  ${({ migrateStake }) => migrateStake && `
-    @media (max-width: 663px){
-    }
+  ${({ skipStake, height }) => skipStake && `
+    height: 100%;
+    min-height: ${height};
   `}
   
   

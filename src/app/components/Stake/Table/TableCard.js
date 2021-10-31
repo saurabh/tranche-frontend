@@ -290,7 +290,7 @@ const TableCard = ({
                   stakeMobile
                   tranche={true}
                   background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
-                  stake={title === 'Liquidity Provider Pools'}
+                  // stake={title === 'Liquidity Provider Pools'}
                   // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                   // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
                 >
@@ -304,9 +304,9 @@ const TableCard = ({
                     </FirstColTitle>
                     <FirstColSubtitle color={ModeThemes[theme].tableText} stakeMobile>
                       <h2>{addrShortener(contractAddress)}</h2>
-                      <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                      {/* <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
                         <img src={LinkArrow} alt='' />
-                      </a>
+                      </a> */}
                     </FirstColSubtitle>
                   </FirstColMobileText>
 

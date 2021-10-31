@@ -189,6 +189,10 @@ const ModalFormButton = styled.button`
   @media (max-width: 633px){
     margin: 12px auto;
     width: 100%;
+    max-width: 192px;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 0;
   }
   :disabled{
     opacity: 0.5;
@@ -741,6 +745,11 @@ const ApproveBtnWrapper = styled.div`
   }
   button:last-child{
     width: 107px;
+    @media (max-width: 633px){
+      max-width: 192px;
+      min-height: 38px;
+      width: 100%;
+    }
   }
   ${({ migrate }) => migrate && `
     position: absolute;
