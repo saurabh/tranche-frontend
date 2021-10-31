@@ -474,7 +474,7 @@ let TableMoreRow = ({
                 <h2>
                   {i18n.t('tranche.trancheData.balance')}: {buyerTokenBalance ? roundNumber(buyerTokenBalance) : '0'} {cryptoType}
                 </h2>
-                <Form onSubmit={(e) => e.preventDefault()}>
+                <Form onSubmit={(e) => e.preventDefault()} noValidate>
                   <FormContent
                     color={ModeThemes[theme].dropDownText}
                     background={ModeThemes[theme].inputBackground}
@@ -561,7 +561,7 @@ let TableMoreRow = ({
                 <h2>
                   {i18n.t('tranche.trancheData.balance')}: {trancheTokenBalance ? roundNumber(trancheTokenBalance) : '0'} {trancheToken}
                 </h2>
-                <Form onSubmit={(e) => e.preventDefault()}>
+                <Form onSubmit={(e) => e.preventDefault()} noValidate>
                   <FormContent
                     color={ModeThemes[theme].dropDownText}
                     background={ModeThemes[theme].inputBackground}
