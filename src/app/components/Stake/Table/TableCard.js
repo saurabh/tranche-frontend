@@ -49,7 +49,8 @@ import {
   TableMobileContentRow,
   TableMobileContentCol,
   TableCardImgWrapper,
-  StakeBtnSlice
+  StakeBtnSlice,
+  FirstColMobileText
   // TableMobilCardBtn
 } from './styles/TableComponents';
 import { initOnboard } from 'services/blocknative';
@@ -280,33 +281,42 @@ const TableCard = ({
   };
   const TableCardMobile = () => {
     return (
-      <TableContentCardWrapperMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor}>
-        <TableContentCardMobile color={Object.values(searchObj(1))[0].background} tranche>
-          <TableCardImgWrapper>
-            <TableCardImg
-              tranche={true}
-              background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
-              stake={title === 'Liquidity Provider Pools'}
-              // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
-              // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
-            >
-              <img src={TrancheStake} alt='Tranche' />
-              {title === 'Liquidity Provider Pools' && <img src={LiquidityIcons[type && type]} alt='Tranche' />}
-            </TableCardImg>
-          </TableCardImgWrapper>
-
-          <TableMobileContent>
+      <TableContentCardWrapperMobile stakeMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor}>
+        <TableContentCardMobile color={Object.values(searchObj(1))[0].background} tranche stakeMobile>
+          <TableMobileContent stakeMobile>
             <TableMobileContentRow>
               <TableFirstColWrapper>
-                <FirstColContent instrument>
-                  <FirstColTitle color={ModeThemes[theme].tableText}>
-                    <h2>{title === 'SLICE Staking Pools' && duration ? poolName && poolName : type && type}</h2>
-                    {title === 'SLICE Staking Pools' && duration ? (
+                <TableCardImg
+                  stakeMobile
+                  tranche={true}
+                  background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
+                  stake={title === 'Liquidity Provider Pools'}
+                  // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+                  // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+                >
+                  <img src={TrancheStake} alt='Tranche' />
+                  {title === 'Liquidity Provider Pools' && <img src={LiquidityIcons[type && type]} alt='Tranche' />}
+                </TableCardImg>
+                <FirstColContent instrument stakeMobile>
+                  <FirstColMobileText>
+                    <FirstColTitle color={ModeThemes[theme].tableText}>
+                      <h2>{title === 'SLICE Staking Pools' && duration ? poolName && poolName : type && type}</h2>
+                    </FirstColTitle>
+                    <FirstColSubtitle color={ModeThemes[theme].tableText} stakeMobile>
+                      <h2>{addrShortener(contractAddress)}</h2>
+                      <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
+                        <img src={LinkArrow} alt='' />
+                      </a>
+                    </FirstColSubtitle>
+                  </FirstColMobileText>
+
+                  {title === 'SLICE Staking Pools' && duration ? (
                       <StakeBtns>
                         <StakeBtnSlice
                           onClick={() => openModal('staking')}
                           disabled={remainingCap === 0}
                           disabledBtnColor={ModeThemes[theme].disabledBtnColor}
+                          stakeMobile
                         >
                           {remainingCap === 0 ? 'Capped' : 'Stake'}
                         </StakeBtnSlice>
@@ -317,6 +327,7 @@ const TableCard = ({
                           onClick={() => openModal('withdrawTokens')}
                           withdraw
                           disabled={true}
+                          stakeMobile
                           disabledBtnColor={ModeThemes[theme].disabledBtnColor}
                         >
                           disabled
@@ -332,35 +343,24 @@ const TableCard = ({
                         </StakeBtn>
                       </StakeBtns>
                     )}
-                  </FirstColTitle>
-                  <FirstColSubtitle>
-                    <h2>{addrShortener(contractAddress)}</h2>
-                    <a href={etherScanUrl + 'address/' + contractAddress} target='_blank' rel='noopener noreferrer'>
-                      <img src={LinkArrow} alt='' />
-                    </a>
-                  </FirstColSubtitle>
                 </FirstColContent>
               </TableFirstColWrapper>
             </TableMobileContentRow>
 
             <TableMobileContentRow>
-              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
-                <h2>total staked</h2>
-                <h2>{roundNumber(staked)}</h2>
-              </TableMobileContentCol>
-              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
-                <h2>{title === 'SLICE Staking Pools' ? 'REMAINING CAPACITY' : 'EPOCH REWARDS'}</h2>
-                {title === 'SLICE Staking Pools' && duration && <h2>{roundNumber(remainingCap)} SLICE</h2>}
-                {title === 'SLICE Staking Pools' && !duration && <h2>N/A</h2>}
-                {title === 'Liquidity Provider Pools' && <h2>{roundNumber(reward)}</h2>}
-              </TableMobileContentCol>
-              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake stakeMobile width="30">
                 <h2>APY</h2>
                 <h2>{roundNumber(apy, false)}%</h2>
               </TableMobileContentCol>
-              <TableMobileContentCol color={ModeThemes[theme].tableText} stake>
-                <h2>your stake</h2>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake stakeMobile width="30">
+                <h2>Your Stake</h2>
                 <h2>{roundNumber(subscription)}</h2>
+              </TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} stake stakeMobile width="40">
+                <h2>{title === 'SLICE Staking Pools' ? 'Remaining Capacity' : 'EPOCH Rewards'}</h2>
+                {title === 'SLICE Staking Pools' && duration && <h2>{roundNumber(remainingCap)}</h2>}
+                {title === 'SLICE Staking Pools' && !duration && <h2>N/A</h2>}
+                {title === 'Liquidity Provider Pools' && <h2>{roundNumber(reward)}</h2>}
               </TableMobileContentCol>
             </TableMobileContentRow>
           </TableMobileContent>
