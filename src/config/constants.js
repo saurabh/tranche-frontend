@@ -35,6 +35,7 @@ export const lockupStakingOccurrences = process.env.REACT_APP_STAKING_LOCKUP_OCC
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 //Google Analytics
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
+export const GTMID = 'GTM-NFDMGZN';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
 export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';

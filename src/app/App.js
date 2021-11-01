@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import TagManager from 'react-gtm-module';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { ThemeProvider } from 'styled-components';
@@ -10,7 +11,7 @@ import ErrorModal from 'app/components/Modals/Error';
 import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards } from 'redux/actions/ethereum';
 import { fetchExchangeRates } from 'redux/actions/tableData';
 import { ETHContracts, MaticContracts } from 'services/web3Subscriptions';
-import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes } from 'config/constants';
+import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes, GTMID } from 'config/constants';
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
@@ -23,6 +24,11 @@ import NotificationProvider from './components/Notifications/NotificationProvide
 import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
+
+const tagManagerArgs = {
+  gtmId: GTMID
+}
+TagManager.initialize(tagManagerArgs)
 
 const baseRouteUrl = '/:locale(zh|kr|en)?';
 const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards, fetchExchangeRates, path, ethereum: { address, network }, checkServerStatus, theme }) => {
