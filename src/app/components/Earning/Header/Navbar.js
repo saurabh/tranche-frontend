@@ -43,13 +43,6 @@ function Navbar({ path, theme }) {
           <ConnectWallet />
         }
 
-          <NavbarIconWrapper id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
-            <NavbarIconContent>
-              <NavbarSpan></NavbarSpan>
-              <NavbarSpan></NavbarSpan>
-              <NavbarSpan></NavbarSpan>
-            </NavbarIconContent>
-          </NavbarIconWrapper>
         </MobileNavbarIconWrapper>
         
         <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} >
@@ -107,7 +100,8 @@ function Navbar({ path, theme }) {
             <a
               href="https://snapshot.org/#/tranche.eth"
               target="_blank"
-            >
+              rel="noopener noreferrer"
+              >
               Vote
             </a>
           </NavbarLinks>

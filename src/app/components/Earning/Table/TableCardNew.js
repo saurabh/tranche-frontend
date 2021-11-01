@@ -269,46 +269,59 @@ const TableCard = ({
   };
   const TableCardMobile = () => {
     return (
-      <TableContentCardWrapperMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor} toggleCard={trancheCard.status}>
+      <TableContentCardWrapperMobile tranche color={ModeThemes[theme].TableCard} borderColor={ModeThemes[theme].TableCardBorderColor}>
         <TableContentCardMobile
           color={Object.values(searchObj(1))[0].background}
           onClick={() => cardToggle()}
           className={trancheCard ? 'table-card-toggle' : ''}
           tranche
-          trancheMobile
         >
-          <TableCardImgWrapper>
-            <TableCardImg
-              tranche={true}
-              background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
-              // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
-              // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
-            >
-              <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
-              <span>
-                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
-              </span>
-            </TableCardImg>
-          </TableCardImgWrapper>
+          
 
-          <TableMobileContent trancheMobile>
+          <TableMobileContent>
+            <TableMobileContentRow>
+              <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id} trancheMobile>
+                <button>
+                  <img src={ChevronTable} alt='ChevronTable' />
+                </button>
+              </AdustBtnWrapper>
+            </TableMobileContentRow>
 
-            <TableMobileContentRow trancheMobile>
-              <TableMobileContentCol color={ModeThemes[theme].tableText}>
-                <FirstColTitle color={ModeThemes[theme].tableText} tranche trancheMobile>
-                    <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
-                      <h2>{cryptoType && cryptoType}</h2>
-                      <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
-                    </a>
-                </FirstColTitle>
+            <TableMobileContentRow>
+              <TableMobileContentCol>
+                <TableCardImgWrapper>
+                  <TableCardImg
+                    tranche={true}
+                    background={type === 'TRANCHE_A' ? '#68D2FF' : '#FF7A7F'}
+                    // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
+                    // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
+                  >
+                    <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+                    <span>
+                      <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                    </span>
+                  </TableCardImg>
+                </TableCardImgWrapper>
               </TableMobileContentCol>
-              <TableMobileContentCol color={ModeThemes[theme].tableText} trancheMobileRows>
-                <h2>NET APY</h2>
-                <h2>
-                  {/* <img src={apyImage} alt='apyImage' /> */}
-                  {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
-                </h2>
-              </TableMobileContentCol>
+              <TableMobileContentCol>
+                <TableFirstColWrapper>
+                  <FirstColContent instrument>
+                    <FirstColTitle color={ModeThemes[theme].tableText} tranche trancheMobile>
+                      <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
+                        <h2>{cryptoType && cryptoType}</h2>
+                        <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
+                      </a>
+                    </FirstColTitle>
+                    </FirstColContent>
+                  </TableFirstColWrapper>
+                </TableMobileContentCol>
+                <TableMobileContentCol color={ModeThemes[theme].tableText} tranche>
+                  <h2>NET APY</h2>
+                  <h2>
+                    {/* <img src={apyImage} alt='apyImage' /> */}
+                    {roundNumber(netAPY, 2)}%{/* <img src={Info} alt='infoImage' /> */}
+                  </h2>
+                </TableMobileContentCol>
             </TableMobileContentRow>
           </TableMobileContent>
         </TableContentCardMobile>

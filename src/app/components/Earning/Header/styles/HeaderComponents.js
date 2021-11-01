@@ -562,7 +562,7 @@ const NavBarRightWrapper = styled.div`
   width: 28%;
   @media (max-width: 992px) {
     flex-direction: row;
-    width: 83%;
+    width: 100%;
   }
 `
 const OtherTabsContainer = styled.div`
@@ -634,7 +634,7 @@ const MarketsTabsWrapper = styled.div`
     line-height: 29px;
     color: ${props => props.color};
     @media (max-width: 767px){
-      font-size: 15px;
+      font-size: 17px;
     }
   }
 `
@@ -658,6 +658,7 @@ const MarketTab = styled.button`
   margin-right: 14px;
   border-radius: 8px;
   height: 51px;
+  width: 235px;
   background: ${props => props.current ? props.backgroundActive : props.background};
   border: 1px solid ${props => props.border};
   font-family: 'Inter', sans-serif;
