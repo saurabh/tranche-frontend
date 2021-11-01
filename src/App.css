@@ -1287,6 +1287,7 @@ button[disabled] img{
     text-align: center;
     margin: 0 0 0 20px;
   }
+  
   #logo-wrapper img{
     height: 25px;
   }
@@ -1299,6 +1300,7 @@ button[disabled] img{
     left: 52% !important;
     height: 100% !important;
   }
+  
   .footerWrapper{
     flex-direction: column;
     padding: 12px 0;
@@ -2160,4 +2162,8 @@ input[type=number] {
       }
       
     }
-    
+
+    .marketsCarousel{
+      margin: 15px 0;
+      overflow: visible;
+    }

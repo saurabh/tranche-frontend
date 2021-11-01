@@ -649,13 +649,14 @@ const MarketTab = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 200px;
   cursor: pointer;
   transition: 300ms;
   outline: none;
   padding: 0 29px;
   position: relative;
   margin-right: 14px;
-  border-radius: 5px;
+  border-radius: 8px;
   height: 51px;
   background: ${props => props.current ? props.backgroundActive : props.background};
   border: 1px solid ${props => props.border};
@@ -667,57 +668,46 @@ const MarketTab = styled.button`
   text-transform: uppercase;
   color: ${props => props.color};
   img{
-    width: ${props => props.market === 'fantom' ? "100px" : ""};
-    margin-right: ${props => props.market === "aavePolygon" ? "5px" : "0"};
+    margin-right:5px;
+  }
+  img:first-child{
+    width: ${props => props.market === "aavePolygon" ? "60px" : "100%"};
   }
   & > span{
-    width: 1px;
     height: 70%;
     background: ${props => props.span};
     display: block;
-    margin: 0 12px;
+    margin: 0 16px;
+    padding: 0.5px;
   }
   @media (max-width: 992px) {
-    img{
-      width: ${props => props.market === "aavePolygon" ? "32px" : "73px"};
-    }
     padding: 12px;
     height: 45px;
     h2{
       font-size: 12px;
     }
   }
+  
 
-  ${({ market, color }) => market === "aavePolygon" && `
-    /* opacity: 0.5;
-    pointer-events: none;
-    padding: 0 20px; */
-    
-    h2{
-      display: flex;
-      height: 100%;
-      align-items: baseline;
-      justify-content: center;
-      font-family: 'Inter', sans-serif !important;
-      font-style: normal !important;
-      font-weight: 500 !important;
-      font-size: 14.14px !important;
-      letter-spacing: 0.05em !important;
-      text-transform: uppercase !important;
-      height: 34%;
-      display: flex;
-      align-items: center;
-      color: ${color};
-      @media (max-width: 992px) {
-        height: 73%;
-      }  
-    }
-
-  `} 
   ${({ theme }) => theme === "light" && `
       opacity: 0.5;
       :hover{
         opacity: 0.8;
+      }
+  `} 
+  ${({ mobile }) => mobile && `
+      width: 90%;
+      padding: 13px !important;
+      img:first-child{
+        width: auto;
+        height: 100%;
+      }
+      img:last-child{
+        width: auto;
+        height: 100%;
+      }
+      & > span{
+        margin: 0 5px;
       }
   `} 
   ${({ current, theme, btnShadow}) => (current && theme === "light") && `

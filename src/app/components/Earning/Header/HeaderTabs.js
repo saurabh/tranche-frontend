@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import i18n from '../../locale/i18n';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
-import { AaveBtn, CompoundBtn, CompoundBtnBlack, FantomDark, FantomLight, PolygonLogo, PolygonLogoBlack } from 'assets';
+import { AaveBtn, CompoundBtn, CompoundBtnBlack, ETHLOGO, FantomDark, FantomLight, FANTOMLOGO, FANTOMLOGOLIGHT, PolygonLogo, PolygonLogoBlack, YEARNLOGO, YEARNLOGOLIGHT } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
@@ -14,9 +16,34 @@ export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
   const [modalOpened, setModalOpened] = useState(false);
   const Tracker = useAnalytics('ExternalLinks');
-
   const { trancheMarket, txModalIsOpen } = data;
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      paritialVisibilityGutter: 60
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      paritialVisibilityGutter: 50
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 2,
+      paritialVisibilityGutter: 30
+    }
+  };
+  
   const openModal = () => {
     setModalOpened(true);
     if (!modalOpened) {
@@ -31,6 +58,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
     setTxModalStatus('initialState');
     setTxModalLoading(false);
   };
+  
 
   return (
     <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle} className='TrancheMarkets'>
@@ -49,11 +77,14 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>
+      { isDesktop ?
       <MarketsTabs>
+        
         <MarketTab
           market='compound'
           current={trancheMarket === 'compound'}
           onClick={() => trancheMarketsToggle('compound')}
+          span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
           border={ModeThemes[theme].TrancheBtnBorder}
@@ -61,7 +92,9 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           theme={theme}
           btnShadow={ModeThemes[theme].btnShadow}
         >
-          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' />
+          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
+          <span></span> 
+          <img src={ETHLOGO} alt='' />
         </MarketTab>
         <MarketTab
           market='aavePolygon'
@@ -75,15 +108,16 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           theme={theme}
           btnShadow={ModeThemes[theme].btnShadow}
         >
-          <h2>
-            <img src={AaveBtn} alt='' /> Market
-          </h2>{' '}
-          <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+          <img src={AaveBtn} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
+
         <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
-          onClick={() => trancheMarketsToggle('fantom')}
+          onClick={() => trancheMarket !== 'fantom' && openModal()}
+          span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
           border={ModeThemes[theme].TrancheBtnBorder}
@@ -91,9 +125,68 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           theme={theme}
           btnShadow={ModeThemes[theme].btnShadow}
         >
-          <img src={theme === 'light' ? FantomLight : FantomDark} alt='' />
+          <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
         </MarketTab>
-      </MarketsTabs>
+
+
+        
+      </MarketsTabs> :
+      <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
+        <MarketTab
+          market='compound'
+          current={trancheMarket === 'compound'}
+          onClick={() => trancheMarketsToggle('compound')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+          mobile
+        >
+          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
+          <span></span> 
+          <img src={ETHLOGO} alt='' />
+        </MarketTab>
+        <MarketTab
+          market='aavePolygon'
+          current={trancheMarket === 'aavePolygon'}
+          onClick={() => trancheMarket !== 'aavePolygon' && openModal()}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+          mobile
+        >
+          <img src={AaveBtn} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+        </MarketTab>
+
+        <MarketTab
+          market='fantom'
+          current={trancheMarket === 'fantom'}
+          onClick={() => trancheMarket !== 'fantom' && openModal()}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+          mobile
+        >
+          <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
+        </MarketTab>
+      </Carousel> }
       {trancheMarket === 'aavePolygon' && (
         <BridgeTokensWrapper>
           <p>
