@@ -1732,6 +1732,9 @@ const FormContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color} !important;
+    @media (max-width: 992px){
+      font-size: 20px;
+    }
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button{
