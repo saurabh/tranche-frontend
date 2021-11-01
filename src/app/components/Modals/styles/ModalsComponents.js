@@ -989,8 +989,8 @@ const ClaimModalCol = styled.div`
 `;
 const StakingModalContentWrapper = styled.div`
   width: ${props => props.migrateStake ? "473px" : "731px"};
-  height: ${props => props.height};
   background: ${props => props.backgroundColor};
+  height: ${props => props.height};
   @media (max-width: 663px){
     width: 100%;
     height: 100vh;
@@ -1000,15 +1000,18 @@ const StakingModalContentWrapper = styled.div`
     overflow: scroll;
     transform: translateY(-50%);
   }
-  ${({ migrateStake }) => migrateStake && `
-    @media (max-width: 663px){
-    }
+  ${({ skipStake, height }) => skipStake && `
+    height: 100%;
+    min-height: ${height};
   `}
+  
+  
 `;
 const StakingModalContent = styled.div`
   width: 100%;
   padding: 33px;
-  height: ${props => props.height};
+  height: 100%;
+  min-height: ${props => props.height};
   & > p{
     font-family: 'Inter', sans-serif;
     font-weight: normal;
@@ -1714,6 +1717,10 @@ const StakeModalFormBtn = styled.button`
     background: #4441CF;
 
   `}  
+  ${({ skipStake }) => skipStake && `
+    position: relative;
+  `}  
+  
 
   @media (max-width: 663px){
     position: relative;
@@ -1725,6 +1732,7 @@ const StakeModalFormBtn = styled.button`
   :hover{
     opacity: 0.7;
   }
+  
   
 `;
 const EstimatedText = styled.div`

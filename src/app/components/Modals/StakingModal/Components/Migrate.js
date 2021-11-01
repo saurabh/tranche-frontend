@@ -68,8 +68,8 @@ export const migrateStake = ({
       contentLabel='Adjust'
       portalClassName='migrateStake'
     >
-      <StakingModalContentWrapper height='457px' backgroundColor={ModeThemes[theme].ModalBackground} migrateStake>
-        <StakingModalContent height='457px' textColor={ModeThemes[theme].ModalText} migrateStake>
+      <StakingModalContentWrapper height='457px' backgroundColor={ModeThemes[theme].ModalBackground} migrateStake skipStake>
+        <StakingModalContent height='457px' textColor={ModeThemes[theme].ModalText} migrateStake skipStake>
           <StakingModalHeader>
             <StakingModalContentSideTitle textColor={ModeThemes[theme].ModalText} migrate>
               <h2>Migrate Tokens</h2>
@@ -241,9 +241,9 @@ export const migrateWithdraw = ({ theme, oldSlice, currentStep, migrateLoading, 
 
 export const migrateStakeSkip = ({ theme, newSlice, objId, setObjId, currentStep, claimAndProgress }) => {
   return (
-    <StakingMigrateModalContentWrapper>
+    <StakingMigrateModalContentWrapper skipStake>
       {objId === null ? (
-        <StakingMigrateModalContent>
+        <StakingMigrateModalContent skipStake>
           <StakeNewWrapper MigrateContentTitle={ModeThemes[theme].MigrateContentTitle}>
             <h2>{i18n.t('stakeNew')}</h2>
 
@@ -301,7 +301,7 @@ export const migrateStakeSkip = ({ theme, newSlice, objId, setObjId, currentStep
             </StakeNewTable>
           </StakeNewWrapper>
 
-          <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => claimAndProgress('skip')}>
+          <StakeModalFormBtn migrate step={currentStep} migrateStake onClick={() => claimAndProgress('skip')} skipStake>
             {i18n.t('skipFor')}
           </StakeModalFormBtn>
         </StakingMigrateModalContent>
