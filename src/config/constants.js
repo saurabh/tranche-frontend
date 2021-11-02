@@ -15,8 +15,10 @@ export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
 export const maticHttpUrl = process.env.REACT_APP_MATIC_HTTP_URL;
+export const fantomHttpUrl = process.env.REACT_APP_FANTOM_HTTP_URL;
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const maticWebSocketsUrl = process.env.REACT_APP_MATIC_WEBSOCKETS_URL;
+export const fantomWebSocketsUrl = process.env.REACT_APP_FANTOM_WEBSOCKETS_URL;
 export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
@@ -28,6 +30,10 @@ export const CompTrancheTokens = process.env.REACT_APP_COMP_TRANCHE_TOKENS.split
 export const JAaveAddress = process.env.REACT_APP_AAVE_TRANCHE_ADDRESS.toLowerCase();
 export const PolygonBuyerCoinAddresses = process.env.REACT_APP_MATIC_BUYER_COIN_ADDRESS.split(',');
 export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split(',');
+// Fantom Tranches
+export const JYearnAddress = process.env.REACT_APP_YEARN_TRANCHE_ADDRESS.toLowerCase();
+export const FantomBuyerCoinAddresses = process.env.REACT_APP_FANTOM_BUYER_COIN_ADDRESS.split(',');
+export const YearnTrancheTokens = process.env.REACT_APP_YEARN_TRANCHE_TOKENS.split(',');
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const LockupAddress = process.env.REACT_APP_STAKING_LOCKUP_ADDRESS;
@@ -39,7 +45,8 @@ export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
-export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+export const maticAddress = '0xMeeeeMeeeMeMeeMeMeMeeMMMeeeeMeeeeeeeMMeM';
+export const fantomAddress = '0xFeeeeFeeeFeFeeFeFeFeeFFFeeeeFeeeeeeeFFeF';
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
 export const SLICEAddress = process.env.REACT_APP_SLICE_ADDRESS.toLowerCase();
