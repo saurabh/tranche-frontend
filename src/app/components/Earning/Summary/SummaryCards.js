@@ -47,7 +47,6 @@ const SummaryCards = ({
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
   let currentPath = parsedPath[1];
-  // window.location.pathname.split('/')[1];
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [hasAllowance, setHasAllowance] = useState(false);
 
