@@ -9,6 +9,7 @@ import {
   serverUrl,
   etherScanUrl,
   maticBlockExplorerUrl,
+  fantomBlockExplorerUrl,
   apiUri,
   ERC20Tokens,
   JCompoundAddress,
@@ -44,6 +45,7 @@ import {
 import { summaryFetchSuccess } from './summaryData';
 import { setHasMigrated, trancheMarketsToggle } from './tableData';
 import { getUnclaimedRewards } from 'services';
+import { fantomNetworkId } from 'config';
 
 const { stakingSummary } = apiUri;
 
@@ -81,7 +83,11 @@ export const setNetwork = (network) => async (dispatch) => {
     store.dispatch(trancheMarketsToggle('aavePolygon'));
     store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
-  network !== maticNetworkId && store.dispatch(setBlockExplorerUrl(etherScanUrl));
+  if (network === fantomNetworkId) {
+    store.dispatch(trancheMarketsToggle('fantom'));
+    store.dispatch(setBlockExplorerUrl(fantomBlockExplorerUrl));
+  }
+  (network !== maticNetworkId && network !== fantomNetworkId) && store.dispatch(setBlockExplorerUrl(etherScanUrl));
 };
 
 export const setBalance = (balance) => (dispatch) => {
@@ -165,10 +171,11 @@ export const setTokenBalances = (address) => async (dispatch) => {
         );
         return batch;
       });
-      network === maticNetworkId && dispatch({
-        type: SET_TOKEN_BALANCE,
-        payload: { tokenAddress: SLICEAddress.toLowerCase(), tokenBalance: '0' }
-      });
+      network === maticNetworkId &&
+        dispatch({
+          type: SET_TOKEN_BALANCE,
+          payload: { tokenAddress: SLICEAddress.toLowerCase(), tokenBalance: '0' }
+        });
       batch.execute();
     }
   } catch (error) {

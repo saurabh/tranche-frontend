@@ -107,7 +107,7 @@ let TableMoreRow = ({
     setTxModalType(txType);
     setTxModalOpen(true);
     setTxModalData({
-      name: name.split('-')[1].trim(),
+      name: name.split('-').length > 1 ? name.split('-')[1].trim() : name.split('-')[0].trim(),
       contractAddress,
       trancheId,
       trancheCard: trancheCard.id,

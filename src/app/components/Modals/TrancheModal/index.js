@@ -8,7 +8,7 @@ import { SLICEAddress } from 'config/constants';
 import { roundNumber, safeMultiply, toBigNumber } from 'utils';
 import { fromWei, buyTrancheTokens, sellTrancheTokens, toBN } from 'services';
 import useAnalytics from 'services/analytics';
-import { TrancheRewards, TrancheEnable, TrancheConfirm, TrancheMarket } from './Components';
+import { TrancheRewards, TrancheEnable, TrancheConfirm } from './Components';
 
 Modal.setAppElement('#root');
 
@@ -69,11 +69,6 @@ const TrancheModal = ({
     setTotalSliceInUSD(roundNumber(safeMultiply(+totalSliceBalance + +unclaimedSlice, exchangeRates.SLICE)));
     setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
   }, [exchangeRates.SLICE, totalSliceBalance, unclaimedSlice]);
-
-  const trancheMarketsToggling = () => {
-    trancheMarketsToggle('aavePolygon');
-    closeModal();
-  };
 
   const handleSubmit = () => {
     try {
@@ -153,8 +148,6 @@ const TrancheModal = ({
         closeModal,
         handleSubmit
       })
-    : txModalType === 'trancheMarkets'
-    ? TrancheMarket({ theme, txModalIsOpen, closeModal, trancheMarketsToggling })
     : '';
 };
 

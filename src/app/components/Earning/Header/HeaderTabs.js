@@ -14,9 +14,8 @@ import useAnalytics from 'services/analytics';
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
-  const [modalOpened, setModalOpened] = useState(false);
   const Tracker = useAnalytics('ExternalLinks');
-  const { trancheMarket, txModalIsOpen } = data;
+  const { trancheMarket } = data;
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
   const updateMedia = () => {
@@ -44,15 +43,11 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
     }
   };
   
-  const openModal = () => {
-    setModalOpened(true);
-    if (!modalOpened) {
-      setTxModalOpen(true);
-      setTxModalType('trancheMarkets');
-    } else {
-      trancheMarketsToggle('aavePolygon');
-    }
+  const openModal = (market) => {
+    setTxModalOpen(true);
+    trancheMarketsToggle(market);
   };
+
   const closeModal = () => {
     setTxModalOpen(false);
     setTxModalStatus('initialState');
@@ -99,7 +94,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarket !== 'aavePolygon' && openModal()}
+          onClick={() => trancheMarket !== 'aavePolygon' && openModal('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -116,7 +111,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
-          onClick={() => trancheMarket !== 'fantom' && openModal()}
+          onClick={() => trancheMarket !== 'fantom' && openModal('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -154,7 +149,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarket !== 'aavePolygon' && openModal()}
+          onClick={() => trancheMarket !== 'aavePolygon' && openModal('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -172,7 +167,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
-          onClick={() => trancheMarket !== 'fantom' && openModal()}
+          onClick={() => trancheMarket !== 'fantom' && openModal('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}

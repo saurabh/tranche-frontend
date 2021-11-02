@@ -1,5 +1,5 @@
 import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCard, USDTCard, DAICARD, MaticTable, TrancheStake, 
-  ETHCARD, Chainlink, WBTC} from 'assets';
+  ETHCARD, Chainlink, WBTC, YearnIcon, FantomIcon } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -7,8 +7,10 @@ export const serverUrl = process.env.REACT_APP_SERVER_URL;
 export const landingUrl = process.env.REACT_APP_LANDING_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
+export const fantomNetworkId = 250;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
 export const maticBlockExplorerUrl = process.env.REACT_APP_MATIC_BLOCK_EXPLORER_URL;
+export const fantomBlockExplorerUrl = process.env.REACT_APP_FANTOM_BLOCK_EXPLORER_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
@@ -142,6 +144,12 @@ export const trancheIcons = {
   bcWBTC: { protocolIcon: CompoundLogo, assetIcon: WBTC },
   acLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
   bcLINK: { protocolIcon: CompoundLogo, assetIcon: Chainlink },
+  ayfWFTM: { protocolIcon: YearnIcon, assetIcon: FantomIcon },
+  byfWFTM: { protocolIcon: YearnIcon, assetIcon: FantomIcon },
+  ayfUSDC: { protocolIcon: YearnIcon, assetIcon: USDCCard },
+  byfUSDC: { protocolIcon: YearnIcon, assetIcon: USDCCard },
+  ayfDAI: { protocolIcon: YearnIcon, assetIcon: DAICARD },
+  byfDAI: { protocolIcon: YearnIcon, assetIcon: DAICARD },
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,
@@ -179,6 +187,44 @@ export const apiUri = {
   graphUri: 'earn/graph/apy?',
   userStakingList: 'staking/list'
 };
+
+
+// export const MAINNET_PARAMS = {
+//   chainId: '0x1',
+//   chainName: 'Ethereum Mainnet',
+//   nativeCurrency: {
+//       name: 'Ether',
+//       symbol: 'ETH',
+//       decimals: 18
+//   },
+//   // rpcUrls: ['https://polygon-rpc.com/'],
+//   blockExplorerUrls: ['https://etherscan.io/']
+// }
+
+export const networkParams = {
+  polygon: {
+    chainId: '0x89',
+    chainName: 'Polygon Mainnet',
+    nativeCurrency: {
+        name: 'MATIC',
+        symbol: 'MATIC',
+        decimals: 18
+    },
+    rpcUrls: ['https://polygon-rpc.com/'],
+    blockExplorerUrls: ['https://polygonscan.com/']
+  },
+  fantom: {
+    chainId: '0xFA',
+    chainName: 'Fantom Opera Mainnet',
+    nativeCurrency: {
+        name: 'Fantom',
+        symbol: 'FTM',
+        decimals: 18
+    },
+    rpcUrls: ['https://rpc.ftm.tools/'],
+    blockExplorerUrls: ['https://ftmscan.com/']
+  }
+}
 
 // Filters
 export const ETH = 'ETH';

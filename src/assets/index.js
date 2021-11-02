@@ -94,6 +94,8 @@ import YEARNLOGOLIGHT from './images/svg/yearnLogoLight.svg';
 import FANTOMLOGO from './images/svg/fantomLogo.svg';
 import FANTOMLOGOLIGHT from './images/svg/fantomLogoLight.svg';
 import ETHLOGO from './images/svg/EthLogo.svg';
+import YearnIcon from './images/svg/YearnIcon.svg';
+import FantomIcon from './images/svg/FantomIcon.svg';
 
 
 
@@ -109,5 +111,5 @@ import ETHLOGO from './images/svg/EthLogo.svg';
 
 
 export {
-    Adjust, DAI, YEARNLOGO, YEARNLOGOLIGHT, FANTOMLOGO, FANTOMLOGOLIGHT, ETHLOGO, DaiClaim, AAVE, VOTE, FantomLight, FantomDark, LinkArrowWhite, Chainlink, WBTC, YAEICON, NAEICON, Dark404, Light404, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCard, USDTCard, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown
+    Adjust, DAI, YEARNLOGO, YEARNLOGOLIGHT, FANTOMLOGO, FANTOMLOGOLIGHT, ETHLOGO, DaiClaim, AAVE, VOTE, FantomLight, FantomDark, LinkArrowWhite, Chainlink, WBTC, YAEICON, NAEICON, Dark404, Light404, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCard, USDTCard, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown, YearnIcon, FantomIcon
 };
