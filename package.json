@@ -50,7 +50,8 @@
     "start": "env-cmd -f ./src/config/.env.development react-scripts start",
     "build": "env-cmd -f ./src/config/.env.production react-scripts build",
     "test": "env-cmd -f ./src/config/.env.development react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "git submodule update --init"
   },
   "eslintConfig": {
     "extends": "react-app"
