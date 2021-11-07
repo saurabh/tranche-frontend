@@ -78,7 +78,6 @@ const SummaryCards = ({
 
   const openModal = () => console.log('needs to be removed at the time of components merge');
   const closeModal = () => console.log('needs to be removed at the time of components merge');
-  console.log(currentPath)
   return (
     <div>
       {

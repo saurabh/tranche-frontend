@@ -23,6 +23,7 @@ import {
   ApproveBigNumber,
   ETHorMaticCheck,
   networkId,
+  maticNetworkId,
   RewardDistributionAddress
 } from 'config';
 import {
@@ -34,7 +35,6 @@ import {
   setTokenBalances
 } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxOngoingData, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
-
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
 export const toBN = web3.utils.toBN;
@@ -202,7 +202,7 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
       .on('transactionHash', (hash) => {
         store.dispatch(setTxLoading(true));
         store.dispatch(setTxModalStatus('pending'));
-        if (network === networkId) {
+        if (network === networkId || network === maticNetworkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
             store.dispatch(setTxLink(transaction.hash));
@@ -274,7 +274,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          if (network === networkId) {
+          if (network === networkId || network === maticNetworkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               store.dispatch(setTxLink(transaction.hash));
@@ -315,7 +315,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          if (network === networkId) {
+          if (network === networkId || network === maticNetworkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               store.dispatch(setTxLink(transaction.hash));
@@ -384,7 +384,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          if (network === networkId) {
+          if (network === networkId || network === maticNetworkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               store.dispatch(setTxLink(transaction.hash));
@@ -421,7 +421,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          if (network === networkId) {
+          if (network === networkId || network === maticNetworkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
               store.dispatch(setTxLink(transaction.hash));
@@ -571,7 +571,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex, migr
         ? StakingContract.methods.stake(amount, durationIndex)
         : StakingContract.methods.deposit(tokenAddress, amount);
     await DepositMethod.send({ from: address }).on('transactionHash', (hash) => {
-      if (network === networkId) {
+      if (network === networkId || network === maticNetworkId) {
         const { emitter } = notify.hash(hash);
         emitter.on('txPool', (transaction) => {
           return {

@@ -8,6 +8,7 @@ export const landingUrl = process.env.REACT_APP_LANDING_URL;
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
+export const polygonScanUrl = "https://polygonscan.com/";
 export const maticBlockExplorerUrl = process.env.REACT_APP_MATIC_BLOCK_EXPLORER_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;

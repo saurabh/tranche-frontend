@@ -5,6 +5,7 @@ import { CloseModal, CloseModalWhite, TrancheStake, LinkIcon, Migrated, TrancheP
 import { ModeThemes } from 'config/constants';
 import { roundNumber, readyToTransact } from 'utils';
 import store from 'redux/store';
+import { maticNetworkId } from 'config';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { claimRewardsAllMarkets, initOnboard } from 'services';
 
@@ -36,6 +37,7 @@ export const TrancheRewards = ({
   txLink,
   txOngoing,
   closeModal,
+  network,
   wallet
 }) => {
   const onboard = initOnboard({
@@ -50,6 +52,7 @@ export const TrancheRewards = ({
     if (!ready) return;
     claimRewardsAllMarkets()
   }
+  let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
 
   return (
     <Modal
@@ -184,7 +187,7 @@ export const TrancheRewards = ({
           ) : txModalType === 'trancheRewards' && txModalStatus !== 'rejected' && (
             <TrancheModalFooter color={ModeThemes[theme].ModalTrancheTextColor} link TrancheEnableConfirm disabledColor={ModeThemes[theme].DisabledBtn} disabledTextColor={ModeThemes[theme].DisabledBtnText} TrancheRewards TrancheRewardsProcess={txModalStatus !== 'initialState'}>
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Etherscan
+                <img src={LinkIcon} alt='img' /> {`View on ${networkVar}`} 
               </a>
             </TrancheModalFooter>
           )}
