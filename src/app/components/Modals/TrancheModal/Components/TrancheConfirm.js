@@ -207,27 +207,28 @@ export const TrancheConfirm = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> {`View on ${networkVar}`} 
+                <img src={LinkIcon} alt='img' /> View on explorer
               </a>
             )}
           </TrancheModalFooter>
-        ) : ( 
+        ) : (
           txModalStatus !== 'rejected' &&
           txModalStatus !== 'failed' &&
           txModalStatus !== 'cancelled' && (
-          <TrancheModalFooter
-            color={ModeThemes[theme].ModalTrancheTextColor}
-            disabledColor={ModeThemes[theme].DisabledBtn}
-            disabledTextColor={ModeThemes[theme].DisabledBtnText}
-          >
-            <button
-              onClick={() => {
-                handleSubmit();
-              }}
+            <TrancheModalFooter
+              color={ModeThemes[theme].ModalTrancheTextColor}
+              disabledColor={ModeThemes[theme].DisabledBtn}
+              disabledTextColor={ModeThemes[theme].DisabledBtnText}
             >
-              <img src={CheckBtnWhite} alt='img' /> Confirm
-            </button>
-          </TrancheModalFooter>)
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+              >
+                <img src={CheckBtnWhite} alt='img' /> Confirm
+              </button>
+            </TrancheModalFooter>
+          )
         )}
       </TrancheModalWrapper>
     </Modal>
