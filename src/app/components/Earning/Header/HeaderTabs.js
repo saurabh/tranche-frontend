@@ -2,13 +2,30 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import i18n from '../../locale/i18n';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
-import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack } from 'assets';
+import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, ETHLOGO, YEARNLOGOLIGHT, YEARNLOGO, FANTOMLOGOLIGHT, FANTOMLOGO } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
+import Carousel from 'react-multi-carousel';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
 import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 import useAnalytics from 'services/analytics';
-
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    paritialVisibilityGutter: 60
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+    paritialVisibilityGutter: 50
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 2,
+    paritialVisibilityGutter: 30
+  }
+};
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
