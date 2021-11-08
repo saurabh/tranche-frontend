@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes, trancheIcons } from 'config/constants';
+import { maticNetworkId } from 'config';
 import { roundNumber } from 'utils';
 import { approveContract } from 'services';
 
@@ -28,6 +29,7 @@ export const TrancheEnable = ({
   txModalIsOpen,
   txModalStatus,
   trancheCard,
+  network,
   txOngoingData: { trancheCardId },
   txLoading,
   txLink,
@@ -46,6 +48,8 @@ export const TrancheEnable = ({
   buyerCoinAddress,
   trancheTokenAddress
 }) => {
+  let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
+
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -181,7 +185,7 @@ export const TrancheEnable = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Etherscan
+                <img src={LinkIcon} alt='img' /> View on Explorer
               </a>
             )}
           </TrancheModalFooter>

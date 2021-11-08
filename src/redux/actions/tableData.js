@@ -344,4 +344,5 @@ export const setTxLink = (string) => (dispatch) => {
     type: SET_TX_LINK,
     payload: txLink(string)
   });
+  console.log()
 };

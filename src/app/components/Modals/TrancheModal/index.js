@@ -15,7 +15,7 @@ Modal.setAppElement('#root');
 const TrancheModal = ({
   // Redux
   formValues,
-  ethereum: { address, txOngoing, tokenBalance, unclaimedSIRRewards, wallet },
+  ethereum: { address, txOngoing, network, tokenBalance, unclaimedSIRRewards, wallet },
   data: {
     txModalIsOpen,
     txModalType,
@@ -99,12 +99,14 @@ const TrancheModal = ({
       txLink,
       txOngoing,
       closeModal,
+      network,
       wallet
     })
     : txModalType === 'trancheEnable'
     ? TrancheEnable({
         theme,
         closeModal,
+        network,
         txModalIsOpen,
         txModalStatus,
         trancheCard,
@@ -129,6 +131,7 @@ const TrancheModal = ({
     : txModalType === 'trancheConfirm'
     ? TrancheConfirm({
         theme,
+        network,
         formValues,
         tokenBalance,
         txModalIsOpen,

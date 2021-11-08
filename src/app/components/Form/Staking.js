@@ -130,7 +130,7 @@ let StakingForm = ({
       <h2>
         Amount of {tokenName} to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'Stake' : 'Withdraw'}:{' '}
       </h2>
-      <Form onSubmit={(e) => adjustStake(e, contractAddress, tokenAddress, durationIndex, migrate)}>
+      <Form onSubmit={(e) => adjustStake(e, contractAddress, tokenAddress, durationIndex, migrate)} noValidate>
         <h2>
           You have {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? roundNumber(balance) : roundNumber(userStaked)} {tokenName} available
           to {modalTypeVar === 'liqStake' || modalTypeVar === 'staking' ? 'stake' : 'withdraw'}

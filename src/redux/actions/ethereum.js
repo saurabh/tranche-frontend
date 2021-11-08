@@ -9,6 +9,7 @@ import {
   serverUrl,
   etherScanUrl,
   maticBlockExplorerUrl,
+  polygonScanUrl,
   apiUri,
   ERC20Tokens,
   JCompoundAddress,
@@ -81,7 +82,7 @@ export const setNetwork = (network) => async (dispatch) => {
     store.dispatch(trancheMarketsToggle('aavePolygon'));
     store.dispatch(setBlockExplorerUrl(maticBlockExplorerUrl));
   }
-  network !== maticNetworkId && store.dispatch(setBlockExplorerUrl(etherScanUrl));
+  network !== maticNetworkId ? store.dispatch(setBlockExplorerUrl(etherScanUrl)) : store.dispatch(setBlockExplorerUrl(polygonScanUrl));
 };
 
 export const setBalance = (balance) => (dispatch) => {

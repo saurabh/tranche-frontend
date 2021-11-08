@@ -50,6 +50,61 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         </HowToLink>
       </div>
       <MarketsTabs>
+        
+        <MarketTab
+          market='compound'
+          current={trancheMarket === 'compound'}
+          onClick={() => trancheMarketsToggle('compound')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+        >
+          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
+          <span></span> 
+          <img src={ETHLOGO} alt='' />
+        </MarketTab>
+        <MarketTab
+          market='aavePolygon'
+          current={trancheMarket === 'aavePolygon'}
+          onClick={() => trancheMarketsToggle('aavePolygon')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+        >
+          <img src={AaveBtn} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+        </MarketTab>
+
+        <MarketTab
+          market='fantom'
+          current={trancheMarket === 'fantom'}
+          onClick={() => trancheMarketsToggle('fantom')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+        >
+          <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
+        </MarketTab>
+
+
+        
+      </MarketsTabs> :
+      <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
         <MarketTab
           market='compound'
           current={trancheMarket === 'compound'}
@@ -66,7 +121,25 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarket !== 'aavePolygon' && openModal()}
+          onClick={() => trancheMarketsToggle('aavePolygon')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+          mobile
+        >
+          <img src={AaveBtn} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+        </MarketTab>
+
+        <MarketTab
+          market='fantom'
+          current={trancheMarket === 'fantom'}
+          onClick={() => trancheMarketsToggle('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
