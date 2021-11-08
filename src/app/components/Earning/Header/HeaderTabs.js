@@ -42,11 +42,6 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
       paritialVisibilityGutter: 30
     }
   };
-  
-  const openModal = (market) => {
-    setTxModalOpen(true);
-    trancheMarketsToggle(market);
-  };
 
   const closeModal = () => {
     setTxModalOpen(false);
@@ -94,7 +89,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarket !== 'aavePolygon' && openModal('aavePolygon')}
+          onClick={() => trancheMarketsToggle('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -111,7 +106,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
-          onClick={() => trancheMarket !== 'fantom' && openModal('fantom')}
+          onClick={() => trancheMarketsToggle('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -149,7 +144,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='aavePolygon'
           current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarket !== 'aavePolygon' && openModal('aavePolygon')}
+          onClick={() => trancheMarketsToggle('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
@@ -167,7 +162,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
-          onClick={() => trancheMarket !== 'fantom' && openModal('fantom')}
+          onClick={() => trancheMarketsToggle('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
           backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}

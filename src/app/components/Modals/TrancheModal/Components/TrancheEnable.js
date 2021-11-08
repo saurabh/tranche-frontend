@@ -181,7 +181,7 @@ export const TrancheEnable = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on explorer
+                <img src={LinkIcon} alt='img' /> View on Explorer
               </a>
             )}
           </TrancheModalFooter>
