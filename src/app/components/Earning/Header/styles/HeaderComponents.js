@@ -643,19 +643,21 @@ const MarketsTabs = styled.div`
   margin: 30px 0 20px 0;
   @media (max-width: 992px) {
     margin: 15px 0px 15px 0;
+    justify-content: space-between;
   }
 `
 const MarketTab = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  // width: 200px;
   cursor: pointer;
   transition: 300ms;
   outline: none;
   padding: 0 29px;
   position: relative;
-  margin-right: ${props => props.market === "compound" ? "14px" : "0"};
-  border-radius: 5px;
+  margin-right: 14px;
+  border-radius: 8px;
   height: 51px;
   width: 235px;
   background: ${props => props.current ? props.backgroundActive : props.background};
@@ -668,77 +670,50 @@ const MarketTab = styled.button`
   text-transform: uppercase;
   color: ${props => props.color};
   img{
-    margin-right: ${props => props.market === "aavePolygon" ? "5px" : "0"};
+    margin-right:5px;
+  }
+  img:first-child{
+    width: ${props => props.market === "aavePolygon" ? "60px" : "100%"};
   }
   & > span{
-    width: 1px;
     height: 70%;
     background: ${props => props.span};
     display: block;
-    margin: 0 12px;
+    margin: 0 16px;
+    padding: 0.5px;
   }
   @media (max-width: 992px) {
-    width: 50%;
-    img{
-      width: ${props => props.market === "aavePolygon" ? "32px" : "125px"};
-    }
     padding: 12px;
     height: 45px;
+    width: 49%;
     h2{
       font-size: 12px;
     }
+    img:first-child{
+      width: ${props => props.market === "aavePolygon" ? "60px" : props.market === 'compound' ? "74px" : "100%"};
+    }
   }
+  
 
-  ${({ market, color }) => market === "aavePolygon" && `
-    /* opacity: 0.5;
-    pointer-events: none;
-    padding: 0 20px; */
-    @media (max-width: 992px) {
-      & > span{
-        margin: 0 10px;
-      }
-      img{
-        height: 20px;
-        width: auto;
-        margin-right: 0;
-      }
-      h2 > img{
-        height: 12px;
-        width: auto;
-        margin-right: 5px;
-      }
-    }
-    
-    h2{
-      display: flex;
-      height: 100%;
-      align-items: baseline;
-      justify-content: center;
-      font-family: 'Inter', sans-serif !important;
-      font-style: normal !important;
-      font-weight: 500 !important;
-      font-size: 14.14px !important;
-      letter-spacing: 0.05em !important;
-      text-transform: uppercase !important;
-      height: 34%;
-      display: flex;
-      align-items: center;
-      color: ${color};
-      @media (max-width: 992px) {
-        height: 67%;
-        font-size: 12px !important;
-        span{
-          font-size: 13px !important;
-          margin-top: 1px;
-        }
-      }  
-    }
-
-  `} 
   ${({ theme }) => theme === "light" && `
       opacity: 0.5;
       :hover{
         opacity: 0.8;
+      }
+  `} 
+  ${({ mobile }) => mobile && `
+      width: 90%;
+      padding: 13px !important;
+      img:first-child{
+        width: auto;
+        height: 100%;
+      }
+      img:last-child{
+        width: auto;
+        height: 100%;
+      }
+      & > span{
+        margin: 0 5px;
       }
   `} 
   ${({ current, theme, btnShadow}) => (current && theme === "light") && `
