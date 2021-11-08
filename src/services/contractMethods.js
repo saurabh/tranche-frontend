@@ -202,7 +202,7 @@ export const approveContract = async (isDeposit, tokenAddress, contractAddress, 
       .on('transactionHash', (hash) => {
         store.dispatch(setTxLoading(true));
         store.dispatch(setTxModalStatus('pending'));
-        store.dispatch(setTxLink(transaction.hash));
+        store.dispatch(setTxLink(hash));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
@@ -274,7 +274,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          store.dispatch(setTxLink(transaction.hash));
+          store.dispatch(setTxLink(hash));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -315,7 +315,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          store.dispatch(setTxLink(transaction.hash));
+          store.dispatch(setTxLink(hash));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -384,7 +384,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          store.dispatch(setTxLink(transaction.hash));
+          store.dispatch(setTxLink(hash));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -421,7 +421,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
         .on('transactionHash', (hash) => {
           store.dispatch(setTxLoading(true));
           store.dispatch(setTxModalStatus('pending'));
-          store.dispatch(setTxLink(transaction.hash));
+          store.dispatch(setTxLink(hash));
           if (network === networkId) {
             const { emitter } = notify.hash(hash);
             emitter.on('txPool', (transaction) => {
@@ -807,7 +807,7 @@ export const claimRewardsAllMarkets = async () => {
       .on('transactionHash', (hash) => {
         store.dispatch(setTxLoading(true));
         store.dispatch(setTxModalStatus('pending'));
-        store.dispatch(setTxLink(transaction.hash));
+        store.dispatch(setTxLink(hash));
         if (network === networkId) {
           const { emitter } = notify.hash(hash);
           emitter.on('txPool', (transaction) => {
