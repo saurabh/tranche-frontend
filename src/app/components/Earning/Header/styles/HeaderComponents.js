@@ -643,13 +643,14 @@ const MarketsTabs = styled.div`
   margin: 30px 0 20px 0;
   @media (max-width: 992px) {
     margin: 15px 0px 15px 0;
+    justify-content: space-between;
   }
 `
 const MarketTab = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
+  // width: 200px;
   cursor: pointer;
   transition: 300ms;
   outline: none;
@@ -684,8 +685,12 @@ const MarketTab = styled.button`
   @media (max-width: 992px) {
     padding: 12px;
     height: 45px;
+    width: 49%;
     h2{
       font-size: 12px;
+    }
+    img:first-child{
+      width: ${props => props.market === "aavePolygon" ? "60px" : props.market === 'compound' ? "74px" : "100%"};
     }
   }
   

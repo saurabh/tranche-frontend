@@ -4,28 +4,28 @@ import i18n from '../../locale/i18n';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
 import { AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, ETHLOGO, YEARNLOGOLIGHT, YEARNLOGO, FANTOMLOGOLIGHT, FANTOMLOGO } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
-import Carousel from 'react-multi-carousel';
+// import Carousel from 'react-multi-carousel';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
 import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 import useAnalytics from 'services/analytics';
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    paritialVisibilityGutter: 60
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    paritialVisibilityGutter: 50
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 2,
-    paritialVisibilityGutter: 30
-  }
-};
+// const responsive = {
+//   desktop: {
+//     breakpoint: { max: 3000, min: 1024 },
+//     items: 3,
+//     paritialVisibilityGutter: 60
+//   },
+//   tablet: {
+//     breakpoint: { max: 1024, min: 464 },
+//     items: 2,
+//     paritialVisibilityGutter: 50
+//   },
+//   mobile: {
+//     breakpoint: { max: 464, min: 0 },
+//     items: 2,
+//     paritialVisibilityGutter: 30
+//   }
+// };
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
@@ -75,7 +75,6 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>
-      { isDesktop ?
 
       <MarketsTabs>
         
@@ -131,64 +130,64 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
 
 
         
-      </MarketsTabs> :
-      <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
-        <MarketTab
-          market='compound'
-          current={trancheMarket === 'compound'}
-          onClick={() => trancheMarketsToggle('compound')}
-          span={ModeThemes[theme].TrancheBtnSpan}
-          background={ModeThemes[theme].TrancheBtnBackground}
-          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
-          border={ModeThemes[theme].TrancheBtnBorder}
-          color={ModeThemes[theme].TrancheBtnColor}
-          theme={theme}
-          btnShadow={ModeThemes[theme].btnShadow}
-          mobile
-        >
-          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
-          <span></span> 
-          <img src={ETHLOGO} alt='' />
-        </MarketTab>
-        <MarketTab
-          market='aavePolygon'
-          current={trancheMarket === 'aavePolygon'}
-          onClick={() => trancheMarketsToggle('aavePolygon')}
-          span={ModeThemes[theme].TrancheBtnSpan}
-          background={ModeThemes[theme].TrancheBtnBackground}
-          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
-          border={ModeThemes[theme].TrancheBtnBorder}
-          color={ModeThemes[theme].TrancheBtnColor}
-          theme={theme}
-          btnShadow={ModeThemes[theme].btnShadow}
-          mobile
-        >
-          <img src={AaveBtn} alt='' /> 
-          <span></span> 
-          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
-        </MarketTab>
+      </MarketsTabs> 
+      {/* // <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
+      //   <MarketTab
+      //     market='compound'
+      //     current={trancheMarket === 'compound'}
+      //     onClick={() => trancheMarketsToggle('compound')}
+      //     span={ModeThemes[theme].TrancheBtnSpan}
+      //     background={ModeThemes[theme].TrancheBtnBackground}
+      //     backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+      //     border={ModeThemes[theme].TrancheBtnBorder}
+      //     color={ModeThemes[theme].TrancheBtnColor}
+      //     theme={theme}
+      //     btnShadow={ModeThemes[theme].btnShadow}
+      //     mobile
+      //   >
+      //     <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
+      //     <span></span> 
+      //     <img src={ETHLOGO} alt='' />
+      //   </MarketTab>
+      //   <MarketTab
+      //     market='aavePolygon'
+      //     current={trancheMarket === 'aavePolygon'}
+      //     onClick={() => trancheMarketsToggle('aavePolygon')}
+      //     span={ModeThemes[theme].TrancheBtnSpan}
+      //     background={ModeThemes[theme].TrancheBtnBackground}
+      //     backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+      //     border={ModeThemes[theme].TrancheBtnBorder}
+      //     color={ModeThemes[theme].TrancheBtnColor}
+      //     theme={theme}
+      //     btnShadow={ModeThemes[theme].btnShadow}
+      //     mobile
+      //   >
+      //     <img src={AaveBtn} alt='' /> 
+      //     <span></span> 
+      //     <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+      //   </MarketTab>
 
-        {/* <MarketTab
-          market='fantom'
-          current={trancheMarket === 'fantom'}
-          onClick={() => trancheMarketsToggle('fantom')}
-          span={ModeThemes[theme].TrancheBtnSpan}
-          background={ModeThemes[theme].TrancheBtnBackground}
-          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
-          border={ModeThemes[theme].TrancheBtnBorder}
-          color={ModeThemes[theme].TrancheBtnColor}
-          theme={theme}
-          btnShadow={ModeThemes[theme].btnShadow}
-          mobile
-        >
-          <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
-          <span></span> 
-          <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
-        </MarketTab> */}
+      //   <MarketTab
+      //     market='fantom'
+      //     current={trancheMarket === 'fantom'}
+      //     onClick={() => trancheMarketsToggle('fantom')}
+      //     span={ModeThemes[theme].TrancheBtnSpan}
+      //     background={ModeThemes[theme].TrancheBtnBackground}
+      //     backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+      //     border={ModeThemes[theme].TrancheBtnBorder}
+      //     color={ModeThemes[theme].TrancheBtnColor}
+      //     theme={theme}
+      //     btnShadow={ModeThemes[theme].btnShadow}
+      //     mobile
+      //   >
+      //     <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
+      //     <span></span> 
+      //     <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
+      //   </MarketTab>
 
 
-      </Carousel>
-      }
+      // </Carousel> */}
+      
 
       {trancheMarket === 'aavePolygon' && (
         <BridgeTokensWrapper>
