@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import i18n from '../../locale/i18n';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
@@ -33,16 +33,25 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
   const Tracker = useAnalytics('ExternalLinks');
 
   const { trancheMarket, txModalIsOpen } = data;
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
 
-  const openModal = () => {
-    setModalOpened(true);
-    if (!modalOpened) {
-      setTxModalOpen(true);
-      setTxModalType('trancheMarkets');
-    } else {
-      trancheMarketsToggle('aavePolygon');
-    }
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
   };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
+
+  // const openModal = () => {
+  //   setModalOpened(true);
+  //   if (!modalOpened) {
+  //     setTxModalOpen(true);
+  //     setTxModalType('trancheMarkets');
+  //   } else {
+  //     trancheMarketsToggle('aavePolygon');
+  //   }
+  // };
   const closeModal = () => {
     setTxModalOpen(false);
     setTxModalStatus('initialState');
@@ -66,6 +75,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>
+      { isDesktop ?
+
       <MarketsTabs>
         
         <MarketTab
@@ -171,6 +182,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
       </Carousel>
+      }
+
       {trancheMarket === 'aavePolygon' && (
         <BridgeTokensWrapper>
           <p>
