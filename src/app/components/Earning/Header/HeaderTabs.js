@@ -111,7 +111,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           <span></span> 
           <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
-
+{/* 
         <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
@@ -127,7 +127,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
           <span></span> 
           <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
-        </MarketTab>
+        </MarketTab> */}
 
 
         
@@ -168,7 +168,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
 
-        <MarketTab
+        {/* <MarketTab
           market='fantom'
           current={trancheMarket === 'fantom'}
           onClick={() => trancheMarketsToggle('fantom')}
@@ -184,7 +184,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
           <span></span> 
           <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
-        </MarketTab>
+        </MarketTab> */}
 
 
       </Carousel>
