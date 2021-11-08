@@ -153,7 +153,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
           </h2>{' '}
           <span></span> <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
         </MarketTab>
-      </MarketsTabs>
+      </Carousel>
       {trancheMarket === 'aavePolygon' && (
         <BridgeTokensWrapper>
           <p>
