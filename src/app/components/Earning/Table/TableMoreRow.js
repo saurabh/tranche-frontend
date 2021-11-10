@@ -258,8 +258,11 @@ let TableMoreRow = ({
                   <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )} */}
-              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText} textwithBtn={cryptoType === 'WFTM'}>
                 <h2>{i18n.t('tranche.trancheData.deposit')}</h2>
+                { cryptoType === 'WFTM' &&
+                  <button onClick={() => openModal('trancheWFTM', true)}>Wrap</button>
+                }
                 {/* <CheckboxWrapper hidden={isEth}>
                   <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
                   <CheckboxContent disabled={txOngoing}>

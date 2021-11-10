@@ -1838,6 +1838,24 @@ const TableMoreTitleWrapper = styled.div`
     text-transform: uppercase;
     color: ${props => props.color};
   }
+  ${({ textwithBtn }) => textwithBtn && `
+    button{
+      width: 114px;
+      height: 32px;
+      background: #292661;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border: none;
+      color: #A09EFF;
+      outline: none;
+      cursor: pointer;
+    }
+  `}
 `
 const TableMobileContent = styled.div`
   width: 83%;

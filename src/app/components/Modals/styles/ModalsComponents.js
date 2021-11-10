@@ -2191,6 +2191,17 @@ const TrancheModalWrapper = styled.div`
       max-height: unset;
     }
   `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    max-height: 480px;
+    // min-height: 685px;
+    min-height: 480px;
+    @media (max-width: 633px){
+      // min-height: 100vh;
+      max-height: unset;
+    }
+  `}
+
+  
   width: 100%;
   background: ${props => props.backgroundColor};
   @media (max-height: 560px){
@@ -2256,6 +2267,9 @@ const TrancheModalContent = styled.div`
     min-height: 347px !important;
   `}
   ${({ initialStatus }) => initialStatus && `
+    min-height: 347px;
+  `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
     min-height: 347px;
   `}
 `;
@@ -2627,6 +2641,38 @@ const TrancheMarketStyles = {
     bottom: '0'
   }
 };
+const TrancheWFTMStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '528px',
+    maxHeight: '480px',
+    width: '100%',
+    minHeight: '480px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
+
 const TrancheRewardsStyles = {
   overlay: {
     display: 'flex',
@@ -2854,6 +2900,7 @@ const GovernanceModalDelegateFormSubmitBtn = styled.button`
 
 export {
   TrancheMarketStyles,
+  TrancheWFTMStyles,
   TrancheRewardsStyles,
   TrancheEnableModal,
   TrancheConfirmModal,

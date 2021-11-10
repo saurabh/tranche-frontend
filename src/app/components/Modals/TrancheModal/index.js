@@ -8,7 +8,7 @@ import { SLICEAddress } from 'config/constants';
 import { roundNumber, safeMultiply, toBigNumber } from 'utils';
 import { fromWei, buyTrancheTokens, sellTrancheTokens, toBN } from 'services';
 import useAnalytics from 'services/analytics';
-import { TrancheRewards, TrancheEnable, TrancheConfirm } from './Components';
+import { TrancheRewards, TrancheEnable, TrancheConfirm, TrancheWFTM } from './Components';
 
 Modal.setAppElement('#root');
 
@@ -123,6 +123,33 @@ const TrancheModal = ({
       })
     : txModalType === 'trancheConfirm'
     ? TrancheConfirm({
+        theme,
+        formValues,
+        tokenBalance,
+        txModalIsOpen,
+        txModalStatus,
+        trancheCard,
+        txOngoingData,
+        txLoading,
+        txLink,
+        name,
+        apyStatus,
+        cryptoType,
+        trancheToken,
+        dividendType,
+        apy,
+        protocolAPY,
+        sliceAPY,
+        netAPY,
+        isDeposit,
+        buyerCoinAddress,
+        trancheTokenAddress,
+        // Functions
+        closeModal,
+        handleSubmit
+      })
+      : txModalType === 'trancheWFTM'
+    ? TrancheWFTM({
         theme,
         formValues,
         tokenBalance,
