@@ -1920,6 +1920,7 @@ const TableMoreTitleWrapper = styled.div`
         font-size: 10.5px;
         width: auto;
         height: auto;
+        background: transparent;
       }
     }
   `}
