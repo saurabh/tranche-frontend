@@ -15,7 +15,7 @@ Modal.setAppElement('#root');
 const TrancheModal = ({
   // Redux
   formValues,
-  ethereum: { address, txOngoing, tokenBalance, unclaimedSIRRewards, wallet },
+  ethereum: { address, txOngoing, network, tokenBalance, unclaimedSIRRewards, wallet },
   data: {
     txModalIsOpen,
     txModalType,
@@ -89,6 +89,7 @@ const TrancheModal = ({
       exchangeRates,
       txModalType,
       txModalIsOpen,
+      network,
       txModalStatus,
       txLoading,
       txLink,
@@ -108,6 +109,7 @@ const TrancheModal = ({
         txLink,
         name,
         contractAddress,
+        network,
         apyStatus,
         trancheToken,
         dividendType,
@@ -134,6 +136,7 @@ const TrancheModal = ({
         txLink,
         name,
         apyStatus,
+        network,
         cryptoType,
         trancheToken,
         dividendType,

@@ -5,6 +5,7 @@ import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, Tranche
 import { ModeThemes, trancheIcons } from 'config/constants';
 import { roundNumber, searchTokenDecimals } from 'utils';
 import { fromWei } from 'services';
+import { networkId, maticNetworkId } from 'config';
 
 import {
   ModalHeader,
@@ -36,6 +37,7 @@ export const TrancheConfirm = ({
   apyStatus,
   cryptoType,
   trancheToken,
+  network,
   dividendType,
   apy,
   protocolAPY,
@@ -48,6 +50,7 @@ export const TrancheConfirm = ({
   closeModal,
   handleSubmit
 }) => {
+  let networkVar = network === networkId ? "Etherscan" : network === maticNetworkId ? "Polygonscan" : "Explorer";
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -203,7 +206,7 @@ export const TrancheConfirm = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Explorer
+                <img src={LinkIcon} alt='img' /> {`View on ${networkVar}`}
               </a>
             )}
           </TrancheModalFooter>

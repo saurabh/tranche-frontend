@@ -1659,6 +1659,19 @@ const TableMoreRightSection = styled.div`
 
   
 `
+
+const FormContentWrapper = styled.div` 
+  width: 100%;
+  h3{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    color: #FFFFFF;
+    margin: 10px 0;
+  }
+
+`
 const FormContent = styled.div` 
   position: relative;
   button{
@@ -1726,6 +1739,54 @@ const FormContent = styled.div`
       opacity: 0.7;
     }
   }
+  ${({ TrancheWFTM, FTMIcon, color }) => TrancheWFTM && `
+    width: 100%;
+    input{
+      height: 56px;
+      border: 1.5px solid #CFCFE5;
+      box-sizing: border-box;
+      border-radius: 8px;
+      padding: 16px 67px 16px 50px;
+      font-weight: normal;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.4);
+      background-image: url(${FTMIcon});
+      background-repeat: no-repeat;
+      background-position: 16px 50%;
+      ::-webkit-input-placeholder{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        color: ${color};
+        opacity: 0.4;
+      }
+      
+      :-ms-input-placeholder{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        color: ${color};
+        opacity: 0.4;
+      }
+      
+      ::placeholder{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        color: ${color};
+        opacity: 0.4;      }
+    }
+    h2{
+      font-size: 16px;
+      margin-right: 16px;
+      color: ${color};
+    }
+  `}
+  
 `
 const CheckboxWrapper = styled.div`
   display: ${({hidden}) => hidden ? 'none' : 'flex'};
@@ -1838,11 +1899,11 @@ const TableMoreTitleWrapper = styled.div`
     text-transform: uppercase;
     color: ${props => props.color};
   }
-  ${({ textwithBtn }) => textwithBtn && `
-    button{
+  ${({ textwithBtn, theme }) => textwithBtn && `
+    & > button{
       width: 114px;
       height: 32px;
-      background: #292661;
+      background: ${theme === 'light' ? "transparent" : "#292661"};
       border-radius: 8px;
       font-family: 'Inter', sans-serif;
       font-weight: bold;
@@ -1850,10 +1911,16 @@ const TableMoreTitleWrapper = styled.div`
       text-align: center;
       letter-spacing: 0.03em;
       text-transform: uppercase;
-      border: none;
-      color: #A09EFF;
+      border: ${theme === 'light' ? "1px solid #292661" : "none"};;
+      color: ${theme === 'light' ? "#292661" : "#A09EFF"};
       outline: none;
       cursor: pointer;
+      @media (max-width: 992px){
+        border: none;
+        font-size: 10.5px;
+        width: auto;
+        height: auto;
+      }
     }
   `}
 `
@@ -2227,7 +2294,34 @@ const LoadingContent = styled.div`
   background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, ${props => props.colorOne}), color-stop(50%, ${props => props.colorTwo}), color-stop(60%, ${props => props.colorOne}));
   background: 0 0/300% 300% linear-gradient(90deg, ${props => props.colorOne} 40%, ${props => props.colorTwo} 50%, ${props => props.colorOne} 60%);
 `
-
+const WrapSubmitBtn = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  width: 100%;
+  background: #4441CF;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 32px 0 0 0;
+  outline: none;
+  cursor: pointer;
+  :disabled{
+    // opacity: 0.5;
+    // pointer-events: none;
+    background: ${props => props.disabledColor} !important;  
+    color: ${props => props.disabledTextColor} !important;  
+    opacity: 1 !important;
+    pointer-events: none;
+  }
+`
 
 
 export {
@@ -2296,7 +2390,9 @@ export {
   TableMoreRowContentLeft,
   TableMoreRowContentRight,
   TableMoreRightSection,
+  FormContentWrapper,
   FormContent,
+  WrapSubmitBtn,
   CheckboxWrapper,
   CheckboxContent,
   TableMoreTitleWrapper,

@@ -5,6 +5,7 @@ import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, Tranche
 import { ModeThemes, trancheIcons } from 'config/constants';
 import { roundNumber } from 'utils';
 import { approveContract } from 'services';
+import { networkId, maticNetworkId } from 'config';
 
 import {
   ModalHeader,
@@ -42,10 +43,12 @@ export const TrancheEnable = ({
   netAPY,
   isDeposit,
   isDepositApproved,
+  network,
   isWithdrawApproved,
   buyerCoinAddress,
   trancheTokenAddress
 }) => {
+  let networkVar = network === networkId ? "Etherscan" : network === maticNetworkId ? "Polygonscan" : "Explorer";
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -181,7 +184,7 @@ export const TrancheEnable = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Explorer
+                <img src={LinkIcon} alt='img' />{`View on ${networkVar}`}
               </a>
             )}
           </TrancheModalFooter>

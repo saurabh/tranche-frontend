@@ -112,7 +112,9 @@ ${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
       padding: 0 50px !important;
     }
   } 
+  
 `}
+
 
 
 ${({ error }) => error && `
@@ -139,6 +141,23 @@ ${({ enableModal }) => enableModal && `
   top: 0;
   @media (max-width: 633px){
     position: absolute;
+  }
+`}
+${({ TrancheWFTM, textColor }) => TrancheWFTM && `
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 150%;
+    letter-spacing: 0.03em;
+    color: ${textColor};
+    @media (max-width: 992px){
+      font-size: 15px;
+    }
   }
 `}
 
@@ -2200,6 +2219,8 @@ const TrancheModalWrapper = styled.div`
       max-height: unset;
     }
   `}
+ 
+  
 
   
   width: 100%;
@@ -2215,6 +2236,9 @@ const TrancheModalHeader = styled.div`
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
     height: 210px; 
+  `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    height: 156px;   
   `}
   display: flex;
   align-items: center;
@@ -2270,9 +2294,28 @@ const TrancheModalContent = styled.div`
     min-height: 347px;
   `}
   ${({ TrancheWFTM }) => TrancheWFTM && `
-    min-height: 347px;
+    min-height: 393px;
+  `}
+  ${({ TrancheWFTMStatus }) => TrancheWFTMStatus && `
+    min-height: 250px;
   `}
 `;
+const WrapFTMHeader = styled.div`
+  width: 100%;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+    margin: -20px 0 12px 0;
+    color: ${props => props.textColor} !important;
+    opacity: 0.6;
+    @media (max-width: 992px){
+      font-size: 12px;
+    }
+  }
+`
+
 const TrancheModalContentHeader = styled.div`
   display: flex;
   justify-content: center;
@@ -2302,6 +2345,9 @@ const TrancheModalContentHeader = styled.div`
       text-align: center;
       color: #898FA4;
     }
+  `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    margin: 30px 0 0 0;
   `}
 
   img{
@@ -2346,6 +2392,7 @@ const TrancheModalFooter = styled.div`
     outline: none;
     color: #FFFFFF;
     margin: 10px auto 16px auto;
+
     img{
       margin-right: 5px;
     }
@@ -2406,9 +2453,15 @@ const TrancheModalFooter = styled.div`
       outline: none;
       color: #FFFFFF;
       margin: 10px auto 16px auto;
+
       img{
         margin-right: 5px;
       }
+    }
+  `}
+  ${({ TrancheWFTMStatus }) => TrancheWFTMStatus && `
+      a{
+        margin: 0;
     }
   `}
   ${({ TrancheRewards }) => TrancheRewards && `
@@ -2432,6 +2485,11 @@ const TrancheModalContentHeaderImg = styled.div`
       z-index: 2;
     }
   }
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    & > img{
+      margin-bottom: 0;
+    }
+  `}
 `
 
 
@@ -2443,6 +2501,9 @@ const TrancheModalContentHeaderText = styled.div`
     text-align: center;
     color: ${props => props.color};
     margin: 17px auto 12px auto;
+    ${({ TrancheWFTM }) => TrancheWFTM && `
+      margin: 10px auto 0 auto;
+    `}
   }
   div{
     display: flex;
@@ -2483,6 +2544,9 @@ const TrancheModalContentStatus = styled.div`
   align-items: center;
   img{
     margin: 45px auto 25px auto;
+    ${({ TrancheWFTMStatus }) => TrancheWFTMStatus && `
+      margin: 20px auto 44px auto;
+    `}
   }
   h2{
     font-family: 'Inter', sans-serif;
@@ -3012,6 +3076,7 @@ export {
   TrancheModalContentHeaderText,
   TrancheModalContentStatus,
   GovernanceModalStyles,
+  WrapFTMHeader,
   GovernanceModalWrapper,
   GovernanceModalHeader,
   GovernanceModalContent,

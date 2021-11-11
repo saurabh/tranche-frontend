@@ -258,7 +258,7 @@ let TableMoreRow = ({
                   <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )} */}
-              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText} textwithBtn={cryptoType === 'WFTM'}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText} textwithBtn={cryptoType === 'WFTM'} theme={theme}>
                 <h2>{i18n.t('tranche.trancheData.deposit')}</h2>
                 { cryptoType === 'WFTM' &&
                   <button onClick={() => openModal('trancheWFTM', true)}>Wrap</button>
@@ -441,7 +441,8 @@ let TableMoreRow = ({
                     <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
                 )}
-                <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
+                <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText} theme={theme} textwithBtn={cryptoType === 'WFTM'}>
+                 
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       {i18n.t('tranche.trancheData.deposit')}
@@ -453,7 +454,12 @@ let TableMoreRow = ({
                     >
                       {i18n.t('tranche.trancheData.withdraw')}
                     </MobileMoreFormBtn>
+                 
+                                  
                   </MobileMoreFormBtns>
+                  { cryptoType === 'WFTM' &&
+                    <button onClick={() => openModal('trancheWFTM', true)}>Wrap</button>
+                  }
                   {/* <CheckboxWrapper hidden={isEth}>
                     <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
 

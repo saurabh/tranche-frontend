@@ -7,7 +7,7 @@ import { roundNumber, readyToTransact } from 'utils';
 import store from 'redux/store';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { claimRewardsAllMarkets, initOnboard } from 'services';
-
+import { networkId, maticNetworkId } from 'config';
 import {
   ModalHeader,
   TrancheModalWrapper,
@@ -28,6 +28,7 @@ export const TrancheRewards = ({
   totalSliceInUSD,
   totalSliceBalance,
   unclaimedSlice,
+  network,
   exchangeRates,
   txModalType,
   txModalIsOpen,
@@ -38,6 +39,8 @@ export const TrancheRewards = ({
   closeModal,
   wallet
 }) => {
+  let networkVar = network === networkId ? "Etherscan" : network === maticNetworkId ? "Polygonscan" : "Explorer";
+
   const onboard = initOnboard({
     address: store.dispatch(setAddress),
     network: store.dispatch(setNetwork),
@@ -204,7 +207,7 @@ export const TrancheRewards = ({
               TrancheRewardsProcess={txModalStatus !== 'initialState'}
             >
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Explorer
+                <img src={LinkIcon} alt='img' /> {`View on ${networkVar}`}
               </a>
             </TrancheModalFooter>
           )
