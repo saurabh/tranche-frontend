@@ -87,8 +87,8 @@ export const TrancheWFTM = ({ theme, txModalIsOpen, closeModal, trancheMarketsTo
               FTM to WFTM
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheWFTMStatus>
-              <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
-              <h2>Wrapping Pending</h2>
+              <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' /> {/* TrancheRejected - Migrated */}
+              <h2>Wrapping Pending</h2> {/* Wrapping Failed - Wrapping Confirmed */}
             </TrancheModalContentStatus>
             
           </TrancheModalContent>
