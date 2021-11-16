@@ -28,7 +28,6 @@ export const TrancheRewards = ({
   totalSliceInUSD,
   totalSliceBalance,
   unclaimedSlice,
-  network,
   exchangeRates,
   txModalType,
   txModalIsOpen,
@@ -39,8 +38,6 @@ export const TrancheRewards = ({
   closeModal,
   wallet
 }) => {
-  let networkVar = network === networkId ? "Etherscan" : network === maticNetworkId ? "Polygonscan" : "Explorer";
-
   const onboard = initOnboard({
     address: store.dispatch(setAddress),
     network: store.dispatch(setNetwork),
@@ -207,7 +204,7 @@ export const TrancheRewards = ({
               TrancheRewardsProcess={txModalStatus !== 'initialState'}
             >
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> {`View on ${networkVar}`}
+                <img src={LinkIcon} alt='img' /> View on Exploirer
               </a>
             </TrancheModalFooter>
           )

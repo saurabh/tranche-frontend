@@ -43,12 +43,10 @@ export const TrancheEnable = ({
   netAPY,
   isDeposit,
   isDepositApproved,
-  network,
   isWithdrawApproved,
   buyerCoinAddress,
   trancheTokenAddress
 }) => {
-  let networkVar = network === networkId ? 'Etherscan' : network === maticNetworkId ? 'Polygonscan' : 'Explorer';
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -185,7 +183,7 @@ export const TrancheEnable = ({
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
                 <img src={LinkIcon} alt='img' />
-                {`View on ${networkVar}`}
+                View on Exploirer
               </a>
             )}
           </TrancheModalFooter>
