@@ -1751,9 +1751,9 @@ const FormContent = styled.div`
       font-size: 16px;
       letter-spacing: 0.03em;
       color: rgba(255, 255, 255, 0.4);
-      background-image: url(${FTMIcon});
-      background-repeat: no-repeat;
-      background-position: 16px 50%;
+      background-image: url(${FTMIcon}) !important;
+      background-repeat: no-repeat !important;
+      background-position: 16px 50% !important;
       ::-webkit-input-placeholder{
         font-family: 'Inter', sans-serif;
         font-weight: normal;

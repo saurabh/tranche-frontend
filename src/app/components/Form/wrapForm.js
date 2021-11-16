@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FormContentWrapper, FormContent } from 'app/components/Stake/Table/styles/TableComponents';
 import { TrancheModalContent, ModalHeader, WrapSubmitBtn } from 'app/components/Modals/styles/ModalsComponents';
-import { roundNumber } from 'utils';
+import { roundNumber, required, number } from 'utils';
 import { ModeThemes } from 'config/constants';
 import { CloseModal, CloseModalWhite, FTMIconInput } from 'assets';
 import { wrapFTM, unwrapFTM, fromWei } from 'services';
@@ -9,8 +9,9 @@ import { wrapFTM, unwrapFTM, fromWei } from 'services';
 export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerTokenBalance, FTMBalance }) => {
   const [Coin1, setCoin1] = useState({ name: 'FTM', balance: 0 });
   const [Coin2, setCoin2] = useState({ name: 'WFTM', balance: 0 });
-  const [Coin1Value, setCoin1Value] = useState({ name: '', balance: 0 });
-  const [Coin2Value, setCoin2Value] = useState({ name: '', balance: 0 });
+  const [Coin1Value, setCoin1Value] = useState('');
+  const [ Coin2Value, setCoin2Value ] = useState('');
+  const [ invalidInput, setInvalidInput ] = useState(false);
 
   useEffect(() => {
     if (txModalType === 'trancheWFTM' && FTMBalance && FTMBalance !== -1) {
@@ -21,9 +22,15 @@ export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerToke
 
   const onValueChange = (e, input) => {
     // input === 'FTM' ? setCoin1Value(e.target.value) : setCoin2Value(e.target.value);
-    console.log(e.target.value)
     setCoin1Value(e.target.value)
     setCoin2Value(e.target.value)
+    if (Coin1.balance < +e.target.value)
+    {
+      setInvalidInput(true);
+    } else
+    {
+      setInvalidInput(false);
+    }
   };
 
   const setMaxAmount = (input) => {
@@ -39,8 +46,8 @@ export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerToke
     let tempVar = Coin1;
     setCoin1(Coin2);
     setCoin2(tempVar);
-    setCoin1Value('')
-    setCoin2Value('')
+    setCoin1Value('');
+    setCoin2Value('');
   };
 
   return (
@@ -56,15 +63,16 @@ export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerToke
       {Coin1.name === 'FTM' ? <h2>You need to wrap {Coin1.name} to Deposit.</h2> : <h2>Unwrap {Coin2.name}</h2>}
     </WrapFTMHeader> */}
         <FormContentWrapper>
-          <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} FTMIcon={FTMIconInput} TrancheWFTM>
+          <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} FTMIcon={FTMIconInput} TrancheWFTM >
             <input
               value={Coin1Value}
               onChange={(e) => onValueChange(e, Coin1.name)}
               type='number'
               step='0.001'
               name='from'
-              placeholder={`${Coin1.name} Amount`}
-              
+              placeholder={`${ Coin1.name } Amount`}
+              className={invalidInput ? 'InputStylingError' : 'InputStyling'}
+              validate={[ required, number ]}
             />
             {Coin1.name === 'WFTM' && <h2 onClick={() => setMaxAmount(Coin1.balance)}>MAX</h2>}
           </FormContent>
@@ -99,7 +107,7 @@ export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerToke
             Balance: {Coin2.balance ? roundNumber(Coin2.balance) : 0} {Coin2.name}
           </h3>
         </FormContentWrapper>
-        <WrapSubmitBtn onClick={() => (Coin1.name === 'FTM' ? handleSubmit('wrap') : handleSubmit('unwrap'))}>
+        <WrapSubmitBtn onClick={() => (Coin1.name === 'FTM' ? handleSubmit('wrap') : handleSubmit('unwrap'))} disabled={invalidInput || !Coin1Value}>
           {Coin1.name === 'FTM' ? <h2>Wrap {Coin1.name}</h2> : <h2>Unwrap {Coin1.name}</h2>}
         </WrapSubmitBtn>
       </TrancheModalContent>

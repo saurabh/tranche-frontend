@@ -2248,12 +2248,12 @@ const WrapSubmitBtn = styled.button`
   outline: none;
   cursor: pointer;
   :disabled{
-    // opacity: 0.5;
-    // pointer-events: none;
-    background: ${props => props.disabledColor} !important;  
-    color: ${props => props.disabledTextColor} !important;  
-    opacity: 1 !important;
-    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+    box-shadow: none;
+    :hover{
+      filter: brightness(1);
+    }
   }
 `
 
