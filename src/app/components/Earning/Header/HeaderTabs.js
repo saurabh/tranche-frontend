@@ -13,7 +13,7 @@ import useAnalytics from 'services/analytics';
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
+const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
   const Tracker = useAnalytics('ExternalLinks');
   const { trancheMarket } = data;
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
@@ -26,6 +26,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
+  
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -73,7 +74,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         
         <MarketTab
           market='compound'
-          current={trancheMarket === 'compound'}
+          current={trancheMarket === 'compound' && (network === 1 || network === 42)}
           onClick={() => trancheMarketsToggle('compound')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -89,7 +90,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         </MarketTab>
         <MarketTab
           market='aavePolygon'
-          current={trancheMarket === 'aavePolygon'}
+          current={trancheMarket === 'aavePolygon' && (network === 137)}
           onClick={() => trancheMarketsToggle('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -106,7 +107,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
 
         <MarketTab
           market='fantom'
-          current={trancheMarket === 'fantom'}
+          current={trancheMarket === 'fantom' && (network === 250)}
           onClick={() => trancheMarketsToggle('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -127,7 +128,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
       <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
         <MarketTab
           market='compound'
-          current={trancheMarket === 'compound'}
+          current={trancheMarket === 'compound' && (network === 1 || network === 42)}
           onClick={() => trancheMarketsToggle('compound')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -144,7 +145,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
         </MarketTab>
         <MarketTab
           market='aavePolygon'
-          current={trancheMarket === 'aavePolygon'}
+          current={trancheMarket === 'aavePolygon' && (network === 137)}
           onClick={() => trancheMarketsToggle('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -162,7 +163,7 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
 
         <MarketTab
           market='fantom'
-          current={trancheMarket === 'fantom'}
+          current={trancheMarket === 'fantom' && (network === 250)}
           onClick={() => trancheMarketsToggle('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -209,7 +210,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
 const mapStateToProps = (state) => {
   return {
     data: state.data,
-    theme: state.theme
+    theme: state.theme,
+    ethereum: state.ethereum
   };
 };
 
