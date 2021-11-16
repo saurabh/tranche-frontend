@@ -13,7 +13,7 @@ import useAnalytics from 'services/analytics';
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
-const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
+const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
   const Tracker = useAnalytics('ExternalLinks');
   const { trancheMarket } = data;
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
@@ -26,6 +26,12 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
+  useEffect(() => {
+    console.log(network)
+  }, [network]); 
+  //1 42
+  //137 
+  //250
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -209,7 +215,8 @@ const HeaderTabs = ({ data, trancheMarketsToggle, setTxModalOpen, setTxModalStat
 const mapStateToProps = (state) => {
   return {
     data: state.data,
-    theme: state.theme
+    theme: state.theme,
+    ethereum: state.ethereum
   };
 };
 
