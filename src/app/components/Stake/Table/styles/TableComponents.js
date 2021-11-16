@@ -2295,35 +2295,6 @@ const LoadingContent = styled.div`
   background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, ${props => props.colorOne}), color-stop(50%, ${props => props.colorTwo}), color-stop(60%, ${props => props.colorOne}));
   background: 0 0/300% 300% linear-gradient(90deg, ${props => props.colorOne} 40%, ${props => props.colorTwo} 50%, ${props => props.colorOne} 60%);
 `
-const WrapSubmitBtn = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 48px;
-  width: 100%;
-  background: #4441CF;
-  border: none;
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #FFFFFF;
-  margin: 32px 0 0 0;
-  outline: none;
-  cursor: pointer;
-  :disabled{
-    // opacity: 0.5;
-    // pointer-events: none;
-    background: ${props => props.disabledColor} !important;  
-    color: ${props => props.disabledTextColor} !important;  
-    opacity: 1 !important;
-    pointer-events: none;
-  }
-`
-
 
 export {
   TableWrapper,
@@ -2393,7 +2364,6 @@ export {
   TableMoreRightSection,
   FormContentWrapper,
   FormContent,
-  WrapSubmitBtn,
   CheckboxWrapper,
   CheckboxContent,
   TableMoreTitleWrapper,

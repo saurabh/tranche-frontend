@@ -48,7 +48,7 @@ export const TrancheEnable = ({
   buyerCoinAddress,
   trancheTokenAddress
 }) => {
-  let networkVar = network === networkId ? "Etherscan" : network === maticNetworkId ? "Polygonscan" : "Explorer";
+  let networkVar = network === networkId ? 'Etherscan' : network === maticNetworkId ? 'Polygonscan' : 'Explorer';
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -90,7 +90,7 @@ export const TrancheEnable = ({
         {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
-              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
+              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to approve it first
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
@@ -100,7 +100,7 @@ export const TrancheEnable = ({
         ) : trancheCard === trancheCardId && txModalStatus === 'pending' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
-              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
+              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to approve it first
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
@@ -110,7 +110,7 @@ export const TrancheEnable = ({
         ) : trancheCard === trancheCardId && txModalStatus === 'success' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
-              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
+              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to approve it first
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <img src={Migrated} alt='img' />
@@ -120,7 +120,7 @@ export const TrancheEnable = ({
         ) : trancheCard === trancheCardId && (txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled') ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
-              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
+              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to approve it first
             </h2>
             <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor}>
               <img src={TrancheRejected} alt='img' />
@@ -136,7 +136,7 @@ export const TrancheEnable = ({
         ) : (
           <TrancheModalContent color={ModeThemes[theme].ModalTrancheTextColor}>
             <h2>
-              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to enable it first
+              To {isDeposit ? 'Deposit in' : 'Withdraw from'} {apyStatus === 'fixed' ? 'Tranche A' : 'Tranche B'}, you need to approve it first
             </h2>
             <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>{dividendType} APY</h2>
@@ -184,7 +184,8 @@ export const TrancheEnable = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' />{`View on ${networkVar}`}
+                <img src={LinkIcon} alt='img' />
+                {`View on ${networkVar}`}
               </a>
             )}
           </TrancheModalFooter>

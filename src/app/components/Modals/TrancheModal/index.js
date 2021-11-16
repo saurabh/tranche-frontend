@@ -42,7 +42,9 @@ const TrancheModal = ({
       isDepositApproved,
       isWithdrawApproved,
       buyerCoinAddress,
-      trancheTokenAddress
+      trancheTokenAddress,
+      buyerTokenBalance,
+      FTMBalance
     }
   },
   // Props
@@ -69,6 +71,7 @@ const TrancheModal = ({
     setTotalSliceInUSD(roundNumber(safeMultiply(+totalSliceBalance + +unclaimedSlice, exchangeRates.SLICE)));
     setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
   }, [exchangeRates.SLICE, totalSliceBalance, unclaimedSlice]);
+
 
   const handleSubmit = () => {
     try {
@@ -156,6 +159,8 @@ const TrancheModal = ({
         theme,
         formValues,
         tokenBalance,
+        txModalType,
+        txModalType,
         txModalIsOpen,
         txModalStatus,
         trancheCard,
@@ -174,6 +179,8 @@ const TrancheModal = ({
         isDeposit,
         buyerCoinAddress,
         trancheTokenAddress,
+        buyerTokenBalance,
+        FTMBalance,
         // Functions
         closeModal,
         handleSubmit

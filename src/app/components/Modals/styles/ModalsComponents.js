@@ -2211,24 +2211,52 @@ const TrancheModalWrapper = styled.div`
     }
   `}
   ${({ TrancheWFTM }) => TrancheWFTM && `
-    max-height: 480px;
+    max-height: 490px;
     // min-height: 685px;
-    min-height: 480px;
+    min-height: 490px;
     @media (max-width: 633px){
       // min-height: 100vh;
       max-height: unset;
     }
   `}
- 
-  
 
-  
   width: 100%;
   background: ${props => props.backgroundColor};
   @media (max-height: 560px){
     min-height: 571px;
   }
 `;
+
+const WrapSubmitBtn = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  width: 100%;
+  background: #4441CF;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  h2 {font-size: 14px};
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 32px 0 0 0;
+  outline: none;
+  cursor: pointer;
+  :disabled{
+    // opacity: 0.5;
+    // pointer-events: none;
+    background: ${props => props.disabledColor} !important;  
+    color: ${props => props.disabledTextColor} !important;  
+    opacity: 1 !important;
+    pointer-events: none;
+  }
+`
+
 const TrancheModalHeader = styled.div`
   height: 68px; 
   ${({ TrancheEnable }) => TrancheEnable && `
@@ -2720,9 +2748,9 @@ const TrancheWFTMStyles = {
   content: {
     position: 'relative',
     maxWidth: '528px',
-    maxHeight: '480px',
+    maxHeight: '490px',
     width: '100%',
-    minHeight: '480px',
+    minHeight: '490px',
     //height: '326px',
     height: 'auto',
     border: 'none',
@@ -3075,6 +3103,7 @@ export {
   TrancheModalContentHeaderImg,
   TrancheModalContentHeaderText,
   TrancheModalContentStatus,
+  WrapSubmitBtn,
   GovernanceModalStyles,
   WrapFTMHeader,
   GovernanceModalWrapper,

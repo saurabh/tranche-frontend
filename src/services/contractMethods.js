@@ -7,7 +7,8 @@ import {
   LockupSetup,
   YieldFarmSetup,
   ERC20Setup,
-  RewardDistributionSetup
+  RewardDistributionSetup,
+  wFTMSetup
 } from 'utils/contractConstructor';
 import store from '../redux/store';
 import { isGreaterThan, isEqualTo, searchTokenDecimals } from 'utils/helperFunctions';
@@ -23,16 +24,10 @@ import {
   ApproveBigNumber,
   ETHorMaticCheck,
   networkId,
-  RewardDistributionAddress
+  RewardDistributionAddress,
+  WFTMAddress
 } from 'config';
-import {
-  setTxLoading,
-  addNotification,
-  setNotificationCount,
-  toggleApproval,
-  checkSIRRewards,
-  setTokenBalances
-} from 'redux/actions/ethereum';
+import { setTxLoading, addNotification, setNotificationCount, toggleApproval, checkSIRRewards, setTokenBalances } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxOngoingData, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
 
 export const toWei = web3.utils.toWei;
@@ -247,12 +242,10 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
     let { depositAmount } = state.form.tranche.values;
     const JCompound = JCompoundSetup(web3, contractAddress);
     const tokenDecimalObj = searchTokenDecimals(cryptoType);
-    if (tokenDecimalObj)
-    {
+    if (tokenDecimalObj) {
       depositAmount = safeMultiply(depositAmount, 10 ** tokenDecimalObj.decimals);
       depositAmount = toBN(depositAmount);
-    } else
-    {
+    } else {
       depositAmount = toWei(depositAmount);
     }
     let depositAmountInEth = ETHorMaticCheck.indexOf(cryptoType) !== -1 ? depositAmount : 0;
@@ -685,8 +678,7 @@ export const claimRewards = async (contractAddress, stakingCounter, migrate = fa
 };
 
 export const getUnclaimedRewards = async (contractAddress) => {
-  try
-  {
+  try {
     const state = store.getState();
     const { web3, address } = state.ethereum;
     const contract = await RewardDistributionSetup(web3, contractAddress);
@@ -774,7 +766,7 @@ export const getUnclaimedRewards = async (contractAddress) => {
       );
     });
     batch.execute();
-    const rewards = await Promise.all([ ...trARewardsPromise, ...trBRewardsPromise, ...historicalTrARewardPromises, ...historicalTrBRewardPromises ]);
+    const rewards = await Promise.all([...trARewardsPromise, ...trBRewardsPromise, ...historicalTrARewardPromises, ...historicalTrBRewardPromises]);
     return rewards.reduce((acc, cur) => {
       acc += +(cur || 0);
       return acc;
@@ -841,3 +833,86 @@ export const claimRewardsAllMarkets = async () => {
     return error;
   }
 };
+
+export const wrapFTM = async (amount) => {
+  const state = store.getState();
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
+  try {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
+    store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxModalStatus('confirm'));
+    store.dispatch(setTxOngoingData({ wrap: true }));
+    const WFTM = await wFTMSetup(web3, WFTMAddress);
+    await WFTM.methods
+      .deposit()
+      .send({ value: toWei(amount), from: address })
+      .on('transactionHash', (hash) => {
+        store.dispatch(setTxLoading(true));
+        store.dispatch(setTxModalStatus('pending'));
+        store.dispatch(setTxLink(hash));
+      })
+      .on('confirmation', async (count) => {
+        if (count === 0) {
+          store.dispatch(setTxLoading(false));
+          store.dispatch(setTxModalLoading(false));
+          store.dispatch(setTxModalStatus('success'));
+          await store.dispatch(setTokenBalances(address));
+        }
+      });
+  } catch (error) {
+    store.dispatch(setTxModalLoading(false));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
+    console.log(error);
+    return error;
+  }
+};
+
+
+export const unwrapFTM = async (amount) => {
+  const state = store.getState();
+  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  let id = notificationCount;
+  try {
+    store.dispatch(
+      addNotification({
+        id,
+        type: 'WAITING',
+        message: 'Your transaction is waiting for you to confirm',
+        title: 'awaiting confirmation'
+      })
+    );
+    store.dispatch(setTxModalLoading(true));
+    store.dispatch(setTxModalStatus('confirm'));
+    const WFTM = await wFTMSetup(web3, WFTMAddress);
+    await WFTM.methods
+      .withdraw(toWei(amount))
+      .send({ from: address })
+      .on('transactionHash', (hash) => {
+        store.dispatch(setTxLoading(true));
+        store.dispatch(setTxModalStatus('pending'));
+        store.dispatch(setTxLink(hash));
+      })
+      .on('confirmation', async (count) => {
+        if (count === 0) {
+          store.dispatch(setTxLoading(false));
+          store.dispatch(setTxModalLoading(false));
+          store.dispatch(setTxModalStatus('success'));
+          await store.dispatch(setTokenBalances(address));
+        }
+      });
+  } catch (error) {
+    store.dispatch(setTxModalLoading(false));
+    error.code === 4001 && store.dispatch(setTxModalStatus('rejected'));
+    console.log(error);
+    return error;
+  }
+};
+
