@@ -37,7 +37,6 @@ export const TrancheConfirm = ({
   apyStatus,
   cryptoType,
   trancheToken,
-  network,
   dividendType,
   apy,
   protocolAPY,
@@ -50,7 +49,6 @@ export const TrancheConfirm = ({
   closeModal,
   handleSubmit
 }) => {
-  let networkVar = network === networkId ? "Etherscan" : network === maticNetworkId ? "Polygonscan" : "Explorer";
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -206,7 +204,7 @@ export const TrancheConfirm = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> {`View on ${networkVar}`}
+                <img src={LinkIcon} alt='img' /> View on Exploirer
               </a>
             )}
           </TrancheModalFooter>
