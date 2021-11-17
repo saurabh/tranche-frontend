@@ -1,13 +1,7 @@
 import Onboard from 'bnc-onboard';
 import Notify from 'bnc-notify';
 import store from 'redux/store';
-import {
-  networkId,
-  alchemyHttpUrl as rpcUrl,
-  infuraKey,
-  blocknativeKey as dappId,
-  networkParams
-} from 'config';
+import { networkId, alchemyHttpUrl as rpcUrl, infuraKey, blocknativeKey as dappId, networkParams } from 'config';
 
 let onboard = undefined;
 let notify = undefined;
@@ -58,13 +52,38 @@ export function initNotify() {
 export function switchNetwork(network) {
   const state = store.getState();
   const { wallet } = state.ethereum;
-
+  if (network === 'kovan' || network === 'mainnet') {
+    wallet.provider
+      .request({
+        id: network === 'mainnet' ? 1 : 42,
+        jsonrpc: 2.0,
+        method: 'wallet_switchEthereumChain',
+        params: [
+          {
+            chainId: network === 'mainnet' ? '0x1' : '0x2a'
+          }
+        ]
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return;
+  }
   wallet.provider
     .request({
-      method: 'wallet_addEthereumChain',
-      params: [networkParams[network]]
+      method: 'wallet_switchEthereumChain',
+      params: [{[Object.keys(networkParams[network])[0]]: networkParams[network].chainId}]
     })
     .catch((error) => {
-      console.log(error);
+      if (error.code === 4902) {
+        wallet.provider
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [networkParams[network]]
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
     });
 }

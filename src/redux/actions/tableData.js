@@ -168,10 +168,13 @@ export const paginationCurrent = (current) => (dispatch) => {
 };
 
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  const state = store.getState();
+  const { network } = state.ethereum;
   const onboard = initOnboard();
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });
     store.dispatch(changeFilter('ethereum'));
+    networkId === 1 ? switchNetwork('mainnet') : switchNetwork('kovan');
   } else if (trancheMarket === 'aavePolygon') {
     onboard.config({ networkId: maticNetworkId });
     store.dispatch(changeFilter('polygon'));

@@ -219,7 +219,7 @@ export const networkParams = {
         decimals: 18
     },
     rpcUrls: ['https://polygon-rpc.com/'],
-    blockExplorerUrls: ['https://polygonscan.com/']
+    blockExplorerUrls: [maticBlockExplorerUrl]
   },
   fantom: {
     chainId: '0xFA',
@@ -230,7 +230,7 @@ export const networkParams = {
         decimals: 18
     },
     rpcUrls: ['https://rpc.ftm.tools/'],
-    blockExplorerUrls: ['https://ftmscan.com/']
+    blockExplorerUrls: [fantomBlockExplorerUrl]
   }
 }
 
