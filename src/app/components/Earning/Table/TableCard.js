@@ -7,7 +7,7 @@ import { setTokenBalances } from 'redux/actions/ethereum';
 import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
-import { statuses, trancheIcons, ModeThemes, etherScanUrl, landingUrl, maticBlockExplorerUrl } from 'config';
+import { statuses, trancheIcons, ModeThemes, landingUrl } from 'config';
 import { LinkArrow, ChevronTable, LinkArrowWhite } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
@@ -78,8 +78,6 @@ const TableCard = ({
   isDesktop
   // checkServer
 }) => {
-  const blockExplorerUrl = network === 'polygon' ? maticBlockExplorerUrl : etherScanUrl;
-
   let buyerTokenBalance =
     cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)

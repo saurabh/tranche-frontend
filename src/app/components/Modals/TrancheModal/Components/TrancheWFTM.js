@@ -3,15 +3,12 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CloseModal, CloseModalWhite, FTMIconInput, LinkIcon, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes } from 'config/constants';
-import { WrapForm } from '../../../Form/wrapForm';
+import { WrapForm } from '../../../Form/WrapForm';
 import {
   ModalHeader,
-  ModalMarketWrapper,
-  ModalMarketWrapperBtn,
   TrancheWFTMStyles,
   TrancheModalContent,
   TrancheModalWrapper,
-  WrapFTMHeader,
   TrancheModalHeader,
   TrancheModalContentHeader,
   TrancheModalContentHeaderImg,

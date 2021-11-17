@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormContentWrapper, FormContent } from 'app/components/Stake/Table/styles/TableComponents';
 import { TrancheModalContent, ModalHeader, WrapSubmitBtn } from 'app/components/Modals/styles/ModalsComponents';
 import { roundNumber, required, number } from 'utils';

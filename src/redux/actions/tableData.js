@@ -168,8 +168,6 @@ export const paginationCurrent = (current) => (dispatch) => {
 };
 
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
-  const state = store.getState();
-  const { network } = state.ethereum;
   const onboard = initOnboard();
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });

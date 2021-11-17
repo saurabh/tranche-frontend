@@ -14,7 +14,7 @@ export function initOnboard(subscriptions) {
       subscriptions,
       hideBranding: true,
       networkId,
-      networkName: 'Fantom Opera Mainnet',
+      // networkName: 'Fantom Opera Mainnet',
       darkMode: theme === 'dark' ? true : theme === 'light' ? false : null,
       walletSelect: {
         wallets: [

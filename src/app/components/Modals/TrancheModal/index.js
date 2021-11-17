@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { trancheMarketsToggle } from 'redux/actions/tableData';
 import { SLICEAddress } from 'config/constants';
 import { roundNumber, safeMultiply, toBigNumber } from 'utils';
 import { fromWei, buyTrancheTokens, sellTrancheTokens, toBN } from 'services';
@@ -50,7 +49,6 @@ const TrancheModal = ({
   // Props
   theme,
   // Functions
-  trancheMarketsToggle,
   closeModal
   // API Values,
 }) => {
@@ -160,7 +158,6 @@ const TrancheModal = ({
         formValues,
         tokenBalance,
         txModalType,
-        txModalType,
         txModalIsOpen,
         txModalStatus,
         trancheCard,
@@ -195,4 +192,4 @@ const mapStateToProps = (state) => ({
   data: state.data
 });
 
-export default connect(mapStateToProps, { trancheMarketsToggle })(TrancheModal);
+export default connect(mapStateToProps, { })(TrancheModal);

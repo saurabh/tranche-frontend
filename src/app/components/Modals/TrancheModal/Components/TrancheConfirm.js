@@ -5,7 +5,6 @@ import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, Tranche
 import { ModeThemes, trancheIcons } from 'config/constants';
 import { roundNumber, searchTokenDecimals } from 'utils';
 import { fromWei } from 'services';
-import { networkId, maticNetworkId } from 'config';
 
 import {
   ModalHeader,

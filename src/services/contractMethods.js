@@ -836,7 +836,7 @@ export const claimRewardsAllMarkets = async () => {
 
 export const wrapFTM = async (amount) => {
   const state = store.getState();
-  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  const { web3, address, notificationCount } = state.ethereum;
   let id = notificationCount;
   try {
     store.dispatch(
@@ -878,7 +878,7 @@ export const wrapFTM = async (amount) => {
 
 export const unwrapFTM = async (amount) => {
   const state = store.getState();
-  const { web3, address, notify, network, notificationCount } = state.ethereum;
+  const { web3, address, notificationCount } = state.ethereum;
   let id = notificationCount;
   try {
     store.dispatch(
