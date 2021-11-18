@@ -62,7 +62,7 @@ export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerToke
         {/* <WrapFTMHeader textColor={ModeThemes[theme].textColor}>
       {Coin1.name === 'FTM' ? <h2>You need to wrap {Coin1.name} to Deposit.</h2> : <h2>Unwrap {Coin2.name}</h2>}
     </WrapFTMHeader> */}
-        <FormContentWrapper>
+        <FormContentWrapper textColor={ModeThemes[theme].textColor}>
           <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} FTMIcon={FTMIconInput} TrancheWFTM >
             <input
               value={Coin1Value}
@@ -99,7 +99,7 @@ export const WrapForm = ({ theme, closeModal, txModalType, cryptoType, buyerToke
             </defs>
           </svg>
         </div>
-        <FormContentWrapper>
+        <FormContentWrapper textColor={ModeThemes[theme].textColor}>
           <FormContent color={ModeThemes[theme].dropDownText} background={ModeThemes[theme].inputBackground} FTMIcon={FTMIconInput} TrancheWFTM>
             <input value={Coin2Value} type='number' step='0.001' name='from' placeholder={`${Coin2.name} Amount`} disabled />
           </FormContent>

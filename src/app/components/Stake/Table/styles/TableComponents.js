@@ -1667,7 +1667,7 @@ const FormContentWrapper = styled.div`
     font-weight: normal;
     font-size: 14px;
     letter-spacing: 0.03em;
-    color: #FFFFFF;
+    color: ${props => props.textColor ? props.textColor : "#FFFFFF"};
     margin: 10px 0;
   }
 
@@ -1783,6 +1783,9 @@ const FormContent = styled.div`
     h2{
       font-size: 16px;
       margin-right: 16px;
+      color: ${color};
+    }
+    h3{
       color: ${color};
     }
   `}
