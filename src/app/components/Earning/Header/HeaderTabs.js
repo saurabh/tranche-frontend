@@ -33,6 +33,10 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
     setTranchesToggle(val);
     trancheMarketsToggle(val);
   }
+  useEffect(() => {
+    let trancheMarkets = ((network === 1 || network === 42) ? 'compound' : (network === 137) ? 'aavePolygon' : (network === 250) ? 'fantom' : '')
+    setTranchesToggle(trancheMarkets);
+  }, [network]);
   
   const responsive = {
     desktop: {

@@ -2563,6 +2563,9 @@ const TrancheModalContentHeaderText = styled.div`
       justify-content: center;
       margin: 0;
     }
+    h2{
+      margin: 0 2px !important;
+    }
   }
 `
 const TrancheModalContentStatus = styled.div`
