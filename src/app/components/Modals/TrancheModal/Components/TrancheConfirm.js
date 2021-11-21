@@ -203,7 +203,7 @@ export const TrancheConfirm = ({
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
-                <img src={LinkIcon} alt='img' /> View on Exploirer
+                <img src={LinkIcon} alt='img' /> View on Explorer
               </a>
             )}
           </TrancheModalFooter>
