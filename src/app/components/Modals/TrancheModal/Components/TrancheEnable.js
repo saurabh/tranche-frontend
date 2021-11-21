@@ -177,7 +177,7 @@ export const TrancheEnable = ({
                     : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
                 }
               >
-                <img src={CheckBtnWhite} alt='img' /> Enable
+                <img src={CheckBtnWhite} alt='img' /> Approve
               </button>
             ) : (
               <a href={txLink} target='_blank' rel='noreferrer noopener'>
@@ -203,7 +203,7 @@ export const TrancheEnable = ({
                       : approveContract(isDeposit, trancheTokenAddress, contractAddress, isWithdrawApproved, e)
                   }
                 >
-                  <img src={CheckBtnWhite} alt='img' /> Enable
+                  <img src={CheckBtnWhite} alt='img' /> Approve
                 </button>
               }
             </TrancheModalFooter>
