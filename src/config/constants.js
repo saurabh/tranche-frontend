@@ -229,7 +229,7 @@ export const networkParams = {
         symbol: 'FTM',
         decimals: 18
     },
-    rpcUrls: ['https://rpc.ftm.tools/'],
+    rpcUrls: ['https://rpc.fantom.network/'],
     blockExplorerUrls: [fantomBlockExplorerUrl]
   }
 }
