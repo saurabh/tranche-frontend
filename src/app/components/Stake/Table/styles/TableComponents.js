@@ -1557,7 +1557,6 @@ const TableMoreRightSection = styled.div`
   border-left: 2px solid ${props => props.color};
   display: flex;
   flex-direction: column;
-  
   justify-content: center;
   h2{
     font-family: 'Inter', sans-serif;
@@ -1565,7 +1564,6 @@ const TableMoreRightSection = styled.div`
     font-weight: 500;
     font-size: 12px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
     color: #7C859B;
     margin: 12px 0;
   }
