@@ -70,20 +70,28 @@ export function switchNetwork(network) {
     return;
   }
   wallet.provider
-    .request({
-      method: 'wallet_switchEthereumChain',
-      params: [{[Object.keys(networkParams[network])[0]]: networkParams[network].chainId}]
-    })
-    .catch((error) => {
-      if (error.code === 4902) {
-        wallet.provider
-        .request({
-          method: 'wallet_addEthereumChain',
-          params: [networkParams[network]]
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      }
-    });
+  .request({
+    method: 'wallet_addEthereumChain',
+    params: [networkParams[network]]
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  // wallet.provider
+  //   .request({
+  //     method: 'wallet_switchEthereumChain',
+  //     params: [{[Object.keys(networkParams[network])[0]]: networkParams[network].chainId}]
+  //   })
+  //   .catch((error) => {
+  //     if (error.code === 4902) {
+  //       wallet.provider
+  //       .request({
+  //         method: 'wallet_addEthereumChain',
+  //         params: [networkParams[network]]
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //     }
+  //   });
 }
