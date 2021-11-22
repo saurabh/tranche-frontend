@@ -1,5 +1,5 @@
 import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCard, USDTCard, DAICARD, MaticTable, TrancheStake, 
-  ETHCARD, Chainlink, WBTC, YearnIcon, FantomIcon } from 'assets';
+  ETHCARD, Chainlink, WBTC, YearnIcon, FantomIcon, MIMIcon, YFIIcon } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -156,8 +156,16 @@ export const trancheIcons = {
   byfWFTM: { protocolIcon: YearnIcon, assetIcon: FantomIcon },
   ayfUSDC: { protocolIcon: YearnIcon, assetIcon: USDCCard },
   byfUSDC: { protocolIcon: YearnIcon, assetIcon: USDCCard },
-  ayfDAI: { protocolIcon: YearnIcon, assetIcon: DAICARD },
-  byfDAI: { protocolIcon: YearnIcon, assetIcon: DAICARD },
+  ayvWFTM: { protocolIcon: YearnIcon, assetIcon: FantomIcon },
+  byvWFTM: { protocolIcon: YearnIcon, assetIcon: FantomIcon },
+  ayvUSDC: { protocolIcon: YearnIcon, assetIcon: USDCCard },
+  byvUSDC: { protocolIcon: YearnIcon, assetIcon: USDCCard },
+  ayvDAI: { protocolIcon: YearnIcon, assetIcon: DAICARD },
+  byvDAI: { protocolIcon: YearnIcon, assetIcon: DAICARD },
+  ayvMIM: { protocolIcon: YearnIcon, assetIcon: MIMIcon },
+  byvMIM: { protocolIcon: YearnIcon, assetIcon: MIMIcon },
+  ayvYFI: { protocolIcon: YearnIcon, assetIcon: YFIIcon },
+  byvYFI: { protocolIcon: YearnIcon, assetIcon: YFIIcon },
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,
@@ -229,7 +237,7 @@ export const networkParams = {
         symbol: 'FTM',
         decimals: 18
     },
-    rpcUrls: ['https://rpc.fantom.network/'],
+    rpcUrls: ['https://rpc.ftm.tools/'],
     blockExplorerUrls: [fantomBlockExplorerUrl]
   }
 }

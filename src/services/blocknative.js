@@ -50,48 +50,54 @@ export function initNotify() {
 }
 
 export function switchNetwork(network) {
-  const state = store.getState();
-  const { wallet } = state.ethereum;
-  if (network === 'kovan' || network === 'mainnet') {
-    wallet.provider
+  try {
+    const state = store.getState();
+    const { wallet } = state.ethereum;
+    if (wallet) {
+      if (network === 'kovan' || network === 'mainnet') {
+        wallet.provider
+          .request({
+            id: network === 'mainnet' ? 1 : 42,
+            jsonrpc: 2.0,
+            method: 'wallet_switchEthereumChain',
+            params: [
+              {
+                chainId: network === 'mainnet' ? '0x1' : '0x2a'
+              }
+            ]
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        return;
+      }
+      wallet.provider
       .request({
-        id: network === 'mainnet' ? 1 : 42,
-        jsonrpc: 2.0,
-        method: 'wallet_switchEthereumChain',
-        params: [
-          {
-            chainId: network === 'mainnet' ? '0x1' : '0x2a'
-          }
-        ]
+        method: 'wallet_addEthereumChain',
+        params: [networkParams[network]]
       })
       .catch((error) => {
         console.log(error);
       });
-    return;
-  }
-  wallet.provider
-  .request({
-    method: 'wallet_addEthereumChain',
-    params: [networkParams[network]]
-  })
-  .catch((error) => {
+    }
+    // wallet.provider
+    //   .request({
+    //     method: 'wallet_switchEthereumChain',
+    //     params: [{[Object.keys(networkParams[network])[0]]: networkParams[network].chainId}]
+    //   })
+    //   .catch((error) => {
+    //     if (error.code === 4902) {
+    //       wallet.provider
+    //       .request({
+    //         method: 'wallet_addEthereumChain',
+    //         params: [networkParams[network]]
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       });
+    //     }
+    //   });
+  } catch (error) {
     console.log(error);
-  });
-  // wallet.provider
-  //   .request({
-  //     method: 'wallet_switchEthereumChain',
-  //     params: [{[Object.keys(networkParams[network])[0]]: networkParams[network].chainId}]
-  //   })
-  //   .catch((error) => {
-  //     if (error.code === 4902) {
-  //       wallet.provider
-  //       .request({
-  //         method: 'wallet_addEthereumChain',
-  //         params: [networkParams[network]]
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //     }
-  //   });
+  }
 }
