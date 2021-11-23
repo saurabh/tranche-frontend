@@ -46,7 +46,7 @@ const SummaryCards = ({
 }) => {
   const { pathname } = window.location;
   let parsedPath = pathname.split('/');
-  let currentPath = parsedPath[parsedPath.length - 1];
+  let currentPath = parsedPath[1];
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
   const [hasAllowance, setHasAllowance] = useState(false);
 
@@ -78,7 +78,6 @@ const SummaryCards = ({
 
   const openModal = () => console.log('needs to be removed at the time of components merge');
   const closeModal = () => console.log('needs to be removed at the time of components merge');
-
   return (
     <div>
       {

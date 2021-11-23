@@ -96,12 +96,14 @@ const TrancheModal = ({
       txLink,
       txOngoing,
       closeModal,
+      network,
       wallet
     })
     : txModalType === 'trancheEnable'
     ? TrancheEnable({
         theme,
         closeModal,
+        network,
         txModalIsOpen,
         txModalStatus,
         trancheCard,
@@ -127,6 +129,7 @@ const TrancheModal = ({
     : txModalType === 'trancheConfirm'
     ? TrancheConfirm({
         theme,
+        network,
         formValues,
         tokenBalance,
         txModalIsOpen,

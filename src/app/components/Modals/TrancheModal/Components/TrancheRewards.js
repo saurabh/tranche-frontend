@@ -5,6 +5,7 @@ import { CloseModal, CloseModalWhite, TrancheStake, LinkIcon, Migrated, TrancheP
 import { ModeThemes } from 'config/constants';
 import { roundNumber, readyToTransact } from 'utils';
 import store from 'redux/store';
+import { maticNetworkId } from 'config';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { claimRewardsAllMarkets, initOnboard } from 'services';
 import {
@@ -35,6 +36,7 @@ export const TrancheRewards = ({
   txLink,
   txOngoing,
   closeModal,
+  network,
   wallet
 }) => {
   const onboard = initOnboard({

@@ -24,12 +24,12 @@ import {
   ApproveBigNumber,
   ETHorMaticCheck,
   networkId,
+  maticNetworkId,
   RewardDistributionAddress,
   WFTMAddress
 } from 'config';
 import { setTxLoading, addNotification, setNotificationCount, toggleApproval, checkSIRRewards, setTokenBalances } from 'redux/actions/ethereum';
 import { setMigrateStep, setMigrateLoading, setTxModalLoading, setTxOngoingData, setTxModalStatus, setTxLink } from 'redux/actions/tableData';
-
 export const toWei = web3.utils.toWei;
 export const fromWei = web3.utils.fromWei;
 export const toBN = web3.utils.toBN;
@@ -564,7 +564,7 @@ export const addStake = async (stakingAddress, tokenAddress, durationIndex, migr
         ? StakingContract.methods.stake(amount, durationIndex)
         : StakingContract.methods.deposit(tokenAddress, amount);
     await DepositMethod.send({ from: address }).on('transactionHash', (hash) => {
-      if (network === networkId) {
+      if (network === networkId || network === maticNetworkId) {
         const { emitter } = notify.hash(hash);
         emitter.on('txPool', (transaction) => {
           return {

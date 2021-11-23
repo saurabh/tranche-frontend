@@ -9,6 +9,7 @@ export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
 export const fantomNetworkId = 250;
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
+export const polygonScanUrl = "https://polygonscan.com/";
 export const maticBlockExplorerUrl = process.env.REACT_APP_MATIC_BLOCK_EXPLORER_URL;
 export const fantomBlockExplorerUrl = process.env.REACT_APP_FANTOM_BLOCK_EXPLORER_URL;
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
@@ -43,6 +44,7 @@ export const lockupStakingOccurrences = process.env.REACT_APP_STAKING_LOCKUP_OCC
 export const epochDuration = process.env.REACT_APP_EPOCH_DURATION;
 //Google Analytics
 export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
+export const GTMID = 'GTM-NFDMGZN';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
 export const maticAddress = '0xMeeeeMeeeMeMeeMeMeMeeMMMeeeeMeeeeeeeMMeM';

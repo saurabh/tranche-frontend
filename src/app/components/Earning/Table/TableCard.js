@@ -298,9 +298,18 @@ const TableCard = ({
                 <FirstColTitle color={ModeThemes[theme].tableText} tranche trancheMobile>
                     <a href={`${landingUrl}analytics/${network}/${trancheId}/${type === 'TRANCHE_A' ? 0 : 1}`} target='_blank' rel='noopener noreferrer'>
                       <h2>{cryptoType && cryptoType}</h2>
-                      <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' />
+                      {/* <img src={theme === 'dark' ? LinkArrowWhite : LinkArrow} alt='' /> */}
                     </a>
                 </FirstColTitle>
+              </TableMobileContentCol>
+              <TableMobileContentCol color={ModeThemes[theme].tableText} trancheMobileRows>
+                <TrancheRateType
+                  trancheMobile
+                  TrancheRateColor={type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor}
+                  TrancheRateTextColor={theme === 'dark' ? "#FFFFFF" : (type === 'TRANCHE_A' ? ModeThemes[theme].TrancheRateFixedColor : ModeThemes[theme].TrancheRateVariableColor)}
+                >
+                  {type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}
+                </TrancheRateType>
               </TableMobileContentCol>
               <TableMobileContentCol color={ModeThemes[theme].tableText} trancheMobileRows>
                 <h2>NET APY</h2>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import TagManager from 'react-gtm-module';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { ThemeProvider } from 'styled-components';
@@ -10,7 +11,7 @@ import ErrorModal from 'app/components/Modals/Error';
 import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards } from 'redux/actions/ethereum';
 import { fetchExchangeRates } from 'redux/actions/tableData';
 import { ETHContracts, MaticContracts, FantomContracts } from 'services/web3Subscriptions';
-import { networkId, maticNetworkId, fantomNetworkId, JCompoundAddress, JAaveAddress, JYearnAddress,ModeThemes } from 'config/constants';
+import { networkId, maticNetworkId, fantomNetworkId, JCompoundAddress, JAaveAddress, JYearnAddress, ModeThemes, GTMID } from 'config/constants';
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
@@ -24,6 +25,11 @@ import Privacy from './pages/Privacy';
 import TermsAndConditions from './pages/Terms&Conditions';
 import '../App.css';
 
+const tagManagerArgs = {
+  gtmId: GTMID
+}
+TagManager.initialize(tagManagerArgs)
+
 const baseRouteUrl = '/:locale(zh|kr|en)?';
 const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards, fetchExchangeRates, path, ethereum: { address, network }, checkServerStatus, theme }) => {
   const [showModal, setShowModal] = useState(true);
@@ -33,11 +39,9 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
   }, [fetchExchangeRates]);
 
   useEffect(() => {
-    if (address)
-    {
+    if (address) {
       setTokenBalances(address);
-      if (network === networkId)
-      {
+      if (network === networkId) {
         checkTrancheAllowances(address, JCompoundAddress);
         checkStakingAllowances(address);
         checkSIRRewards();
@@ -45,7 +49,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
       if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
       if (network === fantomNetworkId) checkTrancheAllowances(address, JYearnAddress);
     }
-  }, [ address, network, setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards ]);
+  }, [address, network, setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards]);
 
   useEffect(() => {
     if (network === networkId) {
@@ -57,7 +61,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
       MaticContracts.subscribe();
       ETHContracts.unsubscribe();
       FantomContracts.unsubscribe();
-    }    
+    }
     if (network === fantomNetworkId) {
       FantomContracts.subscribe();
       ETHContracts.unsubscribe();

@@ -591,6 +591,11 @@ const TableContentCardWrapperMobile = styled.div`
       min-height: 90px;
     }
   `}
+  ${({ stakeMobile }) => stakeMobile && `
+    @media (max-width: 992px){
+      height: 128px;
+    }
+  `}
   ${({ toggleCard }) => toggleCard && `
     @media (max-width: 992px){
       height: auto;
@@ -868,6 +873,10 @@ const TableCardImg = styled.div`
       height: 36px;
     }
   }
+  ${({ stakeMobile }) => stakeMobile && `
+    margin-top: -4px;
+    margin-right: 12px;
+  `}
   
   
   
@@ -955,6 +964,12 @@ const FirstColContent = styled.div`
   ${({ instrument }) => instrument && `
     margin: 4px 0 0 45px;
   `}
+  ${({ stakeMobile }) => stakeMobile && `
+    margin: 0 0 0 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `}
   @media (max-width: 992px){
     width: 100%;
     margin-left: 0px;
@@ -991,6 +1006,9 @@ const FirstColTitle = styled.div`
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    h2{
+      font-size: 12px;
+    }
   }  
   
   ${({ tranche }) => tranche && `
@@ -1040,6 +1058,18 @@ const FirstColSubtitle = styled.div`
       margin-left: 2px;
     }
   }
+  @media (max-width: 992px){
+    margin-top: 0px;
+  }
+  ${({ stakeMobile, color }) => stakeMobile && `
+    @media (max-width: 992px){
+      h2{
+        color: ${color};
+      }
+    }
+  `}
+
+
 `
 
 const TableSecondCol = styled.div`
@@ -1349,6 +1379,7 @@ const StakeBtnSlice = styled.button`
     background: #6E41CF;    
     font-size: 12px;
   `}
+  
   ${({ disabled, disabledBtnColor }) => disabled && `
     background: ${disabledBtnColor};
     pointer-events: none;
@@ -1363,6 +1394,14 @@ const StakeBtnSlice = styled.button`
   :hover{
     opacity: 0.7;
   }
+  ${({ stakeMobile }) => stakeMobile && `
+    @media (max-width: 992px){
+      width: 83px;
+      height: 32px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+  `}
 `
 
 const StakeBtns = styled.div`
@@ -1704,6 +1743,9 @@ const FormContent = styled.div`
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color} !important;
+    @media (max-width: 992px){
+      font-size: 20px;
+    }
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button{
@@ -1937,6 +1979,10 @@ const TableMobileContent = styled.div`
     justify-content: center !important;
     height: auto;
   `}
+  ${({ stakeMobile }) => stakeMobile && `
+    width: 100%;
+    padding: 10px 12px;
+  `}
   
 `
 
@@ -1962,6 +2008,7 @@ const TableMobileContentCol = styled.div`
     width: 25%;
     text-align: center;
   `}
+  
   :nth-child(1){
     h2{
       display: flex;
@@ -1999,11 +2046,14 @@ const TableMobileContentCol = styled.div`
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 5.55px;
+    font-size: 5px;
     line-height: 7px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${props => props.color};
+    @media (max-width: 992px){
+      font-size:  6px;
+    }
   }
   h2:nth-child(3){
     font-size: 9px;
@@ -2011,7 +2061,9 @@ const TableMobileContentCol = styled.div`
   }
   ${({ trancheMobileRows }) => trancheMobileRows && `
     display: flex;
+    width: 33.3333333%;
     flex-direction: column;
+    position: relative;
     justify-content: center;
     align-items: center;
     h2:first-child{
@@ -2022,6 +2074,30 @@ const TableMobileContentCol = styled.div`
     }
 
     
+  `}
+  
+
+  
+  ${({ stakeMobile, color, width }) => stakeMobile && `
+    width: ${width}%;
+    text-align: left;
+    h2:first-child{
+      font-family: 'Inter', sans-serif;
+      font-weight: normal;
+      text-transform: capitalize;
+      font-size: 10px;
+      letter-spacing: 0.03em;
+      color: ${color};
+      opacity: 0.4;
+      // color: rgba(255, 255, 255, 0.4);
+    }
+    h2:last-child{
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 13px;
+      color: ${color};
+      margin-top: 8px;
+    }
   `}
 `
 
@@ -2288,6 +2364,15 @@ const TrancheRateType = styled.h2`
     width: 80px;
     font-size: 12px;
   }
+  ${({ trancheMobile, TrancheRateColor }) => trancheMobile && `
+    border-radius: 5px !important;
+    width: 80px !important;
+    height: 25px !important;
+    position: relative;
+    left: -15px !important;
+    font-size: 11px !important;
+    color: ${TrancheRateColor} !important;
+  `}
 
 `
 
@@ -2295,6 +2380,10 @@ const LoadingContent = styled.div`
   animation: gradient-slide 2.2s ease infinite;
   background: 0 0/300% 300% -webkit-gradient(linear, left top, right top, color-stop(40%, ${props => props.colorOne}), color-stop(50%, ${props => props.colorTwo}), color-stop(60%, ${props => props.colorOne}));
   background: 0 0/300% 300% linear-gradient(90deg, ${props => props.colorOne} 40%, ${props => props.colorTwo} 50%, ${props => props.colorOne} 60%);
+`
+
+const FirstColMobileText = styled.div`
+  
 `
 
 export {
@@ -2385,5 +2474,6 @@ export {
   HowToLink,
   LoadingContent,
   StakeBtnSlice,
-  TrancheRateType
+  TrancheRateType,
+  FirstColMobileText
 };
