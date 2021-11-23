@@ -1220,7 +1220,7 @@ const FourthColContent = styled.div`
     font-size: 12px;
     line-height: 15px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
+    text-transform: unset;
     text-align: center;
     color: #CCCCCD;
   }

@@ -167,7 +167,7 @@ const TableCard = ({
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               {/* <img src={apyImage} alt='apyImage' /> */}
-              <h2>{netAPY || network !== 'ftm' ? `${roundNumber(netAPY, 2)}%` : 'NEW \u2728'}</h2>
+              <h2>{netAPY || network !== 'ftm' || type === 'TRANCHE_A' ? `${roundNumber(netAPY, 2)}%` : 'NEW \u2728'}</h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>
@@ -315,7 +315,7 @@ const TableCard = ({
                 <h2>NET APY</h2>
                 <h2>
                   {/* <img src={apyImage} alt='apyImage' /> */}
-                  {netAPY || network !== 'ftm' ? `${roundNumber(netAPY, 2)}%` : 'NEW \u2728'}{/* <img src={Info} alt='infoImage' /> */}
+                  {netAPY || network !== 'ftm' || type === 'TRANCHE_A' ? `${roundNumber(netAPY, 2)}%` : 'NEW \u2728'}{/* <img src={Info} alt='infoImage' /> */}
                 </h2>
               </TableMobileContentCol>
             </TableMobileContentRow>
