@@ -135,6 +135,7 @@ const TableCard = ({
                 // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
+                
                 <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
                 <span>
                   <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
@@ -245,6 +246,7 @@ const TableCard = ({
             <TableMoreRow
               name={name}
               type={type}
+              network={network}
               trancheId={trancheId}
               apyStatus={apyStatus}
               apy={apy}
