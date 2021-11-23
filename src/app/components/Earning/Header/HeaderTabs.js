@@ -10,23 +10,8 @@ import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper, YearnN
 import { ModeThemes } from 'config';
 import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 import useAnalytics from 'services/analytics';
-// const responsive = {
-//   desktop: {
-//     breakpoint: { max: 3000, min: 1024 },
-//     items: 3,
-//     paritialVisibilityGutter: 60
-//   },
-//   tablet: {
-//     breakpoint: { max: 1024, min: 464 },
-//     items: 2,
-//     paritialVisibilityGutter: 50
-//   },
-//   mobile: {
-//     breakpoint: { max: 464, min: 0 },
-//     items: 2,
-//     paritialVisibilityGutter: 30
-//   }
-// };
+import { networkId, maticNetworkId, fantomNetworkId } from 'config/constants'
+
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
 const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalLoading, setTxModalType, theme }) => {
@@ -50,7 +35,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
     trancheMarketsToggle(val);
   }
   useEffect(() => {
-    let trancheMarkets = ((network === 1 || network === 42) ? 'compound' : (network === 137) ? 'aavePolygon' : (network === 250) ? 'fantom' : '')
+    let trancheMarkets = ((network === networkId) ? 'compound' : (network === maticNetworkId) ? 'aavePolygon' : (network === fantomNetworkId) ? 'fantom' : '')
     setTranchesToggle(trancheMarkets);
   }, [network]);
   
@@ -77,6 +62,9 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
     setTxModalStatus('initialState');
     setTxModalLoading(false);
   };
+  console.log(networkId)
+  console.log(fantomNetworkId)
+  console.log(maticNetworkId)
   
 
   return (
@@ -101,7 +89,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
         
         <MarketTab
           market='compound'
-          current={trancheMarket === 'compound' && (network === 1 || network === 42)}
+          current={trancheMarket === 'compound' && network === networkId}
           onClick={() => trancheMarketsToggling('compound')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -117,7 +105,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
         </MarketTab>
         <MarketTab
           market='aavePolygon'
-          current={trancheMarket === 'aavePolygon' && (network === 137)}
+          current={trancheMarket === 'aavePolygon' && (network === maticNetworkId)}
           onClick={() => trancheMarketsToggling('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -134,7 +122,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
 
         <MarketTab
           market='fantom'
-          current={trancheMarket === 'fantom' && (network === 250)}
+          current={trancheMarket === 'fantom' && (network === fantomNetworkId)}
           onClick={() => trancheMarketsToggling('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -155,7 +143,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
       <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
         <MarketTab
           market='compound'
-          current={trancheMarket === 'compound' && (network === 1 || network === 42)}
+          current={trancheMarket === 'compound' && (network === networkId)}
           onClick={() => trancheMarketsToggling('compound')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -172,7 +160,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
         </MarketTab>
         <MarketTab
           market='aavePolygon'
-          current={trancheMarket === 'aavePolygon' && (network === 137)}
+          current={trancheMarket === 'aavePolygon' && (network === maticNetworkId)}
           onClick={() => trancheMarketsToggling('aavePolygon')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
@@ -190,7 +178,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
 
         <MarketTab
           market='fantom'
-          current={trancheMarket === 'fantom' && (network === 250)}
+          current={trancheMarket === 'fantom' && (network === fantomNetworkId)}
           onClick={() => trancheMarketsToggling('fantom')}
           span={ModeThemes[theme].TrancheBtnSpan}
           background={ModeThemes[theme].TrancheBtnBackground}
