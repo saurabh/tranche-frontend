@@ -685,15 +685,10 @@ const MarketTab = styled.button`
   @media (max-width: 992px) {
     padding: 12px;
     height: 45px;
-    width: 49%;
     h2{
       font-size: 12px;
     }
-    img:first-child{
-      width: ${props => props.market === "aavePolygon" ? "60px" : props.market === 'compound' ? "74px" : "100%"};
-    }
   }
-  
 
   ${({ theme }) => theme === "light" && `
       opacity: 0.5;
