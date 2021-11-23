@@ -112,7 +112,9 @@ ${({ rightStakeModal, ModalHeader }) => rightStakeModal && `
       padding: 0 50px !important;
     }
   } 
+  
 `}
+
 
 
 ${({ error }) => error && `
@@ -139,6 +141,23 @@ ${({ enableModal }) => enableModal && `
   top: 0;
   @media (max-width: 633px){
     position: absolute;
+  }
+`}
+${({ TrancheWFTM, textColor }) => TrancheWFTM && `
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 150%;
+    letter-spacing: 0.03em;
+    color: ${textColor};
+    @media (max-width: 992px){
+      font-size: 15px;
+    }
   }
 `}
 
@@ -2199,12 +2218,53 @@ const TrancheModalWrapper = styled.div`
       max-height: unset;
     }
   `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    max-height: 490px;
+    // min-height: 685px;
+    min-height: 490px;
+    @media (max-width: 633px){
+      // min-height: 100vh;
+      max-height: unset;
+    }
+  `}
+
   width: 100%;
   background: ${props => props.backgroundColor};
   @media (max-height: 560px){
     min-height: 571px;
   }
 `;
+
+const WrapSubmitBtn = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  width: 100%;
+  background: #4441CF;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  h2 {font-size: 14px};
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 32px 0 0 0;
+  outline: none;
+  cursor: pointer;
+  :disabled{
+    opacity: 0.5;
+    cursor: default;
+    box-shadow: none;
+    :hover{
+      filter: brightness(1);
+    }
+  }
+`
+
 const TrancheModalHeader = styled.div`
   height: 68px; 
   ${({ TrancheEnable }) => TrancheEnable && `
@@ -2212,6 +2272,9 @@ const TrancheModalHeader = styled.div`
   `}
   ${({ TrancheConfirm }) => TrancheConfirm && `
     height: 210px; 
+  `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    height: 156px;   
   `}
   display: flex;
   align-items: center;
@@ -2266,7 +2329,29 @@ const TrancheModalContent = styled.div`
   ${({ initialStatus }) => initialStatus && `
     min-height: 347px;
   `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    min-height: 393px;
+  `}
+  ${({ TrancheWFTMStatus }) => TrancheWFTMStatus && `
+    min-height: 250px;
+  `}
 `;
+const WrapFTMHeader = styled.div`
+  width: 100%;
+  & > h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+    margin: -20px 0 12px 0;
+    color: ${props => props.textColor} !important;
+    opacity: 0.6;
+    @media (max-width: 992px){
+      font-size: 12px;
+    }
+  }
+`
+
 const TrancheModalContentHeader = styled.div`
   display: flex;
   justify-content: center;
@@ -2296,6 +2381,9 @@ const TrancheModalContentHeader = styled.div`
       text-align: center;
       color: #898FA4;
     }
+  `}
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    margin: 30px 0 0 0;
   `}
 
   img{
@@ -2340,6 +2428,7 @@ const TrancheModalFooter = styled.div`
     outline: none;
     color: #FFFFFF;
     margin: 10px auto 16px auto;
+
     img{
       margin-right: 5px;
     }
@@ -2400,9 +2489,15 @@ const TrancheModalFooter = styled.div`
       outline: none;
       color: #FFFFFF;
       margin: 10px auto 16px auto;
+
       img{
         margin-right: 5px;
       }
+    }
+  `}
+  ${({ TrancheWFTMStatus }) => TrancheWFTMStatus && `
+      a{
+        margin: 0;
     }
   `}
   ${({ TrancheRewards }) => TrancheRewards && `
@@ -2426,6 +2521,11 @@ const TrancheModalContentHeaderImg = styled.div`
       z-index: 2;
     }
   }
+  ${({ TrancheWFTM }) => TrancheWFTM && `
+    & > img{
+      margin-bottom: 0;
+    }
+  `}
 `
 
 
@@ -2437,6 +2537,9 @@ const TrancheModalContentHeaderText = styled.div`
     text-align: center;
     color: ${props => props.color};
     margin: 17px auto 12px auto;
+    ${({ TrancheWFTM }) => TrancheWFTM && `
+      margin: 10px auto 0 auto;
+    `}
   }
   div{
     display: flex;
@@ -2468,6 +2571,9 @@ const TrancheModalContentHeaderText = styled.div`
       justify-content: center;
       margin: 0;
     }
+    h2{
+      margin: 0 2px !important;
+    }
   }
 `
 const TrancheModalContentStatus = styled.div`
@@ -2477,6 +2583,9 @@ const TrancheModalContentStatus = styled.div`
   align-items: center;
   img{
     margin: 45px auto 25px auto;
+    ${({ TrancheWFTMStatus }) => TrancheWFTMStatus && `
+      margin: 20px auto 44px auto;
+    `}
   }
   h2{
     font-family: 'Inter', sans-serif;
@@ -2635,6 +2744,38 @@ const TrancheMarketStyles = {
     bottom: '0'
   }
 };
+const TrancheWFTMStyles = {
+  overlay: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    zIndex: '2000',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'relative',
+    maxWidth: '528px',
+    maxHeight: '490px',
+    width: '100%',
+    minHeight: '490px',
+    //height: '326px',
+    height: 'auto',
+    border: 'none',
+    boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.12)',
+    borderRadius: '12px',
+    padding: '0',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0'
+  }
+};
+
+
 const TrancheRewardsStyles = {
   overlay: {
     display: 'flex',
@@ -2862,6 +3003,7 @@ const GovernanceModalDelegateFormSubmitBtn = styled.button`
 
 export {
   TrancheMarketStyles,
+  TrancheWFTMStyles,
   TrancheRewardsStyles,
   TrancheEnableModal,
   TrancheConfirmModal,
@@ -2972,7 +3114,9 @@ export {
   TrancheModalContentHeaderImg,
   TrancheModalContentHeaderText,
   TrancheModalContentStatus,
+  WrapSubmitBtn,
   GovernanceModalStyles,
+  WrapFTMHeader,
   GovernanceModalWrapper,
   GovernanceModalHeader,
   GovernanceModalContent,

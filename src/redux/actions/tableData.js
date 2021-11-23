@@ -1,15 +1,7 @@
 import store from '../store';
-import {
-  networkId,
-  maticNetworkId,
-  apiUri,
-  SLICEAddress,
-  LP1TokenAddress,
-  LP2TokenAddress,
-  txLink
-} from 'config';
+import { networkId, maticNetworkId, fantomNetworkId, apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress, txLink } from 'config';
 import { timeout } from 'utils';
-import { postRequest, initOnboard, getRequest } from 'services';
+import { postRequest, initOnboard, getRequest, switchNetwork } from 'services';
 import { checkServer } from './checkServer';
 import {
   LOANS_IS_LOADING,
@@ -180,9 +172,15 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });
     store.dispatch(changeFilter('ethereum'));
+    networkId === 1 ? switchNetwork('mainnet') : switchNetwork('kovan');
   } else if (trancheMarket === 'aavePolygon') {
     onboard.config({ networkId: maticNetworkId });
     store.dispatch(changeFilter('polygon'));
+    switchNetwork('polygon')
+  } else if (trancheMarket === 'fantom') {
+    onboard.config({ networkId: fantomNetworkId });
+    store.dispatch(changeFilter('ftm'));
+    switchNetwork('fantom')
   }
   store.dispatch(trancheCardToggle({ status: false, id: null }));
   dispatch({

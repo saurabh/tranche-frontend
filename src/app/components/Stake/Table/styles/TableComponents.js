@@ -1596,7 +1596,6 @@ const TableMoreRightSection = styled.div`
   border-left: 2px solid ${props => props.color};
   display: flex;
   flex-direction: column;
-  
   justify-content: center;
   h2{
     font-family: 'Inter', sans-serif;
@@ -1604,7 +1603,6 @@ const TableMoreRightSection = styled.div`
     font-weight: 500;
     font-size: 12px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
     color: #7C859B;
     margin: 12px 0;
   }
@@ -1698,6 +1696,19 @@ const TableMoreRightSection = styled.div`
 
   
 `
+
+const FormContentWrapper = styled.div` 
+  width: 100%;
+  h3{
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    color: ${props => props.textColor ? props.textColor : "#FFFFFF"};
+    margin: 10px 0;
+  }
+
+`
 const FormContent = styled.div` 
   position: relative;
   button{
@@ -1768,6 +1779,57 @@ const FormContent = styled.div`
       opacity: 0.7;
     }
   }
+  ${({ TrancheWFTM, FTMIcon, color }) => TrancheWFTM && `
+    width: 100%;
+    input{
+      height: 56px;
+      border: 1.5px solid #CFCFE5;
+      box-sizing: border-box;
+      border-radius: 8px;
+      padding: 16px 67px 16px 50px;
+      font-weight: normal;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.4);
+      background-image: url(${FTMIcon}) !important;
+      background-repeat: no-repeat !important;
+      background-position: 16px 50% !important;
+      ::-webkit-input-placeholder{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        color: ${color};
+        opacity: 0.4;
+      }
+      
+      :-ms-input-placeholder{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        color: ${color};
+        opacity: 0.4;
+      }
+      
+      ::placeholder{
+        font-family: 'Inter', sans-serif;
+        font-weight: normal;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        color: ${color};
+        opacity: 0.4;      }
+    }
+    h2{
+      font-size: 16px;
+      margin-right: 16px;
+      color: ${color};
+    }
+    h3{
+      color: ${color};
+    }
+  `}
+  
 `
 const CheckboxWrapper = styled.div`
   display: ${({hidden}) => hidden ? 'none' : 'flex'};
@@ -1880,6 +1942,31 @@ const TableMoreTitleWrapper = styled.div`
     text-transform: uppercase;
     color: ${props => props.color};
   }
+  ${({ textwithBtn, theme }) => textwithBtn && `
+    & > button{
+      width: 114px;
+      height: 32px;
+      background: ${theme === 'light' ? "transparent" : "#292661"};
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border: ${theme === 'light' ? "1px solid #292661" : "none"};;
+      color: ${theme === 'light' ? "#292661" : "#A09EFF"};
+      outline: none;
+      cursor: pointer;
+      @media (max-width: 992px){
+        border: none;
+        font-size: 10.5px;
+        width: auto;
+        height: auto;
+        background: transparent;
+      }
+    }
+  `}
 `
 const TableMobileContent = styled.div`
   width: 83%;
@@ -2365,6 +2452,7 @@ export {
   TableMoreRowContentLeft,
   TableMoreRowContentRight,
   TableMoreRightSection,
+  FormContentWrapper,
   FormContent,
   CheckboxWrapper,
   CheckboxContent,

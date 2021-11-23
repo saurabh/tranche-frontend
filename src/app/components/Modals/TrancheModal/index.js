@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { trancheMarketsToggle } from 'redux/actions/tableData';
 import { SLICEAddress } from 'config/constants';
 import { roundNumber, safeMultiply, toBigNumber } from 'utils';
 import { fromWei, buyTrancheTokens, sellTrancheTokens, toBN } from 'services';
 import useAnalytics from 'services/analytics';
-import { TrancheRewards, TrancheEnable, TrancheConfirm, TrancheMarket } from './Components';
+import { TrancheRewards, TrancheEnable, TrancheConfirm, TrancheWFTM } from './Components';
 
 Modal.setAppElement('#root');
 
@@ -42,13 +41,14 @@ const TrancheModal = ({
       isDepositApproved,
       isWithdrawApproved,
       buyerCoinAddress,
-      trancheTokenAddress
+      trancheTokenAddress,
+      buyerTokenBalance,
+      FTMBalance
     }
   },
   // Props
   theme,
   // Functions
-  trancheMarketsToggle,
   closeModal
   // API Values,
 }) => {
@@ -70,10 +70,6 @@ const TrancheModal = ({
     setTotalSlice(roundNumber(+totalSliceBalance + +unclaimedSlice));
   }, [exchangeRates.SLICE, totalSliceBalance, unclaimedSlice]);
 
-  const trancheMarketsToggling = () => {
-    trancheMarketsToggle('aavePolygon');
-    closeModal();
-  };
 
   const handleSubmit = () => {
     try {
@@ -94,6 +90,7 @@ const TrancheModal = ({
       exchangeRates,
       txModalType,
       txModalIsOpen,
+      network,
       txModalStatus,
       txLoading,
       txLink,
@@ -115,6 +112,7 @@ const TrancheModal = ({
         txLink,
         name,
         contractAddress,
+        network,
         apyStatus,
         trancheToken,
         dividendType,
@@ -142,6 +140,7 @@ const TrancheModal = ({
         txLink,
         name,
         apyStatus,
+        network,
         cryptoType,
         trancheToken,
         dividendType,
@@ -156,8 +155,36 @@ const TrancheModal = ({
         closeModal,
         handleSubmit
       })
-    : txModalType === 'trancheMarkets'
-    ? TrancheMarket({ theme, txModalIsOpen, closeModal, trancheMarketsToggling })
+      : txModalType === 'trancheWFTM'
+    ? TrancheWFTM({
+        theme,
+        formValues,
+        tokenBalance,
+        txModalType,
+        txModalIsOpen,
+        txModalStatus,
+        trancheCard,
+        txOngoingData,
+        txLoading,
+        txLink,
+        name,
+        apyStatus,
+        cryptoType,
+        trancheToken,
+        dividendType,
+        apy,
+        protocolAPY,
+        sliceAPY,
+        netAPY,
+        isDeposit,
+        buyerCoinAddress,
+        trancheTokenAddress,
+        buyerTokenBalance,
+        FTMBalance,
+        // Functions
+        closeModal,
+        handleSubmit
+      })
     : '';
 };
 
@@ -168,4 +195,4 @@ const mapStateToProps = (state) => ({
   data: state.data
 });
 
-export default connect(mapStateToProps, { trancheMarketsToggle })(TrancheModal);
+export default connect(mapStateToProps, { })(TrancheModal);

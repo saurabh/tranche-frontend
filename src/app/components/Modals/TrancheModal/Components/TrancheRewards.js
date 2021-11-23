@@ -8,7 +8,6 @@ import store from 'redux/store';
 import { maticNetworkId } from 'config';
 import { setAddress, setNetwork, setBalance, setWalletAndWeb3 } from 'redux/actions/ethereum';
 import { claimRewardsAllMarkets, initOnboard } from 'services';
-
 import {
   ModalHeader,
   TrancheModalWrapper,

@@ -19,6 +19,7 @@ import {
 import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
 import maticWeb3 from 'utils/maticWeb3';
+import fantomWeb3 from 'utils/fantomWeb3';
 import {
   SLICEAddress,
   LP1TokenAddress,
@@ -28,15 +29,21 @@ import {
   TrancheBuyerCoinAddresses,
   JAaveAddress,
   AaveTrancheTokens,
-  PolygonBuyerCoinAddresses
+  PolygonBuyerCoinAddresses,
+  YearnTrancheTokens,
+  FantomBuyerCoinAddresses,
+  JYearnAddress
 } from 'config/constants';
 
 const CompTokens = CompTrancheTokens.concat(TrancheBuyerCoinAddresses);
 const AaveTokens = AaveTrancheTokens.concat(PolygonBuyerCoinAddresses);
+const YearnTokens = YearnTrancheTokens.concat(FantomBuyerCoinAddresses);
 let compAllowance = {};
 let aaveAllowance = {};
+let yearnAllowance = {};
 CompTokens.map((tokenAddress) => (compAllowance[tokenAddress.toLowerCase()] = false));
 AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
+YearnTokens.map((tokenAddress) => (yearnAllowance[tokenAddress.toLowerCase()] = false));
 
 const initialState = {
   balance: -1,
@@ -44,12 +51,14 @@ const initialState = {
   address: undefined,
   web3,
   maticWeb3,
+  fantomWeb3,
   notify: initNotify(),
   txOngoing: false,
   tokenBalanceLoading: true,
   trancheAllowance: {
     [JCompoundAddress]: compAllowance,
-    [JAaveAddress]: aaveAllowance
+    [JAaveAddress]: aaveAllowance,
+    [JYearnAddress]: yearnAllowance
   },
   notificationCount: 0,
   notifications: [],

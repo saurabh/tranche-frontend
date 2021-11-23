@@ -61,7 +61,7 @@ let TableMoreRow = ({
   // setDepositApproved,
   // setWithdrawApproved,
   // redux
-  ethereum: { tokenBalance, trancheAllowance, txOngoing, wallet },
+  ethereum: { balance, tokenBalance, trancheAllowance, txOngoing, wallet },
   data: { txOngoingData, trancheCard },
   setAddress,
   setNetwork,
@@ -107,7 +107,7 @@ let TableMoreRow = ({
     setTxModalType(txType);
     setTxModalOpen(true);
     setTxModalData({
-      name: name.split('-')[1].trim(),
+      name: name.split('-').length > 1 ? name.split('-')[1].trim() : name.split('-')[0].trim(),
       contractAddress,
       trancheId,
       trancheCard: trancheCard.id,
@@ -124,7 +124,9 @@ let TableMoreRow = ({
       isDepositApproved,
       isWithdrawApproved,
       buyerCoinAddress,
-      trancheTokenAddress
+      trancheTokenAddress,
+      buyerTokenBalance,
+      FTMBalance: cryptoType === 'WFTM' ? balance : '0'
     });
   };
 
@@ -258,8 +260,9 @@ let TableMoreRow = ({
                   <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                 </div>
               )} */}
-              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
+              <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText} textwithBtn={cryptoType === 'WFTM'} theme={theme}>
                 <h2>{i18n.t('tranche.trancheData.deposit')}</h2>
+                {cryptoType === 'WFTM' && <button onClick={() => openModal('trancheWFTM', true)}>Wrap</button>}
                 {/* <CheckboxWrapper hidden={isEth}>
                   <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
                   <CheckboxContent disabled={txOngoing}>
@@ -325,7 +328,7 @@ let TableMoreRow = ({
                 ) : (
                   <button onClick={() => openModal('trancheEnable', true)}>
                     <img src={BtnArrow} alt='arrow' />
-                    Enable
+                    Approve
                   </button>
                 )}
               </Form>
@@ -414,7 +417,7 @@ let TableMoreRow = ({
                 ) : (
                   <button onClick={() => openModal('trancheEnable', false)}>
                     <img src={BtnArrow} alt='arrow' />
-                    Enable
+                    Approve
                   </button>
                 )}
               </Form>
@@ -438,7 +441,7 @@ let TableMoreRow = ({
                     <ReactLoading type={'spin'} color={ModeThemes[theme].loadingSpinner} />
                   </div>
                 )}
-                <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText}>
+                <TableMoreTitleWrapper color={ModeThemes[theme].dropDownText} theme={theme} textwithBtn={cryptoType === 'WFTM'}>
                   <MobileMoreFormBtns color={ModeThemes[theme].dropDownText}>
                     <MobileMoreFormBtn current={formType === 'deposit'} onClick={() => setFormType('deposit')} color={ModeThemes[theme].dropDownText}>
                       {i18n.t('tranche.trancheData.deposit')}
@@ -451,6 +454,7 @@ let TableMoreRow = ({
                       {i18n.t('tranche.trancheData.withdraw')}
                     </MobileMoreFormBtn>
                   </MobileMoreFormBtns>
+                  {cryptoType === 'WFTM' && <button onClick={() => openModal('trancheWFTM', true)}>Wrap</button>}
                   {/* <CheckboxWrapper hidden={isEth}>
                     <h2>{isDepositApproved ? i18n.t('tranche.trancheData.enabled') : i18n.t('tranche.trancheData.disabled')}</h2>
 
@@ -504,7 +508,7 @@ let TableMoreRow = ({
                   ) : (
                     <button onClick={() => openModal('trancheEnable', true)}>
                       <img src={BtnArrow} alt='arrow' />
-                      Enable
+                      Approve
                     </button>
                   )}
                 </Form>
@@ -591,7 +595,7 @@ let TableMoreRow = ({
                   ) : (
                     <button onClick={() => openModal('trancheEnable', false)}>
                       <img src={BtnArrow} alt='arrow' />
-                      Enable
+                      Approve
                     </button>
                   )}
                 </Form>

@@ -33,7 +33,6 @@ import {
   LoadingContent
 } from './styles/TableComponents';
 import { EmptyBox } from 'assets';
-import { isEqualTo } from 'utils';
 const { stakingList: stakingListUrl, userStakingList: userStakingListUrl } = apiUri;
 
 const style = {

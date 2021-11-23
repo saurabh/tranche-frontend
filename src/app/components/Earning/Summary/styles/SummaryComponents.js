@@ -249,7 +249,7 @@ const StakeCardText = styled.div`
         }
 `;
 const StakeCardBtn = styled.div`
-        button{
+        button, a{
             font-family: "Inter", sans-serif;
             background: #FFFFFF;
             border: 2px solid #FFFFFF;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
-import { ChevronDown } from 'assets';
 import { useOuterClick } from 'services/useOuterClick'
 
 import {
@@ -9,11 +8,6 @@ import {
 import {
     TableHeadWrapper,
     TableHeadTitle,
-    SortingMenu,
-    TableMarketsSortingDropdown,
-    TableMarketsSortingDropdownContent,
-    TableMarketSortingBtn,
-    TableSubTitle,
     TooltipWrapper
 } from './styles/TableComponents';
 import i18n from "app/components/locale/i18n";

@@ -650,7 +650,7 @@ const MarketTab = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  // width: 200px;
+  width: 200px;
   cursor: pointer;
   transition: 300ms;
   outline: none;
@@ -777,6 +777,83 @@ const BridgeTokensWrapper = styled.div`
     }
   }
 `
+const YearnNoticeWrapper = styled.div`
+  margin: 0 0 25px 0;
+  width: 100%;
+  height: 66px;
+  padding: 24px;
+  z-index: 1000;
+  background: linear-gradient(104.19deg, #2521C0 0%, #8900CA 99.36%);
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p{
+    font-family: 'Inter', sans-serif;
+    color: #FFFFFF;
+    font-weight: normal;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    margin: 0;
+    span button{
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      margin-left: 24px;
+      display: none;
+    }
+    span{
+      font-weight: bold;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+  }
+  div{
+    display: flex;
+    align-items: center;
+    position: relative;
+    & > span{
+      height: 100%;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.4); 
+      position: absolute;
+    }
+    button{
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      margin-left: 24px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    height: auto;
+    div{
+      & > span, button{
+        display: none;
+      }
+    }
+    p{
+      span{
+        width: 100%;
+        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 10px 0;
+        button{
+          display: block;
+        }
+      }
+    }
+  }
+
+`
+
 
 export {
   HeaderWrapper,
@@ -814,5 +891,6 @@ export {
   MarketsTabsWrapper,
   MarketsTabs,
   MarketTab,
-  BridgeTokensWrapper
+  BridgeTokensWrapper,
+  YearnNoticeWrapper
 };

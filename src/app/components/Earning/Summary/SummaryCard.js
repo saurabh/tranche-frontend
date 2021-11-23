@@ -104,7 +104,7 @@ const SummaryCard = ({
                   <h2>{i18n.t('tranche.summary.stakeLive.details')}</h2>
                 </StakeCardText>
                 <StakeCardBtn>
-                  <button><a href="/stake" onClick={(e) => Tracker("Stake", "https://app.tranche.com/stake")}>{i18n.t('stake.modal.stake')}</a></button>
+                  <a href="/stake" onClick={(e) => Tracker("Stake", "https://app.tranche.com/stake")}>{i18n.t('stake.modal.stake')}</a>
                 </StakeCardBtn>
               </SummaryCardContainer>
             ) : (

@@ -10,8 +10,8 @@ import ErrorModal from 'app/components/Modals/Error';
 
 import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards } from 'redux/actions/ethereum';
 import { fetchExchangeRates } from 'redux/actions/tableData';
-import { ETHContracts, MaticContracts } from 'services/web3Subscriptions';
-import { networkId, maticNetworkId, JCompoundAddress, JAaveAddress, ModeThemes, GTMID } from 'config/constants';
+import { ETHContracts, MaticContracts, FantomContracts } from 'services/web3Subscriptions';
+import { networkId, maticNetworkId, fantomNetworkId, JCompoundAddress, JAaveAddress, JYearnAddress, ModeThemes, GTMID } from 'config/constants';
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
@@ -39,27 +39,33 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
   }, [fetchExchangeRates]);
 
   useEffect(() => {
-    if (address)
-    {
+    if (address) {
       setTokenBalances(address);
-      if (network === networkId)
-      {
+      if (network === networkId) {
         checkTrancheAllowances(address, JCompoundAddress);
         checkStakingAllowances(address);
         checkSIRRewards();
       }
       if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
+      if (network === fantomNetworkId) checkTrancheAllowances(address, JYearnAddress);
     }
-  }, [ address, network, setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards ]);
+  }, [address, network, setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards]);
 
   useEffect(() => {
     if (network === networkId) {
       ETHContracts.subscribe();
       MaticContracts.unsubscribe();
+      FantomContracts.unsubscribe();
     }
     if (network === maticNetworkId) {
       MaticContracts.subscribe();
       ETHContracts.unsubscribe();
+      FantomContracts.unsubscribe();
+    }
+    if (network === fantomNetworkId) {
+      FantomContracts.subscribe();
+      ETHContracts.unsubscribe();
+      MaticContracts.unsubscribe();
     }
   }, [network, address, path]);
 
