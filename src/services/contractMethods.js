@@ -891,6 +891,7 @@ export const unwrapFTM = async (amount) => {
     );
     store.dispatch(setTxModalLoading(true));
     store.dispatch(setTxModalStatus('confirm'));
+    store.dispatch(setTxOngoingData({ wrap: false }));
     const WFTM = await wFTMSetup(web3, WFTMAddress);
     await WFTM.methods
       .withdraw(toWei(amount))
