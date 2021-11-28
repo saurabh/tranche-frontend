@@ -624,7 +624,7 @@ const NavbarIconContent = styled.div`
 const MarketsTabsWrapper = styled.div`
   & > div{
     display: flex;
-    align-items: center;s
+    align-items: center;
   }
   & > div h2{
     font-family: 'Inter', sans-serif;
@@ -681,14 +681,11 @@ const MarketTab = styled.button`
     display: block;
     margin: 0 16px;
     padding: 0.5px;
-  }
-  @media (max-width: 992px) {
-    padding: 12px;
-    height: 45px;
-    h2{
-      font-size: 12px;
+    @media (max-width: 992px) {
+      height: 100%;
     }
   }
+  
 
   ${({ theme }) => theme === "light" && `
       opacity: 0.5;
@@ -717,6 +714,19 @@ const MarketTab = styled.button`
   `} 
   :hover{
     opacity: ${props => props.current ? "" : "0.7"};
+  }
+  @media (max-width: 992px) {
+    padding: 12px;
+    height: 45px;
+    width: 32%;
+    margin: 0;
+    h2{
+      font-size: 12px;
+    }
+    img:first-child{
+      height: 24px;
+      margin: 0;
+    }
   }
 `
 const BridgeTokensWrapper = styled.div`

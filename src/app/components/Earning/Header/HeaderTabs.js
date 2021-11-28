@@ -4,7 +4,7 @@ import i18n from '../../locale/i18n';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
-import { AaveBtn, CloseModalWhite, CompoundBtn, CompoundBtnBlack, ETHLOGO, FantomDark, FantomLight, FANTOMLOGO, FANTOMLOGOLIGHT, PolygonLogo, PolygonLogoBlack, YEARNLOGO, YEARNLOGOLIGHT } from 'assets';
+import { AaveBtn, AAVEIconMobile, CloseModalWhite, CompoundBtn, CompoundBtnBlack, CompoundIconMobile, ETHLOGO, FantomDark, FantomLight, FANTOMLOGO, FANTOMLOGOLIGHT, PolygonLogo, PolygonLogoBlack, YEARNIconMobile, YEARNLOGO, YEARNLOGOLIGHT } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
@@ -84,7 +84,6 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>
-      { isDesktop ?
       <MarketsTabs>
         
         <MarketTab
@@ -99,7 +98,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           theme={theme}
           btnShadow={ModeThemes[theme].btnShadow}
         >
-          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
+          <img src={isDesktop ? (theme === 'light' ? CompoundBtnBlack : CompoundBtn) : CompoundIconMobile} alt='' /> 
           <span></span> 
           <img src={ETHLOGO} alt='' />
         </MarketTab>
@@ -115,9 +114,9 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           theme={theme}
           btnShadow={ModeThemes[theme].btnShadow}
         >
-          <img src={AaveBtn} alt='' /> 
+          <img src={isDesktop ? AaveBtn : AAVEIconMobile} alt='' /> 
           <span></span> 
-          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+          <img src={PolygonLogo} alt='' />
         </MarketTab>
 
         <MarketTab
@@ -132,68 +131,14 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           theme={theme}
           btnShadow={ModeThemes[theme].btnShadow}
         >
-          <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
+          <img src={isDesktop ? (theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO) : YEARNIconMobile} alt='' /> 
           <span></span> 
           <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
         </MarketTab>
 
 
         
-      </MarketsTabs> :
-      <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
-        <MarketTab
-          market='compound'
-          current={trancheMarket === 'compound' && (network === networkId)}
-          onClick={() => trancheMarketsToggling('compound')}
-          span={ModeThemes[theme].TrancheBtnSpan}
-          background={ModeThemes[theme].TrancheBtnBackground}
-          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
-          border={ModeThemes[theme].TrancheBtnBorder}
-          color={ModeThemes[theme].TrancheBtnColor}
-          theme={theme}
-          btnShadow={ModeThemes[theme].btnShadow}
-          mobile
-        >
-          <img src={theme === 'light' ? CompoundBtnBlack : CompoundBtn} alt='' /> 
-          <span></span> 
-          <img src={ETHLOGO} alt='' />
-        </MarketTab>
-        <MarketTab
-          market='aavePolygon'
-          current={trancheMarket === 'aavePolygon' && (network === maticNetworkId)}
-          onClick={() => trancheMarketsToggling('aavePolygon')}
-          span={ModeThemes[theme].TrancheBtnSpan}
-          background={ModeThemes[theme].TrancheBtnBackground}
-          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
-          border={ModeThemes[theme].TrancheBtnBorder}
-          color={ModeThemes[theme].TrancheBtnColor}
-          theme={theme}
-          btnShadow={ModeThemes[theme].btnShadow}
-          mobile
-        >
-          <img src={AaveBtn} alt='' /> 
-          <span></span> 
-          <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
-        </MarketTab>
-
-        <MarketTab
-          market='fantom'
-          current={trancheMarket === 'fantom' && (network === fantomNetworkId)}
-          onClick={() => trancheMarketsToggling('fantom')}
-          span={ModeThemes[theme].TrancheBtnSpan}
-          background={ModeThemes[theme].TrancheBtnBackground}
-          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
-          border={ModeThemes[theme].TrancheBtnBorder}
-          color={ModeThemes[theme].TrancheBtnColor}
-          theme={theme}
-          btnShadow={ModeThemes[theme].btnShadow}
-          mobile
-        >
-          <img src={theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO} alt='' /> 
-          <span></span> 
-          <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
-        </MarketTab>
-      </Carousel> }
+      </MarketsTabs> 
       {tranchesToggle === 'aavePolygon' && (
         <BridgeTokensWrapper>
           <p>
