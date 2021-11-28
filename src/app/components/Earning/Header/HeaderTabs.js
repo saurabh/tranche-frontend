@@ -210,7 +210,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
         <YearnNoticeWrapper>
           <p><span>Notice:
               <button onClick={() => setFantomNotice(false)}><img src={CloseModalWhite} alt="close"/></button>
-            </span> Yearn V3 is still in beta and is not dispensing yields at this time. APYs will initiate once Yearn V3 launches. </p>
+            </span> Yearn V3 is still in beta and is not displaying all yields at this time. APYs will display once Yearn V3 launches. </p>
           <div>
             <span></span>
             <button onClick={() => setFantomNotice(false)}><img src={CloseModalWhite} alt="close"/></button>
