@@ -331,6 +331,7 @@ const TableCard = ({
             <TableMoreRow
               name={name}
               type={type}
+              network={network}
               trancheId={trancheId}
               apyStatus={apyStatus}
               apy={apy}
