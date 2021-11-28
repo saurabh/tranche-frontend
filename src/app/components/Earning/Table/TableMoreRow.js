@@ -196,22 +196,14 @@ let TableMoreRow = ({
                 <h2>
                   {dividendType} {i18n.t('tranche.trancheData.APY')}
                 </h2>
-                {
-                  network === 'ftm' ? 
-                  <h2>NEW ✨</h2> :
-                  <h2>{protocolAPY && roundNumber(protocolAPY, 2) !== 'NaN' ? roundNumber(protocolAPY, 2) : 0}%</h2>
-                }
+                <h2>{protocolAPY && roundNumber(protocolAPY, 2) !== 'NaN' ? roundNumber(protocolAPY, 2) : 0}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 
             <TableMoreLeftSection color={ModeThemes[theme].dropDownBorder}>
               <TableMoreLeftSectionContent titleColor={ModeThemes[theme].titleSectionText} value={ModeThemes[theme].valueSectionText}>
                 <h2>{i18n.t('tranche.trancheData.trancheAPY')}</h2>
-                {
-                  (network === 'ftm' && type === 'TRANCHE_B') ? 
-                  <h2>NEW ✨</h2> :
-                  <h2>{apy && roundNumber(apy, 2) !== 'NaN' ? roundNumber(apy, 2) : 0}%</h2>
-                }
+                <h2>{apy && roundNumber(apy, 2) !== 'NaN' ? roundNumber(apy, 2) : 0}%</h2>
               </TableMoreLeftSectionContent>
             </TableMoreLeftSection>
 

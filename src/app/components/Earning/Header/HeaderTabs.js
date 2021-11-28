@@ -6,7 +6,7 @@ import 'react-multi-carousel/lib/styles.css';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
 import { AaveBtn, CloseModalWhite, CompoundBtn, CompoundBtnBlack, ETHLOGO, FantomDark, FantomLight, FANTOMLOGO, FANTOMLOGOLIGHT, PolygonLogo, PolygonLogoBlack, YEARNLOGO, YEARNLOGOLIGHT } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
-import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper, YearnNoticeWrapper } from './styles/HeaderComponents';
+import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
 import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 import useAnalytics from 'services/analytics';
@@ -205,17 +205,6 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
             <button>Bridge Tokens</button>
           </a>
         </BridgeTokensWrapper>
-      )}
-      {tranchesToggle === 'fantom' && fantomNotice && (
-        <YearnNoticeWrapper>
-          <p><span>Notice:
-              <button onClick={() => setFantomNotice(false)}><img src={CloseModalWhite} alt="close"/></button>
-            </span> Yearn V3 is still in beta and is not dispensing yields at this time. APYs will initiate once Yearn V3 launches. </p>
-          <div>
-            <span></span>
-            <button onClick={() => setFantomNotice(false)}><img src={CloseModalWhite} alt="close"/></button>
-          </div>
-        </YearnNoticeWrapper>
       )}
       <TrancheModal closeModal={() => closeModal()} />
     </MarketsTabsWrapper>
