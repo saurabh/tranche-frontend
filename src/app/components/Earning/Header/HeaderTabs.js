@@ -61,11 +61,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
     setTxModalOpen(false);
     setTxModalStatus('initialState');
     setTxModalLoading(false);
-  };
-  console.log(networkId)
-  console.log(fantomNetworkId)
-  console.log(maticNetworkId)
-  
+  };  
 
   return (
     <MarketsTabsWrapper color={ModeThemes[theme].TrancheMarketsTitle} className='TrancheMarkets'>
