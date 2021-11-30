@@ -239,7 +239,7 @@ export const migrateWithdraw = ({ theme, oldSlice, currentStep, migrateLoading, 
   );
 };
 
-export const migrateStakeSkip = ({ theme, newSlice, objId, setObjId, currentStep, claimAndProgress }) => {
+export const migrateStakeSkip = ({ theme, newSlice, objId, userStaked, adjustStake, remainingCap, migrateLoading, setObjId, currentStep, claimAndProgress }) => {
   return (
     <StakingMigrateModalContentWrapper skipStake>
       {objId === null ? (
@@ -306,7 +306,7 @@ export const migrateStakeSkip = ({ theme, newSlice, objId, setObjId, currentStep
           </StakeModalFormBtn>
         </StakingMigrateModalContent>
       ) : (
-        <MigrateForm id={objId} />
+        <MigrateForm id={objId} theme={theme} newSlice={newSlice} setObjId={setObjId} userStaked={userStaked} adjustStake={adjustStake} remainingCap={remainingCap} migrateLoading={migrateLoading} />
       )}
     </StakingMigrateModalContentWrapper>
   );

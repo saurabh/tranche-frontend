@@ -1738,6 +1738,7 @@ const StakeModalFormBtn = styled.button`
   `}  
   ${({ skipStake }) => skipStake && `
     position: relative;
+    width: 100%;
   `}  
   
 
@@ -1745,6 +1746,9 @@ const StakeModalFormBtn = styled.button`
     position: relative;
     width: 100%;
     margin: 15px 0;
+    ${({ skipStake }) => skipStake && `
+      width: auto;
+    `} 
   }
 
   transition: 300ms;
