@@ -3003,7 +3003,25 @@ const GovernanceModalDelegateFormSubmitBtn = styled.button`
   border: none;
   outline: none;
 `
-
+const APYWarning = styled.div`
+  width: 80%;
+  min-height: 36px;
+  background: #fbc404;
+  position: absolute;
+  top: 195px;
+  border-radius: 4px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    color: #383838;
+    text-align: center;
+  }
+`
 
 export {
   TrancheMarketStyles,
@@ -3126,5 +3144,6 @@ export {
   GovernanceModalContent,
   GovernanceModalDelegateFormWrapper,
   GovernanceModalDelegateFormText,
-  GovernanceModalDelegateFormSubmitBtn
+  GovernanceModalDelegateFormSubmitBtn,
+  APYWarning
 };

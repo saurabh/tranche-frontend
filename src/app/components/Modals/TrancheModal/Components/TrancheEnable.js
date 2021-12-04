@@ -30,6 +30,7 @@ export const TrancheEnable = ({
   txModalStatus,
   trancheCard,
   network,
+  trancheValue,
   txOngoingData: { trancheCardId },
   txLoading,
   txLink,
