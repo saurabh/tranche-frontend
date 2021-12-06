@@ -1,8 +1,9 @@
 import React from 'react';
 import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { CloseModal, CloseModalWhite, FTMIconInput, LinkIcon, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
+import { CloseModal, CloseModalWhite, FTMIconInput, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes } from 'config/constants';
+import { capitalize } from 'utils';
 import { WrapForm } from '../../../Form/WrapForm';
 import {
   ModalHeader,
@@ -74,17 +75,19 @@ export const TrancheWFTM = ({
           <TrancheModalContentStatus color={ModeThemes[theme].ModalTrancheTextColor} TrancheWFTMStatus>
             {txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled' ? (
               <img src={TrancheRejected} alt='img' />
+            ) : txModalStatus === 'success' ? (
+              <img src={Migrated} alt='img' />
             ) : (
               <img src={theme === 'light' ? TranchePendingLight : TranchePending} alt='img' />
             )}
             {txModalStatus === 'failed' || txModalStatus === 'rejected' || txModalStatus === 'cancelled' ? (
-              <h2>Transaction Rejected</h2>
+              <h2>Transaction {capitalize(txModalStatus)}</h2>
             ) : txModalStatus === 'confirm' ? (
               <h2>Confirm Transaction</h2>
-            ) : wrap ? (
-              <h2>Wrapping</h2>
+            ) : txModalStatus === 'success' ? (
+              <h2>Transaction Successful</h2>
             ) : (
-              <h2>Unwrapping</h2>
+              <h2>Transaction Pending</h2>
             )}
             {}
           </TrancheModalContentStatus>

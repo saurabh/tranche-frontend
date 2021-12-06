@@ -1738,6 +1738,7 @@ const StakeModalFormBtn = styled.button`
   `}  
   ${({ skipStake }) => skipStake && `
     position: relative;
+    width: 100%;
   `}  
   
 
@@ -1745,6 +1746,9 @@ const StakeModalFormBtn = styled.button`
     position: relative;
     width: 100%;
     margin: 15px 0;
+    ${({ skipStake }) => skipStake && `
+      width: auto;
+    `} 
   }
 
   transition: 300ms;
@@ -2999,7 +3003,25 @@ const GovernanceModalDelegateFormSubmitBtn = styled.button`
   border: none;
   outline: none;
 `
-
+const APYWarning = styled.div`
+  width: 80%;
+  min-height: 36px;
+  background: #fbc404;
+  position: absolute;
+  top: 195px;
+  border-radius: 4px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    color: #383838;
+    text-align: center;
+  }
+`
 
 export {
   TrancheMarketStyles,
@@ -3122,5 +3144,6 @@ export {
   GovernanceModalContent,
   GovernanceModalDelegateFormWrapper,
   GovernanceModalDelegateFormText,
-  GovernanceModalDelegateFormSubmitBtn
+  GovernanceModalDelegateFormSubmitBtn,
+  APYWarning
 };

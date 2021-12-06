@@ -39,6 +39,10 @@ const singularOrPlural = (num, string) => {
   return num === 1 ? num + string : num + string + 's';
 }
 
+export const capitalize = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export const formatTime = (value) =>{
   // let format = (val) => moment().add(value, 'seconds').diff(moment(), val);
   // let years =  format('years');

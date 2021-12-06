@@ -70,7 +70,7 @@ export const claimModal = ({
           <ClaimModalHeader textColor={ModeThemes[theme].ModalText}>
             <h2>Total Accrued Rewards</h2>
             <h2>
-              {totalAccruedRewards && roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN'
+              {roundNumber(totalAccruedRewards + newSliceRewards) !== 'NaN'
                 ? roundNumber(totalAccruedRewards + newSliceRewards)
                 : '0'}{' '}
               SLICE{' '}
