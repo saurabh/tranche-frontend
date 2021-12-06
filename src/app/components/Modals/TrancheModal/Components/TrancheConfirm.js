@@ -20,7 +20,8 @@ import {
   LoadingButton,
   LoadingButtonCircle,
   TrancheModalContentStatus,
-  TrancheConfirmModal
+  TrancheConfirmModal,
+  APYWarning
 } from '../../styles/ModalsComponents';
 
 export const TrancheConfirm = ({
@@ -30,10 +31,12 @@ export const TrancheConfirm = ({
   txModalIsOpen,
   txModalStatus,
   trancheCard,
+  trancheValue,
   txOngoingData: { trancheCardId },
   txLoading,
   txLink,
   network,
+  trancheType,
   name,
   apyStatus,
   cryptoType,
@@ -51,7 +54,6 @@ export const TrancheConfirm = ({
   handleSubmit
 }) => {
   let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
-
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -89,6 +91,19 @@ export const TrancheConfirm = ({
               </div>
             </TrancheModalContentHeaderText>
           </TrancheModalContentHeader>
+          {
+            (isDeposit && (trancheValue / 10) < Number(formValues.depositAmount)) &&
+            <APYWarning>
+              <h2>
+                {
+                  trancheType === 'TRANCHE_A' ?
+                  "You are depositing more than 10% of the total value of Tranche A, this will reduce the SLICE APY." :
+                  "You are depositing more than 10% of the total value of Tranche B, this will reduce the TRANCHE and SLICE APY." 
+                }
+              </h2>
+            </APYWarning>
+          }
+
         </TrancheModalHeader>
         {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
           <TrancheModalContent trancheStatus color={ModeThemes[theme].ModalTrancheTextColor}>
@@ -153,7 +168,7 @@ export const TrancheConfirm = ({
               <h2>SLICE APY</h2>
               <h2>{roundNumber(sliceAPY, 2)}%</h2>
             </TrancheModalContentRow>
-            <TrancheModalContentRow noBorder color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
+            <TrancheModalContentRow color={ModeThemes[theme].ModalTrancheTextColor} border={ModeThemes[theme].ModalTrancheTextRowBorder}>
               <h2>Net APY</h2>
               <h2>{roundNumber(netAPY, 2)}%</h2>
             </TrancheModalContentRow>
