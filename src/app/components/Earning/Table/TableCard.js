@@ -79,7 +79,7 @@ const TableCard = ({
   // checkServer
 }) => {
   let buyerTokenBalance =
-    cryptoType === 'ETH' || cryptoType === 'MATIC'
+    cryptoType === 'ETH'
       ? balance && balance !== -1 && fromWei(balance)
       : searchTokenDecimals(cryptoType)
       ? tokenBalance[buyerCoinAddress] && safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchTokenDecimals(cryptoType).decimals)
