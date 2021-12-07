@@ -47,8 +47,6 @@ export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
 export const GTMID = 'GTM-NFDMGZN';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
-export const maticAddress = '0xMeeeeMeeeMeMeeMeMeMeeMMMeeeeMeeeeeeeMMeM';
-export const fantomAddress = '0xFeeeeFeeeFeFeeFeFeFeeFFFeeeeFeeeeeeeFFeF';
 export const WFTMAddress = process.env.REACT_APP_FANTOM_WFTM_ADDRESS;
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();

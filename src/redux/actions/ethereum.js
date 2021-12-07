@@ -5,9 +5,7 @@ import { ERC20Setup, isEqualTo, isGreaterThan } from 'utils';
 import {
   networkId,
   maticNetworkId,
-  maticAddress,
   fantomNetworkId,
-  fantomAddress,
   serverUrl,
   etherScanUrl,
   maticBlockExplorerUrl,
@@ -92,24 +90,10 @@ export const setNetwork = (network) => async (dispatch) => {
 };
 
 export const setBalance = (balance) => (dispatch) => {
-  const state = store.getState();
-  const { network } = state.ethereum;
   dispatch({
     type: SET_BALANCE,
     payload: balance
   });
-  if (network === maticNetworkId) {
-    dispatch({
-      type: SET_TOKEN_BALANCE,
-      payload: { tokenAddress: maticAddress, tokenBalance: balance }
-    });
-  }
-  if (network === fantomNetworkId) {
-    dispatch({
-      type: SET_TOKEN_BALANCE,
-      payload: { tokenAddress: fantomAddress, tokenBalance: balance }
-    });
-  }
 };
 
 export const setWalletAndWeb3 = (wallet) => async (dispatch) => {
