@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes, landingUrl } from 'config';
-import { LinkArrow, ChevronTable, LinkArrowWhite } from 'assets';
+import { LinkArrow, ChevronTable, LinkArrowWhite, InfoIconTable, SliceTooltip } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -39,7 +39,10 @@ import {
   TableMobileContentRow,
   TableMobileContentCol,
   TableCardImgWrapper,
-  TrancheRateType
+  TrancheRateType,
+  TableAPYTooltipWrapper,
+  TableAPYTooltip,
+  TableAPYTooltipCol
   // TableMoreRowContent
 } from '../../Stake/Table/styles/TableComponents';
 // import i18n from 'app/components/locale/i18n';
@@ -78,8 +81,9 @@ const TableCard = ({
   isDesktop
   // checkServer
 }) => {
+  const [tooltip, setTooltip] = useState(false);
   let buyerTokenBalance =
-    cryptoType === 'ETH'
+    cryptoType === 'ETH' || cryptoType === 'MATIC'
       ? balance && balance !== -1 && fromWei(balance)
       : searchTokenDecimals(cryptoType)
       ? tokenBalance[buyerCoinAddress] && safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchTokenDecimals(cryptoType).decimals)
@@ -166,8 +170,30 @@ const TableCard = ({
 
           <TableSecondCol className='table-col' apy>
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
-              {/* <img src={apyImage} alt='apyImage' /> */}
-              <h2>{roundNumber(netAPY, 2)}%</h2>
+              <h2>{roundNumber(netAPY, 2)}%
+                <TableAPYTooltipWrapper>
+                  <img src={InfoIconTable} alt='info' onMouseOver={() => setTooltip(true)} onMouseLeave={() => setTooltip(false)}/>
+                  {
+                    tooltip &&
+                    <TableAPYTooltip>
+                      <TableAPYTooltipCol>
+                        <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                        <h2>{cryptoType && cryptoType}</h2>
+                        <h2>{apy && roundNumber(apy, 2) !== 'NaN' ? roundNumber(apy, 2) : 0}%</h2>
+                        <h2>{type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}</h2>
+                      </TableAPYTooltipCol>
+                      <span>+</span>
+                      <TableAPYTooltipCol>
+                        <img src={SliceTooltip} alt='AssetIcon' />
+                        <h2>SLICE</h2>
+                        <h2>{sliceAPY && roundNumber(sliceAPY, 2) !== 'NaN' ? roundNumber(sliceAPY, 2) : 0}%</h2>
+                        <h2>Variable</h2>
+                      </TableAPYTooltipCol>
+                    </TableAPYTooltip>
+                  }
+                  
+                </TableAPYTooltipWrapper>
+              </h2>
             </SecondColContent>
           </TableSecondCol>
           <TableThirdCol className={'table-col table-fourth-col-return '} totalValue>

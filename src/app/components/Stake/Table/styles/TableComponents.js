@@ -1033,8 +1033,12 @@ const FirstColTitle = styled.div`
   `}
   ${({ trancheMobile }) => trancheMobile && `
     @media (max-width: 992px){
-      a h2{
-        font-size: 12px !important;
+      a{
+        height: 50px;
+        width: 50px;
+        h2{
+          font-size: 12px !important;
+        }
       }
     }
   `}
@@ -1081,7 +1085,11 @@ const TableSecondCol = styled.div`
     width: 14% !important;
     div{
       display: flex;
-      justify-content: space-around; 
+      justify-content: center;
+      img{
+        margin-left: 5px;
+        cursor: default;
+      }
     }
   `}
   ${({ stakeStaked }) => stakeStaked && `
@@ -1092,9 +1100,11 @@ const TableSecondCol = styled.div`
 `
 const SecondColContent = styled.div`
   h2{
+    position: relative;
     text-align: center !important;
     font-size: 17px !important;
     font-family: 'Inter', sans-serif;
+    display: flex;
     color: ${props => props.color};
   }
   
@@ -1110,20 +1120,20 @@ const SecondColContent = styled.div`
     }
     
   }
-  & > div{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 25px;
-    z-index: 2000;
-    img{
-      height: 15px;
-      z-index: 3000;
-      transition: 500ms;
-      ${({ tooltip }) => tooltip && `
-        transform: rotate(360deg);
-      `}
-    }
+  // & > div{
+  //   position: absolute;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   right: 25px;
+  //   z-index: 2000;
+  //   img{
+  //     height: 15px;
+  //     z-index: 3000;
+  //     transition: 500ms;
+  //     ${({ tooltip }) => tooltip && `
+  //       transform: rotate(360deg);
+  //     `}
+  //   }
     div{
       width: 225px;
       height: 50px;
@@ -2385,6 +2395,88 @@ const LoadingContent = styled.div`
 const FirstColMobileText = styled.div`
   
 `
+const TableAPYTooltipCol = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  min-width: 67px;
+  img{
+    width: 24px;
+    margin: 0 0 4px 0 !important;
+  }
+  h2{
+    font-family: 'Inter', sans-serif;
+    color: #FFFFFF;
+    text-align: center;
+    margin: 0 0 1px 0 !important;
+  }
+  h2:nth-child(2){
+    font-weight: normal;
+    font-size: 12px !important;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  h2:nth-child(3){
+    font-weight: bold !important;
+    font-size: 12px !important;
+    line-height: 18px;
+    text-transform: uppercase;
+  }
+  h2:nth-child(4){
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.03em;
+    opacity: 0.5;
+    text-transform: capitalize;
+    font-size: 10px !important;
+  }
+`
+
+const TableAPYTooltipWrapper = styled.span`
+  
+`
+
+const TableAPYTooltip = styled.span`
+  width: auto;
+  height: 102px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2A265B;
+  border-radius: 12px;
+  position: absolute;
+  left: calc(100% + 20px);
+  z-index: 2000;
+  top: 50%;
+  transform: translateY(-50%);
+  :before{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 28px solid transparent;
+    border-bottom: 28px solid transparent;
+    border-right: 28px solid #2A265B;
+  }
+  img{
+    z-index: 3000;
+  }
+  span{
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    width: 25px;
+  }
+`
 
 export {
   TableWrapper,
@@ -2475,5 +2567,8 @@ export {
   LoadingContent,
   StakeBtnSlice,
   TrancheRateType,
-  FirstColMobileText
+  FirstColMobileText,
+  TableAPYTooltipWrapper,
+  TableAPYTooltip,
+  TableAPYTooltipCol
 };

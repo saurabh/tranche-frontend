@@ -21,7 +21,7 @@ import {
   LoadingButtonCircle,
   TrancheModalContentStatus,
   TrancheConfirmModal,
-  APYWarning
+  // APYWarning
 } from '../../styles/ModalsComponents';
 
 export const TrancheConfirm = ({
@@ -91,7 +91,7 @@ export const TrancheConfirm = ({
               </div>
             </TrancheModalContentHeaderText>
           </TrancheModalContentHeader>
-          {
+          {/* {
             (isDeposit && (trancheValue / 10) < Number(formValues.depositAmount)) &&
             <APYWarning>
               <h2>
@@ -102,7 +102,7 @@ export const TrancheConfirm = ({
                 }
               </h2>
             </APYWarning>
-          }
+          } */}
 
         </TrancheModalHeader>
         {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
