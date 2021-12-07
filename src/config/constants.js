@@ -47,6 +47,7 @@ export const GoogleAnalyticsTrackingID = 'UA-197572899-1';
 export const GTMID = 'GTM-NFDMGZN';
 // Token Addresses
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
+export const maticAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 export const WFTMAddress = process.env.REACT_APP_FANTOM_WFTM_ADDRESS;
 export const ERC20Tokens = process.env.REACT_APP_ERC20_TOKENS.split(',');
 export const DAIAddress = process.env.REACT_APP_DAI_ADDRESS.toLowerCase();
@@ -406,6 +407,7 @@ export const ModeThemes = {
     StakingInputText: '#838186',
     loadingSpinner: 'rgba(124,133,155,0.8)',
     Tooltip: '#2F2F2F',
+    tooltipColor: "#FFFFFF",
     NavbarBorder: '#E9E9FC',
     NavbarBackground: '#FFFFFF',
     NavbarShadow: '0px 3.49091px 3.49091px rgba(189, 189, 189, 0.07)',
@@ -485,6 +487,7 @@ export const ModeThemes = {
     TableHeadText: "rgba(255, 255, 255, 0.6)",
     stakeModalBoxShadow: "",
     stakeBoxBackground: "rgba(255, 255, 255, 0.05)",
+    tooltipColor: "#2A265B",
     stakeModalBorderCurrent: "",
     stakeModalBoxBackground: "rgba(175, 155, 255, 0.15)",
     BoxColor: "rgba(196, 149, 255, 0.15)",
