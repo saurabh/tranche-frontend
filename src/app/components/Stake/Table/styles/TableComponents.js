@@ -2407,7 +2407,7 @@ const TableAPYTooltipCol = styled.span`
   }
   h2{
     font-family: 'Inter', sans-serif;
-    color: #FFFFFF;
+    color: ${props => props.titleColor};
     text-align: center;
     margin: 0 0 1px 0 !important;
   }
@@ -2445,13 +2445,14 @@ const TableAPYTooltip = styled.span`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #2A265B;
+  background: ${props => props.tooltipColor};
   border-radius: 12px;
   position: absolute;
   left: calc(100% + 20px);
   z-index: 2000;
   top: 50%;
   transform: translateY(-50%);
+  filter: ${props => props.theme === 'light' ? "drop-shadow(0px 4px 20px rgba(183, 183, 183, 0.15))" : ""};
   :before{
     content: '';
     position: absolute;
@@ -2462,7 +2463,7 @@ const TableAPYTooltip = styled.span`
     transform: translateY(-50%);
     border-top: 28px solid transparent;
     border-bottom: 28px solid transparent;
-    border-right: 28px solid #2A265B;
+    border-right: 28px solid ${props => props.tooltipColor};
   }
   img{
     z-index: 3000;
@@ -2473,7 +2474,7 @@ const TableAPYTooltip = styled.span`
     font-size: 12px;
     line-height: 18px;
     text-transform: uppercase;
-    color: #FFFFFF;
+    color: ${props => props.titleColor};
     width: 25px;
   }
 `

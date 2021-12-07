@@ -8,7 +8,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes, landingUrl } from 'config';
-import { LinkArrow, ChevronTable, LinkArrowWhite, InfoIconTable, SliceTooltip } from 'assets';
+import { LinkArrow, ChevronTable, LinkArrowWhite, InfoIconTable, InfoIconTableLight, SliceTooltip } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -172,18 +172,18 @@ const TableCard = ({
             <SecondColContent className='content-3-col second-4-col-content' color={ModeThemes[theme].tableText}>
               <h2>{roundNumber(netAPY, 2)}%
                 <TableAPYTooltipWrapper>
-                  <img src={InfoIconTable} alt='info' onMouseOver={() => setTooltip(true)} onMouseLeave={() => setTooltip(false)}/>
+                  <img src={theme === "light" ? InfoIconTableLight : InfoIconTable} alt='info' onMouseOver={() => setTooltip(true)} onMouseLeave={() => setTooltip(false)}/>
                   {
                     tooltip &&
-                    <TableAPYTooltip>
-                      <TableAPYTooltipCol>
+                    <TableAPYTooltip titleColor={ModeThemes[theme].titleColor} tooltipColor={ModeThemes[theme].tooltipColor} theme={theme}>
+                      <TableAPYTooltipCol titleColor={ModeThemes[theme].titleColor}>
                         <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
                         <h2>{cryptoType && cryptoType}</h2>
                         <h2>{apy && roundNumber(apy, 2) !== 'NaN' ? roundNumber(apy, 2) : 0}%</h2>
                         <h2>{type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}</h2>
                       </TableAPYTooltipCol>
                       <span>+</span>
-                      <TableAPYTooltipCol>
+                      <TableAPYTooltipCol titleColor={ModeThemes[theme].titleColor}>
                         <img src={SliceTooltip} alt='AssetIcon' />
                         <h2>SLICE</h2>
                         <h2>{sliceAPY && roundNumber(sliceAPY, 2) !== 'NaN' ? roundNumber(sliceAPY, 2) : 0}%</h2>
