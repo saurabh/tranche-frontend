@@ -6,7 +6,7 @@ import { setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances 
 import { initOnboard } from 'services/blocknative';
 import { readyToTransact } from 'utils';
 import { Layout } from 'app/components/Stake/Layout';
-import { PagesData, GoogleAnalyticsTrackingID } from 'config/constants';
+import { PagesData, GoogleAnalyticsTrackingID, networkId } from 'config/constants';
 import Table from '../components/Stake/Table/Table';
 
 function Stake({ ethereum: { address, wallet }, setAddress, setNetwork, setBalance, setWalletAndWeb3, setTokenBalances }) {
@@ -26,6 +26,8 @@ function Stake({ ethereum: { address, wallet }, setAddress, setNetwork, setBalan
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
+
+  onboard.config({ networkId });
   
   const openModal = async (type = null) => {
     const ready = await readyToTransact(wallet, onboard);
