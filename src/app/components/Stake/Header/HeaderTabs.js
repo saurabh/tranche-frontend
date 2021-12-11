@@ -122,7 +122,7 @@ const HeaderTabs = ({
           <StackSummaryCol claim>
             <h2>{i18n.t('Accrued')}</h2>
             <h2>
-              {totalAccruedRewards && roundNumber(safeAdd(totalAccruedRewards, newSliceRewards)) !== 'NaN'
+              {roundNumber(safeAdd(totalAccruedRewards, newSliceRewards)) !== 'NaN'
                 ? roundNumber(totalAccruedRewards + newSliceRewards)
                 : '0'}{' '}
               SLICE
