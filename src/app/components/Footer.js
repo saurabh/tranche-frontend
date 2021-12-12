@@ -2,7 +2,7 @@ import React from 'react';
 
 export function Footer() {
   return (
-    <div className="container content-container footer-container">
+    <div className="container content-container footer-container flex">
       <div className="footerWrapper">
         <div className="footerLinks">
           <a href="/privacy" target="_blank">Privacy</a> 

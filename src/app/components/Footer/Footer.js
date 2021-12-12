@@ -29,7 +29,7 @@ function Footer({ changeTheme, theme }) {
     return `/${ lng }/${ currentPath }`;
   }
   return (
-    <FooterContainer className="footer-container" color={ModeThemes[theme].footerBackground}>
+    <FooterContainer className="footer-container flex" color={ModeThemes[theme].footerBackground}>
       <div className="content-container container">
         <div className="footerWrapper">
           <FooterLeft>

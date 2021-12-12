@@ -160,7 +160,7 @@ const TableCard = ({
             <FifthColContent>
               {title === 'SLICE Staking Pools' && duration && (
                 <StatusTextWrapper
-                  className='status-text-wrapper'
+                  className='status-text-wrapper t-a-c'
                   color={ModeThemes[theme].activeStatusText}
                   backgroundColor={ModeThemes[theme].activeStatus}
                   table='stake'
@@ -173,7 +173,7 @@ const TableCard = ({
               )}
               {title === 'SLICE Staking Pools' && !duration && (
                 <StatusTextWrapper
-                  className='status-text-wrapper'
+                  className='status-text-wrapper t-a-c'
                   color={ModeThemes[theme].activeStatusText}
                   backgroundColor={ModeThemes[theme].activeStatus}
                   table='stake'

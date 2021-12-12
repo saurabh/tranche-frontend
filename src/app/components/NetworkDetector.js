@@ -51,7 +51,7 @@ export default function (ComposedComponent) {
       return (
         <div>
           { (isDisconnected && showNotification) && (<div className="internet-error">
-              <div className="internet-notification-wrapper offline">
+              <div className="internet-notification-wrapper background-white offline">
                 <div className="closeNotification">
                     <button onClick={(e) => this.closeNotification(e)}><img src={closeModal} alt=""/></button>
                 </div>

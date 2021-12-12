@@ -40,7 +40,7 @@ const TableMoreRow = ({
       <div className='table-more-row-second table-more-second-4 table-more-row-content'>
         <div className='table-more-row-second-content'>
           {/*<h2>12.85 <span>DAI</span></h2>*/}
-          <h2>
+          <h2 className='t-a-c'>
             
             {eventName === events['APPROVE_LOAN'].toLowerCase()
               ? roundBasedOnUnit(amount, collateralTypeName) + " " + gweiOrEther(amount, cryptoFromLenderName)
@@ -52,7 +52,7 @@ const TableMoreRow = ({
       </div>
       <div className='table-more-row-third table-more-second-4 table-more-row-content'>
         <div className='table-more-row-third-content'>
-          <h2>{ratio}%</h2>
+          <h2 className='t-a-c'>{ratio}%</h2>
         </div>
       </div>
       <div className='table-more-row-fourth table-more-second-4 table-more-row-content'>

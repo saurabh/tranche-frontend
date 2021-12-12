@@ -183,7 +183,7 @@ const Table = ({
                 <div>
                   {[...Array(5)].map((i, idx) => (
                     <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
-                      <div className='loadingCard'>
+                      <div className='loadingCard flex'>
                         <div className='loadingFirstCol'>
                           <div className='loadingFirslColContent'>
                             <LoadingContent className='loadingAvatar loadingContent ' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
@@ -237,7 +237,7 @@ const Table = ({
           <div className='paginationWrapper'>
             <Pagination total={data && data.count} limit={limit} pageCount={pageCount} currentPage={parseInt(current, 10)}>
               {({ pages, currentPage, hasNextPage, hasPreviousPage, previousPage, nextPage, totalPages, getPageItemProps }) => (
-                <div>
+                <div className='background-white'>
                   <a
                     {...getPageItemProps({
                       pageValue: 1,

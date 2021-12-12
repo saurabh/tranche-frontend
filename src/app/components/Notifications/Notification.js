@@ -70,7 +70,7 @@ const Notification = ({ notification, removeNotification }) => {
 
   return (
     <div
-      className={`NotifyItem ${exit ? "NotifyExit" : ""}`}
+      className={`NotifyItem background-white ${exit ? "NotifyExit" : ""}`}
     >
       <div id="NotifySvgIcon">
         {type === "SUCCESS" ? <svg viewBox="0 0 185 168" xmlns="http://www.w3.org/2000/svg" id="el_3OA8Szq_A" className="svelte-ta62lj">

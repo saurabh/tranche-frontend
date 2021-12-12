@@ -62,7 +62,7 @@ const TableHead = ({changeSorting, path}) => {
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className="remaining-wrapper">
-                    <div className={(path === "lend" || path === "borrow") ? "remaining-title-content" : path === "stake" ? "staked-title-content" : "tranche-size-content"} onClick={() => sortLoans(path === "tranche" ? "amount" : path === "stake" ? "staked" : "remainingLoan")}>
+                    <div className={(path === "lend" || path === "borrow") ? "remaining-title-content t-a-c" : path === "stake" ? "staked-title-content" : "tranche-size-content"} onClick={() => sortLoans(path === "tranche" ? "amount" : path === "stake" ? "staked" : "remainingLoan")}>
                         <h2>{(path === "lend" || path === "borrow") ? "Amount" : path === "stake" ? "staked" : "TRANCHE SIZE"}</h2>
                         <SortChevronWrapper>
                             <img src={upChevron} alt="upChevron"/>
@@ -80,7 +80,7 @@ const TableHead = ({changeSorting, path}) => {
                     </div>
                 </TableHeadTitle>
                 <TableHeadTitle className={(path === "lend" || path === "borrow") ? "interest-paid-wrapper" : path === "stake" ? "accrued-wrapper" : "subscription-wrapper"}>
-                    <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "tranche" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
+                    <div className={(path === "lend" || path === "borrow") ? "interest-paid-title-content t-a-c" : path === "stake" ? "accrued-title-content" : "subscription-title-content"} onClick={() => sortLoans(path === "tranche" ? "subscriber" : path === "stake" ? "isActive" : "interestPaid")}>
                         <h2>{(path === "lend" || path === "borrow") ? "Rate/Payout" : path === "stake" ? "" : "SUBSCRIPTION"}</h2>
                         {   path !== "stake" &&
                             <SortChevronWrapper>

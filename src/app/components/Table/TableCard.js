@@ -694,7 +694,7 @@ const TableCard = ({
           <TableFifthCol className='table-col'>
             <FifthColContent>
               <StatusTextWrapper
-                className='status-text-wrapper'
+                className='status-text-wrapper t-a-c'
                 color={Object.values(searchObj(status))[0].color}
                 backgroundColor={Object.values(searchObj(status))[0].background}
               >

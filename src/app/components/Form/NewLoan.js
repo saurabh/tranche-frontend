@@ -349,9 +349,9 @@ let NewLoan = ({
                     className='fieldStylingDisplay'
                   />
                   <SelectCurrencyView onClick={() => toggleCurrencySelect()}>
-                    <div>
+                    <div className='background-white'>
                       <img src={pairData[pair].img} alt='' />
-                      <h2>{pairData[pair].text}</h2>
+                      <h2 className='t-a-c'>{pairData[pair].text}</h2>
                     </div>
                     <SelectChevron>
                       <img src={selectUp} alt='' />
@@ -363,7 +363,7 @@ let NewLoan = ({
                       {pairData.map((i) => {
                         return (
                           <SelectCurrencyOption key={i.key}>
-                            <button onClick={(e) => handleCurrencySelect(e, i.value)} value={i.key}>
+                            <button className='t-a-c background-white' onClick={(e) => handleCurrencySelect(e, i.value)} value={i.key}>
                               <img src={i.img} alt='' /> {i.text}
                             </button>
                           </SelectCurrencyOption>
