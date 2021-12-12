@@ -673,7 +673,7 @@ const MarketTab = styled.button`
     margin-right:5px;
   }
   img:first-child{
-    width: ${props => props.market === "aavePolygon" ? "60px" : "100%"};
+    width: ${props => props.market === "aavePolygon" || props.market === "avalanche" ? "60px" : "100%"};
   }
   & > span{
     height: 70%;

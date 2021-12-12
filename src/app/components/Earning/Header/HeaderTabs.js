@@ -4,7 +4,7 @@ import i18n from '../../locale/i18n';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { trancheMarketsToggle, setTxModalOpen, setTxModalStatus, setTxModalType, setTxModalLoading } from 'redux/actions/tableData';
-import { AaveBtn, AAVEIconMobile, CloseModalWhite, CompoundBtn, CompoundBtnBlack, CompoundIconMobile, ETHLOGO, FantomDark, FantomLight, FANTOMLOGO, FANTOMLOGOLIGHT, PolygonLogo, PolygonLogoBlack, YEARNIconMobile, YEARNLOGO, YEARNLOGOLIGHT } from 'assets';
+import { AaveBtn, AAVEIconMobile, CloseModalWhite, CompoundBtn, CompoundBtnBlack, CompoundIconMobile, AVAX, ETHLOGO, FantomDark, FantomLight, FANTOMLOGO, FANTOMLOGOLIGHT, PolygonLogo, PolygonLogoBlack, YEARNIconMobile, YEARNLOGO, YEARNLOGOLIGHT } from 'assets';
 import TrancheModal from '../../Modals/TrancheModal';
 import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from './styles/HeaderComponents';
 import { ModeThemes } from 'config';
@@ -153,7 +153,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
         >
           <img src={isDesktop ? (theme === 'light' ? AaveBtn : AaveBtn) : AAVEIconMobile} alt='' /> 
           <span></span> 
-          <img src={theme === 'light' ? PolygonLogo : PolygonLogo} alt='' />
+          <img src={AVAX} alt='' />
         </MarketTab> 
       </MarketsTabs> 
       {tranchesToggle === 'aavePolygon' && (
