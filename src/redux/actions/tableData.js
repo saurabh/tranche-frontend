@@ -1,5 +1,5 @@
 import store from '../store';
-import { networkId, maticNetworkId, fantomNetworkId, apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress, txLink } from 'config';
+import { networkId, maticNetworkId, avalancheNetworkId, fantomNetworkId, apiUri, SLICEAddress, LP1TokenAddress, LP2TokenAddress, txLink } from 'config';
 import { timeout } from 'utils';
 import { postRequest, initOnboard, getRequest, switchNetwork } from 'services';
 import { checkServer } from './checkServer';
@@ -168,6 +168,7 @@ export const paginationCurrent = (current) => (dispatch) => {
 };
 
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
+  console.log(trancheMarket);
   const onboard = initOnboard();
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });
@@ -181,6 +182,10 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
     onboard.config({ networkId: fantomNetworkId });
     store.dispatch(changeFilter('ftm'));
     switchNetwork('fantom')
+  } else if (trancheMarket === 'avalanche') {
+    onboard.config({ networkId: avalancheNetworkId });
+    store.dispatch(changeFilter('avax'));
+    switchNetwork('avalanche');
   }
   store.dispatch(trancheCardToggle({ status: false, id: null }));
   dispatch({

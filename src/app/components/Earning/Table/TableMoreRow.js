@@ -102,7 +102,6 @@ let TableMoreRow = ({
     balance: setBalance,
     wallet: setWalletAndWeb3
   });
-
   const openModal = async (txType, isDeposit) => {
     const ready = await readyToTransact(wallet, onboard);
     if (!ready) return;

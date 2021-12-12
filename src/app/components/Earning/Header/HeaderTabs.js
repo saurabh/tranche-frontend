@@ -10,7 +10,7 @@ import { MarketsTabsWrapper, MarketsTabs, MarketTab, BridgeTokensWrapper } from 
 import { ModeThemes } from 'config';
 import { HowToLink } from '../../Stake/Table/styles/TableComponents';
 import useAnalytics from 'services/analytics';
-import { networkId, maticNetworkId, fantomNetworkId } from 'config/constants'
+import { networkId, maticNetworkId, fantomNetworkId, avalancheNetworkId } from 'config/constants'
 
 export const baseUrl = i18n.language === 'en' ? '' : '/' + i18n.language;
 
@@ -18,7 +18,6 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
   const Tracker = useAnalytics('ExternalLinks');
   const { trancheMarket } = data;
   const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
-  const [fantomNotice, setFantomNotice] = useState(true);
   const [tranchesToggle, setTranchesToggle] = useState('compound');
   
   
@@ -35,7 +34,15 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
     trancheMarketsToggle(val);
   }
   useEffect(() => {
-    let trancheMarkets = ((network === networkId) ? 'compound' : (network === maticNetworkId) ? 'aavePolygon' : (network === fantomNetworkId) ? 'fantom' : '')
+    let trancheMarkets = network === networkId
+        ? 'compound'
+        : (network === maticNetworkId
+          ? 'aavePolygon'
+          : (network === fantomNetworkId
+            ? 'fantom'
+            : (network === avalancheNetworkId
+              ? 'avalanche'
+            : '')));
     setTranchesToggle(trancheMarkets);
   }, [network]);
   
@@ -132,8 +139,22 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
         </MarketTab>
 
-
-        
+        <MarketTab
+          market='avalanche'
+          current={trancheMarket === 'avalanche' && (network === avalancheNetworkId)}
+          onClick={() => trancheMarketsToggling('avalanche')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+        >
+          <img src={isDesktop ? (theme === 'light' ? AaveBtn : AaveBtn) : AAVEIconMobile} alt='' /> 
+          <span></span> 
+          <img src={theme === 'light' ? PolygonLogo : PolygonLogo} alt='' />
+        </MarketTab> 
       </MarketsTabs> 
       {tranchesToggle === 'aavePolygon' && (
         <BridgeTokensWrapper>

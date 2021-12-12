@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes, trancheIcons } from 'config/constants';
-import { maticNetworkId } from 'config';
 import { roundNumber, searchTokenDecimals } from 'utils';
 import { fromWei } from 'services';
 
@@ -53,7 +52,6 @@ export const TrancheConfirm = ({
   closeModal,
   handleSubmit
 }) => {
-  let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
   return (
     <Modal
       isOpen={txModalIsOpen}

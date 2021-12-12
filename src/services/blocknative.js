@@ -8,13 +8,13 @@ let notify = undefined;
 
 export function initOnboard(subscriptions) {
   if (!onboard) {
+    
     const state = store.getState();
     const { theme } = state;
     onboard = Onboard({
       subscriptions,
       hideBranding: true,
       networkId,
-      // networkName: 'Fantom Opera Mainnet',
       darkMode: theme === 'dark' ? true : theme === 'light' ? false : null,
       walletSelect: {
         wallets: [
@@ -50,7 +50,9 @@ export function initNotify() {
 }
 
 export function switchNetwork(network) {
-  try {
+  try
+  {
+    console.log(network);
     const state = store.getState();
     const { wallet } = state.ethereum;
     if (wallet) {

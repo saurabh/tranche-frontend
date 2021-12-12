@@ -292,7 +292,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            await store.dispatch(checkSIRRewards());
+            if (network === networkId) await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
@@ -333,7 +333,7 @@ export const buyTrancheTokens = async (contractAddress, trancheId, trancheType, 
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            await store.dispatch(checkSIRRewards());
+            if (network === networkId) await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', {
               address: address,
@@ -402,7 +402,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            await store.dispatch(checkSIRRewards());
+            if (network === networkId) await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
@@ -439,7 +439,7 @@ export const sellTrancheTokens = async (contractAddress, trancheId, trancheType)
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            await store.dispatch(checkSIRRewards());
+            if (network === networkId) await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
             analyticsTrack('Tracking user activity', 'Tranche Markets', { address: address, trancheType: trancheType, withdrawn: withdrawAmount });
           }
@@ -811,7 +811,7 @@ export const claimRewardsAllMarkets = async () => {
             store.dispatch(setTxLoading(false));
             store.dispatch(setTxModalLoading(false));
             store.dispatch(setTxModalStatus('success'));
-            await store.dispatch(checkSIRRewards());
+            if (network === networkId) await store.dispatch(checkSIRRewards());
             await store.dispatch(setTokenBalances(address));
           });
           emitter.on('txCancel', () => {

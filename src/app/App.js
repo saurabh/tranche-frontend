@@ -10,8 +10,19 @@ import ErrorModal from 'app/components/Modals/Error';
 
 import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards } from 'redux/actions/ethereum';
 import { fetchExchangeRates } from 'redux/actions/tableData';
-import { ETHContracts, MaticContracts, FantomContracts } from 'services/web3Subscriptions';
-import { networkId, maticNetworkId, fantomNetworkId, JCompoundAddress, JAaveAddress, JYearnAddress, ModeThemes, GTMID } from 'config/constants';
+import { ETHContracts, MaticContracts, FantomContracts, AvalancheContracts } from 'services/web3Subscriptions';
+import {
+  networkId,
+  maticNetworkId,
+  fantomNetworkId,
+  avalancheNetworkId,
+  JCompoundAddress,
+  JAaveAddress,
+  JYearnAddress,
+  JAvalancheAddress,
+  ModeThemes,
+  GTMID
+} from 'config/constants';
 // Routes
 import Earn from 'app/pages/Lend';
 import Borrow from 'app/pages/Borrow';
@@ -46,8 +57,9 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
         checkStakingAllowances(address);
         checkSIRRewards();
       }
-      if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
-      if (network === fantomNetworkId) checkTrancheAllowances(address, JYearnAddress);
+      else if (network === maticNetworkId) checkTrancheAllowances(address, JAaveAddress);
+      else if (network === fantomNetworkId) checkTrancheAllowances(address, JYearnAddress);
+      else if (network === avalancheNetworkId) checkTrancheAllowances(address, JAvalancheAddress);
     }
   }, [address, network, setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards]);
 
@@ -56,16 +68,26 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
       ETHContracts.subscribe();
       MaticContracts.unsubscribe();
       FantomContracts.unsubscribe();
+      FantomContracts.unsubscribe();
     }
-    if (network === maticNetworkId) {
+    else if (network === maticNetworkId) {
       MaticContracts.subscribe();
       ETHContracts.unsubscribe();
       FantomContracts.unsubscribe();
+      FantomContracts.unsubscribe();
     }
-    if (network === fantomNetworkId) {
+    else if (network === fantomNetworkId) {
       FantomContracts.subscribe();
       ETHContracts.unsubscribe();
       MaticContracts.unsubscribe();
+      FantomContracts.unsubscribe();
+    }
+    else if (network === avalancheNetworkId) {
+      FantomContracts.subscribe();
+      FantomContracts.unsubscribe();
+      ETHContracts.unsubscribe();
+      MaticContracts.unsubscribe();
+      
     }
   }, [network, address, path]);
 
