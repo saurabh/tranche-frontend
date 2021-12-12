@@ -83,7 +83,7 @@ export const tokenDecimals = [
   { key: 'USDT', decimals: 6 },
   { key: 'WBTC', decimals: 8 }
 ];
-export const ETHorMaticCheck = ['ETH', 'MATIC'];
+export const ETHorMaticCheck = ['ETH', 'MATIC', 'AVAX'];
 export const gweiVariants = ['Gwei', 'nSLICE', 'nDAI', 'nUSDC'];
 
 // Site Banner Data (imported in Header component)

@@ -68,22 +68,22 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
       ETHContracts.subscribe();
       MaticContracts.unsubscribe();
       FantomContracts.unsubscribe();
-      FantomContracts.unsubscribe();
+      AvalancheContracts.unsubscribe();
     }
     else if (network === maticNetworkId) {
       MaticContracts.subscribe();
       ETHContracts.unsubscribe();
       FantomContracts.unsubscribe();
-      FantomContracts.unsubscribe();
+      AvalancheContracts.unsubscribe();
     }
     else if (network === fantomNetworkId) {
       FantomContracts.subscribe();
       ETHContracts.unsubscribe();
       MaticContracts.unsubscribe();
-      FantomContracts.unsubscribe();
+      AvalancheContracts.unsubscribe();
     }
     else if (network === avalancheNetworkId) {
-      FantomContracts.subscribe();
+      AvalancheContracts.subscribe();
       FantomContracts.unsubscribe();
       ETHContracts.unsubscribe();
       MaticContracts.unsubscribe();

@@ -120,7 +120,7 @@ export const setBalance = (balance) => (dispatch) => {
     type: SET_BALANCE,
     payload: balance
   });
-  if (network === maticNetworkId) {
+  if (network === maticNetworkId || network === avalancheNetworkId) {
     dispatch({
       type: SET_TOKEN_BALANCE,
       payload: { tokenAddress: maticAddress, tokenBalance: balance }
@@ -182,10 +182,15 @@ export const setTokenBalances = (address) => async (dispatch) => {
           ? PolygonBuyerCoinAddresses.concat(AaveTrancheTokens)
           : network === fantomNetworkId
             ? FantomBuyerCoinAddresses.concat(YearnTrancheTokens)
-            : network === fantomNetworkId
+            : network === avalancheNetworkId
               ? AvalancheBuyerCoinAddresses.concat(AvalancheTrancheTokens)
-              : []
-    if (network === networkId || network === maticNetworkId || network === fantomNetworkId) {
+              : [];
+    console.log(Tokens);
+    if (network === networkId
+      || network === maticNetworkId
+      || network === fantomNetworkId
+      || network === avalancheNetworkId)
+    {
       const batch = new web3.BatchRequest();
       // const tokenBalance = {};
       Tokens.map((tokenAddress) => {
@@ -204,7 +209,7 @@ export const setTokenBalances = (address) => async (dispatch) => {
         );
         return batch;
       });
-      (network === maticNetworkId || network === fantomNetworkId) &&
+      (network === maticNetworkId || network === fantomNetworkId || network === avalancheNetworkId) &&
         dispatch({
           type: SET_TOKEN_BALANCE,
           payload: { tokenAddress: SLICEAddress.toLowerCase(), tokenBalance: '0' }
@@ -217,6 +222,7 @@ export const setTokenBalances = (address) => async (dispatch) => {
 };
 
 export const toggleApproval = (tokenAddress, contractAddress, bool) => async (dispatch) => {
+  console.log(tokenAddress, contractAddress, bool);
   dispatch({
     type: SET_ALLOWANCE,
     payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }
