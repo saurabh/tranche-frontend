@@ -78,7 +78,6 @@ const TableCard = ({
   isDesktop
   // checkServer
 }) => {
-  const blockExplorerUrl = network === 'polygon' ? maticBlockExplorerUrl : etherScanUrl;
 
   let buyerTokenBalance =
     cryptoType === 'ETH'

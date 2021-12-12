@@ -7,6 +7,7 @@ import {
   maticNetworkId,
   maticAddress,
   fantomNetworkId,
+  avalancheNetworkId,
   serverUrl,
   etherScanUrl,
   maticBlockExplorerUrl,
@@ -24,7 +25,10 @@ import {
   SLICEAddress,
   LP1TokenAddress,
   LP2TokenAddress,
-  RewardDistributionAddress
+  RewardDistributionAddress,
+  AvalancheBuyerCoinAddresses,
+  AvalancheTrancheTokens,
+  avalancheBlockExplorerUrl
 } from 'config';
 import {
   SET_ADDRESS,
@@ -62,17 +66,29 @@ export const setAddress = (address) => (dispatch) => {
 };
 
 export const setNetwork = (network) => async (dispatch) => {
+  console.log(network);
   const state = store.getState();
   const { path, ethereum } = state;
-  const { address } = ethereum;
-  dispatch({
-    type: SET_NETWORK,
-    payload: network
-  });
-  window.localStorage.setItem('network', network === 137 ? 'polygon' : 'ethereum');
+  const { address, wallet } = ethereum;
+  if (network === +wallet.provider.chainId) { 
+    dispatch({
+      type: SET_NETWORK,
+      payload: network
+    });
+    window.localStorage.setItem('network', +wallet.provider.chainId === networkId
+      ? 'ethereum'
+      : (+wallet.provider.chainId === maticNetworkId
+        ? 'polygon'
+        : (+wallet.provider.chainId === fantomNetworkId
+          ? 'ftm'
+          : (+wallet.provider.chainId === avalancheNetworkId
+            ? 'avax'
+            : 'ethereum'))));
+  }
 
   if (network === networkId) {
     store.dispatch(trancheMarketsToggle('compound'));
+    store.dispatch(setBlockExplorerUrl(etherScanUrl));
     if (path === 'stake' && address) {
       const res = await axios(`${serverUrl + stakingSummary + address}`);
       const { result } = res.data;
@@ -87,7 +103,14 @@ export const setNetwork = (network) => async (dispatch) => {
     store.dispatch(trancheMarketsToggle('fantom'));
     store.dispatch(setBlockExplorerUrl(fantomBlockExplorerUrl));
   }
-  network !== maticNetworkId && network !== fantomNetworkId && store.dispatch(setBlockExplorerUrl(etherScanUrl));
+  if (network === avalancheNetworkId) {
+    store.dispatch(trancheMarketsToggle('avalanche'));
+    store.dispatch(setBlockExplorerUrl(avalancheBlockExplorerUrl));
+  }
+  +wallet.provider.chainId !== maticNetworkId &&
+    +wallet.provider.chainId !== fantomNetworkId &&
+    +wallet.provider.chainId !== avalancheNetworkId &&
+    store.dispatch(setBlockExplorerUrl(etherScanUrl));
 };
 
 export const setBalance = (balance) => (dispatch) => {
@@ -144,16 +167,24 @@ export const setTokenBalance = (tokenAddress, address) => async (dispatch) => {
 export const setTokenBalances = (address) => async (dispatch) => {
   try {
     const state = store.getState();
-    let { web3, network, maticWeb3, fantomWeb3 } = state.ethereum;
-    web3 = network === maticNetworkId ? maticWeb3.http : network === fantomNetworkId ? fantomWeb3.http : web3;
+    let { web3, network, maticWeb3, fantomWeb3, avaxWeb3 } = state.ethereum;
+    web3 = network === maticNetworkId
+      ? maticWeb3.http
+      : network === fantomNetworkId
+        ? fantomWeb3.http
+        : network === avalancheNetworkId
+          ? avaxWeb3.http
+          : web3;
     const Tokens =
       network === networkId
         ? ERC20Tokens.concat(CompTrancheTokens)
         : network === maticNetworkId
-        ? PolygonBuyerCoinAddresses.concat(AaveTrancheTokens)
-        : network === fantomNetworkId
-        ? FantomBuyerCoinAddresses.concat(YearnTrancheTokens)
-        : [];
+          ? PolygonBuyerCoinAddresses.concat(AaveTrancheTokens)
+          : network === fantomNetworkId
+            ? FantomBuyerCoinAddresses.concat(YearnTrancheTokens)
+            : network === fantomNetworkId
+              ? AvalancheBuyerCoinAddresses.concat(AvalancheTrancheTokens)
+              : []
     if (network === networkId || network === maticNetworkId || network === fantomNetworkId) {
       const batch = new web3.BatchRequest();
       // const tokenBalance = {};
@@ -195,23 +226,33 @@ export const toggleApproval = (tokenAddress, contractAddress, bool) => async (di
 export const checkTrancheAllowances = (address, contractAddress) => async (dispatch) => {
   try {
     const state = store.getState();
-    let { web3, network, maticWeb3, fantomWeb3 } = state.ethereum;
+    let { web3, network, maticWeb3, fantomWeb3, avaxWeb3 } = state.ethereum;
     // if (
     //   (network === networkId && contractAddress === JAaveAddress) ||
     //   (network === maticNetworkId && contractAddress === JCompoundAddress) ||
     //   (network === fantomNetworkId && contractAddress === JYearnAddress)
     // )
     //   return;
-    web3 = network === maticNetworkId ? maticWeb3.http : network === fantomNetworkId ? fantomWeb3.http : web3;
+    web3 = network === maticNetworkId
+      ? maticWeb3.http
+      : network === fantomNetworkId
+        ? fantomWeb3.http
+        : network === avalancheNetworkId
+          ? avaxWeb3.http : web3;
     const Tokens =
       network === networkId
         ? CompTrancheTokens.concat(TrancheBuyerCoinAddresses)
         : network === maticNetworkId
-        ? AaveTrancheTokens.concat(PolygonBuyerCoinAddresses)
-        : network === fantomNetworkId
-        ? YearnTrancheTokens.concat(FantomBuyerCoinAddresses)
-        : [];
-    if (network === networkId || network === maticNetworkId || network === fantomNetworkId) {
+          ? AaveTrancheTokens.concat(PolygonBuyerCoinAddresses)
+          : network === fantomNetworkId
+            ? YearnTrancheTokens.concat(FantomBuyerCoinAddresses)
+            : network === avalancheNetworkId
+              ? AvalancheTrancheTokens.concat(AvalancheBuyerCoinAddresses)
+              : [];
+    if (network === networkId
+      || network === maticNetworkId
+      || network === fantomNetworkId
+      || network === avalancheNetworkId) {
       const batch = new web3.BatchRequest();
       let tokenBalance = {};
       Tokens.map((tokenAddress) => {

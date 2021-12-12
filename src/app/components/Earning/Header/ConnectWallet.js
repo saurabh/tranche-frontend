@@ -19,7 +19,7 @@ const ConnectWallet = ({
   setBalance,
   setWalletAndWeb3,
   theme,
-  ethereum: { address, balance, tokenBalance, unclaimedSIRRewards },
+  ethereum: { address, balance, tokenBalance, unclaimedSIRRewards, network },
   setTxModalOpen,
   setTxModalType
 }) => {

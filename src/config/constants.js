@@ -5,22 +5,37 @@ import { DAISetup } from 'utils/contractConstructor';
 // exporting .env variables
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
 export const landingUrl = process.env.REACT_APP_LANDING_URL;
+
+// Network Id
 export const networkId = parseInt(process.env.REACT_APP_NETWORK_ID);
 export const maticNetworkId = 137;
 export const fantomNetworkId = 250;
+export const avalancheNetworkId = +process.env.REACT_APP_AVALANCHE_CHAIN_ID;
+
+// Block Explorer Url 
 export const etherScanUrl = process.env.REACT_APP_ETHERSCAN_URL;
-export const polygonScanUrl = "https://polygonscan.com/";
 export const maticBlockExplorerUrl = process.env.REACT_APP_MATIC_BLOCK_EXPLORER_URL;
 export const fantomBlockExplorerUrl = process.env.REACT_APP_FANTOM_BLOCK_EXPLORER_URL;
+export const avalancheBlockExplorerUrl = process.env.REACT_APP_AVALANCHE_BLOCK_EXPLORER_URL;
+
 export const blocknativeKey = process.env.REACT_APP_BLOCKNATIVE_KEY;
 export const infuraKey = process.env.REACT_APP_INFURA_KEY;
+
+// HTTP URL
 export const alchemyHttpUrl = process.env.REACT_APP_ALCHEMY_HTTP_URL;
 export const maticHttpUrl = process.env.REACT_APP_MATIC_HTTP_URL;
 export const fantomHttpUrl = process.env.REACT_APP_FANTOM_HTTP_URL;
+export const avalancheHttpUrl = process.env.REACT_APP_AVALANCHE_HTTP_URL;
+
+export const avalancheRpcUrl = process.env.REACT_APP_AVALANCHE_RPC_URL
+
+// Sockets Url
 export const alchemyWebSocketsUrl = process.env.REACT_APP_ALCHEMY_WEBSOCKETS_URL;
 export const maticWebSocketsUrl = process.env.REACT_APP_MATIC_WEBSOCKETS_URL;
 export const fantomWebSocketsUrl = process.env.REACT_APP_FANTOM_WEBSOCKETS_URL;
 export const infuraWebSocketsUrl = process.env.REACT_APP_INFURA_WEBSOCKETS_URL;
+export const avalancheWebSocketsUrl = process.env.REACT_APP_AVALANCHE_WEBSOCKETS_URL;
+
 export const PriceOracleAddress = process.env.REACT_APP_PRICE_ORACLE;
 export const LoanContractAddress = process.env.REACT_APP_LOAN_ADDRESS;
 // Ethereum Tranches
@@ -35,6 +50,12 @@ export const AaveTrancheTokens = process.env.REACT_APP_AAVE_TRANCHE_TOKENS.split
 export const JYearnAddress = process.env.REACT_APP_YEARN_TRANCHE_ADDRESS.toLowerCase();
 export const FantomBuyerCoinAddresses = process.env.REACT_APP_FANTOM_BUYER_COIN_ADDRESS.split(',');
 export const YearnTrancheTokens = process.env.REACT_APP_YEARN_TRANCHE_TOKENS.split(',');
+
+// Fantom Tranches
+export const JAvalancheAddress = process.env.REACT_APP_AVALANCHE_TRANCHE_ADDRESS.toLowerCase();
+export const AvalancheBuyerCoinAddresses = process.env.REACT_APP_FANTOM_BUYER_COIN_ADDRESS.split(',');
+export const AvalancheTrancheTokens = process.env.REACT_APP_AVALANCHE_TRANCHE_TOKENS.split(',');
+
 // Staking
 export const StakingAddresses = process.env.REACT_APP_STAKING_ADDRESS.split(',');
 export const LockupAddress = process.env.REACT_APP_STAKING_LOCKUP_ADDRESS;
@@ -223,9 +244,9 @@ export const networkParams = {
     chainId: '0x89',
     chainName: 'Polygon Mainnet',
     nativeCurrency: {
-        name: 'MATIC',
-        symbol: 'MATIC',
-        decimals: 18
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18
     },
     rpcUrls: ['https://polygon-rpc.com/'],
     blockExplorerUrls: [maticBlockExplorerUrl]
@@ -234,12 +255,23 @@ export const networkParams = {
     chainId: '0xFA',
     chainName: 'Fantom Opera Mainnet',
     nativeCurrency: {
-        name: 'Fantom',
-        symbol: 'FTM',
-        decimals: 18
+      name: 'Fantom',
+      symbol: 'FTM',
+      decimals: 18
     },
     rpcUrls: ['https://rpc.ftm.tools/'],
     blockExplorerUrls: [fantomBlockExplorerUrl]
+  },
+  avalanche: {
+    chainId: `0x${Number(avalancheNetworkId).toString(16).toUpperCase()}`,
+    chainName: avalancheNetworkId === 43113 ? 'Avalanche Fuji Testnet': 'Avalanche Mainnet',
+    nativeCurrency: {
+      name: 'Avalanche',
+      symbol: 'AVAX',
+      decimals: 18
+    },
+    rpcUrls: [avalancheRpcUrl],
+    blockExplorerUrls: [avalancheBlockExplorerUrl]
   }
 }
 

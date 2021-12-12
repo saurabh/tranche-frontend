@@ -5,12 +5,13 @@ import { web3, timeout } from 'utils';
 import { fetchTableData, trancheCardToggle, fetchUserStakingList } from 'redux/actions/tableData';
 import { summaryFetchSuccess, setSliceStats, setTvl } from 'redux/actions/summaryData';
 import { setTokenBalances } from 'redux/actions/ethereum';
-import { serverUrl, apiUri, StakingAddresses, YieldAddresses, LockupAddress, JCompoundAddress, JAaveAddress, JYearnAddress } from 'config/constants';
+import { serverUrl, apiUri, StakingAddresses, YieldAddresses, LockupAddress, JCompoundAddress, JAaveAddress, JYearnAddress, JAvalancheAddress } from 'config/constants';
 import maticWeb3 from 'utils/maticWeb3';
 import fantomWeb3 from 'utils/fantomWeb3';
+import avaxWeb3 from 'utils/avaxWeb3';
 const { tranchesList, stakingList, stakingSummary, sliceSummary, totalValueLocked, userStakingList } = apiUri;
 
-let JCompound, Staking, YieldFarm, JAave, Lockup, JYearn;
+let JCompound, Staking, YieldFarm, JAave, Lockup, JYearn, JAvalanche;
 
 export const ETHContracts = {
   subscribe: () => {
@@ -245,7 +246,6 @@ export const FantomContracts = {
       const state = store.getState();
       const { path, ethereum } = state;
       const { address } = ethereum;
-
       JYearn =
         path === 'tranche' &&
         address &&
@@ -305,3 +305,71 @@ export const FantomContracts = {
     }
   }
 };
+
+export const AvalancheContracts = {
+  subscribe: () => {
+    try {
+      const state = store.getState();
+      const { path, ethereum } = state;
+      const { address } = ethereum;
+
+      JAvalanche =
+        path === 'tranche' &&
+        address &&
+        avaxWeb3.webSocket.eth
+          .subscribe('logs', {
+            address: JAvalancheAddress
+          })
+          .on('data', async (log) => {
+            console.log(log);
+            let userAddress = address.split('0x')[1];
+            await timeout(5000);
+            if (log.data.includes(userAddress)) {
+              const state = store.getState();
+              const { data } = state;
+              const { skip, limit, filter } = data;
+              await store.dispatch(
+                fetchTableData(
+                  {
+                    skip,
+                    limit,
+                    filter: {
+                      address: address ? address : undefined,
+                      type: filter
+                    }
+                  },
+                  tranchesList
+                )
+              );
+              store.dispatch(trancheCardToggle({ status: false, id: null }));
+              const getSliceStats = async () => {
+                const res = await axios(`${serverUrl + sliceSummary}`);
+                const { result } = res.data;
+                store.dispatch(setSliceStats(result));
+              };
+              const getTvl = async () => {
+                const res = await axios(`${serverUrl}${totalValueLocked}`);
+                const { result } = res.data;
+                store.dispatch(setTvl(result));
+              };
+              getSliceStats();
+              getTvl();
+              store.dispatch(setTokenBalances(address));
+            }
+          });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  unsubscribe: () => {
+    try {
+      JAvalanche &&
+        JAvalanche.unsubscribe((error) => {
+          if (error) console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};
+

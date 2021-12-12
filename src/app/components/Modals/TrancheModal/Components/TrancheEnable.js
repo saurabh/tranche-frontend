@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes, trancheIcons } from 'config/constants';
-import { maticNetworkId } from 'config';
 import { roundNumber } from 'utils';
 import { approveContract } from 'services';
 
@@ -49,7 +48,6 @@ export const TrancheEnable = ({
   buyerCoinAddress,
   trancheTokenAddress
 }) => {
-  let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
 
   return (
     <Modal

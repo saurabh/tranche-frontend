@@ -20,6 +20,7 @@ import { initNotify } from 'services/blocknative';
 import { web3 } from 'utils/getWeb3';
 import maticWeb3 from 'utils/maticWeb3';
 import fantomWeb3 from 'utils/fantomWeb3';
+import avaxWeb3 from 'utils/avaxWeb3';
 import {
   SLICEAddress,
   LP1TokenAddress,
@@ -32,33 +33,46 @@ import {
   PolygonBuyerCoinAddresses,
   YearnTrancheTokens,
   FantomBuyerCoinAddresses,
-  JYearnAddress
+  JYearnAddress,
+  JAvalancheAddress,
+  AvalancheTrancheTokens,
+  AvalancheBuyerCoinAddresses
 } from 'config/constants';
 
 const CompTokens = CompTrancheTokens.concat(TrancheBuyerCoinAddresses);
 const AaveTokens = AaveTrancheTokens.concat(PolygonBuyerCoinAddresses);
 const YearnTokens = YearnTrancheTokens.concat(FantomBuyerCoinAddresses);
+const AvalancheTokens = AvalancheTrancheTokens.concat(AvalancheBuyerCoinAddresses);
+
 let compAllowance = {};
 let aaveAllowance = {};
 let yearnAllowance = {};
+
 CompTokens.map((tokenAddress) => (compAllowance[tokenAddress.toLowerCase()] = false));
 AaveTokens.map((tokenAddress) => (aaveAllowance[tokenAddress.toLowerCase()] = false));
-YearnTokens.map((tokenAddress) => (yearnAllowance[tokenAddress.toLowerCase()] = false));
+YearnTokens.map((tokenAddress) => (yearnAllowance[ tokenAddress.toLowerCase() ] = false));
+
+const avalancheAllowance = AvalancheTokens.reduce((acc, tokenAddress) => {
+  acc[ tokenAddress.toLowerCase() ] = false;
+  return acc;
+}, {});
 
 const initialState = {
   balance: -1,
-  tokenBalance: { [SLICEAddress]: '0', [LP1TokenAddress]: '0', [LP2TokenAddress]: '0' },
+  tokenBalance: { [ SLICEAddress ]: '0', [ LP1TokenAddress ]: '0', [ LP2TokenAddress ]: '0' },
   address: undefined,
   web3,
   maticWeb3,
   fantomWeb3,
+  avaxWeb3,
   notify: initNotify(),
   txOngoing: false,
   tokenBalanceLoading: true,
   trancheAllowance: {
-    [JCompoundAddress]: compAllowance,
-    [JAaveAddress]: aaveAllowance,
-    [JYearnAddress]: yearnAllowance
+    [ JCompoundAddress ]: compAllowance,
+    [ JAaveAddress ]: aaveAllowance,
+    [ JYearnAddress ]: yearnAllowance,
+    [ JAvalancheAddress ]: avalancheAllowance
   },
   notificationCount: 0,
   notifications: [],
@@ -67,7 +81,6 @@ const initialState = {
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
-
   switch (type) {
     case SET_ADDRESS:
       return { ...state, address: payload };
