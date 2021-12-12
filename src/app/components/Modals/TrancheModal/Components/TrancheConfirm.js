@@ -21,7 +21,7 @@ import {
   LoadingButtonCircle,
   TrancheModalContentStatus,
   TrancheConfirmModal,
-  // APYWarning
+  APYWarning
 } from '../../styles/ModalsComponents';
 
 export const TrancheConfirm = ({
