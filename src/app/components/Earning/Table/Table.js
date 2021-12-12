@@ -169,7 +169,7 @@ const Table = ({
                     <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
                       <div className='loadingCard flex'>
                         <div className='loadingFirstCol'>
-                          <div className='loadingFirslColContent'>
+                          <div className='loadingFirslColContent flex'>
                             <LoadingContent className='loadingAvatar loadingContent ' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                             <LoadingContent className='loadingText loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                           </div>

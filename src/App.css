@@ -49,7 +49,6 @@ html {
     justify-content: space-between;
 }
 .table-card-more {
-    /* height: 0; */
     max-height: 0;
     overflow: hidden;
     border: none;
@@ -59,91 +58,21 @@ html {
     transition-timing-function: ease-out;
     padding: 0 12px 0 102px;
 }
-
 .table-more-card-toggle {
-    /*padding: 30px 12px 30px 102px;*/
-    /* padding: 30px 39px 30px 47px;; */
-    /* padding: 0 20px; */
     padding: 0;
     border-bottom: 1px solid #efefef;
     transition-property: max-height, opacity, padding;
     transition-duration: 300ms, 400ms, 100ms;
     transition-timing-function: ease-in;
     opacity: 1;
-    /* height: auto; */
     max-height: 500px;
     overflow: visible;
-}
-/* .ratio-title-content{
-} */
-/* .status-title-content{
-} */
-.table-first-col {
-    display: flex;
-    align-items: center;
-    width: 28%;
-}
-.table-first-col-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-.first-col-content {
-    margin-left: 18px;
-}
-.first-col-img {
-    display: flex;
-    align-items: center;
-}
-.first-col-img img {
-    border-radius: 50%;
-    height: 37px;
-}
-.first-col-title h2 {
-    font-family: "Open Sans", sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 10px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #39295a;
-}
-.first-col-subtitle {
-    display: flex;
-    align-items: center;
-}
-.first-col-subtitle h2 {
-    font-family: "Roboto", sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #838186;
-}
-.first-col-subtitle a img {
-    height: 12px;
-    margin-left: 2px;
-}
-.table-second-col {
-    width: 12%;
-}
-.table-third-col {
-    width: 12%;
-    position: relative;
 }
 .TableContentWrapper {
     margin-bottom: 150px;
 }
-.table-fourth-col {
-    width: 7%;
-}
 .table-fourth-col-return {
     width: 9% !important;
-}
-.table-fifth-col {
-    width: 17%;
 }
 .table-fifth-col-subscription {
     width: 15%;
@@ -179,50 +108,27 @@ html {
 .table-sixth-col button:focus {
     outline: none;
 }
-
 .adjust-btn-wrapper button {
     box-sizing: border-box;
-    /*box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);*/
     border-radius: 4px;
     border: none;
     width: 50px;
     height: 27px;
     align-items: center;
     justify-content: center;
-    display: flex;
     overflow: hidden;
     transition: 1s;
-}
-@keyframes adjustBtnHover {
-    0% {
-        opacity: 0;
-        transform: translateY(-25px);
-    }
-    50% {
-        transform: translateY(25px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 .adjust-btn-wrapper button:hover {
     filter: brightness(97%);
 }
-
-/* .adjust-btn-wrapper button:hover > img{
-  animation-name: adjustBtnHover;
-  animation-timing-function: ease-in-out;
-  animation-duration: 300ms;
-} */
-
 .adjust-btn-wrapper button img {
     pointer-events: none;
 }
 .adjust-btn-wrapper button:disabled {
     background-color: #f1f1f1;
     color: #666666;
-    cursor: default;
+    cursor: not-allowed;
 }
 .adjust-btn-wrapper button:disabled > img {
     animation: none;
@@ -235,29 +141,11 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* margin-bottom: 26px; */
     margin-bottom: 0;
 }
 .table-more-row-first {
-    display: flex;
     align-items: center;
     width: 28%;
-}
-.table-more-row-first-img {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.upArrow {
-    width: 0;
-    height: 0;
-    border-left: 2.5px solid transparent;
-    border-right: 2.5px solid transparent;
-    border-bottom: 3px solid #27d395;
-    position: absolute;
-    bottom: 3px;
-    right: -7px;
 }
 .downArrow {
     width: 0;
@@ -270,11 +158,7 @@ html {
     right: -7px;
 }
 .table-more-row-first-content {
-    display: flex;
     align-items: center;
-}
-.table-more-row-first-content a {
-    display: flex;
 }
 .table-more-row-first-content h2 {
     font-family: "Open Sans", sans-serif;
@@ -299,25 +183,27 @@ html {
     text-transform: uppercase;
     color: #39295a;
 }
+.table-more-second-4 h2 span {
+    font-weight: 400;
+}
 .table-more-row-second {
     width: 12%;
 }
 .table-more-row-third {
     width: 7%;
 }
+.table-more-row-third h2 {
+    font-weight: 400;
+}
 .table-more-row-fourth {
     width: 17%;
 }
-
 .table-more-row-fourth-content {
     position: relative;
     cursor: pointer;
 }
 .table-more-row-fifth {
     width: 24%;
-}
-.table-more-row-fifth-content {
-    display: flex;
 }
 .table-more-row-fifth-content span {
     font-weight: 700 !important;
@@ -330,12 +216,6 @@ html {
 }
 .TableMoreLoading {
     margin: 0 auto;
-}
-.table-more-second-4 h2 span {
-    font-weight: 400;
-}
-.table-more-row-third h2 {
-    font-weight: 400;
 }
 .table-card-toggle {
     border-bottom: 2px solid #f9f9fb;
@@ -350,15 +230,6 @@ html {
     border-radius: 12px;
     margin: 0 auto;
 }
-.more-transactions h2 {
-    font-family: "Open Sans", sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 8px;
-    letter-spacing: 0.05em;
-    color: rgba(57, 41, 90, 0.75);
-}
-
 .ModalHeader {
     width: 100%;
     height: 75px;
@@ -368,7 +239,6 @@ html {
     justify-content: space-between;
     padding: 0 33px;
 }
-
 .ModalHeader h2 {
     font-style: normal;
     font-weight: bold;
@@ -380,7 +250,6 @@ html {
     border: none;
     cursor: pointer;
 }
-
 .ModalContent {
     padding: 33px;
     display: flex;
@@ -388,19 +257,15 @@ html {
     align-items: center;
     justify-content: center;
 }
-
 .BtnGrpLoanModal {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
 }
-
 .ModalButton {
     width: 100%;
     height: 32px;
-    /*background: ${props => props.btnColor ? props.btnColor  : "#ECECEC"};*/ /* props */
-    /*opacity: 0.75;*/
     border: 0.3px solid #ececec;
     box-sizing: border-box;
     box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
@@ -409,46 +274,37 @@ html {
     font-weight: 500;
     font-size: 9px;
     text-transform: uppercase;
-    /*color: rgba(131, 129, 134, 0.4);*/
     cursor: pointer;
 }
-
 .ModalButton:last-child {
     margin: 12px 0 0 0;
     color: #ffffff;
-    /*background: ${props => props.btnColor ? props.btnColor  : "#E42013"};*/ /* props */
 }
-
 .ConfirmAlertWrapper {
     position: relative;
     width: auto;
-    /*height: 326px;*/
     height: auto;
     border-radius: 16px;
     border: none;
     box-shadow: 0px 2px 4px rgba(99, 99, 99, 0.7);
     padding: 33px;
 }
-
 .ConfirmAlertWrapper h2 {
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
     color: #3f3f3f;
 }
-
 .ConfirmAlertBtnWrapper {
     display: flex;
     justify-content: space-around;
 }
-
 .ConfirmAlertBtnWrapper button {
     max-width: 100px;
     font-size: 14px;
     font-weight: 700;
     margin: 12px 0 0 0;
 }
-
 .ModalAdjustForm {
     min-height: 160px;
     height: auto;
@@ -459,7 +315,6 @@ html {
     padding: 10px 35px;
     display: flex;
 }
-
 .ModalFormWrapper {
     position: relative;
     display: flex;
@@ -467,7 +322,6 @@ html {
     justify-content: space-between;
     flex: auto;
 }
-
 .ModalFormGrp {
     position: relative;
 }
@@ -479,7 +333,6 @@ html {
     color: #b9b9b9;
     margin: 6px 0 0 0;
 }
-
 .ModalFormGrpETH:after {
     content: "ETH";
     font-style: normal;
@@ -493,7 +346,6 @@ html {
     right: 39px;
     top: 27px;
 }
-
 .ModalFormGrpSLICE:after {
     content: "SLICE";
     font-style: normal;
@@ -507,7 +359,6 @@ html {
     right: 39px;
     top: 27px;
 }
-
 .ModalFormGrpNewLoan h2 {
     font-style: normal;
     font-weight: normal;
@@ -516,20 +367,17 @@ html {
     color: #b9b9b9;
     margin: 6px 0 0 0;
 }
-
 .NewLoanFormInput {
     position: relative;
     display: flex;
     justify-content: space-between;
 }
-
 .ModalFormLabel {
     font-style: normal;
     font-weight: 300;
     font-size: 9px;
     color: #4f4f4f;
 }
-
 .ModalFormInput {
     border: 2px solid #f1f1f1 !important;
     box-sizing: border-box;
@@ -544,7 +392,6 @@ html {
     text-transform: uppercase;
     color: rgba(57, 41, 90, 0.5);
     padding: 4px 74px 4px 44px;
-    /*background-image: url(${props => props.background});*/ /*props*/
     background-repeat: no-repeat;
     background-position: 9px 50%;
 }
@@ -557,7 +404,6 @@ html {
 .ModalFormInput:focus {
     outline: none;
 }
-
 .ModalFormInput::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -565,7 +411,6 @@ html {
     appearance: none;
     margin: 0;
 }
-
 .ModalFormInputAPY {
     position: relative;
     border: 2px solid #f1f1f1 !important;
@@ -582,11 +427,9 @@ html {
     color: rgba(57, 41, 90, 0.5);
     padding: 4px 74px 4px 10px;
 }
-
 .ModalFormInputAPY:focus {
     outline: none;
 }
-
 .ModalFormInputAPY::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -594,7 +437,6 @@ html {
     appearance: none;
     margin: 0;
 }
-
 .ModalFormInputNewLoan {
     position: relative;
     border: 2px solid #f1f1f1 !important;
@@ -611,11 +453,9 @@ html {
     color: rgba(57, 41, 90, 0.5);
     padding: 4px 105px 4px 10px;
 }
-
 .ModalFormInputNewLoan:focus {
     outline: none;
 }
-
 .ModalFormInputNewLoan::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -623,7 +463,6 @@ html {
     appearance: none;
     margin: 0;
 }
-
 .ModalFormSubmit {
     width: 100%;
     min-height: 91px;
@@ -634,12 +473,10 @@ html {
     justify-content: center;
     align-items: center;
 }
-
 .ModalFormButton {
     width: 100%;
     height: 32px;
     background: #ececec;
-    /*opacity: 0.75;*/
     border: 0.3px solid #ececec;
     box-sizing: border-box;
     box-shadow: 0px 2px 2px rgba(236, 236, 236, 0.4);
@@ -648,10 +485,8 @@ html {
     font-weight: 500;
     font-size: 9px;
     text-transform: uppercase;
-    /*color: rgba(131, 129, 134, 0.4);*/
     cursor: pointer;
 }
-
 .SelectCurrencyView {
     position: relative;
 }
@@ -678,11 +513,9 @@ html {
     display: flex;
     flex-direction: column;
 }
-
 .LoanCustomSelect {
     align-self: flex-end;
 }
-
 .SelectCurrencyOptions {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -708,18 +541,14 @@ html {
     box-sizing: border-box;
     padding: 9px;
 }
-
 .SelectCurrencyOption button:hover {
     background: #e7e7e7;
 }
-
 .SelectCurrencyOption:last-child button {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
-
 .SelectChevron {
-    /*span*/
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -730,7 +559,6 @@ html {
     justify-content: space-between;
     cursor: pointer;
 }
-
 .internet-notification-wrapper {
     max-width: 300px;
     width: 100%;
@@ -743,15 +571,10 @@ html {
     padding: 10px 70px 10px 15px;
     box-shadow: 0px 2px 2px rgba(238, 229, 255, 0.4);
 }
-
 .notification-content {
-    display: flex;
     justify-content: space-between;
     align-items: center;
     height: 100%;
-}
-.notification-logo {
-    display: flex;
 }
 .notification-logo img {
     width: 50px;
@@ -761,11 +584,9 @@ html {
     font-weight: 500;
     font-family: "Roboto", sans-serif;
 }
-
 .online .notification-text h2 {
     color: #081e39;
 }
-
 .offline .notification-text h2 {
     color: #000;
 }
@@ -779,7 +600,6 @@ html {
     width: 15px;
     height: 15px;
     padding: 0;
-    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -787,7 +607,6 @@ html {
 .closeNotification button img {
     width: 6px;
 }
-
 .staticContentWrapper {
     margin: 0 0 150px 0;
 }
@@ -828,28 +647,16 @@ html {
 .staticContentWrapper td {
     border: 1px solid #5f5f5f;
 }
-
 .footerWrapper {
-    /* position: absolute;
-  bottom: 0; */
     width: 100%;
     height: 82px;
-    display: flex;
     align-items: center;
     justify-content: space-between;
-    /* transform: translateX(-50%);
-  left: 50%; */
 }
-
 .footerLinks {
     max-width: 480px;
     width: 100%;
-    display: flex;
     justify-content: space-between;
-    /* margin: 50px 0 20px 0; */
-    /* position: absolute;
-  left: 50%;
-  transform: translateX(-50%); */
 }
 .footerLinks a {
     font-family: "Inter", sans-serif;
@@ -867,9 +674,7 @@ html {
 .footerLinks a:hover {
     color: #aaa8e9;
 }
-
 .paginationWrapper div {
-    display: flex;
     align-items: center;
     position: absolute;
     height: 50px;
@@ -877,18 +682,15 @@ html {
     padding: 15px;
     border-radius: 12px;
 }
-
 .footer-container {
     position: relative;
     border-top: 2px solid rgba(233, 233, 252, 0.1);
     background: #f6f6fc;
 }
-
 .layout-wrapper {
     position: relative;
     min-height: 100vh;
 }
-
 .InputStyling {
     border: 1px solid #ffffff;
 }
@@ -897,34 +699,16 @@ html {
     border: 0.92283px solid rgba(255, 163, 163, 0.5) !important;
     background: rgba(255, 163, 163, 0.05) !important;
 }
-
-.navLinkDisabled {
-    pointer-events: none;
-    opacity: 0.09 !important;
-}
-
 .modalAdjustFormStyle {
     min-height: auto;
 }
-.ModalFormInputNewLoanStyling {
-    max-width: 120px;
-}
 .fieldStylingDisplay {
-    display: none;
-}
-.setPointer {
-    cursor: pointer;
-}
-.displayNone {
     display: none;
 }
 .ratesToggle {
     left: 0 !important;
 }
 @media (max-width: 1200px) {
-    .first-col-content {
-        margin-left: 5px;
-    }
     .table-sixth-col {
         justify-content: center !important;
     }
@@ -934,28 +718,8 @@ html {
     .table-more-row-content {
         width: auto;
     }
-    .table-first-col:before {
-        content: "Address";
-    }
-    .table-second-col:before {
-        content: "Status";
-    }
-    .table-third-col:before {
-        content: "Remaining";
-    }
-    .table-fourth-col:before {
-        content: "Ratio";
-    }
-    .table-fifth-col:before {
-        content: "Interest Paid";
-    }
 }
-
 .active span {
-    display: none !important;
-}
-
-.FormDetails {
     display: none !important;
 }
 .TrancheRewardsModal div .ReactModal__Content--after-open {
@@ -983,8 +747,9 @@ html {
 }
 .ReactModal__Overlay {
     overflow-y: scroll;
+    opacity: 1;
+    transition: all 300ms ease-in-out;
 }
-
 @media (max-width: 633px) {
     .ReactModal__Content {
         position: absolute !important;
@@ -1017,9 +782,6 @@ html {
     }
 }
 @media (max-width: 633px) {
-    .FormDetails {
-        display: block !important;
-    }
     .ModalFormInput,
     .ModalFormInputAPY,
     .ModalFormInputNewLoan {
@@ -1102,9 +864,6 @@ html {
         padding: 15px 0;
         border-bottom: 2px solid #efefef;
     }
-    .first-col-content {
-        margin-left: 5px;
-    }
     .table-sixth-col {
         justify-content: center !important;
     }
@@ -1117,23 +876,7 @@ html {
     .table-more-row-content {
         width: auto;
     }
-    .table-first-col:before {
-        content: "Address";
-    }
-    .table-second-col:before {
-        content: "Status";
-    }
-    .table-third-col:before {
-        content: "Remaining";
-    }
-    .table-fourth-col:before {
-        content: "Ratio";
-    }
-    .table-fifth-col:before {
-        content: "Interest Paid";
-    }
 }
-
 .loadingFirstCol {
     width: 28%;
 }
@@ -1142,14 +885,12 @@ html {
     width: 47px;
     border-radius: 50%;
 }
-
 .loadingCard {
     width: 100%;
     align-items: center;
     justify-content: space-between;
 }
 .loadingFirslColContent {
-    display: flex;
     justify-content: flex-end;
     align-items: center;
 }
@@ -1158,29 +899,26 @@ html {
     width: 80%;
     height: 47px;
 }
-
 .loadingContentCol {
-    width: 100%;
-    height: 47px;
-}
-.loadingFifthColContent {
-    width: 100%;
-    height: 47px;
-}
-
-.loadingSixthColContent {
     width: 100%;
     height: 47px;
 }
 .loadingSecondCol {
     width: 45%;
 }
-
 .loadingFifthCol {
     width: 12%;
 }
+.loadingFifthColContent {
+    width: 100%;
+    height: 47px;
+}
 .loadingSixthCol {
     width: 12%;
+}
+.loadingSixthColContent {
+    width: 100%;
+    height: 47px;
 }
 @media (max-height: 1200px) and (max-height: 600px) {
     .TrancheConfirmModal div .ReactModal__Content--after-open {
@@ -1204,11 +942,9 @@ html {
         display: none;
     }
 }
-
 .loadingContentWrapper {
     border-radius: 3px;
 }
-
 @keyframes gradient-slide {
     0% {
         background-position: 100% 50%;
@@ -1225,7 +961,6 @@ html {
     -webkit-animation: clockwise 500ms linear infinite;
     animation: clockwise 500ms linear infinite;
 }
-
 .btnLoadingIconCut {
     position: relative;
     width: 8px;
@@ -1235,7 +970,6 @@ html {
     top: 0;
     left: 0;
 }
-
 .btnLoadingIcon {
     box-sizing: border-box;
     width: 16px;
@@ -1256,13 +990,11 @@ html {
         infinite;
     animation: donut-rotate 1000ms cubic-bezier(0.4, 0, 0.22, 1) infinite;
 }
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
 input[type="number"] {
     -moz-appearance: textfield;
 }
@@ -1304,7 +1036,6 @@ input[type="number"] {
         transform: rotate(0);
     }
 }
-
 .ratesBoxWrapper {
     border-radius: 19px;
     z-index: 1;
@@ -1312,7 +1043,6 @@ input[type="number"] {
     transition: z-index 150ms step-start, opacity 100ms linear,
         transform 150ms linear, border-radius 150ms linear;
 }
-
 .ratesBoxWrapperDisplay {
     border-radius: 50% !important;
     overflow: hidden !important;
@@ -1322,24 +1052,17 @@ input[type="number"] {
     transition: z-index 150ms step-end, opacity 100ms linear,
         transform 150ms linear, border-radius 150ms linear !important;
 }
-
-.ReactModal__Overlay {
-    opacity: 1;
-    transition: all 300ms ease-in-out;
-}
 .ReactModal__Content {
     transform: scale(0.5) translateY(50%);
     transition: all 300ms ease-in-out;
     background: none !important;
 }
-
 .ReactModal__Content--after-open {
     transform: scale(1) translateY(0);
 }
 .ReactModal__Content--before-close {
     transform: scale(0.5) translateY(50%);
 }
-
 .ReactModal__Overlay--before-close {
     opacity: 0;
 }
@@ -1348,20 +1071,16 @@ input[type="number"] {
     width: 100% !important;
     transition: none !important;
 }
-
 .slide-enter,
 .slide-exit {
     transition: transform 1000ms ease-out;
 }
-
 .slide-enter {
     transform: translateX(100%);
 }
-
 .slide-enter.slide-enter-active {
     transform: translateX(0%);
 }
-
 .slide-exit {
     position: absolute;
     top: 0;
@@ -1369,16 +1088,13 @@ input[type="number"] {
     width: 100%;
     transform: translateX(0%);
 }
-
 .slide-exit-active {
     transform: translateX(-100%);
 }
-
 .hideMenu {
     height: 0 !important;
     transition: 300ms;
 }
-
 .NotifyWrapper {
     position: fixed;
     bottom: 10px;
@@ -1386,7 +1102,6 @@ input[type="number"] {
     width: 300px;
     z-index: 4000;
 }
-
 .NotifyItem {
     border-radius: 10px;
     box-shadow: 0px 2px 10px rgb(0 0 0 / 10%);
@@ -1402,32 +1117,26 @@ input[type="number"] {
     position: relative;
     display: flex;
 }
-
 @keyframes SlideLeft {
     0% {
         margin-left: 120%;
     }
-
     100% {
         margin-left: 0;
     }
 }
-
 @keyframes SlideRight {
     0% {
         margin-left: 0;
     }
-
     100% {
         margin-left: 120%;
     }
 }
-
 .NotifyItem.NotifyExit {
     animation: SlideRight 0.4s;
     animation-fill-mode: forwards;
 }
-
 .NotifyItem #NotifyText,
 p {
     font-family: Helvetica Neue;
@@ -1451,15 +1160,12 @@ p {
     text-transform: lowercase;
     margin: 0;
 }
-
 .NotifyItem #NotifyText span span {
     margin: 0 5px;
-    /* display: none; */
 }
 .NotifyItem #NotifyText span span svg {
     margin: 0 5px;
 }
-
 @-webkit-keyframes kf_el_RzYtw9rUyN_an_gX4OsFPwzz {
     0% {
         stroke-dasharray: 473.87;
@@ -1521,12 +1227,10 @@ p {
     animation-timing-function: cubic-bezier(0, 0, 1, 1),
         cubic-bezier(0, 0, 1, 1);
 }
-
 #NotifySvgIcon svg {
     height: 19.26px;
     width: 19.26px;
 }
-
 #NotifyCloseIcon {
     display: flex;
     cursor: pointer;
@@ -1543,7 +1247,6 @@ p {
 #NotifyCloseIcon:hover {
     background: rgba(155, 155, 155, 0.3);
 }
-
 @-webkit-keyframes kf_el_fv0z90vBrL_an_PwUBZ96LS {
     0% {
         -webkit-transform: translate(88px, 87.587890625px) rotate(0deg)
@@ -1876,7 +1579,6 @@ p {
     -webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);
     animation-timing-function: cubic-bezier(0, 0, 1, 1);
 }
-
 .bn-onboard-modal {
     z-index: 3000 !important;
 }
@@ -1893,9 +1595,4 @@ p {
         height: 100vh !important;
         min-height: auto !important;
     }
-}
-
-.marketsCarousel {
-    margin: 15px 0;
-    overflow: visible;
 }

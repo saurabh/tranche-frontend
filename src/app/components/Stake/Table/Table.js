@@ -185,7 +185,7 @@ const Table = ({
                     <TableContentCard key={idx} color={ModeThemes[theme].TableHead}>
                       <div className='loadingCard flex'>
                         <div className='loadingFirstCol'>
-                          <div className='loadingFirslColContent'>
+                          <div className='loadingFirslColContent flex'>
                             <LoadingContent className='loadingAvatar loadingContent ' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                             <LoadingContent className='loadingText loadingContentWrapper loadingContent' colorOne={ModeThemes[theme].LoadingColorOne} colorTwo={ModeThemes[theme].LoadingColorTwo}></LoadingContent>
                           </div>
@@ -237,7 +237,7 @@ const Table = ({
           <div className='paginationWrapper'>
             <Pagination total={data && data.count} limit={limit} pageCount={pageCount} currentPage={parseInt(current, 10)}>
               {({ pages, currentPage, hasNextPage, hasPreviousPage, previousPage, nextPage, totalPages, getPageItemProps }) => (
-                <div className='background-white'>
+                <div className='background-white flex'>
                   <a
                     {...getPageItemProps({
                       pageValue: 1,

@@ -317,10 +317,6 @@ let NewLoan = ({
       <ModalAdjustForm>
         <Form component={ModalFormWrapper} onSubmit={(e) => createNewLoan(e)}>
           <FormInputsWrapper>
-            {/* <h2 className="FormDetails">
-              COLLATERAL BALANCE: {' '}
-              {collateralBalance ? collateralBalance : 0} {` ${pairData[pair].collateral}`}
-            </h2> */}
             <ModalFormGrpNewLoan>
               <NewLoanFormInput>
                 <NewLoanInputWrapper name='borrowedAskAmount'>

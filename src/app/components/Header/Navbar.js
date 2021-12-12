@@ -62,9 +62,9 @@ function Navbar({ path }) {
           </a>
         </div>
         <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
-          <span></span>
-          <span></span>
-          <span></span>
+          <span className='background-white'></span>
+          <span className='background-white'></span>
+          <span className='background-white'></span>
         </div>
         
         <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} >

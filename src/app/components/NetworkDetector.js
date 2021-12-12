@@ -53,10 +53,10 @@ export default function (ComposedComponent) {
           { (isDisconnected && showNotification) && (<div className="internet-error">
               <div className="internet-notification-wrapper background-white offline">
                 <div className="closeNotification">
-                    <button onClick={(e) => this.closeNotification(e)}><img src={closeModal} alt=""/></button>
+                    <button className='flex' onClick={(e) => this.closeNotification(e)}><img src={closeModal} alt=""/></button>
                 </div>
-                <div className="notification-content">
-                    <div className="notification-logo">
+                <div className="notification-content flex">
+                    <div className="notification-logo flex">
                         <img src={JibrelLogoError} alt=""/>
                     </div>
                     <div className="notification-text">

@@ -159,23 +159,19 @@ ${({ TrancheWFTM, textColor }) => TrancheWFTM && `
       font-size: 15px;
     }
   }
-`}
+`}`
 
-
-
-
-`
 const ModalContent = styled.div`
-padding: 33px;
-min-height: 554px;
-height: 100%;
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: row;
-@media (max-width: 633px){
-  flex-direction: column;
-}
+  padding: 33px;
+  min-height: 554px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  @media (max-width: 633px){
+    flex-direction: column;
+  }
 `
 const ModalContentDetails = styled.div`
 width: 100%;
