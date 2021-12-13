@@ -94,7 +94,7 @@ export const TrancheConfirm = ({
           </TrancheModalContentHeader>
 
           {
-              (isDeposit && (trancheValue / 10) < Number(formValues.depositAmount) && sliceNetwork) ?
+              (isDeposit && (trancheValue / 10) < Number(formValues && formValues.depositAmount) && sliceNetwork) ?
               <APYWarning>
                   <h2>
                     {
@@ -104,7 +104,7 @@ export const TrancheConfirm = ({
                     }
                   </h2>
               </APYWarning> : 
-              (isDeposit && (trancheValue / 10) < Number(formValues.depositAmount) && !sliceNetwork && trancheType === 'TRANCHE_B') ?
+              (isDeposit && (trancheValue / 10) < Number(formValues && formValues.depositAmount) && !sliceNetwork && trancheType === 'TRANCHE_B') ?
               <APYWarning>
                   <h2>
                     You are depositing more than 10% of the total value of Tranche B, this will reduce the TRANCHE APY.
