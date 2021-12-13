@@ -1,5 +1,5 @@
 import { Key, Agree, DaiLogo, ETH as ETHicon, TrancheClaim, DaiClaim, EthClaim, AAVE, CompoundLogo, USDCCard, USDTCard, DAICARD, MaticTable, TrancheStake, 
-  ETHCARD, Chainlink, WBTC, YearnIcon, FantomIcon, MIMIcon, YFIIcon } from 'assets';
+  ETHCARD, Chainlink, WBTC, YearnIcon, FantomIcon, MIMIcon, YFIIcon, TAAVAX, TBAVAX, TBWETH, TAWETH, TABTC, TBBTC } from 'assets';
 import { DAISetup } from 'utils/contractConstructor';
 
 // exporting .env variables
@@ -188,6 +188,13 @@ export const trancheIcons = {
   byvMIM: { protocolIcon: YearnIcon, assetIcon: MIMIcon },
   ayvYFI: { protocolIcon: YearnIcon, assetIcon: YFIIcon },
   byvYFI: { protocolIcon: YearnIcon, assetIcon: YFIIcon },
+  aaavaWAVAX: { protocolIcon: AAVE, assetIcon: TAAVAX },
+  baavaWAVAX: { protocolIcon: AAVE, assetIcon: TBAVAX },
+  aaavaWETH: { protocolIcon: AAVE, assetIcon: TAWETH },
+  baavaWETH: { protocolIcon: AAVE, assetIcon: TBWETH },
+  aaavaWBTC: { protocolIcon: AAVE, assetIcon: TABTC },
+  baavaWBTC: { protocolIcon: AAVE, assetIcon: TBBTC },
+
 };
 export const LiquidityIcons = {
   "SLICE": TrancheStake,
