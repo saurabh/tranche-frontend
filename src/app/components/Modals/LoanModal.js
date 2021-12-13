@@ -154,9 +154,6 @@ const LoanModal = ({
                 ) : (
                   <h2>{actionTypes[type].confirmationText}</h2>
                 )}
-                {/*{type === 'WithdrawInterest' && (
-              <h5>Accrued Interest: {accruedInterest + ' ' + collateralTypeName}</h5>
-            )}*/}
                 <ConfirmAlertBtnWrapper>
                   <ModalButton
                     onClick={onClose}

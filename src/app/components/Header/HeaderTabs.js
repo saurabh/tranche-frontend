@@ -90,7 +90,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
           </MarketsTabsContainer>
               
 
-        <OtherTabsContainer id="other-tabs-container">
+        <OtherTabsContainer id="other-tabs-container" className='flex'>
             <HeaderTabBtn link as='a' href='https://docs.tranche.finance/tranchefinance/' target='_blank' id='how-to-tab'>
             {i18n.t('footer.docs')}
             </HeaderTabBtn>
@@ -151,7 +151,7 @@ const HeaderTabs = ({ path, changeOwnAllFilter, ownAllToggle, ethereum: { addres
         }
         
 
-        <OtherTabsContainer id="other-tabs-container">
+        <OtherTabsContainer id="other-tabs-container" className='flex'>
           {/* <NavbarLinks tabs={true}>
             <NavLink
               to={baseUrl + '/staking'}

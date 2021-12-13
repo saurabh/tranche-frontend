@@ -24,24 +24,17 @@ const TableMoreRow = ({
 
   return (
     <div className='table-more-row'>
-      <div className='table-more-row-first table-more-row-content'>
-        {/*<div className="table-more-row-first-img">
-                    <img src={ethImg} alt=""/>
-                    <span className={arrow}></span>
-                </div>*/}
-        <div className='table-more-row-first-content'>
-          {/* <h2>apr 15, 2020 - 1:53 pm</h2>*/}
+      <div className='table-more-row-first flex table-more-row-content'>
+        <div className='table-more-row-first-content flex'>
           <h2>{createdAt ? createdAt.substring(0, createdAt.length - 5) : ''}</h2>
-          <a href={etherScanUrl + 'tx/' + hash} target='_blank' rel='noopener noreferrer'>
+          <a className='flex' href={etherScanUrl + 'tx/' + hash} target='_blank' rel='noopener noreferrer'>
             <img src={LinkArrow} alt='' />
           </a>
         </div>
       </div>
       <div className='table-more-row-second table-more-second-4 table-more-row-content'>
         <div className='table-more-row-second-content'>
-          {/*<h2>12.85 <span>DAI</span></h2>*/}
-          <h2>
-            
+          <h2 className='t-a-c'>            
             {eventName === events['APPROVE_LOAN'].toLowerCase()
               ? roundBasedOnUnit(amount, collateralTypeName) + " " + gweiOrEther(amount, cryptoFromLenderName)
               : eventName === events['TRANCHE_ADDED'].toLowerCase() 
@@ -52,14 +45,14 @@ const TableMoreRow = ({
       </div>
       <div className='table-more-row-third table-more-second-4 table-more-row-content'>
         <div className='table-more-row-third-content'>
-          <h2>{ratio}%</h2>
+          <h2 className='t-a-c'>{ratio}%</h2>
         </div>
       </div>
       <div className='table-more-row-fourth table-more-second-4 table-more-row-content'>
         <div className='table-more-row-fourth-content'></div>
       </div>
       <div className='table-more-row-fifth table-more-second-4 table-more-row-content'>
-        <div className='table-more-row-fifth-content'>
+        <div className='table-more-row-fifth-content flex'>
           <MoreRowSpan color={Object.values(searchObj(parseInt(status)))[0].color}>•</MoreRowSpan>
           <h2>
             {eventName === events['LOAN_CREATED'].toLowerCase()

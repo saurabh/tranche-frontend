@@ -29,9 +29,9 @@ function Footer({ changeTheme, theme }) {
     return `/${ lng }/${ currentPath }`;
   }
   return (
-    <FooterContainer className="footer-container" color={ModeThemes[theme].footerBackground}>
+    <FooterContainer className="footer-container flex" color={ModeThemes[theme].footerBackground}>
       <div className="content-container container">
-        <div className="footerWrapper">
+        <div className="footerWrapper flex">
           <FooterLeft>
             <LanguageContainer>
               <h2>{i18n.t('footer.language')}</h2>
@@ -62,7 +62,7 @@ function Footer({ changeTheme, theme }) {
               <h2>{i18n.t(`footer.${theme}`)}</h2>
             </CheckboxWrapper>
           </FooterLeft>
-          <FooterLinks className="footerLinks" color={ModeThemes[theme].footerLinks}>
+          <FooterLinks className="footerLinks flex" color={ModeThemes[theme].footerLinks}>
             <a href="/privacy" target="_blank">{i18n.t('footer.privacy')}</a> 
             <a href="/terms" target="_blank">{i18n.t('footer.terms')}</a>
             <a href="https://discord.com/invite/Nv44PTdF3K" target="_blank" rel="noopener noreferrer">{i18n.t('footer.support')}</a>

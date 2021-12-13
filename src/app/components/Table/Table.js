@@ -255,9 +255,9 @@ const Table = ({
                 <div>
                   {[...Array(5)].map((i, idx) => (
                     <TableContentCard key={idx}>
-                      <div className='loadingCard'>
+                      <div className='loadingCard flex'>
                         <div className='loadingFirstCol'>
-                          <div className='loadingFirslColContent'>
+                          <div className='loadingFirslColContent flex'>
                             <div className='loadingAvatar loadingContent '></div>
                             <div className='loadingText loadingContentWrapper loadingContent'></div>
                           </div>

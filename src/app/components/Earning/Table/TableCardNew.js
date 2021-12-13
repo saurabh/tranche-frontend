@@ -230,7 +230,7 @@ const TableCard = ({
           </TableFifthCol>
           <TableSixthCol className='table-sixth-col table-col' trancheTableBtns>
             <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id}>
-              <button>
+              <button className='flex'>
                 <img src={ChevronTable} alt='ChevronTable' />
               </button>
             </AdustBtnWrapper>
@@ -280,7 +280,7 @@ const TableCard = ({
           <TableMobileContent>
             <TableMobileContentRow>
               <AdustBtnWrapper className='adjust-btn-wrapper' chevron status={trancheCard.status && id === trancheCard.id} trancheMobile>
-                <button>
+                <button className='flex'>
                   <img src={ChevronTable} alt='ChevronTable' />
                 </button>
               </AdustBtnWrapper>

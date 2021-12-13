@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Logo from 'assets/images/svg/Logo.svg';
 import { NavbarWrapper, NavbarContainer, NavbarLinks, NavBarMobile, NavBarMobileContent  } from './styles/HeaderComponents';
 import { PagesData, apiUri, pairData  } from 'config/constants';
-import { ETH, DAI, BackArrow } from 'assets';
+import { ETH, DAI, BackArrow, TrancheIcon } from 'assets';
 import { getRequest } from 'services/axios';
 import { roundNumber, safeDivide } from 'utils/helperFunctions';
 import { NavLink } from 'react-router-dom';
@@ -20,7 +20,6 @@ import {
   RatesRowDash
 } from './styles/HeaderComponents';
 import ConnectWallet from './ConnectWallet';
-import { TrancheIcon } from 'assets';
 export const baseUrl = i18n.language === 'en' ? '' : '/'+i18n.language;
 
 function Navbar({ path }) {
@@ -29,10 +28,6 @@ function Navbar({ path }) {
   // const [pair1Value, setPair1Value] = useState(0);
   const [ratesVisability, setRatesVisability] = useState(false);
   const [ratesToggle, setRatesToggle] = useState(false);
-  
-
-
-
   const getPriceFeed = async () => {
     const { priceFeed: priceUrl } = apiUri;
     setRatesVisability(!ratesVisability);
@@ -67,9 +62,9 @@ function Navbar({ path }) {
           </a>
         </div>
         <div id='navbar-icon' className={menuOpen ? "NavIconActive" : ""} onClick={() => setMenuOpen(!menuOpen)}>
-          <span></span>
-          <span></span>
-          <span></span>
+          <span className='background-white'></span>
+          <span className='background-white'></span>
+          <span className='background-white'></span>
         </div>
         
         <NavBarMobile className={menuOpen ? "NavbarMobileToggle" : ""} >

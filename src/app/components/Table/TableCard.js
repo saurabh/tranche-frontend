@@ -567,6 +567,7 @@ const TableCard = ({
           <TableColMobile btn>
             <TableMobilCardBtn color={PagesData[path].btnColor} className='adjust-btn-wrapper'>
               <button
+                className='flex' 
                 disabled={path === 'tranche' || disableBtn}
                 onClick={path === 'tranche' || disableBtn ? undefined : () => openModal()}
               >
@@ -694,7 +695,7 @@ const TableCard = ({
           <TableFifthCol className='table-col'>
             <FifthColContent>
               <StatusTextWrapper
-                className='status-text-wrapper'
+                className='status-text-wrapper t-a-c'
                 color={Object.values(searchObj(status))[0].color}
                 backgroundColor={Object.values(searchObj(status))[0].background}
               >
@@ -800,13 +801,6 @@ const TableCard = ({
                 );
               })
             )}
-
-            {/* <div className="more-transactions">
-              <h2>
-                this loan has 11 more transactions in its history.
-                <a href="/">show more transactions</a>
-              </h2>
-            </div>*/}
           </TableCardMoreContent>
         </TableCardMore>
       </TableContentCardWrapper>
