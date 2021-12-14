@@ -702,10 +702,9 @@ const MarketTab = styled.button`
       }
       img:last-child{
         width: auto;
-        height: 100%;
       }
       & > span{
-        margin: 0 5px;
+        margin: 0 15px;
       }
   `} 
   ${({ current, theme, btnShadow}) => (current && theme === "light") && `
@@ -718,7 +717,6 @@ const MarketTab = styled.button`
   @media (max-width: 992px) {
     padding: 12px;
     height: 45px;
-    width: 32%;
     margin: 0;
     h2{
       font-size: 12px;

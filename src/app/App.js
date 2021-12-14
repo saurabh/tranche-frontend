@@ -5,7 +5,7 @@ import TagManager from 'react-gtm-module';
 import PropTypes from 'prop-types';
 import { GlobalStyle } from 'app/components';
 import { ThemeProvider } from 'styled-components';
-// import Banner from 'app/components/Banner/Banner';
+import Banner from 'app/components/Banner/Banner';
 import ErrorModal from 'app/components/Modals/Error';
 
 import { setTokenBalances, checkTrancheAllowances, checkStakingAllowances, checkSIRRewards } from 'redux/actions/ethereum';
@@ -91,7 +91,7 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
     }
   }, [network, address, path]);
 
-
+console.log(process.env.NODE_ENV)
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
   };
@@ -99,7 +99,10 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
     return (
       <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
-        {/* <Banner /> */}
+          {
+            process.env.NODE_ENV === 'development' &&
+            <Banner />
+          }
         <NotificationProvider />
         <Router>
           <Switch location={window.location}>

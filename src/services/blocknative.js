@@ -52,7 +52,7 @@ export function initNotify() {
 export function switchNetwork(network) {
   try
   {
-    console.log(network);
+    // console.log(network);
     const state = store.getState();
     const { wallet } = state.ethereum;
     if (wallet) {

@@ -87,6 +87,8 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           {i18n.t('footer.docs')}
         </HowToLink>
       </div>
+      { isDesktop ?
+
       <MarketsTabs>
         
         <MarketTab
@@ -155,7 +157,78 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
           <span></span> 
           <img src={AVAX} alt='' />
         </MarketTab> 
-      </MarketsTabs> 
+      </MarketsTabs>  : 
+      <Carousel responsive={responsive} arrows={false} partialVisible={true} className="marketsCarousel">
+      <MarketTab
+        market='compound'
+        current={trancheMarket === 'compound' && (network === networkId)}
+        onClick={() => trancheMarketsToggling('compound')}
+        span={ModeThemes[theme].TrancheBtnSpan}
+        background={ModeThemes[theme].TrancheBtnBackground}
+        backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+        border={ModeThemes[theme].TrancheBtnBorder}
+        color={ModeThemes[theme].TrancheBtnColor}
+        theme={theme}
+        btnShadow={ModeThemes[theme].btnShadow}
+        mobile
+      >
+        <img src={isDesktop ? (theme === 'light' ? CompoundBtnBlack : CompoundBtn) : CompoundIconMobile} alt='' /> 
+        <span></span> 
+        <img src={ETHLOGO} alt='' />
+      </MarketTab>
+      <MarketTab
+        market='aavePolygon'
+        current={trancheMarket === 'aavePolygon' && (network === maticNetworkId)}
+        onClick={() => trancheMarketsToggling('aavePolygon')}
+        span={ModeThemes[theme].TrancheBtnSpan}
+        background={ModeThemes[theme].TrancheBtnBackground}
+        backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+        border={ModeThemes[theme].TrancheBtnBorder}
+        color={ModeThemes[theme].TrancheBtnColor}
+        theme={theme}
+        btnShadow={ModeThemes[theme].btnShadow}
+        mobile
+      >
+        <img src={isDesktop ? AaveBtn : AAVEIconMobile} alt='' /> 
+        <span></span> 
+        <img src={theme === 'light' ? PolygonLogoBlack : PolygonLogo} alt='' />
+      </MarketTab>
+
+      <MarketTab
+        market='fantom'
+        current={trancheMarket === 'fantom' && (network === fantomNetworkId)}
+        onClick={() => trancheMarketsToggling('fantom')}
+        span={ModeThemes[theme].TrancheBtnSpan}
+        background={ModeThemes[theme].TrancheBtnBackground}
+        backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+        border={ModeThemes[theme].TrancheBtnBorder}
+        color={ModeThemes[theme].TrancheBtnColor}
+        theme={theme}
+        btnShadow={ModeThemes[theme].btnShadow}
+        mobile
+      >
+        <img src={isDesktop ? (theme === 'light' ? AaveBtn : AaveBtn) : AAVEIconMobile} alt='' /> 
+        <span></span> 
+        <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
+      </MarketTab>
+      <MarketTab
+          market='avalanche'
+          current={trancheMarket === 'avalanche' && (network === avalancheNetworkId)}
+          onClick={() => trancheMarketsToggling('avalanche')}
+          span={ModeThemes[theme].TrancheBtnSpan}
+          background={ModeThemes[theme].TrancheBtnBackground}
+          backgroundActive={ModeThemes[theme].TrancheBtnBackgroundCurrent}
+          border={ModeThemes[theme].TrancheBtnBorder}
+          color={ModeThemes[theme].TrancheBtnColor}
+          theme={theme}
+          btnShadow={ModeThemes[theme].btnShadow}
+          mobile
+        >
+          <img src={isDesktop ? (theme === 'light' ? AaveBtn : AaveBtn) : AAVEIconMobile} alt='' /> 
+          <span></span> 
+          <img src={AVAX} alt='' />
+        </MarketTab> 
+    </Carousel> }
       {tranchesToggle === 'aavePolygon' && (
         <BridgeTokensWrapper>
           <p>

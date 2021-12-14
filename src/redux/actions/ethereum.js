@@ -66,7 +66,6 @@ export const setAddress = (address) => (dispatch) => {
 };
 
 export const setNetwork = (network) => async (dispatch) => {
-  console.log(network);
   const state = store.getState();
   const { path, ethereum } = state;
   const { address, wallet } = ethereum;
@@ -185,7 +184,7 @@ export const setTokenBalances = (address) => async (dispatch) => {
             : network === avalancheNetworkId
               ? AvalancheBuyerCoinAddresses.concat(AvalancheTrancheTokens)
               : [];
-    console.log(Tokens);
+    // console.log(Tokens);
     if (network === networkId
       || network === maticNetworkId
       || network === fantomNetworkId
@@ -222,7 +221,7 @@ export const setTokenBalances = (address) => async (dispatch) => {
 };
 
 export const toggleApproval = (tokenAddress, contractAddress, bool) => async (dispatch) => {
-  console.log(tokenAddress, contractAddress, bool);
+  // console.log(tokenAddress, contractAddress, bool);
   dispatch({
     type: SET_ALLOWANCE,
     payload: { contractAddress, tokenAddress: tokenAddress.toLowerCase(), isApproved: bool }

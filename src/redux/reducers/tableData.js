@@ -106,7 +106,6 @@ export default function (state = initialState, action) {
     case OWN_ALL_TOGGLE:
       return { ...state, tradeType: payload };
     case TRANCHE_MARKETS:
-      console.log(payload);
       return { ...state, trancheMarket: payload };
     case USER_STAKING_LIST_SUCCESS:
       return { ...state, userStakingList: payload };

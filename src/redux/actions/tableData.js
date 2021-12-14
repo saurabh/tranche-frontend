@@ -168,7 +168,7 @@ export const paginationCurrent = (current) => (dispatch) => {
 };
 
 export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
-  console.log(trancheMarket);
+  // console.log(trancheMarket);
   const onboard = initOnboard();
   if (trancheMarket === 'compound') {
     onboard.config({ networkId });
