@@ -91,7 +91,6 @@ const App = ({ setTokenBalances, checkTrancheAllowances, checkStakingAllowances,
     }
   }, [network, address, path]);
 
-console.log(process.env.NODE_ENV)
   const serverError = () => {
     return <ErrorModal openModal={showModal} closeModal={() => setShowModal(false)} />;
   };
@@ -99,10 +98,10 @@ console.log(process.env.NODE_ENV)
     return (
       <ThemeProvider theme={ModeThemes[theme]}>
         <GlobalStyle />
-          {
-            process.env.NODE_ENV === 'development' &&
-            <Banner />
-          }
+        {
+          process.env.NODE_ENV === 'development' &&
+          <Banner />
+        }
         <NotificationProvider />
         <Router>
           <Switch location={window.location}>

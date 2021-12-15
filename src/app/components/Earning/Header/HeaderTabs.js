@@ -244,9 +244,9 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
       {tranchesToggle === 'fantom' && (
         <BridgeTokensWrapper>
           <p>
-            To use Fantom markets, you will need to use the Fantom bridge to move your tokens from the Ethereum mainnet to the Fantom. After moving your assets to Fantom, you can buy different instruments on Tranche, trade on the Quickswap DEX, and explore other applications on the Fantom network.
+            To use Fantom markets, you will need to use the Fantom bridge to move your tokens from the Ethereum mainnet to the Fantom chain. After moving your assets to Fantom, you can buy different instruments on Tranche, trade on AnySwap, and explore other applications on the Fantom network.
           </p>
-          <a href='https://fantom.foundation/' target='_blank' rel='noopener noreferrer'>
+          <a href='https://anyswap.exchange/bridge#/router' target='_blank' rel='noopener noreferrer'>
             <button>Bridge Tokens</button>
           </a>
         </BridgeTokensWrapper>
