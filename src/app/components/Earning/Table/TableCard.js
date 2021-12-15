@@ -8,7 +8,7 @@ import { trancheCardToggle } from 'redux/actions/tableData';
 import { checkServer } from 'redux/actions/checkServer';
 import { roundNumber, safeDivide, safeMultiply, searchTokenDecimals } from 'utils';
 import { statuses, trancheIcons, ModeThemes, landingUrl } from 'config';
-import { LinkArrow, ChevronTable, LinkArrowWhite, InfoIconTable, InfoIconTableLight, SliceTooltip } from 'assets';
+import { LinkArrow, ChevronTable, LinkArrowWhite, InfoIconTable, InfoIconTableLight, SliceTooltip, DefaultIcon } from 'assets';
 import TableMoreRow from './TableMoreRow';
 
 import {
@@ -140,9 +140,9 @@ const TableCard = ({
                 // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
               >
                 
-                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+                <img src={trancheIcons[trancheToken] ? trancheIcons[trancheToken].protocolIcon : DefaultIcon} alt='ProtocolIcon' />
                 <span>
-                  <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                  <img src={trancheIcons[trancheToken] ? trancheIcons[trancheToken].assetIcon : DefaultIcon} alt='AssetIcon' />
                 </span>
               </TableCardImg>
               <FirstColContent instrument>
@@ -177,7 +177,7 @@ const TableCard = ({
                     tooltip &&
                     <TableAPYTooltip titleColor={ModeThemes[theme].titleColor} tooltipColor={ModeThemes[theme].tooltipColor} theme={theme}>
                       <TableAPYTooltipCol titleColor={ModeThemes[theme].titleColor}>
-                        <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                        <img src={trancheIcons[trancheToken] ? trancheIcons[trancheToken].assetIcon : DefaultIcon} alt='AssetIcon' />
                         <h2>{cryptoType && cryptoType}</h2>
                         <h2>{apy && roundNumber(apy, 2) !== 'NaN' ? roundNumber(apy, 2) : 0}%</h2>
                         <h2>{type === 'TRANCHE_A' ? 'Fixed' : 'Variable'}</h2>
@@ -311,9 +311,9 @@ const TableCard = ({
               // type={type === 'TRANCHE_A' ? 'A' : type === 'TRANCHE_B' ? 'B' : ''}
               // color={type === 'TRANCHE_A' ? '#12BB7E' : type === 'TRANCHE_B' ? '#FD8383' : ''}
             >
-              <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].protocolIcon} alt='ProtocolIcon' />
+              <img src={trancheIcons[trancheToken] ? trancheIcons[trancheToken].protocolIcon : DefaultIcon} alt='ProtocolIcon' />
               <span>
-                <img src={trancheIcons[trancheToken] && trancheIcons[trancheToken].assetIcon} alt='AssetIcon' />
+                <img src={trancheIcons[trancheToken] ? trancheIcons[trancheToken].assetIcon : DefaultIcon} alt='AssetIcon' />
               </span>
             </TableCardImg>
           </TableCardImgWrapper>
