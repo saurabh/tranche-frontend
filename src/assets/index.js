@@ -122,9 +122,15 @@ import TADAI from './images/svg/TADAI.svg';
 import TBDAI from './images/svg/TBDAI.svg';
 import TABTC from './images/svg/TABTC.svg';
 import TBBTC from './images/svg/TBBTC.svg';
+import TAVAX from './images/svg/TAVAX.svg';
+import TWETH from './images/svg/TWETH.svg';
+import TBTC from './images/svg/TBTC.svg';
+
+
 
 
 export {
     Adjust, DAI, DAITooltip, SliceTooltip, InfoIconTable, DefaultIcon, InfoIconTableLight, YEARNLOGO, AAVEIconMobile, CompoundIconMobile, YEARNLOGOLIGHT, YEARNIconMobile, FTMIconInput, FANTOMLOGO, FANTOMLOGOLIGHT, ETHLOGO, DaiClaim, AAVE, VOTE, FantomLight, FantomDark, LinkArrowWhite, Chainlink, WBTC, YAEICON, NAEICON, Dark404, Light404, TrancheStake, TrancheRejected, TranchePending, TranchePendingLight, LinkIcon, CheckBtnWhite, CheckBtn, Migrated, USDCCard, USDTCard, MaticTable, ETHCARD, DAICARD, Compound, Logo, AaveBtn, CompoundBtn, CompoundBtnBlack, PolygonLogo, PolygonLogoBlack, LockLight, USDCWhite, AaveTable, TrancheImgColored, CloseModalWhite, ChevronTableLanguageWhite, InfoWhite, ETHWHITE, DaiBlue, DaiRed, Down, Up, CompoundLogo, ChevronTableLanguage, ChevronTable, BtnArrow, DAITrancheTable, ArrowGreen, EthClaim, Lock, TrancheClaim, RequestLoan, Withdraw, AdjustStaking, Info, YearnImg, TrancheImg, CreateLoan, ChevronDownBorrow, ChevronDownEarn, UserImg, DaiLogo, BackArrow, TrancheIcon, EmptyBox, SLICELogo, SLICE, EarningAsset, ETH, USDC, Agree, ServerError, AdjustEarn, AdjustTrade, LinkArrow, WhiteAdjust, DarkAdjust, GrayAdjust, Key, downChevron, upChevron, CloseModal, selectDown, selectUp, FilterChevron, ChevronDown, YearnIcon, FantomIcon, MIMIcon, YFIIcon,
-    TAUSDC, TBUSDC, TAWETH, TBBTC, TABTC, TBWETH, TADAI, TBDAI, TBAVAX, TAAVAX, TAUSDT, TBUSDT, TAAAVE, TBAAVE, AVAX
+    TAUSDC, TBUSDC, TAWETH, TBBTC, TABTC, TBWETH, TADAI, TBDAI, TBAVAX, TAAVAX, TAUSDT, TBUSDT, TAAAVE, TBAAVE, AVAX,
+    TAVAX, TWETH, TBTC
 };
