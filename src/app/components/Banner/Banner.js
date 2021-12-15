@@ -14,7 +14,7 @@ const Banner = () => {
     <BannerWrapper>
       { showBanner ? 
         <BannerContent>
-          <BannerText><span role="img" aria-label="Caution">⚠️</span> {i18n.t("caution")}</BannerText>
+          <BannerText><span role="img" aria-label="Caution">⚠️</span> You are currently on the Tranche Development Environment - This is a sandbox environment for team and community testing - Please connect your wallet to a test network!</BannerText>
           <Close src={CloseBanner} onClick={() => setShowBanner(false)}/>
         </BannerContent> : ""
       }

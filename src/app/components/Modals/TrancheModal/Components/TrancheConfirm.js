@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes, trancheIcons } from 'config/constants';
-import { maticNetworkId } from 'config';
+import { maticNetworkId, networkId } from 'config';
 import { roundNumber, searchTokenDecimals } from 'utils';
 import { fromWei } from 'services';
 
@@ -21,7 +21,7 @@ import {
   LoadingButtonCircle,
   TrancheModalContentStatus,
   TrancheConfirmModal,
-  // APYWarning
+  APYWarning
 } from '../../styles/ModalsComponents';
 
 export const TrancheConfirm = ({
@@ -53,7 +53,8 @@ export const TrancheConfirm = ({
   closeModal,
   handleSubmit
 }) => {
-  let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
+  // let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
+  let sliceNetwork = network === networkId ? true : false;
   return (
     <Modal
       isOpen={txModalIsOpen}
@@ -91,18 +92,25 @@ export const TrancheConfirm = ({
               </div>
             </TrancheModalContentHeaderText>
           </TrancheModalContentHeader>
-          {/* {
-            (isDeposit && (trancheValue / 10) < Number(formValues.depositAmount)) &&
-            <APYWarning>
-              <h2>
-                {
-                  trancheType === 'TRANCHE_A' ?
-                  "You are depositing more than 10% of the total value of Tranche A, this will reduce the SLICE APY." :
-                  "You are depositing more than 10% of the total value of Tranche B, this will reduce the TRANCHE and SLICE APY." 
-                }
-              </h2>
-            </APYWarning>
-          } */}
+
+          {
+              (isDeposit && (trancheValue / 10) < Number(formValues && formValues.depositAmount) && sliceNetwork) ?
+              <APYWarning>
+                  <h2>
+                    {
+                      trancheType === 'TRANCHE_A' ?
+                      "You are depositing more than 10% of the total value of Tranche A, this will reduce the SLICE APY." :
+                      "You are depositing more than 10% of the total value of Tranche B, this will reduce the TRANCHE and SLICE APY." 
+                    }
+                  </h2>
+              </APYWarning> : 
+              (isDeposit && (trancheValue / 10) < Number(formValues && formValues.depositAmount) && !sliceNetwork && trancheType === 'TRANCHE_B') ?
+              <APYWarning>
+                  <h2>
+                    You are depositing more than 10% of the total value of Tranche B, this will reduce the TRANCHE APY.
+                  </h2>
+              </APYWarning> : ""
+          }
 
         </TrancheModalHeader>
         {trancheCard === trancheCardId && txModalStatus === 'confirm' ? (
