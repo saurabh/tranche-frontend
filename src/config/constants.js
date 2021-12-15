@@ -53,7 +53,7 @@ export const YearnTrancheTokens = process.env.REACT_APP_YEARN_TRANCHE_TOKENS.spl
 
 // Fantom Tranches
 export const JAvalancheAddress = process.env.REACT_APP_AVALANCHE_TRANCHE_ADDRESS.toLowerCase();
-export const AvalancheBuyerCoinAddresses = process.env.REACT_APP_FANTOM_BUYER_COIN_ADDRESS.split(',');
+export const AvalancheBuyerCoinAddresses = process.env.REACT_APP_AVALANCHE_BUYER_COIN_ADDRESS.split(',');
 export const AvalancheTrancheTokens = process.env.REACT_APP_AVALANCHE_TRANCHE_TOKENS.split(',');
 
 // Staking
