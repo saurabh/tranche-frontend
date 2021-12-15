@@ -2441,7 +2441,7 @@ const TableAPYTooltipWrapper = styled.span`
 const TableAPYTooltip = styled.span`
   width: auto;
   height: 102px;
-  padding: 10px;
+  padding: 10px 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2475,7 +2475,7 @@ const TableAPYTooltip = styled.span`
     line-height: 18px;
     text-transform: uppercase;
     color: ${props => props.titleColor};
-    width: 25px;
+    min-width: 40px;
   }
 `
 
