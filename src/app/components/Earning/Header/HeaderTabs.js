@@ -207,7 +207,7 @@ const HeaderTabs = ({ ethereum: { network }, data, trancheMarketsToggle, setTxMo
         btnShadow={ModeThemes[theme].btnShadow}
         mobile
       >
-        <img src={isDesktop ? (theme === 'light' ? AaveBtn : AaveBtn) : AAVEIconMobile} alt='' /> 
+        <img src={isDesktop ? (theme === 'light' ? YEARNLOGOLIGHT : YEARNLOGO) : YEARNIconMobile} alt='' /> 
         <span></span> 
         <img src={theme === 'light' ? FANTOMLOGOLIGHT : FANTOMLOGO} alt='' />
       </MarketTab>
