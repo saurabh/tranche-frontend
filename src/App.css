@@ -924,7 +924,7 @@ html {
     .TrancheConfirmModal div .ReactModal__Content--after-open {
         position: absolute !important;
         left: 50% !important;
-        transform: translateX(-50%);
+        transform: translateX(-50%) !important;
     }
 }
 @media (max-width: 992px) {
