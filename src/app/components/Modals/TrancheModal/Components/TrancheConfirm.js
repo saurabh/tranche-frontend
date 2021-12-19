@@ -3,8 +3,8 @@ import Modal from 'react-modal';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { CheckBtnWhite, CloseModal, CloseModalWhite, LinkIcon, Migrated, TranchePending, TranchePendingLight, TrancheRejected } from 'assets';
 import { ModeThemes, trancheIcons } from 'config/constants';
-import { maticNetworkId, networkId } from 'config';
-import { roundNumber, searchTokenDecimals } from 'utils';
+import { networkId } from 'config';
+import { roundNumber, searchTokenDecimals, safeDivide } from 'utils';
 import { fromWei } from 'services';
 
 import {
@@ -53,7 +53,6 @@ export const TrancheConfirm = ({
   closeModal,
   handleSubmit
 }) => {
-  // let networkVar = network === maticNetworkId ? "Polygonscan" : "Etherscan";
   let sliceNetwork = network === networkId ? true : false;
   return (
     <Modal
@@ -197,7 +196,7 @@ export const TrancheConfirm = ({
               <h2>
                 {isDeposit
                   ? searchTokenDecimals(cryptoType)
-                    ? `${roundNumber(fromWei(tokenBalance[buyerCoinAddress] || '0', 'Mwei'))} ${cryptoType}`
+                    ? `${roundNumber(safeDivide(tokenBalance[buyerCoinAddress], 10 ** searchTokenDecimals(cryptoType).decimals))} ${cryptoType}`
                     : `${roundNumber(fromWei(tokenBalance[buyerCoinAddress] || '0'))} ${cryptoType}`
                   : `${roundNumber(fromWei(tokenBalance[trancheTokenAddress] || '0'))} ${trancheToken}`}
               </h2>
