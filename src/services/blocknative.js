@@ -74,13 +74,13 @@ export function switchNetwork(network) {
         return;
       }
       wallet.provider
-      .request({
-        method: 'wallet_addEthereumChain',
-        params: [networkParams[network]]
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [ networkParams[ network ] ]
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     // wallet.provider
     //   .request({

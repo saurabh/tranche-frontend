@@ -183,7 +183,7 @@ export const trancheMarketsToggle = (trancheMarket) => (dispatch) => {
     store.dispatch(changeFilter('ftm'));
     switchNetwork('fantom')
   } else if (trancheMarket === 'avalanche') {
-    onboard.config({ networkId: 1 });
+    onboard.config({ networkId: avalancheNetworkId });
     store.dispatch(changeFilter('avax'));
     switchNetwork('avalanche');
   }
